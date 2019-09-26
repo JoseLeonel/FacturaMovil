@@ -360,7 +360,7 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
   	String resultado = Constantes.EMPTY;
   	try {
       if (factura.getCliente() != null) {
-       	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+       	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
       		String cedulaExtrangera = factura.getCliente().getIdentificacionExtranjero() !=null ?factura.getCliente().getIdentificacionExtranjero():Constantes.EMPTY;
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {

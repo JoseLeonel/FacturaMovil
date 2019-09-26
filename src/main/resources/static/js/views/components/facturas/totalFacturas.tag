@@ -82,11 +82,10 @@
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                        <option  value="6"  >Aceptada</option>
-                                        <option  value="2"  >Facturada</option>
-                                    	<option  value="7"  >Rechazadas</option>
-                                        <option  value="5"  >Anulada</option>                                    </select>
-                        
+                                        <option value="6">{$.i18n.prop("estado.factura.aceptada")}</option>
+                                        <option value="2">{$.i18n.prop("estado.factura.facturada")}</option>
+                                    	<option  value="7">{$.i18n.prop("estado.factura.rechazada")}</option>
+                                        <option  value="5">{$.i18n.prop("estado.factura.anulada")}</option>                                    
                                     </select>
                                 </div>  
                             </div> 
@@ -94,6 +93,7 @@
                                 <div class="form-group">
                                     <label>Actividad Economica </label>  
                                     <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+										 <option    value="0"  >{$.i18n.prop("todos.select")}</option>
 										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
                                     </select>
                                 </div>  
@@ -256,9 +256,6 @@ function BuscarActividadComercial(){
 
     })
 }
-
-
-
 /**
 *  Lista de los clientes
 **/
@@ -364,7 +361,10 @@ function __ListaActividadesComercales(){
 						if(self.factura.total >0){
                           self.mostrarBotones=true
 						}
-						
+						//Se presentan los filtros
+		               self.mostrarFiltros = true;
+		               self.valorMarginBottom  = '0px'
+
 					    self.update();
 			        },
 			        error: function (xhr, status) {

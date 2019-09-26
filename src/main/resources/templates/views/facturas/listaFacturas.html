@@ -7,28 +7,21 @@
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
     <title>Lista de Facturas</title>
      <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-   
-      <meta http-equiv="Expires" content="0">
+	
+    <meta http-equiv="Expires" content="0">
    <meta http-equiv="Last-Modified" content="0">
    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
    <meta http-equiv="Pragma" content="no-cache">
- 		
-    
-<!--        <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script> -->
-  <script th:src="@{/js/jquery-1.11.2.js}"></script>
-	<!-- jQuery UI 1.11.4 -->
+    <script th:src="@{/js/jquery-1.11.2.js}"></script>
 	<script src="/js/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
 	<script type="text/javascript" src="js/jquery.i18n.js"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
     <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
 	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
-	 
 	 <!-- MASK -->
 	 <script type="text/javascript" src="js/jquery.mask.js"></script>
 	 <script type="text/javascript" src="/js/print.min.js"></script>
-	 
 	 <script th:src="@{/js/jsonPath.js}"></script>
    <!-- SWEERT ALERT -->
         <script type="text/javascript" src="/js/sweetalert2.min.js"></script>
@@ -37,7 +30,6 @@
 	<script src="/riot/riot-compiler.min.js"></script>
 	<script src="/riot/riot.csp.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
-		
 	<!-- LISTADO DE FACTURAS -->
 	<script type="text/javascript" src="/js/views/facturas/listaFacturas.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/listaFacturas.tag" ></script>
@@ -49,22 +41,19 @@
 	}
 	.formatoEntrada{
 		margin-bottom: 1%;
-}
-	}
+    }
 	.scrlollT{
 	overflow: scroll;
 	}
 	html {
-  scroll-behavior: smooth;
-}
+         scroll-behavior: smooth;
+    }
 	
 	</style>
     
 </head>
 <body>
-
 <div layout:fragment="content">
-   
     <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -79,7 +68,7 @@
         <div class="row" >
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
-                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltro avanzado <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltros de Consulta <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
                 </div>  
                 <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
@@ -116,7 +105,6 @@
                                     </select>
                                 </div>  
                             </div>  
-                             
                         </div>
                         <div class= "row">
                         	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -131,6 +119,7 @@
                                 <div class="form-group">
                                     <label>Actividad Economica </label>  
                                     <select  class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+                                        <option  data-tokens="Todos"   value="0"  >Todos</option>  
                                     </select>
                                 </div>  
                             </div>    
@@ -139,14 +128,13 @@
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado" id= "estado" name="estado" >
                                     	<option  value="0"  th:text="#{todos.select}"></option>
-                                    	<option  value="6"  >Aceptada</option>
-                                        <option  value="2"  >Facturada</option>
-                                    	<option  value="7"  >Rechazadas</option>
-                                        <option  value="5"  >Anulada</option>   
+                                    	<option  value="6"  th:text="#{estado.factura.aceptada}"></option>
+                                        <option  value="2"  th:text="#{estado.factura.facturada}"></option>
+                                    	<option  value="7"  th:text="#{estado.factura.rechazada}"></option>
+                                        <option  value="5"  th:text="#{estado.factura.anulada}"></option>   
                                     </select>
                                 </div>  
                             </div>    
-
                         </div>   
                         <div class="row">
                              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -164,7 +152,6 @@
                                 </div>  
                             </div>    
                         </div> 
- 
                     </form>  
                 </div>
             </div>
@@ -186,35 +173,30 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="97%">
                                         <thead>
                                             <tr>
-                                                <th style="width:6%" class = "table-header" th:text="#{usuario.nombreUsuario}">         </th>
-                                                <th style="width:4%" class = "table-header" th:text="#{factura.fecha.emision}">         </th>
-                                                <th style="width:3%" class = "table-header" th:text="#{factura.documento}">             </th>
-                                                <th style="width:3%" class = "table-header" th:text="#{factura.tipo.documento}">             </th>
-                                                <th style="width:3%" class = "table-header" th:text="#{factura.condicion.pago}">             </th>
-                                                
-                                                
-                                                <th style="width:6%"  class = "table-header" th:text="#{factura.cliente}">               </th>
-                                                <th style="width:6%"  class = "table-header" >A nombre               </th>
-                                                <th style="width:5%" class = "table-header" th:text="#{factura.total}">     
-                                                 <th style="width:5%" class = "table-header" th:text="#{factura.estado}">                   </th>
-                                                <th style="width:2%" class = "table-header" th:text="#{listado.acciones}">                </th>
+                                                <th style="width:6%" class = "table-header" th:text="#{usuario.nombreUsuario}"></th>
+                                                <th style="width:4%" class = "table-header" th:text="#{factura.fecha.emision}"></th>
+                                                <th style="width:3%" class = "table-header" th:text="#{factura.documento}"></th>
+                                                <th style="width:3%" class = "table-header" th:text="#{factura.tipo.documento}"></th>
+                                                <th style="width:3%" class = "table-header" th:text="#{factura.condicion.pago}"></th>
+                                                <th style="width:6%"  class = "table-header" th:text="#{factura.cliente}"></th>
+                                                <th style="width:6%"  class = "table-header" >A nombre</th>
+                                                <th style="width:5%" class = "table-header" th:text="#{factura.total}"></th>
+                                                <th style="width:5%" class = "table-header" th:text="#{factura.estado}"></th>
+                                                <th style="width:2%" class = "table-header" th:text="#{listado.acciones}"></th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
-                                                <th style="width:6%" th:text="#{usuario.nombreUsuario}">         </th>
-                                                <th style="width:4%" th:text="#{factura.fecha.emision}">         </th>
-                                                <th style="width:3%" th:text="#{factura.documento}">             </th>
-                                                <th style="width:3%" th:text="#{factura.tipo.documento}">        </th>
-                                                <th style="width:3%" th:text="#{factura.condicion.pago}">        </th>
-                                                
-                                                
-                                                
-                                                <th style="width:6%"  th:text="#{factura.cliente}">              </th>
-                                                <th style="width:6%"  >A nombre               </th>
-                                                <th style="width:5%" th:text="#{factura.total}">                   </th>
-                                                <th style="width:5%" th:text="#{factura.estado}">                   </th>
-                                                <th style="width:2%">                </th>
+                                                <th style="width:6%" th:text="#{usuario.nombreUsuario}"></th>
+                                                <th style="width:4%" th:text="#{factura.fecha.emision}"></th>
+                                                <th style="width:3%" th:text="#{factura.documento}"></th>
+                                                <th style="width:3%" th:text="#{factura.tipo.documento}"></th>
+                                                <th style="width:3%" th:text="#{factura.condicion.pago}"></th>
+                                                <th style="width:6%"  th:text="#{factura.cliente}"></th>
+                                                <th style="width:6%"  >A nombre</th>
+                                                <th style="width:5%" th:text="#{factura.total}"></th>
+                                                <th style="width:5%" th:text="#{factura.estado}"></th>
+                                                <th style="width:2%"></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -224,19 +206,11 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
     <!-- Fin del Listado -->
-  
-    
       <lista-facturas></lista-facturas>
      <ptv-imprimir></ptv-imprimir>
-     
-     
-     
-     
 </div>
-
 </body>
 </html>

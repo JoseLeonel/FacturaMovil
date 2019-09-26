@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -110,7 +109,16 @@ public class DetalleController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 	}
-
+	/**
+	 * Ganancia
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/ListaDetallesGanancia", method = RequestMethod.GET)
+	public String listaFacturaGanancia(ModelMap model) {
+		return "views/detalle/ListaGanancia";
+	}
+	
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -128,11 +136,11 @@ public class DetalleController {
 
 	@RequestMapping(value = "/TotalVentasPorDetalleAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String tipoImpuesto,@RequestParam Integer estado) {
+	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String tipoImpuesto,@RequestParam Integer estado,@RequestParam String actividadEconomica) {
 		Date fechaInicial = Utils.parseDate(fechaInicio);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto,estado);
+		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto,estado,actividadEconomica);
 
 	}
 //	@Autowired
@@ -145,9 +153,9 @@ public class DetalleController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		// criptografica desde linux
-//			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+	// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+	// criptografica desde linux
+  // certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
@@ -261,7 +269,7 @@ public class DetalleController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/DescargarDetallexCodigoAjax.do", method = RequestMethod.GET)
-	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto, @RequestParam Integer estado) throws IOException {
+	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException {
 		Boolean isVededor = false;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
@@ -277,7 +285,7 @@ public class DetalleController {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
 
-		Collection<Detalle> detalles = detalleBo.facturasRango(estado	, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto);
+		Collection<Detalle> detalles = detalleBo.facturasRango(estado	, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto, actividadEconomica);
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");

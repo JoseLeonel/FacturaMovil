@@ -489,8 +489,9 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   	String resultado = Constantes.EMPTY;
   	String nodoCodigoTarifa = Constantes.EMPTY;
   	String nodoTarifa = Constantes.EMPTY;
+  	tipoImpuesto = tipoImpuesto == null?Constantes.EMPTY:tipoImpuesto;
   	try {
-  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
   			return resultado;
   		}
   		if (codigoTarifa !=null) {
@@ -503,7 +504,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   		
   		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
-	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+  			if(montoImpuesto > Constantes.ZEROS_DOUBLE || !tipoImpuesto.equals(Constantes.EMPTY) ) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoImpuesto, 2)) + "</Codigo>" +
 	            nodoCodigoTarifa +
@@ -592,7 +593,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     String resultado = Constantes.EMPTY;
   	try {
       if (factura.getCliente() != null) {
-       	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+       	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
       		String cedulaExtrangera = factura.getCliente().getIdentificacionExtranjero() !=null ?factura.getCliente().getIdentificacionExtranjero():Constantes.EMPTY;
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {

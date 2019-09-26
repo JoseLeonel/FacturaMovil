@@ -33,7 +33,7 @@ public class ListarFacturasNativa implements Serializable {
 	@Column(name = "estado")
 	private Integer						estado;
 
-	@Column(name = "act_comercial", length = 6)
+	@Column(name = "act_comercial")
 	private String						codigoActividad;
 
 	@Temporal(TemporalType.TIMESTAMP)

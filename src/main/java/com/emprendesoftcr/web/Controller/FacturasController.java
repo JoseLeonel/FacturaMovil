@@ -77,6 +77,7 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -90,6 +91,7 @@ import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
+import com.emprendesoftcr.web.command.ConsultaFacturaGananciasNativeCommand;
 import com.emprendesoftcr.web.command.ConsultaIvaCommand;
 import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
@@ -155,6 +157,7 @@ public class FacturasController {
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
+																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null ? Constantes.EMPTY : d.getTipoImpuesto());
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
@@ -210,19 +213,18 @@ public class FacturasController {
 																																																			} else {
 																																																				facturaElectronica.setEmisorCorreo(correo);
 																																																			}
-																																																			facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta1());
-																																																			facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta2());
-																																																			facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta3());
-																																																			facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta4());
-																																																			facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta5());
-																																																			facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta6());
-																																																			facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta7());
-																																																			facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta8());
+																																																			facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta1());
+																																																			facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta2());
+																																																			facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta3());
+																																																			facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta4());
+																																																			facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta5());
+																																																			facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta6());
+																																																			facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta7());
+																																																			facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta8());
 
-																																																			
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
-																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE) || d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_CREDITO)) {
 																																																				if (d.getNombreFactura() != null) {
 																																																					if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
 																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
@@ -672,9 +674,10 @@ public class FacturasController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/generaFacturaPDF", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void generarFacturaPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
+	public void generarFacturaPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam(value = "consecutivo", required = false) String consecutivo) throws Exception {
 		try {
-			Factura factura = facturaBo.findById(idFactura);
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Factura factura = idFactura != null ? facturaBo.findById(idFactura) : facturaBo.findByConsecutivoAndEmpresa(consecutivo, usuarioSesion.getEmpresa());
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 
@@ -851,7 +854,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListaFacturasImpuestoServicioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
@@ -878,6 +881,36 @@ public class FacturasController {
 			}
 		}
 
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+
+	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		idCategoria = idCategoria == null?Constantes.ZEROS:idCategoria;
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria);
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (ConsultaGananciaNative consultaGananciaNative : facturas) {
+			solicitudList.add(new ConsultaFacturaGananciasNativeCommand(consultaGananciaNative));
+		}
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1028,21 +1061,17 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente) {
+	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam Integer estado, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
 		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
-
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
 
@@ -1052,9 +1081,13 @@ public class FacturasController {
 		} else {
 			idUsuario = usuarioSesion.getId();
 		}
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
+		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+		if (estado == Constantes.ZEROS) {
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+		} else {
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+		}
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
 			for (FacturasSinNotaCreditoNative facturasDelDia : objetos) {
@@ -1064,7 +1097,6 @@ public class FacturasController {
 			}
 
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1073,10 +1105,8 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 
-//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
-//---- rolo
 
 	/***
 	 * @param request
@@ -1091,7 +1121,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1139,7 +1169,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1217,7 +1247,6 @@ public class FacturasController {
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 //				result.rejectValue("facturaClave", "error.recepcionFactura.tipo.cambio.esta.ceros");
 			}
-	
 
 			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
 			JSONObject json = null;
@@ -1250,7 +1279,7 @@ public class FacturasController {
 					detalleNuevo.setCodigoComercialCodigo(detalle.getCodigoComercialCodigo() == null ? Constantes.EMPTY : detalle.getCodigoComercialCodigo());
 					detalleNuevo.setDescuentoMonto(detalle.getDescuentoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getDescuentoMonto());
 					detalleNuevo.setDescuentoNaturaleza(detalle.getDescuentoNaturaleza() == null ? Constantes.EMPTY : detalle.getDescuentoNaturaleza());
-								detalleNuevo.setImpuestoExoneracionTipoDocumento(detalle.getImpuestoExoneracionTipoDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionTipoDocumento());
+					detalleNuevo.setImpuestoExoneracionTipoDocumento(detalle.getImpuestoExoneracionTipoDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionTipoDocumento());
 					detalleNuevo.setImpuestoExoneracionNumeroDocumento(detalle.getImpuestoExoneracionNumeroDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNumeroDocumento());
 					detalleNuevo.setImpuestoExoneracionNombreInstitucion(detalle.getImpuestoExoneracionNombreInstitucion() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNombreInstitucion());
 					detalleNuevo.setImpuestoExoneracionFechaEmision(detalle.getImpuestoExoneracionFechaEmision() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionFechaEmision());
@@ -1262,38 +1291,37 @@ public class FacturasController {
 					detalleNuevo.setImpuestoCodigoTarifa(detalle.getImpuestoCodigoTarifa() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa());
 					detalleNuevo.setImpuestoTarifa(detalle.getImpuestoTarifa() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa());
 					detalleNuevo.setImpuestoMonto(detalle.getImpuestoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto());
-						
+
 					detalleNuevo.setImpuestoCodigo1(detalle.getImpuestoCodigo1() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo1());
-					detalleNuevo.setImpuestoCodigoTarifa1(detalle.getImpuestoCodigoTarifa1() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa1());
-					detalleNuevo.setImpuestoTarifa1(detalle.getImpuestoTarifa1() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa1());
-					detalleNuevo.setImpuestoMonto1(detalle.getImpuestoMonto1() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto1());
-				
+					detalleNuevo.setImpuestoCodigoTarifa1(detalle.getImpuestoCodigoTarifa1() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa1());
+					detalleNuevo.setImpuestoTarifa1(detalle.getImpuestoTarifa1() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa1());
+					detalleNuevo.setImpuestoMonto1(detalle.getImpuestoMonto1() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto1());
+
 					detalleNuevo.setImpuestoCodigo2(detalle.getImpuestoCodigo2() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo2());
-					detalleNuevo.setImpuestoCodigoTarifa2(detalle.getImpuestoCodigoTarifa2() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa2());
-					detalleNuevo.setImpuestoTarifa2(detalle.getImpuestoTarifa2() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa2());
-					detalleNuevo.setImpuestoMonto2(detalle.getImpuestoMonto2() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto2());
-				
+					detalleNuevo.setImpuestoCodigoTarifa2(detalle.getImpuestoCodigoTarifa2() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa2());
+					detalleNuevo.setImpuestoTarifa2(detalle.getImpuestoTarifa2() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa2());
+					detalleNuevo.setImpuestoMonto2(detalle.getImpuestoMonto2() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto2());
+
 					detalleNuevo.setImpuestoCodigo3(detalle.getImpuestoCodigo3() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo3());
-					detalleNuevo.setImpuestoCodigoTarifa3(detalle.getImpuestoCodigoTarifa3() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa3());
-					detalleNuevo.setImpuestoTarifa3(detalle.getImpuestoTarifa3() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa3());
-					detalleNuevo.setImpuestoMonto3(detalle.getImpuestoMonto3() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto3());
-					
+					detalleNuevo.setImpuestoCodigoTarifa3(detalle.getImpuestoCodigoTarifa3() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa3());
+					detalleNuevo.setImpuestoTarifa3(detalle.getImpuestoTarifa3() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa3());
+					detalleNuevo.setImpuestoMonto3(detalle.getImpuestoMonto3() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto3());
+
 					detalleNuevo.setImpuestoCodigo4(detalle.getImpuestoCodigo4() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo4());
-					detalleNuevo.setImpuestoCodigoTarifa4(detalle.getImpuestoCodigoTarifa4() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa4());
-					detalleNuevo.setImpuestoTarifa4(detalle.getImpuestoTarifa4() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa4());
-					detalleNuevo.setImpuestoMonto4(detalle.getImpuestoMonto4() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto4());
+					detalleNuevo.setImpuestoCodigoTarifa4(detalle.getImpuestoCodigoTarifa4() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa4());
+					detalleNuevo.setImpuestoTarifa4(detalle.getImpuestoTarifa4() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa4());
+					detalleNuevo.setImpuestoMonto4(detalle.getImpuestoMonto4() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto4());
 
 					detalleNuevo.setImpuestoCodigo5(detalle.getImpuestoCodigo5() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo5());
-					detalleNuevo.setImpuestoCodigoTarifa5(detalle.getImpuestoCodigoTarifa5() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa5());
-					detalleNuevo.setImpuestoTarifa5(detalle.getImpuestoTarifa5() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa5());
-					detalleNuevo.setImpuestoMonto5(detalle.getImpuestoMonto5() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto5());
+					detalleNuevo.setImpuestoCodigoTarifa5(detalle.getImpuestoCodigoTarifa5() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa5());
+					detalleNuevo.setImpuestoTarifa5(detalle.getImpuestoTarifa5() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa5());
+					detalleNuevo.setImpuestoMonto5(detalle.getImpuestoMonto5() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto5());
 
 					detalleNuevo.setImpuestoCodigo6(detalle.getImpuestoCodigo6() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo6());
-					detalleNuevo.setImpuestoCodigoTarifa6(detalle.getImpuestoCodigoTarifa6() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa6());
-					detalleNuevo.setImpuestoTarifa6(detalle.getImpuestoTarifa6() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa6());
-					detalleNuevo.setImpuestoMonto6(detalle.getImpuestoMonto6() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto6());
+					detalleNuevo.setImpuestoCodigoTarifa6(detalle.getImpuestoCodigoTarifa6() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa6());
+					detalleNuevo.setImpuestoTarifa6(detalle.getImpuestoTarifa6() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa6());
+					detalleNuevo.setImpuestoMonto6(detalle.getImpuestoMonto6() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto6());
 
-					
 					detallesCompra.add(detalleNuevo);
 				}
 			}
@@ -1319,11 +1347,11 @@ public class FacturasController {
 					recepcionFactura.setFacturaTipoCambio(570d);
 				}
 			}
-			
-			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)||recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) ) {
+
+			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA) || recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY)) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-				
+
 			}
 			recepcionFactura.setFacturaTotalDescuentos(recepcionFactura.getFacturaTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalDescuentos());
 			recepcionFactura.setFacturaTotalExento(recepcionFactura.getFacturaTotalExento() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExento());
@@ -1339,8 +1367,6 @@ public class FacturasController {
 			recepcionFactura.setFacturaTotalServExonerado(recepcionFactura.getFacturaTotalServExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExonerado());
 			recepcionFactura.setFacturaTotalServGravados(recepcionFactura.getFacturaTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServGravados());
 
-			
-			
 			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null ? Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO : recepcionFactura.getTipoGasto());
 			recepcionFactura.setVersion_doc("4.3");
 
@@ -1370,7 +1396,7 @@ public class FacturasController {
 				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(recepcionFacturaDetalle.getImpuestoCodigoTarifa1());
 				recepcionFacturaDetalleNueva.setImpuestoTarifa1(recepcionFacturaDetalle.getImpuestoTarifa1());
 				recepcionFacturaDetalleNueva.setImpuestoMonto1(recepcionFacturaDetalle.getImpuestoMonto1());
-				
+
 				recepcionFacturaDetalleNueva.setImpuestoCodigo2(recepcionFacturaDetalle.getImpuestoCodigo2());
 				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(recepcionFacturaDetalle.getImpuestoCodigoTarifa2());
 				recepcionFacturaDetalleNueva.setImpuestoTarifa2(recepcionFacturaDetalle.getImpuestoTarifa2());
@@ -1396,7 +1422,6 @@ public class FacturasController {
 				recepcionFacturaDetalleNueva.setImpuestoTarifa6(recepcionFacturaDetalle.getImpuestoTarifa6());
 				recepcionFacturaDetalleNueva.setImpuestoMonto6(recepcionFacturaDetalle.getImpuestoMonto6());
 
-				
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());
@@ -1418,7 +1443,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam String actividadEconomica) {
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam String estado, @RequestParam String actividadEconomica,@RequestParam Integer tipoGasto) {
 
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1444,11 +1469,16 @@ public class FacturasController {
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
-			if(!estado.equals(0)) {
-				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));	
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));
 			}
+      if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+      	delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));	
+      }
+      if(tipoGasto > Constantes.ZEROS) {
+      	delimitador.addFiltro(new JqGridFilter("tipoGasto", tipoGasto.toString(), "="));
+      }
 			
-			delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
@@ -1554,7 +1584,6 @@ public class FacturasController {
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
 			facturaCommand.setTipoDoc(facturaCommand.getTipoDoc() != null ? facturaCommand.getTipoDoc() : Constantes.EMPTY);
 			facturaCommand.setCondicionVenta(facturaCommand.getCondicionVenta() == null ? Constantes.EMPTY : facturaCommand.getCondicionVenta());
-
 			UsuarioCaja usuarioCajaBd = null;
 			// Si esta en estado facturada en base de datos se retornae un mensaje que ya fue procesada
 			if (facturaCommand != null) {
@@ -1651,6 +1680,8 @@ public class FacturasController {
 			}
 			if (facturaCommand.getCliente() == null) {
 				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
+				cliente = cliente == null ? clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_CREDITO, usuario.getEmpresa()) : cliente;
+				;
 				if (cliente == null) {
 					cliente = clienteBo.crearClienteFrecuente(usuario.getEmpresa(), usuario);
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.intente.nuevo", result.getAllErrors());
@@ -1661,10 +1692,10 @@ public class FacturasController {
 			}
 
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-				if (facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+				if (facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE) || facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_CREDITO)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
 				}
-				if (facturaCommand.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (facturaCommand.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) || facturaCommand.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
 				}
 			}
@@ -1890,7 +1921,7 @@ public class FacturasController {
 
 			if (estado.equals(Constantes.FACTURA_ESTADO_PENDIENTE)) {
 				if (facturaBD.getCliente() != null) {
-					if (!facturaBD.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+					if (!facturaBD.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !facturaBD.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 						facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
 					} else {
 						facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
@@ -2025,13 +2056,17 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoAlternativoFactura(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam String correo) {
+	public RespuestaServiceValidator enviarCorreoAlternativoFactura(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
+			consecutivo = consecutivo == null ? Constantes.EMPTY : consecutivo;
+			idFactura = idFactura == null ? Constantes.ZEROS_LONG : idFactura;
 
-			Factura factura = facturaBo.findById(idFactura);
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Factura factura = consecutivo.length() > 0 ? facturaBo.findByConsecutivoAndEmpresa(consecutivo, usuario.getEmpresa()) : null;
+			factura = factura == null ? facturaBo.findById(idFactura) : factura;
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
@@ -2050,21 +2085,14 @@ public class FacturasController {
 				if (listaCorreos.size() == 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.vacio.enviar");
 				}
-
 			}
-
 			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
-
 			}
 			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
-
 			}
-
 			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
-			//
-
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2078,13 +2106,16 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoClienteAsociadosFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoClienteAsociadosFacturaAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam String correo) {
+	public RespuestaServiceValidator enviarCorreoClienteAsociadosFacturaAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
-
-			Factura factura = facturaBo.findById(idFactura);
+			consecutivo = consecutivo == null ? Constantes.EMPTY : consecutivo;
+			idFactura = idFactura == null ? Constantes.ZEROS_LONG : idFactura;
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Factura factura = consecutivo.length() > 0 ? facturaBo.findByConsecutivoAndEmpresa(consecutivo, usuario.getEmpresa()) : null;
+			factura = factura == null ? facturaBo.findById(idFactura) : factura;
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
@@ -2092,7 +2123,6 @@ public class FacturasController {
 			if (haciendaBD == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
 			}
-
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			if (correo != null) {
 				if (!correo.equals(Constantes.EMPTY)) {
@@ -2100,7 +2130,7 @@ public class FacturasController {
 				}
 			}
 			// Correo Oficial
-			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 				if (factura.getCliente().getCorreoElectronico() != null) {
 					if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico());
@@ -2108,7 +2138,7 @@ public class FacturasController {
 				}
 			}
 			// Correo Alternativo 1
-			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 				if (factura.getCliente().getCorreoElectronico1() != null) {
 					if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico1());
@@ -2116,7 +2146,7 @@ public class FacturasController {
 				}
 			}
 			// Correo Alternativo 2
-			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 				if (factura.getCliente().getCorreoElectronico2() != null) {
 					if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico2());
@@ -2124,7 +2154,7 @@ public class FacturasController {
 				}
 			}
 			// Correo Alternativo 3
-			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 				if (factura.getCliente().getCorreoElectronico3() != null) {
 					if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico3());
@@ -2189,7 +2219,6 @@ public class FacturasController {
 		return new Attachment(name + ext, data);
 	}
 
-	@SuppressWarnings("unused")
 	private String getConsecutivo(String tipoDoc, String consecutivo) {
 		return tipoDoc + "-" + consecutivo;
 	}

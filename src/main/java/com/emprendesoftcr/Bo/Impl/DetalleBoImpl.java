@@ -64,8 +64,8 @@ public class DetalleBoImpl implements DetalleBo {
 		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin,empresa);
 	}
 	@Override
-	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto) {
-		return detalleDao.facturasRango(estado, fechaInicio, fechaFin,empresa,tipoImpuesto);
+	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica) {
+		return detalleDao.facturasRango(estado, fechaInicio, fechaFin,empresa,tipoImpuesto,actividadEconomica);
 	}
 	@Override
 	public Collection<Detalle> findByFactura(Factura factura){
@@ -73,8 +73,8 @@ public class DetalleBoImpl implements DetalleBo {
 	}
 
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado) {
-		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal,tipoImpuesto,estado);
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado,String actividadEconomica) {
+		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal,tipoImpuesto,estado,actividadEconomica);
 	}
 
 	@Override

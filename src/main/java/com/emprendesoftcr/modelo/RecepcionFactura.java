@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 
 /**
  * Recepcion de la factura, aceptacion de facturas de un emisor.
@@ -842,6 +843,11 @@ public class RecepcionFactura implements Serializable {
 		return Utils.obtenerDescripcionTipoDocumento(this.tipoDoc);
 	}
 
+	public String getTipoGastoStr() {
+		return MapEnums.ENUM_TIPO_GASTO.get(this.tipoGasto.toString());
+	}
+
+	
 	public String getDetalles() {
 		return detalles;
 	}

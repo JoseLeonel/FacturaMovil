@@ -20,7 +20,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 public final class UtilsPdf {
 	public static Font	bigFont40							= FontFactory.getFont("Helvetica", "Windows-1254", 34.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont24							= FontFactory.getFont("Helvetica", "Windows-1254", 30.0F, 1, BaseColor.BLACK);
-	public static Font	bigFont16							= FontFactory.getFont("Helvetica", "Windows-1254", 20.0F, 1, BaseColor.BLACK);
+	public static Font	bigFont16							= FontFactory.getFont("Helvetica", "Windows-1254", 12.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont							= FontFactory.getFont("Helvetica", "Windows-1254", 14.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont12						= FontFactory.getFont("Helvetica", "Windows-1254", 12.0F, 1, BaseColor.BLACK);
 	public static Font	pequeFont						= FontFactory.getFont("Helvetica", "Windows-1254", 11.0F, 1, BaseColor.BLACK);

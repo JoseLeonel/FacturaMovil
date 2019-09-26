@@ -2,11 +2,11 @@ package com.emprendesoftcr;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 
 public class vivi {
 
@@ -56,11 +56,14 @@ public class vivi {
 //		}else {
 //			System.out.println(" no es mayor a 5 decimales ");
 //		}
-		if (validarCedula("9999999918899")) {
-			System.out.println("cedula diferente caracter");
-		} else {
-			System.out.println("cedula igual caracter");
-		}
+//		if (validarCedula("9999999918899")) {
+//			System.out.println("cedula diferente caracter");
+//		} else {
+//			System.out.println("cedula igual caracter");
+//		}
+		List<String>  ejemplos = Arrays.asList("leo","alberto","pedro");
+		String ejemplo = ejemplos.stream().collect(Collectors.joining(","));
+		System.out.println(ejemplo);
 
 //		System.out.println(Utils.roundFactura(valor, 5));
 

@@ -23,7 +23,6 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.FacturaDao;
-import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.UsuarioCajaFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
@@ -495,7 +494,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 			totalServExentos = totalServExentos + getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
-			totalExento = totalExento + getTotalExentos(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
+			totalExento = totalExento + getTotalExentos(detalle.getTipoImpuesto(),detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
 			totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalle.getMontoDescuento());
 			montoTotalLinea = getMontoTotalLinea(detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getImpuestoNeto(), detalle.getTipoDocumentoExoneracion());
@@ -618,9 +617,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
-//		if (!tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			esMercancia = Boolean.FALSE;
-//		}
+		if (!tipoImpuesto.equals(Constantes.EMPTY)) {
+			esMercancia = Boolean.FALSE;
+		}
 		if (!unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -640,9 +639,9 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @param subTotal
 	 * @return
 	 */
-	private Double getTotalExentos(Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
+	private Double getTotalExentos(String tipoImpuesto ,Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
-		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE)) {
+		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
 			resultado = subTotal;
 		}
 		return resultado;
@@ -659,9 +658,9 @@ public class FacturaBoImpl implements FacturaBo {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
 
-//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			esMercancia = Boolean.FALSE;
-//		}
+		if (!tipoImpuesto.equals(Constantes.EMPTY)) {
+			esMercancia = Boolean.FALSE;
+		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -691,11 +690,11 @@ public class FacturaBoImpl implements FacturaBo {
 //		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
 //			esMercancia = Boolean.FALSE;
 //		}
-		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+		if (tipoImpuesto.equals(Constantes.EMPTY) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
 		if (esMercancia) {
-			if (montoImpuesto1 > Constantes.ZEROS_DOUBLE || montoImpuesto > Constantes.ZEROS_DOUBLE) {
+			if (montoImpuesto1 > Constantes.ZEROS_DOUBLE || montoImpuesto > Constantes.ZEROS_DOUBLE || !tipoImpuesto.equals(Constantes.EMPTY)) {
 				if (porcentajeExoneracion > Constantes.ZEROS) {
 					Double porcentaValor = porcentajeExoneracion / 100d;
 					porcentaValor = 1 - porcentaValor;
@@ -740,9 +739,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalMercExonerada(String tipoImpuesto, String unidadMedida, Double montoTotal, Integer porcentajeExoneracion) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esGravado = Boolean.TRUE;
-//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			esGravado = Boolean.FALSE;
-//		}
+		if (tipoImpuesto.equals(Constantes.EMPTY)) {
+			esGravado = Boolean.FALSE;
+		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esGravado = Boolean.FALSE;
 		}
@@ -763,11 +762,10 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServExonerado(String tipoImpuesto, String unidadMedida, Double montoExonerado) {
 
 		Double resultado = Constantes.ZEROS_DOUBLE;
-//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			resultado = montoExonerado;
-//		}
+		
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-			resultado = montoExonerado;
+				resultado = montoExonerado;	
+			
 		}
 		return resultado;
 	}
@@ -783,16 +781,11 @@ public class FacturaBoImpl implements FacturaBo {
 	 */
 	private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto, Double montoImpuesto1) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
-		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE)) {
-			return resultado;
-		}
-//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			resultado = SubTotal;
-//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-			resultado = SubTotal;
+			if(!tipoImpuesto.equals(Constantes.EMPTY)){
+				resultado = SubTotal;	
+			}
 		}
-
 		return resultado;
 	}
 
@@ -824,7 +817,7 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getImpuestoNetoTotal(String tipoDocumentoExonerado, Integer porcentajeExonerado, Double montoImpuesto, Double montoImpuesto1, Double montoExonerado) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		if (!tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
-			if (porcentajeExonerado < 100) {
+			if (porcentajeExonerado <= 100) {
 				resultado = Utils.Maximo5Decimales(montoImpuesto) + Utils.Maximo5Decimales(montoImpuesto1);
 				resultado = resultado - Utils.Maximo5Decimales(montoExonerado);
 			}
@@ -899,7 +892,6 @@ public class FacturaBoImpl implements FacturaBo {
 
 		Double resultado = Utils.Maximo5Decimales(montoTotal) - Utils.Maximo5Decimales(montoDescuento);
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-//		return resultado;
 	}
 
 	/**
@@ -1042,7 +1034,7 @@ public class FacturaBoImpl implements FacturaBo {
 			try {
 				// Generar el consecutivo de venta
 				if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-					if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)||facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
+					if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
 						// factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(empresa, usuario, factura));
 						factura.setNumeroConsecutivo(empresaBo.spGenerarConsecutivoFactura(empresa, usuario, factura.getTipoDoc()));
 
@@ -1059,7 +1051,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 				} else {
 					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)||facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
+						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
 							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 						} else {
 							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
@@ -1205,13 +1197,6 @@ public class FacturaBoImpl implements FacturaBo {
 
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
-//							if (facturaAnterior.getClave() != null) {
-//								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
-//								if (hacienda != null) {
-//									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
-//									haciendaDao.modificar(hacienda);
-//								}
-//							}
 						}
 					}
 				}

@@ -87,11 +87,31 @@
                                 </div>  
                             </div> 
                         </div>
+                        <div class="row">
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+                                        <option value="0"  >Todas</option>
+										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>              
+                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <label> Tipo Gasto  <span class="requeridoDato">*</span></label>
+                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
+                                    <option value="0"  >Todos</option>
+                                    <option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
+                                    <option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
+                                </select>
+                            </div>                     
+
+                        </div>
                     </form>  
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a      show={hay_datos== true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar " href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
+                <a      show={hay_datos== true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar " href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
                 <button  show={hay_datos== true} onclick ={__CorreoAlternativo} type="button" class="btn btn-primary btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>                        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             </div>
@@ -107,20 +127,46 @@
                     <div class="box-body">
                         <div class="planel-body" >
                             <div class= "row">
-                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
-                                        <label  >Impuestos </label>
-                                        <input type="text" class="form-control totalImpuestos" value="{totalImpuestos}" readonly>
+                                        <label  >Total Impuesto Compras </label>
+                                        <input type="text" class="form-control totalImpuestoCompra" value="{totales.totalImpuestoCompra}" readonly>
                                     </div>  
                                 </div>                             
-                                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-4">
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
-                                        <label  >{$.i18n.prop("compra.listado.total")} </label>
-                                        <input type="text" class="form-control totalCompra " value="{total}" readonly>
+                                        <label  >Total Compras </label>
+                                        <input type="text" class="form-control totalCompra " value="{totales.totalCompra}" readonly>
+                                    </div>  
+                                </div>                             
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label  >Total Impuestos Notas Credito </label>
+                                        <input type="text" class="form-control totalNotaCreditoImpuesto " value="{totales.totalNotaCreditoImpuesto}" readonly>
+                                    </div>  
+                                </div>                             
+
+                            </div>
+                            <div class= "row">
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label  >Total Notas Credito </label>
+                                        <input type="text" class="form-control totalNotaCreditoTotal" value="{totales.totalNotaCreditoTotal}" readonly>
+                                    </div>  
+                                </div>                             
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label  >Total Impuestos Notas Debito </label>
+                                        <input type="text" class="form-control totalNotaDebitoImpuesto " value="{totales.totalNotaDebitoImpuesto}" readonly>
+                                    </div>  
+                                </div>                             
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label  >Total Notas Debito </label>
+                                        <input type="text" class="form-control totalNotaDebitoImpuesto " value="{totales.totalNotaDebitoImpuesto}" readonly>
                                     </div>  
                                 </div>                             
                             </div>
-
                         </div>    
                     </div>
                 </div>
@@ -167,15 +213,24 @@
     self.fechaInicio =null
     self.estado = 6;
     self.fechaFin =null
+    self.actividadEconomica = "";
+    self.tipoGasto = "";
+    self.totales = {
+        totalImpuestoCompra:0,
+        totalCompra:0,
+        totalNotaCreditoImpuesto:0,
+        totalNotaCreditoTotal:0,
+        totalNotaDebitoTotal:0,
+        totalNotaDebitoImpuesto:0,
+    }    
     self.on('mount',function(){
-        $("#filtros").validate(reglasDeValidacion());
-    
         $('.datepickerFechaFinal').datepicker(
                 {
                 format: 'yyyy-mm-dd',
                 todayHighlight:true,
                 }
         );
+        __ListaActividadesComercales()
         $('.datepickerFechaInicio').datepicker(
                 {
                 format: 'yyyy-mm-dd',
@@ -184,6 +239,55 @@
         );
     })
  
+ /**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+				BuscarActividadComercial()
+ 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+/**
+* Asigna la actividad comercial
+**/
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+/**
+*Busca la actividad comercial
+**/
+function BuscarActividadComercial(){
+    var codigo =$('.selectActividadEconocimica').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+            self.actividadEconomica = codigo
+            self.update()
+        }
+
+    })
+}
+
 /**
 * Camps requeridos
 **/
@@ -236,7 +340,9 @@ function __EnviarPorCorreo(){
       	correoAlternativo:$('#correoAlternativo').val(),		
        	fechaInicioParam:$('#fechaInicio').val(),
        	fechaFinParam:$('.fechaFin').val(),
-           estado:$(".selectEstado").val()
+        estado:$(".selectEstado").val(),
+        actividadEconomica : $('.selectActividadEconocimica').val(),
+        tipoGasto : $('.tipoGasto').val()
     };
     $.ajax({
         url: "CorreoTotalComprasAceptadasAjax.do",
@@ -250,11 +356,7 @@ function __EnviarPorCorreo(){
             mensajeErrorServidor(xhr, status);
         }
      });
-}		
-
-		
-
-
+}
 /**
 * limpiar los filtros
 **/
@@ -272,6 +374,14 @@ __Busqueda(){
     self.hay_datos  = false
     self.total          = 0
     self.totalImpuestos = 0
+     self.totales = {
+        totalImpuestoCompra:0,
+        totalCompra:0,
+        totalNotaCreditoImpuesto:0,
+        totalNotaCreditoTotal:0,
+        totalNotaDebitoTotal:0,
+        totalNotaDebitoImpuesto:0,
+    }    
     self.update()
      if ($("#filtros").valid()) {
       var formulario = $("#filtros").serialize();
@@ -284,8 +394,9 @@ __Busqueda(){
                 if(result.total > 0){
                     TotalesGenerales(result)
                     self.estado = $('.estado').val()
+                    self.actividadEconomica = $('.selectActividadEconocimica').val();
+                    self.tipoGasto = $('.tipoGasto').val();
                     self.update()
-
                 }           
             },
             error: function (xhr, status) {
@@ -301,8 +412,12 @@ __Busqueda(){
 *  Suma de totales de compras
 **/
 function TotalesGenerales(data){
-    self.total          = data.totalSTR
-    self.totalImpuestos = data.totalImpuestoSTR
+    self.totales.totalCompra = data.totalSTR
+    self.totales.totalImpuestoCompra = data.totalImpuestoSTR
+    self.totales.totalNotaCreditoImpuesto = data.totalImpuestoNotaCreditoSTR
+    self.totales.totalNotaDebitoImpuesto = data.totalImpuestoNotaDebitoSTR
+    self.totales.totalNotaDebitoTotal = data.totalNotaDebitoSTR
+    self.totales.totalNotaCreditoTotal = data.totalNotaCreditoSTR
     self.hay_datos=true
     self.update()
 }

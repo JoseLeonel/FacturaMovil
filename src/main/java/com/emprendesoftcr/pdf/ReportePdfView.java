@@ -2,6 +2,7 @@
 package com.emprendesoftcr.pdf;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -64,7 +65,7 @@ public class ReportePdfView {
 		tabla_tercera_tabla.setWidthPercentage(60);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17, 35, 40 };
+		float[] header_espacio_03 = { 23, 60, 133, 18, 27, 35, 22, 35, 40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -80,7 +81,7 @@ public class ReportePdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Detalle", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Unid", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 
-		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cantidad", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cant.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Unit.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVAI", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 //		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVA2", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
@@ -116,7 +117,10 @@ public class ReportePdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.EMPTY : item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			String valor = Constantes.EMPTY;
+			DecimalFormat formato = new DecimalFormat("##");
+			valor = item.getTipoImpuesto().equals(Constantes.EMPTY) ? "Exento" : formato.format(item.getTarifaIva()) + "%";
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(valor), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 //			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.ZEROS_DOUBLE : item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
@@ -162,7 +166,7 @@ public class ReportePdfView {
 		} else {
 			nota = fac_electro.get_nota();
 		}
-		
+
 //		String cuentas = Constantes.EMPTY;
 //		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 //
@@ -194,8 +198,8 @@ public class ReportePdfView {
 //			}
 //		}
 
-		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota , font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
-		tabla_ultima.addCell(izquierda_inferior_ultima); 
+		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
+		tabla_ultima.addCell(izquierda_inferior_ultima);
 		PdfPTable central_inferior_ultima = new PdfPTable(1);
 		central_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		central_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());

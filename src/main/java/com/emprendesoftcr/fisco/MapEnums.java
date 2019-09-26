@@ -153,6 +153,9 @@ public class MapEnums {
             put("08", "Compra Simplificada").
             put(" ", "Compras").
             put("99", "Otros").build();
+    public static final Map<String, String> ENUM_TIPO_GASTO = ImmutableMap.<String, String>builder().put("1", "Gasto por inventario").
+        put("2", "Gasto por operación").
+        put("", "Otros").build();
     public static final Map<String, String> ENUM_TIPO_DOC_EXONERACION = ImmutableMap.<String, String>builder().put("01", "Compras Autorizadas").
             put("02", "Ventas exentas a diplomáticos").
             put("03", "Orden de compra (instituciones publicas y otros organismos").

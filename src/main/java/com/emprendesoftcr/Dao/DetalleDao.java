@@ -20,10 +20,10 @@ public interface DetalleDao {
 	Integer eliminarDetalleFactura(Factura factura)throws Exception;
 	
 	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa);
-	Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto);
+	Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica);
 	
 	Collection<Detalle> findByFactura(Factura factura);
-	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado);
+	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado,String actividadEconomica);
 	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 	
 }

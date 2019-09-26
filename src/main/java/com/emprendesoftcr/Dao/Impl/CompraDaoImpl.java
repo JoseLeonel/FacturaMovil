@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
@@ -99,60 +100,77 @@ public class CompraDaoImpl implements CompraDao {
 		}
 
 	}
-	
+
 	@Override
-	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor){
+	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Compra obj");
 		hql.append(" where obj.empresa = :empresa ");
 		if (proveedor != null) {
-				hql.append("and obj.proveedor = :proveedor ");
+			hql.append("and obj.proveedor = :proveedor ");
 		}
 		hql.append("and obj.fechaIngreso >= :fechaInicio and obj.fechaIngreso <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
 		if (proveedor != null) {
-				query.setParameter("proveedor", proveedor);
+			query.setParameter("proveedor", proveedor);
 		}
 		query.setParameter("empresa", empresa);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
-	
+
 	@Override
-	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado) {
-		
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconocimica, String tipoGasto) {
 
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS);
+		if(tipoGasto.equals(Constantes.COMBO_TODOS)) {
+			tipoGasto = "1,2";
+		} 
 
 		// set parametros entrada
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, String.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA_IN, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO_IN, String.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_TIPO_GASTO_IN, String.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ACTIVIDAD_ECONOMICA_IN, String.class, ParameterMode.IN);
 
-		
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_CREDITO_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_DEBITO_OUT, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
-	
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_CREDITO_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_DEBITO_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
+		if (!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
+			storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ACTIVIDAD_ECONOMICA_IN, actividadEconocimica);
+		}
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, fechaFinal);
-		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA_IN, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_TIPO_GASTO_IN, tipoGasto);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ACTIVIDAD_ECONOMICA_IN, actividadEconocimica);
+		
 		String estados = Constantes.EMPTY;
-		if(estado.equals(0)) {
-			estados = "2"+","+"6"+","+"7";
-			
-		}else {
+		if (estado.equals(0)) {
+			estados = "2" + "," + "6" + "," + "7";
+
+		} else {
 			estados = estado.toString();
 		}
-		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, estados);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO_IN, estados);
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalComprasAceptadasCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT));
+		return new TotalComprasAceptadasCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT),
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_CREDITO_OUT),
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_DEBITO_OUT),
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT),
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_CREDITO_ACEPTADAS_OUT),
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_DEBITO_ACEPTADAS_OUT)
+				                                   );
 	}
-	
 
 }

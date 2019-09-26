@@ -10,7 +10,7 @@ public class Constantes {
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
 	public static final Integer					ESQUEMA_XML_4_3																							= 2;
-	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO  															= "Fact#:";
+	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO																= "Fact#:";
 	// unidad de medidas SP
 	public static final String					UNIDAD_MEDIDA_SERVICIO_SP																		= "Sp";
 	public static final String					UNIDAD_MEDIDA_SERVICIO_OS																		= "Os";
@@ -187,6 +187,10 @@ public class Constantes {
 	// Cliente /VENDEDOR Frecuente de una empresa
 	public static final String					NOMBRE_CLIENTE_FRECUENTE																		= "CLIENTE_FRECUENTE";
 	public static final String					CEDULA_CLIENTE_FRECUENTE																		= "999999999999";
+	public static final String					NOMBRE_CLIENTE_CREDITO																			= "CLIENTE_CREDITO";
+	public static final String					CEDULA_CLIENTE_CREDITO																			= "888888888888";
+	public static final String					CEDULA_FERRETERIA_VINDAS																		= "888888888888";
+
 	public static final String					CORREO_CLIENTE_FRECUENTE																		= "CLIENTE_FRECUENTE@FRECUENTE.COM";
 	public static final String					NOMBRE_VENDEDOR_FRECUENTE																		= "VENDEDOR_FRECUENTE";
 	public static final String					CEDULA_VENDEDOR_FRECUENTE																		= "99999999999999";
@@ -500,6 +504,7 @@ public class Constantes {
 
 	// Nombres de procedimientos
 	public static final String					SP_TOTAL_FACTURAS																						= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "SPFACTTODO";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO														= "FECHA_INICIO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO																	= "ESTADO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA										= "act_econo";
@@ -519,12 +524,17 @@ public class Constantes {
 	// Totales de Compras Aceptadas
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO													= "FECHA_INICIO";
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN															= "FECHA_FIN";
-	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA														= "ID_EMPRESA";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPTOTALACEPTADAS";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA												= "ID_EMPRESA";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO														= "estado";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPACEPTCOMPRAS";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA_IN										= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO_IN												= "ESTADO";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_TIPO_GASTO_IN										= "tipo_gast";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ACTIVIDAD_ECONOMICA_IN						= "act_econo";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT															= "TOTAL";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_CREDITO_OUT								= "TOTAL_NOTA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_DEBITO_OUT 								= "TOTAL_DEBITO";
 	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT										= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_CREDITO_ACEPTADAS_OUT				= "IMPNOTA";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_DEBITO_ACEPTADAS_OUT				= "IMPDEBITO";
 
 	// Totales de inventarios
 	public static final String					SP_TOTAL_INVENTARIO																					= "SPTOTALINVENTARIOS";

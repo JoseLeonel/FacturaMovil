@@ -141,9 +141,10 @@
 			            <ul class="treeview-menu">
 			                <li><a href="/ListaFacturas" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
 			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
-			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulo</a></li>
-			                <li><a href="ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
-			                 <li><a href="TotalImpuestoVentasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
+			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulos</a></li>
+			                <li><a href="/ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
+			                <li><a href="/TotalImpuestoVentasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
+			                <li><a href="/ListaDetallesGanancia"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Restaurante','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>GananciasXArticulo</a></li>
 			            </ul>
 			        </li>
 
@@ -156,7 +157,7 @@
 			            <ul class="treeview-menu">
 			                <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Ingresadas al Inventario</a></li>
 			                <li><a href="/ListaRecepcionFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Aceptadas por Hacienda</a></li>
-			                <li><a href="totalesComprasAceptadas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Aceptadas Hacienda</a></li>
+			                <li><a href="/totalesComprasAceptadas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Aceptadas Hacienda</a></li>
 <!-- 			                <li><a href="TotalImpuestoComprasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>IVA Mensual</a></li> -->
 			                <li><a href="/ListarConsultaComprasSimplificado" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Simplificado</a></li>
 			                
@@ -197,7 +198,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="/ListarHacienda" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Hacienda</a></li>
+                <li><a href="/ListarHacienda" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Envios Hacienda</a></li>
                 <li><a href="/recepcionFactura" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i  class="fa fa-circle-o"></i>Aceptar Compras</a></li>
             </ul>
         </li>           

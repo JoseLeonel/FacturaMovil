@@ -131,8 +131,26 @@
                                     </select>
                                 </div>  
                             </div>
-                                              
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado" id= "estado" name="estado" >
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
+                                    	<option  value="6"  >Aceptada</option>
+                                        <option  value="2"  >Facturada</option>
+                                    	<option  value="7"  >Rechazadas</option>
+                                    </select>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Codigo Articulo </label>
+                                    <input type="text" id="codigo" name="codigo" class="form-control campo codigo "   >   
+                                </div>  
+                            </div>    
+                        </div>   
                       
                     </form>  
                 </div>
@@ -221,8 +239,8 @@ self.mostrarListado        = true
 self.mostrarDetalle        = false
 self.clientes              = {data:[]}
 self.detail                = []
-    self.facturas_espera       = {data:[]}  
-    self.factura                = {
+self.facturas_espera       = {data:[]}  
+self.factura  = {
         id:null,
         estado :1,
 	    fechaCredito:null,
@@ -395,8 +413,7 @@ function evaluarFactura(data){
                           factura:modeloTabla,
                           facturaDia:0
                       }
-                      console.log("consultaFactura")
-                      riot.mount('ptv-imprimir',{parametros:parametros}); 
+            riot.mount('ptv-imprimir',{parametros:parametros}); 
             __eliminarFacturaListado()
             
         });
@@ -512,6 +529,8 @@ function _consulta(){
             fechaInicio:inicial,
             fechaFin:$('.fechaFinal').val(),
             idCliente:$('#clienteParam').val(),
+            estado:$('.selectEstado').val(),
+            codigo:$('.codigo').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  

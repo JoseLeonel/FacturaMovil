@@ -111,20 +111,20 @@ public class HeaderFooter extends PdfPageEventHelper {
 			PdfPTable izquierda = new PdfPTable(1);
 			if (img_logo != null) {
 				img_logo.setAlignment(Image.ALIGN_LEFT);
-				img_logo.scaleAbsolute(300, 175);
+				img_logo.scaleAbsolute(230, 130);
 				img_logo.setAbsolutePosition(20, PageSize.TABLOID.rotate().getHeight() - 100);
 				img_logo.setAlignment(Image.ALIGN_RIGHT);
+				PdfPCell cell_logo = img_logo == null ? new PdfPCell() : new PdfPCell(img_logo, false);
+				cell_logo.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
+				cell_logo.setColspan(1);
+				cell_logo.setBorder(Rectangle.NO_BORDER);
+				izquierda.addCell(cell_logo);
 
 			}
-
-			PdfPCell cell_logo = img_logo == null ? new PdfPCell() : new PdfPCell(img_logo, false);
-			cell_logo.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-			cell_logo.setColspan(1);
-			cell_logo.setBorder(Rectangle.NO_BORDER);
-			izquierda.addCell(cell_logo);
 			if (!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			}
+			
 			tabla_cabezera.addCell(izquierda);
 
 			PdfPTable derecha = new PdfPTable(1);

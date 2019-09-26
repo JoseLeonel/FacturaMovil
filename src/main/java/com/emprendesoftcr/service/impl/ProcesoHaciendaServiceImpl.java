@@ -60,6 +60,7 @@ import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
+import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
@@ -102,6 +103,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
+																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null?Constantes.EMPTY:d.getTipoImpuesto());
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
@@ -747,25 +749,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, hacienda.getClave(), openIDConnectHacienda);
 					String body = (String) response.get(POST_RESPONSE);
 
-//					Boolean errorCaidaPlataforma = Boolean.TRUE;
-//					if (body.contains("502") || body.contains("503") || body.contains("501") || body.contains("500") || body.contains("504")) {
-//						errorCaidaPlataforma = Boolean.FALSE;
-//						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
-//					}
-//					if (body.contains("token has expired")) {
-//						errorCaidaPlataforma = Boolean.FALSE;
-//						log.info("** Error  aceptarDocumento: token has expired " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
-//					}		
-//					log.info("** aceptarDocumento hacienda body: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
-						// log.info(body);
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
-
 						String status = getHaciendaStatus(respuestaHacienda.indEstado());
-						// log.info("** getHaciendaStatus: " + status + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 						hacienda.setUpdated_at(new Date());
 						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
-						// hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(respuesta.getDetalleMensaje()==null?Constantes.EMPTY:respuesta.getDetalleMensaje()));
 						respuesta.setClave(respuestaHacienda.clave());
 						respuesta.setFecha(respuestaHacienda.fecha());
 						respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -1151,7 +1139,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String texto = "Empresa :" + empresa.getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + consecutivo + error.getMessage();
 			correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
 			correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
-			correosBo.sendSimpleMessage("jcisneroscr@gmail.com", subject, texto);
 
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
@@ -1357,7 +1344,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1412,7 +1399,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 												hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
 												// no se graba el cliente si es frecuente
 												if (factura.getCliente() != null) {
-													if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+													if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 														hacienda.setCedulaReceptor(factura.getCliente().getCedula());
 														hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
 													}

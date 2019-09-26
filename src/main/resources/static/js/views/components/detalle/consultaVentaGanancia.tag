@@ -1,8 +1,8 @@
-<lista-facturas>
+<venta-ganancia>
    <!-- Titulos -->
-    <div  class="row " show="mostrarListado" >
+    <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp Compras Aceptadas en Hacienda </h1>
+            <h1><i class="fa fa-calculator"></i>&nbsp Ganancia por producto en ventas por clientes</h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
@@ -11,19 +11,19 @@
     <br><br>
     <!-- Inicio Filtros-->
     <div>
-        <div class="row" show={mostrarListado}>
+        <div >
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid " style="margin-bottom : {valorMarginBottom}; padding : 2px;  cursor: pointer;">
-                    <h4> <i class="fa fa-filter " style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
                 </div>  
-                <div  show={mostrarFiltros}  class="advanced-search-grid text-left " style="padding-top : 5px; padding-bottom : 5px;">
+                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicial " id="fechaInicial"  name= "fechaInicial" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
                                         </div>
@@ -34,8 +34,8 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal  " id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -45,106 +45,142 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label>{$.i18n.prop("emisor.cedula")} </label>  
-	                                <input type="text" class="form-control cedulaEmisor" id="cedulaEmisor" name="cedulaEmisor">
-                                </div>  
-                            </div>    
-                        </div>
-                        <div class="row">    
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                    	<option value="0"  >Todos</option>
-                                        <option  value="2"  >Pendiente Aceptar</option>
-	                                   	<option  value="6"  >Aceptada</option>
-                                       	<option  value="7"  >Rechazadas</option>
-
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  value="6">Aceptada</option>
+                                        <option  value="2">Facturada</option>
+                                    	<option  value="7">Rechazada</option>
+                                        <option  value="5">Anulada</option>                                    
                                     </select>
                                 </div>  
-                            </div>  
-                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            </div> 
+							 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>Actividad Economica </label>  
                                     <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
-                                        <option value="0"  >Todas</option>
 										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
                                     </select>
                                 </div>  
-                            </div>              
-                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                <label> Tipo Gasto  <span class="requeridoDato">*</span></label>
-                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
-                                    <option value="0"  >Todos</option>
-                                    <option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
-                                    <option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
-                                </select>
-                            </div>                     
-                        </div>
+                            </div>        
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+        	                         <label > Categorias </label>  
+                                    <select  class="form-control selectCategoria categoria" id="categoria" name="categoria" data-live-search="true">
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  data-tokens="{descripcion}" each={categorias.data}  value="{id}"  >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>                           
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
+                                    <select  class="form-control selectCliente" id="clienteParam" name="clienteParam" data-live-search="true">
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
+                                    </select>
+                               </div>  
+                            </div>                           
+
+                            </div>
                     </form>  
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
     </div>    
-	<!-- Fin Filtros-->
+<!-- Fin Filtros-->
+
+
     <br>
-  	<!-- Listado  -->
+  <!-- Listado  -->
     <div classs="contenedor-listar "  show={mostrarListado} >
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
-                            <div class="listaContainer" >    
-
-                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   style="width:100%">
-                                       <thead>
+                        
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <th class = "table-header" >Ingreso    </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
-                                                <th class = "table-header" >{$.i18n.prop("emisor.cedula")}             </th>
-                                                <th class = "table-header" >Tipo Aceptacion         </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}    </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.documento")}         </th>
-                                                <th class = "table-header" >#Compra        </th>
+                                                <th class = "table-header" >Fecha Emision</th>
+                                                <th class = "table-header" >Cliente</th>
+                                                <th class = "table-header" >Categoria</th>
+                                                <th class = "table-header" >Codigo</th>
+                                                <th class = "table-header" >Producto</th>
+                                                <th class = "table-header" >Cantidad</th>
+                                                <th class = "table-header" >Costo</th>
+                                                <th class = "table-header" >Total(-Imp)</th>
+                                                <th class = "table-header" >Ganancia</th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
-                                                <th>Ingreso</th>
-                                                <th>{$.i18n.prop("factura.fecha.emision")}</th>
-                                                <th>{$.i18n.prop("emisor.cedula")}</th>
-                                                <th>Tipo Aceptacion</th>
-                                                <th>{$.i18n.prop("factura.totalImpuestos")} </th>
-                                                <th>{$.i18n.prop("factura.totalComprobante")} </th>
-                                                <th>{$.i18n.prop("factura.documento")}</th>
-                                                 <th>#Compra</th>
-                                                
+                                                <th>Fecha Emision</th>
+                                                <th>Cliente</th>
+                                                <th>Categoria</th>
+                                                <th>Codigo</th>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Costo</th>
+                                                <th>Total(-Imp)</th>
+                                                <th>Ganancia</th>
                                             </tr>
                                         </tfoot>
                                     </table>
-
+                                </div>   
                             </div> 
-  
                         </div>    
                     </div>
                 </div>
-        
+            </div>
+            <div class="col-md-1 col-lg-1 "> </div>
+        </div>
     </div>
     <!-- Fin del Listado -->
+<!-- Fin Filtros-->
+<div class="containerTotales">
+   	<div class="elementoTotales">
+   	    <label> Total Costo</label>
+        <input type="text" readonly="readonly" class="form-control "  value="{totalCosto}" >
+   	</div>
+   	<div class="elementoTotales">
+   	    <label> Total Impuesto </label>
+        <input type="text" readonly="readonly" class="form-control" value="{totalImpuesto}">
+   	</div>
+   	<div class="elementoTotales">
+   	    <label> Total Descuentos </label>
+        <input type="text" readonly="readonly" class="form-control" value="{totalDescuento}">
+   	</div>
+   	<div class="elementoTotales">
+   	    <label> Total Venta </label>
+        <input type="text" readonly="readonly" class="form-control"  value="{totalVenta}">
+   	</div>
+   	<div class="elementoTotales">
+   	    <label> Total Ganancia </label>
+        <input type="text" readonly="readonly" class="form-control " value="{totalGanancia}" >
+   	</div>
+</div>
 
 <style type="text/css">
-    .listaContainer{
-        display:flex;
-    }
-    .clickable {
-        cursor: pointer;
-    }
+        .scroller {
+            width: 200px; height: 600px; overflow-y: scroll;
+        }
+        .containerTotales{
+           display: flex; /* or inline-flex */
+          justify-content:space-between;  
+          flex-wrap:wrap;
+        }
+        .elementoTotales{
+          
+         
+        }
     .btn-success {
         color: #e7e7e7;
         background-color: #00a65a !important;
@@ -320,7 +356,6 @@
     .tituloTotal{
         font-size:30px;
     }
-
     .wrap{
         max-width:100%;
         width:100%;
@@ -454,7 +489,7 @@
     .cabecera-derecha {
         width:25%;
     }
-    .contenedor-detalle  {
+    .contenedor-detalle   {
         display:flex;
         width:100%;
         margin :auto;
@@ -491,33 +526,82 @@
         margin-bottom: 5px;
         font-weight: 600;
     }
-    div.dataTables_wrapper {
-        width: 100%;
-        margin: 0 auto;
-    }
     
 </style>
 
 <script>
 self = this
-
+self.categorias        = {data:[]}
+self.listaFacturas         = []
+self.totalDescuento = 0
+self.totalImpuesto  = 0
+self.totalCosto     = 0
+self.totalVenta     = 0
+self.totalGanancia  = 0
 self.mostrarListado        = true
-self.mostrarDetalle        = false
-self.hay_datos             = false
-self.fechaInicio =null
-self.fechaFin =null
-self.cedula =""
-self.totalGeneral = 0
-self.totalImpuestoGeneral = 0
-self.estado = 6
-self.tipoGasto = ""
-self.actividadEconomica =""
+self.clientes                  = {data:[]}
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
-     __InicializarTabla('.tableListar')
-     __ListaActividadesComercales()
+    __InicializarTabla('.tableListar')
+    __listadoCategoriasActivas();
+    agregarInputsCombos()
+    _init()
+    listaClientesActivos()
+    __ListaActividadesComercales()
+    window.addEventListener( "keydown", function(evento){
+      $(".errorServerSideJgrid").remove();
+    }, false );
 })
+/**
+*  Obtiene la lista de los clientes activos
+**/
+function listaClientesActivos(){
+    self.clientes                  = {data:[]}
+    self.update()
+    $.ajax({
+        url: "ListarClientesActivosAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.clientes.data = result.aaData
+                self.update()
+                $('.selectCliente').selectpicker();
+             } 
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
+}
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategoriasActivas(){
+    self.categorias = {data:[]}
+    self.update()
+    $.ajax({
+       url: "ListarCategoriasActivasAjax.do",
+      datatype: "json",
+      global: false,
+      method:"GET",
+      success: function (result) {
+        if(result.aaData.length > 0){
+            self.categorias.data = result.aaData
+            self.update()
+             $('.selectCategoria').selectpicker();
+        }
+      },
+      error: function (xhr, status) {
+          console.log(xhr);
+           mensajeErrorServidor(xhr, status);
+      }
+  });
+
+}
 /**
 *  Lista de los clientes
 **/
@@ -531,7 +615,6 @@ function __ListaActividadesComercales(){
                 self.empresaActividadComercial   = result.aaData
                 self.update()
 				BuscarActividadComercial()
- 
             }
         },
         error: function (xhr, status) {
@@ -563,18 +646,7 @@ function BuscarActividadComercial(){
             self.actividadEconomica = codigo
             self.update()
         }
-
     })
-}
-/**
-* limpiar los filtros
-**/
-__limpiarFiltros(){
-    $('#fechaInicial').val(null)
-    $('#fechaFinal').val(null)
-    self.totalGeneral = 0
-    self.totalImpuestoGeneral = 0
-    self.update()
 }
 /**
 * Camps requeridos
@@ -584,9 +656,11 @@ var reglasDeValidacion = function() {
 		rules : {
 			fechaInicial : {
 				required : true,
+                validFecha:true
 			},
 			fechaFinal : {
 				required : true,
+                validFecha:true
 			}                                   
                         
 		},
@@ -595,35 +669,39 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+/**
+* limpiar los filtros
+**/
+__limpiarFiltros(){
+    $('#fechaInicial').val(null)
+    $('#fechaFinal').val(null)
+}
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-    self.hay_datos   = false
-    self.fechaInicio =$('.fechaInicial').val()
-    self.fechaFin    =$('.fechaFinal').val()
-    self.cedula      =$('#cedulaEmisor').val()
-    self.estado = $("#estado").val()
-    self.tipoGasto = $("#tipoGasto").val()
-    self.actividadEconomica = $(".selectActividadEconocimica").val()
-    self.totalGeneral = 0
-    self.totalImpuestoGeneral = 0
+    self.totalDescuento = 0
+    self.totalImpuesto  = 0
+    self.totalCosto     = 0
+    self.totalVenta     = 0
+    self.totalGanancia  = 0
     self.listaFacturas = []
     self.update()
-    
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
         var parametros = {
-        	fechaInicioParam:inicial,
-        	fechaFinParam:$('.fechaFinal').val(),
-        	cedulaEmisor:$('#cedulaEmisor').val(),
-            estado:$('#estado').val(),
+            fechaInicioParam:inicial,
+            fechaFinParam:$('.fechaFinal').val(),
+            estado:$('.selectEstado').val(),
             actividadEconomica:$('.selectActividadEconocimica').val(),
-            tipoGasto:$('.tipoGasto').val(),
+            cliente:$('.selectActividadEconocimica').val(),
+            idCategoria:$('.selectCategoria').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarRecepcionFacturasActivasAndAnuladasAjax.do",
+            url: "ListaFacturasGananciaAjax.do",
             datatype: "json",
             data:parametros ,
             method:"GET",
@@ -632,89 +710,53 @@ __Busqueda(){
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
                     self.listaFacturas = result.aaData
-                    self.hay_datos             = true
-                    self.estado = $('#estado').val(),
-                    self.tipoGasto = $("#tipoGasto").val()
                     self.update()
-                    TotalesGenerales(result.aaData)
-                    agregarInputsCombos()
+                    agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
+                
+                    sumar()
                 }else{
                     __InformacionDataTable();
-                    agregarInputsCombos()
+                     agregarInputsCombos();
                 }           
             },
             error: function (xhr, status) {
                 mensajeErrorServidor(xhr, status);
+                console.log(xhr);
             }
         });
+
      }
 }
-
 /**
-*  Listar la tabla a aplicar el mantenimiento
+* sumar
 **/
-function __InicializarTabla(nombreTabla){
-    $(nombreTabla).DataTable({
-        destroy: true,
-        "language": idioma_espanol,
-        "sDom": 'lrtip',
-        "order": [0, 'desc'],
-        "bPaginate": true,
-        'responsive': true,
-        "bAutoWidth": true,
-        "lengthChange": true,
-        
-    });    
-}
-
-function loadListar(table,idioma,formatoTabla,data){
-	$(table).DataTable().destroy();
-        $(table).DataTable({
-        destroy: true,
-        "language": idioma_espanol,
-        "sDom": 'lrtip',
-        "scrollCollapse": true,
-        "order": [0, 'desc'],
-        "bPaginate": true,
-        'responsive': true,
-        "bAutoWidth": true,
-        "lengthChange": true,
-       
-        "columns": formatoTabla,
-    });  
-    $(table).dataTable().fnClearTable();
-    $(table).dataTable().fnAddData(data);        
-}
-
-/**
-*  Suma de totales de cuenta por cobrar 
-**/
-function TotalesGenerales(data){
-    self.totalGeneral = 0
-    self.totalImpuestoGeneral = 0
+function sumar(){
+    self.totalDescuento = 0
+    self.totalImpuesto  = 0
+    self.totalCosto     = 0
+    self.totalVenta     = 0
+    self.totalGanancia  = 0
     self.update()
-    for(var i in data) { 
-        self.totalGeneral         += data[i].totalFactura;
-        self.totalImpuestoGeneral += data[i].totalImpuestos;
-     }
-     self.totalGeneral = formatoDecimales(self.totalGeneral,2)
-     self.totalImpuestoGeneral = formatoDecimales(self.totalImpuestoGeneral,2)
-     self.update()
-}
-
-function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListar tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    $.each(self.listaFacturas, function( index, modeloTabla ) {
+          self.totalImpuesto += modeloTabla.impuesto
+          self.totalVenta += modeloTabla.total
+          self.totalDescuento += modeloTabla.descuento
+          self.totalCosto += modeloTabla.costo
+          self.totalGanancia += modeloTabla.ganancia
+          self.update()
     })
-} 
+    self.totalImpuesto   = formatoDecimales(__valorNumerico(self.totalImpuesto))
+    self.totalVenta      = redondearDecimales(self.totalVenta,2)
+    self.totalDescuento  = redondearDecimales(self.totalDescuento,2)
+    self.totalCosto = redondearDecimales(self.totalCosto,2)
+    self.totalGanancia = redondearDecimales(self.totalGanancia,2)
+    self.update()
+}
 /*
  * Muestra los filtros avanzados
  */
- __mostrarFiltros(){ 
+ __mostrarFiltros(){
     if(self.mostrarFiltros){
         self.mostrarFiltros = false;
         self.valorMarginBottom  = '10px'
@@ -724,79 +766,33 @@ function agregarInputsCombos(){
     }
     self.update();
 }
-/**
-*Formato de la fecha con hora
-**/
-function __displayDate_detail(fecha) {
-    var dateTime = new Date(fecha);
-    return moment(dateTime).format('DD/MM/YYYY ');
-}
-/**
+/**$.i18n.prop("factura.tipoDocumento")
 *Formato del listado 
-**/
+**/                         
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-			{'data' : 'created_at'  ,"name":"created_at"    ,"title" : "Ingreso"     , "autoWidth" : true},
-            {"data" : "fechaEmision"	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")      ,"autoWidth":true, 
-				"render" : function(fechaEmision){
-					return formatearFechaDT(fechaEmision); 
-				}
-			},
-			
-			{'data' : 'cedulaEmisor'  ,"name":"cedulaEmisor"    ,"title" : $.i18n.prop("emisor.cedula")     , "autoWidth" : true},
-    	    {'data' : 'mensaje'  ,"name":"mensaje"    ,"title" : "Tipo Aceptacion"     , "autoWidth" : true},
-            {'data' :'totalImpuestos'       ,"name":"totalImpuestos"        ,"title" : $.i18n.prop("factura.totalImpuestos")     ,"autoWidth" :true,
-                "render":function(totalImpuestos,type, row){
-				    return  totalImpuestos.toFixed(2);
-				    }
-           },
-           {'data' :'totalFactura'       ,"name":"totalFactura"        ,"title" : $.i18n.prop("factura.totalComprobante")     ,"autoWidth" :true ,
-               "render":function(totalFactura,type, row){
-				    return  totalFactura.toFixed(2);
-				    }
-          },
-    	  {'data' :'numeroConsecutivoReceptor'                    ,"name":"numeroConsecutivoReceptor"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
-            		 "render":function(numeroConsecutivoReceptor,type, row){
-								return __TipoDocumentos(numeroConsecutivoReceptor,row)
-	 						  }
-
-          }
-          ,
-    	  {'data' :'facturaConsecutivo'                    ,"name":"facturaConsecutivo"                     ,"title" : "#Compra"   ,"autoWidth" :true ,
-            		 "render":function(facturaConsecutivo,type, row){
-								return __TipoDocumentos(facturaConsecutivo,row)
-	 						  }
-                               
-          }
-   ];
-   self.update();
-}
-//Formato de fecha
-function formatearFechaDT(fecha){	
-	if(fecha == null){
-		return " ";	
-	}else{
-		return moment(fecha).format('DD/MM/YYYY');		
-	}	
-}
-function __TipoDocumentos(numeroConsecutivo,row){
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-
-    default:
-        return  numeroConsecutivo
-}
+                               {'data' :'fechaEmisionSTR'  ,"name":"fechaEmisionSTR"  ,"title" : "Fecha Emision"    ,"autoWidth" :true },
+                               {'data' :'nombreCompleto'  ,"name":"nombreCompleto"  ,"title" : "Cliente"    ,"autoWidth" :true },
+                               {'data' :'nombreCategoria' ,"name":"nombreCategoria" ,"title" : "Categoria"  ,"autoWidth" :true },
+                               {'data' :'codigo'          ,"name":"codigo"          ,"title" : "Codigo"     ,"autoWidth" :true },
+                               {'data' :'nombreArticulo'  ,"name":"nombreArticulo"  ,"title" : "Articulo"   ,"autoWidth" :true },
+                               {'data' :'cantidadSTR'     ,"name":"cantidadSTR"     ,"title" : "Cantidad"   ,"autoWidth" :true },
+                               {'data' :'costoSTR'        ,"name":"costoSTR"        ,"title" : "Costo" ,"autoWidth" :true },
+                               {'data' :'totalSTR'        ,"name":"totalSTR"        ,"title" : "Total(-Imp)" ,"autoWidth" :true },
+                               {'data' :'gananciaSTR'     ,"name":"gananciaSTR"     ,"title" : "Ganancia" ,"autoWidth" :true }
+	      		            ];
+    self.update();
+   
+}  
+function agregarInputsCombos(){
+     // Agregar los input de busqueda 
+    $('.tableListar tfoot th').each( function (e) {
+        var title = $('.tableListar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 8    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
 }
 </script>
-</lista-facturas>
+</venta-ganancia>

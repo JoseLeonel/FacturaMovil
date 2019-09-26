@@ -12,6 +12,7 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -26,8 +27,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturadaAndUsuario;
 
 /**
- * Caja es las diferentes cajas de una empresa lo importante es la terminal 00001 son 5 digitos
- * CajaBoImpl.
+ * Caja es las diferentes cajas de una empresa lo importante es la terminal 00001 son 5 digitos CajaBoImpl.
  * @author jose.
  * @since 3 nov. 2018
  */
@@ -39,22 +39,23 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	private ConsultasNativeDao consultasNativeDao;
 
 	@Override
-	public Collection<HaciendaNative> findByEmpresaAndEstado(Empresa empresa, String fechaInicial , String fechaFinal) {
-		
-		return consultasNativeDao.findByEmpresaAndEstado(empresa,fechaInicial,fechaFinal);
+	public Collection<HaciendaNative> findByEmpresaAndEstado(Empresa empresa, String fechaInicial, String fechaFinal) {
+
+		return consultasNativeDao.findByEmpresaAndEstado(empresa, fechaInicial, fechaFinal);
 	}
 
 	@Override
-	public Collection<HaciendaNativeByEmpresaAndFechaAndCliente> findByEmpresaAndFechaAndCliente(Empresa empresa, String fechaInicial , String fechaFinal,String cedula){
+	public Collection<HaciendaNativeByEmpresaAndFechaAndCliente> findByEmpresaAndFechaAndCliente(Empresa empresa, String fechaInicial, String fechaFinal, String cedula) {
 		return consultasNativeDao.findByEmpresaAndFechaAndCliente(empresa, fechaInicial, fechaFinal, cedula);
 	}
 
 	@Override
-	public Collection<ProformasByEmpresaAndEstado> findByProformasByEmpresaAndEstado(Empresa empresa, Integer estado){
+	public Collection<ProformasByEmpresaAndEstado> findByProformasByEmpresaAndEstado(Empresa empresa, Integer estado) {
 		return consultasNativeDao.findByProformasByEmpresaAndEstado(empresa, estado);
 	}
+
 	@Override
-	public Collection<ProformasByEmpresaAndFacturada> findByProformasByEmpresaFacturada(Empresa empresa){
+	public Collection<ProformasByEmpresaAndFacturada> findByProformasByEmpresaFacturada(Empresa empresa) {
 		return consultasNativeDao.findByProformasByEmpresaFacturada(empresa);
 	}
 
@@ -65,39 +66,38 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 
 	@Override
 	public Collection<ProformasByEmpresaAndFacturadaAndUsuario> findByProformasByEmpresaFacturadaAndUsuario(Empresa empresa, Integer idUsuario) {
-		
+
 		return consultasNativeDao.findByProformasByEmpresaFacturadaAndUsuario(empresa, idUsuario);
 	}
 
 	@Override
-	public Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa, Integer idusuario, String estado,String fecha) {
-		
-		return consultasNativeDao.findByFacturasDelDia(empresa, idusuario, estado,fecha);
+	public Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa, Integer idusuario, String estado, String fecha) {
+
+		return consultasNativeDao.findByFacturasDelDia(empresa, idusuario, estado, fecha);
 	}
 
 	@Override
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente) {
-		
-		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente);
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo) {
+
+		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente,codigo);
 	}
 
 	@Override
 	public Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar() {
-		
+
 		return consultasNativeDao.findByComprabarDocumentoPendienteaceptar();
 	}
 
 	@Override
-	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa,
-			String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
+	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
 		return consultasNativeDao.findByEmpresaAndEstadoAndFechasAndActividadComercial(empresa, fechaInicial, fechaFinal, estado, codigoActividadComercial);
 	}
-	
+
 	@Override
-	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, 
-			String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
 		return consultasNativeDao.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(empresa, fechaInicial, fechaFinal, estado, codigoActividadComercial);
-			}
+	}
+
 	@Override
 	public Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial, String fechaFinal, Long idProveedor, Integer estado, Integer idUsuario) {
 		return consultasNativeDao.findComprasSimplificadasByFechaAndEstadoAndEmpresa(empresa, fechaInicial, fechaFinal, idProveedor, estado, idUsuario);
@@ -110,9 +110,13 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal,  String actividadComercial) {
-		return consultasNativeDao.findByFacturasImpuestoServicio(empresa, idUsuario, estado, fechaInicial, fechaFinal,   actividadComercial);
+	public Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial) {
+		return consultasNativeDao.findByFacturasImpuestoServicio(empresa, idUsuario, estado, fechaInicial, fechaFinal, actividadComercial);
 	}
 
-	
+	@Override
+	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria) {
+		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria);
+	}
+
 }
