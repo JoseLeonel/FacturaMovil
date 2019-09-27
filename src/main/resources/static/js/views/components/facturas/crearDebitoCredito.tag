@@ -174,22 +174,18 @@
                   </div>
                   </div>
                 </div>  
-                  <br>
+                 
              </div>
             <div  class="contenedor-factura " >
                 
                 <div class="cabecera-izquierda">
                     <div class="row">
-                        <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
+                        <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4">
                             <label>Ingrese el Consecutivo</label>
                             <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" placeholder="Consecutivo:XXXXXXXXXXXX" />
+                            
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
-                                <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
-                            </div>
+                   
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-2">
                                 <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
@@ -205,9 +201,8 @@
                             <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}</h1>                        </th>
                             <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1> </th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}</h1>                     </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.cantidad")} Aplicar</h1>             </th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}</h1>                       </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}</h1>                    </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}</h1>                     </th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}</h1>                     </th>
                         </tr>
                         </thead>
@@ -223,15 +218,12 @@
                                 <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                             </td>
                             <td class="text-right">
+                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
+                            </td>
+                            <td class="text-right">
                                 <input   class="form-control" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
                             </td>
-                            <td class="text-right">
-                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
-                            </td>
                                                         
-                            <td class="text-right">
-                                <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
-                            </td>
 
                             <td class="text-right">
                                 <input  class="campo" type="text"  value = " {montoTotalLinea.toFixed(2)}" readonly/>
@@ -456,7 +448,454 @@
     </div>
 </div>
 <!--Fin Cambiar Descuento-->
+<style type="text/css"  >
+.contenedor-factura {
+  display:flex;
+}
+.campoDetalle {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 8px 18px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    font: 20px verdana, arial, helvetica, sans-serif;
+    /* margin: 2px 0; */
+    padding: 1px 2px;
+    overflow: visible;
+}
+.campoLabel{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+.teclashift {
+    font-weight: 700;
+    font-size: 27px !important;
+    text-align: center;
+    color: red;
 
+}
+.teclaFuncion{
+
+}
+.opcionPrecioPublico{
+    display: flex;
+    flex-direction: column;
+}
+.tituloTipoCambio{
+    color: #0c3f65 !important;
+    float: left !important;
+    font-size: 13px !important;
+    background-color: transparent !important;
+    font-weight: normal;
+    text-align: left;
+}
+.ssCambioCentral{
+    color: #0c3f65 !important;
+    display: block;
+    text-align: center;
+        font-weight: 900;
+
+}
+.ssCambio{
+    color: #0c3f65 !important;
+    display: block;
+    text-align: left;
+}
+@media (min-width: 992px){
+.modal-lg {
+    width: 1024px !important;
+}
+}
+.facturaDiaContainer{
+  display:flex;
+}
+  .tamanoClienteNuevo{
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+    height: 10%;
+
+  }
+  .tituloClienteNuevo{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+  }
+  .btn-dark-gray {
+    background-color: #3D3E42;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px!important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+   }
+   .btn-green {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 20px !important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    margin-top: 22px;
+    cursor: pointer;
+}
+    .botonesContainer{
+       display:flex;
+    }
+    .boton{
+       flex: 1;
+    }
+    .imagenesBilletes{
+      height: 90px;
+      width: 170px;
+    }
+   .pantallaBilletes{
+       display:flex;
+
+   }
+   .billeteContainer{
+       display:flex;
+       flex-flow: wrap;
+       flex-direction: row;
+   }
+   .billete{
+    cursor: pointer;
+    margin-right: 4%;
+    margin-top: 2%;
+
+   }
+.input-group {
+    position: relative;
+    display: flex;
+    border-collapse: separate;
+}
+     .input-group-addon.btnClientes {
+       color: #66b12f;
+        cursor: pointer;
+    }
+    .elementoTotalesChino{
+        font-weight: 600 !important;
+        font-size: 32px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        margin-left: 4%;
+        margin-bottom: 2%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+    .elementoTotales{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+        margin-left: 2%;
+    }
+    .TotalesContainer{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .contenedorExoneracion{
+
+    }
+    .label-totalesComprobanteChino {
+        display: flex;
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 37px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
+        cursor: pointer;
+        margin: 2%!important;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 25px !important;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .titleListaPrecio{
+        color:#0c3f65;
+       
+    }
+    .tituloDetalle{
+        text-align: center;
+        text-decoration: none;
+        font-style: italic;
+        color: black;
+        font-weight: 600;
+        font-size: 20px;
+    }
+    .btn-block {
+        display: block;
+        width: 100%;
+        margin-top: 30%;
+        }    
+
+    .fondoVentaEspera{
+        background: black;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
+        font-style: italic;
+        color: #e2f312 !important;
+        font-weight: 600;
+        font-size: 14px;
+        
+    }
+    .ventaEsperaSeleccionada{
+        display: flex;
+        padding-bottom: 0.2%;
+    }  
+    .ventaEsperaSeleccionada .tituloVentaEspera{
+        color: yellow;
+        background: black;
+        font-weight: 700;
+    }                           
+    .contenedorFactura{
+        display: flex;
+        flex: 1;
+        border: 1px solid #3c8dbc;
+        background: #ffffff;
+    
+
+    }
+
+    .precioTotalFacturaContainer{
+        display:flex;
+        flex:1;
+    }
+
+    .codigoBarraPrecioContainer{
+        display:flex;
+        flex:1;
+    }
+    .codigoBarraPrecioContainer .inputCodigoPrecio{
+        flex:1;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-bottom: 1%;
+    }
+
+    .labelBotones {
+        font-weight: 600 !important;
+        font-size: 19px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    @media screen and (max-width: 1024px) {
+    .labelBotones {
+        font-size: 14px !important;
+    }
+    .label-totalesComprobante{
+        font-size: 18px !important;
+    }
+    .cantidadArticulosTitulo{
+        font-size: 10px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        font-size: 14px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        font-size: 14px !important;
+    }
+    }
+
+    .botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
+    display:flex;
+    }
+
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
+    flex:1;
+    padding-right: 1%;
+    padding-bottom: 2%;
+    }
+
+
+
+
+    .gananciaContainer{
+        display:flex;
+        flex:1;
+    }
+    .gananciaContainer .formatoTituloGanancia{
+        flex:1;
+        color: black;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+    .tituloCantidadArticulos{
+        display:flex;
+    }
+    .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
+    font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #edea17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        /* padding: 5px; */
+        /* margin: 5px; */
+        /* border: none; */
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+
+    }
+
+    .tituloProductoIngresadoContainer{
+        display:flex;
+        flex:1;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
+        flex: 1;
+        display: flex;
+        padding-left: 2%;
+        padding-right: 2%;
+    
+    }
+
+
+
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        flex: 0.15;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: yellow !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 100%; */
+        /* border-collapse: separate; */
+        text-align: center;
+        /* margin: 5px; */
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+        /* border-radius: 5.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{px; */
+        /* -webkit-transition: background-color 100ms linear; */
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        /* transition: background-color 100ms linear; */
+    }
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 100%; */
+        /* border-collapse: separate; */
+        text-align: center;
+        /* margin: 5px; */
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+        /* border-radius: 5px; */
+        /* -webkit-transition: background-color 100ms linear; */
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        /* transition: background-color 100ms linear; */
+    }
+
+
+
+</style>    
 
 <script>
     var self = this;
