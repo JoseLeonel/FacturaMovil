@@ -147,11 +147,12 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, String.class, ParameterMode.IN);
-		
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, String.class, ParameterMode.IN);	
 		}
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, String.class, ParameterMode.IN);
+		
+	
 		
 
 		// set parametros salida

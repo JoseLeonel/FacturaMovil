@@ -79,6 +79,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
@@ -1061,7 +1062,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam Integer estado, @RequestParam String codigo) {
+	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String estado, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
@@ -1082,8 +1083,8 @@ public class FacturasController {
 			idUsuario = usuarioSesion.getId();
 		}
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
-		if (estado == Constantes.ZEROS) {
+		Collection<FacturasSinNotaCreditoNative> objetos = null;
+		if (estado.equals(Constantes.COMBO_TODOS)) {
 			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
 		} else {
 			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
@@ -1589,10 +1590,10 @@ public class FacturasController {
 			if (facturaCommand != null) {
 				if (facturaCommand.getId() != null) {
 					if (facturaCommand.getId() > Constantes.ZEROS_LONG) {
-						Factura facturaRevision = facturaBo.findById(facturaCommand.getId());
+						FacturaIDNativa facturaRevision = consultasNativeBo.findIdFactura(facturaCommand.getId());
 						if (facturaRevision != null) {
 							if (facturaRevision.getEstado() != null) {
-								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA) || facturaRevision.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) ) {
 									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}

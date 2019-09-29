@@ -1,5 +1,6 @@
 package com.emprendesoftcr.modelo.sqlNativo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,7 +21,10 @@ import com.emprendesoftcr.Utils.Utils;
 + " inner join provee_simpli on provee_simpli.id = compra_simpli.proveedorsimpl_id " 
 + "  where  compra_simpli.empresa_id = :ID_EMPRESA and compra_simpli.created_at >= :FECHAINICIAL and compra_simpli.created_at <= :FechaFinal and compra_simpli.estado = :Estado and compra_simpli.usuario_id =  and compra_simpli.proveedorsimpl_id =  ")
 @Entity
-public class CompraSimplificadaNative {
+public class CompraSimplificadaNative implements Serializable {
+
+	
+	private static final long serialVersionUID = 466521158014902869L;
 
 	@Id
 	@Column(name = "id")
@@ -289,7 +293,7 @@ public class CompraSimplificadaNative {
 			return false;
 		return true;
 	}
-	
+
 	
 	
 	

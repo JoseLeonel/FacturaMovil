@@ -119,6 +119,9 @@ public class KardexController {
 			if (articulo == null) {
 				result.rejectValue("codigo", "error.kardex.articulo.no.existe");
 			}
+			if(articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.kardex.articulo.inactivo", result.getAllErrors());
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -154,7 +157,9 @@ public class KardexController {
 			if (articulo == null) {
 				result.rejectValue("codigo", "error.kardex.articulo.no.existe");
 			}
-			
+			if(articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.kardex.articulo.inactivo", result.getAllErrors());
+			}
 			if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE)
 			{
 				result.rejectValue("codigo", "error.kardex.articulo.no.existe");

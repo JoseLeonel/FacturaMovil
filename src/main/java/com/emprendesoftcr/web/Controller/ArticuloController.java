@@ -619,6 +619,13 @@ public class ArticuloController {
 			articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 			articulo.setCodigoTarifa1(Constantes.EMPTY);
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articulo.setEstado(articulo.getEstado() == null? Constantes.EMPTY:articulo.getEstado());
+			
+			if(articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
+				result.rejectValue("estado", "error.articulo.inactivo.agregar");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
+				
+			}
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 

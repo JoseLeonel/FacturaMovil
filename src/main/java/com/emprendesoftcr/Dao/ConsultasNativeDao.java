@@ -8,6 +8,7 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -52,4 +53,6 @@ public interface  ConsultasNativeDao {
 	Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal, String actividadComercial);
 	
 	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa,Cliente cliente,Integer estado,String fechaInicial,String fechaFinal, String actividadComercial,Integer idCategoria);
+	
+	FacturaIDNativa findIdFactura(Long id);
 }

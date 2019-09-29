@@ -59,18 +59,6 @@
                                     </div>
                                    
 
-                                    <div class="form-group has-success">
-                                        <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class=" tamanoLetraTotales totalEfectivo campo " id="totalEfectivo" name="totalEfectivo">
-                                    </div>
-                                    <div  class="form-group has-success">
-                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="tamanoLetraTotales totalTarjeta campo" id="totalTarjeta" name="totalTarjeta"   >
-                                    </div>
-                                    <div  class="form-group has-success">
-                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales   totalBanco" id="totalBanco" name="totalBanco"  >
-                                    </div>
 
                                     
                                 </div>
@@ -114,34 +102,11 @@
                     </div>
                     <div class="box-footer">
                         <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
-                        <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                        <button onclick={__AplicarYcrearFactura}  class="btn-green-aplicar btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
-		        <div class="box">
-				    <div class="box-header with-border"><h1 class="box-title">Detalles Facturacion</h1></div>
-				    <div class="box-body">
-                        <aside class="right-sidebar">
-                            <!--Booking details-->
-                            <article class="booking-details clearfix">
-                                <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
-                                <div class="booking-info">
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral  } </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                </div>
-                                <div class="precioTotalFactura">
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                </div>
-                                <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
-                                </div>
-                            </article>
-                        </aside>
-                    </div><!-- fin box-body-->
-				</div><!-- fin box -->
-		    </div>
+           
         </div>  
           <!--Ventana de los billetes-->
         <div class="container">
@@ -169,8 +134,9 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
-                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.documentos.especiales")}"> <span class="label label-limpiar">{$.i18n.prop("crear.documentos.especiales")}</span></a>
+                    <a class="pull-left" href="#"     onclick = {__MostrarFormularioDePago} title="{$.i18n.prop("crear.documentos.especiales")}"> <span class="label label-limpiar">F8={$.i18n.prop("crear.documentos.especiales")}</span></a>
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
+                    
                   </div>
                   </div>
                 </div>  
@@ -187,7 +153,7 @@
                         </div>
                    
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-2">
-                                <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
+                                <button     onclick={__verificarFactura} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
                                 </button>
                             </div>
@@ -197,13 +163,11 @@
                         <thead>
                         <tr>
                             <th style="width:5%;">                                                   </th>
-                            <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}</h1>                         </th>
-                            <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}</h1>                        </th>
-                            <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1> </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}</h1>                     </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.cantidad")} Aplicar</h1>             </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}</h1>                       </th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}</h1>                     </th>
+                            <th><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.linea")}</div></th>
+                            <th><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.codigo")}</label></th>
+                            <th style="width:20%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descripcion")}</label> </th>
+                            <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.cantidad")}</label></th>
+                            <th ><div class="tituloDetalle">Cant. Aplicar</label></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -215,185 +179,23 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
+                                <label> {cantidad.toFixed(3)} </label>
                             </td>
                             <td class="text-right">
-                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
-                            </td>
-                            <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
-                            </td>
-                                                        
-
-                            <td class="text-right">
-                                <input  class="campo" type="text"  value = " {montoTotalLinea.toFixed(2)}" readonly/>
+                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)}  />
                             </td>
                         </tr>
                         </tbody>
                     </table>          
                 </div>
-                <section class="cabecera-derecha">
-				    <!--right sidebar-->
-                     <div class="row">
-                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                    <aside class="left-sidebar">
-                            <!--Booking details-->
-                        <article class="booking-details clearfix">
-                            <div    onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                <table id="pagarTable" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}: </div>
-                                            </td>
-                                            <td width="70%" id="">
-                                            
-                                                <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {totalComprobante}</span>
-                                                </div>
-                                            </td>
-                                        </tr>                     
-                                    </tbody>
-                                </table>
-                            </div>
-                        </article>
-                    </aside>
-                    </div>
-                    </div>
-                    <section   class="lista-factura-espera">
-                        <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
-                        </div>    
-                     </section >
-
-                </section>
+               
                       
             </div><!-- fin contenedor-factura-->
             
         </div><!-- fin box-body-->
 	</div><!-- fin box -->
-<!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
-            </div>
-            <div class="modal-body">
-               <form id="formularioParametros" name ="formularioParametros" >
-                    <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
-                        </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
-                        </div>
-                    </div> 
-                </form>    
-                <br>             
-                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
-                    <thead>
-                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
-                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
-                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
-                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th >{$.i18n.prop("articulo.codigo")}         </th>
-                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
-                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
-                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
-                            <th >                                        </th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
-<!--Modal mostrar  -->
-<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
-                        <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                        <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
-                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("cliente.cedula")}           </th>
-                            <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
-                            <th>{$.i18n.prop("cliente.descuento")}        </th>
-                            <th>{$.i18n.prop("cliente.telefono")}         </th>
-                            <th>{$.i18n.prop("cliente.celular")}          </th>
-                            <th>                                          </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
- 
-<!--Modal mostrar  -->
-<div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.celular")}           </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("vendedor.cedula")}           </th>
-                            <th>{$.i18n.prop("vendedor.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("vendedor.correoElectronico")}</th>
-                            <th>{$.i18n.prop("vendedor.telefono")}         </th>
-                            <th>{$.i18n.prop("vendedor.celular")}          </th>
-                            <th>                                           </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
+
+
  
 
 <!--Modal Cambiar Cantidad-->
@@ -423,32 +225,34 @@
 <!--Fin Cambiar Cantidad-->
 
 
-<!--Modal Cambiar Descuento-->
-<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Descuento-->
 <style type="text/css"  >
+.btn-green-aplicar {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px!important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+#pagarTitulo {
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #ffffff !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    line-height: 30px;
+}
+
 .contenedor-factura {
   display:flex;
 }
@@ -554,20 +358,25 @@
     float: right;
     cursor: pointer;
    }
+   .campoLabel{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
    .btn-green {
     background-color: #4cae4c;
     color: #FFF;
     border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
     padding-left: 20px;
     padding-right: 20px;
-    font-size: 20px !important;
+    font-size: 12px !important;
     font-weight: bold;
     margin-right: 15px;
     border: none;
     float: right;
-    margin-top: 22px;
+    margin-top: 26px;
     cursor: pointer;
 }
     .botonesContainer{
@@ -983,18 +792,9 @@
     self.on('mount',function(){
         _INIT()
         $("#formularioFactura").validate(reglasDeValidacionFactura());
-        __informacionData()
-        __informacionData_vendedores()
-        __InicializarTabla('.tableListaCliente')
-        __InicializarTabla('.tableListaInventario')
-        __InicializarTabla('.tableListaVendedor')
-        agregarInputsCombos_Articulo()
-        __ListaFacturasEnEspera()
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __ComboEstados()
-        __ListaDeClientes()
-       __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
        __comboCondicionPagoRef()
@@ -1016,6 +816,52 @@ __LimpiarFormulario(){
      _INIT()    
 }
 function _INIT(){
+     self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    }      
+    self.update()
   $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
@@ -1464,10 +1310,6 @@ function __Init(){
             nombreCompleto:""
         }
     }           
-    self.vendedor              = {
-        id:null,
-        nombreCompleto:""
-    }
     self.tipoCambio                    = {}
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
@@ -1503,7 +1345,6 @@ function __Init(){
       __ComboTipoDocumentos()
       //Estados
       __ComboEstados()
-     __ListaFacturasEnEspera()
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -1641,32 +1482,9 @@ function evaluarFactura(data){
 	                confirmButtonText: $.i18n.prop("btn.aceptar"),
                 })
                 __Init()
-                __ListaFacturasEnEspera()
             }
         });
     }
-}
-/**
-*  Lista de las facturas pendientes por el usuario
-**/
-function __ListaFacturasEnEspera(){
-     self.facturas_espera       = {data:[]}  
-     self.update()
-    $.ajax({
-        url: 'ListarNotasCreditoAndDebitoEsperaActivasAjax',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.facturas_espera.data =  result.aaData;  
-               self.update(); 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });    
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de Descuento
@@ -1734,6 +1552,17 @@ __agregarArticulosFactura(e){
      if (e.keyCode != 13) {
         return;
     } 
+    verificarConsecutivo()
+
+}
+__verificarFactura(){
+  
+    verificarConsecutivo()
+
+}
+
+
+function verificarConsecutivo(){
     var numero  = $('.consecutivoFactura').val()
     $.ajax({
         url: "ListarDetlleByFacturaConsecutivoAjax.do",
@@ -1891,65 +1720,7 @@ function __ListaDeArticulosPorDescripcion(){
         }
     });
 }
-/**
-*  Muestra la lista de clientes
-**/
-_EscogerClientes(){
-    $('#modalClientes').modal('show')  
-}
 
-/**
-*  Muestra la lista de vendedores
-**/
-_EscogerVendedores(){
-    $('#modalVendedor').modal('show')  
-}
-/**
-*  Lista de los vendedores
-**/
-function __ListaDeVendedores(){
-    $.ajax({
-        url: 'ListarVendedoresActivosAjax.do',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                __informacionData_vendedores()
-                loadListar(".tableListaVendedor",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
-                agregarInputsCombos_Vendedores()
-                ActivarEventoFiltro(".tableListaVendedor")
-                __seleccionarVendedor()
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
-/**
-*  Lista de los clientes
-**/
-function __ListaDeClientes(){
-    $.ajax({
-        url: 'ListarClientesActivosAjax.do',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                __informacionData()
-                loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
-                agregarInputsCombos_Clientes()
-                ActivarEventoFiltro(".tableListaCliente")
-                __seleccionarClientes()
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -2125,45 +1896,9 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
-    __ValidarCantidadArticulo(self.item.codigo,cantidad)
+    agregarCantidadAlaVenta(cantidad)
+    
   }
-/**
-* Buscar el codigo del codigo  en la base de datos
-**/
-function __ValidarCantidadArticulo(idArticulo,cantidad){
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                            return 
-                        }
-                        if(modeloTabla.cantidad < cantidad ){
-                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                            return 
-                        }
-                        agregarCantidadAlaVenta(cantidad)
-                    })
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
 /**
 * Monto del descuento
 **/
@@ -2193,7 +1928,7 @@ function ActualizarLineaDEtalle(){
 * Agregar la cantidad nueva
 **/
 function agregarCantidadAlaVenta(cantidad){
-    self.item.cantidad = cantidad
+    self.item.cantidadNotaCredito = cantidad
     self.update()
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
@@ -2317,143 +2052,9 @@ function getSubTotalGeneral(){
     self.subTotalGeneral = redondearDecimales(resultado,5)
     self.update()
 }
-/**
-* Definicion de la tabla articulos 
-**/
-function _informacionData_Articulo(){
-   self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
-                                        {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
-                                        {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
-                                        {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
-                                          "render":function(precioPublico,type, row){
-                                              var resultado = formatoDecimales(__valorNumerico(precioPublico))
-                                               return  resultado;
-                                            }
-                                        },
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-                                            "render":function(id,type, row){
-                                                    return __OpcionesArticulos(id,type,row);
-                                                }	 
-                                        },
-                              ];
-    
- self.update()        
-}
-/**
-* Opciones del modal de articulos
-*/
-function __OpcionesArticulos(){
-  var agregar  = '<a href="#"  class="btn btnAgregar btn-success form-control" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
 
-}
-/**
-* Agregar codigos a la Factura desde modal de articulos
-**/
-function __agregarArticulos() {
-     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListarArticulos').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.articulo = data;
-        self.update();  
-	     if(self.articulo.contable == "si"){
-           __buscarcodigo(self.articulo.codigo,1)
-        }else{
-            __agregarArticulo(1)
-        }
-    });
-}
 
-/**
-* formato de la tabla de clientes
-**/
-function __informacionData_vendedores(){
-    self.informacion_tabla_vendedores = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
-                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
-                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},                                
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									            "render":function(id,type, row){
-										            return __OpcionesVendedores(id,type,row);
-	 							                }	 
-								            },
-                                        ];                              
-   
-}
-/**
-* Opciones del modal de clientes
-*/
-function __OpcionesVendedores(){
-  var agregar  = '<a href="#"  title="Seleccionar Vendedor" class="btn btnVendedor btn-success form-control" title="Seleccione el vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
 
-}
-/**
-* Seleccionar el vendedor de la factura
-**/
-function __seleccionarVendedor() {
-     $('#tableListaVendedor').on('click', '.btnVendedor', function (e) {
-         var table = $('#tableListaVendedor').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-         }
-        self.vendedor = data
-        self.update();
-    });
-}
-/**
-* formato de la tabla de clientes
-**/
-function __informacionData(){
-    self.informacion_tabla_clientes = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
-                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
-                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									            "render":function(id,type, row){
-										            return __Opcionesclientes(id,type,row);
-	 							                }	 
-								            },
-                                        ];                              
-   
-}
-/**
-* Opciones del modal de clientes
-*/
-function __Opcionesclientes(){
-  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
-
-}
-/**
-* Agregar codigos a la factura desde modal de articulos
-**/
-function __seleccionarClientes() {
-     $('#tableListaCliente').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListaCliente').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.cliente = data
-        self.update();
-    });
-}
 /**
 * cargar los estados de la factura
 **/
@@ -2481,25 +2082,9 @@ function __comboCondicionPagoRef(){
         descripcion:$.i18n.prop("referencia.anula.documento")
     })
     self.codigosReferencias.push({
-        estado:"02",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
-    })    
-    self.codigosReferencias.push({
         estado:"03",
         descripcion:$.i18n.prop("referencia.corrige.monto.documento")
     })   
-    self.codigosReferencias.push({
-        estado:"04",
-        descripcion:$.i18n.prop("referencia.otro.documento")
-    })    
-    self.codigosReferencias.push({
-        estado:"05",
-        descripcion:$.i18n.prop("referencia.sustituye.comprobante.documento")
-    })    
-    self.codigosReferencias.push({
-        estado:"99",
-        descripcion:$.i18n.prop("referencia.otros.documento")
-    })    
     self.update()
 }
 /**
@@ -2514,47 +2099,9 @@ function __ComboTipoDocumentos(){
         descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
     })
     
-    self.comboTipoDocumentos.push({
-         estado:"02",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
-    })
-    self.update()
    self.comboTipoDocumentosRef.push({
          estado:"01",
         descripcion:$.i18n.prop("referencia.tipo.documento.factura.electronica")
-    })
-    self.comboTipoDocumentosRef.push({
-         estado:"02",
-        descripcion:$.i18n.prop("referencia.tipo.documento.nota.debito")
-    })
-    self.comboTipoDocumentosRef.push({
-         estado:"03",
-        descripcion:$.i18n.prop("referencia.tipo.documento.nota.credito")
-    })
-     self.comboTipoDocumentosRef.push({
-        estado:"04",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.tiquete")
-    })
-
-     self.comboTipoDocumentosRef.push({
-        estado:"05",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.nota.despacho")
-    })
-    self.comboTipoDocumentosRef.push({
-        estado:"06",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.contrato")
-    })
-    self.comboTipoDocumentosRef.push({
-        estado:"07",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.procedimiento")
-    })
-    self.comboTipoDocumentosRef.push({
-        estado:"08",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.comprobante.contigencia")
-    })
-    self.comboTipoDocumentosRef.push({
-        estado:"99",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.otros")
     })
     self.update()
 
@@ -2564,10 +2111,7 @@ function __ComboTipoDocumentos(){
 **/
 function __ComboEstados(){
     self.comboEstados = []
-    self.comboEstados.push({
-        estado:1,
-        descripcion:$.i18n.prop("factura.estado.pendiente")
-    })
+    
     self.comboEstados.push({
         estado:2,
         descripcion:$.i18n.prop("factura.estado.facturado")

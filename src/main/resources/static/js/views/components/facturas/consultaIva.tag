@@ -52,6 +52,7 @@
 				<div class="actividadEconomica">   
 				<label class="titleListaPrecio">Actividades Comerciales </label>  
 					<select class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
+					    <option    value="0"  >{$.i18n.prop("todos.select")}</option> 
 						<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
 					</select>
 				</div>

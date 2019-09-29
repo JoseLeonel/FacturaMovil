@@ -360,6 +360,7 @@ function __ListaActividadesComercales(){
 			        	self.mostrarFiltros = false;
 						if(self.factura.total >0){
                           self.mostrarBotones=true
+						  self.actividadEconomica =   $('.selectActividadEconocimica').val()
 						}
 						//Se presentan los filtros
 		               self.mostrarFiltros = true;

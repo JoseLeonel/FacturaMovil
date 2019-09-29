@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +18,7 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -123,7 +125,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo) {
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente, String codigo) {
 		String queryStr = getQueryBase(FacturasSinNotaCreditoNative.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
@@ -139,13 +141,13 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		} else {
 			queryStr = queryStr.replaceAll("and facturas.cliente_id = ", " ");
 		}
-		if(codigo != null) {
-			if(codigo.equals(Constantes.EMPTY)) {
+		if (codigo != null) {
+			if (codigo.equals(Constantes.EMPTY)) {
 				queryStr = queryStr.replaceAll("and detalles.codigo ", " ");
 				queryStr = queryStr.replaceAll("inner join detalles on detalles.factura_id = facturas.id ", " ");
-				
-			}else {
-				queryStr = queryStr.replaceAll("and detalles.codigo","and detalles.codigo ='" + codigo.toString() + "' ");
+
+			} else {
+				queryStr = queryStr.replaceAll("and detalles.codigo", "and detalles.codigo ='" + codigo.toString() + "' ");
 			}
 		}
 
@@ -164,7 +166,12 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":FECHAINICIAL", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":FECHAFINAL", "'" + fechaFinal + "'");
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
-		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", " in ('" + codigoActividadComercial.toString() + "')");
+		if(codigoActividadComercial > Constantes.ZEROS) {
+			queryStr = queryStr.replace("ACT_COMERCIAL", " and f.act_comercial in ('" + codigoActividadComercial.toString() + "') ");	
+		}else {
+			queryStr = queryStr.replace("ACT_COMERCIAL", Constantes.EMPTY);
+		}
+		
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
 		return (Collection<ConsultaIVANative>) query.getResultList();
 	}
@@ -228,14 +235,14 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
-		
+
 		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
 			queryStr = queryStr.replaceAll("and facturas.act_comercial", "");
-				
-		}else {
+
+		} else {
 			queryStr = queryStr.replaceAll("and facturas.act_comercial", " and facturas.act_comercial in ('" + actividadComercial + "') ");
 		}
-		
+
 		if (idUsuario > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("and facturas.usuario_id", "and facturas.usuario_id ='" + idUsuario.toString() + "' ");
 		} else {
@@ -276,7 +283,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 			queryStr = queryStr.replaceAll("and facturas.cliente_id", " ");
 		}
 		if (idCategoria > Constantes.ZEROS) {
-			queryStr = queryStr.replaceAll( "and categorias.id =", " and categorias.id =" + idCategoria.toString() + " ");
+			queryStr = queryStr.replaceAll("and categorias.id =", " and categorias.id =" + idCategoria.toString() + " ");
 			;
 		} else {
 			queryStr = queryStr.replaceAll("and categorias.id =", "");
@@ -308,6 +315,21 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasImpuestoServicioNativa.class);
 		return (Collection<ListarFacturasImpuestoServicioNativa>) query.getResultList();
+
+	}
+
+	@Override
+	public FacturaIDNativa findIdFactura(Long id) {
+		String queryStr = getQueryBase(FacturaIDNativa.class);
+		queryStr = queryStr.replaceAll(":ID_FACTURA", id.toString());
+		Query query = entityManager.createNativeQuery(queryStr, FacturaIDNativa.class);
+		List<FacturaIDNativa> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (FacturaIDNativa) results.get(0);
+		} else {
+			return null;
+		}
+		
 
 	}
 

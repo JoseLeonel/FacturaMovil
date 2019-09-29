@@ -2,6 +2,8 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,6 +16,7 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -117,6 +120,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	@Override
 	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria) {
 		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria);
+	}
+
+  @Transactional
+	@Override
+	public FacturaIDNativa findIdFactura(Long id) {
+		return consultasNativeDao.findIdFactura(id);
 	}
 
 }
