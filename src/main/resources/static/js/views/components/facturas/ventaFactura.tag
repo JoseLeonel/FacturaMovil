@@ -688,7 +688,7 @@
                                         <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}">
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} <span class="teclashift">(Tecla =shift )</span></label> 
                                         <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   value="{factura.totalTarjeta}">
                                     </div>
                                     <div  class="form-group has-success">
@@ -734,7 +734,7 @@
                         <aside class="right-sidebar">
                             <!--Booking details-->
                             <article class="booking-details clearfix">
-                                <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
+                                <span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span>
                                     <div class="containerTotales">
                                         <div class="elementoTotales" >
                                            <div class="tituloTotal">
@@ -765,6 +765,11 @@
                                         </div>
                                         
                                     </div>
+                                     <div class="containerBotonesPagar">
+                                        <div class="elementoPagar">
+                                             <button onclick={__MoverMontoTarjeta}  class="btn-Pagar btn-PagarICON pull-right"> </i> Pagar Tarjeta</button>
+                                        </div>
+                                    </div>
                                     <div class="pantallaBilletes">
                                        <div class="billeteContainer">
                                             <div class="billete" each={billetes}   onclick={_sumarBilletes}>
@@ -783,8 +788,41 @@
 </div>  
 
 <style type="text/css">
+.btn-PagarICON:before {
+    font-family: FontAwesome;
+    content: "\f09d ";
+}
+.btn-Pagar {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 24px;
+    padding-right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.containerBotonesPagar{
+    display:flex;
+    margin-top: 2%;
+}
+.elementoPagar{
+
+}
+.teclashift {
+    font-weight: 700;
+    font-size: 27px !important;
+    text-align: center;
+    color: red;
+
+}
  .imagenesBilletes{
-      height: 90px;
+      height: 75px;
       width: 170px;
     }
    .pantallaBilletes{
@@ -3981,7 +4019,103 @@ function __Teclas(){
     if(tecla ==45){
        __OpcionAbrirCajon()
     }
+     if(tecla ==16){
+       moverPagoTarjeta()
+      return 
+    }
     }, false );
+}
+__MoverMontoTarjeta(){
+    if($('#modalAgregarClienteNuevo').is(':visible')){
+           return
+    }
+     var resultado = __valorNumerico($(".totalTarjeta").val())
+    if(resultado > 0){
+        $('.totalTarjeta').select()
+        $('.totalTarjeta').focus()
+        return
+
+    }
+    self.totalCambioPagarSTR = 0
+    self.totalCambioPagar= 0
+    var resultado = __valorNumerico($(".totalEfectivo").val())
+    if(resultado > 0){
+        self.factura.totalTarjeta = resultado
+        self.factura.totalEfectivo = 0
+        self.factura.totalBanco = 0
+        self.update()  
+        $(".totalEfectivo").val(null)
+        $(".totalTarjeta").val(self.factura.totalTarjeta) 
+        $('.totalTarjeta').select()
+        $('.totalTarjeta').focus()
+        return
+    } 
+    self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
+    self.factura.totalBanco = 0
+    self.factura.totalTarjeta = 0
+    self.update()  
+    $(".totalEfectivo").val(null)
+    $(".totalTarjeta").val(self.factura.totalComprobante) 
+    $('.totalTarjeta').select()
+    $('.totalTarjeta').focus()
+    return
+
+}
+
+function moverPagoTarjeta(){
+        if($('#modalAgregarClienteNuevo').is(':visible')){
+           return
+        }
+        self.totalCambioPagarSTR = 0
+        self.totalCambioPagar= 0
+        var resultado = __valorNumerico($(".totalEfectivo").val())
+        if(resultado > 0){
+          self.factura.totalTarjeta = resultado
+          self.factura.totalEfectivo = 0
+          self.factura.totalBanco = 0
+          self.update()  
+          $(".totalEfectivo").val(null)
+          $(".totalTarjeta").val(self.factura.totalTarjeta) 
+          $('.totalTarjeta').select()
+          $('.totalTarjeta').focus()
+          return
+        } 
+        resultado = __valorNumerico($(".totalTarjeta").val())
+        if(resultado > 0){
+            self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
+            self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+         } 
+        resultado = __valorNumerico($(".totalBanco").val())
+        if(resultado > 0){
+            self.factura.totalEfectivo = resultado
+            self.factura.totalBanco = 0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+        }    
+        self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
+        self.factura.totalBanco = 0
+        self.factura.totalTarjeta = 0
+        self.update()  
+        $(".totalBanco").val(null)
+        $(".totalTarjeta").val(null)
+        $(".totalEfectivo").val(self.factura.totalEfectivo) 
+        $('.totalEfectivo').select()
+        $('.totalEfectivo').focus()
+
 }
 
 function refrescarPagina(){

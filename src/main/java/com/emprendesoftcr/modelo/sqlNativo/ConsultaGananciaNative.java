@@ -10,11 +10,11 @@ import javax.persistence.Id;
 query = "SELECT clientes.id,  clientes.cedula,clientes.nombre_completo," 
 + "categorias.descripcion as nomb_categ,detalles.codigo,detalles.descripcion as nomb_product,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") as fecha_emision," 
 + "sum(IFNULL(detalles.costo * detalles.cantidad,0)) as costo,sum(IFNULL(detalles.cantidad,0)) as cantidad ,sum(IFNULL(detalles.monto_total_linea ,0)) as total," 
-+ "sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto, 0)) as impuesto,sum(IFNULL(detalles.monto_impuesto, 0)) as monto_exonerado FROM detalles" 
-+ " inner join facturas on facturas.id =detalles.factura_id " 
-+ " inner join clientes on clientes.id =facturas.cliente_id " 
-+ " inner join articulos on articulos.codigo =detalles.codigo " 
-+ " inner join categorias on categorias.id = articulos.categoria_id "
++ "sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto, 0)) as impuesto,sum(IFNULL(detalles.mont_exone, 0)) as monto_exonerado FROM detalles" 
++ " left join facturas on facturas.id =detalles.factura_id " 
++ " left join clientes on clientes.id =facturas.cliente_id " 
++ " left join articulos on articulos.codigo =detalles.codigo " 
++ " left join categorias on categorias.id = articulos.categoria_id "
 + " where facturas.empresa_id = :ID_EMPRESA facturas.estado in and facturas.tipo_doc !='88' and facturas.tipo_doc !='86' and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.fecha_emision >= :fechaInicial and facturas.fecha_emision <= :fechaFinal and categorias.id = and facturas.cliente_id and facturas.act_comercial and detalles.codigo " + " GROUP by clientes.id,clientes.cedula,clientes.nombre_completo,categorias.descripcion,detalles.codigo,detalles.descripcion,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") " + " ORDER BY clientes.nombre_completo,categorias.descripcion,detalles.descripcion ASC")
 @Entity
 public class ConsultaGananciaNative implements Serializable {

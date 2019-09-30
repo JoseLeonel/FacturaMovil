@@ -4195,10 +4195,14 @@ function __seleccionarClientes() {
         }
         $('#modalClientes').modal('hide') 
         if(!verificarSiClienteFrecuente()){
+            self.factura.tipoDoc ='01'
+            
            __ComboTipoDocumentos(1)
         }else{
+            self.factura.tipoDoc ='04'
             __ComboTipoDocumentos(0)
         }
+        self.update()
        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
@@ -4221,18 +4225,6 @@ function verificarSiClienteFrecuente(){
     return false;
 }
 
-function validarSiTieneExoneracion(){
-    for (var count = 0; count < self.detail.length; count++) {
-        self.item          = self.detail[count];
-        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
-        if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
-           if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
-                return true
-            }
-        }
-    }            
-    
-}
 
 /**
 * Aplicar la exoneracion de detalles

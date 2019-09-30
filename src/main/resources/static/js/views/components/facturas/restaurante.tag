@@ -1117,7 +1117,7 @@
                                         <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" >
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} <span class="teclashift">(Tecla =shift )</span></label> 
                                         <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     </div>
                                     <div  class="form-group has-success">
@@ -1198,6 +1198,11 @@
                                         </div>
                                         
                                     </div>
+                                    <div class="containerBotonesPagar">
+                                        <div class="elementoPagar">
+                                             <button onclick={__MoverMontoTarjeta}  class="btn-Pagar btn-PagarICON pull-right"> </i> Pagar Tarjeta</button>
+                                        </div>
+                                    </div>
                             </article>
                         </aside>
                     </div><!-- fin box-body-->
@@ -1221,6 +1226,39 @@
             </div>       
         <!--Fin Ventana de los billetes--> 
 <style type="text/css">
+.btn-PagarICON:before {
+    font-family: FontAwesome;
+    content: "\f09d ";
+}
+.btn-Pagar {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 24px;
+    padding-right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.containerBotonesPagar{
+    display:flex;
+    margin-top: 2%;
+}
+.elementoPagar{
+
+}
+.teclashift {
+    font-weight: 700;
+    font-size: 27px !important;
+    text-align: center;
+    color: red;
+
+}
 .tituloDescuento{
     font-size: 50px;
 }
@@ -3348,14 +3386,20 @@ function cargarDetallesFacturaEnEspera(data){
             nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
             numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
             tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
-
         });
         self.update()
     })
     self.totalCambioPagar = 0
     self.totalCambioPagarSTR =0
     self.update()
-    
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    $('#totalEfectivo').val(self.factura.totalComprobante)
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
+    __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
 }
 /** 
@@ -3381,7 +3425,11 @@ function crearFactura(estado, separarFactura){
     self.detalleFactura.data = self.detail    
     self.update() 
     if(estado ==1){
-       self.factura.tipoDoc = "04";
+        if(!verificarSiClienteFrecuente()){
+           self.factura.tipoDoc = "01";
+        }else{
+            self.factura.tipoDoc = "04";
+        }
     }
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
@@ -3533,7 +3581,6 @@ function mostrarPAgo(){
     self.mostarParaCrearNuevaVentas = false
     self.mostrarSepararCuenta		    = false //true
     self.mostrarCambiarMesa = false;
-
     self.factura.totalEfectivo = self.factura.totalComprobante
     self.update()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
@@ -4402,20 +4449,45 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
-        __aplicarExoneracionPorCliente()
-        
-        
-         $('#modalClientes').modal('hide') 
-        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
-        $('#totalTarjeta').val(null)
-        $('#totalBanco').val(null)
-        $('#totalEfectivo').focus()
-        $('#totalEfectivo').select()
+         if(self.cliente.cedula != data.cedula){
+            self.cliente = data
+            self.update();
+            __aplicarExoneracionPorCliente()
+
+        }
+        $('#modalClientes').modal('hide') 
+        if(!verificarSiClienteFrecuente()){
+            self.factura.tipoDoc ='01'
+            
+           __ComboTipoDocumentos(1)
+        }else{
+            self.factura.tipoDoc = "04";
+            __ComboTipoDocumentos(0)
+        }
+        self.update()
+       $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+       $('#totalTarjeta').val(null)
+       $('#totalBanco').val(null)
+       $('#totalEfectivo').focus()
+       $('#totalEfectivo').select()
          
         
     });
 }
 
+/**
+*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
+* para que salga factura o proforma
+**/
+function verificarSiClienteFrecuente(){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || self.cliente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
+        return true
+    }
+    if(self.cliente.cedula.indexOf("999999999999") != -1 || self.cliente.cedula.indexOf("888888888888") != -1){
+        return true
+    }
+    return false;
+}
 
 /**
 * Aplicar la exoneracion de detalles
@@ -4465,7 +4537,7 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                   
+                 
                     aplicaExo = true
                 }
                
@@ -4473,7 +4545,6 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-      
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
@@ -4481,14 +4552,6 @@ function __aplicarExoneracionPorCliente(){
        self.totalCambioPagar = 0
        self.totalCambioPagarSTR = 0
        self.update();
-
-    }
-    if(verificarClienteFrecuente()){
-        __ComboTipoDocumentos(0)
-
-    }else{
-        __ComboTipoDocumentosSinClienteFrecuente()
-
     }
 
 }
@@ -4664,8 +4727,100 @@ function __Teclas(){
     if(tecla ==45){
        __OpcionAbrirCajon()
     }
+    if(tecla ==16){
+       moverPagoTarjeta()
+      return 
+    }
      
     }, false );
+}
+
+__MoverMontoTarjeta(){
+    if($('#modalAgregarClienteNuevo').is(':visible')){
+           return
+    }
+     var resultado = __valorNumerico($(".totalTarjeta").val())
+    if(resultado > 0){
+        $('.totalTarjeta').select()
+        $('.totalTarjeta').focus()
+        return
+
+    }
+    var resultado = __valorNumerico($(".totalEfectivo").val())
+    if(resultado > 0){
+        self.factura.totalTarjeta = resultado
+        self.factura.totalEfectivo = 0
+        self.factura.totalBanco = 0
+        self.update()  
+        $(".totalEfectivo").val(null)
+        $(".totalTarjeta").val(self.factura.totalTarjeta) 
+        $('.totalTarjeta').select()
+        $('.totalTarjeta').focus()
+        return
+    } 
+    self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
+    self.factura.totalBanco = 0
+    self.factura.totalTarjeta = 0
+    self.update()  
+    $(".totalEfectivo").val(null)
+    $(".totalTarjeta").val(self.factura.totalComprobante) 
+    $('.totalTarjeta').select()
+    $('.totalTarjeta').focus()
+    return
+}
+
+function moverPagoTarjeta(){
+        if($('#modalAgregarClienteNuevo').is(':visible')){
+           return
+        }
+        var resultado = __valorNumerico($(".totalEfectivo").val())
+        if(resultado > 0){
+          self.factura.totalTarjeta = resultado
+          self.factura.totalEfectivo = 0
+          self.factura.totalBanco = 0
+          self.update()  
+          $(".totalEfectivo").val(null)
+          $(".totalTarjeta").val(self.factura.totalTarjeta) 
+          $('.totalTarjeta').select()
+          $('.totalTarjeta').focus()
+          return
+        } 
+        resultado = __valorNumerico($(".totalTarjeta").val())
+        if(resultado > 0){
+            self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
+            self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+         } 
+        resultado = __valorNumerico($(".totalBanco").val())
+        if(resultado > 0){
+            self.factura.totalEfectivo = resultado
+            self.factura.totalBanco = 0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+        }    
+        self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
+        self.factura.totalBanco = 0
+        self.factura.totalTarjeta = 0
+        self.update()  
+        $(".totalBanco").val(null)
+        $(".totalTarjeta").val(null)
+        $(".totalEfectivo").val(self.factura.totalEfectivo) 
+        $('.totalEfectivo').select()
+        $('.totalEfectivo').focus()
+
 }
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
