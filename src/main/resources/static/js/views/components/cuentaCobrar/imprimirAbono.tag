@@ -213,7 +213,6 @@ self.on('mount',function(){
 function consultaAbono(){
     var parametros = {
         id:self.abono.id
-
     }
     $.ajax({
         url: "MostrarAbonoAjax.do",
