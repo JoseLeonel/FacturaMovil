@@ -51,7 +51,7 @@ public interface ConsultasNativeBo {
 
 	Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial);
 
-	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria);
+	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo);
 	
 	FacturaIDNativa findIdFactura(Long id);
 

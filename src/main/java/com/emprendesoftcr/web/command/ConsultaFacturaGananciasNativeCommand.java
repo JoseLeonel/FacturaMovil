@@ -20,6 +20,8 @@ public class ConsultaFacturaGananciasNativeCommand {
 	private Double	total;
 	private Double	descuento;
 	private Double	impuesto;
+	private Double	montoExoneracion;
+	private String	montoExoneracionSTR;
 	private Double	ganancia;
 	private String	gananciaSTR;
 	private String	costoSTR;
@@ -45,7 +47,28 @@ public class ConsultaFacturaGananciasNativeCommand {
 		this.totalSTR = Utils.formateadorMiles((consultaGananciaNative.getTotal() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getTotal()));
 		this.costoSTR = Utils.formateadorMiles(consultaGananciaNative.getCosto() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCosto());
 		this.cantidadSTR = Utils.formateadorMiles(consultaGananciaNative.getCantidad() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCantidad());
+		this.montoExoneracion =  consultaGananciaNative.getMontoExoneracion();
+		this.montoExoneracionSTR = Utils.formateadorMiles(consultaGananciaNative.getMontoExoneracion() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getMontoExoneracion());
 	}
+
+	
+	
+	
+	
+	public String getMontoExoneracionSTR() {
+		return montoExoneracionSTR;
+	}
+
+
+
+
+	
+	public void setMontoExoneracionSTR(String montoExoneracionSTR) {
+		this.montoExoneracionSTR = montoExoneracionSTR;
+	}
+
+
+
 
 	public String getGananciaSTR() {
 		if (this.total != null && this.costo !=null) {
@@ -210,5 +233,17 @@ public class ConsultaFacturaGananciasNativeCommand {
 		}
 		
 	}
+
+	
+	public Double getMontoExoneracion() {
+		return montoExoneracion;
+	}
+
+	
+	public void setMontoExoneracion(Double montoExoneracion) {
+		this.montoExoneracion = montoExoneracion;
+	}
+	
+	
 
 }

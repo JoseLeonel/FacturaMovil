@@ -111,7 +111,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 			PdfPTable izquierda = new PdfPTable(1);
 			if (img_logo != null) {
 				img_logo.setAlignment(Image.ALIGN_LEFT);
-				img_logo.scaleAbsolute(230, 130);
+				img_logo.scaleAbsolute(200, 110);
 				img_logo.setAbsolutePosition(20, PageSize.TABLOID.rotate().getHeight() - 100);
 				img_logo.setAlignment(Image.ALIGN_RIGHT);
 				PdfPCell cell_logo = img_logo == null ? new PdfPCell() : new PdfPCell(img_logo, false);

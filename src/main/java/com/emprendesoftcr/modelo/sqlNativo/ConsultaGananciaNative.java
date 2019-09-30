@@ -9,13 +9,13 @@ import javax.persistence.Id;
 @BaseNativeQuery(name = "cons_vent_gana", 
 query = "SELECT clientes.id,  clientes.cedula,clientes.nombre_completo," 
 + "categorias.descripcion as nomb_categ,detalles.codigo,detalles.descripcion as nomb_product,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") as fecha_emision," 
-+ "sum(IFNULL(detalles.costo * detalles.cantidad,0)) as costo,sum(IFNULL(detalles.cantidad,0)) as cantidad ,sum(IFNULL(detalles.monto_total_linea -detalles.monto_impuesto-detalles.monto_impuesto1,0)) as total," 
-+ "sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto, 0)) as impuesto FROM detalles" 
++ "sum(IFNULL(detalles.costo * detalles.cantidad,0)) as costo,sum(IFNULL(detalles.cantidad,0)) as cantidad ,sum(IFNULL(detalles.monto_total_linea ,0)) as total," 
++ "sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto, 0)) as impuesto,sum(IFNULL(detalles.monto_impuesto, 0)) as monto_exonerado FROM detalles" 
 + " inner join facturas on facturas.id =detalles.factura_id " 
 + " inner join clientes on clientes.id =facturas.cliente_id " 
 + " inner join articulos on articulos.codigo =detalles.codigo " 
 + " inner join categorias on categorias.id = articulos.categoria_id "
-+ " where facturas.empresa_id = :ID_EMPRESA facturas.estado in and facturas.tipo_doc !='88' and facturas.tipo_doc !='86' and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.fecha_emision >= :fechaInicial and facturas.fecha_emision <= :fechaFinal and categorias.id = and facturas.cliente_id and facturas.act_comercial  " + " GROUP by clientes.id,clientes.cedula,clientes.nombre_completo,categorias.descripcion,detalles.codigo,detalles.descripcion,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") " + " ORDER BY clientes.nombre_completo,categorias.descripcion,detalles.descripcion ASC")
++ " where facturas.empresa_id = :ID_EMPRESA facturas.estado in and facturas.tipo_doc !='88' and facturas.tipo_doc !='86' and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.fecha_emision >= :fechaInicial and facturas.fecha_emision <= :fechaFinal and categorias.id = and facturas.cliente_id and facturas.act_comercial and detalles.codigo " + " GROUP by clientes.id,clientes.cedula,clientes.nombre_completo,categorias.descripcion,detalles.codigo,detalles.descripcion,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") " + " ORDER BY clientes.nombre_completo,categorias.descripcion,detalles.descripcion ASC")
 @Entity
 public class ConsultaGananciaNative implements Serializable {
 
@@ -56,6 +56,11 @@ public class ConsultaGananciaNative implements Serializable {
 	@Column(name = "impuesto")
 	private Double						impuesto;
 
+	@Column(name = "monto_exonerado")
+	private Double						montoExoneracion;
+
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -153,6 +158,16 @@ public class ConsultaGananciaNative implements Serializable {
 		this.impuesto = impuesto;
 	}
 
+	
+	public Double getMontoExoneracion() {
+		return montoExoneracion;
+	}
+
+	
+	public void setMontoExoneracion(Double montoExoneracion) {
+		this.montoExoneracion = montoExoneracion;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -165,6 +180,7 @@ public class ConsultaGananciaNative implements Serializable {
 		result = prime * result + ((fechaEmision == null) ? 0 : fechaEmision.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
+		result = prime * result + ((montoExoneracion == null) ? 0 : montoExoneracion.hashCode());
 		result = prime * result + ((nombreArticulo == null) ? 0 : nombreArticulo.hashCode());
 		result = prime * result + ((nombreCategoria == null) ? 0 : nombreCategoria.hashCode());
 		result = prime * result + ((nombreCompleto == null) ? 0 : nombreCompleto.hashCode());
@@ -221,6 +237,11 @@ public class ConsultaGananciaNative implements Serializable {
 				return false;
 		} else if (!impuesto.equals(other.impuesto))
 			return false;
+		if (montoExoneracion == null) {
+			if (other.montoExoneracion != null)
+				return false;
+		} else if (!montoExoneracion.equals(other.montoExoneracion))
+			return false;
 		if (nombreArticulo == null) {
 			if (other.nombreArticulo != null)
 				return false;
@@ -243,5 +264,7 @@ public class ConsultaGananciaNative implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 
 }

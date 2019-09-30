@@ -893,7 +893,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria) {
+	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		idCategoria = idCategoria == null?Constantes.ZEROS:idCategoria;
@@ -907,7 +907,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria);
+		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria,codigo);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaGananciaNative consultaGananciaNative : facturas) {
 			solicitudList.add(new ConsultaFacturaGananciasNativeCommand(consultaGananciaNative));

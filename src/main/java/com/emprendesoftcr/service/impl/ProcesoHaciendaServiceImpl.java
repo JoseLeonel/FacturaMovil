@@ -102,7 +102,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
-																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null?Constantes.EMPTY:d.getTipoImpuesto());
+																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null ? Constantes.EMPTY : d.getTipoImpuesto());
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
@@ -352,7 +352,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						enviarCorreoCuentasPorCobrar(cuentaCobrar, dias);
 					}
 				}
-				
 
 			}
 			log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
@@ -373,7 +372,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String from = cuentaCobrar.getEmpresa().getCorreoCredito();
 			if (cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!cuentaCobrar.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Creditos_" +cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@emprendesoftcr.com";
+					from = "Creditos_" + cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 
@@ -388,7 +387,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("fechaEmision", cuentaCobrar.getCreated_atSTR());
 			modelEmail.put("fechaPlazo", cuentaCobrar.getFechaPlazoSTR());
 			if (factura != null) {
-			
+
 				FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 				Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 				List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
@@ -396,7 +395,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 				ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 				String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
-				Collection<Attachment> attachments = createAttachments( PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc())) ;
+				Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
 				if (cuentaCobrar.getEmpresa().getCorreoCredito() != null) {
 					if (!cuentaCobrar.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
 						listaCorreos.add(cuentaCobrar.getEmpresa().getCorreoCredito());
@@ -451,7 +450,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -604,16 +603,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-			//	recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -1013,7 +1012,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1343,7 +1342,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1533,7 +1532,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

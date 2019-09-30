@@ -2,7 +2,7 @@
    <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp Ganancia por producto en ventas por clientes</h1>
+            <h1><i class="fa fa-calculator"></i>&nbsp Utilidad en ventas  </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
@@ -66,7 +66,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
         	                         <label > Categorias </label>  
-                                    <select  class="form-control selectCategoria categoria" id="categoria" name="categoria" data-live-search="true">
+                                    <select  class="form-control selectCategoria " id="categoria" name="categoria" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option  data-tokens="{descripcion}" each={categorias.data}  value="{id}"  >{descripcion}</option>
                                     </select>
@@ -80,7 +80,13 @@
                                         <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                </div>  
-                            </div>                           
+                            </div>     
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Codigo Articulo </label>
+                                    <input type="text" id="codigo" name="codigo" class="form-control campo codigo "   >   
+                                </div>  
+                            </div>                       
 
                             </div>
                     </form>  
@@ -116,7 +122,7 @@
                                                 <th class = "table-header" >Producto</th>
                                                 <th class = "table-header" >Cantidad</th>
                                                 <th class = "table-header" >Costo</th>
-                                                <th class = "table-header" >Total(-Imp)</th>
+                                                <th class = "table-header" >Total</th>
                                                 <th class = "table-header" >Ganancia</th>
                                             </tr>
                                         </thead>
@@ -154,16 +160,20 @@
    	    <label> Total Impuesto </label>
         <input type="text" readonly="readonly" class="form-control" value="{totalImpuesto}">
    	</div>
+    <div class="elementoTotales">
+   	    <label> Total Impuesto Exonerados </label>
+        <input type="text" readonly="readonly" class="form-control" value="{montoExoneracion}">
+   	</div>   
    	<div class="elementoTotales">
    	    <label> Total Descuentos </label>
         <input type="text" readonly="readonly" class="form-control" value="{totalDescuento}">
    	</div>
    	<div class="elementoTotales">
-   	    <label> Total Venta </label>
+   	    <label> Total  </label>
         <input type="text" readonly="readonly" class="form-control"  value="{totalVenta}">
    	</div>
    	<div class="elementoTotales">
-   	    <label> Total Ganancia </label>
+   	    <label> Total Utilidad Bruta </label>
         <input type="text" readonly="readonly" class="form-control " value="{totalGanancia}" >
    	</div>
 </div>
@@ -174,11 +184,11 @@
         }
         .containerTotales{
            display: flex; /* or inline-flex */
-          justify-content:space-between;  
+          
           flex-wrap:wrap;
         }
         .elementoTotales{
-          
+              margin-left: 2%;
          
         }
     .btn-success {
@@ -538,6 +548,7 @@ self.totalImpuesto  = 0
 self.totalCosto     = 0
 self.totalVenta     = 0
 self.totalGanancia  = 0
+self.montoExoneracion = 0
 self.mostrarListado        = true
 self.clientes                  = {data:[]}
 self.on('mount',function(){
@@ -686,6 +697,7 @@ __Busqueda(){
     self.totalCosto     = 0
     self.totalVenta     = 0
     self.totalGanancia  = 0
+    self.montoExoneracion =0 
     self.listaFacturas = []
     self.update()
     var inicial  =$('.fechaInicial').val()
@@ -695,8 +707,9 @@ __Busqueda(){
             fechaFinParam:$('.fechaFinal').val(),
             estado:$('.selectEstado').val(),
             actividadEconomica:$('.selectActividadEconocimica').val(),
-            cliente:$('.selectActividadEconocimica').val(),
-            idCategoria:$('.selectCategoria').val(),
+            cliente:$('#clienteParam').val(),
+            idCategoria:$('#categoria').val(),
+            codigo:$('#codigo').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -737,13 +750,15 @@ function sumar(){
     self.totalCosto     = 0
     self.totalVenta     = 0
     self.totalGanancia  = 0
+    self.montoExoneracion = 0
     self.update()
     $.each(self.listaFacturas, function( index, modeloTabla ) {
-          self.totalImpuesto += modeloTabla.impuesto
+          self.totalImpuesto += modeloTabla.montoExoneracion == 0?modeloTabla.impuesto:0
           self.totalVenta += modeloTabla.total
           self.totalDescuento += modeloTabla.descuento
           self.totalCosto += modeloTabla.costo
           self.totalGanancia += modeloTabla.ganancia
+          self.montoExoneracion += modeloTabla.montoExoneracion
           self.update()
     })
     self.totalImpuesto   = formatoDecimales(__valorNumerico(self.totalImpuesto))
@@ -751,6 +766,7 @@ function sumar(){
     self.totalDescuento  = redondearDecimales(self.totalDescuento,2)
     self.totalCosto = redondearDecimales(self.totalCosto,2)
     self.totalGanancia = redondearDecimales(self.totalGanancia,2)
+    self.montoExoneracion = redondearDecimales(self.montoExoneracion,2)
     self.update()
 }
 /*
@@ -778,8 +794,8 @@ function __InformacionDataTable(){
                                {'data' :'nombreArticulo'  ,"name":"nombreArticulo"  ,"title" : "Articulo"   ,"autoWidth" :true },
                                {'data' :'cantidadSTR'     ,"name":"cantidadSTR"     ,"title" : "Cantidad"   ,"autoWidth" :true },
                                {'data' :'costoSTR'        ,"name":"costoSTR"        ,"title" : "Costo" ,"autoWidth" :true },
-                               {'data' :'totalSTR'        ,"name":"totalSTR"        ,"title" : "Total(-Imp)" ,"autoWidth" :true },
-                               {'data' :'gananciaSTR'     ,"name":"gananciaSTR"     ,"title" : "Ganancia" ,"autoWidth" :true }
+                               {'data' :'totalSTR'        ,"name":"totalSTR"        ,"title" : "Total" ,"autoWidth" :true },
+                               {'data' :'gananciaSTR'     ,"name":"gananciaSTR"     ,"title" : "Utilidad" ,"autoWidth" :true }
 	      		            ];
     self.update();
    
@@ -789,7 +805,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

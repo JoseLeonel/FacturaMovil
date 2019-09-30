@@ -118,8 +118,8 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria) {
-		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria);
+	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo) {
+		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria,codigo);
 	}
 
   @Transactional

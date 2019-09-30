@@ -198,7 +198,7 @@ self.abono = {
     },
 }
 self.on('mount',function(){
-    //self.abono = self.parametros
+    self.abono = self.parametros
     self.update()
     if (typeof self.abono !== 'undefined'){
         if(self.abono.id > 0){

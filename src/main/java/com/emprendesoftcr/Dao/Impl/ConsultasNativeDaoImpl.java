@@ -271,8 +271,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	@Override
-	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria) {
+	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo) {
 		String queryStr = getQueryBase(ConsultaGananciaNative.class);
+		codigo = codigo ==null?Constantes.EMPTY:codigo;
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
@@ -292,6 +293,12 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + estado + ") ");
 		} else {
 			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + "2,6,7,5" + ") ");
+		}
+		
+		if (codigo.length() > 0 ) {
+			queryStr = queryStr.replaceAll("and detalles.codigo", " and detalles.codigo ="+codigo.toString());
+		} else {
+			queryStr = queryStr.replaceAll("and detalles.codigo", Constantes.EMPTY);
 		}
 
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaGananciaNative.class);
