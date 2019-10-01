@@ -24,8 +24,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 /**
- * Cuentas por cobrar de clientes
- * CuentaCobrarDaoImpl.
+ * Cuentas por cobrar de clientes CuentaCobrarDaoImpl.
  * @author jose.
  * @since 3 nov. 2018
  */
@@ -109,6 +108,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		try {
 			log.info("**Crear cuentas por cobrar: " + " fecha " + new Date());
 			CuentaCobrar cuentaCobrar = new CuentaCobrar();
+			cuentaCobrar.setNombreFactura(factura.getNombreFactura() == null ? Constantes.EMPTY : factura.getNombreFactura());
 			cuentaCobrar.setCreated_at(new Date());
 			cuentaCobrar.setUpdated_at(new Date());
 			cuentaCobrar.setDescripcionArticulo(Constantes.CUENTA_POR_COBRAR_DESCRIPCION_AUTOMATICO);
@@ -230,10 +230,10 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( Empresa empresa, Cliente cliente, String estado) {
+	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Empresa empresa, Cliente cliente, String estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from CuentaCobrar obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -265,10 +265,10 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado) {
+	public Collection<CuentaCobrar> cuentasPorCobrarbyEstado(String estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from CuentaCobrar obj");
 		hql.append(" where ");

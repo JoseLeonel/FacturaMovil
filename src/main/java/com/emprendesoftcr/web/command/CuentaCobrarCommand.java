@@ -10,7 +10,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 
 public class CuentaCobrarCommand {
 
-	private Long		id;
+	private Long			id;
 
 	private String		recibo;
 
@@ -33,7 +33,7 @@ public class CuentaCobrarCommand {
 	private Double		totalAbono;
 
 	private Double		totalSaldo;
-	
+
 	private String		totalSTR;
 
 	private String		totalAbonoSTR;
@@ -59,15 +59,17 @@ public class CuentaCobrarCommand {
 
 	private String		created_atSTR;
 	private String		updated_atSTR;
-	
-	private Integer plazoCredito;
-	
-	private Boolean cancelar;
+
+	private Integer		plazoCredito;
+
+	private Boolean		cancelar;
 
 	private Cliente		cliente;
 	private Vendedor	vendedor;
 
 	private Empresa		empresa;
+
+	private String		nombreFactura;
 
 	public CuentaCobrarCommand(CuentaCobrar cuentaCobrar) {
 		super();
@@ -100,50 +102,39 @@ public class CuentaCobrarCommand {
 		this.totalAbonoSTR = cuentaCobrar.getTotalAbonoSTR();
 		this.totalSaldoSTR = cuentaCobrar.getTotalSaldoSTR();
 		this.totalSTR = cuentaCobrar.getTotalSTR();
-		this.codigoMoneda =cuentaCobrar.getCodigoMoneda();
+		this.codigoMoneda = cuentaCobrar.getCodigoMoneda();
 		this.cancelar = false;
+		this.nombreFactura = cuentaCobrar.getNombreFactura();
 	}
 
 	public CuentaCobrarCommand() {
 		super();
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
-	
-	
-	
 	public String getTotalSTR() {
 		return totalSTR;
 	}
 
-	
 	public void setTotalSTR(String totalSTR) {
 		this.totalSTR = totalSTR;
 	}
 
-	
 	public String getTotalAbonoSTR() {
 		return totalAbonoSTR;
 	}
 
-	
 	public void setTotalAbonoSTR(String totalAbonoSTR) {
 		this.totalAbonoSTR = totalAbonoSTR;
 	}
 
-	
 	public String getTotalSaldoSTR() {
 		return totalSaldoSTR;
 	}
 
-	
 	public void setTotalSaldoSTR(String totalSaldoSTR) {
 		this.totalSaldoSTR = totalSaldoSTR;
 	}
@@ -152,7 +143,6 @@ public class CuentaCobrarCommand {
 		return plazoCredito;
 	}
 
-	
 	public void setPlazoCredito(Integer plazoCredito) {
 		this.plazoCredito = plazoCredito;
 	}
@@ -161,17 +151,14 @@ public class CuentaCobrarCommand {
 		return created_atSTR;
 	}
 
-	
 	public void setCreated_atSTR(String created_atSTR) {
 		this.created_atSTR = created_atSTR;
 	}
 
-	
 	public String getUpdated_atSTR() {
 		return updated_atSTR;
 	}
 
-	
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}
@@ -356,27 +343,28 @@ public class CuentaCobrarCommand {
 		this.totalSaldo = totalSaldo;
 	}
 
-	
 	public String getCodigoMoneda() {
 		return codigoMoneda;
 	}
 
-	
 	public void setCodigoMoneda(String codigoMoneda) {
 		this.codigoMoneda = codigoMoneda;
 	}
 
-	
 	public Boolean getCancelar() {
 		return cancelar;
 	}
 
-	
 	public void setCancelar(Boolean cancelar) {
 		this.cancelar = cancelar;
 	}
-	
-	
-	
+
+	public String getNombreFactura() {
+		return nombreFactura;
+	}
+
+	public void setNombreFactura(String nombreFactura) {
+		this.nombreFactura = nombreFactura;
+	}
 
 }

@@ -80,12 +80,12 @@ public class CuentaCobrar implements Serializable {
 	@Column(name = "tipo")
 	private String						tipo;
 
-	@Column(name="cambio_moneda", columnDefinition="varchar(3) default 'CRC'")
+	@Column(name = "cambio_moneda", columnDefinition = "varchar(3) default 'CRC'")
 	private String						codigoMoneda;
 
-	@Column(name="tipo_cambio", columnDefinition="Double default '1'")
+	@Column(name = "tipo_cambio", columnDefinition = "Double default '1'")
 	private Double						tipoCambio;
-	
+
 	@Column(name = "estado")
 	private String						estado;
 
@@ -125,6 +125,8 @@ public class CuentaCobrar implements Serializable {
 	@JoinColumn(name = "vendedor_id")
 	private Vendedor					vendedor;
 
+	@Column(name = "nombre", length = 180)
+	private String						nombreFactura;
 
 	public CuentaCobrar() {
 		super();
@@ -133,15 +135,12 @@ public class CuentaCobrar implements Serializable {
 
 		this.created_at = new Date();
 		this.updated_at = new Date();
-		
 
 	}
-
 	
 	
 
-
-	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor) {
+	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, String nombreFactura) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -170,9 +169,8 @@ public class CuentaCobrar implements Serializable {
 		this.usuario = usuario;
 		this.empresa = empresa;
 		this.vendedor = vendedor;
+		this.nombreFactura = nombreFactura;
 	}
-
-
 
 
 
@@ -406,8 +404,6 @@ public class CuentaCobrar implements Serializable {
 		this.vendedor = vendedor;
 	}
 
-	
-
 	public String getCodigoMoneda() {
 		return codigoMoneda;
 	}
@@ -422,6 +418,14 @@ public class CuentaCobrar implements Serializable {
 
 	public void setTipoCambio(Double tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+
+	public String getNombreFactura() {
+		return nombreFactura;
+	}
+
+	public void setNombreFactura(String nombreFactura) {
+		this.nombreFactura = nombreFactura;
 	}
 
 }

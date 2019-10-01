@@ -1,6 +1,6 @@
 <grafico-inicio>
   
-	<div class="row">
+	<div class="row" show="{mostrarVentasXMes == true}">
 			<div class="col-sm-9">
 				<div class="card-box p-t-40"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					<div class="row">
@@ -11,7 +11,7 @@
 					<canvas id="chart-totalventas" width="1011" height="252" style="display: block; width: 1011px; height: 252px;">
 				</canvas></div>
 			</div>
-			<div class="col-sm-3">	
+			<div class="col-sm-3" show="{nodisponible == true}">	
 				<!-- circliful Chart -->
 				<div class="row">
 					<div class="col-sm-12 col-lg-12">
@@ -47,7 +47,7 @@
 			</div>
 
 		</div>
-        <div class="row">
+        <div class="row" show="{nodisponible == true}"> 
 			<div class="col-lg-6">
 				<div class="card-box"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					<div class="row">
@@ -90,7 +90,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" show="{nodisponible == true}">
 			
 			<div class="col-sm-12 col-lg-6">
 				<div class="card-box">
@@ -204,10 +204,54 @@ h1, h2, h3, h4, h5, h6 {
 
 <script>
 self = this
+self.mostrarVentasXMes = false;
+self.nodisponible = false
 self.on('mount',function(){
+
+	graficoVentas();
 
 });
 
+
+function graficoVentas(){
+	var ctx = document.getElementById("chart-totalventas").getContext("2d");
+	var graficoVenta = new Chart(ctx,{
+		type:"bar",
+		
+		data:{
+			labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			datasets:[{
+				label:'Ventas mensuales ',
+				data:[10,9,15,60,10,9,15,25,20,9,15,60],
+				backgroundColor:[
+					'rgb(66,134,244)',
+					'rgb(74,135,72)',
+					'rgb(279,89,50)',
+					'rgb(74,135,72)',
+					'rgb(279,89,50)',
+					'rgb(74,135,72)',
+					'rgb(279,89,50)',
+					'rgb(66,134,244)',
+					'rgb(279,89,50)',
+					'rgb(74,135,72)',
+					'rgb(66,134,244)',
+					'rgb(279,89,50)',
+					
+				]
+
+			}],
+		},
+		options:{
+			scales:{
+				yAxes:[{
+					ticks:{
+						beginAtZero:true
+					}
+				}]
+			}
+		}
+	})
+}
 
 </script>
 </grafico-inicio>
