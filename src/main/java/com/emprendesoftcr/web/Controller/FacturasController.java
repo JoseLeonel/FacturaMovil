@@ -94,11 +94,13 @@ import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.ConsultaFacturaGananciasNativeCommand;
 import com.emprendesoftcr.web.command.ConsultaIvaCommand;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
+import com.emprendesoftcr.web.command.NotaCreditoEspecificaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
@@ -864,24 +866,18 @@ public class FacturasController {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
-
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-
 		Collection<ListarFacturasImpuestoServicioNativa> facturas = consultasNativeBo.findByFacturasImpuestoServicio(usuarioSesion.getEmpresa(), usuarioSesion.getId(), estado, inicio1, fin1, actividadEconomica);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ListarFacturasImpuestoServicioNativa listarFacturasImpuestoServicioNativa : facturas) {
-
 			// no se carga el usuario del sistema el id -1
 			if (listarFacturasImpuestoServicioNativa.getId().longValue() > 0L) {
 				solicitudList.add(new FacturaImpuestoServicioCommand(listarFacturasImpuestoServicioNativa));
 			}
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -896,7 +892,7 @@ public class FacturasController {
 	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		idCategoria = idCategoria == null?Constantes.ZEROS:idCategoria;
+		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
@@ -907,7 +903,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria,codigo);
+		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaGananciaNative consultaGananciaNative : facturas) {
 			solicitudList.add(new ConsultaFacturaGananciasNativeCommand(consultaGananciaNative));
@@ -934,16 +930,13 @@ public class FacturasController {
 		Boolean administrador = Boolean.FALSE;
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		estado = estado == null ? Constantes.FACTURA_ESTADO_PROFORMAS : estado;
-
 		Collection<ProformasByEmpresaAndEstado> objetoProformaAdmin = null;
 		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
 		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
-
 		objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 		objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 		objetoFacturasAdmin = objetoProformaAdmin == null && objetoAnuladoAdmin == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
 		administrador = Boolean.TRUE;
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (administrador) {
@@ -957,7 +950,6 @@ public class FacturasController {
 				}
 
 			}
-
 			if (objetoAnuladoAdmin != null) {
 				for (ProformasByEmpresaAndEstado proformasByEmpresaAndEstado : objetoAnuladoAdmin) {
 
@@ -1021,12 +1013,9 @@ public class FacturasController {
 			}
 
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Collection<ListarFacturasNativa> objetos = consultasNativeBo.findByFacturasAndFechaAndTipoDocAndUsuario(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
 		List<Object> solicitudList = new ArrayList<Object>();
@@ -1036,9 +1025,7 @@ public class FacturasController {
 					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
 				}
 			}
-
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1085,9 +1072,9 @@ public class FacturasController {
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Collection<FacturasSinNotaCreditoNative> objetos = null;
 		if (estado.equals(Constantes.COMBO_TODOS)) {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG, codigo);
 		} else {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG, codigo);
 		}
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
@@ -1108,7 +1095,6 @@ public class FacturasController {
 
 	}
 
-
 	/***
 	 * @param request
 	 * @param response
@@ -1122,7 +1108,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1170,7 +1156,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1444,7 +1430,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam String estado, @RequestParam String actividadEconomica,@RequestParam Integer tipoGasto) {
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam String estado, @RequestParam String actividadEconomica, @RequestParam Integer tipoGasto) {
 
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1473,13 +1459,13 @@ public class FacturasController {
 			if (!estado.equals(Constantes.COMBO_TODOS)) {
 				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));
 			}
-      if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
-      	delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));	
-      }
-      if(tipoGasto > Constantes.ZEROS) {
-      	delimitador.addFiltro(new JqGridFilter("tipoGasto", tipoGasto.toString(), "="));
-      }
-			
+			if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+				delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));
+			}
+			if (tipoGasto > Constantes.ZEROS) {
+				delimitador.addFiltro(new JqGridFilter("tipoGasto", tipoGasto.toString(), "="));
+			}
+
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
@@ -1518,7 +1504,74 @@ public class FacturasController {
 		}
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
-//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/crearNotaCreditoEspecificaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator crearNotaCreditoEspecifica(HttpServletRequest request, ModelMap model, @ModelAttribute NotaCreditoEspecificaCommand notaCreditoEspecificaCommand, BindingResult result, SessionStatus status) {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			notaCreditoEspecificaCommand.setConsecutivo(notaCreditoEspecificaCommand.getConsecutivo() == null ? Constantes.EMPTY : notaCreditoEspecificaCommand.getConsecutivo());
+			notaCreditoEspecificaCommand.setReferenciaRazon(notaCreditoEspecificaCommand.getReferenciaRazon() == null ? Constantes.EMPTY : notaCreditoEspecificaCommand.getReferenciaRazon());
+			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(notaCreditoEspecificaCommand.getConsecutivo(), usuario.getEmpresa());
+			if (facturaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.consecutivo.no.existe", result.getAllErrors());
+			}
+			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
+			}
+			if (notaCreditoEspecificaCommand.getReferenciaRazon().equals(Constantes.EMPTY)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.razon", result.getAllErrors());
+			}
+
+			JSONObject json = null;
+			ArrayList<DetalleFacturaCommand> detalles = new ArrayList<>();
+			try {
+				json = (JSONObject) new JSONParser().parse(notaCreditoEspecificaCommand.getDetalleFactura());
+				// Agregar Lineas de Detalle
+				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+				Gson gson = new Gson();
+				if (jsonArrayDetalleFactura != null) {
+					Integer numeroLinea = 1;
+					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+						DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
+						detalles.add(detalleFacturaCommand);
+						numeroLinea += 1;
+					}
+				}
+			} catch (org.json.simple.parser.ParseException e) {
+				throw e;
+			}
+			ArrayList<DetalleFacturaCommand> detallesCorrectos = new ArrayList<>();
+			// Valida si esta aplicando una cantidad equivocada a la indicada y alimentando los detalles a crear en la nota de credito
+			Boolean detallesIncorrectos = Boolean.FALSE;
+			Double cantidad = Constantes.ZEROS_DOUBLE;
+			for (DetalleFacturaCommand detalleFacturaCommand : detalles) {
+				Detalle detalle = detalleBo.findById(detalleFacturaCommand.getId());
+				if (detalle != null) {
+					cantidad = detalle.getCantidad() - (detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito());
+					if (cantidad < detalleFacturaCommand.getCantidadAplicadaNotaCredito()) {
+						detallesIncorrectos = Boolean.TRUE;
+					} else {
+						detallesCorrectos.add(detalleFacturaCommand);
+					}
+				}
+			}
+			if(detallesIncorrectos) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.detalles.incorrectos", result.getAllErrors());
+			}
+			
+
+//			return this.crearFactura(facturaCommand, result, usuario);
+		} catch (Exception e) {
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
+		}
+		return respuestaServiceValidator;
 	}
 
 	/**
@@ -1593,7 +1646,7 @@ public class FacturasController {
 						FacturaIDNativa facturaRevision = consultasNativeBo.findIdFactura(facturaCommand.getId());
 						if (facturaRevision != null) {
 							if (facturaRevision.getEstado() != null) {
-								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA) || facturaRevision.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) ) {
+								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA) || facturaRevision.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
 									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}

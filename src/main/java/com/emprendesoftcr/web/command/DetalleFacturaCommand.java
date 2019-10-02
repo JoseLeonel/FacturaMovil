@@ -83,6 +83,8 @@ public class DetalleFacturaCommand {
 
 	private Double	montoExoneracion;
 	private Double	montoExoneracion1;
+	
+	private Double cantidadAplicadaNotaCredito;
 
 	
 
@@ -175,6 +177,7 @@ public class DetalleFacturaCommand {
 		this.montoExoneracion = detalle.getMontoExoneracion();
 		this.porcentajeExoneracion = detalle.getPorcentajeExoneracion();
 		this.montoExoneracion1 = detalle.getMontoExoneracion1();
+		this.cantidadAplicadaNotaCredito = detalle.getCantidadAplicadaNotaCredito() ==null?Constantes.ZEROS_DOUBLE:detalle.getCantidadAplicadaNotaCredito();
 
 	}
 
@@ -184,6 +187,18 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+
+	
+	public Double getCantidadAplicadaNotaCredito() {
+		return cantidadAplicadaNotaCredito;
+	}
+
+	
+	public void setCantidadAplicadaNotaCredito(Double cantidadAplicadaNotaCredito) {
+		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
 	}
 
 	public Double getMontoExoneracion1() {

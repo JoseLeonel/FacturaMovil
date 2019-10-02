@@ -81,4 +81,10 @@ public class DetalleBoImpl implements DetalleBo {
 	public Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa) {
 		return detalleDao.findByCodigoAndEmpresa(codigo, empresa);
 	}
+
+	@Override
+	public Detalle findById(Long idDetalle) {
+	
+		return detalleDao.findById(idDetalle);
+	}
 }

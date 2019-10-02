@@ -26,4 +26,6 @@ public interface DetalleDao {
 	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado,String actividadEconomica);
 	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 	
+	Detalle findById(Long  idDetalle);
+	
 }

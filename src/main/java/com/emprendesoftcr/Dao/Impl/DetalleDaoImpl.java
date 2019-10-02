@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -196,6 +197,20 @@ public class DetalleDaoImpl implements DetalleDao {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Detalle findById(Long  idDetalle) {
+			Query query = entityManager.createQuery("select obj from Detalle obj where obj.id = :id");
+			query.setParameter("id", idDetalle);
+			List<Detalle> results = query.getResultList();
+			if (!results.isEmpty()) {
+				return (Detalle) results.get(0);
+			} else {
+				return null;
+			}
+		
+
 	}
 
 }
