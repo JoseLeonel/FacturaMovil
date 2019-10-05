@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
@@ -26,7 +28,7 @@ public interface FacturaBo {
 	Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 	Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
 	
-	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja,TipoCambio tipoCambio) throws Exception;
+	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja,TipoCambio tipoCambio,ArrayList<DetalleFacturaCommand> detallesFacturaCommand,ArrayList<DetalleFacturaCommand> detallesNotaCredito) throws Exception;
 
 	Double  getTotalEfectivo(FacturaCommand facturaCommand) throws Exception;
 	
@@ -40,4 +42,6 @@ public interface FacturaBo {
 	
 	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
 	Collection<Object[]> proformasByState(Integer estado, Integer idEmpresa);
+	void actualizarCantidadesNotaCredito(Factura factura,DetalleFacturaCommand detalleFacturaCommand) throws Exception;
+	ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception;
 }	

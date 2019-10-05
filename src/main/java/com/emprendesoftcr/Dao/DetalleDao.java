@@ -1,11 +1,13 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 public interface DetalleDao {
@@ -27,5 +29,7 @@ public interface DetalleDao {
 	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 	
 	Detalle findById(Long  idDetalle);
+	
+	void aplicarRebajoCantidadPorNotaCredito( ArrayList<DetalleFacturaCommand>  detalles) throws Exception;
 	
 }

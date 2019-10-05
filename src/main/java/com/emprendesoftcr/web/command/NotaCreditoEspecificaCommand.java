@@ -35,4 +35,6 @@ public class NotaCreditoEspecificaCommand {
 	public void setReferenciaRazon(String referenciaRazon) {
 		this.referenciaRazon = referenciaRazon;
 	}
+	
+	
 }

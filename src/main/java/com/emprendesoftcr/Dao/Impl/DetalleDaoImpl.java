@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 /**
@@ -212,5 +213,43 @@ public class DetalleDaoImpl implements DetalleDao {
 		
 
 	}
+	
+	/**
+	 * Rebajo en notas de credito especifica
+	 * @see com.emprendesoftcr.Bo.DetalleBo#aplicarRebajoCantidadPorNotaCredito(java.util.ArrayList)
+	 */
+		@Override
+		public void aplicarRebajoCantidadPorNotaCredito(ArrayList<DetalleFacturaCommand> detalles) throws Exception {
+			try {
+				Factura factura = null;
+				Double rebaja = Constantes.ZEROS_DOUBLE;
+				for (DetalleFacturaCommand detalleFacturaCommand : detalles) {
+					rebaja = Constantes.ZEROS_DOUBLE;
+					// Primer paso entoncrar el detalle en la factura
+					Detalle detalle = findById(detalleFacturaCommand.getId());
+					// Segundo paso Obtener la Factura
+					if (detalle != null) {
+						if (factura == null) {
+							factura = factura == null ? detalle.getFactura() : factura;
+						}
+						// Aplicar rebaja
+						rebaja = detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito();
+						rebaja = rebaja + detalleFacturaCommand.getCantidadAplicadaNotaCredito();
+						// Rebajar del detalle y asignarlo en cantidadNotasCredito
+						detalle.setCantidadAplicadaNotaCredito(rebaja);
+						modificar(detalle);
+					}
+				} // ciclo
+				//
+				if (factura != null) {
+
+				}
+
+			} catch (Exception e) {
+				log.info("** Error  aplicarRebajoCantidadPorNotaCredito: " + e.getMessage() + " fecha " + new Date());
+				throw e;
+			}
+
+		}
 
 }

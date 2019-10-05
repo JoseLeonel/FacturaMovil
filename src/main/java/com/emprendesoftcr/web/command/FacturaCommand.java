@@ -127,6 +127,8 @@ public class FacturaCommand {
 	public FacturaCommand() {
 		super();
 	}
+	
+	
 
 	public Long getId() {
 		return id;
@@ -559,5 +561,7 @@ public class FacturaCommand {
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
 	}
+	
+	
 
 }

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.ClienteBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -45,6 +46,7 @@ import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.DetalleFacturaParaNotaCreditoCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
@@ -63,51 +65,54 @@ import com.google.common.base.Function;
 @Controller
 public class DetalleController {
 
-	private static final Function<Object, DetalleFacturaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleFacturaCommand>() {
+	private static final Function<Object, DetalleFacturaCommand>								TO_COMMAND_DETALLE							= new Function<Object, DetalleFacturaCommand>() {
 
-																																											@Override
-																																											public DetalleFacturaCommand apply(Object f) {
-																																												return new DetalleFacturaCommand((Detalle) f);
-																																											};
-																																										};
+																																																								@Override
+																																																								public DetalleFacturaCommand apply(Object f) {
+																																																									return new DetalleFacturaCommand((Detalle) f);
+																																																								};
+																																																							};
 
 	private static final Function<Object, DetalleFacturaParaNotaCreditoCommand>	TO_COMMAND_DETALLE_NOTA_CREDITO	= new Function<Object, DetalleFacturaParaNotaCreditoCommand>() {
 
-																																											@Override
-																																											public DetalleFacturaParaNotaCreditoCommand apply(Object f) {
-																																												return new DetalleFacturaParaNotaCreditoCommand((Detalle) f);
-																																											};
-																																										};
+																																																								@Override
+																																																								public DetalleFacturaParaNotaCreditoCommand apply(Object f) {
+																																																									return new DetalleFacturaParaNotaCreditoCommand((Detalle) f);
+																																																								};
+																																																							};
 
 	@Autowired
-	private DataTableBo																						dataTableBo;
+	private DataTableBo																													dataTableBo;
 
 	@Autowired
-	private DetalleBo																							detalleBo;
+	private DetalleBo																														detalleBo;
 
 	@Autowired
-	private UsuarioBo																							usuarioBo;
+	private UsuarioBo																														usuarioBo;
 
 	@Autowired
-	private ClienteBo																							clienteBo;
+	private ClienteBo																														clienteBo;
 
 	@Autowired
-	private CorreosBo																							correosBo;
+	private CorreosBo																														correosBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																	empresaPropertyEditor;
+	private ConsultasNativeBo																										consultasNativeBo;
 
 	@Autowired
-	private ClientePropertyEditor																	clientePropertyEditor;
+	private EmpresaPropertyEditor																								empresaPropertyEditor;
 
 	@Autowired
-	private VendedorPropertyEditor																vendedorPropertyEditor;
+	private ClientePropertyEditor																								clientePropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor																	stringPropertyEditor;
+	private VendedorPropertyEditor																							vendedorPropertyEditor;
 
 	@Autowired
-	private FechaPropertyEditor																		fechaPropertyEditor;
+	private StringPropertyEditor																								stringPropertyEditor;
+
+	@Autowired
+	private FechaPropertyEditor																									fechaPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -198,20 +203,25 @@ public class DetalleController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsecutivoParaNotaCreditoEspecificaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
 
-		DataTableDelimitador delimitadores = null;
+	
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		delimitadores = new DataTableDelimitador(request, "Detalle");
-		delimitadores.addFiltro(new JqGridFilter("factura.empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
-
-		JqGridFilter dataTableFilter = new JqGridFilter("factura.numeroConsecutivo", "'" + consecutivo + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-		
-		dataTableFilter = new JqGridFilter("cantidad", "'" + Constantes.ZEROS_DOUBLE + "'", ">");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE_NOTA_CREDITO);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<DetallesFacturaNotaCreditoNativa> objetos = consultasNativeBo.findByFacturaParaNotaCredito(consecutivo, usuarioSesion.getEmpresa());
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (DetallesFacturaNotaCreditoNativa detallesFacturaNotaCreditoNativa : objetos) {
+				solicitudList.add(detallesFacturaNotaCreditoNativa);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <debito-credito>
   
 <!--Fin Ventana de los billetes-->      
-<div class="box box-solid box-primary" >
+<div class="box box-solid box-primary"  show="{mostrarnotacredito ==true}">
         <div class="box-body">
              <div class="box-header with-border">
                 <div class="row">
@@ -9,6 +9,7 @@
                   <div class="box-tools ">
                     <a class="pull-left" href="#"  > <span class="label label-limpiar">Crear Nota Credito de un producto especifico</span></a>
                     <a class="pull-right" href="#"  onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
+                    <a class="pull-right" href="#"  onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">Volver</span></a>
                   </div>
                   </div>
                 </div>  
@@ -17,20 +18,15 @@
                     <div class="cabecera-izquierda">
                         <div class="item-1">
                             <label>Ingrese el Consecutivo</label>
-                            <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" placeholder="Consecutivo:XXXXXXXXXXXX" />
+                            <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" placeholder="Consecutivo:XXXXXXXXXXXX" value="{parametro.consecutivo}"/>
                         </div>
                         <div class="item-1">
-                            <button  onclick={__verificarFactura} class="btn-green btn-buscar " id="btn-facturar" >{$.i18n.prop("btn.consultar")}</button>
+                            <label>Cliente</label>
+                            <input  class="form-control " type="text" value="{factura.cliente.nombreCompleto}" readonly/>
                         </div>
-                        <div class="item-2">
-                            <div class="containerCliente">
-                               <div class="clienteItem">
-                                   <h4>{factura.cliente.nombreCompleto}</h4>
-                               </div>
-                               <div class="clienteItem">
-                                   <h4>{factura.cliente.cedula}</h4>
-                               </div>
-                            </div>
+                        <div class="item-1">
+                            <label>Cedula</label>
+                            <input  class="form-control " type="text" value="{factura.cliente.cedula}" readonly/>
                         </div>
                     </div>
                     <div class="motivoContainer">
@@ -70,7 +66,7 @@
                                 <label class="text-listado"> {cantidad.toFixed(3)} </label>
                             </td>
                             <td class="list-item">
-                                <input onkeyup={__RebajarCantidad} onBlur={__RebajarCantidad} id= "cantidadAplicadaNotaCredito" class="form-control cantidadDetalle" type="number"  step="any" min="0" pattern="^[0-9]+" placeholder="Cantidad a rebajar" value = {cantidad}  />
+                                <input onkeyup={__RebajarCantidad} onBlur={__RebajarCantidad} id= "cantidadAplicadaNotaCredito" class="form-control cantidadDetalle cantidadAplicadaNotaCredito" type="number"  step="any" min="0" pattern="^[0-9]+" placeholder="Cantidad a rebajar" value = {cantidadAplicadaNotaCredito.toFixed(3)}  />
                             </td>
                         </tr>
                         </tbody>
@@ -558,6 +554,8 @@
 </style>    
 <script>
     var self = this;
+    self.parametro   = opts.parametros;  
+    self.mostrarnotacredito = true;
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -610,6 +608,8 @@
     self.item                  = null;
     self.detalleFactura        = {data:[]}
     self.on('mount',function(){
+
+        verificarConsecutivo()
         _INIT()
        __Eventos()
          window.addEventListener( "keydown", function(evento){
@@ -617,9 +617,7 @@
         }, false );
      
     })
-__LimpiarFormulario(){
-     _INIT()    
-}
+
 function _INIT(){
      self.factura                = {
         id:null,
@@ -669,6 +667,57 @@ function _INIT(){
     __Eventos()
 }
 /**
+*  Consecutivo a consultar
+**/
+function verificarConsecutivo(){
+    var numero  = $('.consecutivoFactura').val()
+    self.detail = [];
+    self.factura = null
+    self.update()
+    $.ajax({
+        url: "ListarDetlleByConsecutivoNotaCreditoAjax.do",
+        datatype: "json",
+        data: {consecutivo:numero},
+        method:"POST",
+        success: function (data) {
+             if(data.aaData.length > 0){
+                cargarDetallesFacturaEnEspera(data.aaData)
+                if(self.factura.estado ==5){
+                    sweetAlert("", "Ya se encuentra anulada", "error");
+                    return
+                }
+               
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+/**
+*  Cargar detalles Factura en espera
+**/
+function cargarDetallesFacturaEnEspera(data){
+   
+     $.each(data, function( index, modeloTabla ) {
+        if(self.factura  == null){
+            self.factura = modeloTabla.factura
+            self.update()
+        } 
+        self.detail.push({
+            numeroLinea     : modeloTabla.numeroLinea,
+            id              : modeloTabla.id,
+            codigo          : modeloTabla.codigo,
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : __valorNumerico(modeloTabla.cantidad) - __valorNumerico(modeloTabla.cantidadAplicadaNotaCredito) ,
+            cantidadAplicadaNotaCredito     :  __valorNumerico(modeloTabla.cantidad) - __valorNumerico(modeloTabla.cantidadAplicadaNotaCredito) 
+        });
+        self.update()
+    })
+    self.update()
+}
+
 
 /**
 *  Actimpuestor validaciones del formulario
@@ -730,65 +779,9 @@ function aplicarFactura(){
 * Limpiar Pantalla
 **/
 __Limpiar(){
-    __Init()
+    _INIT()
 }
-/**
-*  Inicializar las variables de trabajos
-**/
-function __Init(){
-    
-    self.detail                = []
-    self.mensajesBackEnd       = []
-    self.error                 = false
-    self.item                  = null;
-    self.detalleFactura        ={data:[]}
-    self.factura                = {
-        id:null,
-	    fechaCredito:null,
-	    fechaEmision:null,
-	    condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
-	    estado:1,
-	    cliente:{
-            id:null,
-            nombreCompleto:"",
-        },
-	    vendedor:{
-            id:null,
-            nombreCompleto:""
-        }
-    }           
-    self.update();
-}
+
 /**
 *  Crear Factura nueva
 **/
@@ -864,62 +857,7 @@ __agregarArticulosFactura(e){
     } 
     verificarConsecutivo()
 }
-__verificarFactura(){
-    verificarConsecutivo()
-}
-function verificarConsecutivo(){
-    var numero  = $('.consecutivoFactura').val()
-    $.ajax({
-        url: "ListarDetlleByConsecutivoNotaCreditoAjax.do",
-        datatype: "json",
-        data: {consecutivo:numero},
-        method:"POST",
-        success: function (data) {
-             if(data.aaData.length > 0){
-                cargarDetallesFacturaEnEspera(data.aaData)
-                if(self.factura.estado ==5){
-                    sweetAlert("", "Ya se encuentra anulada", "error");
-                    return
-                }
-                if(self.factura.id == null){
-                    sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
-                }else{
-                    self.factura.id= null
-                    self.update()
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
-/**
-*  Cargar detalles Factura en espera
-**/
-function cargarDetallesFacturaEnEspera(data){
-    self.detail = [];
-    self.factura = null
-    self.update()
-     $.each(data, function( index, modeloTabla ) {
-        if(self.factura  == null){
-            self.factura = modeloTabla.factura
-            self.update()
-        } 
-        self.detail.push({
-            numeroLinea     : modeloTabla.numeroLinea,
-            id              : modeloTabla.id,
-            codigo          : modeloTabla.codigo,
-            tipoImpuesto    : modeloTabla.tipoImpuesto,
-            descripcion     : modeloTabla.descripcion,
-            cantidad        : __valorNumerico(modeloTabla.cantidad) ,
-            cantidadAplicadaNotaCredito     :  __valorNumerico(modeloTabla.cantidad)
-        });
-        self.update()
-    })
-    self.update()
-}
+
 /**
 * eliminar un detalle factura
 **/

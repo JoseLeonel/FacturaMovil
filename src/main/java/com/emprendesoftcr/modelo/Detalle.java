@@ -263,7 +263,8 @@ public class Detalle implements Serializable {
 		this.porcentajeExoneracion = detalleFacturaCommand.getPorcentajeExoneracion();
 		this.montoExoneracion = detalleFacturaCommand.getMontoExoneracion();
 		this.montoExoneracion1 = detalleFacturaCommand.getMontoExoneracion1();
-
+		this.cantidadAplicadaNotaCredito = detalleFacturaCommand.getCantidadAplicadaNotaCredito();
+		
 	}
 
 	public Long getId() {

@@ -2,6 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
@@ -30,8 +34,10 @@ public class DetalleFacturaParaNotaCreditoCommand {
 	private String	consecutivo;
 
 	private String	tipoDoc;
-
+	
+	
 	private Factura	factura;
+	
 	
 	private Double cantidadAplicadaNotaCredito;
 

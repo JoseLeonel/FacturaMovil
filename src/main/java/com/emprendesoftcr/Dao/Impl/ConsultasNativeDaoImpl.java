@@ -18,12 +18,14 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -166,12 +168,12 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":FECHAINICIAL", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":FECHAFINAL", "'" + fechaFinal + "'");
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
-		if(codigoActividadComercial > Constantes.ZEROS) {
-			queryStr = queryStr.replace("ACT_COMERCIAL", " and f.act_comercial in ('" + codigoActividadComercial.toString() + "') ");	
-		}else {
+		if (codigoActividadComercial > Constantes.ZEROS) {
+			queryStr = queryStr.replace("ACT_COMERCIAL", " and f.act_comercial in ('" + codigoActividadComercial.toString() + "') ");
+		} else {
 			queryStr = queryStr.replace("ACT_COMERCIAL", Constantes.EMPTY);
 		}
-		
+
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
 		return (Collection<ConsultaIVANative>) query.getResultList();
 	}
@@ -271,9 +273,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	@Override
-	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo) {
+	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo) {
 		String queryStr = getQueryBase(ConsultaGananciaNative.class);
-		codigo = codigo ==null?Constantes.EMPTY:codigo;
+		codigo = codigo == null ? Constantes.EMPTY : codigo;
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
@@ -294,9 +296,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		} else {
 			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + "2,6,7,5" + ") ");
 		}
-		
-		if (codigo.length() > 0 ) {
-			queryStr = queryStr.replaceAll("and detalles.codigo", " and detalles.codigo ="+codigo.toString());
+
+		if (codigo.length() > 0) {
+			queryStr = queryStr.replaceAll("and detalles.codigo", " and detalles.codigo =" + codigo.toString());
 		} else {
 			queryStr = queryStr.replaceAll("and detalles.codigo", Constantes.EMPTY);
 		}
@@ -336,8 +338,65 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		} else {
 			return null;
 		}
-		
 
+	}
+
+	@Override
+	public Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo, Empresa empresa) {
+		String queryStr = getQueryBase(DetallesFacturaNotaCreditoNativa.class);
+
+		queryStr = queryStr.replaceAll(" facturas.empresa_id", " facturas.empresa_id=" + "'" + empresa.getId() + "'");
+
+		queryStr = queryStr.replaceAll(" facturas.numero_consecutivo", " facturas.numero_consecutivo=" + "'" + consecutivo + "'");
+
+		Query query = entityManager.createNativeQuery(queryStr, DetallesFacturaNotaCreditoNativa.class);
+		return (Collection<DetallesFacturaNotaCreditoNativa>) query.getResultList();
+
+	}
+
+	/**
+	 * Lista de facturas que no tenga notas de credito
+	 * @see com.emprendesoftcr.Dao.ConsultasNativeDao#findByFacturasSinNotasCreditos(com.emprendesoftcr.modelo.Empresa, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Cliente, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
+		String queryStr = getQueryBase(ListarFacturaNCNativa.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+
+		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", "");
+
+		} else {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", " and fac.act_comercial in ('" + actividadComercial + "') ");
+		}
+
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", "and fac.usuario_id ='" + idUsuario.toString() + "' ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", " ");
+		}
+		if (cliente != null) {
+			queryStr = queryStr.replaceAll("and fac.cliente_id", " and fac.cliente_id =" + cliente.getId().toString() + " ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.cliente_id ", " ");
+		}
+		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('" + tipoDocumento + "') ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('04','86','87','01') ");
+		}
+
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + estado + ") ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7" + ") ");
+		}
+
+		Query query = entityManager.createNativeQuery(queryStr, ListarFacturaNCNativa.class);
+		return (Collection<ListarFacturaNCNativa>) query.getResultList();
 	}
 
 }
