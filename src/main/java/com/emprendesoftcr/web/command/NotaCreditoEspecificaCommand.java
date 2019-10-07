@@ -7,6 +7,8 @@ public class NotaCreditoEspecificaCommand {
 	private String	referenciaRazon;
 
 	private String	detalleFactura;
+	
+	private Integer completa;
 
 	public NotaCreditoEspecificaCommand() {
 		super();
@@ -34,6 +36,16 @@ public class NotaCreditoEspecificaCommand {
 
 	public void setReferenciaRazon(String referenciaRazon) {
 		this.referenciaRazon = referenciaRazon;
+	}
+
+	
+	public Integer getCompleta() {
+		return completa;
+	}
+
+	
+	public void setCompleta(Integer completa) {
+		this.completa = completa;
 	}
 	
 	

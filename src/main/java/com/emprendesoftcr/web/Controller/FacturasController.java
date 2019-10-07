@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +80,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -1036,7 +1038,7 @@ public class FacturasController {
 		return respuestaService;
 
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -1565,23 +1567,45 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.razon", result.getAllErrors());
 			}
 
-			JSONObject json = null;
 			ArrayList<DetalleFacturaCommand> detalles = new ArrayList<>();
-			try {
-				json = (JSONObject) new JSONParser().parse(notaCreditoEspecificaCommand.getDetalleFactura());
-				// Agregar Lineas de Detalle
-				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
-				Gson gson = new Gson();
-				if (jsonArrayDetalleFactura != null) {
-					Integer numeroLinea = 1;
-					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
-						DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
-						detalles.add(detalleFacturaCommand);
-						numeroLinea += 1;
+			if (notaCreditoEspecificaCommand.getCompleta() == 1) {
+				Collection<DetallesFacturaNotaCreditoNativa> objetos = consultasNativeBo.findByFacturaParaNotaCredito(notaCreditoEspecificaCommand.getConsecutivo(), usuario.getEmpresa());
+				for (DetallesFacturaNotaCreditoNativa detallesFacturaNotaCreditoNativa : objetos) {
+					DetalleFacturaCommand detalleFacturaCommand2 = new DetalleFacturaCommand();
+					detalleFacturaCommand2.setId(detallesFacturaNotaCreditoNativa.getId());
+					Double cantidaNotas = detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito() ==null?Constantes.ZEROS_DOUBLE:detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito();
+					Double cantidad  = detallesFacturaNotaCreditoNativa.getCantidad() - cantidaNotas  ;
+					
+					detalleFacturaCommand2.setCantidadAplicadaNotaCredito(cantidad);
+					if(cantidad > Constantes.ZEROS_DOUBLE) {
+						detalles.add(detalleFacturaCommand2);	
 					}
+					
 				}
-			} catch (org.json.simple.parser.ParseException e) {
-				throw e;
+				
+				if (detalles.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.detalles.incorrectos", result.getAllErrors());
+				}
+		
+
+			}
+			if (notaCreditoEspecificaCommand.getCompleta() == 2) {
+				JSONObject json = null;
+				try {
+					json = (JSONObject) new JSONParser().parse(notaCreditoEspecificaCommand.getDetalleFactura());
+					// Agregar Lineas de Detalle
+					JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+					Gson gson = new Gson();
+					if (jsonArrayDetalleFactura != null) {
+						for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+							DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
+							detalles.add(detalleFacturaCommand);
+						}
+					}
+				} catch (org.json.simple.parser.ParseException e) {
+					throw e;
+				}
+
 			}
 			ArrayList<DetalleFacturaCommand> detallesCorrectos = new ArrayList<>();
 			// Valida si esta aplicando una cantidad equivocada a la indicada y alimentando los detalles a crear en la nota de credito
@@ -1594,7 +1618,7 @@ public class FacturasController {
 					if (cantidad < detalleFacturaCommand1.getCantidadAplicadaNotaCredito()) {
 						detallesIncorrectos = Boolean.TRUE;
 					} else {
-					
+
 						detalleFacturaCommand1.setNumeroLinea(Constantes.ZEROS);
 						detalleFacturaCommand1.setPrecioUnitario(detalle1.getPrecioUnitario());
 						detalleFacturaCommand1.setCantidad(detalleFacturaCommand1.getCantidadAplicadaNotaCredito());
@@ -1686,8 +1710,7 @@ public class FacturasController {
 			facturaAplicarCommand.setUpdated_at(new Date());
 			facturaAplicarCommand.setVersionEsquemaXML(facturaBD.getVersionEsquemaXML());
 			facturaAplicarCommand.setDetalleFactura(Constantes.EMPTY);
-			
-			
+
 			facturaAplicarCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
 				facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO);
@@ -1697,7 +1720,7 @@ public class FacturasController {
 			facturaAplicarCommand.setNota(facturaBD.getNota());
 			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
 			// Datos de la Nota de Credito
-			facturaAplicarCommand.setReferenciaCodigo(Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO);
+			facturaAplicarCommand.setReferenciaCodigo(notaCreditoEspecificaCommand.getCompleta() ==2?Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO:Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
 			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
@@ -1705,15 +1728,14 @@ public class FacturasController {
 			facturaAplicarCommand.setReferenciaRazon(notaCreditoEspecificaCommand.getReferenciaRazon());
 			facturaAplicarCommand.setPlazoCredito(Constantes.ZEROS);
 			facturaAplicarCommand.setReferenciaTipoDoc(facturaBD.getTipoDoc());
-			
-			
+
 			facturaAplicarCommand.setMesa(facturaBD.getMesa());
 			facturaAplicarCommand.setMontoCambio(facturaBD.getMontoCambio());
 			facturaAplicarCommand.setPesoTransporteTotal(facturaBD.getPesoTransporteTotal());
 			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getTipoCambio());
 			facturaAplicarCommand.setUsuario(usuario.getNombreUsuario());
-      facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
-			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesCorrectos,detallesCorrectos);
+			facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
+			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesCorrectos, detallesCorrectos);
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
@@ -1742,7 +1764,7 @@ public class FacturasController {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
-			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand,detallesNotaCredito);
+			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
@@ -1761,14 +1783,14 @@ public class FacturasController {
 			FacturaCommand facturaCommand = null;
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
-			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand,detallesNotaCredito);
+			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
 		} catch (Exception e) {
 
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
 
-	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand,ArrayList<DetalleFacturaCommand> detallesNotaCredito) {
+	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {
 		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -1977,7 +1999,7 @@ public class FacturasController {
 
 			}
 
-			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio, detallesFacturaCommand,detallesNotaCredito);
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio, detallesFacturaCommand, detallesNotaCredito);
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -1985,7 +2007,6 @@ public class FacturasController {
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
-		
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
 
@@ -1996,8 +2017,6 @@ public class FacturasController {
 		}
 
 	}
-	
-	
 
 	/**
 	 * Mostrar una Factura

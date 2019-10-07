@@ -188,7 +188,6 @@ function ListarFacturas(){
                 __VerDetalle();
                 __EnviarCorreos();
 				EventoFiltro();
-				suma(facturas.data);
 				__NotaCredito()
 		   }else{
 			__Inicializar_Table('.tableListar');  
@@ -199,35 +198,6 @@ function ListarFacturas(){
 		   console.log(xhr);
 	   }
 	});
-}
-/**
- * 
- * suma de los tiquetes , facturas excluye notas de credito y debito y estados anulados 
- */
-function suma(data){
-    var total =  0
-	$.each(data, function( index, modeloTabla ) {
-        if($('.tipoDocumento').val() =='0'){
-             if(modeloTabla.tipoDoc =='04' || modeloTabla.tipoDoc =='87' || modeloTabla.tipoDoc =='01'){
-				var estado = $('.selectEstado').val()
-				if(estado =='0'){
-					if(modeloTabla.estado == 2 || modeloTabla.estado == 7 || modeloTabla.estado == 6){
-						total = modeloTabla.totalComprobante + total;
-					} 
-				}else{
-					
-				    if( estado ==modeloTabla.estado){
-						total = modeloTabla.totalComprobante + total;
-					}	
-				}
-                   
-			 }
-		} else{
-           total = __valorFloat(modeloTabla.totalComprobante) + total;  
-		} 
-	})
-	$('.total').val(formatoDecimales(total,2))   
-
 }
 /**
 *  inicializar el listado
@@ -396,7 +366,7 @@ function __NotaCredito(){
 	    }
 		$('.mostrarListadoDeFacturas').hide();
 		var parametros = {
-			consecutivo:data.consecutivo,
+			consecutivo:data.numeroConsecutivo,
 		}
 		riot.mount('debito-credito',{parametros:parametros});   
 	});
@@ -498,6 +468,15 @@ function cargaMantenimiento(tipoEjec,data) {
  */
 function __MostrarListado(){
 	$('.mostrarListadoDeFacturas').show();
+
+}
+
+/**
+ * Mostrar listado y actualizar
+ */
+function __MostrarListadoActualizado(){
+	$('.mostrarListadoDeFacturas').show();
+	ListarFacturas()
 
 }
 

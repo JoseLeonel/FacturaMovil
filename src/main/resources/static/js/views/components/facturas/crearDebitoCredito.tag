@@ -1,24 +1,14 @@
 <debito-credito>
   
 <!--Fin Ventana de los billetes-->      
-<div class="box box-solid box-primary"  show="{mostrarnotacredito ==true}">
-        <div class="box-body">
-             <div class="box-header with-border">
-                <div class="row">
-                  <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
-                  <div class="box-tools ">
-                    <a class="pull-left" href="#"  > <span class="label label-limpiar">Crear Nota Credito de un producto especifico</span></a>
-                    <a class="pull-right" href="#"  onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                    <a class="pull-right" href="#"  onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">Volver</span></a>
-                  </div>
-                  </div>
-                </div>  
-             </div>
+<div class="box box-solid box-primary"  show={mostrarnotacredito == true}>
+        <div class="box-body" >
+             
             <div  class="contenedor-factura " >
                     <div class="cabecera-izquierda">
                         <div class="item-1">
                             <label>Ingrese el Consecutivo</label>
-                            <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" placeholder="Consecutivo:XXXXXXXXXXXX" value="{parametro.consecutivo}"/>
+                            <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" value="{parametro.consecutivo}" readonly/>
                         </div>
                         <div class="item-1">
                             <label>Cliente</label>
@@ -51,7 +41,7 @@
                             <th><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.codigo")}</label></th>
                             <th style="width:20%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descripcion")}</label> </th>
                             <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.cantidad")}</label></th>
-                            <th ><div class="tituloDetalle">Cant. Aplicar</label></th>
+                            <th ><div class="tituloDetalle">Cant. Rebajar</label></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -70,7 +60,10 @@
                             </td>
                         </tr>
                         </tbody>
-                    </table>          
+                    </table>   
+                    <div class="boton">
+                        <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                    </div>        
                 </div>
             </div><!-- fin contenedor-factura-->
         </div><!-- fin box-body-->
@@ -78,6 +71,21 @@
 
 <!--Fin Cambiar Cantidad-->
 <style type="text/css"  >
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
     .motivoContainer{
         display:flex;
     }
@@ -555,7 +563,7 @@
 <script>
     var self = this;
     self.parametro   = opts.parametros;  
-    self.mostrarnotacredito = true;
+    self.mostrarnotacredito = false;
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -665,12 +673,63 @@ function _INIT(){
     }      
     self.update()
     __Eventos()
+     self.detail                = []
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    }                   
+    self.item                  = null;
+    self.detalleFactura        = {data:[]}
 }
 /**
 *  Consecutivo a consultar
 **/
 function verificarConsecutivo(){
-    var numero  = $('.consecutivoFactura').val()
+    self.mostrarnotacredito = false;
+    var numero  = self.parametro.consecutivo
     self.detail = [];
     self.factura = null
     self.update()
@@ -681,12 +740,13 @@ function verificarConsecutivo(){
         method:"POST",
         success: function (data) {
              if(data.aaData.length > 0){
+                 self.mostrarnotacredito = true;
+                 self.update()
                 cargarDetallesFacturaEnEspera(data.aaData)
-                if(self.factura.estado ==5){
-                    sweetAlert("", "Ya se encuentra anulada", "error");
-                    return
-                }
-               
+            }else{
+                 self.mostrarnotacredito = false;
+                __MostrarListadoActualizado()
+                
             }
         },
         error: function (xhr, status) {
@@ -695,16 +755,18 @@ function verificarConsecutivo(){
         }
     });
 }
+_AtrasFacturaFinal(){
+     self.mostrarnotacredito = false;
+     self.update();
+     __MostrarListado()
+}
 /**
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
    
      $.each(data, function( index, modeloTabla ) {
-        if(self.factura  == null){
-            self.factura = modeloTabla.factura
-            self.update()
-        } 
+        self.factura = modeloTabla.factura
         self.detail.push({
             numeroLinea     : modeloTabla.numeroLinea,
             id              : modeloTabla.id,
@@ -794,7 +856,8 @@ function crearFactura(){
     var  parametros = {
         consecutivo:$('.consecutivoFactura').val(),
         detalleFactura:self.factura.detalleFactura,
-        referenciaRazon:$('.referenciaRazon').val()
+        referenciaRazon:$('.referenciaRazon').val(),
+        completa:2
     }
     $.ajax({
         type : "POST",
@@ -826,25 +889,14 @@ function evaluarFactura(data){
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
             self.update()
-            if(self.facturaImprimir.estado == 2){
-                __Init()
-                //Envia a la pantalla de impresion
-                var parametros = {
+            _INIT()
+            //Envia a la pantalla de impresion
+            var parametros = {
                     factura:modeloTabla,
                     facturaDia:0
-                }
-                console.log("consultaFactura")
-                riot.mount('ptv-imprimir',{parametros:parametros});
-            }else{
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: $.i18n.prop("btn.aceptar"),
-                })
-                __Init()
-            }
+            }    
+            riot.mount('ptv-imprimir',{parametros:parametros});
+            verificarConsecutivo()
         });
     }
 }

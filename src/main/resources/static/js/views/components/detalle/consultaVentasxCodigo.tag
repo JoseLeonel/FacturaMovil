@@ -733,10 +733,6 @@ function __Impuestos(){
      self.update();
      
 }
-
-
-
-
 /*
  * Muestra los filtros avanzados
  */

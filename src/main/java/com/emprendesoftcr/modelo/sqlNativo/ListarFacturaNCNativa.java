@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 5 oct. 2019
  */
 
-@BaseNativeQuery(name = "facturasNC", query = "SELECT y.id,y.fecha_emision,y.numero_consecutivo,y.tipo_doc,y.condicion_venta,y.nombre_completo,\n" + 
+@BaseNativeQuery(name = "facturasNC", query = "SELECT DISTINCT y.id,y.fecha_emision,y.numero_consecutivo,y.tipo_doc,y.condicion_venta,y.nombre_completo,\n" + 
 		"       y.nombre_factura,y.total_comprobante,y.estado, y.cantidad,y.cantidad_notas,\n" + 
 		"       y.act_comercial,y.cedula,y.nombre_usuario\n" + 
 		"  FROM (SELECT fac.id,fac.fecha_emision,fac.numero_consecutivo,\n" + 
@@ -26,14 +26,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 		"              fac.nombre_factura,fac.total_comprobante,fac.estado,fac.act_comercial,\n" + 
 		"              clientes.cedula,usuarios.nombre_usuario, \n" + 
 		"       (select sum(detalles.cantidad) from detalles where detalles.factura_id = fac.id) as cantidad ,\n" + 
-		"       (select sum(detalles.cantidad) from detalles where detalles.factura_id = fac.id) as cantidad_notas\n" + 
+		"       (select sum(detalles.cant_notac) from detalles where detalles.factura_id = fac.id) as cantidad_notas\n" + 
 		"         FROM facturas fac\n" + 
 		"         inner join detalles det on det.factura_id = fac.id  \n" + 
 		"         inner join clientes on clientes.id = fac.cliente_id  \n" + 
 		"         inner join usuarios on usuarios.id = fac.usuario_id\n" + 
 		" WHERE fac.empresa_id = :ID_EMPRESA and fac.fecha_emision >=  :fechaInicial and  fac.fecha_emision <=  :fechaFinal  and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado  \n" + 
 		"     ORDER BY fac.id) y\n" + 
-		"where y.cantidad <= y.cantidad_notas\n" + 
+		"where y.cantidad > y.cantidad_notas\n" + 
 		"ORDER BY y.fecha_emision desc")
 @Entity
 public class ListarFacturaNCNativa implements Serializable {
