@@ -45,6 +45,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
@@ -323,6 +324,9 @@ public class FacturasController {
 
 	@Autowired
 	private VendedorBo																								vendedorBo;
+
+	@Autowired
+	private CuentaCobrarBo																						cuentaCobrarBo;
 
 	@Autowired
 	private ClienteBo																									clienteBo;
@@ -1573,20 +1577,19 @@ public class FacturasController {
 				for (DetallesFacturaNotaCreditoNativa detallesFacturaNotaCreditoNativa : objetos) {
 					DetalleFacturaCommand detalleFacturaCommand2 = new DetalleFacturaCommand();
 					detalleFacturaCommand2.setId(detallesFacturaNotaCreditoNativa.getId());
-					Double cantidaNotas = detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito() ==null?Constantes.ZEROS_DOUBLE:detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito();
-					Double cantidad  = detallesFacturaNotaCreditoNativa.getCantidad() - cantidaNotas  ;
-					
+					Double cantidaNotas = detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito();
+					Double cantidad = detallesFacturaNotaCreditoNativa.getCantidad() - cantidaNotas;
+
 					detalleFacturaCommand2.setCantidadAplicadaNotaCredito(cantidad);
-					if(cantidad > Constantes.ZEROS_DOUBLE) {
-						detalles.add(detalleFacturaCommand2);	
+					if (cantidad > Constantes.ZEROS_DOUBLE) {
+						detalles.add(detalleFacturaCommand2);
 					}
-					
+
 				}
-				
+
 				if (detalles.size() == 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.detalles.incorrectos", result.getAllErrors());
 				}
-		
 
 			}
 			if (notaCreditoEspecificaCommand.getCompleta() == 2) {
@@ -1720,7 +1723,7 @@ public class FacturasController {
 			facturaAplicarCommand.setNota(facturaBD.getNota());
 			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
 			// Datos de la Nota de Credito
-			facturaAplicarCommand.setReferenciaCodigo(notaCreditoEspecificaCommand.getCompleta() ==2?Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO:Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
+			facturaAplicarCommand.setReferenciaCodigo(notaCreditoEspecificaCommand.getCompleta() == 2 ? Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO : Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
 			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
@@ -1950,10 +1953,11 @@ public class FacturasController {
 				facturaCommand.setVendedor(vendedor);
 
 			}
+			Factura facturaReferenciaValidar = null;
 			// Validar el codigo de factura que se le va aplicar una nota de credito
 			if (facturaCommand.getReferenciaNumero() != null) {
 				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
-					Factura facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+					facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
 					if (facturaReferenciaValidar != null) {
 						if (facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
@@ -2006,6 +2010,13 @@ public class FacturasController {
 			Factura facturaCreada = facturaBo.findById(factura.getId());
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+			}
+
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (facturaReferenciaValidar != null) {
+					cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferenciaValidar);
+				}
+
 			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);

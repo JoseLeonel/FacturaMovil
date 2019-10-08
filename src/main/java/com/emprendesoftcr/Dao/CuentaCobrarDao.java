@@ -22,6 +22,8 @@ public interface CuentaCobrarDao {
 	CuentaCobrar buscarPorConsecutivo(Empresa empresa, String consecutivo);
 
 	void crearCuentaXCobrar(Factura factura);
+	
+	
 
 	TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Cliente cliente);
 	

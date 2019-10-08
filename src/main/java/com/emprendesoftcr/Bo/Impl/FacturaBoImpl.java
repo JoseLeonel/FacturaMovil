@@ -1129,31 +1129,31 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 
 			// Anulacion de la factura anterior
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-				if (factura.getReferenciaNumero() != null) {
-					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
-						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
-						facturaAnterior = facturaAnterior == null ? facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnterior;
-						if (facturaAnterior != null) {
-							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
-							if (cuentaCobrar != null) {
-								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
-								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrarDao.eliminar(cuentaCobrar);
-								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
-									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
-									cuentaCobrarDao.modificar(cuentaCobrar);
-
-								}
-							}
-
-				//			facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
-							modificar(facturaAnterior);
-						}
-					}
-				}
-			}
+//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+//				if (factura.getReferenciaNumero() != null) {
+//					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
+//						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
+//						facturaAnterior = facturaAnterior == null ? facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnterior;
+//						if (facturaAnterior != null) {
+//							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
+//							if (cuentaCobrar != null) {
+//								
+//								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+//									cuentaCobrarDao.eliminar(cuentaCobrar);
+//								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+//									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
+//									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
+//									cuentaCobrarDao.modificar(cuentaCobrar);
+//
+//								}
+//							}
+//
+//				//			facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
+//							modificar(facturaAnterior);
+//						}
+//					}
+//				}
+//			}
 			// Si viene con detalles significa que es una nota de credito espeficica
 			if (detallesNotaCredito.size() > 0) {
 				detalleDao.aplicarRebajoCantidadPorNotaCredito(detallesNotaCredito);
