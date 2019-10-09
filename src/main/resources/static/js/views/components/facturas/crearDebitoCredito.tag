@@ -779,8 +779,6 @@ function cargarDetallesFacturaEnEspera(data){
     })
     self.update()
 }
-
-
 /**
 *  Actimpuestor validaciones del formulario
 **/
@@ -835,7 +833,7 @@ function aplicarFactura(){
             crearFactura()  
         }
     });
-    
+  
 }
 /**
 * Limpiar Pantalla
@@ -843,7 +841,6 @@ function aplicarFactura(){
 __Limpiar(){
     _INIT()
 }
-
 /**
 *  Crear Factura nueva
 **/
@@ -872,7 +869,11 @@ function crearFactura(){
                 }
             } else {
                	serverMessageJsonClase(data);
-                evaluarFactura(data)
+                self.mostrarnotacredito = false;
+                self.update()
+               __MostrarListadoActualizado()
+	             evaluarFactura(data)
+
             }
         },
         error : function(xhr, status) {
@@ -881,25 +882,7 @@ function crearFactura(){
         }
     });
 }
-/**
-*Si fue facturada o tiquete
-**/
-function evaluarFactura(data){
-   if (data.message != null && data.message.length > 0) {
-        $.each(data.listaObjetos, function( index, modeloTabla ) {
-            self.facturaImprimir   = modeloTabla
-            self.update()
-            _INIT()
-            //Envia a la pantalla de impresion
-            var parametros = {
-                    factura:modeloTabla,
-                    facturaDia:0
-            }    
-            riot.mount('ptv-imprimir',{parametros:parametros});
-            verificarConsecutivo()
-        });
-    }
-}
+
 /**
 * Consultar el consecutivo de una factura para agregar los articulos relacionados
 **/

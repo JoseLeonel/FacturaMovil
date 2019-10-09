@@ -480,6 +480,21 @@ function __MostrarListadoActualizado(){
 
 }
 
+/**
+*Si fue facturada o tiquete
+**/
+function evaluarFactura(data){
+	if (data.message != null && data.message.length > 0) {
+		 $.each(data.listaObjetos, function( index, modeloTabla ) {
+			 //Envia a la pantalla de impresion
+			 var parametros = {
+					 factura:modeloTabla,
+					 facturaDia:0
+			 }    
+			 riot.mount('ptv-imprimir',{parametros:parametros});
+		 });
+	 }
+ }
 
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
