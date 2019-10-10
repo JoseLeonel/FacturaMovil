@@ -30,7 +30,6 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -929,7 +928,7 @@ public class FacturaBoImpl implements FacturaBo {
 			long id = Thread.currentThread().getId();
 			System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
-			Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
+			Empresa empresa = usuario.getEmpresa();
 			// Se actualizan los datos de la factura command
 			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);

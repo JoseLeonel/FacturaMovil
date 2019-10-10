@@ -93,7 +93,6 @@ import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
-import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.ConsultaFacturaGananciasNativeCommand;
 import com.emprendesoftcr.web.command.ConsultaIvaCommand;
@@ -348,8 +347,6 @@ public class FacturasController {
 	@Autowired
 	private VendedorPropertyEditor																		vendedorPropertyEditor;
 
-	@Autowired
-	private FacturaFormValidator																			facturaFormValidator;
 
 	@Autowired
 	private StringPropertyEditor																			stringPropertyEditor;
@@ -598,7 +595,7 @@ public class FacturasController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito");
-		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambio, totalColones,totalEfectivo,totalTarjeta,totalBanco,totalCredito", baos);
+		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC", baos);
 		return baos;
 	}
 

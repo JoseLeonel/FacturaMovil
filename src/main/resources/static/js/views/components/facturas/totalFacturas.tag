@@ -358,10 +358,10 @@ function __ListaActividadesComercales(){
 			        	self.factura = data;
 			        	self.mostrarDetalle = true;
 			        	self.mostrarFiltros = false;
-						if(self.factura.total >0){
+						//if(self.factura.total >0){
                           self.mostrarBotones=true
 						  self.actividadEconomica =   $('.selectActividadEconocimica').val()
-						}
+						//}
 						//Se presentan los filtros
 		               self.mostrarFiltros = true;
 		               self.valorMarginBottom  = '0px'

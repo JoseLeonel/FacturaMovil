@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -46,6 +48,7 @@ import com.google.common.base.Function;
  * @author jose.
  * @since 17 mar. 2018
  */
+
 @Controller
 public class ClientesController {
 
@@ -63,6 +66,10 @@ public class ClientesController {
 	@Autowired
 	private FacturaBo																			facturaBo;
 
+	@Autowired
+	private EmpresaBo																			empresaBo;
+
+	
 	@Autowired
 	private UsuarioBo																			usuarioBo;
 
@@ -118,13 +125,22 @@ public class ClientesController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	
+	
+	@RequestMapping(value = "/movil/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarClientesAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam Integer idEmpresa) {
+		//Principal principal = request.getUserPrincipal();
+		JqGridFilter dataTableFilter = new JqGridFilter("empresa_id", "'" + idEmpresa + "'", "=");
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Cliente");
+		dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
 
-	/**
-	 * Listar los clientes activos
-	 * @param request
-	 * @param response
-	 * @return
-	 */
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarClientesActivosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody

@@ -172,7 +172,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa, String actividadEconomica) {
-		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
+		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa  and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
 		if (actividadEconomica.equals(Constantes.COMBO_TODOS)) {
 			sql = sql.replaceAll("and obj.codigoActividad = :codigoActividad","");
 		}
