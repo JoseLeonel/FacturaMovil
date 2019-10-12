@@ -55,6 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		.permitAll().antMatchers("/service/CrearFacturaServiceAjax")
 		.permitAll().antMatchers("/movil/ListarClientesAjax.do")
+		.permitAll().antMatchers("/movil/ListarCategoriasAjax.do")
+		.permitAll().antMatchers("/movil/ListarArticulosAjax.do")
 		.permitAll().antMatchers("/webjars/**")
 		.permitAll().antMatchers("/login")
 		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")

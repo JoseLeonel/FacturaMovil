@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ import com.google.common.base.Function;
  * @author jose.
  * @since 17 mar. 2018
  */
-
+@CrossOrigin
 @Controller
 public class ClientesController {
 
@@ -129,15 +130,10 @@ public class ClientesController {
 	
 	@RequestMapping(value = "/movil/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarClientesAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam Integer idEmpresa) {
-		//Principal principal = request.getUserPrincipal();
-		JqGridFilter dataTableFilter = new JqGridFilter("empresa_id", "'" + idEmpresa + "'", "=");
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Cliente");
-		dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
+	public Collection<Cliente> listarClientesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {
+		
 
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		return clienteBo.findByEmpresa(idEmpresa);
 	}
 
 

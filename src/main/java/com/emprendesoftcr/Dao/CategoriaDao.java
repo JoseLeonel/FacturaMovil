@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -14,6 +16,8 @@ public interface CategoriaDao {
 	Categoria buscar(Long id);
 
 	Categoria buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
+	
+	Collection<Categoria> findByEmpresaAll(Integer idEmpresa);
 
 	
 }

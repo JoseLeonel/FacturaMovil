@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -57,6 +59,11 @@ public class CategoriaBoImpl implements CategoriaBo {
 	@Override
 	public Categoria buscar(Long id) {
 		return categoriaDao.buscar(id);
+	}
+
+	@Override
+	public Collection<Categoria> findByEmpresaAll(Integer idEmpresa) {
+		return categoriaDao.findByEmpresaAll(idEmpresa);
 	}
 
 }

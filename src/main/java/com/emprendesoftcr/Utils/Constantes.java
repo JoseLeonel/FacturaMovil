@@ -503,8 +503,8 @@ public class Constantes {
 	public static final String					FACTURA_ESTADO_FACTURADO_STR																= "factura.estado.facturado";
 
 	// Nombres de procedimientos
-	public static final String					SP_TOTAL_FACTURAS																						= "SPTOTALFACTURAS";
-	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "SPFACTTODO";
+	public static final String					SP_TOTAL_FACTURAS																						= "sp_total_facturas";
+	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "sp_todo_facturas";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO														= "FECHA_INICIO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO																	= "ESTADO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA										= "act_econo";
@@ -512,7 +512,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA															= "ID_EMPRESA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL																	= "TOTAL";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO												= "TOTAL_DESC";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS												= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS												= "TOTAL_IMP";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS										= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS									= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS									= "TOTAL_GRABADAS";
@@ -521,6 +521,20 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA						= "TOTAL_TARJETA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO							= "TOTAL_BANCO";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO						= "TOTAL_CREDITO";
+
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_N																	= "TOTAL_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO_N												= "TOTAL_DESC_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS_N												= "TOTAL_IMP_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS_N										= "TOTAL_NETAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS_N									= "TOTAL_EXENTAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS_N									= "TOTAL_GRABADAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS_N				= "TOTAL_OTROS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO_N						= "TOTAL_EFECTIVO_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA_N						= "TOTAL_TARJETA_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO_N							= "TOTAL_BANCO_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO_N						= "TOTAL_CREDITO_N";
+
+	
 	// Totales de Compras Aceptadas
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO													= "FECHA_INICIO";
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN															= "FECHA_FIN";

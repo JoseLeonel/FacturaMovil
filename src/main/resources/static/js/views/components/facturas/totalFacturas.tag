@@ -120,36 +120,41 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-body">
+				    <h1>Ventas </h1>
                     <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasGravadas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasGravadas" placeHolder ="{$.i18n.prop("factura.totalVentasGravadas")}" id="totalVentasGravadas" name="totalVentasGravadas" value="{factura.totalVentasGravadasSTR}">
+                                <label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasGravadasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasExentas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasExentas" placeHolder ="{$.i18n.prop("factura.totalVentasExentas")}" id="totalVentasExentas" name="totalVentasExentas" value="{factura.totalVentasExentasSTR}">
+                                <label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasExentasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasNetas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasNetas" placeHolder ="{$.i18n.prop("factura.totalVentasNetas")}" id="totalVentasNetas" name="totalVentasNetas" value="{factura.totalVentasNetasSTR}">
+                                <label> {$.i18n.prop("factura.totalVentasNetas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasNetasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalImpuestos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{factura.totalImpuestosSTR}">
+                                <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalImpuestosSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalDescuentos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentosSTR}">
+                                <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalDescuentosSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total.otros.cargos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalOtrosCargos" placeHolder ="{$.i18n.prop("factura.total")}" id="totalOtrosCargos" name="totalOtrosCargos" value="{factura.totalOtrosCargosSTR}">
+                                <label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalOtrosCargosSTR}">
                             </div>
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.totalSTR}">
+                                <label> {$.i18n.prop("factura.total")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalSTR}">
+                            </div>
+							<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> Total Ventas - Notas de Credito  </label>
+                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalGeneralSTR}">
                             </div>
                         </div>
                 	</form>
@@ -166,29 +171,116 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-body">
+				    <h1>Ventas </h1>  
                     <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalEfectivo"  id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivoSTR}">
+                                <input type="text" readonly="readonly" class="form-control " value="{factura.totalEfectivoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalTarjeta" id="totalTarjeta" name="totalTarjeta" value="{factura.totalTarjetaSTR}">
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.resumen.banco")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalBanco" id="totalBanco" name="totalBanco" value="{factura.totalBancoSTR}">
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalCredito" id="totalCredito" name="totalCredito" value="{factura.totalCreditoSTR}">
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoSTR}">
                             </div>
                             
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.total")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalPagos"   value="{factura.totalPagosSTR}">
+                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalPagosSTR}">
+                            </div>
+							
+                        </div>
+                	</form>
+                </div>
+            </div>   
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+    </div>
+
+<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
+    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+            <div class="box box-solid box-primary">
+                <div class="box-body">
+				    <h1>Notas de Credito </h1>
+                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
+                        <div class="row">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasGravadasNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasExentasNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalVentasNetas")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasNetasNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalImpuestosNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control " value="{factura.totalDescuentosNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalOtrosCargosNC}">
+                            </div>
+
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalNC}">
+                            </div>
+                        </div>
+                	</form>
+                </div>
+            </div>   
+	        <div class="col-md-12 col-lg-12 col-sm-12">
+		        </div>
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+    </div>
+
+<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
+    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+            <div class="box box-solid box-primary">
+                <div class="box-body">
+				    <h1>Notas de Credito </h1>  
+                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
+                        <div class="row">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalEfectivoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.banco")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoNC}">
+                            </div>
+                            
+
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalPagos"   value="{factura.totalPagosNC}">
                             </div>
                         </div>
                 	</form>
@@ -200,16 +292,13 @@
 
 
 
+
 	<script>
-	
 		self = this;
-	
 		//Se presentan los filtros
 		self.mostrarFiltros = true;
 		self.valorMarginBottom  = '0px'
-
 		self.mostrarDetalle        = false
-
 		self.factura ={				
 				total:"0",
 				totalDescuentos:"0",
@@ -300,33 +389,33 @@ function __ListaActividadesComercales(){
 			return validationOptions;
 		};
 		
-		function limpiarFactura(){
-			self.factura ={				
-				total:"0",
-				totalDescuentos:"0",
-				totalImpuestos:"0",
-				totalVentasNetas:"0",
-				totalVentasExentas:"0",
-				totalVentasGravadas:"0",
-				totalOtrosCargos:"0",
-				totalEfectivo:"0",
-				totalTarjeta:"0",
-				totalBanco:"0",
-				totalPagos:"0",
-				totalCredito:"0"
-		    }		
-			self.update();
-			$('.datepickerFechaFinal').datepicker(
-            	{
-              format: 'yyyy-mm-dd',
-              todayHighlight:true,
-            	}
-    		);
-    		$('.datepickerFechaInicio').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              todayHighlight:true,
-            }
+function limpiarFactura(){
+	self.factura ={				
+		total:"0",
+		totalDescuentos:"0",
+		totalImpuestos:"0",
+		totalVentasNetas:"0",
+		totalVentasExentas:"0",
+    	totalVentasGravadas:"0",
+		totalOtrosCargos:"0",
+		totalEfectivo:"0",
+		totalTarjeta:"0",
+	    totalBanco:"0",
+		totalPagos:"0",
+		totalCredito:"0"
+	}		
+	self.update();
+	$('.datepickerFechaFinal').datepicker(
+    {
+        format: 'yyyy-mm-dd',
+        todayHighlight:true,
+    }
+    );
+    $('.datepickerFechaInicio').datepicker(
+     {
+        format: 'yyyy-mm-dd',
+        todayHighlight:true,
+    }
     		);
 
 		}

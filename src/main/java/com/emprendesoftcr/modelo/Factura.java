@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 
 /**
  * Factura de ventas a los clientes.
@@ -388,6 +389,12 @@ public class Factura implements Serializable {
 		return fechaCredito;
 	}
 
+	public String getFechaCreditoSTR() {
+		if (this.fechaCredito != null) {
+			return Utils.getFechaGeneraReporte(this.getFechaCredito());
+		}
+		return Constantes.EMPTY;
+	}
 	public void setFechaCredito(Date fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
@@ -412,6 +419,11 @@ public class Factura implements Serializable {
 		return condicionVenta;
 	}
 
+	public String getCondicionVentaSTR() {
+		return MapEnums.ENUM_CONDICION_VENTA.get(this.getCondicionVenta());
+	}
+
+	
 	public void setCondicionVenta(String condicionVenta) {
 		this.condicionVenta = condicionVenta;
 	}
@@ -426,6 +438,10 @@ public class Factura implements Serializable {
 
 	public String getTipoDoc() {
 		return tipoDoc;
+	}
+	
+	public String getTipoDocSTR() {
+		return MapEnums.ENUM_TIPO_DOC.get(this.tipoDoc);
 	}
 
 	public void setTipoDoc(String tipoDoc) {
@@ -1044,6 +1060,13 @@ public class Factura implements Serializable {
 	public String getNombreCliente() {
 		if (this.cliente != null) {
 			return this.getCliente().getNombreCompleto();
+		}
+		return Constantes.EMPTY;
+	}
+
+	public String getCedulaCliente() {
+		if (this.cliente != null) {
+			return this.getCliente().getCedula();
 		}
 		return Constantes.EMPTY;
 	}

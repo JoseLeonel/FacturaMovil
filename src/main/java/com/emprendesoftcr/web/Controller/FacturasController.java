@@ -545,8 +545,9 @@ public class FacturasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		modelEmail.put("estadoDesc", estadoDesc);
-		modelEmail.put("actividad", actividadEconomica);
+		modelEmail.put("cedula", "Cedula:"+ usuario.getEmpresa().getCedula());	
+		modelEmail.put("estadoDesc", "Documentos con Estado:"+estadoDesc);
+		modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS)?Constantes.EMPTY:"Actividad Economica:"+actividadEconomica);
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
@@ -556,10 +557,25 @@ public class FacturasController {
 		modelEmail.put("totalTarjeta", facturaCommand.getTotalTarjeta() != null ? facturaCommand.getTotalTarjetaSTR() : Constantes.ZEROS);
 		modelEmail.put("totalBanco", facturaCommand.getTotalBanco() != null ? facturaCommand.getTotalBancoSTR() : Constantes.ZEROS);
 		modelEmail.put("totalCredito", facturaCommand.getTotalCredito() != null ? facturaCommand.getTotalCreditoSTR() : Constantes.ZEROS);
+		modelEmail.put("totalDinero",  facturaCommand.getTotalPagosSTR());
 		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() != null ? facturaCommand.getTotalImpuestosSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() != null ? facturaCommand.getTotalVentasGravadasSTR() : Constantes.ZEROS);
+		modelEmail.put("totalMenosNotas", facturaCommand.getTotal() + facturaCommand.getTotal_n());
+		
+		modelEmail.put("total_n", facturaCommand.getTotal_n() != null ? facturaCommand.getTotalNC() : Constantes.ZEROS);
+		modelEmail.put("totalDescuentos_n", facturaCommand.getTotalDescuentos_n() != null ? facturaCommand.getTotalDescuentosNC() : Constantes.ZEROS);
+		modelEmail.put("totalOtrosCargos_n", facturaCommand.getTotalOtrosCargos_n() != null ? facturaCommand.getTotalOtrosCargosNC() : Constantes.ZEROS);
+		modelEmail.put("totalEfectivo_n", facturaCommand.getTotalEfectivo_n() != null ? facturaCommand.getTotalEfectivoNC() : Constantes.ZEROS);
+		modelEmail.put("totalTarjeta_n", facturaCommand.getTotalTarjeta_n() != null ? facturaCommand.getTotalTarjetaNC() : Constantes.ZEROS);
+		modelEmail.put("totalBanco_n", facturaCommand.getTotalBanco_n() != null ? facturaCommand.getTotalBancoNC() : Constantes.ZEROS);
+		modelEmail.put("totalCredito_n", facturaCommand.getTotalCredito_n() != null ? facturaCommand.getTotalCreditoNC() : Constantes.ZEROS);
+		modelEmail.put("totalImpuestos_n", facturaCommand.getTotalImpuestos_n() != null ? facturaCommand.getTotalImpuestosNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasNetas_n", facturaCommand.getTotalVentasNetas_n() != null ? facturaCommand.getTotalVentasNetasNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasExentas_n", facturaCommand.getTotalVentasExentas_n() != null ? facturaCommand.getTotalVentasExentasNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasGravadas_n", facturaCommand.getTotalVentasGravadas_n() != null ? facturaCommand.getTotalVentasGravadasNC() : Constantes.ZEROS);
+		modelEmail.put("totalDinero_n",  facturaCommand.getTotalPagosNC());
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
 	}
@@ -594,8 +610,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito");
-		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC", baos);
+		List<String> headers = Arrays.asList("Actividad Economica","Tipo Documento","Condicion Venta","Fecha Credito", "Fecha Emision", "# Documento", "#Proforma","Cedula", "Cliente","A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito","Clave Referencia Factura/tiquete aplico Nota Credito","Nota");
+		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaCliente, nombreCliente,nombreFactura, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
 		return baos;
 	}
 

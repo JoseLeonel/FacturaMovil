@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,7 @@ import com.itextpdf.text.DocumentException;
  * @author jose.
  * @since 19 abr. 2018
  */
+@CrossOrigin
 @Controller
 public class ArticuloController {
 
@@ -150,6 +152,15 @@ public class ArticuloController {
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
+	}
+	
+
+	@RequestMapping(value = "/movil/ListarArticulosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa,@RequestParam Long idCategoria) {
+
+	
+		return articuloBo.articulosByCategoriaAndEmpresa(idEmpresa, idCategoria);
 	}
 
 	@SuppressWarnings("all")
