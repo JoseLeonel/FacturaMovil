@@ -2,9 +2,7 @@ package com.emprendesoftcr;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.Year;
 
 import com.emprendesoftcr.Utils.Constantes;
 
@@ -61,9 +59,12 @@ public class vivi {
 //		} else {
 //			System.out.println("cedula igual caracter");
 //		}
-		List<String>  ejemplos = Arrays.asList("leo","alberto","pedro");
-		String ejemplo = ejemplos.stream().collect(Collectors.joining(","));
-		System.out.println(ejemplo);
+		
+		Year anno = Year.now(); 
+    System.out.printf("Este año:" + anno.getValue()); 
+//		List<String>  ejemplos = Arrays.asList("leo","alberto","pedro");
+//		String ejemplo = ejemplos.stream().collect(Collectors.joining(","));
+//		System.out.println(ejemplo);
 
 //		System.out.println(Utils.roundFactura(valor, 5));
 

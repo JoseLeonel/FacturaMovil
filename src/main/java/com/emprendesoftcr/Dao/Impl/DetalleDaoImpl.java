@@ -163,8 +163,16 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL, Double.class, ParameterMode.OUT);
-
+		
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA, Double.class, ParameterMode.OUT);
+		
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N, Double.class, ParameterMode.OUT);
+		
 
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, fechaInicio);
@@ -184,7 +192,15 @@ public class DetalleDaoImpl implements DetalleDao {
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO), 
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS),
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL),
-				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA));
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_N),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N)
+				       
+				);
 	}
 
 	@Override

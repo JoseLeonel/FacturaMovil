@@ -587,9 +587,9 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_IN_TIPO_DOC									= "tipoDocumento";
 	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_OUT_CONSECUTIVO							= "consecutivo";
 //Procedimiento para generar totales por linea de datalles de la factura
-	public static final String					SP_VENTASXDETALLE																						= "ventasxdetalle";
-	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO															= "ventasxdetaTodos";
-	public static final String					SP_VENTASXDETALLE_EXCEPTO																		= "ventasxdetalleExc";
+	public static final String					SP_VENTASXDETALLE																						= "sp_ventas_detalle";
+	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO															= "sp_detall_todos";
+	public static final String					SP_VENTASXDETALLE_EXCEPTO																		= "sp_ventas_det_exc";
 	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA															= "e_empresa";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL													= "fecha_inicio";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL														= "fecha_fin";
@@ -601,6 +601,12 @@ public class Constantes {
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO												= "total_desc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS													= "total_exc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA												= "total_gananc";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_N																	= "total_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N												= "total_imp_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N													= "total_grav_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N												= "total_desc_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N													= "total_exc_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N												= "total_gananc_n";
 //Procedimiento callback para actualizar la aceptacion de hacienda
 	public static final String					SP_CALLBACK_HACIENDA																				= "sp_callback";
 	public static final String					SP_CALLBACK_HACIENDA_CLAVE																	= "clave_e";

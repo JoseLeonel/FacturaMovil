@@ -5,7 +5,7 @@
 				<div class="card-box p-t-40"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					<div class="row">
 						<h3 class="portlet-title text-dark">
-							Total de IVA por en ventas por  Mes
+						   Ventas por  Mes
 						</h3>
 					</div>
 					<canvas id="chart-totalventas" width="1011" height="252" style="display: block; width: 1011px; height: 252px;">
@@ -204,41 +204,55 @@ h1, h2, h3, h4, h5, h6 {
 
 <script>
 self = this
-self.mostrarVentasXMes = false;
+self.mostrarVentasXMes = true;
 self.nodisponible = false
+self.meses = []
+self.colores = []
+self.datos = []
 self.on('mount',function(){
 
-	graficoVentas();
+	__cargaMeses();
 
 });
 
-
+function __cargaMeses(){
+    self.meses = []
+    self.colores = []
+    self.datos = []
+    self.update()
+     $.ajax({
+         url: "GraficoVentasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                 $.each(result.aaData, function( index, modeloTabla ) {
+					self.meses.push(vectorMes(modeloTabla.mes))
+					self.colores.push(vectorColores(modeloTabla.mes))
+					self.datos.push(modeloTabla.total) 
+				 })
+				 graficoVentas()
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+/**
+* Grafico de ventas
+**/
 function graficoVentas(){
 	var ctx = document.getElementById("chart-totalventas").getContext("2d");
 	var graficoVenta = new Chart(ctx,{
 		type:"bar",
-		
 		data:{
-			labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			labels:self.meses,
 			datasets:[{
-				label:'Ventas mensuales ',
-				data:[10,9,15,60,10,9,15,25,20,9,15,60],
-				backgroundColor:[
-					'rgb(66,134,244)',
-					'rgb(74,135,72)',
-					'rgb(279,89,50)',
-					'rgb(74,135,72)',
-					'rgb(279,89,50)',
-					'rgb(74,135,72)',
-					'rgb(279,89,50)',
-					'rgb(66,134,244)',
-					'rgb(279,89,50)',
-					'rgb(74,135,72)',
-					'rgb(66,134,244)',
-					'rgb(279,89,50)',
-					
-				]
-
+				label:'Ventas  ',
+				data:self.datos,
+				backgroundColor: self.colores
 			}],
 		},
 		options:{
@@ -251,6 +265,64 @@ function graficoVentas(){
 			}
 		}
 	})
+}
+
+function vectorMes(mes){
+   if(mes == 1){
+	   return 'Enero'
+   }else if(mes == 2){
+	   return 'Febrero'
+   }else if(mes == 3){
+	   return 'Marzo'
+   }else if(mes == 4){
+	   return 'Abril'
+   }else if(mes == 5){
+	   return 'Mayo'
+   }else if(mes == 6){
+	   return 'Junio'
+   }else if(mes == 7){
+	   return 'Julio'
+   }else if(mes == 8){
+	   return 'Agosto'
+   }else if(mes == 9){
+	   return 'Septiembre'
+   }else if(mes== 10){
+	   return 'Octubre'
+   }else if(mes == 11){
+	   return 'Noviembre'
+   }else if (mes == 12){
+        return 'Diciembre'
+   }
+   return 'Sin definir'
+}
+
+function vectorColores(mes){
+   if(mes == 1){
+	   return 'rgb(66,134,244)'
+   }else if(mes == 2){
+	   return 'rgb(74,135,72)'
+   }else if(mes == 3){
+	   return 'rgb(279,89,50)'
+   }else if(mes == 4){
+	   return 'rgb(66,134,244)'
+   }else if(mes == 5){
+	   return 'rgb(74,135,72)'
+   }else if(mes == 6){
+	   return 'rgb(279,89,50)'
+   }else if(mes == 7){
+	   return 'rgb(66,134,244)'
+   }else if(mes == 8){
+	   return 'rgb(74,135,72)'
+   }else if(mes == 9){
+	   return 'rgb(279,89,50)'
+   }else if(mes== 10){
+	   return 'rgb(66,134,244)'
+   }else if(mes == 11){
+	   return 'rgb(74,135,72)'
+   }else if (mes == 12){
+        return 'rgb(279,89,50)'
+   }
+   return 'rgb(279,89,50)'
 }
 
 </script>

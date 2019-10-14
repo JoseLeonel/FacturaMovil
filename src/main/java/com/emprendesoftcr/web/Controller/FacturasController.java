@@ -365,6 +365,7 @@ public class FacturasController {
 
 	@Autowired
 	private RecepcionFacturaBo																				recepcionFacturaBo;
+	
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

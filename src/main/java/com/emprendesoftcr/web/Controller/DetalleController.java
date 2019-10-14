@@ -343,8 +343,8 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotal, montoDescuento,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuesto, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision","Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente","Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total", "Tipo Moneda", "Tipo Cambio");
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuestoNC, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 

@@ -29,6 +29,27 @@ public class DetalleCompraCommand {
 	
 
 	
+	public DetalleCompraCommand(Integer numeroLinea, Double porcentajeImpuesto, Long articulo_id, String codigo, String descripcion, Double cantidad, Double costo, Double precio, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Articulo articulo) {
+		super();
+		this.numeroLinea = numeroLinea;
+		this.porcentajeImpuesto = porcentajeImpuesto;
+		this.articulo_id = articulo_id;
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.cantidad = cantidad;
+		this.costo = costo;
+		this.precio = precio;
+		this.totalImpuesto = totalImpuesto;
+		this.totalDescuento = totalDescuento;
+		this.impuesto = impuesto;
+		this.descuento = descuento;
+		this.montoTotalLinea = montoTotalLinea;
+		this.articulo = articulo;
+	}
+
+
+
+
 	public Integer getNumeroLinea() {
 		return numeroLinea;
 	}
