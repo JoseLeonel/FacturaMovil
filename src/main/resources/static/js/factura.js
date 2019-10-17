@@ -22,6 +22,60 @@ $(document)
 
 
 
+function verificarClienteFrecuente(clienteFrecuente){
+    if(clienteFrecuente == null || typeof clienteFrecuente == "undefined"  ){
+        return true;
+    }
+    if(typeof clienteFrecuente.id == "undefined"  ){
+        return true;
+    }
+    if(typeof clienteFrecuente.nombreCompleto == "undefined"  ){
+        return true;
+    }
+
+    if(clienteFrecuente.id == 0 ){
+        return true
+    }
+    if(clienteFrecuente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
+        return true;        
+    }
+    if(clienteFrecuente.cedula.indexOf("999999999999") != -1){
+       return true; 
+    }
+    return false;
+}
+
+function verificarSiClienteFrecuente(clienteFrecuente){
+    if(clienteFrecuente == null || typeof clienteFrecuente == "undefined"  ){
+       return true;
+   }
+   if(typeof clienteFrecuente.id == "undefined"  ){
+       return true;
+   }
+   if(typeof clienteFrecuente.nombreCompleto == "undefined"  ){
+       return true;
+   }
+
+   if(clienteFrecuente.id == 0 ){
+       return true
+   }
+
+   if (typeof clienteFrecuente == "undefined"  ){
+       return true
+   }
+   if(clienteFrecuente.id == 0 ){
+       return true
+   }
+   if(clienteFrecuente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || clienteFrecuente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
+       return true
+   }
+   if(clienteFrecuente.cedula.indexOf("999999999999") != -1 || clienteFrecuente.cedula.indexOf("888888888888") != -1){
+       return true
+   }
+   return false;
+}
+
+
 //traducciones del table
 	var idioma_espanol = 
 			{

@@ -1324,8 +1324,8 @@ function __seleccionarClientes() {
          self.update();
         __aplicarExoneracionPorCliente()
         
-       
-         if(verificarSiClienteFrecuente()){
+       //factura.js
+         if(verificarSiClienteFrecuente(self.cliente)){
              __ComboTipoDocumentos(1)
          }else{
              __ComboTipoDocumentos(2)
@@ -1334,25 +1334,7 @@ function __seleccionarClientes() {
     });
 }
 
-/**
-*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
-* para que salga factura o proforma
-**/
-function verificarSiClienteFrecuente(){
-     if(self.cliente == null || typeof self.cliente == "undefined"  ){
-        return true;
-    }
-    if(self.cliente.id == 0 ){
-        return true
-    }
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
-        return true
-    }
-    if(self.cliente.cedula.indexOf("999999999999")){
-        return true
-    }
-    return false;
-}
+
 
 /**
 * Aplicar la exoneracion de detalles

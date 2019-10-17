@@ -3835,25 +3835,15 @@ function __aplicarExoneracionPorCliente(){
        self.update();
 
     }
-    if(verificarClienteFrecuente()){
+    //factura.js
+    if(verificarClienteFrecuente(self.cliente)){
       __ComboTipoDocumentos()
     }else{
         __ComboTipoDocumentosSinClienteFrecuente()
     }
 
 }
-function verificarClienteFrecuente(){
-    if(self.cliente == null){
-        return false;
-    }
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
-        return true;        
-    }
-    if(self.cliente.cedula.indexOf("999999999999") != -1){
-       return true; 
-    }
-    return false;
-}
+
 
 /**
 * cargar los estados de la factura

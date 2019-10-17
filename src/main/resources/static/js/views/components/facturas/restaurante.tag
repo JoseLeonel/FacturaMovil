@@ -3425,7 +3425,8 @@ function crearFactura(estado, separarFactura){
     self.detalleFactura.data = self.detail    
     self.update() 
     if(estado ==1){
-        if(!verificarSiClienteFrecuente()){
+        //factura.js
+        if(!verificarSiClienteFrecuente(self.cliente)){
            self.factura.tipoDoc = "01";
         }else{
             self.factura.tipoDoc = "04";
@@ -4456,7 +4457,7 @@ function __seleccionarClientes() {
 
         }
         $('#modalClientes').modal('hide') 
-        if(!verificarSiClienteFrecuente()){
+        if(!verificarSiClienteFrecuente(self.cliente)){
             self.factura.tipoDoc ='01'
             
            __ComboTipoDocumentos(1)
@@ -4475,25 +4476,7 @@ function __seleccionarClientes() {
     });
 }
 
-/**
-*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
-* para que salga factura o proforma
-**/
-function verificarSiClienteFrecuente(){
-    if (typeof self.cliente == "undefined"  ){
-        return true
-    }
-    if(self.cliente.id == 0 ){
-        return true
-    }
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || self.cliente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
-        return true
-    }
-    if(self.cliente.cedula.indexOf("999999999999") != -1 || self.cliente.cedula.indexOf("888888888888") != -1){
-        return true
-    }
-    return false;
-}
+
 
 /**
 * Aplicar la exoneracion de detalles
@@ -4562,22 +4545,6 @@ function __aplicarExoneracionPorCliente(){
 
 }
 
-
-function verificarClienteFrecuente(){
-    if(self.cliente == null || typeof self.cliente == "undefined"  ){
-        return false;
-    }
-    if(self.cliente.id == 0 ){
-        return false
-    }
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
-        return true;        
-    }
-    if(self.cliente.cedula.indexOf("999999999999") != -1){
-       return true; 
-    }
-    return false;
-}
 /**
 * cargar los estados de la factura
 **/
