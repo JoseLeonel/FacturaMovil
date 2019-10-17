@@ -502,6 +502,11 @@ public class Constantes {
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR																= "factura.estado.facturado";
 
+	//SP actualizar el grafico vena
+	public static final String					SP_GRAFICO_VENTAS																						= "sp_graf_ventas";
+	public static final String					SP_GRAFICO_VENTAS_EMPRESA_IN																= "empresa_in";
+	public static final String					SP_GRAFICO_VENTAS_ANNO_IN		    														= "anno_in";
+	
 	// Nombres de procedimientos
 	public static final String					SP_TOTAL_FACTURAS																						= "sp_total_facturas";
 	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "sp_todo_facturas";

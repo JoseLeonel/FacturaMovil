@@ -4480,6 +4480,12 @@ function __seleccionarClientes() {
 * para que salga factura o proforma
 **/
 function verificarSiClienteFrecuente(){
+    if (typeof self.cliente == "undefined"  ){
+        return true
+    }
+    if(self.cliente.id == 0 ){
+        return true
+    }
     if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || self.cliente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
         return true
     }
@@ -4558,8 +4564,11 @@ function __aplicarExoneracionPorCliente(){
 
 
 function verificarClienteFrecuente(){
-    if(self.cliente == null){
+    if(self.cliente == null || typeof self.cliente == "undefined"  ){
         return false;
+    }
+    if(self.cliente.id == 0 ){
+        return false
     }
     if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
         return true;        

@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.GraficoVentasBo;
 import com.emprendesoftcr.Dao.GraficoVentasDao;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.GraficoVenta;
 
 
@@ -19,8 +21,26 @@ public class GraficoVentasBoImpl implements GraficoVentasBo {
 	
 	@Override
 	public Collection<GraficoVenta> findByAll() {
-		// TODO Auto-generated method stub
+		
 		return graficoVentasDao.findByAll();
+	}
+
+	@Override
+	public Collection<GraficoVenta> findByAllEmpresaAndAnno(Empresa empresa, Integer anno) {
+		
+		return graficoVentasDao.findByAllEmpresaAndAnno(empresa, anno);
+	}
+
+	@Override
+	public void actualizarGraficoVenta(Integer anno,  Empresa empresa) throws Exception {
+		graficoVentasDao.actualizarGraficoVenta(anno, empresa);
+		
+	}
+
+	@Override
+	public GraficoVenta findByEmpresaAndAnno(Empresa empresa, Integer mes, Integer anno) throws Exception  {
+
+		return graficoVentasDao.findByEmpresaAndAnno(empresa, mes, anno);
 	}
 
 	

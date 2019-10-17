@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -105,6 +107,7 @@ public class CategoriasController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
+	@Cacheable(value="categoriaCache")
 	@RequestMapping(value = "/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -119,7 +122,7 @@ public class CategoriasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
+	@Cacheable(value="categoriaCache")
 	@RequestMapping(value = "/movil/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public Collection<Categoria> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {
@@ -129,6 +132,7 @@ public class CategoriasController {
 	}
 
 	@SuppressWarnings("all")
+	@Cacheable(value="categoriaCache")
 	@RequestMapping(value = "/ListarPaginacionCategoriasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
@@ -165,6 +169,7 @@ public class CategoriasController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
+	@Cacheable(value="categoriaCache")
 	@RequestMapping(value = "/ListarCategoriasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -192,6 +197,7 @@ public class CategoriasController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
+	@CacheEvict(value="categoriaCache",allEntries=true)
 	@RequestMapping(value = "/AgregarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
@@ -223,6 +229,7 @@ public class CategoriasController {
 	 * Modificar una categoria
 	 */
 	@SuppressWarnings("all")
+	@CacheEvict(value="categoriaCache",allEntries=true)
 	@RequestMapping(value = "/ModificarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {

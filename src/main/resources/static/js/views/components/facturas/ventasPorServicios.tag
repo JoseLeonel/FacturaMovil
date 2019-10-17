@@ -1339,6 +1339,12 @@ function __seleccionarClientes() {
 * para que salga factura o proforma
 **/
 function verificarSiClienteFrecuente(){
+     if(self.cliente == null || typeof self.cliente == "undefined"  ){
+        return true;
+    }
+    if(self.cliente.id == 0 ){
+        return true
+    }
     if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
         return true
     }

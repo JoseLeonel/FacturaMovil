@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -49,6 +50,7 @@ public class GraficosController {
 
 
 	@SuppressWarnings("all")
+	@Cacheable(value="GraficosVentas")
 	@RequestMapping(value = "/GraficoVentasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable graficoVentasAjax(HttpServletRequest request, HttpServletResponse response) {
