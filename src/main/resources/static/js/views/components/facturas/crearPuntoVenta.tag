@@ -1319,7 +1319,7 @@
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
-       getTipoCambioDolar()
+       
        
         $('.codigo').select()
         $(".codigo").focus()
@@ -1358,6 +1358,14 @@
                 timer = setTimeout(fn, ms);
             });
         };
+        var retrievedTipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
+        if(retrievedTipoCambio != null){
+           self.tipoCambio = retrievedTipoCambio
+           self.update()
+        }else{
+           getTipoCambioDolar()
+        }
+
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1475,6 +1483,7 @@ function getTipoCambioDolar(){
          self.tipoCambio.total = __valorNumerico(response.venta.valor)
          self.tipoCambio.totalCompra = __valorNumerico(response.compra.valor)
          self.update()
+         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
     });
 }
 

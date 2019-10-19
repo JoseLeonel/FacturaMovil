@@ -42,6 +42,9 @@
                             <th style="width:20%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descripcion")}</label> </th>
                             <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.cantidad")}</label></th>
                             <th ><div class="tituloDetalle">Cant. Rebajar</label></th>
+                            <th ><div class="tituloDetalle">Monto Linea </label></th>
+                            
+                            
                         </tr>
                         </thead>
                         <tbody>
@@ -55,9 +58,14 @@
                             <td class="list-item">
                                 <label class="text-listado"> {cantidad.toFixed(3)} </label>
                             </td>
+
                             <td class="list-item">
                                 <input onkeyup={__RebajarCantidad} onBlur={__RebajarCantidad} id= "cantidadAplicadaNotaCredito" class="form-control cantidadDetalle cantidadAplicadaNotaCredito" type="number"  step="any" min="0" pattern="^[0-9]+" placeholder="Cantidad a rebajar" value = {cantidadAplicadaNotaCredito.toFixed(3)}  />
                             </td>
+                            <td class="list-item">
+                                <label class="text-listado"> {cantidad.toFixed(3)} </label>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>   

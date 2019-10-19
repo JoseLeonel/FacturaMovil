@@ -367,8 +367,9 @@ function __NotaCredito(){
 		$('.mostrarListadoDeFacturas').hide();
 		var parametros = {
 			consecutivo:data.numeroConsecutivo,
+			codigoMoneda :'CRC'
 		}
-		riot.mount('debito-credito',{parametros:parametros});   
+		riot.mount('nota-credito',{parametros:parametros});   
 	});
 }
 

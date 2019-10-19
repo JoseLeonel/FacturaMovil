@@ -3,11 +3,7 @@
 	<div class="row" show="{mostrarVentasXMes == true}">
 			<div class="col-sm-9">
 				<div class="card-box p-t-40"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
-					<div class="row">
-						<h3 class="portlet-title text-dark">
-						   Ventas por  Mes
-						</h3>
-					</div>
+					
 					<canvas id="chart-totalventas" width="1011" height="252" style="display: block; width: 1011px; height: 252px;">
 				</canvas></div>
 			</div>
@@ -219,6 +215,7 @@ function __cargaMeses(){
     self.meses = []
     self.colores = []
     self.datos = []
+	self.mostrarVentasXMes = false;
     self.update()
      $.ajax({
          url: "GraficoVentasAjax.do",
@@ -231,6 +228,8 @@ function __cargaMeses(){
 					self.colores.push(vectorColores(modeloTabla.mes))
 					self.datos.push(modeloTabla.total) 
 				 })
+				 self.mostrarVentasXMes = true;
+				 self.update()
 				 graficoVentas()
             }            
         },
@@ -240,11 +239,26 @@ function __cargaMeses(){
         }
     })
 }
+
 /**
 * Grafico de ventas
 **/
 function graficoVentas(){
+	if(typeof(graficoVenta) != "undefined"){
+		graficoVenta.destroy();
+		graficoVenta.removeData();
+		window.graficoVenta.destroy();
+	}
+   if(self.datos.length == 0){
+      self.mostrarVentasXMes = false;
+      self.update()
+	  return
+    }
 	var ctx = document.getElementById("chart-totalventas").getContext("2d");
+	var max = Math.max.apply(null,self.datos);
+    max = max >= 300 ? max+300: max;
+    var minData = Math.min.apply(null,self.datos);
+    minData = minData >= 50 ? 300 : minData;
 	var graficoVenta = new Chart(ctx,{
 		type:"bar",
 		data:{
@@ -252,14 +266,25 @@ function graficoVentas(){
 			datasets:[{
 				label:'Ventas  ',
 				data:self.datos,
-				backgroundColor: self.colores
+				backgroundColor: self.colores,
+				borderColor: 'rgb(279,89,50)',
+				borderWidth: 0.5,
 			}],
 		},
 		options:{
+			responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Ventas por mes'
+					},
 			scales:{
 				yAxes:[{
 					ticks:{
-						beginAtZero:true
+						beginAtZero:true,
+						 min: minData
 					}
 				}]
 			}

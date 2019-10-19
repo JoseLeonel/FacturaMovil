@@ -15,6 +15,7 @@
     <script th:src="@{/js/jquery-1.11.2.js}"></script>
 	<script src="/js/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
+	 <link rel="stylesheet" type="text/css" th:href="@{/css/notacredito.css}"/>
 	<script type="text/javascript" src="js/jquery.i18n.js"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
     <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
@@ -34,7 +35,7 @@
 	<script type="text/javascript" src="/js/views/facturas/creditoDebitos.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/listaFacturas.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/facturas/crearDebitoCredito.tag" ></script>
+	<script type = "riot/tag"  src="/js/views/components/facturas/crearNotaCredito.tag" ></script>
 	<style>
 	.tituloFacturas{
 	    font-size: 24px;
@@ -206,7 +207,7 @@
     <!-- Fin del Listado -->
       <lista-facturas></lista-facturas>
       <ptv-imprimir></ptv-imprimir>
-      <debito-credito></debito-credito>
+      <nota-credito></nota-credito>
 </div>
 </body>
 </html>
