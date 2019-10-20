@@ -735,8 +735,6 @@ function getMedioPago() {
 	}
    self.update()
 }
-
-
 function getMoneda() {
 	var resultado = "CRC-Colones Costa Rica";
 	if(self.facturaImpresa.codigoMoneda == "CRC") {
@@ -748,8 +746,6 @@ function getMoneda() {
     self.facturaImpresa.codigoMoneda = resultado
     self.update()
 }
-
-
 /**
 *Imprimir facturaImpresa
 **/    
@@ -759,7 +755,6 @@ __ImprimirfacturaImpresa(){
     $('.codigo').select()
     $(".codigo").focus() 
 }
-
 /**
  * Buscar la condicion de Pago
  * **/
