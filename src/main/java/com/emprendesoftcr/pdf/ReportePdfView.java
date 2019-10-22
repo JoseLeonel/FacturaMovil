@@ -72,7 +72,6 @@ public class ReportePdfView {
 
 		tabla_tercera_tabla.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		tabla_tercera_tabla.getDefaultCell().setCellEvent(new RoundRectangle());
-		// tabla_tercera_tabla.getDefaultCell().setBorder(0);
 		tabla_tercera_tabla.setSpacingAfter(0);
 		tabla_tercera_tabla.setSpacingBefore(0);
 
@@ -84,19 +83,14 @@ public class ReportePdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cant.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Unit.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVAI", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
-//		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVA2", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total IVA", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 
-//tabla_tercera_tabla.setKeepRowsTogather(true);
 		tabla_tercera_tabla.setHeaderRows(1);
 		tabla_tercera_tabla.setSplitRows(true);
 		tabla_tercera_tabla.setComplete(false);
-//tabla_tercera_tabla.setSplitLate(false);
-//tabla_tercera_tabla.setKeepTogether(true);
 		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 		Double totalExoneracion = Constantes.ZEROS_DOUBLE;
-//tabla_tercera_tabla.setFooterRows(1);
 		fac_electro.setMontoExoneracion(Constantes.ZEROS_DOUBLE);
 		;
 		int indice_ = 0;
@@ -121,14 +115,10 @@ public class ReportePdfView {
 			DecimalFormat formato = new DecimalFormat("##");
 			valor = item.getTipoImpuesto().equals(Constantes.EMPTY) ? "Exento" : formato.format(item.getTarifaIva()) + "%";
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(valor), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
-//			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.ZEROS_DOUBLE : item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			indice_++;
-			/*
-			 * if(indice_ == 27){ agregaLineasBlanco02(tabla_tercera_tabla, 7); }
-			 */
 		}
 		fac_electro.setMontoExoneracion(totalExoneracion);
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
@@ -137,7 +127,6 @@ public class ReportePdfView {
 
 		tabla_tercera_tabla.addCell(ultima_linea_);
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
-//		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
@@ -167,36 +156,6 @@ public class ReportePdfView {
 			nota = fac_electro.get_nota();
 		}
 
-//		String cuentas = Constantes.EMPTY;
-//		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-//
-//			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta1();
-//			}
-//			if (!fac_electro.getCuenta2().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta2();
-//			}
-//			if (!fac_electro.getCuenta3().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta3();
-//			}
-//			if (!fac_electro.getCuenta4().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta4();
-//			}
-//			if (!fac_electro.getCuenta5().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta5();
-//
-//			}
-//			if (!fac_electro.getCuenta6().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta6();
-//			}
-//			if (!fac_electro.getCuenta7().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta7();
-//			}
-//			if (!fac_electro.getCuenta8().equals(Constantes.EMPTY)) {
-//				cuentas = cuentas + fac_electro.getCuenta8();
-//
-//			}
-//		}
 
 		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
 		tabla_ultima.addCell(izquierda_inferior_ultima);
@@ -277,7 +236,6 @@ public class ReportePdfView {
 		tabla_ultima.addCell(central_inferior_ultima);
 
 		PdfPTable derecha_inferior_ultima = new PdfPTable(1);
-		// derecha_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		derecha_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
 
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalVenta), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
@@ -304,7 +262,7 @@ public class ReportePdfView {
 		document.add(tabla_ultima);
 		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-033-2019 del 20-06-2019 , a las " + fac_electro.getFechaEmision();
 		Integer contador = 1;
-		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+	//	if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 
 			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
 				document.add(new Paragraph(fac_electro.getCuenta1(), UtilsPdf.font_cabezera_tabla));
@@ -344,7 +302,7 @@ public class ReportePdfView {
 
 			}
 			document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));
-		}
+		//}
 
 	}
 
@@ -400,7 +358,6 @@ public class ReportePdfView {
 		@Override
 		public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
 			PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
-			// cb.setColorStroke(new GrayColor(0.8f));
 			cb.roundRectangle(rect.getLeft() + 1.5f, rect.getBottom() + 1.5f, rect.getWidth() - 3, rect.getHeight() - 3, 5);
 			cb.stroke();
 		}
