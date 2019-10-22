@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Nota de Credito </title>
+    <title>Nota de Debito </title>
      <!-- Meta -->
 	
     <meta http-equiv="Expires" content="0">
@@ -32,7 +32,7 @@
 	<script src="/riot/riot.csp.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	<!-- LISTADO DE FACTURAS -->
-	<script type="text/javascript" src="/js/views/facturas/creditoDebitos.js"></script>
+	<script type="text/javascript" src="/js/views/facturas/notaDebito.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/listaFacturas.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/crearNotaCredito.tag" ></script>
@@ -63,7 +63,7 @@
   <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-             <i class="fa fa-calculator tituloFacturas" th:text="#{titulo.notacredito.especifica}"></i >
+             <i class="fa fa-calculator tituloFacturas" th:text="#{titulo.notaDedito.especifica}"></i >
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
@@ -114,7 +114,7 @@
                                  <div class="form-group">
                                     <label th:text="#{factura.tipo.documento}"> </label>  
                                     <select  class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento" >
-                                        <option  value="0"  th:text="#{todos.select}"></option>
+                                        
                                     </select>
                                  </div>  
                             </div>

@@ -1,3 +1,4 @@
+
 package com.emprendesoftcr.Utils;
 
 import java.util.ResourceBundle;
@@ -5,7 +6,12 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
-//Esquema de XML
+
+	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA																= 1;
+	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA														= 2;
+	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA_DEBITO														= 3;
+
+	//Esquema de XML
 	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL																= 1;
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
@@ -255,6 +261,7 @@ public class Constantes {
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA														= "Ingreso del proveedor:";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO											= "Ingreso por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA															= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO															= "Salida por Nota de debito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION										= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																									= "Si";
@@ -449,6 +456,7 @@ public class Constantes {
 	public static final String					FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA												= "08";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS																	= "88";
 	public static final String					FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO												= "86";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO								= "89";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO												= "87";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA												= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO												= "02";

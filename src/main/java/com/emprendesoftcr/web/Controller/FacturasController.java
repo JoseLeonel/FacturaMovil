@@ -308,9 +308,6 @@ public class FacturasController {
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
-
 	@Autowired
 	private UsuarioBo																									usuarioBo;
 
@@ -450,6 +447,12 @@ public class FacturasController {
 		return "views/facturas/creditoDebito";
 	}
 
+	@RequestMapping(value = "/notaDebito.do", method = RequestMethod.GET)
+	public String notaDebito(ModelMap model) {
+		return "views/facturas/notaDebito";
+	}
+
+	
 	@RequestMapping(value = "/ListaFacturasAnulacion", method = RequestMethod.GET)
 	public String listaFacturasAnulacion(ModelMap model) {
 		return "views/facturas/listaFacturasAnulacion";
@@ -777,10 +780,6 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-//		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
-//			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
-//			delimitadores.addFiltro(dataTableFilter);
-//		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -1283,7 +1282,6 @@ public class FacturasController {
 			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY)) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-//				result.rejectValue("facturaClave", "error.recepcionFactura.codido.moneda.cero");
 			}
 
 			recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTipoCambio());
@@ -1291,7 +1289,6 @@ public class FacturasController {
 			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-//				result.rejectValue("facturaClave", "error.recepcionFactura.tipo.cambio.esta.ceros");
 			}
 
 			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
@@ -1565,202 +1562,7 @@ public class FacturasController {
 		return respuestaService;
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/crearNotaCreditoEspecificaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator crearNotaCreditoEspecifica(HttpServletRequest request, ModelMap model, @ModelAttribute NotaCreditoEspecificaCommand notaCreditoEspecificaCommand, BindingResult result, SessionStatus status) {
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		try {
 
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			notaCreditoEspecificaCommand.setConsecutivo(notaCreditoEspecificaCommand.getConsecutivo() == null ? Constantes.EMPTY : notaCreditoEspecificaCommand.getConsecutivo());
-			notaCreditoEspecificaCommand.setReferenciaRazon(notaCreditoEspecificaCommand.getReferenciaRazon() == null ? Constantes.EMPTY : notaCreditoEspecificaCommand.getReferenciaRazon());
-			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(notaCreditoEspecificaCommand.getConsecutivo(), usuario.getEmpresa());
-			if (facturaBD == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.consecutivo.no.existe", result.getAllErrors());
-			}
-			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
-			}
-			if (notaCreditoEspecificaCommand.getReferenciaRazon().equals(Constantes.EMPTY)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.razon", result.getAllErrors());
-			}
-
-			ArrayList<DetalleFacturaCommand> detalles = new ArrayList<>();
-			if (notaCreditoEspecificaCommand.getCompleta() == 1) {
-				Collection<DetallesFacturaNotaCreditoNativa> objetos = consultasNativeBo.findByFacturaParaNotaCredito(notaCreditoEspecificaCommand.getConsecutivo(), usuario.getEmpresa());
-				for (DetallesFacturaNotaCreditoNativa detallesFacturaNotaCreditoNativa : objetos) {
-					DetalleFacturaCommand detalleFacturaCommand2 = new DetalleFacturaCommand();
-					detalleFacturaCommand2.setId(detallesFacturaNotaCreditoNativa.getId());
-					Double cantidaNotas = detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detallesFacturaNotaCreditoNativa.getCantidadAplicadaNotaCredito();
-					Double cantidad = detallesFacturaNotaCreditoNativa.getCantidad() - cantidaNotas;
-
-					detalleFacturaCommand2.setCantidadAplicadaNotaCredito(cantidad);
-					if (cantidad > Constantes.ZEROS_DOUBLE) {
-						detalles.add(detalleFacturaCommand2);
-					}
-
-				}
-
-				if (detalles.size() == 0) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.detalles.incorrectos", result.getAllErrors());
-				}
-
-			}
-			if (notaCreditoEspecificaCommand.getCompleta() == 2) {
-				JSONObject json = null;
-				try {
-					json = (JSONObject) new JSONParser().parse(notaCreditoEspecificaCommand.getDetalleFactura());
-					// Agregar Lineas de Detalle
-					JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
-					Gson gson = new Gson();
-					if (jsonArrayDetalleFactura != null) {
-						for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
-							DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
-							detalles.add(detalleFacturaCommand);
-						}
-					}
-				} catch (org.json.simple.parser.ParseException e) {
-					throw e;
-				}
-
-			}
-			ArrayList<DetalleFacturaCommand> detallesCorrectos = new ArrayList<>();
-			// Valida si esta aplicando una cantidad equivocada a la indicada y alimentando los detalles a crear en la nota de credito
-			Boolean detallesIncorrectos = Boolean.FALSE;
-			Double cantidad = Constantes.ZEROS_DOUBLE;
-			for (DetalleFacturaCommand detalleFacturaCommand1 : detalles) {
-				Detalle detalle1 = detalleBo.findById(detalleFacturaCommand1.getId());
-				if (detalle1 != null) {
-					cantidad = detalle1.getCantidad() - (detalle1.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle1.getCantidadAplicadaNotaCredito());
-					if (cantidad < detalleFacturaCommand1.getCantidadAplicadaNotaCredito()) {
-						detallesIncorrectos = Boolean.TRUE;
-					} else {
-
-						detalleFacturaCommand1.setNumeroLinea(Constantes.ZEROS);
-						detalleFacturaCommand1.setPrecioUnitario(detalle1.getPrecioUnitario());
-						detalleFacturaCommand1.setCantidad(detalleFacturaCommand1.getCantidadAplicadaNotaCredito());
-						detalleFacturaCommand1.setMontoTotal(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setMontoDescuento(detalle1.getMontoDescuento());
-						detalleFacturaCommand1.setNaturalezaDescuento(detalle1.getNaturalezaDescuento());
-						detalleFacturaCommand1.setSubTotal(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setImpuesto(detalle1.getImpuesto());
-						detalleFacturaCommand1.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setMontoTotalLinea(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setGanancia(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setPorcentajeDesc(detalle1.getPorcentajeDesc());
-						detalleFacturaCommand1.setDescripcion(detalle1.getDescripcion());
-						detalleFacturaCommand1.setTipoCodigo(detalle1.getTipoCodigo());
-						detalleFacturaCommand1.setCodigo(detalle1.getCodigo());
-						detalleFacturaCommand1.setUnidadMedida(detalle1.getUnidadMedida());
-						detalleFacturaCommand1.setTipoImpuesto(detalle1.getTipoImpuesto());
-						detalleFacturaCommand1.setConsecutivo(Constantes.EMPTY);
-						detalleFacturaCommand1.setConsecutivoProforma(Constantes.EMPTY);
-						detalleFacturaCommand1.setTipoDoc(Constantes.EMPTY);
-						detalleFacturaCommand1.setNombreUsuario(detalle1.getUsuario().getNombreUsuario());
-						detalleFacturaCommand1.setMontoGanancia(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setFactura(null);
-						detalleFacturaCommand1.setPorcentajeGanancia(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setCosto(detalle1.getCosto());
-						detalleFacturaCommand1.setTipoImpuesto1(Constantes.EMPTY);
-						detalleFacturaCommand1.setImpuesto1(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setPesoTransporte(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setPesoTransporteTotal(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setTipoDocumentoExoneracion(detalle1.getTipoDocumentoExoneracion());
-						detalleFacturaCommand1.setNumeroDocumentoExoneracion(detalle1.getNumeroDocumentoExoneracion());
-						detalleFacturaCommand1.setNombreInstitucionExoneracion(detalle1.getNombreInstitucionExoneracion());
-						detalleFacturaCommand1.setFechaEmisionExoneracion(detalle1.getFechaEmisionExoneracion());
-						detalleFacturaCommand1.setPorcentajeExoneracion(detalle1.getPorcentajeExoneracion());
-						detalleFacturaCommand1.setMontoExoneracion(detalle1.getMontoExoneracion());
-						detalleFacturaCommand1.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-						detalleFacturaCommand1.setCantidadAplicadaNotaCredito(detalleFacturaCommand1.getCantidadAplicadaNotaCredito());
-
-						detallesCorrectos.add(detalleFacturaCommand1);
-					}
-				}
-			}
-			if (detallesIncorrectos) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.detalles.incorrectos", result.getAllErrors());
-			}
-			// Se agregan los valores de la factura que se le aplica la nota credito
-			FacturaCommand facturaAplicarCommand = new FacturaCommand();
-			facturaAplicarCommand.setId(null);
-			facturaAplicarCommand.setFechaCredito(null);
-			facturaAplicarCommand.setNumeroConsecutivo(Constantes.ZEROS);
-			facturaAplicarCommand.setFechaEmision(null);
-			facturaAplicarCommand.setCondicionVenta(facturaBD.getCondicionVenta());
-			facturaAplicarCommand.setPlazoCredito(facturaBD.getPlazoCredito());
-			facturaAplicarCommand.setMedioPago(Constantes.EMPTY);
-			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
-			facturaAplicarCommand.setDireccion(Constantes.EMPTY);
-			facturaAplicarCommand.setCorreoAlternativo(facturaBD.getCorreoAlternativo());
-			facturaAplicarCommand.setNota(Constantes.EMPTY);
-			facturaAplicarCommand.setComanda(Constantes.EMPTY);
-			facturaAplicarCommand.setSubTotal(facturaBD.getSubTotal());
-			facturaAplicarCommand.setTotalTransporte(facturaBD.getTotalTransporte());
-			facturaAplicarCommand.setTotal(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalServGravados(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalServExentos(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalMercanciasGravadas(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalMercanciasExentas(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalGravado(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalExento(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalVenta(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalDescuentos(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalVentaNeta(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalImpuesto(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalComprobante(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalBanco(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setMontoCambio(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalCambio(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalImpuesto(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalImpuestoServ(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getCambioMoneda());
-			facturaAplicarCommand.setPesoTransporteTotal(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setCodigoMoneda(facturaBD.getCodigoMoneda());
-			facturaAplicarCommand.setEmpresa(facturaBD.getEmpresa());
-			facturaAplicarCommand.setCreated_at(new Date());
-			facturaAplicarCommand.setUpdated_at(new Date());
-			facturaAplicarCommand.setVersionEsquemaXML(facturaBD.getVersionEsquemaXML());
-			facturaAplicarCommand.setDetalleFactura(Constantes.EMPTY);
-
-			facturaAplicarCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
-			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
-				facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO);
-			} else {
-				facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
-			}
-			facturaAplicarCommand.setNota(facturaBD.getNota());
-			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
-			// Datos de la Nota de Credito
-			facturaAplicarCommand.setReferenciaCodigo(notaCreditoEspecificaCommand.getCompleta() == 2 ? Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO : Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
-			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
-			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
-			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
-
-			facturaAplicarCommand.setReferenciaRazon(notaCreditoEspecificaCommand.getReferenciaRazon());
-			facturaAplicarCommand.setPlazoCredito(Constantes.ZEROS);
-			facturaAplicarCommand.setReferenciaTipoDoc(facturaBD.getTipoDoc());
-
-			facturaAplicarCommand.setMesa(facturaBD.getMesa());
-			facturaAplicarCommand.setMontoCambio(facturaBD.getMontoCambio());
-			facturaAplicarCommand.setPesoTransporteTotal(facturaBD.getPesoTransporteTotal());
-			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getTipoCambio());
-			facturaAplicarCommand.setUsuario(usuario.getNombreUsuario());
-			facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
-			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesCorrectos, detallesCorrectos);
-		} catch (Exception e) {
-			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
-			respuestaServiceValidator.setMessage(e.getMessage());
-			return respuestaServiceValidator;
-		}
-
-	}
 
 	/**
 	 * Crear la Factura
@@ -1823,8 +1625,8 @@ public class FacturasController {
 			facturaAplicarCommand.setCorreoAlternativo(facturaBD.getCorreoAlternativo());
 			facturaAplicarCommand.setNota(Constantes.EMPTY);
 			facturaAplicarCommand.setComanda(Constantes.EMPTY);
-			facturaAplicarCommand.setSubTotal(facturaBD.getSubTotal());
-			facturaAplicarCommand.setTotalTransporte(facturaBD.getTotalTransporte());
+			facturaAplicarCommand.setSubTotal(facturaCommand.getSubTotal());
+			facturaAplicarCommand.setTotalTransporte(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotal(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotalServGravados(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotalServExentos(Constantes.ZEROS_DOUBLE);
@@ -1856,12 +1658,20 @@ public class FacturasController {
 			
 
 			facturaAplicarCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			if (!facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
+				if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);	
+				}
+				if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO);
+				}
+				
+			} 
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
-				facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO);
-			} else {
-				facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
-			}
-			facturaAplicarCommand.setNota(facturaBD.getNota());
+					facturaAplicarCommand.setTipoDoc(facturaCommand.getTipoDoc());	
+				
+			} 
+			facturaAplicarCommand.setNota(facturaCommand.getNota());
 			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
 			// Datos de la Nota de Credito
 			facturaAplicarCommand.setReferenciaCodigo(Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO );
@@ -1879,6 +1689,7 @@ public class FacturasController {
 			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getTipoCambio());
 			facturaAplicarCommand.setUsuario(usuario.getNombreUsuario());
 			facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
+			facturaAplicarCommand.setRebajaInventario(facturaCommand.getRebajaInventario() ==null?Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA:facturaCommand.getRebajaInventario());
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);

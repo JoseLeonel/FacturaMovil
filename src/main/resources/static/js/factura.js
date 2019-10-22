@@ -22,6 +22,8 @@ $(document)
 
 
 
+
+
 function verificarClienteFrecuente(clienteFrecuente){
     if(clienteFrecuente == null || typeof clienteFrecuente == "undefined"  ){
         return true;

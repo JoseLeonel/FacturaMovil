@@ -116,16 +116,12 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	                "<Tipo>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getTipoCedula()) + "</Tipo>" +
 	                "<Numero>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCedula()) + "</Numero>" +
 	            "</Identificacion>" +
-	      //      "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +    
 	            "<Ubicacion>" +
 			            "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
 			            "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 			            "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-			//            "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
 			            "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 	           "</Ubicacion>" +
-	 //          getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
-	//           getFax(0,factura.getEmpresa().getCodigoPais()) +
 	            "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
 	        "</Emisor>" +
 	        xmlReceptor(factura) +
@@ -150,7 +146,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	            "<TotalVentaNeta>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVentaNeta()) + "</TotalVentaNeta>" +
 	            "<TotalImpuesto>" +     FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalImpuesto()) + "</TotalImpuesto>" +
 	            "<TotalIVADevuelto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalIVADevuelto()) + "</TotalIVADevuelto>" +
-	            "<TotalOtrosCargos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) + "</TotalOtrosCargos>" +
+	            getTotalOtrosCargos(factura.getTotalOtrosCargos()) +
 	            "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
 	        "</ResumenFactura>" +
 	        "<InformacionReferencia>" +
@@ -161,10 +157,6 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	                "<Razon>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaRazon()) + "</Razon>" +
 	        "</InformacionReferencia>" +
 	        
-//	            "<Normativa>" +
-//	            "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
-//	            "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
-//	        "</Normativa>" +
 	        "<Otros>" +
 	        		"<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" +
 	        		Utils.oTroContenido()+
@@ -180,6 +172,20 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 		
 		return xml;
 	}
+  
+  private String getTotalOtrosCargos(Double cargos) {
+		String resultado = Constantes.EMPTY;
+		if (cargos == null) {
+			return resultado;
+		}
+		if(cargos.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
+		resultado  = "<TotalOtrosCargos>" +  FacturaElectronicaUtils.truncateDecimal(cargos,5) + "</TotalOtrosCargos>"; 
+		
+		return resultado;
+	}	
   
   private String actividadComercial(Factura factura) {
 		String resultado = Constantes.EMPTY;
@@ -283,7 +289,6 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
             "</CodigoComercial>" +
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato3Decimales(detalle.getCantidad()) + "</Cantidad>" +
             "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
-       //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
             "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
             "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
@@ -446,50 +451,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 		
       return resultado;
 	}
-	/**
-	 * 
-	 * @param telefono
-	 * @param codigoPais
-	 * @return
-	 */
-	private String getTelefono(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			 if(telefono > Constantes.ZEROS) {
-				 resultado = "<Telefono>" +
-		        "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO) + "</NumTelefono>";
-			      resultado += "</Telefono>";
-		   	 }		
-		} catch (Exception e) {
-			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		return resultado;
-	}
-	
-/**
-* 
-* @param telefono
-* @param codigoPais
-* @return
-*/
-	private String getFax(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			if(telefono > Constantes.ZEROS) {
-				 resultado = "<Fax>" +
-		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";
-		        resultado += "</Fax>";
-			}
-			
-		} catch (Exception e) {
-			log.info("** Error  getFax: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		return resultado;
-	}
+
 	
 	/**
 	 * 
@@ -507,16 +469,6 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
          		resultado = "<Receptor>" +
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
@@ -525,16 +477,6 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getIdentificacionExtranjero()) + "</IdentificacionExtranjero>" +
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
@@ -549,24 +491,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   	return resultado;
 }
   
- private String ubicacionReceptor(Factura factura) {
-  	
-  	String resultado = Constantes.EMPTY;
-  	if(factura.getCliente().getProvincia() !=null ) {
-  		if(!factura.getCliente().getProvincia().equals(Constantes.EMPTY)) {
-  	    resultado = "<Ubicacion>" +
-  	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-  	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-  	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
- // 	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-  	        "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getOtraSena()) + "</OtrasSenas>" +
-  	        "</Ubicacion>" ;
-  		}
-  	}
-
-  	return resultado;
-  }
-  
+   
   private String xmlIdentificacion (Factura factura) throws Exception {
   	String resultado = Constantes.EMPTY;
   	try {

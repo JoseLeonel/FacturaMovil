@@ -188,7 +188,7 @@ function ListarFacturas(){
                 __VerDetalle();
                 __EnviarCorreos();
 				EventoFiltro();
-				__NotaCredito()
+				__NotaDebito()
 		   }else{
 			__Inicializar_Table('.tableListar');  
 		   }           
@@ -249,8 +249,9 @@ var idioma_espanol =
 * cargar los tipos de Documento de la factura
 **/
 function __ComboTipoDocumentosPara(){
-	$('.tipoDocumento').append('<option value="'+"04"+'">'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+ '</option>');
-	$('.tipoDocumento').append('<option value="'+"01"+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("factura.tipo.documento.nota.credito")+ '</option>');
+	
+	
 }
 
 function agregarInputsCombos(){
@@ -343,7 +344,7 @@ function __Opciones(id,type,row){
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
 	menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-	menu += '<li><a href="#"  title="Nota Credito" class="  btnNotaCredito" >Nota Credito</a></li>'
+	menu += '<li><a href="#"  title="Nota Credito" class="  btnNotaDebito" >Nota Debito</a></li>'
     if(row.noFacturaElectronica == 0){
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Correo al Cliente</a></li>'
         menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Correo Alternativo</a></li>'
@@ -355,8 +356,8 @@ function __Opciones(id,type,row){
 /**
  * Nota de credito
  */
-function __NotaCredito(){
-	$('.tableListar').on('click','.btnNotaCredito',function(e){
+function __NotaDebito(){
+	$('.tableListar').on('click','.btnNotaDebito',function(e){
 		var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -365,10 +366,10 @@ function __NotaCredito(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
 		$('.mostrarListadoDeFacturas').hide();
-        var parametros = {
+		var parametros = {
 			consecutivo:data.numeroConsecutivo,
-			tipoEjecucion :1
-		}		
+			tipoEjecucion :2
+		}
 		riot.mount('nota-credito',{parametros:parametros});   
 	});
 }

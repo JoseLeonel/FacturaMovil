@@ -106,16 +106,12 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	         "<Tipo>" + Utils.zeroPad(factura.getEmpresa().getTipoCedula(),2) + "</Tipo>" +
 	         "<Numero>" + factura.getEmpresa().getCedula() + "</Numero>" +
 	     "</Identificacion>" +
-	//     "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +
 	     "<Ubicacion>" +
 	         "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
 	         "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 	         "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//	         "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
 	         "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 	     "</Ubicacion>" +
-	//     getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
-	//     getFax(0,factura.getEmpresa().getCodigoPais()) +
 	     "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCorreoElectronico()) + "</CorreoElectronico>" +
 	 "</Emisor>" +
 	 xmlReceptor(factura) +
@@ -140,13 +136,9 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		       "<TotalVentaNeta>" +    FacturaElectronicaUtils.truncateDecimal(factura.getTotalVentaNeta(),5) + "</TotalVentaNeta>" +
 		       "<TotalImpuesto>" +     FacturaElectronicaUtils.truncateDecimal(impuestoTotal(factura.getTotalImpuesto(),factura.getTotalExonerado()),5) + "</TotalImpuesto>" +
 		       "<TotalIVADevuelto>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalIVADevuelto(),5) + "</TotalIVADevuelto>" +
-		       "<TotalOtrosCargos>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalOtrosCargos(),5) + "</TotalOtrosCargos>" +
+		       getTotalOtrosCargos(factura.getTotalOtrosCargos()) +
 		       "<TotalComprobante>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalComprobante(),5) + "</TotalComprobante>" +
 			     "</ResumenFactura>" +
-//	     "<Normativa>" +
-//	         "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
-//	         "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
-//	     "</Normativa>" +
            informacionFerencia(factura)+
            "<Otros>" +
 	     		"<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" +
@@ -160,6 +152,21 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		}
 		 return xml;
 	}
+	
+	private String getTotalOtrosCargos(Double cargos) {
+		String resultado = Constantes.EMPTY;
+		if (cargos == null) {
+			return resultado;
+		}
+		if(cargos.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
+		resultado  = "<TotalOtrosCargos>" +  FacturaElectronicaUtils.truncateDecimal(cargos,5) + "</TotalOtrosCargos>"; 
+		
+		return resultado;
+	}	
+	
 	private Double impuestoTotal(Double impuestoTotal,Double totalExonerado) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		if(totalExonerado > Constantes.ZEROS_DOUBLE) {
@@ -303,53 +310,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 			
        return resultado;
 	}
-	/**
-	 * 
-	 * @param telefono
-	 * @param codigoPais
-	 * @return
-	 */
-	private String getTelefono(Integer telefono,Integer codigoPais) throws Exception{
-		String resultado = Constantes.EMPTY;
-		try {
-	    if(telefono > Constantes.ZEROS) {
-	  		 resultado = "<Telefono>" +
-	          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-	 	        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO) + "</NumTelefono>";
-	 	     resultado += "</Telefono>";
-	     }
-			
-		} catch (Exception e) {
-			log.error("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		
-		return resultado;
-	}
 	
-/**
- * 
- * @param telefono
- * @param codigoPais
- * @return
- */
-	private String getFax(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			if(telefono > Constantes.ZEROS) {
-				 resultado = "<Fax>" +
-		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";
-		        resultado += "</Fax>";
-			}
-			
-		} catch (Exception e) {
-			log.error("** Error  getFax: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-
-		}
-		return resultado;
-	}
 	/**
 	 * 
 	 * @param factura
@@ -400,7 +361,6 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
           "</CodigoComercial>" +
           "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato3Decimales(detalle.getCantidad()) + "</Cantidad>" +
           "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
-     //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
           "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
           "<PrecioUnitario>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getPrecioUnitario(),5) + "</PrecioUnitario>" +
           "<MontoTotal>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getMontoTotal(),5) + "</MontoTotal>" +
@@ -600,16 +560,6 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
          		resultado = "<Receptor>" +
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
@@ -618,16 +568,6 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
@@ -643,23 +583,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   	return resultado;
 }
   
-  private String ubicacionReceptor(Factura factura) {
-  	
-  	String resultado = Constantes.EMPTY;
-  	if(factura.getCliente().getProvincia() !=null ) {
-  		if(!factura.getCliente().getProvincia().equals(Constantes.EMPTY)) {
-  	    resultado = "<Ubicacion>" +
-  	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-  	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-  	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-  //	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-  	        "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-  	        "</Ubicacion>" ;
-  		}
-  	}
-
-  	return resultado;
-  }
+ 
   
 private String xmlIdentificacion (Factura factura) throws Exception {
 	String resultado = Constantes.EMPTY;

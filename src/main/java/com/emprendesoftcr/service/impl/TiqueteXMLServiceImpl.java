@@ -113,16 +113,13 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		            "<Tipo>" + factura.getEmpresa().getTipoCedula() + "</Tipo>" +
 		            "<Numero>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCedula()) + "</Numero>" +
 		        "</Identificacion>" +
-//		        "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +
 		        "<Ubicacion>" +
 		            "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
 		            "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 		            "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//		            "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
 		            "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 		        "</Ubicacion>" +
 		        getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
-//		        getFax(0,factura.getEmpresa().getCodigoPais()) +
 		        "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
 		        "</Emisor>" +
 		        xmlReceptor(factura) +
@@ -146,14 +143,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		            "<TotalVentaNeta>" +    FacturaElectronicaUtils.truncateDecimal(factura.getTotalVentaNeta(),5) + "</TotalVentaNeta>" +
 		            "<TotalImpuesto>" +     FacturaElectronicaUtils.truncateDecimal(factura.getTotalImpuesto(),5) + "</TotalImpuesto>" +
 		            "<TotalIVADevuelto>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalIVADevuelto(),5) + "</TotalIVADevuelto>" +
-		            "<TotalOtrosCargos>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalOtrosCargos(),5) + "</TotalOtrosCargos>" +
+		            getTotalOtrosCargos(factura.getTotalOtrosCargos()) +
 		            "<TotalComprobante>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalComprobante(),5) + "</TotalComprobante>" +
 		        "</ResumenFactura>" +
 		        informacionFerencia(factura) +
-//			      "<Normativa>" +
-//			        "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
-//			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
-//		        "</Normativa>" +
 				    "<Otros>" + oTroTexto(observacion) +
 				    Utils.oTroContenido()+"</Otros>" +    
 		        "</TiqueteElectronico>";
@@ -165,6 +158,20 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
     return resultado;
 		
 	}
+	
+private String getTotalOtrosCargos(Double cargos) {
+	String resultado = Constantes.EMPTY;
+	if (cargos == null) {
+		return resultado;
+	}
+	if(cargos.equals(Constantes.ZEROS_DOUBLE)) {
+		return resultado;
+	}
+	
+	resultado  = "<TotalOtrosCargos>" +  FacturaElectronicaUtils.truncateDecimal(cargos,5) + "</TotalOtrosCargos>"; 
+	
+	return resultado;
+}	
 	
 private String actividadComercial(Factura factura) {
 	String resultado = Constantes.EMPTY;
@@ -374,7 +381,6 @@ private String informacionFerencia(Factura factura) {
                   "</CodigoComercial>" +
                   "<Cantidad>" + FacturaElectronicaUtils.truncateDecimal(detalle.getCantidad(),3) + "</Cantidad>" +
                   "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
-             //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
                   "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
                   "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
                   "<MontoTotal>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getMontoTotal(),5) + "</MontoTotal>" +
@@ -518,16 +524,6 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
          		resultado = "<Receptor>" +
                 "<Nombre>" +  FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
@@ -536,16 +532,6 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
                 "<Nombre>" +  FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
