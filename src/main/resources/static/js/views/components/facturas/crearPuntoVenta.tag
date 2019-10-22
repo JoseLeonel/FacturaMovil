@@ -958,7 +958,7 @@
 
     .labelBotones {
         font-weight: 600 !important;
-        font-size: 19px !important;
+        font-size: 16px !important;
         font-family: Roboto,sans-serif !important;
         color: #ffffff !important;
         text-shadow: 0px 0px 1px #ffffff;
@@ -2130,46 +2130,12 @@ function __reimprimir(){
 **/
 function consultaFactura(data,tipoImpresion){
     var parametros = {
-                          factura:data,
-                          facturaDia:tipoImpresion
-                      }
-                      console.log("consultaFactura")
-                      riot.mount('ptv-imprimir',{parametros:parametros});
+        factura:data,
+        facturaDia:tipoImpresion
+    }
+    riot.mount('ptv-imprimir',{parametros:parametros});
                    
     return 
-    self.contador = 0
-    self.update()
-    var modelo = null
-     $.ajax({
-        url: "MostrarFacturaAjax",
-        datatype: "json",
-        data: {idFactura:data.id},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                      modelo = modeloTabla   
-                      var parametros = {
-                          factura:modelo,
-                          facturaDia:tipoImpresion
-                      }
-                      console.log("consultaFactura")
-                      riot.mount('ptv-imprimir',{parametros:parametros});
-                    });
-                    
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
 }
 /**
 * Tipo de Documento

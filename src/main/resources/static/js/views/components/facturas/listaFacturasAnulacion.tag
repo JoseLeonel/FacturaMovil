@@ -8,10 +8,10 @@
       </div>
       <div class="modal-body">
            <form id = "formularioFactura" name ="formularioFactura "   class="advanced-search-form">
-                <input type="hidden" id='referenciaTipoDoc' name='referenciaTipoDoc'  value="03" >
+                <input type="hidden" id='tipoDoc' name='tipoDoc'  value="03" >
                 <input type="hidden" id='referenciaCodigo' name='referenciaCodigo'  value="01" >
                 <input type="hidden" id='referenciaNumero' name='referenciaNumero'  value="{parametro.consecutivo}" >
-                <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
+                <input type="hidden" id='estado'                  name='estado'                  value="2" >
                 <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
                 <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                 <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
@@ -26,14 +26,14 @@
                 <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                 <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                 <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
-                <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
+                <input type="hidden" id='totalEfectivo'           name='totalEfectivo'        value="{factura.totalEfectivo}" >
+                <input type="hidden" id='totalTarjeta'            name='totalTarjeta'        value="{factura.totalTarjeta}" >
+                <input type="hidden" id='totalBanco'              name='totalBanco'        value="{factura.totalBanco}" >
                 <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
 
             <div class="row">   
                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                    <label class="knob-label" >{$.i18n.prop("informacion.razon")}</label>
+                    <label class="knob-label" >Motivo</label>
                     <input type="text" class="form-control referenciaRazon" id="referenciaRazon" name= "referenciaRazon" >
                 </div>
             </div>
@@ -81,42 +81,9 @@
    self.on('mount',function(){
     $("#formularioFactura").validate(reglasDeValidacionAnular());
     __Init()
-    verificarConsecutivo()
-    _Empresa()
-     __FacturaEnEspera()
+    __FacturaEnEspera()
     __ComboRebajoInventario()
 })
-
-/**
-* Consultar la empresa
-**/
-function _Empresa(){
-     $.ajax({
-        url: "ParametrosEmpresaAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.empresa = modeloTabla
-                       self.vueltoImprimir = self.empresa.vueltoImprimir
-                       self.update()
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
 
 function __ComboRebajoInventario(){
     self.comboRebajaInventario = []
@@ -168,10 +135,10 @@ function crearFactura(){
     self.factura.tipoDoc = "03"
     self.update();
     var formulario = $("#formularioFactura").serialize();
+    
    $.ajax({
         type : "POST",
         dataType : "json",
-        async: false,
         data : formulario,
         url : "CrearNotaCreditoAjax.do",
         success : function(data) {
@@ -181,15 +148,7 @@ function crearFactura(){
                     mensajeError(data.message)
                 }
             } else {
-                $('#ModalAnularDocumento').modal('hide')
-               	serverMessageJsonClase(data);
-                swal({
-	                title: '',
-	                text: "Nota Credito completa Exitosamente",
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: 'Aceptar',
-	            })   
+               
                 evaluarFactura(data)
             }
         },
@@ -211,13 +170,26 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
             self.facturaReimprimir = modeloTabla
             self.update()
-            var parametros = {
-                factura:modeloTabla,
-                facturaDia:0
-            }
-            riot.mount('ptv-imprimir',{parametros:parametros}); 
-            __MostrarListadoActualizados()
         });
+       $('#ModalAnularDocumento').modal('hide')
+
+          swal({
+  	        title: "",
+   	        text: "Cons:" + self.facturaImprimir.numeroConsecutivo,
+   	        type: 'success',
+   	        showCancelButton: false,
+   	        confirmButtonText: 'Aceptar',
+        })
+          
+        var parametros = {
+            factura:self.facturaReimprimir,
+            facturaDia:1
+        }
+   
+        riot.mount('ptv-imprimir',{parametros:parametros}); 
+        $('.imprimirModal').modal('show');   
+            __MostrarListado()
+        
     }
 }
 /**
@@ -296,50 +268,148 @@ function __Init(){
     self.update();
  
 }
-/**
-*  Consecutivo a consultar
-**/
-function verificarConsecutivo(){
-    self.mostrarnotacredito = false;
+
+
+function __FacturaEnEspera(){
     var numero  = self.parametro.consecutivo
     self.detail = [];
+    self.factura = null
     self.update()
+     __Init()
     $.ajax({
-        url: "ListarDetlleByConsecutivoNotaCreditoAjax.do",
-        datatype: "json",
+        url: "ListarDetlleByFacturaConsecutivoAjax.do",
         data: {consecutivo:numero},
         method:"POST",
         success: function (data) {
-             if(data.aaData.length > 0){
-                cargarDetallesFacturaEnEspera(data.aaData)
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
             }
         },
         error: function (xhr, status) {
-        mensajeErrorServidor(xhr, status);
+            mensajeErrorServidor(xhr, status);
+            
         }
     });
 }
+
 /**
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
-     $.each(data, function( index, modeloTabla ) {
+    $('.referenciaRazon').val(null);
+    self.detail = [];
+    self.mostrarModal   = false
+    self.update()
+    $.each(data, function( index, modeloTabla ) {
+        self.factura = modeloTabla.factura
+        $('.referenciaRazon').val(null);
+        self.cliente  = modeloTabla.factura.cliente
+        self.vendedor = modeloTabla.factura.vendedor
+        self.update()
+        self.descripcionArticulo = modeloTabla.descripcion
         self.detail.push({
             numeroLinea     : modeloTabla.numeroLinea,
-            id              : modeloTabla.id,
+            pesoPrioridad   :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
+            tipoImpuesto    : modeloTabla.tipoImpuesto,
+            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
             descripcion     : modeloTabla.descripcion,
-            cantidad        : __valorNumerico(modeloTabla.cantidad) - __valorNumerico(modeloTabla.cantidadAplicadaNotaCredito) ,
-            cantidadAplicadaNotaCredito     :  __valorNumerico(modeloTabla.cantidad) - __valorNumerico(modeloTabla.cantidadAplicadaNotaCredito) 
+            cantidad        : parseFloat(modeloTabla.cantidad),
+            precioUnitario  : parseFloat(modeloTabla.precioUnitario),
+            impuesto        : parseFloat(modeloTabla.impuesto),
+            impuesto1       : parseFloat(modeloTabla.impuesto1),
+            montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
+            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
+            montoDescuento  : parseFloat(modeloTabla.montoDescuento),
+            porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
+            subTotal        : parseFloat(modeloTabla.subTotal),
+            montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
+            montoTotal      : parseFloat(modeloTabla.montoTotal),
+            costo           : parseFloat(modeloTabla.costo),
+            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
+            montoGanancia :parseFloat(modeloTabla.montoGanancia),
+            ganancia :parseFloat(__valorNumerico(modeloTabla.ganancia)),
+            pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
+            montoExoneracion1:parseFloat(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
         });
+    
         self.update()
     })
-    self.update()
+
+    __aplicarExoneracionPorCliente()
+    
     $('#ModalAnularDocumento').modal({
          backdrop: 'static',
          keyboard: false
     })
     $('#ModalAnularDocumento').modal('show')      
+
+   
+    
 }
+
+/**
+* Aplicar la exoneracion de detalles
+**/
+function __aplicarExoneracionPorCliente(){
+    var aplicaExo = false
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    var valorTotal = 0
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
+        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+            if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
+                if(self.cliente.porcentajeExoneracion > 0  ){
+                    self.item.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+                    self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
+                    self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = parseFloat(self.item.montoImpuesto1) * parseFloat(porcentaje)  
+                    self.item.montoExoneracion1 = valorTotal
+                     valorTotal = parseFloat(self.item.montoImpuesto) * parseFloat(porcentaje)  
+                    self.item.montoExoneracion = valorTotal
+                    self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
+                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
+                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion  
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+                    aplicaExo= true
+                }else{
+                    //Cliente no tiene exoneracion
+                    self.item.porcentajeExoneracion = 0
+                    self.item.fechaEmisionExoneracion = null
+                    self.item.nombreInstitucionExoneracion = ""
+                    self.item.numeroDocumentoExoneracion = ""
+                    self.item.tipoDocumentoExoneracion = ""
+                    self.item.montoExoneracion = 0
+                    self.item.montoExoneracion1 = 0
+                    self.item.ImpuestoNeto = parseFloat(self.item.montoImpuesto) + parseFloat(self.item.montoImpuesto1) 
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.factura.totalEfectivo =0
+                    self.factura.totalTarjeta =0
+                    self.factura.totalBanco =0
+                    self.factura.totalCambioPagar = self.factura.totalComprobante
+                    self.update();
+                 
+                    
+                }
+               
+            }
+    }
+}
+
+
+
+
 </script>
 </credito-completa>
