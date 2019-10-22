@@ -8,12 +8,14 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -55,4 +57,9 @@ public interface  ConsultasNativeDao {
 	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa,Cliente cliente,Integer estado,String fechaInicial,String fechaFinal, String actividadComercial,Integer idCategoria,String codigo);
 	
 	FacturaIDNativa findIdFactura(Long id);
+	
+	Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo,Empresa empresa);
+	
+	Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal,Cliente cliente , String tipoDocumento,String actividadComercial);
+	
 }

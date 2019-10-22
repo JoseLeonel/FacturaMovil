@@ -84,10 +84,10 @@ public class DetalleFacturaCommand {
 	private Double	montoExoneracion;
 	private Double	montoExoneracion1;
 
-	
+	private Double	cantidadAplicadaNotaCredito;
 
 	public DetalleFacturaCommand(Long id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String descripcion, String tipoCodigo, String codigo, String unidadMedida, String tipoImpuesto, String fechaEmisionSTR, String consecutivo, String consecutivoProforma, String tipoDoc, String nombreUsuario, Double montoGanancia, Factura factura, Double porcentajeGanancia, Double costo, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Double pesoTransporte, Double pesoTransporteTotal, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
-			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1) {
+			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1, Double cantidadAplicadaNotaCredito) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -128,6 +128,7 @@ public class DetalleFacturaCommand {
 		this.porcentajeExoneracion = porcentajeExoneracion;
 		this.montoExoneracion = montoExoneracion;
 		this.montoExoneracion1 = montoExoneracion1;
+		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
 	}
 
 	public DetalleFacturaCommand() {
@@ -175,6 +176,7 @@ public class DetalleFacturaCommand {
 		this.montoExoneracion = detalle.getMontoExoneracion();
 		this.porcentajeExoneracion = detalle.getPorcentajeExoneracion();
 		this.montoExoneracion1 = detalle.getMontoExoneracion1();
+		this.cantidadAplicadaNotaCredito = detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito();
 
 	}
 
@@ -184,6 +186,14 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Double getCantidadAplicadaNotaCredito() {
+		return cantidadAplicadaNotaCredito;
+	}
+
+	public void setCantidadAplicadaNotaCredito(Double cantidadAplicadaNotaCredito) {
+		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
 	}
 
 	public Double getMontoExoneracion1() {

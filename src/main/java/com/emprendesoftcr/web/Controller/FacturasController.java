@@ -44,6 +44,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
@@ -79,9 +80,11 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -90,15 +93,16 @@ import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
-import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.ConsultaFacturaGananciasNativeCommand;
 import com.emprendesoftcr.web.command.ConsultaIvaCommand;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
+import com.emprendesoftcr.web.command.NotaCreditoEspecificaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
@@ -304,9 +308,6 @@ public class FacturasController {
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
-
 	@Autowired
 	private UsuarioBo																									usuarioBo;
 
@@ -318,6 +319,9 @@ public class FacturasController {
 
 	@Autowired
 	private VendedorBo																								vendedorBo;
+
+	@Autowired
+	private CuentaCobrarBo																						cuentaCobrarBo;
 
 	@Autowired
 	private ClienteBo																									clienteBo;
@@ -339,9 +343,6 @@ public class FacturasController {
 
 	@Autowired
 	private VendedorPropertyEditor																		vendedorPropertyEditor;
-
-	@Autowired
-	private FacturaFormValidator																			facturaFormValidator;
 
 	@Autowired
 	private StringPropertyEditor																			stringPropertyEditor;
@@ -442,6 +443,11 @@ public class FacturasController {
 		return "views/facturas/creditoDebito";
 	}
 
+	@RequestMapping(value = "/notaDebito.do", method = RequestMethod.GET)
+	public String notaDebito(ModelMap model) {
+		return "views/facturas/notaDebito";
+	}
+
 	@RequestMapping(value = "/ListaFacturasAnulacion", method = RequestMethod.GET)
 	public String listaFacturasAnulacion(ModelMap model) {
 		return "views/facturas/listaFacturasAnulacion";
@@ -540,8 +546,9 @@ public class FacturasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		modelEmail.put("estadoDesc", estadoDesc);
-		modelEmail.put("actividad", actividadEconomica);
+		modelEmail.put("cedula", "Cedula:" + usuario.getEmpresa().getCedula());
+		modelEmail.put("estadoDesc", "Documentos con Estado:" + estadoDesc);
+		modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS) ? Constantes.EMPTY : "Actividad Economica:" + actividadEconomica);
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
@@ -551,10 +558,25 @@ public class FacturasController {
 		modelEmail.put("totalTarjeta", facturaCommand.getTotalTarjeta() != null ? facturaCommand.getTotalTarjetaSTR() : Constantes.ZEROS);
 		modelEmail.put("totalBanco", facturaCommand.getTotalBanco() != null ? facturaCommand.getTotalBancoSTR() : Constantes.ZEROS);
 		modelEmail.put("totalCredito", facturaCommand.getTotalCredito() != null ? facturaCommand.getTotalCreditoSTR() : Constantes.ZEROS);
+		modelEmail.put("totalDinero", facturaCommand.getTotalPagosSTR());
 		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() != null ? facturaCommand.getTotalImpuestosSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() != null ? facturaCommand.getTotalVentasGravadasSTR() : Constantes.ZEROS);
+		modelEmail.put("totalMenosNotas", facturaCommand.getTotal() + facturaCommand.getTotal_n());
+
+		modelEmail.put("total_n", facturaCommand.getTotal_n() != null ? facturaCommand.getTotalNC() : Constantes.ZEROS);
+		modelEmail.put("totalDescuentos_n", facturaCommand.getTotalDescuentos_n() != null ? facturaCommand.getTotalDescuentosNC() : Constantes.ZEROS);
+		modelEmail.put("totalOtrosCargos_n", facturaCommand.getTotalOtrosCargos_n() != null ? facturaCommand.getTotalOtrosCargosNC() : Constantes.ZEROS);
+		modelEmail.put("totalEfectivo_n", facturaCommand.getTotalEfectivo_n() != null ? facturaCommand.getTotalEfectivoNC() : Constantes.ZEROS);
+		modelEmail.put("totalTarjeta_n", facturaCommand.getTotalTarjeta_n() != null ? facturaCommand.getTotalTarjetaNC() : Constantes.ZEROS);
+		modelEmail.put("totalBanco_n", facturaCommand.getTotalBanco_n() != null ? facturaCommand.getTotalBancoNC() : Constantes.ZEROS);
+		modelEmail.put("totalCredito_n", facturaCommand.getTotalCredito_n() != null ? facturaCommand.getTotalCreditoNC() : Constantes.ZEROS);
+		modelEmail.put("totalImpuestos_n", facturaCommand.getTotalImpuestos_n() != null ? facturaCommand.getTotalImpuestosNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasNetas_n", facturaCommand.getTotalVentasNetas_n() != null ? facturaCommand.getTotalVentasNetasNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasExentas_n", facturaCommand.getTotalVentasExentas_n() != null ? facturaCommand.getTotalVentasExentasNC() : Constantes.ZEROS);
+		modelEmail.put("totalVentasGravadas_n", facturaCommand.getTotalVentasGravadas_n() != null ? facturaCommand.getTotalVentasGravadasNC() : Constantes.ZEROS);
+		modelEmail.put("totalDinero_n", facturaCommand.getTotalPagosNC());
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
 	}
@@ -589,8 +611,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito");
-		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambio, totalColones,totalEfectivo,totalTarjeta,totalBanco,totalCredito", baos);
+		List<String> headers = Arrays.asList("Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "Fecha Emision", "# Documento", "#Proforma", "Cedula", "Cliente", "A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
+		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaCliente, nombreCliente,nombreFactura, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
 		return baos;
 	}
 
@@ -753,10 +775,6 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-//		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
-//			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
-//			delimitadores.addFiltro(dataTableFilter);
-//		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -864,24 +882,18 @@ public class FacturasController {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
-
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-
 		Collection<ListarFacturasImpuestoServicioNativa> facturas = consultasNativeBo.findByFacturasImpuestoServicio(usuarioSesion.getEmpresa(), usuarioSesion.getId(), estado, inicio1, fin1, actividadEconomica);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ListarFacturasImpuestoServicioNativa listarFacturasImpuestoServicioNativa : facturas) {
-
 			// no se carga el usuario del sistema el id -1
 			if (listarFacturasImpuestoServicioNativa.getId().longValue() > 0L) {
 				solicitudList.add(new FacturaImpuestoServicioCommand(listarFacturasImpuestoServicioNativa));
 			}
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -896,7 +908,7 @@ public class FacturasController {
 	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		idCategoria = idCategoria == null?Constantes.ZEROS:idCategoria;
+		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
@@ -907,7 +919,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria,codigo);
+		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaGananciaNative consultaGananciaNative : facturas) {
 			solicitudList.add(new ConsultaFacturaGananciasNativeCommand(consultaGananciaNative));
@@ -934,16 +946,13 @@ public class FacturasController {
 		Boolean administrador = Boolean.FALSE;
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		estado = estado == null ? Constantes.FACTURA_ESTADO_PROFORMAS : estado;
-
 		Collection<ProformasByEmpresaAndEstado> objetoProformaAdmin = null;
 		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
 		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
-
 		objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 		objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 		objetoFacturasAdmin = objetoProformaAdmin == null && objetoAnuladoAdmin == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
 		administrador = Boolean.TRUE;
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (administrador) {
@@ -957,7 +966,6 @@ public class FacturasController {
 				}
 
 			}
-
 			if (objetoAnuladoAdmin != null) {
 				for (ProformasByEmpresaAndEstado proformasByEmpresaAndEstado : objetoAnuladoAdmin) {
 
@@ -1008,6 +1016,43 @@ public class FacturasController {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/ListarFacturasNotasCreditoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasNotasCreditoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) {
+		Cliente cliente = clienteBo.buscar(idCliente);
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ListarFacturaNCNativa> objetos = consultasNativeBo.findByFacturasSinNotasCreditos(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ListarFacturaNCNativa facturasDelDia : objetos) {
+				if (facturasDelDia.getId().longValue() > 0L) {
+					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
+				}
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) {
@@ -1021,12 +1066,9 @@ public class FacturasController {
 			}
 
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Collection<ListarFacturasNativa> objetos = consultasNativeBo.findByFacturasAndFechaAndTipoDocAndUsuario(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
 		List<Object> solicitudList = new ArrayList<Object>();
@@ -1036,9 +1078,7 @@ public class FacturasController {
 					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
 				}
 			}
-
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1085,9 +1125,9 @@ public class FacturasController {
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Collection<FacturasSinNotaCreditoNative> objetos = null;
 		if (estado.equals(Constantes.COMBO_TODOS)) {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG, codigo);
 		} else {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG, codigo);
 		}
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
@@ -1108,7 +1148,6 @@ public class FacturasController {
 
 	}
 
-
 	/***
 	 * @param request
 	 * @param response
@@ -1122,7 +1161,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1170,7 +1209,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1238,7 +1277,6 @@ public class FacturasController {
 			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY)) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-//				result.rejectValue("facturaClave", "error.recepcionFactura.codido.moneda.cero");
 			}
 
 			recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTipoCambio());
@@ -1246,7 +1284,6 @@ public class FacturasController {
 			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-//				result.rejectValue("facturaClave", "error.recepcionFactura.tipo.cambio.esta.ceros");
 			}
 
 			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
@@ -1444,7 +1481,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam String estado, @RequestParam String actividadEconomica,@RequestParam Integer tipoGasto) {
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam String estado, @RequestParam String actividadEconomica, @RequestParam Integer tipoGasto) {
 
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1473,13 +1510,13 @@ public class FacturasController {
 			if (!estado.equals(Constantes.COMBO_TODOS)) {
 				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));
 			}
-      if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
-      	delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));	
-      }
-      if(tipoGasto > Constantes.ZEROS) {
-      	delimitador.addFiltro(new JqGridFilter("tipoGasto", tipoGasto.toString(), "="));
-      }
-			
+			if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+				delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));
+			}
+			if (tipoGasto > Constantes.ZEROS) {
+				delimitador.addFiltro(new JqGridFilter("tipoGasto", tipoGasto.toString(), "="));
+			}
+
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
@@ -1518,7 +1555,6 @@ public class FacturasController {
 		}
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
-//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
 	/**
@@ -1537,9 +1573,137 @@ public class FacturasController {
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
+			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
+			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
+		} catch (Exception e) {
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CrearNotaCreditoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator crearNotaCredito(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
 
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			return this.crearFactura(facturaCommand, result, usuario);
+			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+			if (facturaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.consecutivo.no.existe", result.getAllErrors());
+			}
+			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
+			}
+			
+				
+			if(facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+				if(facturaBD.getTotalComprobante() > facturaCommand.getTotalComprobante()  ) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("nota.anula.documento.monto.menor", result.getAllErrors());		
+				}	
+			}	
+			
+			if(facturaCommand.getReferenciaCodigo() == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("nota.codigo.anulacion.vacio", result.getAllErrors());
+				
+			}
+			
+			
+			FacturaCommand facturaAplicarCommand = new FacturaCommand();
+			facturaAplicarCommand.setCliente(facturaBD.getCliente());
+			facturaAplicarCommand.setEmpresa(facturaBD.getEmpresa());
+			facturaAplicarCommand.setId(null);
+			facturaAplicarCommand.setFechaCredito(null);
+			facturaAplicarCommand.setNumeroConsecutivo(Constantes.ZEROS);
+			facturaAplicarCommand.setFechaEmision(null);
+			facturaAplicarCommand.setCondicionVenta(facturaBD.getCondicionVenta());
+			facturaAplicarCommand.setPlazoCredito(facturaBD.getPlazoCredito());
+			facturaAplicarCommand.setMedioPago(Constantes.EMPTY);
+			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
+			facturaAplicarCommand.setDireccion(Constantes.EMPTY);
+			facturaAplicarCommand.setCorreoAlternativo(facturaBD.getCorreoAlternativo());
+			facturaAplicarCommand.setNota(Constantes.EMPTY);
+			facturaAplicarCommand.setComanda(Constantes.EMPTY);
+			facturaAplicarCommand.setSubTotal(facturaCommand.getSubTotal());
+			facturaAplicarCommand.setTotalTransporte(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotal(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalServGravados(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalServExentos(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalMercanciasGravadas(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalMercanciasExentas(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalGravado(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalExento(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalVenta(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalDescuentos(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalVentaNeta(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalImpuesto(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalComprobante(Constantes.ZEROS_DOUBLE);
+			if(facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+				facturaAplicarCommand.setTotalEfectivo(facturaBD.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalEfectivo());
+				facturaAplicarCommand.setTotalTarjeta(facturaBD.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalTarjeta());
+				facturaAplicarCommand.setTotalBanco(facturaBD.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalBanco());
+				
+			}else {
+				facturaAplicarCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
+				facturaAplicarCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
+				facturaAplicarCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
+					
+			}
+			facturaAplicarCommand.setTotalCredito(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setMontoCambio(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalCambio(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalImpuesto(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTotalImpuestoServ(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getCambioMoneda());
+			facturaAplicarCommand.setPesoTransporteTotal(Constantes.ZEROS_DOUBLE);
+			facturaAplicarCommand.setCodigoMoneda(facturaBD.getCodigoMoneda());
+			facturaAplicarCommand.setCreated_at(new Date());
+			facturaAplicarCommand.setUpdated_at(new Date());
+			facturaAplicarCommand.setVersionEsquemaXML(facturaBD.getVersionEsquemaXML());
+			facturaAplicarCommand.setDetalleFactura(Constantes.EMPTY);
+
+			facturaAplicarCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			if (!facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
+				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
+				}
+				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO);
+				}
+
+			}
+			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
+				facturaAplicarCommand.setTipoDoc(facturaCommand.getTipoDoc());
+
+			}
+			facturaAplicarCommand.setNota(facturaCommand.getNota());
+			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
+			// Datos de la Nota de Credito
+			facturaAplicarCommand.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
+			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
+			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
+
+			facturaAplicarCommand.setReferenciaRazon(facturaCommand.getNota());
+			facturaAplicarCommand.setPlazoCredito(Constantes.ZEROS);
+			facturaAplicarCommand.setReferenciaTipoDoc(facturaBD.getTipoDoc());
+
+			facturaAplicarCommand.setMesa(facturaBD.getMesa());
+			facturaAplicarCommand.setMontoCambio(facturaBD.getMontoCambio());
+			facturaAplicarCommand.setPesoTransporteTotal(facturaBD.getPesoTransporteTotal());
+			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getTipoCambio());
+			facturaAplicarCommand.setUsuario(usuario.getNombreUsuario());
+			facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
+			facturaAplicarCommand.setRebajaInventario(facturaCommand.getRebajaInventario() == null ? Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA : facturaCommand.getRebajaInventario());
+			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
+			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
+			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
@@ -1556,15 +1720,16 @@ public class FacturasController {
 
 			Usuario usuario = null;
 			FacturaCommand facturaCommand = null;
-
-			return this.crearFactura(facturaCommand, result, usuario);
+			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
+			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
+			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
 		} catch (Exception e) {
 
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
 
-	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
+	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {
 		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -1593,7 +1758,7 @@ public class FacturasController {
 						FacturaIDNativa facturaRevision = consultasNativeBo.findIdFactura(facturaCommand.getId());
 						if (facturaRevision != null) {
 							if (facturaRevision.getEstado() != null) {
-								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA) || facturaRevision.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) ) {
+								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA) || facturaRevision.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
 									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}
@@ -1646,7 +1811,7 @@ public class FacturasController {
 				}
 
 			}
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) && !facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) && !facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					if (facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());
@@ -1724,10 +1889,11 @@ public class FacturasController {
 				facturaCommand.setVendedor(vendedor);
 
 			}
+			Factura facturaReferenciaValidar = null;
 			// Validar el codigo de factura que se le va aplicar una nota de credito
 			if (facturaCommand.getReferenciaNumero() != null) {
 				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
-					Factura facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+					facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
 					if (facturaReferenciaValidar != null) {
 						if (facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
@@ -1755,7 +1921,7 @@ public class FacturasController {
 			}
 
 			facturaCommand.setEmpresa(usuario.getEmpresa());
-			facturaFormValidator.validate(facturaCommand, result);
+			// facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -1772,13 +1938,24 @@ public class FacturasController {
 				}
 
 			}
-			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio);
+
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio, detallesFacturaCommand, detallesNotaCredito);
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Factura facturaCreada = facturaBo.findById(factura.getId());
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+			}
+
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (facturaReferenciaValidar != null) {
+					if (facturaReferenciaValidar.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferenciaValidar);
+					}
+
+				}
+
 			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);

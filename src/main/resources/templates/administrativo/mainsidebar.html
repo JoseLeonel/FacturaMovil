@@ -3,7 +3,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="active treeview">
-            <a href="#">
+            <a href="/">
                 <i class="fa fa-dashboard"></i> <span>Inicio</span>
             </a>
         </li>
@@ -90,7 +90,6 @@
             <ul class="treeview-menu">
                 <li><a href="/puntoVenta" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','usuario_vendedor','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Nueva</a></li>
                 <li><a href="/ventaDolares" sec:authorize="hasAnyAuthority('venta_dolares','administrador_Cocodrillos')"><i class="fa fa-circle-o"></i> Nueva Dolares</a></li>
-<!--                 <li><a href="/creditoDebito" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Notas Credito</a></li> -->
                 <li><a href="/ListaFacturasAnulacion" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Anular venta </a></li>
                 <li><a href="/ventasPorServicio" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
                 <li><a href="/postVenta" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Cajero','Administrador_Sistema','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Venta POS </a></li>
@@ -111,6 +110,21 @@
                 
             </ul>
         </li>
+
+         <li class="treeview"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')">
+            <a href="#">
+                <i class="fa fa-unlock"></i>
+                <span>Notas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/creditoDebito"><i class="fa fa-circle-o"></i> Notas de Creditos</a></li>
+                <li><a href="/notaDebito.do"><i class="fa fa-circle-o"></i>Notas de Debitos</a></li>
+                
+                
+            </ul>
+        </li>
+
         
          <li class="treeview"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')">
             <a href="#">
@@ -143,7 +157,7 @@
 			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
 			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulos</a></li>
 			                <li><a href="/ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
-			                <li><a href="/TotalImpuestoVentasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
+<!-- 			                <li><a href="/TotalImpuestoVentasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li> -->
 <!-- 			                <li><a href="/ListaDetallesGanancia"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Restaurante','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>Utilidad en ventas</a></li> -->
 			            </ul>
 			        </li>

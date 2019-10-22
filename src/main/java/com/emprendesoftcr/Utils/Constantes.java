@@ -1,3 +1,4 @@
+
 package com.emprendesoftcr.Utils;
 
 import java.util.ResourceBundle;
@@ -5,12 +6,17 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
-//Esquema de XML
+
+	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA																= 1;
+	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA														= 2;
+	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA														= 3;
+
+	//Esquema de XML
 	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL																= 1;
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
 	public static final Integer					ESQUEMA_XML_4_3																							= 2;
-	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO																= "Fact#:";
+	public static final String					DOCUMENTO_ANULA_NOTA																= "Cons:#:";
 	// unidad de medidas SP
 	public static final String					UNIDAD_MEDIDA_SERVICIO_SP																		= "Sp";
 	public static final String					UNIDAD_MEDIDA_SERVICIO_OS																		= "Os";
@@ -253,8 +259,9 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_SALIDA																					= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO															= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA														= "Ingreso del proveedor:";
-	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO											= "Ingreso por nota de credito:";
+	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO											= "Salida por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA															= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO															= "Ingreso por Nota de debito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION										= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																									= "Si";
@@ -441,7 +448,7 @@ public class Constantes {
 
 	public static final String					FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO										= "01";
 	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_TEXTO											= "02";
-	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO											= "03";
+	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO											= "02";
 	public static final String					FACTURA_CODIGO_REFERENCIA_OTRO_DOCUMENTO										= "04";
 	public static final String					FACTURA_CODIGO_REFERENCIA_SUSTITUYE_COMPROBANTE							= "05";
 
@@ -449,6 +456,7 @@ public class Constantes {
 	public static final String					FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA												= "08";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS																	= "88";
 	public static final String					FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO												= "86";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO								= "89";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO												= "87";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA												= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO												= "02";
@@ -502,9 +510,14 @@ public class Constantes {
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR																= "factura.estado.facturado";
 
+	//SP actualizar el grafico vena
+	public static final String					SP_GRAFICO_VENTAS																						= "sp_graf_ventas";
+	public static final String					SP_GRAFICO_VENTAS_EMPRESA_IN																= "empresa_in";
+	public static final String					SP_GRAFICO_VENTAS_ANNO_IN		    														= "anno_in";
+	
 	// Nombres de procedimientos
-	public static final String					SP_TOTAL_FACTURAS																						= "SPTOTALFACTURAS";
-	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "SPFACTTODO";
+	public static final String					SP_TOTAL_FACTURAS																						= "sp_total_facturas";
+	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "sp_todo_facturas";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO														= "FECHA_INICIO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO																	= "ESTADO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA										= "act_econo";
@@ -512,7 +525,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA															= "ID_EMPRESA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL																	= "TOTAL";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO												= "TOTAL_DESC";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS												= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS												= "TOTAL_IMP";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS										= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS									= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS									= "TOTAL_GRABADAS";
@@ -521,6 +534,20 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA						= "TOTAL_TARJETA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO							= "TOTAL_BANCO";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO						= "TOTAL_CREDITO";
+
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_N																	= "TOTAL_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO_N												= "TOTAL_DESC_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS_N												= "TOTAL_IMP_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS_N										= "TOTAL_NETAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS_N									= "TOTAL_EXENTAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS_N									= "TOTAL_GRABADAS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS_N				= "TOTAL_OTROS_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO_N						= "TOTAL_EFECTIVO_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA_N						= "TOTAL_TARJETA_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO_N							= "TOTAL_BANCO_N";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO_N						= "TOTAL_CREDITO_N";
+
+	
 	// Totales de Compras Aceptadas
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO													= "FECHA_INICIO";
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN															= "FECHA_FIN";
@@ -573,9 +600,9 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_IN_TIPO_DOC									= "tipoDocumento";
 	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_OUT_CONSECUTIVO							= "consecutivo";
 //Procedimiento para generar totales por linea de datalles de la factura
-	public static final String					SP_VENTASXDETALLE																						= "ventasxdetalle";
-	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO															= "ventasxdetaTodos";
-	public static final String					SP_VENTASXDETALLE_EXCEPTO																		= "ventasxdetalleExc";
+	public static final String					SP_VENTASXDETALLE																						= "sp_ventas_detalle";
+	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO															= "sp_detall_todos";
+	public static final String					SP_VENTASXDETALLE_EXCEPTO																		= "sp_ventas_det_exc";
 	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA															= "e_empresa";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL													= "fecha_inicio";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL														= "fecha_fin";
@@ -587,6 +614,12 @@ public class Constantes {
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO												= "total_desc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS													= "total_exc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA												= "total_gananc";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_N																	= "total_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N												= "total_imp_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N													= "total_grav_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N												= "total_desc_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N													= "total_exc_n";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N												= "total_gananc_n";
 //Procedimiento callback para actualizar la aceptacion de hacienda
 	public static final String					SP_CALLBACK_HACIENDA																				= "sp_callback";
 	public static final String					SP_CALLBACK_HACIENDA_CLAVE																	= "clave_e";

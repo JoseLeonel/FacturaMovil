@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -66,6 +67,13 @@ public class CategoriaDaoImpl implements CategoriaDao {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Collection<Categoria> findByEmpresaAll(Integer idEmpresa) {
+		Query query = entityManager.createQuery("select obj from Categoria obj where  obj.empresa.id = :idEmpresa order by obj.id,obj.descripcion");
+		query.setParameter("idEmpresa", idEmpresa);
+		return query.getResultList();
 	}
 
 }

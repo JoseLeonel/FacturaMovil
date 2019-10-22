@@ -240,6 +240,14 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
+	
+	@Override
+	public Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa,Long idCategoria) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa.id = :idEmpresa and obj.categoria.id = :idCategoria order by obj.categoria.id,obj.descripcion");
+		query.setParameter("idEmpresa", idEmpresa);
+		query.setParameter("idCategoria", idCategoria);
+		return query.getResultList();
+	}
 
 	@Override
 	public Collection<Articulo> articulosOrderCategoria(Empresa empresa) {

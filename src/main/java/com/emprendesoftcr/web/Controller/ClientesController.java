@@ -10,19 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -46,6 +51,7 @@ import com.google.common.base.Function;
  * @author jose.
  * @since 17 mar. 2018
  */
+@CrossOrigin
 @Controller
 public class ClientesController {
 
@@ -63,6 +69,10 @@ public class ClientesController {
 	@Autowired
 	private FacturaBo																			facturaBo;
 
+	@Autowired
+	private EmpresaBo																			empresaBo;
+
+	
 	@Autowired
 	private UsuarioBo																			usuarioBo;
 
@@ -102,6 +112,7 @@ public class ClientesController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
+	@Cacheable(value="clientesCache")
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -118,14 +129,19 @@ public class ClientesController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	
+	@Cacheable(value="clientesCache")
+	@RequestMapping(value = "/movil/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public Collection<Cliente> listarClientesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {
+		
 
-	/**
-	 * Listar los clientes activos
-	 * @param request
-	 * @param response
-	 * @return
-	 */
+		return clienteBo.findByEmpresa(idEmpresa);
+	}
+
+
 	@SuppressWarnings("all")
+	@Cacheable(value="clientesCache")
 	@RequestMapping(value = "/ListarClientesActivosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivosAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -179,6 +195,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
+	@CacheEvict(value="clientesCache",allEntries=true)
 	@RequestMapping(value = "/AgregarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -335,6 +352,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
+	@CacheEvict(value="clientesCache",allEntries=true)
 	@RequestMapping(value = "/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {

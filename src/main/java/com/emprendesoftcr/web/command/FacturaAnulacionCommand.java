@@ -5,6 +5,7 @@ import java.util.Date;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 
@@ -48,6 +49,8 @@ public class FacturaAnulacionCommand {
 	private Integer	noFacturaElectronica;
 	private String	impuestoServicioSTR;
 	private Double	impuestoServicio;
+	private Double	cantidadNotasCredito;
+	private Double	cantidad;
 
 	public FacturaAnulacionCommand(FacturasSinNotaCreditoNative facturasSinNotaCreditoNative) {
 		super();
@@ -112,6 +115,34 @@ public class FacturaAnulacionCommand {
 
 	}
 
+	public FacturaAnulacionCommand(ListarFacturaNCNativa facturasSinNotasCredito) {
+		super();
+		this.id = facturasSinNotasCredito.getId();
+		
+		this.cantidad = facturasSinNotasCredito.getCantidad();
+		this.cantidadNotasCredito = facturasSinNotasCredito.getCantidadNotas();
+
+		this.numeroConsecutivo = facturasSinNotasCredito.getNumeroConsecutivo();
+
+		this.totalComprobante = facturasSinNotasCredito.getTotalComprobante();
+
+		this.estado = facturasSinNotasCredito.getEstado();
+
+		this.nombreCompleto = facturasSinNotasCredito.getNombreCompleto();
+
+		this.cedula = facturasSinNotasCredito.getCedula();
+		this.fechaEmision = facturasSinNotasCredito.getFechaEmision();
+		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(facturasSinNotasCredito.getFechaEmision());
+		this.totalComprobanteSTR = Utils.formateadorMiles(facturasSinNotasCredito.getTotalComprobante());
+		this.nombreFactura = facturasSinNotasCredito.getNombreFactura();
+		this.nombreUsuario = facturasSinNotasCredito.getNombreUsuario();
+		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(facturasSinNotasCredito.getTipoDoc());
+		this.tipoDoc = facturasSinNotasCredito.getTipoDoc();
+		this.condicionVentaSTR = MapEnums.ENUM_CONDICION_VENTA.get(facturasSinNotasCredito.getCondicionVenta());
+		this.estadoSTR = MapEnums.ENUM_ESTADO_FACTURA.get(facturasSinNotasCredito.getEstado().toString());
+
+	}
+
 	public FacturaAnulacionCommand(ListarFacturasImpuestoServicioNativa facturasSinNotaCreditoNative) {
 		super();
 		this.id = facturasSinNotaCreditoNative.getId();
@@ -159,6 +190,28 @@ public class FacturaAnulacionCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+
+	
+	public Double getCantidadNotasCredito() {
+		return cantidadNotasCredito;
+	}
+
+	
+	public void setCantidadNotasCredito(Double cantidadNotasCredito) {
+		this.cantidadNotasCredito = cantidadNotasCredito;
+	}
+
+	
+	public Double getCantidad() {
+		return cantidad;
+	}
+
+	
+	public void setCantidad(Double cantidad) {
+		this.cantidad = cantidad;
 	}
 
 	public String getImpuestoServicioSTR() {

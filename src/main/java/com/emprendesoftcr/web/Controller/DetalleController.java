@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -45,7 +47,9 @@ import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
+import com.emprendesoftcr.web.command.DetalleFacturaParaNotaCreditoCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -62,44 +66,54 @@ import com.google.common.base.Function;
 @Controller
 public class DetalleController {
 
-	
-	private static final Function<Object, DetalleFacturaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleFacturaCommand>() {
+	private static final Function<Object, DetalleFacturaCommand>								TO_COMMAND_DETALLE							= new Function<Object, DetalleFacturaCommand>() {
 
-																																											@Override
-																																											public DetalleFacturaCommand apply(Object f) {
-																																												return new DetalleFacturaCommand((Detalle) f);
-																																											};
-																																										};
+																																																								@Override
+																																																								public DetalleFacturaCommand apply(Object f) {
+																																																									return new DetalleFacturaCommand((Detalle) f);
+																																																								};
+																																																							};
 
-	@Autowired
-	private DataTableBo																						dataTableBo;
+	private static final Function<Object, DetalleFacturaParaNotaCreditoCommand>	TO_COMMAND_DETALLE_NOTA_CREDITO	= new Function<Object, DetalleFacturaParaNotaCreditoCommand>() {
 
-	@Autowired
-	private DetalleBo																							detalleBo;
-
-	@Autowired
-	private UsuarioBo																							usuarioBo;
+																																																								@Override
+																																																								public DetalleFacturaParaNotaCreditoCommand apply(Object f) {
+																																																									return new DetalleFacturaParaNotaCreditoCommand((Detalle) f);
+																																																								};
+																																																							};
 
 	@Autowired
-	private ClienteBo																							clienteBo;
+	private DataTableBo																													dataTableBo;
 
 	@Autowired
-	private CorreosBo																							correosBo;
+	private DetalleBo																														detalleBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																	empresaPropertyEditor;
+	private UsuarioBo																														usuarioBo;
 
 	@Autowired
-	private ClientePropertyEditor																	clientePropertyEditor;
+	private ClienteBo																														clienteBo;
 
 	@Autowired
-	private VendedorPropertyEditor																vendedorPropertyEditor;
+	private CorreosBo																														correosBo;
 
 	@Autowired
-	private StringPropertyEditor																	stringPropertyEditor;
+	private ConsultasNativeBo																										consultasNativeBo;
 
 	@Autowired
-	private FechaPropertyEditor																		fechaPropertyEditor;
+	private EmpresaPropertyEditor																								empresaPropertyEditor;
+
+	@Autowired
+	private ClientePropertyEditor																								clientePropertyEditor;
+
+	@Autowired
+	private VendedorPropertyEditor																							vendedorPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor																								stringPropertyEditor;
+
+	@Autowired
+	private FechaPropertyEditor																									fechaPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -109,6 +123,7 @@ public class DetalleController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 	}
+
 	/**
 	 * Ganancia
 	 * @param model
@@ -118,7 +133,7 @@ public class DetalleController {
 	public String listaFacturaGanancia(ModelMap model) {
 		return "views/detalle/ListaGanancia";
 	}
-	
+
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -136,15 +151,15 @@ public class DetalleController {
 
 	@RequestMapping(value = "/TotalVentasPorDetalleAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String tipoImpuesto,@RequestParam Integer estado,@RequestParam String actividadEconomica) {
+	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String tipoImpuesto, @RequestParam Integer estado, @RequestParam String actividadEconomica) {
 		Date fechaInicial = Utils.parseDate(fechaInicio);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto,estado,actividadEconomica);
+		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto, estado, actividadEconomica);
 
 	}
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -153,9 +168,9 @@ public class DetalleController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-	// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-	// criptografica desde linux
-  // certificadoBo.agregar(usuario.getEmpresa(),"","");
+		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+		// criptografica desde linux
+		 certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
@@ -184,6 +199,32 @@ public class DetalleController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetlleByConsecutivoNotaCreditoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarConsecutivoParaNotaCreditoEspecificaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
+
+	
+		// Usuario de la session
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<DetallesFacturaNotaCreditoNativa> objetos = consultasNativeBo.findByFacturaParaNotaCredito(consecutivo, usuarioSesion.getEmpresa());
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (DetallesFacturaNotaCreditoNativa detallesFacturaNotaCreditoNativa : objetos) {
+				solicitudList.add(detallesFacturaNotaCreditoNativa);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+
 	/**
 	 * Listado de los impuestos de servicio 10%
 	 * @param request
@@ -192,7 +233,6 @@ public class DetalleController {
 	 * @param fechaFin
 	 * @return
 	 */
-	
 
 	/**
 	 * Enviar Correo
@@ -285,7 +325,7 @@ public class DetalleController {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
 
-		Collection<Detalle> detalles = detalleBo.facturasRango(estado	, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto, actividadEconomica);
+		Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto, actividadEconomica);
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
@@ -304,30 +344,30 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento","IVA", "Tarifa", "%IVA", "Total IVA",  "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotal, montoDescuento,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuesto, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision","Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente","Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total", "Tipo Moneda", "Tipo Cambio");
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuestoNC, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 
 	@RequestMapping(value = "/ListaDetallesxCodigoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable ListaDetallesxCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String codigo, @RequestParam String tipoDocumento, @RequestParam String idCliente,@RequestParam String tipoImpuesto,@RequestParam Integer estado) {
+	public RespuestaServiceDataTable ListaDetallesxCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String codigo, @RequestParam String tipoDocumento, @RequestParam String idCliente, @RequestParam String tipoImpuesto, @RequestParam Integer estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idCliente, usuarioSesion.getEmpresa());
-		DataTableDelimitador query = DelimitadorBuilderXCodigo.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa(), codigo, tipoDocumento, cliente, usuarioBo, tipoImpuesto,estado);
+		DataTableDelimitador query = DelimitadorBuilderXCodigo.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa(), codigo, tipoDocumento, cliente, usuarioBo, tipoImpuesto, estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND_DETALLE);
 	}
 
 	private static class DelimitadorBuilderXCodigo {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa, String codigo, String tipoDocumento, Cliente cliente, UsuarioBo usuarioBo, String tipoImpuesto,Integer estado) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa, String codigo, String tipoDocumento, Cliente cliente, UsuarioBo usuarioBo, String tipoImpuesto, Integer estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Detalle");
 			Date fechaInicio = new Date();
 			Date fechaFinal = new Date();
 			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + estado + "'", "="));
-					delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("factura.empresa.id", "'" + empresa.getId().toString() + "'", "="));
 			if (codigo != null) {
 				if (!codigo.equals(Constantes.EMPTY)) {
@@ -381,8 +421,6 @@ public class DetalleController {
 			return delimitador;
 		}
 	}
-
-	
 
 	static class RESPONSES {
 

@@ -19,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.emprendesoftcr.repository.UsuarioRepository;
 import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
@@ -51,7 +52,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		 http.csrf().disable();
 		 http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
-		.permitAll().antMatchers("/service/CrearFacturaServiceAjax").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
+
+		.permitAll().antMatchers("/service/CrearFacturaServiceAjax")
+		.permitAll().antMatchers("/movil/ListarClientesAjax.do")
+		.permitAll().antMatchers("/movil/ListarCategoriasAjax.do")
+		.permitAll().antMatchers("/movil/ListarArticulosAjax.do")
+		.permitAll().antMatchers("/webjars/**")
+		.permitAll().antMatchers("/login")
 		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
 		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
 		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")
@@ -86,5 +93,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        }
 	    }
 	}
+	
+	public void addCorsMappings(CorsRegistry registry) {
+      registry.addMapping("/**");
+  }
+	
 	
 }

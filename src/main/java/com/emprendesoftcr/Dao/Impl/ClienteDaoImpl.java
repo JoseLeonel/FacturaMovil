@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -87,6 +88,16 @@ public class ClienteDaoImpl implements ClienteDao {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Collection<Cliente> findByEmpresa(Integer idEmpresa) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Cliente obj");
+		hql.append(" where obj.empresa.id = :idEmpresa ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("idEmpresa", idEmpresa);
+		return query.getResultList();
 	}
 
 }

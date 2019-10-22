@@ -958,7 +958,7 @@
 
     .labelBotones {
         font-weight: 600 !important;
-        font-size: 19px !important;
+        font-size: 16px !important;
         font-family: Roboto,sans-serif !important;
         color: #ffffff !important;
         text-shadow: 0px 0px 1px #ffffff;
@@ -1319,7 +1319,7 @@
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
-       getTipoCambioDolar()
+       
        
         $('.codigo').select()
         $(".codigo").focus()
@@ -1358,6 +1358,14 @@
                 timer = setTimeout(fn, ms);
             });
         };
+        var retrievedTipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
+        if(retrievedTipoCambio != null){
+           self.tipoCambio = retrievedTipoCambio
+           self.update()
+        }else{
+           getTipoCambioDolar()
+        }
+
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1475,6 +1483,7 @@ function getTipoCambioDolar(){
          self.tipoCambio.total = __valorNumerico(response.venta.valor)
          self.tipoCambio.totalCompra = __valorNumerico(response.compra.valor)
          self.update()
+         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
     });
 }
 
@@ -2121,46 +2130,12 @@ function __reimprimir(){
 **/
 function consultaFactura(data,tipoImpresion){
     var parametros = {
-                          factura:data,
-                          facturaDia:tipoImpresion
-                      }
-                      console.log("consultaFactura")
-                      riot.mount('ptv-imprimir',{parametros:parametros});
+        factura:data,
+        facturaDia:tipoImpresion
+    }
+    riot.mount('ptv-imprimir',{parametros:parametros});
                    
     return 
-    self.contador = 0
-    self.update()
-    var modelo = null
-     $.ajax({
-        url: "MostrarFacturaAjax",
-        datatype: "json",
-        data: {idFactura:data.id},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                      modelo = modeloTabla   
-                      var parametros = {
-                          factura:modelo,
-                          facturaDia:tipoImpresion
-                      }
-                      console.log("consultaFactura")
-                      riot.mount('ptv-imprimir',{parametros:parametros});
-                    });
-                    
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
 }
 /**
 * Tipo de Documento
@@ -4194,7 +4169,8 @@ function __seleccionarClientes() {
 
         }
         $('#modalClientes').modal('hide') 
-        if(!verificarSiClienteFrecuente()){
+        //factura.js
+        if(!verificarSiClienteFrecuente(self.cliente)){
             self.factura.tipoDoc ='01'
             
            __ComboTipoDocumentos(1)
@@ -4210,21 +4186,6 @@ function __seleccionarClientes() {
        $('#totalEfectivo').select()
     });
 }
-
-/**
-*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
-* para que salga factura o proforma
-**/
-function verificarSiClienteFrecuente(){
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || self.cliente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
-        return true
-    }
-    if(self.cliente.cedula.indexOf("999999999999") != -1 || self.cliente.cedula.indexOf("888888888888") != -1){
-        return true
-    }
-    return false;
-}
-
 
 /**
 * Aplicar la exoneracion de detalles

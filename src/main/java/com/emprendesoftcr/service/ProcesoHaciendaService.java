@@ -32,9 +32,9 @@ public interface ProcesoHaciendaService {
 	// Proceso de firmar las facturas y crear el registro de hacienda
 	void procesoFirmado() throws Exception;
 
-	 void taskAnularProformas() throws Exception;
-	 
-	 void taskCuentasPorCobrarVencidas() throws Exception;
+	void taskAnularProformas() throws Exception;
+
+	void taskCuentasPorCobrarVencidas() throws Exception;
 
 	// Proceso para firmar las facturas recibidas y aceptadas en el sistema
 	void procesoFirmadoRecepcionFactura() throws Exception;
@@ -42,7 +42,8 @@ public interface ProcesoHaciendaService {
 	// void procesoCambiarConsecutivo() throws Exception;
 
 	Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception;
-	
+
 	void procesoCambiarConsecutivo() throws Exception;
 
+	void graficoVenta() throws Exception;
 }

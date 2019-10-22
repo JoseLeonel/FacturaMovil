@@ -6,6 +6,7 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 public interface CuentaCobrarBo {
@@ -25,6 +26,6 @@ public interface CuentaCobrarBo {
 	Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Empresa empresa,Cliente cliente,String estado);
 	
 	Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado);
-
+	void modificarCuentaXCobrarPorNotaCredito(Factura notaCredito,Factura facturaAplicar);
 
 }

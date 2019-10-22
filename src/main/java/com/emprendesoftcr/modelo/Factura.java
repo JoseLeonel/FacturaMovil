@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 
 /**
  * Factura de ventas a los clientes.
@@ -244,6 +245,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "act_comercial", length = 6)
 	private String						codigoActividad;
+	
+	@Column(name = "rebaja_invent", columnDefinition = "INT default '0'")
+	private Integer rebajaInventario;
 
 	public Factura() {
 		super();
@@ -253,8 +257,10 @@ public class Factura implements Serializable {
 
 	}
 
+	
+	
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa, String codigoActividad) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa, String codigoActividad, Integer rebajaInventario) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -322,7 +328,21 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.mesa = mesa;
 		this.codigoActividad = codigoActividad;
+		this.rebajaInventario = rebajaInventario;
 	}
+
+
+
+	public Integer getRebajaInventario() {
+		return rebajaInventario;
+	}
+
+
+	
+	public void setRebajaInventario(Integer rebajaInventario) {
+		this.rebajaInventario = rebajaInventario;
+	}
+
 
 	public String getTipoDocumentoOtroCargo() {
 		return tipoDocumentoOtroCargo;
@@ -355,6 +375,14 @@ public class Factura implements Serializable {
 	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
+	
+	public Double getTotalImpuestoServicioNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalImpuestoServicio != null ? this.totalImpuestoServicio * -1 : this.totalImpuestoServicio;
+		} else {
+			return this.totalImpuestoServicio;
+		}
+	}
 
 	public Double getTotalImpuestoServicio() {
 		return totalImpuestoServicio;
@@ -380,6 +408,12 @@ public class Factura implements Serializable {
 		return fechaCredito;
 	}
 
+	public String getFechaCreditoSTR() {
+		if (this.fechaCredito != null) {
+			return Utils.getFechaGeneraReporte(this.getFechaCredito());
+		}
+		return Constantes.EMPTY;
+	}
 	public void setFechaCredito(Date fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
@@ -404,6 +438,11 @@ public class Factura implements Serializable {
 		return condicionVenta;
 	}
 
+	public String getCondicionVentaSTR() {
+		return MapEnums.ENUM_CONDICION_VENTA.get(this.getCondicionVenta());
+	}
+
+	
 	public void setCondicionVenta(String condicionVenta) {
 		this.condicionVenta = condicionVenta;
 	}
@@ -418,6 +457,10 @@ public class Factura implements Serializable {
 
 	public String getTipoDoc() {
 		return tipoDoc;
+	}
+	
+	public String getTipoDocSTR() {
+		return MapEnums.ENUM_TIPO_DOC.get(this.tipoDoc);
 	}
 
 	public void setTipoDoc(String tipoDoc) {
@@ -463,6 +506,14 @@ public class Factura implements Serializable {
 	public Double getTotalColones() {
 		return totalComprobante * tipoCambio;
 	}
+	
+	public Double getTotalColonesNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalComprobante != null ? (totalComprobante * tipoCambio) * -1 : (totalComprobante * tipoCambio);
+		} else {
+			return (totalComprobante * tipoCambio);
+		}
+	}
 
 	public void setTipoCambio(Double tipoCambio) {
 		this.tipoCambio = tipoCambio;
@@ -470,6 +521,15 @@ public class Factura implements Serializable {
 
 	public Double getSubTotal() {
 		return subTotal;
+	}
+	
+
+	public Double getSubTotalNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.subTotal != null ? subTotal  * -1 :0d;
+		} else {
+			return subTotal;
+		}
 	}
 
 	public void setSubTotal(Double subTotal) {
@@ -481,6 +541,8 @@ public class Factura implements Serializable {
 		Double valorDescuento = this.totalDescuentos != null ? this.totalDescuentos : Constantes.ZEROS;
 		return Utils.formateadorMiles(valorSubTotal + valorDescuento);
 	}
+	
+	
 
 	public String getSubTotalSTR() {
 		return Utils.formateadorMiles(this.subTotal);
@@ -497,21 +559,53 @@ public class Factura implements Serializable {
 	public void setTotalTransporte(Double totalTransporte) {
 		this.totalTransporte = totalTransporte;
 	}
+	
+	public Double getTotalTransporteNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalTransporte != null ? totalTransporte  * -1 :0d;
+		} else {
+			return totalTransporte;
+		}
+	}
 
 	public Double getTotalServGravados() {
 		return totalServGravados;
+	}
+	
+	public Double getTotalServGravadosNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalServGravados != null ? totalServGravados  * -1 :0d;
+		} else {
+			return totalServGravados;
+		}
 	}
 
 	public void setTotalServGravados(Double totalServGravados) {
 		this.totalServGravados = totalServGravados;
 	}
 
+	public Double getTotalServExentosNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalServExentos != null ? totalServExentos  * -1 :0d;
+		} else {
+			return totalServExentos;
+		}
+	}
+	
 	public Double getTotalServExentos() {
 		return totalServExentos;
 	}
 
 	public void setTotalServExentos(Double totalServExentos) {
 		this.totalServExentos = totalServExentos;
+	}
+	
+	public Double getTotalMercanciasGravadasNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalMercanciasGravadas != null ? totalMercanciasGravadas  * -1 :0d;
+		} else {
+			return totalMercanciasGravadas;
+		}
 	}
 
 	public Double getTotalMercanciasGravadas() {
@@ -520,6 +614,14 @@ public class Factura implements Serializable {
 
 	public void setTotalMercanciasGravadas(Double totalMercanciasGravadas) {
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
+	}
+	
+	public Double getTotalMercanciasExentasNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalMercanciasExentas != null ? totalMercanciasExentas  * -1 :0d;
+		} else {
+			return totalMercanciasExentas;
+		}
 	}
 
 	public Double getTotalMercanciasExentas() {
@@ -534,6 +636,13 @@ public class Factura implements Serializable {
 		return Utils.formateadorMiles(this.totalMercanciasExentas);
 	}
 
+	public Double getTotalGravadoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalGravado != null ? totalGravado  * -1 :0d;
+		} else {
+			return totalGravado;
+		}
+	}
 	public Double getTotalGravado() {
 		return totalGravado;
 	}
@@ -545,7 +654,13 @@ public class Factura implements Serializable {
 	public String getTotalGravadoSTR() {
 		return Utils.formateadorMiles(this.totalGravado);
 	}
-
+	public Double getTotalExentoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalExento != null ? totalExento  * -1 :0d;
+		} else {
+			return totalExento;
+		}
+	}
 	public Double getTotalExento() {
 		return totalExento;
 	}
@@ -558,6 +673,14 @@ public class Factura implements Serializable {
 		return Utils.formateadorMiles(this.totalExento);
 	}
 
+	public Double getTotalVentaNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalVenta != null ? totalVenta  * -1 :0d;
+		} else {
+			return totalVenta;
+		}
+	}
+	
 	public Double getTotalVenta() {
 		return totalVenta;
 	}
@@ -568,6 +691,14 @@ public class Factura implements Serializable {
 
 	public String getTotalVentaSTR() {
 		return Utils.formateadorMiles(this.totalVenta);
+	}
+	
+	public Double getTotalDescuentosNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalDescuentos != null ? totalDescuentos  * -1 :0d;
+		} else {
+			return totalDescuentos;
+		}
 	}
 
 	public Double getTotalDescuentos() {
@@ -582,6 +713,14 @@ public class Factura implements Serializable {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
 
+	public Double getTotalVentaNetaNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalVentaNeta != null ? totalVentaNeta  * -1 :0d;
+		} else {
+			return totalVentaNeta;
+		}
+	}
+	
 	public Double getTotalVentaNeta() {
 		return totalVentaNeta;
 	}
@@ -592,6 +731,14 @@ public class Factura implements Serializable {
 
 	public String getTotalVentaNetaSTR() {
 		return Utils.formateadorMiles(this.totalVentaNeta);
+	}
+	
+	public Double getTotalImpuestoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalImpuesto != null ? totalImpuesto  * -1 :0d;
+		} else {
+			return totalImpuesto;
+		}
 	}
 
 	public Double getTotalImpuesto() {
@@ -605,6 +752,14 @@ public class Factura implements Serializable {
 	public String getTotalImpuestoSTR() {
 		return Utils.formateadorMiles(this.totalImpuesto);
 	}
+	
+	public Double getTotalComprobanteNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalComprobante != null ? totalComprobante  * -1 :0d;
+		} else {
+			return totalComprobante;
+		}
+	}
 
 	public Double getTotalComprobante() {
 		return totalComprobante;
@@ -614,6 +769,14 @@ public class Factura implements Serializable {
 		this.totalComprobante = totalComprobante;
 	}
 
+	public Double getTotalEfectivoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalEfectivo != null ? totalEfectivo  * -1 :0d;
+		} else {
+			return totalEfectivo;
+		}
+	}
+	
 	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
@@ -626,6 +789,14 @@ public class Factura implements Serializable {
 		return Utils.formateadorMiles(this.totalEfectivo);
 	}
 
+	public Double getTotalTarjetaNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalTarjeta != null ? totalTarjeta  * -1 :0d;
+		} else {
+			return totalTarjeta;
+		}
+	}
+	
 	public Double getTotalTarjeta() {
 		return totalTarjeta;
 	}
@@ -642,12 +813,28 @@ public class Factura implements Serializable {
 		return totalBanco;
 	}
 
+	public Double getTotalBancoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalBanco != null ? totalBanco  * -1 :0d;
+		} else {
+			return totalBanco;
+		}
+	}
+	
 	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
 	public String getTotalBancoSTR() {
 		return Utils.formateadorMiles(this.totalBanco);
+	}
+	
+	public Double getTotalCreditoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalCredito != null ? totalCredito  * -1 :0d;
+		} else {
+			return totalCredito;
+		}
 	}
 
 	public Double getTotalCredito() {
@@ -662,6 +849,14 @@ public class Factura implements Serializable {
 		return Utils.formateadorMiles(this.totalCredito);
 	}
 
+	public Double getMontoCambioNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.montoCambio != null ? montoCambio  * -1 :0d;
+		} else {
+			return montoCambio;
+		}
+	}
+	
 	public Double getMontoCambio() {
 		return montoCambio;
 	}
@@ -684,6 +879,14 @@ public class Factura implements Serializable {
 
 	public String getTotalCambioSTR() {
 		return Utils.formateadorMiles(this.totalCambio);
+	}
+	
+	public Double getTotalCambioPagarNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalCambioPagar != null ? totalCambioPagar  * -1 :0d;
+		} else {
+			return totalCambioPagar;
+		}
 	}
 
 	public Double getTotalCambioPagar() {
@@ -880,6 +1083,13 @@ public class Factura implements Serializable {
 		return Constantes.EMPTY;
 	}
 
+	public String getCedulaCliente() {
+		if (this.cliente != null) {
+			return this.getCliente().getCedula();
+		}
+		return Constantes.EMPTY;
+	}
+
 	public Mesa getMesa() {
 		return mesa;
 	}
@@ -903,13 +1113,27 @@ public class Factura implements Serializable {
 	public void setConsecutivoProforma(String consecutivoProforma) {
 		this.consecutivoProforma = consecutivoProforma;
 	}
-
+	public Double getTotalServExoneradoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalServExonerado != null ? totalServExonerado  * -1 :0d;
+		} else {
+			return totalServExonerado;
+		}
+	}
 	public Double getTotalServExonerado() {
 		return totalServExonerado;
 	}
 
 	public void setTotalServExonerado(Double totalServExonerado) {
 		this.totalServExonerado = totalServExonerado;
+	}
+	
+	public Double getTotalMercExoneradaNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalMercExonerada != null ? totalMercExonerada  * -1 :0d;
+		} else {
+			return totalMercExonerada;
+		}
 	}
 
 	public Double getTotalMercExonerada() {
@@ -918,6 +1142,14 @@ public class Factura implements Serializable {
 
 	public void setTotalMercExonerada(Double totalMercExonerada) {
 		this.totalMercExonerada = totalMercExonerada;
+	}
+	
+	public Double getTotalExoneradoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalExonerado != null ? totalExonerado  * -1 :0d;
+		} else {
+			return totalExonerado;
+		}
 	}
 
 	public Double getTotalExonerado() {
@@ -928,6 +1160,14 @@ public class Factura implements Serializable {
 		this.totalExonerado = totalExonerado;
 	}
 
+	public Double getTotalIVADevueltoNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalIVADevuelto != null ? totalIVADevuelto  * -1 :0d;
+		} else {
+			return totalIVADevuelto;
+		}
+	}
+	
 	public Double getTotalIVADevuelto() {
 		return totalIVADevuelto;
 	}
@@ -936,6 +1176,14 @@ public class Factura implements Serializable {
 		this.totalIVADevuelto = totalIVADevuelto;
 	}
 
+	public Double getTotalOtrosCargosNC() {
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.totalOtrosCargos != null ? totalOtrosCargos  * -1 :0d;
+		} else {
+			return totalOtrosCargos;
+		}
+	}
+	
 	public Double getTotalOtrosCargos() {
 		return totalOtrosCargos;
 	}

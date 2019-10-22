@@ -134,5 +134,11 @@ public class ArticuloBoImpl implements ArticuloBo {
 	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa, Categoria categoria, String estado, String minimoMaximo){
 		return articuloDao.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(empresa, categoria, estado,  minimoMaximo);
 	}
+
+	@Override
+	public Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa, Long idCategoria) {
+		
+		return articuloDao.articulosByCategoriaAndEmpresa(idEmpresa, idCategoria);
+	}
 	
 }

@@ -1,7 +1,9 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Dao.DetalleDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 @EnableTransactionManagement
@@ -60,25 +64,35 @@ public class DetalleBoImpl implements DetalleBo {
 	}
 
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa) {
-		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin,empresa);
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Empresa empresa) {
+		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin, empresa);
 	}
+
 	@Override
-	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica) {
-		return detalleDao.facturasRango(estado, fechaInicio, fechaFin,empresa,tipoImpuesto,actividadEconomica);
+	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin, Empresa empresa, String tipoImpuesto, String actividadEconomica) {
+		return detalleDao.facturasRango(estado, fechaInicio, fechaFin, empresa, tipoImpuesto, actividadEconomica);
 	}
+
 	@Override
-	public Collection<Detalle> findByFactura(Factura factura){
+	public Collection<Detalle> findByFactura(Factura factura) {
 		return detalleDao.findByFactura(factura);
 	}
 
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado,String actividadEconomica) {
-		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal,tipoImpuesto,estado,actividadEconomica);
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto, Integer estado, String actividadEconomica) {
+		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal, tipoImpuesto, estado, actividadEconomica);
 	}
 
 	@Override
-	public Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa) {
+	public Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa) {
 		return detalleDao.findByCodigoAndEmpresa(codigo, empresa);
 	}
+
+	@Override
+	public Detalle findById(Long idDetalle) {
+
+		return detalleDao.findById(idDetalle);
+	}
+
+
 }

@@ -90,15 +90,17 @@
         </div>
     </div>    
 <!-- Fin Filtros-->
-
+<br>
       <br>
   	<!-- Detalle  -->
-	<div id="formularioDetalle" class="row center" >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
+	<div  class="row center" show ={resultado == true} >
+    	
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-body">
-                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
+                    <h1>Ventas </div>
+                    <form  class="advanced-search-form">
+
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasGravadas")} </label>
@@ -125,13 +127,51 @@
                 	</form>
                 </div>
             </div>   
+	      
+        </div>
+       
+    </div>
+
+	<!-- Detalle  -->
+	<div  class="row center" show ={resultado == true} >
+    	 <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+            <div class="box box-solid box-primary">
+                <div class="box-body">
+                    <h1>Notas de Credito aplicadas a las Ventas </div>
+                    <form  class="advanced-search-form">
+
+                        <div class="row">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalVentasGravadas")} </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalGravadoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalVentasExentas")} </label>
+                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalExentoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalImpuestoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalDescuentoNC}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total")}  </label>
+                                <input type="text" readonly="readonly" class="form-control " value="{totales.totalNC}">
+                            </div>
+                            
+                        </div>
+                	</form>
+                </div>
+            </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
 				<a class="fa fa-download" onclick ={__DescargarExcel}  title="Descargar detalle transacciones" href="#"> Descargar</a>        
 	        </div>
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+       
     </div>
-
 
 
 <style type="text/css">
@@ -483,7 +523,10 @@ self.totales ={
 	totalExento:"0",
 	total:"0",
 	totalGanancia:"0",
-}			
+}	
+self.mostrarFiltros = true;
+self.resultado = false;
+self.valorMarginBottom  = '10px'		
 
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
@@ -614,6 +657,7 @@ __Busqueda(){
 	
     self.fechaInicio = $('#fechaInicial').val();
     self.fechaFin = $('#fechaFinal').val();
+    self.resultado = false;
     self.update();
     if ($("#filtros").valid()) {
         var parametros = {
@@ -635,9 +679,8 @@ __Busqueda(){
             method:"GET",
             success: function (data) {
 	        	self.totales = data;
-	        	self.mostrarDetalle = true;
+                self.resultado = true;
                 self.estado = $(".estado").val()
-	        	
 			    self.update();
 	        },
 	        error: function (xhr, status) {
@@ -733,10 +776,6 @@ function __Impuestos(){
      self.update();
      
 }
-
-
-
-
 /*
  * Muestra los filtros avanzados
  */

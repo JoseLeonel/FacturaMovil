@@ -213,6 +213,9 @@ public class Empresa implements Serializable {
 	@Column(name = "nota_cred_intern", columnDefinition = "INT default '1'")
 	private Integer						notaCreditoConsecutivo;
 	
+	@Column(name = "nota_debe_intern", columnDefinition = "INT default '1'")
+	private Integer						notaDebitoConsecutivo;
+	
 	@Column(name = "correo_pdf")
 	private String						correoPDF;
 
@@ -247,13 +250,9 @@ public class Empresa implements Serializable {
 	
 	
 
-	
-
-
-
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma, String codigoActividad, Integer consecutivoCompraSimplificada, Integer notaCreditoConsecutivo, String correoPDF, String correoCredito, String cuenta1, String cuenta2, String cuenta3, String cuenta4, String cuenta5,
-			String cuenta6, String cuenta7, String cuenta8) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma, String codigoActividad, Integer consecutivoCompraSimplificada, Integer notaCreditoConsecutivo, Integer notaDebitoConsecutivo, String correoPDF, String correoCredito, String cuenta1, String cuenta2, String cuenta3,
+			String cuenta4, String cuenta5, String cuenta6, String cuenta7, String cuenta8) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -315,6 +314,7 @@ public class Empresa implements Serializable {
 		this.codigoActividad = codigoActividad;
 		this.consecutivoCompraSimplificada = consecutivoCompraSimplificada;
 		this.notaCreditoConsecutivo = notaCreditoConsecutivo;
+		this.notaDebitoConsecutivo = notaDebitoConsecutivo;
 		this.correoPDF = correoPDF;
 		this.correoCredito = correoCredito;
 		this.cuenta1 = cuenta1;
@@ -917,6 +917,16 @@ public class Empresa implements Serializable {
 	
 	public void setCuenta8(String cuenta8) {
 		this.cuenta8 = cuenta8;
+	}
+
+	
+	public Integer getNotaDebitoConsecutivo() {
+		return notaDebitoConsecutivo;
+	}
+
+	
+	public void setNotaDebitoConsecutivo(Integer notaDebitoConsecutivo) {
+		this.notaDebitoConsecutivo = notaDebitoConsecutivo;
 	}
 
 	

@@ -34,5 +34,6 @@ public interface ArticuloBo {
 	Collection<Articulo> articulosOrderCategoria(Empresa empresa);
 
 	Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa, Categoria categoria, String estado, String minimoMaximo);
-
+ 
+	Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa,Long idCategoria);
 }

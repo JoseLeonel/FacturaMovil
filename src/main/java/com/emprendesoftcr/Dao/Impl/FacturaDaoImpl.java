@@ -172,7 +172,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa, String actividadEconomica) {
-		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
+		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa  and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
 		if (actividadEconomica.equals(Constantes.COMBO_TODOS)) {
 			sql = sql.replaceAll("and obj.codigoActividad = :codigoActividad","");
 		}
@@ -210,6 +210,19 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO, Double.class, ParameterMode.OUT);
+		
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS_N, Double.class, ParameterMode.OUT);
+
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO_N, Double.class, ParameterMode.OUT);
 
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, fechaInicio);
@@ -223,8 +236,28 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS),
-				(Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO));
+		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS),
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO),
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS_N),
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO_N), 
+				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO_N));
 	}
 
 	/**

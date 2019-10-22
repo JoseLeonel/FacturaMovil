@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -16,4 +18,6 @@ public interface ClienteDao {
 	Cliente buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa);
 
 	Cliente buscarPorCedulaYEmpresa(String cedula, Empresa empresa);
+
+	Collection<Cliente> findByEmpresa(Integer idEmpresa);
 }

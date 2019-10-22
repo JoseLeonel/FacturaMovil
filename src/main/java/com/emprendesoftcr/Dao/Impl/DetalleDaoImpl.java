@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 /**
@@ -161,8 +163,16 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL, Double.class, ParameterMode.OUT);
-
+		
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA, Double.class, ParameterMode.OUT);
+		
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_N, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N, Double.class, ParameterMode.OUT);
+		
 
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, fechaInicio);
@@ -182,7 +192,15 @@ public class DetalleDaoImpl implements DetalleDao {
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO), 
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS),
 				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL),
-				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA));
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO_N), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_N),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N)
+				       
+				);
 	}
 
 	@Override
@@ -197,5 +215,21 @@ public class DetalleDaoImpl implements DetalleDao {
 			return null;
 		}
 	}
+
+	@Override
+	public Detalle findById(Long  idDetalle) {
+			Query query = entityManager.createQuery("select obj from Detalle obj where obj.id = :id");
+			query.setParameter("id", idDetalle);
+			List<Detalle> results = query.getResultList();
+			if (!results.isEmpty()) {
+				return (Detalle) results.get(0);
+			} else {
+				return null;
+			}
+		
+
+	}
+	
+	
 
 }

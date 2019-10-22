@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -19,4 +21,5 @@ public interface ClienteBo {
 	Cliente buscarPorCedulaYEmpresa(String cedula, Empresa empresa);
 	
 	Cliente crearClienteFrecuente(Empresa empresa,Usuario usuario); 
+	Collection<Cliente> findByEmpresa(Integer idEmpresa);
 }

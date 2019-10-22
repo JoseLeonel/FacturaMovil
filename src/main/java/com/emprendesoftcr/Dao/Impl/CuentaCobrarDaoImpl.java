@@ -283,4 +283,6 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		return query.getResultList();
 	}
 
+	
+
 }

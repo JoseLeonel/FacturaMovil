@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,6 +37,7 @@ import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
+import com.emprendesoftcr.Bo.GraficoVentasBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.SemaforoBo;
@@ -279,6 +281,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	CertificadoBo																											certificadoBo;
+	
+	@Autowired
+	GraficoVentasBo																											graficoVentasBo;
 
 	@Autowired
 	FacturaXMLServices																								facturaXMLServices;
@@ -301,6 +306,27 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Autowired
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
+
+
+	/**
+	 * Grafico de ventas
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
+	 */
+  @Scheduled(cron = "0 0/10 * * * ?")
+	@Override
+	public synchronized void graficoVenta() throws Exception {
+  	Year anno = Year.now(); 
+  	Integer annno = new Integer(anno.getValue());
+		Collection<Empresa> lista = empresaBo.findByEstado(Constantes.ESTADO_ACTIVO);
+		for(Empresa empresa : lista) {
+			graficoVentasBo.actualizarGraficoVenta(annno, empresa);
+		}
+		
+
+	}
+
+	
+	
 	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoCambiarConsecutivo() throws Exception {
@@ -450,7 +476,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -603,7 +629,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -612,7 +638,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -646,7 +672,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/01 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1012,7 +1038,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1342,7 +1368,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

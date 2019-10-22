@@ -15,15 +15,19 @@ public interface DetalleDao {
 	void modificar(Detalle detalle);
 
 	void eliminar(Detalle detalle);
-	
-	
-	Integer eliminarDetalleFactura(Factura factura)throws Exception;
-	
-	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa);
-	Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica);
-	
+
+	Integer eliminarDetalleFactura(Factura factura) throws Exception;
+
+	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Empresa empresa);
+
+	Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin, Empresa empresa, String tipoImpuesto, String actividadEconomica);
+
 	Collection<Detalle> findByFactura(Factura factura);
-	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado,String actividadEconomica);
-	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
-	
+
+	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto, Integer estado, String actividadEconomica);
+
+	Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa);
+
+	Detalle findById(Long idDetalle);
+
 }

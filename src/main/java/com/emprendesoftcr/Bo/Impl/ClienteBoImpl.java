@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,12 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setNombreComercial(Constantes.EMPTY);
 		agregar(cliente);
 		return cliente;
+	}
+
+	@Override
+	public Collection<Cliente> findByEmpresa(Integer idEmpresa) {
+		
+		return clienteDao.findByEmpresa(idEmpresa);
 	}
 
 }

@@ -30,7 +30,6 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -187,6 +186,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? new Factura() : facturaDao.findById(facturaCommand.getId());
 			// Se complentan los datos de la factura
 			factura.setCondicionVenta(facturaCommand.getCondicionVenta());
+			factura.setRebajaInventario(facturaCommand.getRebajaInventario() == null ? Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA : facturaCommand.getRebajaInventario());
 
 			// Fecha de credito
 			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
@@ -318,7 +318,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMesa(facturaCommand.getMesa());
 			factura.setCreated_at(new Date());
 			factura.setFechaEmision(new Date());
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
 				factura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
 				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 				factura.setClave(Constantes.EMPTY);
@@ -330,7 +330,8 @@ public class FacturaBoImpl implements FacturaBo {
 		return factura;
 	}
 
-	private ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
+	@Override
+	public ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
 		// evitar problemas con el tema de los decimales en el front
 		JSONObject json = null;
@@ -344,6 +345,7 @@ public class FacturaBoImpl implements FacturaBo {
 				Integer numeroLinea = 1;
 				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
 					DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
+					detalleFacturaCommand.setCantidadAplicadaNotaCredito(detalleFacturaCommand.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getCantidadAplicadaNotaCredito());
 					detallesFacturaCommand.add(detalleFacturaCommand);
 					numeroLinea += 1;
 				}
@@ -384,7 +386,7 @@ public class FacturaBoImpl implements FacturaBo {
 		Double gananciaProducto = Constantes.ZEROS_DOUBLE;
 		Double precioUnitario = Constantes.ZEROS_DOUBLE;
 		Double costo = Constantes.ZEROS_DOUBLE;
-
+		Double descuentoTotal = Constantes.ZEROS_DOUBLE;
 		Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
@@ -401,30 +403,6 @@ public class FacturaBoImpl implements FacturaBo {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
-			// Vefica si el cliente es libre de impuesto para eliminar el impuesto de los
-			// articulos de los detalles
-			if (getLibreImpuesto(factura.getCliente())) {
-				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					detalleFacturaCommand.setTipoDocumentoExoneracion(Constantes.EMPTY);
-					detalleFacturaCommand.setPorcentajeExoneracion(Constantes.ZEROS);
-					detalleFacturaCommand.setFechaEmisionExoneracion(null);
-					detalleFacturaCommand.setNumeroDocumentoExoneracion(Constantes.EMPTY);
-					detalleFacturaCommand.setTipoImpuesto(Constantes.EMPTY);
-					detalleFacturaCommand.setTipoImpuesto1(Constantes.EMPTY);
-					detalleFacturaCommand.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
-					detalleFacturaCommand.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
-					detalleFacturaCommand.setImpuesto(Constantes.ZEROS_DOUBLE);
-					detalleFacturaCommand.setImpuesto1(Constantes.ZEROS_DOUBLE);
-
-				} else {
-
-					detalleFacturaCommand.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
-					detalleFacturaCommand.setPorcentajeExoneracion(Constantes.PORCENTAJE_LIBRE_IVA);
-					detalleFacturaCommand.setFechaEmisionExoneracion(new Date());
-					detalleFacturaCommand.setTipoDocumentoExoneracion(Constantes.TIPO_LIBRE_IVA);
-
-				}
-			}
 
 			gananciaProducto = Constantes.ZEROS_DOUBLE;
 			precioUnitario = Constantes.ZEROS_DOUBLE;
@@ -440,6 +418,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento());
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
 			detalle.setCosto(costo);
@@ -452,8 +431,8 @@ public class FacturaBoImpl implements FacturaBo {
 			detalleFacturaCommand.setTipoImpuesto1(detalleFacturaCommand.getTipoImpuesto1() != null ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
 			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() != null ? detalleFacturaCommand.getImpuesto1() : Constantes.ZEROS_DOUBLE);
-			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null && getLibreImpuesto(factura.getCliente()) == Boolean.FALSE ? articulo.getCodigoTarifa() : Constantes.EMPTY);
-			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null && getLibreImpuesto(factura.getCliente()) == Boolean.FALSE ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
+			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
+			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
 			detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
 			detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
@@ -494,13 +473,14 @@ public class FacturaBoImpl implements FacturaBo {
 
 			totalServExentos = totalServExentos + getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
-			totalExento = totalExento + getTotalExentos(detalle.getTipoImpuesto(),detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
+			totalExento = totalExento + getTotalExentos(detalle.getTipoImpuesto(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
 			totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalle.getMontoDescuento());
 			montoTotalLinea = getMontoTotalLinea(detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getImpuestoNeto(), detalle.getTipoDocumentoExoneracion());
 			totalComprobante = totalComprobante + montoTotalLinea;
 
 			detalle.setMontoTotalLinea(montoTotalLinea);
+			descuentoTotal = descuentoTotal + detalle.getMontoDescuento();
 			subTotal = subTotal + detalle.getSubTotal();
 			detalle.setNumeroLinea(numeroLinea);
 			numeroLinea += 1;
@@ -524,11 +504,8 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalOtrosCargos(subTotal * 0.10);
 			factura.setTipoDocumentoOtroCargo(Constantes.TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO);
 			factura.setDetalleOtroCargo(Constantes.IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE);
-
 			totalOtrosCargos = totalOtrosCargos + factura.getTotalOtrosCargos();
-
 			totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
-
 		}
 
 		// Se actualoza el resumen de la factura con los detalles asociados
@@ -562,25 +539,6 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuesto(Utils.aplicarRedondeo(totalImpuesto) ? Utils.roundFactura(totalImpuesto, 5) : totalImpuesto);
 		factura.setTotalImpuestoServicio(Utils.aplicarRedondeo(totalImpServicios) ? Utils.roundFactura(totalImpServicios, 5) : totalImpServicios);
 		factura.setTotalComprobante(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante);
-
-	}
-
-	/**
-	 * Verifica si es libre de impuesto
-	 * @param cliente
-	 * @return
-	 */
-	private Boolean getLibreImpuesto(Cliente cliente) {
-		Boolean libreImpuesto = Boolean.FALSE;
-		if (cliente != null) {
-			if (cliente.getLibreImpuesto() == null) {
-				return libreImpuesto;
-			}
-			if (cliente.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
-				libreImpuesto = true;
-			}
-		}
-		return libreImpuesto;
 
 	}
 
@@ -624,7 +582,6 @@ public class FacturaBoImpl implements FacturaBo {
 			esMercancia = Boolean.FALSE;
 		}
 		if (esMercancia) {
-
 			if (montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
 				resultado = subTotal;
 			}
@@ -639,7 +596,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @param subTotal
 	 * @return
 	 */
-	private Double getTotalExentos(String tipoImpuesto ,Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
+	private Double getTotalExentos(String tipoImpuesto, Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
 			resultado = subTotal;
@@ -687,9 +644,7 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal, Integer porcentajeExoneracion) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
-//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-//			esMercancia = Boolean.FALSE;
-//		}
+
 		if (tipoImpuesto.equals(Constantes.EMPTY) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -762,10 +717,10 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServExonerado(String tipoImpuesto, String unidadMedida, Double montoExonerado) {
 
 		Double resultado = Constantes.ZEROS_DOUBLE;
-		
+
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-				resultado = montoExonerado;	
-			
+			resultado = montoExonerado;
+
 		}
 		return resultado;
 	}
@@ -782,8 +737,8 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto, Double montoImpuesto1) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-			if(!tipoImpuesto.equals(Constantes.EMPTY)){
-				resultado = SubTotal;	
+			if (!tipoImpuesto.equals(Constantes.EMPTY)) {
+				resultado = SubTotal;
 			}
 		}
 		return resultado;
@@ -901,7 +856,6 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @return
 	 */
 	private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
-//		Double valor = porcentajeDescuento / 100d;
 		Double resultado = montoTotal * porcentajeDescuento;
 		resultado = resultado / 100d;
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
@@ -945,15 +899,19 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
+
 		Collection<Detalle> detalles = detalleDao.findByFactura(factura);
 		if (detalles != null) {
 			for (Detalle detalle : detalles) {
 
 				Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalle.getCodigo(), usuario.getEmpresa());
 				if (articulo != null) {
-					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
-						aplicarInventario(factura, detalle, articulo);
+					if (articulo.getContable() != null) {
+						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+							aplicarInventario(factura, detalle, articulo);
+						}
 					}
+
 				}
 			}
 
@@ -968,14 +926,14 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Override
 	@Transactional
-	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
+	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) throws Exception {
 		Factura factura = null;
 		lock.lock();
 		try {
 			long id = Thread.currentThread().getId();
-			System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
+			log.info(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
-			Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
+			Empresa empresa = usuario.getEmpresa();
 			// Se actualizan los datos de la factura command
 			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
@@ -1014,17 +972,21 @@ public class FacturaBoImpl implements FacturaBo {
 					facturaAnular = facturaAnular == null ? facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnular;
 					if (facturaAnular != null) {
 						if (facturaAnular.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
-							facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
+							if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+								facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
+							} else {
+								facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO);
+							}
+
 						}
-						facturaCommand.setNota(Constantes.DOCUMENTO_ANULA_NOTA_CREDITO + facturaAnular.getNumeroConsecutivo().trim());
-						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
+						facturaCommand.setNota(getNotaRazon(facturaCommand, facturaAnular.getNumeroConsecutivo().trim()));
 						modificar(facturaAnular);
 						facturaCommand.setCliente(facturaAnular.getCliente());
 					}
 				}
 			}
 			// Se forman los detalles command de las factura
-			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = this.formaDetallesCommand(facturaCommand);
+
 			// --------------------------------------------- Se trabaja con el objeto a
 			// registrar en bd -----------------------------------------------------
 			// Se forma el objeto factura
@@ -1033,9 +995,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 			try {
 				// Generar el consecutivo de venta
-				if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
 					if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
-						// factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(empresa, usuario, factura));
 						factura.setNumeroConsecutivo(empresaBo.spGenerarConsecutivoFactura(empresa, usuario, factura.getTipoDoc()));
 
 						if (empresa.getNoFacturaElectronica() != null && empresa.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
@@ -1050,7 +1011,7 @@ public class FacturaBoImpl implements FacturaBo {
 				if (factura.getEmpresa().getNoFacturaElectronica() != null && factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 				} else {
-					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
 							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 						} else {
@@ -1071,6 +1032,10 @@ public class FacturaBoImpl implements FacturaBo {
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoNotaCreditoInterno(factura.getEmpresa(), usuario));
 				}
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
+					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoNotaDebitoInterno(factura.getEmpresa(), usuario));
+				}
+
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los
 				// procesos de hacienda
 				if (factura.getId() == null) {
@@ -1160,7 +1125,13 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 				// Actualiza articulo y inventario
-				this.actualizaArticulosInventario(factura, usuario);
+				if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
+					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+
+						this.actualizaArticulosInventario(factura, usuario);
+					}
+
+				}
 
 				// Crear Credito del cliente
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
@@ -1175,33 +1146,7 @@ public class FacturaBoImpl implements FacturaBo {
 				throw e;
 			}
 
-			// Anulacion de la factura anterior
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-				if (factura.getReferenciaNumero() != null) {
-					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
-						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
-						facturaAnterior = facturaAnterior == null ? facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnterior;
-						if (facturaAnterior != null) {
-							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
-							if (cuentaCobrar != null) {
-								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
-								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrarDao.eliminar(cuentaCobrar);
-								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
-									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
-									cuentaCobrarDao.modificar(cuentaCobrar);
-
-								}
-							}
-
-							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
-							modificar(facturaAnterior);
-						}
-					}
-				}
-			}
-			System.out.println(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
+			log.info(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 		} catch (Exception e) {
 			log.error("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
@@ -1213,30 +1158,45 @@ public class FacturaBoImpl implements FacturaBo {
 		return factura;
 	}
 
+	private String getNotaRazon(FacturaCommand facturaCommand, String consecutivo) {
+		String resultado = Constantes.EMPTY;
+		if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
+			resultado = "N.Credio:" + consecutivo;
+		}
+		if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			resultado = "Fact/Tiq:" + consecutivo;
+		}
+
+		return resultado;
+	}
+
 	/**
 	 * Aplicar el inventario si estado de la venta es facturada Toda nota credito se devuelve al inventario los productos
 	 */
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
-			if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
-				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-						if (articulo.getContable() != null) {
-							if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
-								String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
-								kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
-							}
-						}
-					} else {
-						if (articulo.getContable() != null) {
-							if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
-								String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-								kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
-							}
+			factura.setRebajaInventario(factura.getRebajaInventario() == null ? Constantes.ZEROS : factura.getRebajaInventario());
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (factura.getRebajaInventario().equals(Constantes.APLICA_SUMA_INVENTARIO_POR_NOTA)) {
+					String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
+					kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, factura.getUsuarioCreacion());
+				}
+			} else {
+
+				String leyenda = factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ? Constantes.MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO + factura.getNumeroConsecutivo() : Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
+
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					if (factura.getRebajaInventario() != null) {
+						if (factura.getRebajaInventario().equals(Constantes.APLICA_REBAJO_INVENTARIO_POR_NOTA)) {
+							kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 						}
 					}
+				} else {
+					kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 				}
+
 			}
+
 		} catch (Exception e) {
 			log.error("** Error  aplicar en el inventario: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -1281,5 +1241,16 @@ public class FacturaBoImpl implements FacturaBo {
 
 	public List<Object[]> proformasByState(Integer estado, Integer idEmpresa) {
 		return facturaDao.proformasByState(estado, idEmpresa);
+	}
+
+	@Override
+	@Transactional
+	public void actualizarCantidadesNotaCredito(Factura factura, DetalleFacturaCommand detalleFacturaCommand) throws Exception {
+		try {
+
+		} catch (Exception e) {
+			log.info("** Error  actualizar contadores del detalle de la factura: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 	}
 }

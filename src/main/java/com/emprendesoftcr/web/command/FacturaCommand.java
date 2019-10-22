@@ -124,6 +124,8 @@ public class FacturaCommand {
 
 	private String		codigoActividad;
 
+	private Integer		rebajaInventario;
+
 	public FacturaCommand() {
 		super();
 	}
@@ -558,6 +560,14 @@ public class FacturaCommand {
 
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
+	}
+
+	public Integer getRebajaInventario() {
+		return rebajaInventario;
+	}
+
+	public void setRebajaInventario(Integer rebajaInventario) {
+		this.rebajaInventario = rebajaInventario;
 	}
 
 }
