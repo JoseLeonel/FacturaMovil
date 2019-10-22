@@ -344,7 +344,6 @@ public class FacturasController {
 	@Autowired
 	private VendedorPropertyEditor																		vendedorPropertyEditor;
 
-
 	@Autowired
 	private StringPropertyEditor																			stringPropertyEditor;
 
@@ -362,7 +361,6 @@ public class FacturasController {
 
 	@Autowired
 	private RecepcionFacturaBo																				recepcionFacturaBo;
-	
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -408,8 +406,6 @@ public class FacturasController {
 	public String crearVentaDolares(ModelMap model) {
 		return "views/facturas/ventaDolares";
 	}
-	
-	
 
 	/**
 	 * Ventas por Mini super
@@ -452,7 +448,6 @@ public class FacturasController {
 		return "views/facturas/notaDebito";
 	}
 
-	
 	@RequestMapping(value = "/ListaFacturasAnulacion", method = RequestMethod.GET)
 	public String listaFacturasAnulacion(ModelMap model) {
 		return "views/facturas/listaFacturasAnulacion";
@@ -551,9 +546,9 @@ public class FacturasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		modelEmail.put("cedula", "Cedula:"+ usuario.getEmpresa().getCedula());	
-		modelEmail.put("estadoDesc", "Documentos con Estado:"+estadoDesc);
-		modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS)?Constantes.EMPTY:"Actividad Economica:"+actividadEconomica);
+		modelEmail.put("cedula", "Cedula:" + usuario.getEmpresa().getCedula());
+		modelEmail.put("estadoDesc", "Documentos con Estado:" + estadoDesc);
+		modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS) ? Constantes.EMPTY : "Actividad Economica:" + actividadEconomica);
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
@@ -563,13 +558,13 @@ public class FacturasController {
 		modelEmail.put("totalTarjeta", facturaCommand.getTotalTarjeta() != null ? facturaCommand.getTotalTarjetaSTR() : Constantes.ZEROS);
 		modelEmail.put("totalBanco", facturaCommand.getTotalBanco() != null ? facturaCommand.getTotalBancoSTR() : Constantes.ZEROS);
 		modelEmail.put("totalCredito", facturaCommand.getTotalCredito() != null ? facturaCommand.getTotalCreditoSTR() : Constantes.ZEROS);
-		modelEmail.put("totalDinero",  facturaCommand.getTotalPagosSTR());
+		modelEmail.put("totalDinero", facturaCommand.getTotalPagosSTR());
 		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() != null ? facturaCommand.getTotalImpuestosSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() != null ? facturaCommand.getTotalVentasGravadasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalMenosNotas", facturaCommand.getTotal() + facturaCommand.getTotal_n());
-		
+
 		modelEmail.put("total_n", facturaCommand.getTotal_n() != null ? facturaCommand.getTotalNC() : Constantes.ZEROS);
 		modelEmail.put("totalDescuentos_n", facturaCommand.getTotalDescuentos_n() != null ? facturaCommand.getTotalDescuentosNC() : Constantes.ZEROS);
 		modelEmail.put("totalOtrosCargos_n", facturaCommand.getTotalOtrosCargos_n() != null ? facturaCommand.getTotalOtrosCargosNC() : Constantes.ZEROS);
@@ -581,7 +576,7 @@ public class FacturasController {
 		modelEmail.put("totalVentasNetas_n", facturaCommand.getTotalVentasNetas_n() != null ? facturaCommand.getTotalVentasNetasNC() : Constantes.ZEROS);
 		modelEmail.put("totalVentasExentas_n", facturaCommand.getTotalVentasExentas_n() != null ? facturaCommand.getTotalVentasExentasNC() : Constantes.ZEROS);
 		modelEmail.put("totalVentasGravadas_n", facturaCommand.getTotalVentasGravadas_n() != null ? facturaCommand.getTotalVentasGravadasNC() : Constantes.ZEROS);
-		modelEmail.put("totalDinero_n",  facturaCommand.getTotalPagosNC());
+		modelEmail.put("totalDinero_n", facturaCommand.getTotalPagosNC());
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
 	}
@@ -616,7 +611,7 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica","Tipo Documento","Condicion Venta","Fecha Credito", "Fecha Emision", "# Documento", "#Proforma","Cedula", "Cliente","A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito","Clave Referencia Factura/tiquete aplico Nota Credito","Nota");
+		List<String> headers = Arrays.asList("Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "Fecha Emision", "# Documento", "#Proforma", "Cedula", "Cliente", "A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
 		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaCliente, nombreCliente,nombreFactura, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
 		return baos;
 	}
@@ -1562,8 +1557,6 @@ public class FacturasController {
 		return respuestaService;
 	}
 
-
-
 	/**
 	 * Crear la Factura
 	 * @param request
@@ -1581,10 +1574,7 @@ public class FacturasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			
-      
-			 
-			
+
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
@@ -1594,7 +1584,7 @@ public class FacturasController {
 			return respuestaServiceValidator;
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearNotaCreditoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -1610,6 +1600,20 @@ public class FacturasController {
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
 			}
+			
+				
+			if(facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+				if(facturaBD.getTotalComprobante() > facturaCommand.getTotalComprobante()  ) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("nota.anula.documento.monto.menor", result.getAllErrors());		
+				}	
+			}	
+			
+			if(facturaCommand.getReferenciaCodigo() == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("nota.codigo.anulacion.vacio", result.getAllErrors());
+				
+			}
+			
+			
 			FacturaCommand facturaAplicarCommand = new FacturaCommand();
 			facturaAplicarCommand.setCliente(facturaBD.getCliente());
 			facturaAplicarCommand.setEmpresa(facturaBD.getEmpresa());
@@ -1639,9 +1643,17 @@ public class FacturasController {
 			facturaAplicarCommand.setTotalVentaNeta(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotalImpuesto(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotalComprobante(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-			facturaAplicarCommand.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			if(facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+				facturaAplicarCommand.setTotalEfectivo(facturaBD.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalEfectivo());
+				facturaAplicarCommand.setTotalTarjeta(facturaBD.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalTarjeta());
+				facturaAplicarCommand.setTotalBanco(facturaBD.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaBD.getTotalBanco());
+				
+			}else {
+				facturaAplicarCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
+				facturaAplicarCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
+				facturaAplicarCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
+					
+			}
 			facturaAplicarCommand.setTotalCredito(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setMontoCambio(Constantes.ZEROS_DOUBLE);
 			facturaAplicarCommand.setTotalCambio(Constantes.ZEROS_DOUBLE);
@@ -1655,26 +1667,25 @@ public class FacturasController {
 			facturaAplicarCommand.setUpdated_at(new Date());
 			facturaAplicarCommand.setVersionEsquemaXML(facturaBD.getVersionEsquemaXML());
 			facturaAplicarCommand.setDetalleFactura(Constantes.EMPTY);
-			
 
 			facturaAplicarCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
 			if (!facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
-				if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);	
+				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
 				}
-				if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 					facturaAplicarCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO);
 				}
-				
-			} 
+
+			}
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
-					facturaAplicarCommand.setTipoDoc(facturaCommand.getTipoDoc());	
-				
-			} 
+				facturaAplicarCommand.setTipoDoc(facturaCommand.getTipoDoc());
+
+			}
 			facturaAplicarCommand.setNota(facturaCommand.getNota());
 			facturaAplicarCommand.setNombreFactura(facturaBD.getNombreFactura());
 			// Datos de la Nota de Credito
-			facturaAplicarCommand.setReferenciaCodigo(Constantes.FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO );
+			facturaAplicarCommand.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
 			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
@@ -1689,7 +1700,7 @@ public class FacturasController {
 			facturaAplicarCommand.setTipoCambioMoneda(facturaBD.getTipoCambio());
 			facturaAplicarCommand.setUsuario(usuario.getNombreUsuario());
 			facturaAplicarCommand.setCodigoActividad(facturaBD.getCodigoActividad());
-			facturaAplicarCommand.setRebajaInventario(facturaCommand.getRebajaInventario() ==null?Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA:facturaCommand.getRebajaInventario());
+			facturaAplicarCommand.setRebajaInventario(facturaCommand.getRebajaInventario() == null ? Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA : facturaCommand.getRebajaInventario());
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaAplicarCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
@@ -1939,10 +1950,10 @@ public class FacturasController {
 
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				if (facturaReferenciaValidar != null) {
-					if(facturaReferenciaValidar.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-						cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferenciaValidar);	
+					if (facturaReferenciaValidar.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferenciaValidar);
 					}
-					
+
 				}
 
 			}

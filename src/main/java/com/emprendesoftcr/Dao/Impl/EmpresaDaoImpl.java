@@ -343,6 +343,33 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return resultado;
 
 	}
+	
+	@Override
+	public String generarConsecutivoNotaDebitoInterno(Empresa empresa, Usuario usuario) throws Exception {
+		String resultado = Constantes.EMPTY;
+		try {
+			Integer consecutivo = Constantes.ZEROS;
+			consecutivo = empresa.getNotaCreditoConsecutivo();
+			empresa.setNotaDebitoConsecutivo(empresa.getNotaDebitoConsecutivo() + 1);
+			modificar(empresa);
+			// Casa matriz
+			String casaMatriz = Constantes.EMPTY;
+			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
+			// Terminal donde esta vendiendo el usaurio
+			String terminalUsuario = Constantes.EMPTY;
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
+			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
+			String tipoDoc = Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO;
+			resultado = casaMatriz + terminalUsuario + tipoDoc + consecutivoFactura;
+
+		} catch (Exception e) {
+			log.info("** Error  generarConsecutivoNotaDebitoInterno: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+		return resultado;
+
+	}
 
 	/**
 	 * genera el consecutivo de la factura

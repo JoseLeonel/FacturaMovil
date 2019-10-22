@@ -9,14 +9,14 @@ public class Constantes {
 
 	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA																= 1;
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA														= 2;
-	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA_DEBITO														= 3;
+	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA														= 3;
 
 	//Esquema de XML
 	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL																= 1;
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
 	public static final Integer					ESQUEMA_XML_4_3																							= 2;
-	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO																= "Fact#:";
+	public static final String					DOCUMENTO_ANULA_NOTA																= "Cons:#:";
 	// unidad de medidas SP
 	public static final String					UNIDAD_MEDIDA_SERVICIO_SP																		= "Sp";
 	public static final String					UNIDAD_MEDIDA_SERVICIO_OS																		= "Os";
@@ -259,9 +259,9 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_SALIDA																					= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO															= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA														= "Ingreso del proveedor:";
-	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO											= "Ingreso por nota de credito:";
+	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO											= "Salida por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA															= "Salida por venta:";
-	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO															= "Salida por Nota de debito:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO															= "Ingreso por Nota de debito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION										= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																									= "Si";
@@ -448,7 +448,7 @@ public class Constantes {
 
 	public static final String					FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO										= "01";
 	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_TEXTO											= "02";
-	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO											= "03";
+	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO											= "02";
 	public static final String					FACTURA_CODIGO_REFERENCIA_OTRO_DOCUMENTO										= "04";
 	public static final String					FACTURA_CODIGO_REFERENCIA_SUSTITUYE_COMPROBANTE							= "05";
 

@@ -40,6 +40,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="pago_tipoVentaL">Codigo Aplicar </label> 
+                                                <select class="form-control referenciaCodigo" id="referenciaCodigo" name="referenciaCodigo"   >
+                                                    <option each={comboCodigosReferencia} value="{estado}"  >{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group ">
                                         <label >Motivo </label> 
                                         <input type="text" class="campo nota" id="nota" name="nota" value="">
@@ -505,11 +516,11 @@
     self.parametros   = opts.parametros; 
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
-    self.mensajesBackEnd       = []
     self.mostrarCrearNota      = true
     self.error                 = false
     self.comboTipoDocumentos   = []
     self.comboRebajaInventario = []
+    self.comboCodigosReferencia = []
     self.subTotalGeneral       = 0
      self.totalDescuentos       = 0
     self.totalImpuesto         = 0
@@ -583,7 +594,6 @@
     self.montoExoneracion1             = 0
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
-    self.totalGananciaByProducto = 0
     self.facturaImpresa={
         cliente:{
             cedula:""
@@ -612,12 +622,14 @@
     self.transaccion = false
     self.on('mount',function(){
         _Empresa()
+        __ComboRebajoInventario()
+        __ComboTipoDocumentos()
         __FacturaEnEspera()
        __Teclas()
+       __ComboCodigoReferencia()
         $(".nota").attr("maxlength", 80);
     })
-
-    /**
+/**
 * Consultar la empresa
 **/
 function _Empresa(){
@@ -640,23 +652,21 @@ function _Empresa(){
                     });
                 }
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
             console.log(xhr);
         }
     });
-
 }
 
+/**
+**/
 _AtrasListado(){
   self.mostrarCrearNota      = false
   self.mostrarFormularioPago = false
    __MostrarListado() 
 }
-
-
 
 _SeleccionarEfectivo(){
     $('.totalEfectivo').select()
@@ -688,8 +698,7 @@ var reglasDeValidacionFactura = function() {
 
 	});
 	return validationOptions;
-};
-
+}
 /**
 * Aplicar el descuento
 **/
@@ -895,31 +904,29 @@ function __EnterFacturar(){
         self.cantidadEnterFacturar = 0
         self.update()
 }
-
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(e){
  aplicarFactura(2)
 }
-
 /**
 * Aplicar la factura
 **/
 function aplicarFactura(estado){
-  
-    if($(".rebajaInventario").val() == 0){
-        mensajeError("Seleccione Si se rebaja el Inventario o No se rebaja del inventario")
+    if($(".referenciaCodigo").val() == 0){
+        mensajeError("Seleccione codigo aplicar")
         return
-
+    }
+    if($(".rebajaInventario").val() == 0){
+        mensajeError("Seleccione Si actualiza el inventario")
+        return
     }
     var notaVerificar  = $('.nota').val()
     if(notaVerificar.length ==0){
         mensajeError(self.parametros.tipoEjecucion  == 1?"Digite el motivo de la nota de credito":"Digite el motivo de la nota de debito")
         return
-
     }
-    
     if(self.detail.length == 0 ){
          swal({
                 type: 'error',
@@ -966,9 +973,6 @@ function __Init(){
         consecutivoProforma:"",
 
     }
-    self.bloqueoFactura = 0;
-    self.transaccion = false
-    self.precioUltimo = ""
     self.factura                = {
         id:null,
         codigoActividad:"",
@@ -1016,13 +1020,10 @@ function __Init(){
         }
 
     } 
-     self.cantidadEnterFacturar = 0
+    self.cantidadEnterFacturar = 0
     self.numeroLinea =0
-    self.cantArticulos =0
-    self.mostrarListadoArticulos == false
     self.detail                = []
     self.error                 = false
-    self.comboTipoDocumentos   = []
     self.item                  = null;
     self.articulo              = null;
     self.detalleFactura        ={data:[]}
@@ -1036,12 +1037,12 @@ function __Init(){
     self.totalCambioPagarSTR           = 0
     self.update();
     $('#tipoDoc').prop("selectedIndex", 0);
-   $(".nota").attr("maxlength", 80);
-   $("#totalBanco").val(null)   
-   $(".totalTarjeta").val(null)   
-   $(".totalEfectivo").val(null)   
+    $(".nota").attr("maxlength", 80);
+    $("#totalBanco").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalEfectivo").val(null)   
     $("#nota").val(null)
-    __ComboTipoDocumentos()
+   
   
 }
 /**
@@ -1057,7 +1058,6 @@ function __FacturaEnEspera(){
         url: "ListarDetlleByFacturaConsecutivoAjax.do",
         data: {consecutivo:numero},
         method:"POST",
-       
         success: function (data) {
             if(data.aaData.length > 0){
                cargarDetallesFacturaEnEspera(data.aaData)
@@ -1139,10 +1139,8 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-    __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
 }
-
 /**
 * Aplicar la exoneracion de detalles
 **/
@@ -1207,7 +1205,6 @@ function __aplicarExoneracionPorCliente(){
        self.update();
     }
 }
-
 /**
 *  Crear Factura nueva
 **/
@@ -1228,7 +1225,6 @@ function crearFactura(estado){
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = 2
     self.factura.tipoDoc = self.parametros.tipoEjecucion = 2 ?"02":"03"
-    self.factura.tipo
     self.update();
     var dataTemporal = null
     var formulario = $("#formularioFactura").serialize();
@@ -1271,53 +1267,6 @@ function crearFactura(estado){
 *Si fue facturada o tiquete
 **/
 function evaluarFactura(data){
-    self.facturaImprimir =null
-     self.factura                = {
-        id:null,
-	    fechaCredito:null,
-	    fechaEmision:null,
-	    condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
-	    estado:1,
-	    cliente:{
-            id:null,
-            nombreCompleto:"",
-        },
-	    vendedor:{
-            id:null,
-            nombreCompleto:""
-        }
-    }                            
-    self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
@@ -1329,10 +1278,9 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 self.facturaReimprimir = self.facturaImprimir
                 self.update()
-                    
                     swal({
                         type: 'success',
-                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
+                        title: "Cons:" + self.facturaImprimir.numeroConsecutivo,
                         showConfirmButton: false,
                         timer: 1500
                      })
@@ -1372,9 +1320,7 @@ _AtrasFacturaFinal(){
    self.cantidadEnterFacturar = 0
    self.error = false
    self.update()
- 
-}
-
+ }
 /**
 *   funcion para grabar la Factura en el back end
 **/
@@ -1412,10 +1358,7 @@ function mostrarPAgo(){
     self.update()
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-  
 }
-
-
 /**
 * eliminar un detalle factura
 **/
@@ -1450,58 +1393,6 @@ function  eliminarDetalle(){
      __calculate();
  }
 
-
-
-function __storege(){
-    self.bloqueoFactura = 0;
-    self.detail = []
-    self.factura                = {
-        id:null,
-	   fechaCredito:null,
-	   fechaEmision:null,
-	   condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-	    codigoMoneda:"",
-	    estado:1,
-	    cliente:{
-            id:null,
-            nombreCompleto:""
-        },
-	    vendedor:{
-            id:null,
-            nombreCompleto:""
-        }
-
-    }   
-    self.update()
-}
  
 /**
 * Monto de descuento sobre la ganancia
@@ -1539,13 +1430,11 @@ function ActualizarLineaDEtalle(){
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
     self.item.pesoTransporteTotal = parseFloat(self.item.cantidad) *  parseFloat(self.item.pesoTransporte)
-   
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
     self.item.montoImpuesto    = montoImpuesto
     self.item.montoImpuesto1   = montoImpuesto1
-    
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
     self.item.montoGanancia    = self.item.ganancia 
@@ -1632,8 +1521,6 @@ function __calculate() {
     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
     getSubTotalGeneral()
-    $(".nombreFactura").val(self.factura.nombreFactura)
-    $(".correoAlternativo").val(self.factura.correoAlternativo)
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -1651,6 +1538,33 @@ function getSubTotalGeneral(){
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
     self.update()
 }
+
+
+
+function __ComboCodigoReferencia(){
+    self.comboCodigosReferencia = []
+    self.update()
+    self.comboCodigosReferencia.push({
+        estado:0,
+        descripcion:"Seleccionar"
+    })
+    self.comboCodigosReferencia.push({
+            estado:'01',
+            descripcion:$.i18n.prop("referencia.anula.documento")
+    })
+    if(self.parametros.tipoEjecucion == 1){
+        self.comboCodigosReferencia.push({
+            estado:'02',
+            descripcion:$.i18n.prop("referencia.corrige.monto.documento")
+        })
+
+    }
+
+    
+   self.update()
+}
+
+
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -1664,14 +1578,14 @@ function __ComboTipoDocumentos(){
     self.update()
 }
 
-function __ComboTipoDocumentos(){
+function __ComboRebajoInventario(){
     self.comboRebajaInventario = []
     self.update()
     self.comboRebajaInventario.push({
         estado:0,
         descripcion:"Seleccionar"
     })
-    if(self.parametros.tipoEjecucion ==1){
+    if(self.parametros.tipoEjecucion ==2){
         self.comboRebajaInventario.push({
             estado:1,
             descripcion:"Si Rebajar Inventario"
@@ -1681,7 +1595,7 @@ function __ComboTipoDocumentos(){
             descripcion:"No Rebajar Inventario"
         })
 
-    } else if(self.parametros.tipoEjecucion ==2){
+    } else if(self.parametros.tipoEjecucion ==1){
         self.comboRebajaInventario.push({
             estado:3,
             descripcion:"Sumar al Inventario"
@@ -1690,14 +1604,9 @@ function __ComboTipoDocumentos(){
             estado:4,
             descripcion:"No sumar al Inventario"
         })
-
     }
-
-    self.update()
+   self.update()
 }
-
-
-
 /**
 * Mostrar el pago con F8 o en blanco
 **/
