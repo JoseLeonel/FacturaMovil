@@ -9,7 +9,7 @@ import javax.persistence.Id;
 /**
  * Modelo para totalizar los articulos de una caja
  */
-@BaseNativeQuery(name = "totalesCategoriaArticuloCaja", 
+@BaseNativeQuery(name = "totales_cate_art_caja", 
 query = "SELECT cate.descripcion as categoria, art.descripcion as articulo, sum(deta.cantidad) as total, sum(deta.monto_total_linea) as total_categoria FROM detalles deta"
 	+ " left join articulos art on art.codigo = deta.codigo and art.empresa_id = :ID_EMPRESA"
 	+ " left join categorias cate on cate.id = art.categoria_id"

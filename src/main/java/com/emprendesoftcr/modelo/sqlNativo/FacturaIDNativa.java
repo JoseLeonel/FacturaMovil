@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@BaseNativeQuery(name = "facturaid	", query = "select facturas.id, facturas.estado from facturas"
+@BaseNativeQuery(name = "factura_id	", query = "select facturas.id, facturas.estado from facturas"
 + "  where  facturas.id = :ID_FACTURA  ")
 @Entity
 public class FacturaIDNativa implements Serializable {

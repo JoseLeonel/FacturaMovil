@@ -10,7 +10,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "facturasparaanulacion", query = "select facturas.nombre_factura,facturas.total_comprobante,facturas.codigo_moneda,facturas.total_descuentos,facturas.total_impuesto,clientes.nombre_completo,clientes.cedula,facturas.numero_consecutivo,facturas.fecha_emision,usuarios.nombre_usuario ,facturas.id,facturas.usuario_id,facturas.empresa_id,facturas.estado from facturas " 
+@BaseNativeQuery(name = "fact_anulacion", query = "select facturas.nombre_factura,facturas.total_comprobante,facturas.codigo_moneda,facturas.total_descuentos,facturas.total_impuesto,clientes.nombre_completo,clientes.cedula,facturas.numero_consecutivo,facturas.fecha_emision,usuarios.nombre_usuario ,facturas.id,facturas.usuario_id,facturas.empresa_id,facturas.estado from facturas " 
     + " inner join clientes on clientes.id = facturas.cliente_id "
     + " inner join detalles on detalles.factura_id = facturas.id "
 		+ " inner join usuarios on usuarios.id = facturas.usuario_id "

@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "facturasdia", 
+@BaseNativeQuery(name = "facturas_dia", 
 query = "Select empresas.print_cel,empresas.imprimir_direc,empresas.nofactura_elec,clientes.cedula,clientes.nombre_completo,facturas.updated_at,facturas.created_at,facturas.estado,facturas.total_comprobante,facturas.total_impuesto,facturas.total_descuentos,facturas.sub_total," + 
 		"facturas.nombre_factura,facturas.tipo_doc,facturas.plazo_credito,facturas.condicion_venta,facturas.fecha_emision,facturas.clave,facturas.consecutivo_proforma,facturas.numero_consecutivo," + 
 		"facturas.id,facturas.usuario_id," + 

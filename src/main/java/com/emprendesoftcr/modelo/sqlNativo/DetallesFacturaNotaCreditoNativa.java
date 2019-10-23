@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 import com.emprendesoftcr.modelo.Factura;
 
-@BaseNativeQuery(name = "factNC	", query = "select detalles.id, detalles.numero_linea,detalles.cantidad,detalles.descripcion,detalles.codigo,detalles.factura_id,detalles.cant_notaC from detalles"
+@BaseNativeQuery(name = "fact_nc	", query = "select detalles.id, detalles.numero_linea,detalles.cantidad,detalles.descripcion,detalles.codigo,detalles.factura_id,detalles.cant_notaC from detalles"
 		+ "  inner join facturas on facturas.id = detalles.factura_id  "
 		+ "  where detalles.cantidad > detalles.cant_notaC and facturas.numero_consecutivo    and facturas.empresa_id  ")
 @Entity

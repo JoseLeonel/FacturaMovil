@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "proformasFacturas", query = "SELECT facturas.id,facturas.usuario_id,facturas.fecha_emision,facturas.cliente_id,facturas.nombre_factura,facturas.total_impuesto,facturas.total_descuentos,facturas.total_comprobante,usuarios.nombre_usuario,clientes.nombre_completo,facturas.empresa_id,facturas.consecutivo_proforma,facturas.estado,facturas.tipo_doc,facturas.numero_consecutivo FROM facturas" + " left join clientes on clientes.id = facturas.cliente_id " + " left JOIN usuarios on usuarios.id = facturas.usuario_id " + " left join empresas on empresas.id = facturas.empresa_id " + " where facturas.empresa_id = :ID_EMPRESA and facturas.estado = 2  and facturas.consecutivo_proforma !=''" + " order by facturas.fecha_emision desc ")
+@BaseNativeQuery(name = "proformas_fact_n", query = "SELECT facturas.id,facturas.usuario_id,facturas.fecha_emision,facturas.cliente_id,facturas.nombre_factura,facturas.total_impuesto,facturas.total_descuentos,facturas.total_comprobante,usuarios.nombre_usuario,clientes.nombre_completo,facturas.empresa_id,facturas.consecutivo_proforma,facturas.estado,facturas.tipo_doc,facturas.numero_consecutivo FROM facturas" + " left join clientes on clientes.id = facturas.cliente_id " + " left JOIN usuarios on usuarios.id = facturas.usuario_id " + " left join empresas on empresas.id = facturas.empresa_id " + " where facturas.empresa_id = :ID_EMPRESA and facturas.estado = 2  and facturas.consecutivo_proforma !=''" + " order by facturas.fecha_emision desc ")
 @Entity
 public class ProformasByEmpresaAndFacturada implements Serializable {
 

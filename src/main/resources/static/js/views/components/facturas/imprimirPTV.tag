@@ -838,7 +838,7 @@ function __imprimir(){
     imprimirElemento(objeto)
 }
 function imprimirElemento(elemento){
-  var originalContents = document.body.innerHTML;
+ // var originalContents = document.body.innerHTML;
   var ventana =window.open("", "MsgWindow", "width=600,height=400");
   var html = "<!DOCTYPE HTML>";
   html += '<html><head><title>' + "" + '</title>'
@@ -850,7 +850,7 @@ function imprimirElemento(elemento){
   ventana.focus();
   ventana.print();
   ventana.close();
-  document.body.innerHTML = originalContents;
+ // document.body.innerHTML = originalContents;
   
  // printJS('imprimeme', 'html');
   

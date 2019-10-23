@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -82,6 +84,7 @@ public class TipoCambiosController {
 	 * @param response
 	 * @return
 	 */
+	@Cacheable(value="tipoCambioCache")
 	@RequestMapping(value = "/ListarTipoCambioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -96,7 +99,7 @@ public class TipoCambiosController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-
+	@CacheEvict(value="tipoCambioCache",allEntries=true)
 	@RequestMapping(value = "/AgregarTipoCambioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {

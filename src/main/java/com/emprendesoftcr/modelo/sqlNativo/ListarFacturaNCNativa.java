@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 5 oct. 2019
  */
 
-@BaseNativeQuery(name = "facturasNC", query = "SELECT DISTINCT y.id,y.fecha_emision,y.numero_consecutivo,y.tipo_doc,y.condicion_venta,y.nombre_completo,\n" + 
+@BaseNativeQuery(name = "facturas_nc", query = "SELECT DISTINCT y.id,y.fecha_emision,y.numero_consecutivo,y.tipo_doc,y.condicion_venta,y.nombre_completo,\n" + 
 		"       y.nombre_factura,y.total_comprobante,y.estado, y.cantidad,y.cantidad_notas,\n" + 
 		"       y.act_comercial,y.cedula,y.nombre_usuario\n" + 
 		"  FROM (SELECT fac.id,fac.fecha_emision,fac.numero_consecutivo,\n" + 

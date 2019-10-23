@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "haciendaComprobar", query = "SELECT hacienda_xml.id,hacienda_xml.consecutivo,hacienda_xml.empresa_id, hacienda_xml.reintentos_aceptacion, hacienda_xml.created_at, hacienda_xml.estado, hacienda_xml.tipo_doc ,empresas.nombre FROM hacienda_xml " 
+@BaseNativeQuery(name = "hacienda_comprobar", query = "SELECT hacienda_xml.id,hacienda_xml.consecutivo,hacienda_xml.empresa_id, hacienda_xml.reintentos_aceptacion, hacienda_xml.created_at, hacienda_xml.estado, hacienda_xml.tipo_doc ,empresas.nombre FROM hacienda_xml " 
     + " LEFT join empresas on empresas.id = hacienda_xml.empresa_id WHERE hacienda_xml.estado = 3 or hacienda_xml.estado = 10 "
 		+ " ORDER by hacienda_xml.empresa_id  asc LIMIT 500" )
 @Entity

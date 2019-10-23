@@ -249,7 +249,7 @@ public class Constantes {
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS																= "sp_eliminarDetallesCompra";
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM								= "idCompra_param";
 
-	public static final String					SP_ELIMINAR_DETALLES_FACTURA																= "sp_eliminarDetallesFactura";
+	public static final String					SP_ELIMINAR_DETALLES_FACTURA																= "sp_eliminard";
 	public static final String					SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM								= "idFactura_param";
 
 	// Kardex
@@ -628,6 +628,6 @@ public class Constantes {
 	public static final String					SP_CALLBACK_HACIENDA_MENSAJE																= "mensaje_e";
 
 	// Procecimiento para actualizar la caja
-	public static final String					SP_ACTUALIZA_CAJA																						= "SPACTUALIZACAJAUSUARIO";
+	public static final String					SP_ACTUALIZA_CAJA																						= "sp_actua_caja";
 	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO														= "ID_CAJA_USUARIO";
 }

@@ -1287,7 +1287,7 @@ function evaluarFactura(data){
                    
                   var parametros = {
                           factura: self.facturaReimprimir ,
-                          facturaDia:0
+                          facturaDia:1
                       }
                       riot.mount('ptv-imprimir',{parametros:parametros});
         

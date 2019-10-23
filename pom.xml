@@ -179,6 +179,7 @@
 				<exclusion>
 					<groupId>com.zaxxer</groupId>
 					<artifactId>HikariCP</artifactId>
+					
 				</exclusion>
 			</exclusions>
 		</dependency>
