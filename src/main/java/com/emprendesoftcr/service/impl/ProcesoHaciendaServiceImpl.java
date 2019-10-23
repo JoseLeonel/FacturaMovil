@@ -458,7 +458,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Date fechaInicial = dateFormat.parse(inicio);
 					Date fechaFinal = dateFormat.parse(fin);
 					int dias = (int) ((fechaFinal.getTime() - fechaInicial.getTime()) / 86400000);
-					if (dias >= 31) {
+					if (dias >= 28) {
 						factura.setEstado(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA);
 						factura.setNota(Constantes.ANULACION_AUTOMATICA_PROFORMAS);
 						facturaBo.modificar(factura);
