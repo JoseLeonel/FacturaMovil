@@ -316,7 +316,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/10 04 * * ?")
+	@Scheduled(cron = "0 0/35 04 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("Totales de Grafico  {}", new Date());
@@ -641,7 +641,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
 			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -653,7 +653,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);

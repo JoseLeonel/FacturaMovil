@@ -125,31 +125,7 @@ public class CuentaCobrarController {
 		return "views/cuentasxcobrar/ListarCuentasXCobrarConsulta";
 	}
 
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/GraficoCuentasXCobrarAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable graficoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<GraficoCuentasPorCobrarNative>  objetos = consultasNativeBo.findByGraficoCuentasXCobrar(usuarioSesion.getEmpresa());
-		List<Object> solicitudList = new ArrayList<Object>();
-		if (objetos != null) {
-			for (GraficoCuentasPorCobrarNative graficoCuentasPorCobrarNative : objetos) {
-				if (graficoCuentasPorCobrarNative.getId().longValue() > 0L) {
-					solicitudList.add(new CuentaCobrarCommand(graficoCuentasPorCobrarNative));
-				}
-			}
-		}
-		respuestaService.setRecordsTotal(0l);
-		respuestaService.setRecordsFiltered(0l);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(solicitudList);
-		return respuestaService;
-
-	}
+	
 	
 ////Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarAjax.do", method = RequestMethod.GET)

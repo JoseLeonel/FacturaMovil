@@ -7,6 +7,7 @@ import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorPagarNative;
 
 public class CuentaPagarCommand {
 
@@ -40,8 +41,11 @@ public class CuentaPagarCommand {
 	private Empresa		empresa;
 
 	private Usuario		usuarioCreacion;
+	private String nombreCompleto;
 
 	private String		estado;
+	
+	private Integer totalDiasMoroso;
 
 	public CuentaPagarCommand(CuentaPagar cuentaPagar) {
 		super();
@@ -65,7 +69,21 @@ public class CuentaPagarCommand {
 		this.totalSTR = cuentaPagar.getTotalSTR();
 		this.consecutivo = cuentaPagar.getConsecutivo();
 	}
+	
+	
 
+	public CuentaPagarCommand( GraficoCuentasPorPagarNative graficoCuentasPorPagarNative) {
+		super();
+		this.id = graficoCuentasPorPagarNative.getId();
+		this.consecutivo = graficoCuentasPorPagarNative.getConsecutivo();
+		this.totalSaldo = graficoCuentasPorPagarNative.getTotalSaldo();
+		this.totalDiasMoroso = graficoCuentasPorPagarNative.getTotalDiasMorosos();
+		this.fechaCredito = graficoCuentasPorPagarNative.getFechaCredito();
+		this.nombreCompleto = graficoCuentasPorPagarNative.getNombreCompleto();
+		this.fechaCreditoSTR = Utils.getFechaStr(graficoCuentasPorPagarNative.getFechaCredito());
+	}
+
+	
 	public CuentaPagarCommand() {
 		super();
 	}
@@ -77,6 +95,34 @@ public class CuentaPagarCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	
+	
+	public Integer getTotalDiasMoroso() {
+		return totalDiasMoroso;
+	}
+
+
+
+	
+	public void setTotalDiasMoroso(Integer totalDiasMoroso) {
+		this.totalDiasMoroso = totalDiasMoroso;
+	}
+
+
+
+	public String getNombreCompleto() {
+		return nombreCompleto;
+	}
+
+
+
+	
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
+	}
+
+
 
 	public String getTotalSTR() {
 		return totalSTR;

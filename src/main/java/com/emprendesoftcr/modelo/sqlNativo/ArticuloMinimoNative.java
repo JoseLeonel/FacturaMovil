@@ -9,8 +9,8 @@ import javax.persistence.Id;
 @BaseNativeQuery(name ="lista_art_mini" ,query ="SELECT articulos.id,articulos.codigo,\n" + 
 		"       articulos.descripcion,\n" + 
 		"       articulos.cantidad,articulos.minimo \n" + 
-		"   FROM `articulos` WHERE articulos.estado ='Activo' and   "
-		+ "articulos.minimo <= articulos.cantidad "
+		"   FROM `articulos` WHERE articulos.estado ='Activo' and articulos.contable = 'Si' and  "
+		+ "articulos.minimo > articulos.cantidad "
 		+ " and articulos.empresa_id = :ID_EMPRESA ORDER BY codigo,descripcion asc LIMIT 50 " )
 @Entity
 public class ArticuloMinimoNative implements Serializable {

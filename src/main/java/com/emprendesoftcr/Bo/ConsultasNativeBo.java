@@ -13,7 +13,9 @@ import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoArticuloMasVendidoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorPagarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
@@ -42,7 +44,7 @@ public interface ConsultasNativeBo {
 
 	Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa, Integer idusuario, String estado, String fecha);
 
-	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo);
+	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente, String codigo);
 
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
 
@@ -56,14 +58,21 @@ public interface ConsultasNativeBo {
 
 	Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial);
 
-	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo);
-	
+	Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo);
+
 	FacturaIDNativa findIdFactura(Long id);
-	Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo,Empresa empresa);
-	
-	Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal,Cliente cliente , String tipoDocumento,String actividadComercial);
-	
+
+	Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo, Empresa empresa);
+
+	Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
+
 	Collection<ListaNotasNative> findByNotasCreditoAndDebito(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
+
 	Collection<ArticuloMinimoNative> findByAllArticulosMinimo(Empresa empresa);
+
 	Collection<GraficoCuentasPorCobrarNative> findByGraficoCuentasXCobrar(Empresa empresa);
+
+	Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa);
+	
+	Collection<GraficoCuentasPorPagarNative> findByGraficoCuentasXPagar(Empresa empresa);
 }

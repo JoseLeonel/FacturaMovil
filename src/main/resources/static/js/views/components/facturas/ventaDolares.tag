@@ -1719,7 +1719,7 @@ function __sumarMasArticulo(codigo,precio){
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
         return
     }
-    var valorPrecio =  parseFloat(precio)
+    var valorPrecio =  __valorNumerico(precio)
     var cantidadAct =""
     var existe = false
     for(i=0; i<codigo.length; i++){
@@ -1732,7 +1732,7 @@ function __sumarMasArticulo(codigo,precio){
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){
             self.item          = self.detail[count];
-            self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
+            self.item.cantidad = self.item.cantidad + __valorNumerico(cantidadAct)
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
@@ -2089,7 +2089,7 @@ function __agregarArticulo(cantidad){
             for (var count = 0; count < self.detail.length; count++) {
                 if (self.detail[count].codigo == self.articulo.codigo ){
                 self.item          = self.detail[count];
-                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
+                self.item.cantidad = self.item.cantidad + __valorNumerico(cantidad)
                 self.cantidadEnterFacturar = 0
                 self.cantArticulos = self.cantArticulos + 1
                 self.update();
@@ -2152,7 +2152,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoImpuesto   = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto 
      self.pesoPrioridad =  self.pesoPrioridad + 1
     self.numeroLinea = self.numeroLinea + 1
@@ -2162,7 +2162,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       iva             : parseFloat(self.articulo.impuesto),
+       iva             : __valorNumerico(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
@@ -2175,8 +2175,8 @@ function __nuevoArticuloAlDetalle(cantidad){
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
        montoTotal      :montoTotal,
-        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
-       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+        costo           : self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:__valorNumerico(self.articulo.gananciaPrecioPublico),
     });
    
     
@@ -2195,7 +2195,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 * Monto de Total
 **/
 function getMontoTotal(precioUnitario,cantidad){
-    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+    var resultado = __valorNumerico(precioUnitario) * __valorNumerico(cantidad)
     return resultado
 }
 /**
@@ -2221,7 +2221,7 @@ function _calcularImpuesto(precio,iva){
     if(iva == 0){
         return 0;
     }
-    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+    var impuesto = iva > 0 ?__valorNumerico(iva)/100:0
     impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
     var total = total - precio 
@@ -2353,7 +2353,7 @@ function _actualizarDesc(e){
    
       //Descuento
     if(self.item.porcentajeDesc != descuento){
-       self.item.porcentajeDesc =  parseFloat(descuento);  
+       self.item.porcentajeDesc =  __valorNumerico(descuento);  
     }    
     self.update()
     ActualizarLineaDEtalle()  

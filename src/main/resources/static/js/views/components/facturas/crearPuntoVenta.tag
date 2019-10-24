@@ -1079,21 +1079,13 @@
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         text-align: left;
-        /* padding-left: 20px; */
-        /* line-height: 100%; */
-        /* border-collapse: separate; */
         text-align: center;
-        /* margin: 5px; */
         border: none;
         text-align: center !important;
         background-color: black !important;
-        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
-        /* border-radius: 5.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{px; */
-        /* -webkit-transition: background-color 100ms linear; */
         -moz-transition: background-color 100ms linear;
         -o-transition: background-color 100ms linear;
         -ms-transition: background-color 100ms linear;
-        /* transition: background-color 100ms linear; */
     }
 
     .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
@@ -1105,21 +1097,13 @@
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         text-align: left;
-        /* padding-left: 20px; */
-        /* line-height: 100%; */
-        /* border-collapse: separate; */
         text-align: center;
-        /* margin: 5px; */
         border: none;
         text-align: center !important;
         background-color: black !important;
-        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
-        /* border-radius: 5px; */
-        /* -webkit-transition: background-color 100ms linear; */
         -moz-transition: background-color 100ms linear;
         -o-transition: background-color 100ms linear;
         -ms-transition: background-color 100ms linear;
-        /* transition: background-color 100ms linear; */
     }
 
 
@@ -1314,7 +1298,6 @@
        __InformacionDataTableDia()
        __ListaDeClientes()
        __ListaActividadesComercales()
-       //__ListaArticulosUsoInterno()
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
@@ -1342,13 +1325,6 @@
            }
         });
         
-       
-
-       // var timer;
-       // $("#codigo").on('keyup',function() {
-       //     timer && clearTimeout(timer);
-       //     timer = setTimeout(postData, 100);
-       // });
             $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
@@ -2721,26 +2697,26 @@ function cargarDetallesFacturaEnEspera(data){
             tipoImpuesto    : modeloTabla.tipoImpuesto,
             tipoImpuesto1   : modeloTabla.tipoImpuesto1,
             descripcion     : modeloTabla.descripcion,
-            cantidad        : parseFloat(modeloTabla.cantidad),
-            precioUnitario  : parseFloat(modeloTabla.precioUnitario),
-            impuesto        : parseFloat(modeloTabla.impuesto),
-            impuesto1       : parseFloat(modeloTabla.impuesto1),
-            montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
-            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
-            montoDescuento  : parseFloat(modeloTabla.montoDescuento),
-            porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
-            subTotal        : parseFloat(modeloTabla.subTotal),
-            montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-            montoTotal      : parseFloat(modeloTabla.montoTotal),
-            costo           : parseFloat(modeloTabla.costo),
-            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
-            montoGanancia :parseFloat(modeloTabla.montoGanancia),
-            ganancia :parseFloat(__valorNumerico(modeloTabla.ganancia)),
-            pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
-            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal),
-            montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
-            montoExoneracion1:parseFloat(modeloTabla.montoExoneracion1),
-            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            cantidad        : __valorNumerico(modeloTabla.cantidad),
+            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+            impuesto        : __valorNumerico(modeloTabla.impuesto),
+            impuesto1       : __valorNumerico(modeloTabla.impuesto1),
+            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+            subTotal        : __valorNumerico(modeloTabla.subTotal),
+            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+            costo           : __valorNumerico(modeloTabla.costo),
+            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
+            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
+            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
             fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
             nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
             numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
@@ -3169,7 +3145,7 @@ function __sumarMasArticulo(codigo,precio){
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){
             self.item          = self.detail[count];
-            self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
+            self.item.cantidad = self.item.cantidad + __valorNumerico(cantidadAct)
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
@@ -3379,19 +3355,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                 if (data.message != null && data.message.length > 0) {
                     self.articulo =null
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Articulo no puede agregarse si no hay en el inventario
-                     //   if(modeloTabla.contable == "Si"){
-                     //       if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                     //           mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                     //           return
-                     //       }
-                     //       if(modeloTabla.cantidad < cantidad ){
-                     //           mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                     //           return
-                     //       }
-
-                      //  }
-                       if(modeloTabla.estado  == "Inactivo"){
+                             if(modeloTabla.estado  == "Inactivo"){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
@@ -3524,7 +3488,7 @@ function __agregarArticulo(cantidad){
             for (var count = 0; count < self.detail.length; count++) {
                 if (self.detail[count].codigo == self.articulo.codigo ){
                 self.item          = self.detail[count];
-                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
+                self.item.cantidad = self.item.cantidad + __valorNumerico(cantidad)
                 self.cantidadEnterFacturar = 0
                 self.cantArticulos = self.cantArticulos + 1
                 self.update();
@@ -3606,49 +3570,49 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     //Determinar el precio a incluir
     var resultadoPrecio = getListaPrecio(self.articulo)
-    var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
+    var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
+    resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto1) 
     precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
-    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
-    var costoTotal      = parseFloat(self.articulo.costo) > precioUnitario ?0:parseFloat(self.articulo.costo); 
-    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
+    var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
     self.detail.push({
-       numeroLinea     : parseFloat(self.numeroLinea),
+       numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
        tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
-       iva             : parseFloat(self.articulo.impuesto),
-       iva1            : parseFloat(self.articulo.impuesto1),
+       iva             : __valorNumerico(self.articulo.impuesto),
+       iva1            : __valorNumerico(self.articulo.impuesto1),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
-       cantidad        : parseFloat(cantidad),
-       precioUnitario  : parseFloat(precioUnitario),
-       impuesto        : parseFloat(self.articulo.impuesto),
-       impuesto1        : parseFloat(self.articulo.impuesto1),
-       montoImpuesto   : parseFloat(montoImpuesto),
-       montoImpuesto1  : parseFloat(montoImpuesto1),
-       impuestoNeto    : parseFloat(montoImpuesto) + parseFloat(montoImpuesto1),
+       cantidad        : __valorNumerico(cantidad),
+       precioUnitario  : __valorNumerico(precioUnitario),
+       impuesto        : __valorNumerico(self.articulo.impuesto),
+       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       montoImpuesto   : __valorNumerico(montoImpuesto),
+       montoImpuesto1  : __valorNumerico(montoImpuesto1),
+       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
-       ganancia        : parseFloat(ganancia),
-       montoGanancia   : parseFloat(ganancia),
-       subTotal        : parseFloat(subTotal),
-       montoTotalLinea : parseFloat(montoTotalLinea),
-       montoTotal      : parseFloat(montoTotal),
+       ganancia        : __valorNumerico(ganancia),
+       montoGanancia   : __valorNumerico(ganancia),
+       subTotal        : __valorNumerico(subTotal),
+       montoTotalLinea : __valorNumerico(montoTotalLinea),
+       montoTotal      : __valorNumerico(montoTotal),
        costo           : costoTotal,
-       porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
-       pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
-       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte),
+       porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:__valorNumerico(getListaPrecioGanancia(self.articulo)),
+       pesoTransporte :  __valorNumerico(self.articulo.pesoTransporte),
+       pesoTransporteTotal :__valorNumerico(self.articulo.pesoTransporte),
        montoExoneracion:0,
        montoExoneracion1:0,
        porcentajeExoneracion:0,
@@ -3669,7 +3633,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 }
 
 function verificarTarifa(){
-    if(parseFloat(self.articulo.impuesto) > 0 ||  parseFloat(self.articulo.impuesto1) > 0){
+    if(__valorNumerico(self.articulo.impuesto) > 0 ||  __valorNumerico(self.articulo.impuesto1) > 0){
        if (self.articulo.tipoImpuesto =='01' ||  self.articulo.tipoImpuesto =='07'){
             if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
                 return true 
@@ -3683,34 +3647,34 @@ function verificarTarifa(){
 function getListaPrecio(articulo){
     //Precio Publico
     if($('.selectListaPrecios').val()==1){
-        resultado=  parseFloat(articulo.precioPublico )
+        resultado=  __valorNumerico(articulo.precioPublico )
     }
     //Precio Mayorista
     if($('.selectListaPrecios').val()==2){
-        resultado=  parseFloat(articulo.precioMayorista )
+        resultado=  __valorNumerico(articulo.precioMayorista )
     }
     //Precio Especial
     if($('.selectListaPrecios').val()==3){
-        resultado=  parseFloat(articulo.precioEspecial) 
+        resultado=  __valorNumerico(articulo.precioEspecial) 
     }
-    return resultado > 0 ?resultado:parseFloat(articulo.precioPublico )
+    return resultado > 0 ?resultado:__valorNumerico(articulo.precioPublico )
 
 }
 
 function getListaPrecioGanancia(articulo){
     //Precio Publico
     if($('.selectListaPrecios').val()==1){
-        resultado=  parseFloat(articulo.gananciaPrecioPublico )
+        resultado=  __valorNumerico(articulo.gananciaPrecioPublico )
     }
     //Precio Mayorista
     if($('.selectListaPrecios').val()==2){
-        resultado=  parseFloat(articulo.gananciaPrecioMayorista )
+        resultado=  __valorNumerico(articulo.gananciaPrecioMayorista )
     }
     //Precio Especial
     if($('.selectListaPrecios').val()==3){
-        resultado=  parseFloat(articulo.gananciaPrecioEspecial) 
+        resultado=  __valorNumerico(articulo.gananciaPrecioEspecial) 
     }
-    return resultado > 0 ?resultado:parseFloat(articulo.gananciaPrecioEspecial )
+    return resultado > 0 ?resultado:__valorNumerico(articulo.gananciaPrecioEspecial )
 
 }
 
@@ -3842,7 +3806,7 @@ function ActualizarLineaDEtalle(){
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
-    self.item.pesoTransporteTotal = parseFloat(self.item.cantidad) *  parseFloat(self.item.pesoTransporte)
+    self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
@@ -3851,7 +3815,7 @@ function ActualizarLineaDEtalle(){
     self.item.montoImpuesto1   = montoImpuesto1
     
     self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
+    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
     self.item.montoGanancia    = self.item.ganancia 
     self.update()
 }
@@ -3900,13 +3864,13 @@ function _actualizarDesc(e){
     if(self.empresa.aplicaGanancia ==1){
         if(self.item.porcentajeGanancia < descuento ){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
-            descuento  = parseFloat(self.item.porcentajeGanancia)
+            descuento  = __valorNumerico(self.item.porcentajeGanancia)
         }
     } 
     var index     = self.detail.indexOf(self.item);
       //Descuento
     if(self.item.porcentajeDesc != descuento){
-       self.item.porcentajeDesc =  parseFloat(descuento);  
+       self.item.porcentajeDesc =  __valorNumerico(descuento);  
     }    
     self.update()
     ActualizarLineaDEtalle()  
@@ -3960,12 +3924,12 @@ function __calculate() {
         totalVenta              += e.montoTotal
         totalGanancia           +=__valorNumerico(e.ganancia)
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
-        totalPesoByFactura      += parseFloat(e.pesoTransporte) * parseFloat(e.cantidad)
-        montoExoneracion        = montoExoneracion + parseFloat(e.montoExoneracion) 
-        montoExoneracion        = montoExoneracion + parseFloat(e.montoExoneracion1) 
+        totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad)
+        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion) 
+        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion1) 
     });
     self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
-    self.totalPesoByFactura = parseFloat(totalPesoByFactura)
+    self.totalPesoByFactura = __valorNumerico(totalPesoByFactura)
     self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
@@ -4196,17 +4160,17 @@ function __aplicarExoneracionPorCliente(){
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
         self.item          = self.detail[count];
-        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+        self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
-                if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
-                    self.item.porcentajeExoneracion = self.cliente.libreImpuesto == 1?100:parseFloat(self.cliente.porcentajeExoneracion)
+                if(self.cliente.porcentajeExoneracion > 0  ){
+                    self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
-                    self.item.nombreInstitucionExoneracion = self.cliente.libreImpuesto == 1?self.cliente.nombreCompleto:self.cliente.nombreInstitucionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
-                    self.item.tipoDocumentoExoneracion = self.cliente.libreImpuesto == 1?"AA9999999BBB":self.cliente.tipoDocumentoExoneracion
-                    valorTotal = parseFloat(self.item.montoImpuesto1) * parseFloat(porcentaje)  
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion1 = valorTotal
-                     valorTotal = parseFloat(self.item.montoImpuesto) * parseFloat(porcentaje)  
+                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion = valorTotal
                     self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
                     self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
@@ -4224,7 +4188,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = parseFloat(self.item.montoImpuesto) + parseFloat(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0

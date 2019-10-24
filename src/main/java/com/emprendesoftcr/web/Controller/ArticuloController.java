@@ -410,31 +410,7 @@ public class ArticuloController {
 	}
 
 	
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/ListarArticuloMinimoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarArticulosMinimoAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<ArticuloMinimoNative>  objetos = consultasNativeBo.findByAllArticulosMinimo(usuarioSesion.getEmpresa());
-		List<Object> solicitudList = new ArrayList<Object>();
-		if (objetos != null) {
-			for (ArticuloMinimoNative articuloMinimoNative : objetos) {
-				if (articuloMinimoNative.getId().longValue() > 0L) {
-					solicitudList.add(new ArticuloCommand(articuloMinimoNative));
-				}
-			}
-		}
-		respuestaService.setRecordsTotal(0l);
-		respuestaService.setRecordsFiltered(0l);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(solicitudList);
-		return respuestaService;
-
-	}
+	
 
 	
 	@SuppressWarnings("all")

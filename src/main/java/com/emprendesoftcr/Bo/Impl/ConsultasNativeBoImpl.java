@@ -20,7 +20,9 @@ import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoArticuloMasVendidoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorPagarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
@@ -84,9 +86,9 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo) {
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente, String codigo) {
 
-		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente,codigo);
+		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente, codigo);
 	}
 
 	@Override
@@ -122,11 +124,11 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria,String codigo) {
-		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria,codigo);
+	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo) {
+		return consultasNativeDao.findByDetallesGanancia(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria, codigo);
 	}
 
-  @Transactional
+	@Transactional
 	@Override
 	public FacturaIDNativa findIdFactura(Long id) {
 		return consultasNativeDao.findIdFactura(id);
@@ -134,12 +136,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 
 	@Override
 	public Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo, Empresa empresa) {
-				return consultasNativeDao.findByFacturaParaNotaCredito(consecutivo, empresa);
+		return consultasNativeDao.findByFacturaParaNotaCredito(consecutivo, empresa);
 	}
 
 	@Override
 	public Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
-		
+
 		return consultasNativeDao.findByFacturasSinNotasCreditos(empresa, idUsuario, estado, fechaInicial, fechaFinal, cliente, tipoDocumento, actividadComercial);
 	}
 
@@ -150,14 +152,26 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 
 	@Override
 	public Collection<ArticuloMinimoNative> findByAllArticulosMinimo(Empresa empresa) {
-		
+
 		return consultasNativeDao.findByAllArticulosMinimo(empresa);
 	}
 
 	@Override
 	public Collection<GraficoCuentasPorCobrarNative> findByGraficoCuentasXCobrar(Empresa empresa) {
-		
+
 		return consultasNativeDao.findByGraficoCuentasXCobrar(empresa);
+	}
+
+	@Override
+	public Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa) {
+
+		return consultasNativeDao.findByGraficoArticuloMasVendido(empresa);
+	}
+
+	@Override
+	public Collection<GraficoCuentasPorPagarNative> findByGraficoCuentasXPagar(Empresa empresa) {
+		
+		return consultasNativeDao.findByGraficoCuentasXPagar(empresa);
 	}
 
 }

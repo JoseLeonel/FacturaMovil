@@ -23,7 +23,9 @@ import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoArticuloMasVendidoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorPagarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
@@ -469,6 +471,24 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		Query query = entityManager.createNativeQuery(queryStr, GraficoCuentasPorCobrarNative.class);
 		return (Collection<GraficoCuentasPorCobrarNative>) query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa) {
+		String queryStr = getQueryBase(GraficoArticuloMasVendidoNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		Query query = entityManager.createNativeQuery(queryStr, GraficoArticuloMasVendidoNative.class);
+		return (Collection<GraficoArticuloMasVendidoNative>) query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<GraficoCuentasPorPagarNative> findByGraficoCuentasXPagar(Empresa empresa) {
+		String queryStr = getQueryBase(GraficoCuentasPorPagarNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		Query query = entityManager.createNativeQuery(queryStr, GraficoCuentasPorPagarNative.class);
+		return (Collection<GraficoCuentasPorPagarNative>) query.getResultList();
 	}
 
 }
