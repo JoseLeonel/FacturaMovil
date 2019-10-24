@@ -1,49 +1,46 @@
 <grafico-inicio>
   
 	<div class="row" show="{mostrarVentasXMes == true}">
-			<div class="col-sm-9">
+			<div class="col-md-9 col-sx-12 col-sm-9 col-lg-9">
 				<div class="card-box p-t-40"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					
-					<canvas id="chart-totalventas" width="1011" height="252" style="display: block; width: 1011px; height: 252px;">
+					<canvas id="chart-totalventas" width="500" height="320" style="display: block; width: 1011px; height: 252px;">
 				</canvas></div>
 			</div>
-			<div class="col-sm-3" show="{nodisponible == true}">	
+			<div class="col-md-3 col-sx-12 col-sm-3 col-lg-3" show="{mostrarVentasXMes == false}">	
 				<!-- circliful Chart -->
 				<div class="row">
-					<div class="col-sm-12 col-lg-12">
+					<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
 						<div class="widget-simple-chart text-center card-box">
 							<h3 class="text-primary"> <span class="counter" id="totalVentasTotal">287357.08</span></h3>
 							<p class="text-muted text-nowrap">TOTAL VENTAS DE SEPTIEMBRE</p>
 						</div>
 					</div>
-
-					<div class="col-sm-12 col-lg-12">
+                    
+					<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
 						<div class="widget-simple-chart text-center card-box">
 							<h3 class="text-success"> <span class="counter" id="totalVentasCosto">33501.46</span></h3>
 							<p class="text-muted text-nowrap">COSTO DE SEPTIEMBRE</p>
 						</div>
 					</div>
 
-					<div class="col-sm-12 col-lg-12">
-						<div class="widget-simple-chart text-center card-box">                                            
-							<h3 class="text-warning"> <span class="counter" id="totalVentasUtilidad">181054.54</span></h3>
+					<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+						<div class="widget-simple-chart text-center card-box">
+							<h3 class="text-success"> <span class="counter" id="totalVentasCosto">33501.46</span></h3>
 							<p class="text-muted text-nowrap">UTILIDAD DE SEPTIEMBRE</p>
 						</div>
 					</div>
 
-					<div class="col-sm-12 col-lg-12">
-						<div class="widget-simple-chart text-center card-box">                                            
-							<h3 class="text-warning"> <span class="counter" id="totalVentasUtilidad">181054.54</span></h3>
-							<p class="text-muted text-nowrap">IVA EN VENTAS</p>
-						</div>
-					</div>
+				
+
+				
 
 				</div>
 				<!-- end circliful Chart -->
 			</div>
 
 		</div>
-        <div class="row" show="{nodisponible == true}"> 
+        <div class="row" show="{mostrarVentasXMes == false}"> 
 			<div class="col-lg-6">
 				<div class="card-box"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					<div class="row">
@@ -65,7 +62,7 @@
 				</canvas></div>
 			</div>
 
-			<div class="col-lg-6">
+			<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
 				<div class="card-box"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					<div class="row">
 						<h4 class="m-t-0 header-title"><b>Articulos menos vendidos</b></h4>
@@ -86,39 +83,60 @@
 			</div>
 		</div>
 
-		<div class="row" show="{nodisponible == true}">
-			
-			<div class="col-sm-12 col-lg-6">
+		<div class="row" show="{mostrarVentasXMes == true}">
+			<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
 				<div class="card-box">
-					 <h3 class="portlet-title text-dark">Productos debajo del stock mínimo</h3>
-					 <div class="row">
-					<div id="articulosbajostock_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="articulosbajostock_length"><label>Mostrar <select name="articulosbajostock_length" aria-controls="articulosbajostock" class="form-control input-sm"><option value="10" selected="selected">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option><option value="1000">1000</option><option value="5000">5000</option></select> por página</label></div></div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-12"><div class="dataTables_scroll"><div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px none; width: 100%;"><div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 662px; padding-right: 12px;"><table class="table table-striped table-responsive dataTable no-footer" role="grid" style="margin-left: 0px; width: 662px;"><thead>
-							<tr role="row"><th class="btn-primary sorting_asc" tabindex="0" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 65px;" aria-sort="ascending" aria-label="Código: activate to sort column descending">Código</th><th class="btn-primary sorting" tabindex="0" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 216px;" aria-label="Descripción: activate to sort column ascending">Descripción</th><th class="btn-primary sorting" tabindex="0" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 98px;" aria-label="Disponible: activate to sort column ascending">Disponible</th><th class="btn-primary sorting" tabindex="0" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 122px;" aria-label="Mínimo stock: activate to sort column ascending">Mínimo stock</th></tr>
-						</thead></table></div></div><div class="dataTables_scrollBody" style="position: relative; overflow: auto; height: 200px; width: 100%;"><table class="table table-striped table-responsive dataTable no-footer" id="articulosbajostock" role="grid" aria-describedby="articulosbajostock_info" style="width: 100%;"><thead>
-							<tr role="row" style="height: 0px;"><th class="btn-primary sorting_asc" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 65px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-sort="ascending" aria-label="Código: activate to sort column descending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Código</div></th><th class="btn-primary sorting" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 216px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Descripción: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Descripción</div></th><th class="btn-primary sorting" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 98px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Disponible: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Disponible</div></th><th class="btn-primary sorting" aria-controls="articulosbajostock" rowspan="1" colspan="1" style="width: 122px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Mínimo stock: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Mínimo stock</div></th></tr>
-						</thead>
-						
-						<tbody>
-							
-						<tr id="10" role="row" class="odd"><td class="sorting_1">0006</td><td>PAPAS FRITAS</td><td>-154.00</td><td>0.00</td></tr><tr id="12" role="row" class="even"><td class="sorting_1">0008</td><td>SALSA EXTRA</td><td>-9.00</td><td>0.00</td></tr><tr id="13" role="row" class="odd"><td class="sorting_1">0009</td><td>CHILE EXTRA</td><td>-23.00</td><td>0.00</td></tr><tr id="14" role="row" class="even"><td class="sorting_1">0010</td><td>REFRESCO NATURAL</td><td>-9.00</td><td>1.00</td></tr><tr id="15" role="row" class="odd"><td class="sorting_1">0011</td><td>GASEOSO 600ML</td><td>-9.00</td><td>0.00</td></tr><tr id="19" role="row" class="even"><td class="sorting_1">0015</td><td>AGUA EN BOTELLA</td><td>-5.00</td><td>0.00</td></tr><tr id="20" role="row" class="odd"><td class="sorting_1">0016</td><td>TACO MEXICANO UBER</td><td>-59.00</td><td>0.00</td></tr><tr id="21" role="row" class="even"><td class="sorting_1">0017</td><td>TACO TICO UBER</td><td>-3.00</td><td>0.00</td></tr><tr id="28" role="row" class="odd"><td class="sorting_1">0024</td><td>TACO MEX MEDIO CHILE GLOVO</td><td>-7.00</td><td>0.00</td></tr><tr id="29" role="row" class="even"><td class="sorting_1">0025</td><td>TACO MEX CON CHILE GLOVO</td><td>-18.00</td><td>0.00</td></tr></tbody>
-					</table></div></div></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="articulosbajostock_info" role="status" aria-live="polite">Mostrando 1 de 426</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="articulosbajostock_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="articulosbajostock_previous"><a href="#" aria-controls="articulosbajostock" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="articulosbajostock" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="articulosbajostock" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="articulosbajostock" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="articulosbajostock" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="articulosbajostock" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button disabled" id="articulosbajostock_ellipsis"><a href="#" aria-controls="articulosbajostock" data-dt-idx="6" tabindex="0">…</a></li><li class="paginate_button "><a href="#" aria-controls="articulosbajostock" data-dt-idx="7" tabindex="0">426</a></li><li class="paginate_button next" id="articulosbajostock_next"><a href="#" aria-controls="articulosbajostock" data-dt-idx="8" tabindex="0">Next</a></li></ul></div></div></div></div>
+					<h3 class="portlet-title text-dark">Productos debajo del stock mínimo</h3>
+					<div class="row">
+					        	<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+  									    <table id="tableListarDebajoMinimo" class="display table responsive table-hover nowrap table-condensed tableListarDebajoMinimo "   style="width:100%">
+											<thead>
+												<tr>
+													<th class = "table-header" style="width:5%;">{$.i18n.prop("articulo.codigo")}</th>
+													<th class = "table-header" style="width:5%;">{$.i18n.prop("articulo.descripcion")}</th>
+													<th class = "table-header" style="width:5%;">{$.i18n.prop("inventario.cantidad")}</th>
+													<th class = "table-header" style="width:5%;">{$.i18n.prop("inventario.minimo")}</th>
+												</tr>
+											</thead>
+											<tfoot style="display: table-header-group;">
+												<tr>
+													<th style="width:5%;">{$.i18n.prop("articulo.codigo")}</th>
+													<th style="width:5%;">{$.i18n.prop("articulo.descripcion")}</th>
+													<th style="width:5%;">{$.i18n.prop("inventario.cantidad")}</th>
+													<th style="width:2%;">{$.i18n.prop("inventario.minimo")}</th>
+												</tr>
+											</tfoot>
+                                        </table>							
+								</div>
 					</div>
 				</div>
 			</div>
-			 <div class="col-sm-12 col-lg-6">
+			 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
 				<div class="card-box">
-					<h3 class="portlet-title text-dark">Cuentas por Pagar con mas tiempo del plazo establecido</h3>
+					<h3 class="portlet-title text-dark">Cuentas por Cobrar con mas tiempo del plazo establecido</h3>
 					<div class="row">
-						<div id="pedidosPendientes_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="pedidosPendientes_length"><label>Mostrar <select name="pedidosPendientes_length" aria-controls="pedidosPendientes" class="form-control input-sm"><option value="10" selected="selected">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="250">250</option><option value="500">500</option><option value="1000">1000</option><option value="5000">5000</option></select> por página</label></div></div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-12"><div class="dataTables_scroll"><div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px none; width: 100%;"><div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 662px; padding-right: 12px;"><table class="table table-striped table-responsive dataTable no-footer" role="grid" style="margin-left: 0px; width: 662px;"><thead>
-								<tr role="row"><th class="btn-primary sorting_asc" tabindex="0" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="N. Pedido: activate to sort column descending">N. Pedido</th><th class="btn-primary sorting" tabindex="0" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 142px;" aria-label="Cliente: activate to sort column ascending">Cliente</th><th class="btn-primary sorting" tabindex="0" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 113px;" aria-label="Fecha: activate to sort column ascending">Fecha</th><th class="btn-primary sorting" tabindex="0" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 85px;" aria-label="Total: activate to sort column ascending">Total</th></tr>
-							</thead></table></div></div><div class="dataTables_scrollBody" style="position: relative; overflow: auto; height: 200px; width: 100%;"><table class="table table-striped table-responsive dataTable no-footer" id="pedidosPendientes" role="grid" aria-describedby="pedidosPendientes_info" style="width: 100%;"><thead>
-								<tr role="row" style="height: 0px;"><th class="btn-primary sorting_asc" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 161px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-sort="ascending" aria-label="N. Pedido: activate to sort column descending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">N. Pedido</div></th><th class="btn-primary sorting" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 142px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Cliente: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Cliente</div></th><th class="btn-primary sorting" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 113px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Fecha: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Fecha</div></th><th class="btn-primary sorting" aria-controls="pedidosPendientes" rowspan="1" colspan="1" style="width: 85px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Total: activate to sort column ascending"><div class="dataTables_sizing" style="height:0;overflow:hidden;">Total</div></th></tr>
-							</thead>
-							
-							<tbody>
-								
-							<tr id="43" role="row" class="odd"><td class="sorting_1">136-000000043</td><td>CONTADO</td><td>2018-09-17</td><td>570.00</td></tr><tr id="44" role="row" class="even"><td class="sorting_1">136-000000044</td><td>CONTADO</td><td>2018-10-08</td><td>799.09</td></tr><tr id="45" role="row" class="odd"><td class="sorting_1">136-000000045</td><td>YILANIA</td><td>2018-10-15</td><td>550.49</td></tr><tr id="47" role="row" class="even"><td class="sorting_1">136-000000047</td><td>alex2</td><td>2018-10-19</td><td>1120.49</td></tr><tr id="48" role="row" class="odd"><td class="sorting_1">136-000000048</td><td>alex1</td><td>2018-10-19</td><td>855.00</td></tr><tr id="51" role="row" class="even"><td class="sorting_1">136-000000051</td><td>Eugenia</td><td>2018-10-31</td><td>570.00</td></tr><tr id="64" role="row" class="odd"><td class="sorting_1">136-000000064</td><td>CONTADO</td><td>2018-11-20</td><td>835.49</td></tr><tr id="75" role="row" class="even"><td class="sorting_1">136-000000075</td><td>CONTADO</td><td>2019-01-23</td><td>620.00</td></tr><tr id="76" role="row" class="odd"><td class="sorting_1">136-000000076</td><td>ANA SALAZAR</td><td>2019-01-23</td><td>2000.00</td></tr><tr id="85" role="row" class="even"><td class="sorting_1">136-000000085</td><td>RIDS</td><td>2019-03-07</td><td>570.00</td></tr></tbody>
-						</table></div></div></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="pedidosPendientes_info" role="status" aria-live="polite">Mostrando 1 de 7</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="pedidosPendientes_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="pedidosPendientes_previous"><a href="#" aria-controls="pedidosPendientes" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="pedidosPendientes" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="6" tabindex="0">6</a></li><li class="paginate_button "><a href="#" aria-controls="pedidosPendientes" data-dt-idx="7" tabindex="0">7</a></li><li class="paginate_button next" id="pedidosPendientes_next"><a href="#" aria-controls="pedidosPendientes" data-dt-idx="8" tabindex="0">Next</a></li></ul></div></div></div></div>
+					        	<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+  									    <table id="tableListarCuentaPorCobrar" class="display table responsive table-hover nowrap table-condensed tableListarCuentaPorCobrar "   style="width:100%">
+											<thead>
+												<tr>
+													<th class = "table-header" style="width:5%;">#Factura</th>
+													<th class = "table-header" style="width:5%;">Cliente</th>
+													<th class = "table-header" style="width:5%;">Fecha</th>
+													<th class = "table-header" style="width:5%;">Saldo</th>
+													<th class = "table-header" style="width:5%;">Dias Morosos</th>
+												</tr>
+											</thead>
+											<tfoot style="display: table-header-group;">
+												<tr>
+													<th style="width:5%;">#Factura</th>
+													<th style="width:5%;">Cliente</th>
+													<th style="width:5%;">Fecha</th>
+													<th style="width:5%;">Saldo</th>
+													<th style="width:5%;">Dias Morosos</th>
+												</tr>
+											</tfoot>
+                                        </table>							
+								</div>
 					</div>
 				</div>
 			</div>
@@ -129,57 +147,57 @@
 
 
 <style type="text/css">
-.text-muted {
+	.text-muted {
 
-    color: #98a6ad;
+		color: #98a6ad;
 
-}
-.text-muted {
+	}
+	.text-muted {
 
-    color: #777;
+		color: #777;
 
-}
-.text-nowrap {
+	}
+	.text-nowrap {
 
-    white-space: nowrap;
+		white-space: nowrap;
 
-}
-.text-primary {
-    text-align: center;
-    color: #00b19d;
+	}
+	.text-primary {
+		text-align: center;
+		color: #00b19d;
 
-}
-.text-center {
+	}
+	.text-center {
 
-    text-align: center;
+		text-align: center;
 
-}
-.p-t-40 {
-    padding-top: 40px;
-}
-.text-dark {
-    color: #797979 !important;
-}
-h3 {
-    line-height: 30px;
-}
-h1, h2, h3, h4, h5, h6 {
+	}
+	.p-t-40 {
+		padding-top: 40px;
+	}
+	.text-dark {
+		color: #797979 !important;
+	}
+	h3 {
+		line-height: 30px;
+	}
+	h1, h2, h3, h4, h5, h6 {
 
-    color: #505458;
-    font-family: 'Roboto', sans-serif;
-    margin: 10px 0;
+		color: #505458;
+		font-family: 'Roboto', sans-serif;
+		margin: 10px 0;
 
-}
-.card-box {
-    padding: 20px;
-    border: 1px solid rgba(54, 64, 74, 0.08);
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin-bottom: 20px;
-    background-color: #fff;
-}
+	}
+	.card-box {
+		padding: 20px;
+		border: 1px solid rgba(54, 64, 74, 0.08);
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		background-clip: padding-box;
+		margin-bottom: 20px;
+		background-color: #fff;
+	}
   .containerPrincipal{
     display:flex;
     background: white;
@@ -202,14 +220,160 @@ h1, h2, h3, h4, h5, h6 {
 self = this
 self.mostrarVentasXMes = true;
 self.nodisponible = false
+self.formato_tabla_Strock_minimo =[] 
 self.meses = []
 self.colores = []
 self.datos = []
 self.on('mount',function(){
+    __InicializarTabla('.tableListarDebajoMinimo')
+	__InicializarTabla('.tableListarCuentaPorCobrar')
 
+	
 	__cargaMeses();
+	__ArticulosMinimo()
+	__CuentasXCobrarGrafico()
 
 });
+
+/**
+*  Listar la tabla a aplicar el mantenimiento
+**/
+function __InicializarTabla(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        
+    });    
+}
+
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "scrollCollapse": true,
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+
+/**
+*-------------------------------------Articulos al minimo ---------------------------------------------------------------------
+**/
+
+function __ArticulosMinimo(){
+        $("#tableListarDebajoMinimo").dataTable().fnClearTable(); 
+        $.ajax({
+            url: "ListarArticuloMinimoAjax.do",
+            datatype: "json",
+			global: false,
+            method:"POST",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable_Minimo_Stock();
+                    loadListar(".tableListarDebajoMinimo",idioma_espanol,self.formato_tabla_Strock_minimo,result.aaData)
+                    agregarInputsCombos_Minimo_Stock()
+                    ActivarEventoFiltro(".tableListarDebajoMinimo")
+                }else{
+                    __InformacionDataTable_Minimo_Stock();
+                    agregarInputsCombos_Minimo_Stock()
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+}
+
+function agregarInputsCombos_Minimo_Stock(){
+     // Agregar los input de busqueda 
+    $('.tableListarDebajoMinimo tfoot th').each( function (e) {
+        var title = $('.tableListarDebajoMinimo thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
+
+/**
+*Formato del listado 
+**/
+
+function __InformacionDataTable_Minimo_Stock(){
+    self.formato_tabla_Strock_minimo = [ 
+			{'data' : 'codigo'        ,"name":"codigo"       ,"title" : $.i18n.prop("articulo.codigo")       , "autoWidth" : true},
+ 			{'data' : 'descripcion'   ,"name":"descripcion"  ,"title" : $.i18n.prop("articulo.descripcion")  , "autoWidth" : true},
+    	    {'data' : 'cantidad1'     ,"name":"cantidad1"     ,"title" : $.i18n.prop("inventario.cantidad")   , "autoWidth" : true},
+			{'data' : 'minimo'        ,"name":"minimo"       ,"title" : $.i18n.prop("inventario.minimo")     , "autoWidth" : true},
+   ];
+   self.update();
+}
+
+/**
+*-------------------------------------Cuentas X Cobrar ---------------------------------------------------------------------
+**/
+function __CuentasXCobrarGrafico(){
+        $("#tableListarCuentaPorCobrar").dataTable().fnClearTable(); 
+        $.ajax({
+            url: "GraficoCuentasXCobrarAjax.do",
+            datatype: "json",
+			global: false,
+            method:"POST",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable_CuentaPorCobrar();
+                    loadListar(".tableListarCuentaPorCobrar",idioma_espanol,self.formato_tabla_CuentaPorCobrar,result.aaData)
+                    agregarInputsCombos_CuentaPorCobrar()
+                    ActivarEventoFiltro(".tableListarCuentaPorCobrar")
+                }else{
+                    __InformacionDataTable_CuentaPorCobrar();
+                    agregarInputsCombos_CuentaPorCobrar()
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+}
+
+function agregarInputsCombos_CuentaPorCobrar(){
+     // Agregar los input de busqueda 
+    $('.tableListarCuentaPorCobrar tfoot th').each( function (e) {
+        var title = $('.tableListarCuentaPorCobrar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
+
+/**
+*Formato del listado 
+**/
+
+
+function __InformacionDataTable_CuentaPorCobrar(){
+    self.formato_tabla_CuentaPorCobrar = [ 
+			{'data' : 'numeroFactura'    ,"name":"numeroFactura"   ,"title" : "#Factura/Tiquete"  , "autoWidth" : true},
+ 			{'data' : 'nombreCompleto'   ,"name":"nombreCompleto"  ,"title" : "Cliente"             , "autoWidth" : true},
+			{'data' : 'fechaPlazoSTR'    ,"name":"fechaPlazoSTR"    ,"title" : "Fecha"             , "autoWidth" : true},
+    	    {'data' : 'totalSaldo'       ,"name":"totalSaldo"       ,"title" : "Saldo"             , "autoWidth" : true},
+			{'data' : 'totalDiasMoroso'  ,"name":"totalDiasMoroso"  ,"title" : "Dias Morosos"      , "autoWidth" : true},
+   ];
+   self.update();
+}
+
 
 function __cargaMeses(){
     self.meses = []
@@ -220,6 +384,7 @@ function __cargaMeses(){
      $.ajax({
          url: "GraficoVentasAjax.do",
         datatype: "json",
+		global: false,
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){

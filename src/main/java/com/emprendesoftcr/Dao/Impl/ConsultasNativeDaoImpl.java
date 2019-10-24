@@ -13,6 +13,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
@@ -22,9 +23,11 @@ import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -161,6 +164,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	/**
 	 * Consulta ventas
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
 
 		String queryStr = getQueryBase(ConsultaIVANative.class);
@@ -181,6 +185,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	/**
 	 * Consulta compras
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
 
 		String queryStr = getQueryBase(ConsultaComprasIvaNative.class);
@@ -230,6 +235,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
 		String queryStr = getQueryBase(ListarFacturasNativa.class);
@@ -272,6 +278,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ConsultaGananciaNative> findByDetallesGanancia(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo) {
 		String queryStr = getQueryBase(ConsultaGananciaNative.class);
@@ -307,6 +314,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ConsultaGananciaNative>) query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial) {
 		String queryStr = getQueryBase(ListarFacturasImpuestoServicioNativa.class);
@@ -332,6 +340,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		String queryStr = getQueryBase(FacturaIDNativa.class);
 		queryStr = queryStr.replaceAll(":ID_FACTURA", id.toString());
 		Query query = entityManager.createNativeQuery(queryStr, FacturaIDNativa.class);
+		@SuppressWarnings("unchecked")
 		List<FacturaIDNativa> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (FacturaIDNativa) results.get(0);
@@ -341,6 +350,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo, Empresa empresa) {
 		String queryStr = getQueryBase(DetallesFacturaNotaCreditoNativa.class);
@@ -358,6 +368,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	 * Lista de facturas que no tenga notas de credito
 	 * @see com.emprendesoftcr.Dao.ConsultasNativeDao#findByFacturasSinNotasCreditos(com.emprendesoftcr.modelo.Empresa, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Cliente, java.lang.String, java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
 		String queryStr = getQueryBase(ListarFacturaNCNativa.class);
@@ -397,6 +408,67 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturaNCNativa.class);
 		return (Collection<ListarFacturaNCNativa>) query.getResultList();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<ListaNotasNative> findByNotasCreditoAndDebito(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
+		String queryStr = getQueryBase(ListaNotasNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+
+		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", "");
+
+		} else {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", " and fac.act_comercial in ('" + actividadComercial + "') ");
+		}
+
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", "and fac.usuario_id ='" + idUsuario.toString() + "' ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", " ");
+		}
+		if (cliente != null) {
+			queryStr = queryStr.replaceAll("and fac.cliente_id", " and fac.cliente_id =" + cliente.getId().toString() + " ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.cliente_id ", " ");
+		}
+		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('" + tipoDocumento + "') ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('02','86','03') ");
+		}
+
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + estado + ") ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7" + ") ");
+		}
+
+		Query query = entityManager.createNativeQuery(queryStr, ListaNotasNative.class);
+		return (Collection<ListaNotasNative>) query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<ArticuloMinimoNative> findByAllArticulosMinimo(Empresa empresa) {
+		String queryStr = getQueryBase(ArticuloMinimoNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		Query query = entityManager.createNativeQuery(queryStr, ArticuloMinimoNative.class);
+		return (Collection<ArticuloMinimoNative>) query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<GraficoCuentasPorCobrarNative> findByGraficoCuentasXCobrar(Empresa empresa) {
+		String queryStr = getQueryBase(GraficoCuentasPorCobrarNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		Query query = entityManager.createNativeQuery(queryStr, GraficoCuentasPorCobrarNative.class);
+		return (Collection<GraficoCuentasPorCobrarNative>) query.getResultList();
 	}
 
 }

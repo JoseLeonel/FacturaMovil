@@ -174,7 +174,7 @@ function ListarFacturas(){
 	}
 	__Inicializar_Table('.tableListar')  
 	$.ajax({
-	   url: "ListarFacturasNotasCreditoAjax.do",
+	   url: "ListarNotasCreditoDebitosAjax.do",
 	   datatype: "json",
 	   data:parametros ,
 	   method:"GET",
@@ -188,7 +188,8 @@ function ListarFacturas(){
                 __VerDetalle();
                 __EnviarCorreos();
 				EventoFiltro();
-				__NotaDebito()
+				__NotaCredito()
+				__imprimirReferenciaPTV()
 		   }else{
 			__Inicializar_Table('.tableListar');  
 		   }           
@@ -250,9 +251,10 @@ var idioma_espanol =
 **/
 function __ComboTipoDocumentosPara(){
 	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("factura.tipo.documento.nota.credito")+ '</option>');
-	
-	
+	$('.tipoDocumento').append('<option value="'+"86"+'">'+$.i18n.prop("documento.electronico.nota.credito.interna")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"02"+'">'+$.i18n.prop("factura.tipo.documento.nota.debito")+ '</option>');
 }
+
 
 function agregarInputsCombos(){
 	// Agregar los input de busqueda 
@@ -305,23 +307,20 @@ function EventoFiltro(){
 *Formato del listado 
 **/
 var informacion_tabla = [ 
-                        {'data' :'nombreUsuario'  ,"name":"nombreUsuario"    ,"title" : "Usuario"         ,"autoWidth" :true },
-                        {'data' :'fechaEmisionSTR'                ,"name":"fechaEmision"                  ,"title" : "Fecha Emisi\u00F3n"   ,"autoWidth" :true },
-                        {'data' :'numeroConsecutivo'              ,"name":"numeroConsecutivo"                ,"title" : "No.Consecutivo"  ,"autoWidth" :true },
-						{'data' :'tipoDocSTR'           ,"name":"tipoDocSTR"       ,"title" : "Tipo documento"    ,"autoWidth" :true  },
-						{'data' :'condicionVentaSTR'           ,"name":"condicionVentaSTR"       ,"title" : "Cond.Pago"    ,"autoWidth" :true  },
-                        {'data' :'nombreCompleto' ,"name":"nombreCompleto"  ,"title" : "Cliente"   ,"autoWidth" :true ,
+                        {'data' :'nombreUsuario'        ,"name":"nombreUsuario"     ,"title" : "Usuario"           ,"autoWidth" :true },
+                        {'data' :'fechaEmisionSTR'      ,"name":"fechaEmision"      ,"title" : "Fecha Emisi\u00F3n","autoWidth" :true },
+                        {'data' :'numeroConsecutivo'    ,"name":"numeroConsecutivo" ,"title" : "No.Consecutivo"    ,"autoWidth" :true },
+						{'data' :'tipoDocSTR'           ,"name":"tipoDocSTR"        ,"title" : "Tipo documento"    ,"autoWidth" :true  },
+						{'data' :'referenciaNumero'     ,"name":"referenciaNumero"  ,"title" : "#Referencia"             ,"autoWidth" :true  },
+						{'data' :'referenciaTipoDoc'    ,"name":"referenciaTipoDoc" ,"title" : "Tipo Documento"    ,"autoWidth" :true  },
+						{'data' :'referenciaCodigo'     ,"name":"referenciaCodigo"  ,"title" : "Po"                ,"autoWidth" :true  },
+                        {'data' :'nombreCompleto'       ,"name":"nombreCompleto"    ,"title" : "Cliente"           ,"autoWidth" :true ,
                             "render":function(nombreCompleto,type, row){
     						    return nombreCompleto ==null?"":nombreCompleto.length > 40?nombreCompleto.substring(0,40)+"....":nombreCompleto;
 						    }
 						},
 						
-                        {'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
-                            "render":function(nombreFactura,type, row){
-    						    return nombreFactura ==null?"":nombreFactura.length > 40 ? nombreFactura.substring(0,40)+"...":nombreFactura;
-						    }
-                        },
-						{'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
+						{'data' :'totalComprobanteSTR'     ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
 						{'data' :'estadoSTR'               ,"name":"estadoSTR"           ,"title" : "Estado"      ,"autoWidth" :true ,
 						"render":function(estadoSTR,type, row){
 						  return estados(estadoSTR,row); //factura.js
@@ -342,9 +341,10 @@ function __Opciones(id,type,row){
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Imprimir" class="  btnImprimir" >Imprimir</a></li>'
+	menu += '<li><a href="#"  title="Imprimir" class="  btnImprimir" >Imprimir</a></li>'
+	menu += '<li><a href="#"  title="Imprimir referencia" class="  btnImprimirReferencia" >Referencia</a></li>'
 	menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-	menu += '<li><a href="#"  title="Nota Credito" class="  btnNotaDebito" >Nota Debito</a></li>'
+	menu += '<li><a href="#"  title="Nota Credito" class="  btnNotaCredito" >Nota Credito</a></li>'
     if(row.noFacturaElectronica == 0){
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Correo al Cliente</a></li>'
         menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Correo Alternativo</a></li>'
@@ -354,10 +354,26 @@ function __Opciones(id,type,row){
 }
 
 /**
+*  imprimir impresora punto de venta
+**/
+function __imprimirReferenciaPTV(){
+	$('.tableListar').on('click','.btnImprimirReferencia',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+		}
+		__FacturaConsecutivo(data.referenciaNumero);
+	});
+}
+
+/**
  * Nota de credito
  */
-function __NotaDebito(){
-	$('.tableListar').on('click','.btnNotaDebito',function(e){
+function __NotaCredito(){
+	$('.tableListar').on('click','.btnNotaCredito',function(e){
 		var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -366,10 +382,10 @@ function __NotaDebito(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
 		$('.mostrarListadoDeFacturas').hide();
-		var parametros = {
+        var parametros = {
 			consecutivo:data.numeroConsecutivo,
-			tipoEjecucion :2
-		}
+			tipoEjecucion :1
+		}		
 		riot.mount('nota-credito',{parametros:parametros});   
 	});
 }
@@ -507,6 +523,28 @@ function __FacturaEnEspera(factura){
         datatype: "json",
         data: {idFactura:factura.id},
         method:"POST",
+        success: function (data) {
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+/**
+*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
+**/
+function __FacturaConsecutivo(consecutivo){
+    	$.ajax({
+			url: "ListarDetlleByFacturaConsecutivoAjax.do",
+			datatype: "json",
+			data: {consecutivo:consecutivo},
+			method:"POST",
         success: function (data) {
             if(data.aaData.length > 0){
                cargarDetallesFacturaEnEspera(data.aaData)

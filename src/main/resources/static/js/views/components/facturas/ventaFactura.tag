@@ -3233,7 +3233,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
-    var costoTotal      = parseFloat(self.articulo.costo) > precioUnitario ?0:parseFloat(self.articulo.costo); 
+    var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
@@ -3775,21 +3775,21 @@ function __seleccionarClientes() {
 **/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = self.cliente.libreImpuesto == 1?1:self.cliente.porcentajeExoneracion / 100
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
     var valorTotal = 0
     for (var count = 0;count < self.detail.length; count++) {
         self.item = self.detail[count];
-        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+        self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
-                if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
-                    self.item.porcentajeExoneracion = self.cliente.libreImpuesto == 1?100:parseFloat(self.cliente.porcentajeExoneracion)
+                if(self.cliente.porcentajeExoneracion > 0  ){
+                    self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
-                    self.item.nombreInstitucionExoneracion = self.cliente.libreImpuesto == 1?self.cliente.nombreCompleto:self.cliente.nombreInstitucionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
-                    self.item.tipoDocumentoExoneracion = self.cliente.libreImpuesto == 1?"AA9999999BBB":self.cliente.tipoDocumentoExoneracion
-                    valorTotal = parseFloat(self.item.montoImpuesto1) * parseFloat(porcentaje)  
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion1 = valorTotal
-                     valorTotal = parseFloat(self.item.montoImpuesto) * parseFloat(porcentaje)  
+                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion = valorTotal
                     self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
                     self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
@@ -3807,7 +3807,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = parseFloat(self.item.montoImpuesto) + parseFloat(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0
@@ -3837,10 +3837,13 @@ function __aplicarExoneracionPorCliente(){
     }
     //factura.js
     if(verificarClienteFrecuente(self.cliente)){
-      __ComboTipoDocumentos()
+      __ComboTipoDocumentos(1)
     }else{
+        self.factura.tipoDoc ="01"
+        self.update()
         __ComboTipoDocumentosSinClienteFrecuente()
     }
+
 
 }
 

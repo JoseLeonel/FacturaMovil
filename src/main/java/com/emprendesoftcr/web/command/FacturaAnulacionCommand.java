@@ -2,9 +2,13 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -52,6 +56,13 @@ public class FacturaAnulacionCommand {
 	private Double	cantidadNotasCredito;
 	private Double	cantidad;
 
+	private String	referenciaNumero;
+
+	private String	referenciaRazon;
+
+	private String	referenciaCodigo;
+	private String	referenciaTipoDoc;
+
 	public FacturaAnulacionCommand(FacturasSinNotaCreditoNative facturasSinNotaCreditoNative) {
 		super();
 
@@ -81,24 +92,37 @@ public class FacturaAnulacionCommand {
 		this.nombreUsuario = facturasSinNotaCreditoNative.getNombreUsuario();
 	}
 
+	public FacturaAnulacionCommand(ListaNotasNative listaNotas) {
+		super();
+		this.id = listaNotas.getId();
+		this.numeroConsecutivo = listaNotas.getNumeroConsecutivo();
+		this.totalComprobante = listaNotas.getTotalComprobante();
+		this.estado = listaNotas.getEstado();
+		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(listaNotas.getTipoDoc());
+		this.tipoDoc = listaNotas.getTipoDoc();
+		this.referenciaTipoDoc = MapEnums.ENUM_TIPO_DOC.get(listaNotas.getReferenciaTipoDoc());
+		this.referenciaCodigo = MapEnums.ENUM_CODIGO_REFERENCIA.get(listaNotas.getReferenciaCodigo());
+		this.referenciaNumero = listaNotas.getReferenciaNumero();
+		this.nombreCompleto = listaNotas.getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) || listaNotas.getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) ?listaNotas.getNombreFactura():listaNotas.getNombreCompleto();
+		this.cedula = listaNotas.getCedula();
+		this.fechaEmision = listaNotas.getFechaEmision();
+		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(listaNotas.getFechaEmision());
+		this.totalComprobanteSTR = Utils.formateadorMiles(listaNotas.getTotalComprobante());
+		this.nombreFactura = listaNotas.getNombreFactura();
+		this.nombreUsuario = listaNotas.getNombreUsuario();
+		this.estadoSTR = MapEnums.ENUM_ESTADO_FACTURA.get(listaNotas.getEstado().toString());
+	}
+
 	public FacturaAnulacionCommand(ListarFacturasNativa facturasSinNotaCreditoNative) {
 		super();
 		this.id = facturasSinNotaCreditoNative.getId();
-
 		this.numeroConsecutivo = facturasSinNotaCreditoNative.getNumeroConsecutivo();
-
 		this.totalComprobante = facturasSinNotaCreditoNative.getTotalComprobante();
-
 		this.codigoMoneda = facturasSinNotaCreditoNative.getCodigoMoneda();
-
 		this.estado = facturasSinNotaCreditoNative.getEstado();
-
 		this.totalDescuentos = facturasSinNotaCreditoNative.getTotalDescuentos();
-
 		this.totalImpuesto = facturasSinNotaCreditoNative.getTotalImpuesto();
-
 		this.nombreCompleto = facturasSinNotaCreditoNative.getNombreCompleto();
-
 		this.cedula = facturasSinNotaCreditoNative.getCedula();
 		this.fechaEmision = facturasSinNotaCreditoNative.getFechaEmision();
 		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(facturasSinNotaCreditoNative.getFechaEmision());
@@ -112,13 +136,12 @@ public class FacturaAnulacionCommand {
 		this.condicionVentaSTR = MapEnums.ENUM_CONDICION_VENTA.get(facturasSinNotaCreditoNative.getCondicionVenta());
 		this.noFacturaElectronica = facturasSinNotaCreditoNative.getNoFacturaElectronica();
 		this.estadoSTR = MapEnums.ENUM_ESTADO_FACTURA.get(facturasSinNotaCreditoNative.getEstado().toString());
-
 	}
 
 	public FacturaAnulacionCommand(ListarFacturaNCNativa facturasSinNotasCredito) {
 		super();
 		this.id = facturasSinNotasCredito.getId();
-		
+
 		this.cantidad = facturasSinNotasCredito.getCantidad();
 		this.cantidadNotasCredito = facturasSinNotasCredito.getCantidadNotas();
 
@@ -191,25 +214,27 @@ public class FacturaAnulacionCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
-	
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
 	public Double getCantidadNotasCredito() {
 		return cantidadNotasCredito;
 	}
 
-	
 	public void setCantidadNotasCredito(Double cantidadNotasCredito) {
 		this.cantidadNotasCredito = cantidadNotasCredito;
 	}
 
-	
 	public Double getCantidad() {
 		return cantidad;
 	}
 
-	
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
@@ -388,6 +413,30 @@ public class FacturaAnulacionCommand {
 
 	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
 		this.noFacturaElectronica = noFacturaElectronica;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
 	}
 
 }

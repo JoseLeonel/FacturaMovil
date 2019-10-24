@@ -7,6 +7,7 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
 
 public class CuentaCobrarCommand {
 
@@ -70,6 +71,26 @@ public class CuentaCobrarCommand {
 	private Empresa		empresa;
 
 	private String		nombreFactura;
+	
+	private String nombreCompleto;
+	private String numeroFactura;
+	private String fechaPlazoSTR;
+	private Double totalDiasMoroso;
+	
+	
+	
+	public CuentaCobrarCommand(GraficoCuentasPorCobrarNative graficoCuentasPorCobrarNative) {
+		super();
+		this.id = graficoCuentasPorCobrarNative.getId();
+		this.factura = graficoCuentasPorCobrarNative.getNumeroFactura();
+		this.numeroFactura = graficoCuentasPorCobrarNative.getNumeroFactura();
+		this.totalSaldo = graficoCuentasPorCobrarNative.getTotalSaldo();
+		this.totalDiasMoroso = graficoCuentasPorCobrarNative.getTotalDiasMoroso();
+		this.fechaPlazo = graficoCuentasPorCobrarNative.getFechaPlazo();
+		this.nombreCompleto = graficoCuentasPorCobrarNative.getNombreCompleto();
+		this.fechaPlazoSTR = Utils.getFechaStr(graficoCuentasPorCobrarNative.getFechaPlazo());
+	
+	}
 
 	public CuentaCobrarCommand(CuentaCobrar cuentaCobrar) {
 		super();
@@ -113,6 +134,46 @@ public class CuentaCobrarCommand {
 
 	public Long getId() {
 		return id;
+	}
+
+	
+	
+	public String getNumeroFactura() {
+		return numeroFactura;
+	}
+
+	
+	public void setNumeroFactura(String numeroFactura) {
+		this.numeroFactura = numeroFactura;
+	}
+
+	
+	public String getFechaPlazoSTR() {
+		return fechaPlazoSTR;
+	}
+
+	
+	public void setFechaPlazoSTR(String fechaPlazoSTR) {
+		this.fechaPlazoSTR = fechaPlazoSTR;
+	}
+
+	
+	public Double getTotalDiasMoroso() {
+		return totalDiasMoroso;
+	}
+
+	
+	public void setTotalDiasMoroso(Double totalDiasMoroso) {
+		this.totalDiasMoroso = totalDiasMoroso;
+	}
+
+	public String getNombreCompleto() {
+		return nombreCompleto;
+	}
+
+	
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
 
 	public String getTotalSTR() {

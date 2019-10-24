@@ -163,8 +163,7 @@ public class MapEnums {
             put("05", "Zonas Francas").
             put("99", "Otros").build();
     public static final Map<String, String> ENUM_CODIGO_REFERENCIA = ImmutableMap.<String, String>builder().put("01", "Anula documento de referencia").
-            put("02", "Corrige texto de ocumento de referencia").
-            put("03", "Corrige monto").
+            put("02", "Corrige monto").
             put("04", "Referencia a otro documento").
             put("05", "Sustituye comprobante provisional por contigencia").
             put("99", "Otros").build();

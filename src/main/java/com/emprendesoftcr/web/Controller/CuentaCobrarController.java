@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -48,6 +49,9 @@ import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
+import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CuentaCobrarCommand;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -74,18 +78,21 @@ public class CuentaCobrarController {
 																																					};
 	@Autowired
 	private UsuarioBo																						usuarioBo;
-	
+
 	@Autowired
-	private CorreosBo																									correosBo;
+	private CorreosBo																						correosBo;
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
-	
+
 	@Autowired
-	private ClienteBo																					clienteBo;
+	private ClienteBo																						clienteBo;
 
 	@Autowired
 	private CuentaCobrarBo																			cuentaCobrarBo;
+
+	@Autowired
+	ConsultasNativeBo																						consultasNativeBo;
 
 	@Autowired
 	private EmpresaPropertyEditor																empresaPropertyEditor;
@@ -112,17 +119,41 @@ public class CuentaCobrarController {
 	public String listar(ModelMap model) {
 		return "views/cuentasxcobrar/ListarCuentasXCobrar";
 	}
+
 	@RequestMapping(value = "/ListarCuentasXCobrarConsulta", method = RequestMethod.GET)
 	public String listarConsulta(ModelMap model) {
 		return "views/cuentasxcobrar/ListarCuentasXCobrarConsulta";
 	}
 
-	
-	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GraficoCuentasXCobrarAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable graficoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<GraficoCuentasPorCobrarNative>  objetos = consultasNativeBo.findByGraficoCuentasXCobrar(usuarioSesion.getEmpresa());
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (GraficoCuentasPorCobrarNative graficoCuentasPorCobrarNative : objetos) {
+				if (graficoCuentasPorCobrarNative.getId().longValue() > 0L) {
+					solicitudList.add(new CuentaCobrarCommand(graficoCuentasPorCobrarNative));
+				}
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
 	
 ////Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarAjax.do", method = RequestMethod.GET)
-	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
+	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idClienteParam, @RequestParam String estadoParam) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idClienteParam);
@@ -130,7 +161,7 @@ public class CuentaCobrarController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estadoParam);
+		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, usuario.getEmpresa(), cliente, estadoParam);
 
 		String nombreArchivo = "cuentaxCobrar.xls";
 		response.setContentType("application/octet-stream");
@@ -147,51 +178,48 @@ public class CuentaCobrarController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
-	
+
 ////Descarga de manuales de usuario de acuerdo con su perfil
-@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarEstadoAjax.do", method = RequestMethod.GET)
-public void descargarDetalleTotalFacturasEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
+	@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarEstadoAjax.do", method = RequestMethod.GET)
+	public void descargarDetalleTotalFacturasEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam, @RequestParam String estadoParam) throws IOException, Exception {
 
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Cliente cliente = clienteBo.buscar(idClienteParam);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idClienteParam);
 
-	// Se buscan las facturas
-	Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(  usuario.getEmpresa(),cliente,estadoParam);
+		// Se buscan las facturas
+		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(usuario.getEmpresa(), cliente, estadoParam);
 
-	String nombreArchivo = "cuentaxCobrar.xls";
-	response.setContentType("application/octet-stream");
-	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+		String nombreArchivo = "cuentaxCobrar.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
-	// Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
-	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
-	int BUFFER_SIZE = 4096;
-	byte[] buffer = new byte[BUFFER_SIZE];
-	int bytesRead = -1;
-	while ((bytesRead = inputStream.read(buffer)) != -1) {
-		response.getOutputStream().write(buffer, 0, bytesRead);
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
 	}
-}
 
-	
-	
 //Enviar Correo de las cuentas por cobrar
-@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
-public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
+	@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
+	public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idClienteParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Cliente cliente = clienteBo.buscar(idClienteParam);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idClienteParam);
 
-	// Se buscan las facturas
-	Date fechaInicio = Utils.parseDate(fechaInicioParam);
-	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-	Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estadoParam);
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, usuario.getEmpresa(), cliente, estadoParam);
 //Se prepara el excell
 		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
-	
-	Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+		Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 		// Se prepara el correo
 		String from = "FacturasEmitidas@emprendesoftcr.com";
@@ -203,9 +231,9 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 		ArrayList<String> listaCorreos = new ArrayList<>();
-	
-			listaCorreos.add(correoAlternativo);
-	
+
+		listaCorreos.add(correoAlternativo);
+
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
@@ -215,61 +243,59 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 		modelEmail.put("saldo", saldo);
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
-}
-
+	}
 
 //Enviar Correo de las cuentas por cobrar
-@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do", method = RequestMethod.GET)
-public void enviarCorreoCuentasXCobrarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
+	@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do", method = RequestMethod.GET)
+	public void enviarCorreoCuentasXCobrarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 
-Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-Cliente cliente = clienteBo.buscar(idClienteParam);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idClienteParam);
 
-Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(usuario.getEmpresa(),cliente,estadoParam);
+		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(usuario.getEmpresa(), cliente, estadoParam);
 //Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
 
-Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+		Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
-	// Se prepara el correo
-	String from = "FacturasEmitidas@emprendesoftcr.com";
-	if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-		if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-			from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasPendientes" + "_No_Reply@emprendesoftcr.com";
+		// Se prepara el correo
+		String from = "FacturasEmitidas@emprendesoftcr.com";
+		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasPendientes" + "_No_Reply@emprendesoftcr.com";
+			}
 		}
-	}
-	String subject = "Facturas Pendientes de cancelar ";
+		String subject = "Facturas Pendientes de cancelar ";
 
-	ArrayList<String> listaCorreos = new ArrayList<>();
+		ArrayList<String> listaCorreos = new ArrayList<>();
 
 		listaCorreos.add(correoAlternativo);
 
-	Map<String, Object> modelEmail = new HashMap<>();
-	modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-	modelEmail.put("total", total);
-	modelEmail.put("abono", abono);
-	modelEmail.put("saldo", saldo);
+		Map<String, Object> modelEmail = new HashMap<>();
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("total", total);
+		modelEmail.put("abono", abono);
+		modelEmail.put("saldo", saldo);
 
-	correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
-}
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
+	}
 
-private Collection<Attachment> createAttachments(Attachment... attachments) {
-	return Arrays.asList(attachments);
-}
-private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
-	return new Attachment(name + ext, data);
-}
+	private Collection<Attachment> createAttachments(Attachment... attachments) {
+		return Arrays.asList(attachments);
+	}
 
+	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+		return new Attachment(name + ext, data);
+	}
 
 	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente","Moneda", "Total", "Saldo", "Abono");
+		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Moneda", "Total", "Saldo", "Abono");
 		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR,codigoMoneda, total,totalSaldo,totalAbono", baos);
 		return baos;
 	}
-	
-	
+
 	/**
 	 * Total de Cuentas por cobrar
 	 * @param request
@@ -281,16 +307,15 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 	 */
 	@RequestMapping(value = "/TotalCuentasPorCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalCuentaPorCobrarCommand totalCuentasPorCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam Long idCliente) {
+	public TotalCuentaPorCobrarCommand totalCuentasPorCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idCliente) {
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		
-		return cuentaCobrarBo.sumarCuentasPorCobrar(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),cliente);
+
+		return cuentaCobrarBo.sumarCuentasPorCobrar(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), cliente);
 	}
-	
-	
+
 	/**
 	 * Listado de las cuentas por cobrar
 	 * @param request
@@ -300,10 +325,10 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idCliente,@RequestParam String estado) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idCliente, @RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, cliente, usuarioSesion.getEmpresa(),estado);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, cliente, usuarioSesion.getEmpresa(), estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -311,15 +336,14 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaCobrarPorEstadoCedulaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarEstadoAndCedulaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idCliente,@RequestParam String estado) {
+	public RespuestaServiceDataTable listarEstadoAndCedulaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idCliente, @RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilderEstado.get(request,  cliente, usuarioSesion.getEmpresa(),estado);
+		DataTableDelimitador query = DelimitadorBuilderEstado.get(request, cliente, usuarioSesion.getEmpresa(), estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
-	
 	/**
 	 * Agregar una Cuenta Manual cuando no se realiza por medio de una factura creada desde del sistema
 	 * @param request
@@ -338,11 +362,9 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-			Double totalCuotas = cuentaCobrar.getMontoCouta()  * cuentaCobrar.getCantidadPagos();
-			
-			
-			
-			if (totalCuotas < cuentaCobrar.getTotal()  || totalCuotas  > cuentaCobrar.getTotal() ) {
+			Double totalCuotas = cuentaCobrar.getMontoCouta() * cuentaCobrar.getCantidadPagos();
+
+			if (totalCuotas < cuentaCobrar.getTotal() || totalCuotas > cuentaCobrar.getTotal()) {
 				result.rejectValue("montoCouta", "error.cuentaCobrar.montoCuota.menor.total");
 			}
 			if (cuentaCobrar.getCantidadPagos() == null) {
@@ -355,7 +377,6 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
-		
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -401,7 +422,7 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 				return RESPONSES.ERROR.CUENTACOBRAR.NO_EXISTE;
 			}
 
-			Double totalCuotas = cuentaCobrar.getMontoCouta()* cuentaCobrar.getCantidadPagos();
+			Double totalCuotas = cuentaCobrar.getMontoCouta() * cuentaCobrar.getCantidadPagos();
 			if (totalCuotas < cuentaCobrar.getTotal() || totalCuotas > cuentaCobrar.getTotal()) {
 				result.rejectValue("montoCouta", "error.cuentaCobrar.montoCuota.menor.total");
 			}
@@ -415,7 +436,7 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
-			
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -468,7 +489,7 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa,String estado) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaCobrar");
 			Date fechaInicio = new Date();
@@ -478,15 +499,15 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
-				
+
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
 			}
-			if(estado !=null) {
-				if(!estado.equals(Constantes.EMPTY)) {
-					if(!estado.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+			if (estado != null) {
+				if (!estado.equals(Constantes.EMPTY)) {
+					if (!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 					}
-						
+
 				}
 			}
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
@@ -510,34 +531,33 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 			return delimitador;
 		}
 	}
-	
+
 	private static class DelimitadorBuilderEstado {
 
-		static DataTableDelimitador get(HttpServletRequest request, Cliente cliente, Empresa empresa,String estado) {
+		static DataTableDelimitador get(HttpServletRequest request, Cliente cliente, Empresa empresa, String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaCobrar");
-			
 
 //			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.cuen.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
-				
+
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
 			}
-			if(estado !=null) {
-				if(!estado.equals(Constantes.EMPTY)) {
-					if(!estado.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+			if (estado != null) {
+				if (!estado.equals(Constantes.EMPTY)) {
+					if (!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 					}
-						
+
 				}
 			}
-		
+
 			return delimitador;
 		}
 	}
-	
+
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

@@ -10,6 +10,7 @@ import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 
 public class ArticuloCommand {
 
@@ -69,7 +70,21 @@ public class ArticuloCommand {
 	private String			codigoTarifa;
 	private String			codigoTarifa1;
 	private Integer						baseImponible;
+	private Double cantidad1;
 
+	
+	
+
+	public ArticuloCommand(ArticuloMinimoNative articuloMinimoNative) {
+		super();
+		this.id = articuloMinimoNative.getId();
+		this.codigo = articuloMinimoNative.getCodigo();
+		this.descripcion = articuloMinimoNative.getDescripcion();
+				this.minimo = articuloMinimoNative.getMinimo();
+				this.cantidad1 =articuloMinimoNative.getCantidad();
+				
+		
+	}
 	public ArticuloCommand(Articulo articulo) {
 		super();
 		this.id = articulo.getId();
@@ -126,7 +141,6 @@ public class ArticuloCommand {
 
 	}
 	
-	
 
 	
 	public Integer getBaseImponible() {
@@ -136,6 +150,14 @@ public class ArticuloCommand {
 
 
 	
+	
+	public Double getCantidad1() {
+		return cantidad1;
+	}
+	
+	public void setCantidad1(Double cantidad1) {
+		this.cantidad1 = cantidad1;
+	}
 	public void setBaseImponible(Integer baseImponible) {
 		this.baseImponible = baseImponible;
 	}

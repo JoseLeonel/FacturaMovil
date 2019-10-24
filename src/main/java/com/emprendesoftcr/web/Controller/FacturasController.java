@@ -80,10 +80,10 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
-import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -102,7 +102,6 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
-import com.emprendesoftcr.web.command.NotaCreditoEspecificaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
@@ -377,6 +376,12 @@ public class FacturasController {
 		return "views/facturas/recepcionFactura";
 	}
 
+	
+	@RequestMapping(value = "/ListaNostas.do", method = RequestMethod.GET)
+	public String listaNotas(ModelMap model) {
+		return "views/facturas/listasNotas";
+	}
+	
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -1015,6 +1020,44 @@ public class FacturasController {
 		return detallesFacturaCommand;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/ListarNotasCreditoDebitosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasNotasCreditoDebitosAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) {
+		Cliente cliente = clienteBo.buscar(idCliente);
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ListaNotasNative> objetos = consultasNativeBo.findByNotasCreditoAndDebito(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ListaNotasNative facturasDelDia : objetos) {
+				if (facturasDelDia.getId().longValue() > 0L) {
+					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
+				}
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasNotasCreditoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody

@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.KardexBo;
@@ -45,12 +48,16 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
@@ -86,6 +93,9 @@ public class ArticuloController {
 
 	@Autowired
 	private ArticuloBo																			articuloBo;
+	
+	@Autowired
+	ConsultasNativeBo  consultasNativeBo;
 
 	@Autowired
 	private DetalleBo																				detalleBo;
@@ -399,6 +409,34 @@ public class ArticuloController {
 
 	}
 
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticuloMinimoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosMinimoAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ArticuloMinimoNative>  objetos = consultasNativeBo.findByAllArticulosMinimo(usuarioSesion.getEmpresa());
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ArticuloMinimoNative articuloMinimoNative : objetos) {
+				if (articuloMinimoNative.getId().longValue() > 0L) {
+					solicitudList.add(new ArticuloCommand(articuloMinimoNative));
+				}
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+
+	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody

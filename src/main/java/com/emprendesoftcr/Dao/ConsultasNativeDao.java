@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
@@ -12,9 +13,11 @@ import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -61,5 +64,10 @@ public interface  ConsultasNativeDao {
 	Collection<DetallesFacturaNotaCreditoNativa> findByFacturaParaNotaCredito(String consecutivo,Empresa empresa);
 	
 	Collection<ListarFacturaNCNativa> findByFacturasSinNotasCreditos(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal,Cliente cliente , String tipoDocumento,String actividadComercial);
+	
+	Collection<ListaNotasNative> findByNotasCreditoAndDebito(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
+	
+	Collection<ArticuloMinimoNative> findByAllArticulosMinimo(Empresa empresa);
+	Collection<GraficoCuentasPorCobrarNative> findByGraficoCuentasXCobrar(Empresa empresa);
 	
 }

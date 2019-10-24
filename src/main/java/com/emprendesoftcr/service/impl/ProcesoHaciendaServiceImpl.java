@@ -316,7 +316,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/25 02 * * ?")
+	@Scheduled(cron = "0 0/10 04 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("Totales de Grafico  {}", new Date());
@@ -482,7 +482,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/6 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -1044,7 +1044,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/14 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1375,7 +1375,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/08 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

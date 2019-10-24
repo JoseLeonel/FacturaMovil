@@ -230,63 +230,63 @@
 </div><!-- fin contenedor-factura-->
 
 <style type="text/css"  >
-.btn-dark-gray-final {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 20px!important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.btn-dark-gray {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.btn-dark-gray {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.disabled { 
-    position : relative; 
-    color: grey;
-}
-.disabled:after {
-    content:' ';
-    width: 100%;
-    height: 100%;
-    left:0;
-    top: 0;
-    position:absolute;
-}
+    .btn-dark-gray-final {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+        font-size: 20px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .disabled { 
+        position : relative; 
+        color: grey;
+    }
+    .disabled:after {
+        content:' ';
+        width: 100%;
+        height: 100%;
+        left:0;
+        top: 0;
+        position:absolute;
+    }
     .label-campos{
        margin-left: 2%;
     }
@@ -361,36 +361,36 @@
 
     }
   
-  .btn-dark-gray {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px!important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-   }
-   .btn-green {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px !important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-green {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px !important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
     .botonesContainer{
        display:flex;
     }
@@ -589,7 +589,6 @@
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
-    self.totalImpuesto1                 = 0
     self.montoExoneracion              = 0
     self.montoExoneracion1             = 0
     self.totalComprobante              = 0
@@ -659,7 +658,6 @@ function _Empresa(){
         }
     });
 }
-
 /**
 **/
 _AtrasListado(){
@@ -1087,32 +1085,33 @@ function cargarDetallesFacturaEnEspera(data){
         self.update()
         self.descripcionArticulo = modeloTabla.descripcion
         self.detail.push({
+            unidadMedida    : modeloTabla.unidadMedida,
             numeroLinea     : modeloTabla.numeroLinea,
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
             tipoImpuesto1   : modeloTabla.tipoImpuesto1,
             descripcion     : modeloTabla.descripcion,
-            cantidad        : parseFloat(modeloTabla.cantidad),
-            precioUnitario  : parseFloat(modeloTabla.precioUnitario),
-            impuesto        : parseFloat(modeloTabla.impuesto),
-            impuesto1       : parseFloat(modeloTabla.impuesto1),
-            montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
-            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
-            montoDescuento  : parseFloat(modeloTabla.montoDescuento),
-            porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
-            subTotal        : parseFloat(modeloTabla.subTotal),
-            montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-            montoTotal      : parseFloat(modeloTabla.montoTotal),
-            costo           : parseFloat(modeloTabla.costo),
-            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
-            montoGanancia :parseFloat(modeloTabla.montoGanancia),
-            ganancia :parseFloat(__valorNumerico(modeloTabla.ganancia)),
-            pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
-            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal),
-            montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
-            montoExoneracion1:parseFloat(modeloTabla.montoExoneracion1),
-            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            cantidad        : __valorNumerico(modeloTabla.cantidad),
+            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+            impuesto        : __valorNumerico(modeloTabla.impuesto),
+            impuesto1       : __valorNumerico(modeloTabla.impuesto1),
+            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+            subTotal        : __valorNumerico(modeloTabla.subTotal),
+            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+            costo           : __valorNumerico(modeloTabla.costo),
+            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
+            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
+            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
             fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
             nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
             numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
@@ -1146,21 +1145,21 @@ function cargarDetallesFacturaEnEspera(data){
 **/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = self.cliente.libreImpuesto == 1?1:self.cliente.porcentajeExoneracion / 100
+    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
-        self.item          = self.detail[count];
-        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+        self.item  = self.detail[count];
+        self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
-                if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
-                    self.item.porcentajeExoneracion = self.cliente.libreImpuesto == 1?100:parseFloat(self.cliente.porcentajeExoneracion)
+                if(self.cliente.porcentajeExoneracion > 0  ){
+                    self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
-                    self.item.nombreInstitucionExoneracion = self.cliente.libreImpuesto == 1?self.cliente.nombreCompleto:self.cliente.nombreInstitucionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
-                    self.item.tipoDocumentoExoneracion = self.cliente.libreImpuesto == 1?"AA9999999BBB":self.cliente.tipoDocumentoExoneracion
-                    valorTotal = parseFloat(self.item.montoImpuesto1) * parseFloat(porcentaje)  
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion1 = valorTotal
-                     valorTotal = parseFloat(self.item.montoImpuesto) * parseFloat(porcentaje)  
+                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
                     self.item.montoExoneracion = valorTotal
                     self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
                     self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
@@ -1178,7 +1177,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = parseFloat(self.item.montoImpuesto) + parseFloat(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0
@@ -1429,7 +1428,7 @@ function ActualizarLineaDEtalle(){
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
-    self.item.pesoTransporteTotal = parseFloat(self.item.cantidad) *  parseFloat(self.item.pesoTransporte)
+    self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
@@ -1462,7 +1461,6 @@ function __calculate() {
     var subTotal       = 0
     var totalDescuento = 0
     var totalImpuesto  = 0
-    var totalImpuesto1 = 0
     var totalMercanciasGravadas = 0
     var totalMercanciasExentas  = 0
     var totalServGravados       = 0
@@ -1473,35 +1471,24 @@ function __calculate() {
     var totalventaNeta          = 0
     var totalGanancia           = 0
     self.cantArticulos      = 0
-    var totalPesoByFactura = 0
     var montoExoneracion = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
+        totalMercanciasGravadas += e.tipoImpuesto.length > 0  && e.unidadMedida !="Sp"?e.montoTotal:0
+        totalMercanciasExentas  += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0
+        totalServGravados       += e.tipoImpuesto.length > 0 && e.unidadMedida =="Sp"?e.montoTotal:0
+        totalServExentos        += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0
+        totalGravado            += e.tipoImpuesto.length > 0 ?e.montoTotal:0
+        totalExento             += e.tipoImpuesto.length == 0 ?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         totalGanancia           +=__valorNumerico(e.ganancia)
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
-        totalPesoByFactura      += parseFloat(e.pesoTransporte) * parseFloat(e.cantidad)
-        montoExoneracion        = montoExoneracion + parseFloat(e.montoExoneracion) 
-        montoExoneracion        = montoExoneracion + parseFloat(e.montoExoneracion1) 
+        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion) 
     });
     self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
-    self.totalPesoByFactura = parseFloat(totalPesoByFactura)
-    self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
     self.factura.totalServGravados       = __valorNumerico(totalServGravados)
@@ -1511,13 +1498,12 @@ function __calculate() {
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
     self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
+    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) 
     self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
     self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
     getSubTotalGeneral()
@@ -1534,7 +1520,7 @@ function getSubTotalGeneral(){
     self.subTotalGeneral = formatoDecimales(resultado,2)
     self.factura.subtotal =  resultado
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
+    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
     self.update()
 }
