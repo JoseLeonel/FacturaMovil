@@ -40,46 +40,61 @@
 			</div>
 
 		</div>
-        <div class="row" show="{mostrarVentasXMes == false}"> 
-			<div class="col-lg-6">
-				<div class="card-box"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
+        <div class="row" show="{mostrarVentasXMes == true}"> 
+			<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+				<div class="card-box">
+					<h3 class="portlet-title text-dark">Productos mas Vendidos</h3>
 					<div class="row">
-						<div class="col-lg-12">
-							<h4 class="m-t-0 header-title"><b>Artículos más vendidos</b></h4>
-						</div>
+			        	<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+						    <table id="tableListarArticulosMasVendidos" class="display table responsive table-hover nowrap table-condensed tableListarArticulosMasVendidos "   style="width:100%">
+								<thead>
+									<tr>
+										<th class = "table-header" style="width:5%;">{$.i18n.prop("articulo.codigo")}</th>
+										<th class = "table-header" style="width:5%;">{$.i18n.prop("articulo.descripcion")}</th>
+										<th class = "table-header" style="width:5%;">{$.i18n.prop("inventario.cantidad")}</th>
+									</tr>
+									</thead>
+									<tfoot style="display: table-header-group;">
+										<tr>
+											<th style="width:5%;">{$.i18n.prop("articulo.codigo")}</th>
+											<th style="width:5%;">{$.i18n.prop("articulo.descripcion")}</th>
+											<th style="width:5%;">{$.i18n.prop("inventario.cantidad")}</th>
+										</tr>
+									</tfoot>
+                            </table>							
+    					</div>
 					</div>
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="form-group">
-								 <div id="masVendidosReportrange" class="form-control pull-left m-r-10">
-									<i class="ion-calendar"></i>
-									<span>01-09-2019 - 30-09-2019</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<canvas id="chart-masvendidos" height="218" style="display: block; width: 654px; height: 218px;" width="654">
-				</canvas></div>
+				</div>
 			</div>
 
 			<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
 				<div class="card-box"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
+					<h3 class="portlet-title text-dark">Cuentas por Pagar con mas tiempo del plazo establecido</h3>
 					<div class="row">
-						<h4 class="m-t-0 header-title"><b>Articulos menos vendidos</b></h4>
-					</div>
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="form-group">
-								 <div id="vendedoresReportrange" class="form-control pull-left m-r-10">
-									<i class="ion-calendar"></i>
-									<span>01-09-2019 - 30-09-2019</span>
-								</div>
-							</div>
+					    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+  						    <table id="tableListarCuentaPorPagar" class="display table responsive table-hover nowrap table-condensed tableListarCuentaPorPagar "   style="width:100%">
+							<thead>
+								<tr>
+									<th class = "table-header" style="width:5%;">#Pedido</th>
+									<th class = "table-header" style="width:5%;">Proveedor</th>
+									<th class = "table-header" style="width:5%;">Fecha</th>
+									<th class = "table-header" style="width:5%;">Saldo</th>
+									<th class = "table-header" style="width:5%;">Dias Morosos</th>
+								</tr>
+						        </thead>
+								<tfoot style="display: table-header-group;">
+									<tr>
+										<th style="width:5%;">#Pedido</th>
+										<th style="width:5%;">Proveedor</th>
+										<th style="width:5%;">Fecha</th>
+										<th style="width:5%;">Saldo</th>
+										<th style="width:5%;">Dias Morosos</th>
+									</tr>
+								</tfoot>
+                                </table>							
 						</div>
-					</div>
-					<canvas id="chart-vendedores" height="218" style="display: block; width: 654px; height: 218px;" width="654">
-					
-				</canvas></div>
+                    </div>              
+				 </div>
 			</div>
 		</div>
 
@@ -115,36 +130,32 @@
 				<div class="card-box">
 					<h3 class="portlet-title text-dark">Cuentas por Cobrar con mas tiempo del plazo establecido</h3>
 					<div class="row">
-					        	<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-  									    <table id="tableListarCuentaPorCobrar" class="display table responsive table-hover nowrap table-condensed tableListarCuentaPorCobrar "   style="width:100%">
-											<thead>
-												<tr>
-													<th class = "table-header" style="width:5%;">#Factura</th>
-													<th class = "table-header" style="width:5%;">Cliente</th>
-													<th class = "table-header" style="width:5%;">Fecha</th>
-													<th class = "table-header" style="width:5%;">Saldo</th>
-													<th class = "table-header" style="width:5%;">Dias Morosos</th>
-												</tr>
-											</thead>
-											<tfoot style="display: table-header-group;">
-												<tr>
-													<th style="width:5%;">#Factura</th>
-													<th style="width:5%;">Cliente</th>
-													<th style="width:5%;">Fecha</th>
-													<th style="width:5%;">Saldo</th>
-													<th style="width:5%;">Dias Morosos</th>
-												</tr>
-											</tfoot>
-                                        </table>							
-								</div>
-					</div>
+					    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+  						    <table id="tableListarCuentaPorCobrar" class="display table responsive table-hover nowrap table-condensed tableListarCuentaPorCobrar "   style="width:100%">
+							<thead>
+								<tr>
+									<th class = "table-header" style="width:5%;">#Factura</th>
+									<th class = "table-header" style="width:5%;">Cliente</th>
+									<th class = "table-header" style="width:5%;">Fecha</th>
+									<th class = "table-header" style="width:5%;">Saldo</th>
+									<th class = "table-header" style="width:5%;">Dias Morosos</th>
+								</tr>
+						        </thead>
+								<tfoot style="display: table-header-group;">
+									<tr>
+										<th style="width:5%;">#Factura</th>
+										<th style="width:5%;">Cliente</th>
+										<th style="width:5%;">Fecha</th>
+										<th style="width:5%;">Saldo</th>
+										<th style="width:5%;">Dias Morosos</th>
+									</tr>
+								</tfoot>
+                                </table>							
+							</div>
+    					</div>
 				</div>
 			</div>
-			
 		</div>
-
-		
-
 
 <style type="text/css">
 	.text-muted {
@@ -214,6 +225,7 @@
   .parteContainer4{
     background: white;
   }
+  
 </style>
 
 <script>
@@ -227,11 +239,13 @@ self.datos = []
 self.on('mount',function(){
     __InicializarTabla('.tableListarDebajoMinimo')
 	__InicializarTabla('.tableListarCuentaPorCobrar')
-
-	
+	__InicializarTabla('.tableListarArticulosMasVendidos')
+	__InicializarTabla('.tableListarCuentaPorPagar')
 	__cargaMeses();
 	__ArticulosMinimo()
 	__CuentasXCobrarGrafico()
+	__ArticulosMasVendido()
+	__CuentasXPagarGrafico()
 
 });
 
@@ -243,7 +257,7 @@ function __InicializarTabla(nombreTabla){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'lrtip',
-        "order": [0, 'desc'],
+        "order": [2, 'desc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,
@@ -269,6 +283,78 @@ function loadListar(table,idioma,formatoTabla,data){
     });  
     $(table).dataTable().fnClearTable();
     $(table).dataTable().fnAddData(data);        
+}
+/**
+*-------------------------------------Articulos mas vendido ---------------------------------------------------------------------
+**/
+
+function __ArticulosMasVendido(){
+        $("#tableListarArticulosMasVendidos").dataTable().fnClearTable(); 
+        $.ajax({
+            url: "GraficoArticuloMasVendidoAjax.do",
+            datatype: "json",
+			global: false,
+            method:"POST",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable_Articulo_MAS_VENDDIDO();
+                    loadListarGraficoArticuloMas(".tableListarArticulosMasVendidos",idioma_espanol,self.formato_tabla_Strock_Articulo_Mas_Vendido,result.aaData)
+                    agregarInputsCombos_Articulo_Mas_Vendido()
+                    ActivarEventoFiltro(".tableListarArticulosMasVendidos")
+                }else{
+                    __InformacionDataTable_Articulo_MAS_VENDDIDO();
+                    agregarInputsCombos_Articulo_Mas_Vendido()
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+}
+
+/**
+ *  Carga el listar de los mantenimientos
+ */
+
+function loadListarGraficoArticuloMas(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [2, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+
+
+function agregarInputsCombos_Articulo_Mas_Vendido(){
+     // Agregar los input de busqueda 
+    $('.tableListarArticulosMasVendidos tfoot th').each( function (e) {
+        var title = $('.tableListarArticulosMasVendidos thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
+
+/**
+*Formato del listado 
+**/
+
+function __InformacionDataTable_Articulo_MAS_VENDDIDO(){
+    self.formato_tabla_Strock_Articulo_Mas_Vendido = [ 
+			{'data' : 'codigo'           ,"name":"codigo"       ,"title" : $.i18n.prop("articulo.codigo")       , "autoWidth" : true},
+ 			{'data' : 'descripcion'      ,"name":"descripcion"  ,"title" : $.i18n.prop("articulo.descripcion")  , "autoWidth" : true},
+    	    {'data' : 'cantidadVendido'  ,"name":"cantidadVendido"     ,"title" : $.i18n.prop("inventario.cantidad")   , "autoWidth" : true},
+   ];
+   self.update();
 }
 
 /**
@@ -366,13 +452,76 @@ function agregarInputsCombos_CuentaPorCobrar(){
 function __InformacionDataTable_CuentaPorCobrar(){
     self.formato_tabla_CuentaPorCobrar = [ 
 			{'data' : 'numeroFactura'    ,"name":"numeroFactura"   ,"title" : "#Factura/Tiquete"  , "autoWidth" : true},
- 			{'data' : 'nombreCompleto'   ,"name":"nombreCompleto"  ,"title" : "Cliente"             , "autoWidth" : true},
+ 			{'data' : 'nombreCompleto'   ,"name":"nombreCompleto"  ,"title" : "Cliente"             , "autoWidth" : true,
+			    "render":function(nombreCompleto,type, row){
+					return  row.nombreCompleto.length >35?row.nombreCompleto.substring(0, 35):row.nombreCompleto;
+                }
+			 },
 			{'data' : 'fechaPlazoSTR'    ,"name":"fechaPlazoSTR"    ,"title" : "Fecha"             , "autoWidth" : true},
     	    {'data' : 'totalSaldo'       ,"name":"totalSaldo"       ,"title" : "Saldo"             , "autoWidth" : true},
 			{'data' : 'totalDiasMoroso'  ,"name":"totalDiasMoroso"  ,"title" : "Dias Morosos"      , "autoWidth" : true},
    ];
    self.update();
 }
+
+
+/**
+*-------------------------------------Cuentas X Pagar ---------------------------------------------------------------------
+**/
+function __CuentasXPagarGrafico(){
+        $("#tableListarCuentaPorPagar").dataTable().fnClearTable(); 
+        $.ajax({
+            url: "GraficoCuentasXPagarAjax.do",
+            datatype: "json",
+			global: false,
+            method:"POST",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable_CuentaPorPagar();
+                    loadListar(".tableListarCuentaPorPagar",idioma_espanol,self.formato_tabla_CuentaPorPagar,result.aaData)
+                    agregarInputsCombos_CuentaPorPagar()
+                    ActivarEventoFiltro(".tableListarCuentaPorPagar")
+                }else{
+                    __InformacionDataTable_CuentaPorPagar();
+                    agregarInputsCombos_CuentaPorPagar()
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+}
+
+function agregarInputsCombos_CuentaPorPagar(){
+     // Agregar los input de busqueda 
+    $('.tableListarCuentaPorPagar tfoot th').each( function (e) {
+        var title = $('.tableListarCuentaPorPagar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
+
+/**
+*Formato del listado 
+**/
+
+
+function __InformacionDataTable_CuentaPorPagar(){
+    self.formato_tabla_CuentaPorPagar	 = [ 
+			{'data' : 'consecutivo'       ,"name":"consecutivo"   ,"title" : "#Pedido"  , "autoWidth" : true},
+ 			{'data' : 'nombreCompleto'   ,"name":"nombreCompleto"  ,"title" : "Proveedor"             , "autoWidth" : true,
+			    "render":function(nombreCompleto,type, row){
+					return  row.nombreCompleto.length >35?row.nombreCompleto.substring(0, 35):row.nombreCompleto;
+                }
+			 },
+			{'data' : 'fechaCreditoSTR'  ,"name":"fechaCreditoSTR"  ,"title" : "Fecha"             , "autoWidth" : true},
+    	    {'data' : 'totalSaldo'       ,"name":"totalSaldo"       ,"title" : "Saldo"             , "autoWidth" : true},
+			{'data' : 'totalDiasMoroso'  ,"name":"totalDiasMoroso"  ,"title" : "Dias Morosos"      , "autoWidth" : true},
+   ];
+   self.update();
+}
+
+
 
 
 function __cargaMeses(){
