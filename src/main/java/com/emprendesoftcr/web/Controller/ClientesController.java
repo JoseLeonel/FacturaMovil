@@ -27,7 +27,6 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -70,10 +69,6 @@ public class ClientesController {
 	private FacturaBo																			facturaBo;
 
 	@Autowired
-	private EmpresaBo																			empresaBo;
-
-	
-	@Autowired
 	private UsuarioBo																			usuarioBo;
 
 	@Autowired
@@ -112,7 +107,7 @@ public class ClientesController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@Cacheable(value="clientesCache")
+	@Cacheable(value = "clientesCache")
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -129,19 +124,17 @@ public class ClientesController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
-	@Cacheable(value="clientesCache")
+
+	@Cacheable(value = "clientesCache")
 	@RequestMapping(value = "/movil/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public Collection<Cliente> listarClientesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {
-		
+	public Collection<Cliente> listarClientesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa) {
 
 		return clienteBo.findByEmpresa(idEmpresa);
 	}
 
-
 	@SuppressWarnings("all")
-	@Cacheable(value="clientesCache")
+	@Cacheable(value = "clientesCache")
 	@RequestMapping(value = "/ListarClientesActivosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivosAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -195,7 +188,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="clientesCache",allEntries=true)
+	@CacheEvict(value = "clientesCache", allEntries = true)
 	@RequestMapping(value = "/AgregarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -352,7 +345,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="clientesCache",allEntries=true)
+	@CacheEvict(value = "clientesCache", allEntries = true)
 	@RequestMapping(value = "/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {

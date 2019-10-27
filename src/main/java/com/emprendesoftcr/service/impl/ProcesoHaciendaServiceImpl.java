@@ -316,17 +316,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/35 04 * * ?")
+	@Scheduled(cron = "0 0/18 04 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
-		log.info("Totales de Grafico  {}", new Date());
+		log.info("inicio Totales de Grafico  {}", new Date());
   	Year anno = Year.now(); 
   	Integer annno = new Integer(anno.getValue());
-		Collection<Empresa> lista = empresaBo.findByEstado(Constantes.ESTADO_ACTIVO);
-		for(Empresa empresa : lista) {
-			graficoVentasBo.actualizarGraficoVenta(annno, empresa);
-		}
-		
+			graficoVentasBo.actualizarGraficoVenta(annno);
+			log.info("fin Totales de Grafico  {}", new Date());
 
 	}
 
@@ -641,10 +638,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);

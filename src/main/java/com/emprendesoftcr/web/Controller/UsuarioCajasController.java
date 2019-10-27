@@ -258,7 +258,7 @@ public class UsuarioCajasController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/MostrarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/MostrarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
 		try {

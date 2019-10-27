@@ -13,6 +13,10 @@
             <section class="zona-impresion" id="imprimemeCorte">
                 <div class="forma-impresion">
                     <div class="ticket" > 
+                        <form id = "formularioUsuarioCajaImprimir" name ="formularioUsuarioCajaImprimir"   class="advanced-search-form formularioUsuarioCajaImprimir">
+                           <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
+                        </form>   
+                  
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{usuarioCaja.created_atSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
@@ -181,16 +185,48 @@ self.usuarioCaja   = opts.usuarioCaja;
 
 
 self.on('mount',function(){
-    if(self.usuarioCaja.id > 0){
-        self.usuarioCaja.created_at = displayDate_detail(self.usuarioCaja.created_at)
-        self.usuarioCaja.updated_at = displayDate_detail(new Date())
-        self.update()
-       $('.imprimirModalCorte').modal('show'); 
-    }
+   consultaCaja()
     __Teclas()
    
 
 })
+
+/**
+*consultar Facturas por Consecutivo
+**/
+function consultaCaja(){
+   var formulario = $('#formularioUsuarioCajaImprimir').serialize();
+     $.ajax({
+        url: "MostrarUsuarioCajaAjax.do",
+        datatype: "json",
+        data: formulario,
+        method:"Post",
+        success: function (data) {
+            self.usuarioCaja = null
+            self.update()
+            $.each(data.listaObjetos, function( index, modeloTabla ) {
+                self.usuarioCaja = modeloTabla    
+                self.usuarioCaja.created_at = displayDate_detail(self.usuarioCaja.created_at)
+                self.usuarioCaja.updated_at = displayDate_detail(new Date())
+                self.update()
+                
+                
+            })
+            if(self.usuarioCaja !=null){
+               $('.imprimirModalCorte').modal('show');
+            }
+             
+       
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+     
+
+}
+
 
 /**
 *  teclas de la pantalla

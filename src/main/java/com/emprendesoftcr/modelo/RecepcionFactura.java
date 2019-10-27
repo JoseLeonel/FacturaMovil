@@ -332,7 +332,7 @@ public class RecepcionFactura implements Serializable {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			return this.facturaTotalImpuestos != null ? this.facturaTotalImpuestos * -1 : this.facturaTotalImpuestos;
 		} else {
-			return this.facturaTotalImpuestos;
+			return this.facturaTotalImpuestos != null ? this.facturaTotalImpuestos : Constantes.ZEROS_DOUBLE;
 		}
 
 	}
@@ -341,7 +341,7 @@ public class RecepcionFactura implements Serializable {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			return this.facturaTotalComprobante != null ? this.facturaTotalComprobante * -1 : this.facturaTotalComprobante;
 		} else {
-			return this.facturaTotalComprobante;
+			return this.facturaTotalComprobante != null ? this.facturaTotalComprobante : Constantes.ZEROS_DOUBLE;
 		}
 	}
 
@@ -353,12 +353,10 @@ public class RecepcionFactura implements Serializable {
 		this.id = id;
 	}
 
-	
 	public Integer getEstado() {
 		return estado;
 	}
 
-	
 	public void setEstado(Integer estado) {
 		this.estado = estado;
 	}
@@ -847,7 +845,6 @@ public class RecepcionFactura implements Serializable {
 		return MapEnums.ENUM_TIPO_GASTO.get(this.tipoGasto.toString());
 	}
 
-	
 	public String getDetalles() {
 		return detalles;
 	}

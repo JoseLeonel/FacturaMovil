@@ -1282,7 +1282,8 @@
     self.on('mount',function(){
 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
-        __informacionData()
+         self.informacion_tabla_clientes =__informacionData_formato_cliente()
+         self.update()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
         __InicializarTabla('.tableListaInventario')
@@ -1334,13 +1335,9 @@
                 timer = setTimeout(fn, ms);
             });
         };
-        var retrievedTipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
-        if(retrievedTipoCambio != null){
-           self.tipoCambio = retrievedTipoCambio
-           self.update()
-        }else{
+       
            getTipoCambioDolar()
-        }
+       
 
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
@@ -1447,7 +1444,7 @@ __ConsultarHacienda(e){
 **/
 function getTipoCambioDolar(){
     $.ajax({
-    "url": "https://api.hacienda.go.cr/indicadores/tc/dolar",
+    "url": "https://api.hacienda.go.cr/indicadores/tc",
     "method": "GET",
     statusCode: {
         
@@ -1456,10 +1453,10 @@ function getTipoCambioDolar(){
         }
     }
     }).done(function (response) {
-         self.tipoCambio.total = __valorNumerico(response.venta.valor)
-         self.tipoCambio.totalCompra = __valorNumerico(response.compra.valor)
+         self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
+         self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
          self.update()
-         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
+        // localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
     });
 }
 
@@ -2063,14 +2060,14 @@ function __InformacionDataTableDia(){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                                {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                {'data' :'cliente'  ,"name":"cliente"  ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":row.cedula != "999999999999"?cliente:row.nombreFactura;
+									    return __ClienteNombreFactura(row);
 	 							    }
                                },
-                               {'data' :'totalDescuentosSTR'             ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
-                               {'data' :'totalComprobanteSTR'            ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
-                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                               {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
+                               {'data' : 'id'                 ,"name":"id"                      ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
@@ -2078,6 +2075,21 @@ function __InformacionDataTableDia(){
 	      		            ];
     self.update();
    
+}
+
+function __ClienteNombreFactura(row){
+    var nombreFactura  = row.nombreFactura == null?"":row.nombreFactura
+    var nombreCliente  = row.cliente  == null?"":row.cliente
+    if(nombreCliente == null){
+        return ""
+    }
+    if(row.cedula != "999999999999"){
+       return nombreCliente.length > 50 ?nombreCliente.substring(0,35) + "..." :nombreCliente;
+    }else {
+        return nombreFactura.length > 50 ?nombreFactura.substring(0,35) + "..." :nombreFactura;
+    }
+
+
 }
 /**
 *Opciones del listado de las facturas por dia
@@ -3270,8 +3282,9 @@ function __ListaDeClientes(){
                         liveSearch: true
                     }
                 );
-                $('.nombreInstitucionExoneracion').selectpicker('refresh');
-                __informacionData()
+                
+                 self.informacion_tabla_clientes =__informacionData_formato_cliente()
+                 self.update()
                 loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
@@ -4086,34 +4099,7 @@ function __seleccionarVendedor() {
         self.update();
     });
 }
-/**
-* formato de la tabla de clientes
-**/
-function __informacionData(){
-    self.informacion_tabla_clientes = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
-                                        
-                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
-                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'nombreComercial'  ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									            "render":function(id,type, row){
-										            return __Opcionesclientes(id,type,row);
-	 							                }	 
-								            },
 
-
-                                        ];                              
-   
-}
-/**
-* Opciones del modal de clientes
-*/
-function __Opcionesclientes(){
-  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
-
-}
 /**
 * Agregar codigos a la factura desde modal de articulos
 **/
@@ -4126,17 +4112,17 @@ function __seleccionarClientes() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-        if(self.cliente.cedula != data.cedula){
+    //    if(self.cliente.cedula != data.cedula){
             self.cliente = data
             self.update();
-            __aplicarExoneracionPorCliente()
+         
 
-        }
+      //  }
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
             self.factura.tipoDoc ='01'
-            
+               __aplicarExoneracionPorCliente()
            __ComboTipoDocumentos(1)
         }else{
             self.factura.tipoDoc ='04'
@@ -4156,7 +4142,10 @@ function __seleccionarClientes() {
 **/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = self.cliente.libreImpuesto == 1?1:self.cliente.porcentajeExoneracion / 100
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    if(porcentaje == 0){
+        return
+    }
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
         self.item          = self.detail[count];

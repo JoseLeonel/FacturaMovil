@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
@@ -125,7 +126,7 @@ public class CuentaCobrarCommand {
 		this.totalSTR = cuentaCobrar.getTotalSTR();
 		this.codigoMoneda = cuentaCobrar.getCodigoMoneda();
 		this.cancelar = false;
-		this.nombreFactura = cuentaCobrar.getNombreFactura();
+		this.nombreFactura = cuentaCobrar.getNombreFactura()  ==null?Constantes.EMPTY:cuentaCobrar.getNombreFactura();
 	}
 
 	public CuentaCobrarCommand() {

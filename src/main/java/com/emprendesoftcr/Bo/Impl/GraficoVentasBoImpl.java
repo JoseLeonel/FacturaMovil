@@ -32,8 +32,8 @@ public class GraficoVentasBoImpl implements GraficoVentasBo {
 	}
 
 	@Override
-	public void actualizarGraficoVenta(Integer anno,  Empresa empresa) throws Exception {
-		graficoVentasDao.actualizarGraficoVenta(anno, empresa);
+	public void actualizarGraficoVenta(Integer anno) throws Exception {
+		graficoVentasDao.actualizarGraficoVenta(anno);
 		
 	}
 

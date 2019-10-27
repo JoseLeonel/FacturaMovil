@@ -551,11 +551,13 @@ public class ComprasController {
 		return "views/compras/crearCompra";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
 
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+			@SuppressWarnings("unused")
+			RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
@@ -689,6 +691,7 @@ public class ComprasController {
 	 * @param idEmpresa
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarComprasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -711,6 +714,7 @@ public class ComprasController {
 	 * @param idEmpresa
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor, @RequestParam String estado) {
@@ -722,6 +726,7 @@ public class ComprasController {
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarComprasNoAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarComprasNoAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
@@ -743,6 +748,7 @@ public class ComprasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarCompraEsperaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long id) {
@@ -762,6 +768,7 @@ public class ComprasController {
 	 * @param idCompra
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AnularCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Long idCompra, BindingResult result, SessionStatus status) {

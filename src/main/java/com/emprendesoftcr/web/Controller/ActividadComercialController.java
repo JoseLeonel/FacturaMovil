@@ -96,6 +96,7 @@ public class ActividadComercialController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_POR_EMPRESA);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaEmpresaActividadComercialPorPricipalAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarEmpresa(HttpServletRequest request, HttpServletResponse response) throws Exception {

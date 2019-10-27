@@ -20,6 +20,55 @@ $(document)
                 }).ajaxStop($.unblockUI);
 
 
+function __informacionData_formato_cliente(){
+    var informacion_tabla_clientes = [	
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false,
+									            "render":function(id,type, row){
+										            return __TamanoNombre(row.nombreCompleto);
+	 							                }	 
+                                        },
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false,
+    								            "render":function(id,type, row){
+    									            return __TamanoNombre(row.correoElectronico);
+	 							                }	 
+                                        },
+                                        {'data' : 'nombreComercial'  ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false,
+    								            "render":function(id,type, row){
+    									            return __TamanoNombre(row.nombreComercial);
+	 							                }	 
+                                        },
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+									            "render":function(id,type, row){
+										            return __Opcionesclientes(id,type,row);
+	 							                }	 
+								            },
+
+
+                                        ];                              
+   
+   return informacion_tabla_clientes
+}
+
+
+
+/**
+* Opciones del modal de clientes
+*/
+function __Opcionesclientes(){
+  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+
+function __TamanoNombre(nombre){
+    var nombreCliente  = nombre  == null?"":nombre
+    if(nombreCliente == null){
+        return ""
+    }
+    return nombreCliente.length > 31 ?nombreCliente.substring(0,31) + "..." :nombreCliente;
+}
 
 
 

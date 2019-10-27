@@ -468,7 +468,7 @@ self.on('mount',function(){
 **/
 function getTipoCambioDolar(){
     $.ajax({
-    "url": "https://api.hacienda.go.cr/indicadores/tc/dolar",
+    "url": "https://api.hacienda.go.cr/indicadores/tc",
     "method": "GET",
     statusCode: {
         
@@ -477,8 +477,10 @@ function getTipoCambioDolar(){
         }
     }
     }).done(function (response) {
-         self.tipoCambio.total = __valorNumerico(response.venta.valor)
-         self.update()
+        self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
+        self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
+        self.update()
+    
     });
 }
 /**
@@ -1344,13 +1346,13 @@ function __seleccionarClientes() {
 **/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = self.cliente.libreImpuesto == 1?1:self.cliente.porcentajeExoneracion / 100
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
-        self.item          = self.detail[count];
+        self.item = self.detail[count];
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
-                if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
+                if(self.cliente.porcentajeExoneracion > 0  ){
                     self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion

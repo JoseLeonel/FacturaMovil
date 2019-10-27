@@ -112,6 +112,7 @@ public class ComprasSimplificadaController {
 		return "views/simplificado/ListarConsultaComprasSimplificado";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearCompraSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute CompraSimplificadaCommand compraSimplificadaCommand, BindingResult result, SessionStatus status) {
@@ -379,6 +380,7 @@ public class ComprasSimplificadaController {
 		return baos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioCorreoComprasSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator envioCorreoComprasSimplificadaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor, @RequestParam Integer estado, @RequestParam String correoAlternativo, String totalDescuento, String totalImpuesto, String total) {
@@ -457,19 +459,24 @@ public class ComprasSimplificadaController {
 
 	static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
 			private static class COMPRASIMPLIFICADA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compraSimplificada.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compraSimplificada.modificado.correctamente");
 			}
 		}
 
+		@SuppressWarnings("unused")
 		private static class ERROR {
 
 			private static class COMPRASIMPLIFICADA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
 			}
 		}

@@ -1,9 +1,7 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
-import java.util.Date;
 
-import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.EmpresaActividadComercial;
 

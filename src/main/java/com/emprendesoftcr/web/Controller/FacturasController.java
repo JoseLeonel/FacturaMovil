@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +46,9 @@ import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
-import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.MesaBo;
-import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -72,7 +69,6 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -355,11 +351,7 @@ public class FacturasController {
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
 
-	@Autowired
-	private EmpresaBo																									empresaBo;
 
-	@Autowired
-	private RecepcionFacturaBo																				recepcionFacturaBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -1743,7 +1735,7 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			Factura facturaCreada = facturaBo.findById(factura.getId());
+	//		Factura facturaCreada = facturaBo.findById(factura.getId());
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
@@ -1758,7 +1750,7 @@ public class FacturasController {
 
 			}
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -2197,9 +2189,7 @@ public class FacturasController {
 		return new Attachment(name + ext, data);
 	}
 
-	private String getConsecutivo(String tipoDoc, String consecutivo) {
-		return tipoDoc + "-" + consecutivo;
-	}
+
 
 	private ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
 		return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
@@ -2209,119 +2199,7 @@ public class FacturasController {
 		return Arrays.asList(attachments);
 	}
 
-	private static class DelimitadorBuilder {
-
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento, Integer estado, String actividadEconomica, Integer idUsuario) {
-			// Consulta por fechas
-			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
-			Date fechaInicio = new Date();
-			Date fechaFinal = new Date();
-
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "!="));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "!="));
-			delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS.toString() + "'", "!="));
-			if (!estado.equals(Constantes.ZEROS)) {
-				delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
-			}
-
-			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
-			delimitador.addFiltro(new JqGridFilter("codigoActividad", "'" + actividadEconomica + "'", "="));
-
-			if (cliente != null) {
-				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
-			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Usuario usuarioParametro = usuarioBo.buscar(idUsuario);
-			if (usuarioBo.isAdministrador_vendedor(usuario)) {
-
-				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
-			} else {
-				if (usuarioParametro != null) {
-					delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuarioParametro.getId().toString() + "'", "="));
-				}
-
-			}
-			if (tipoDocumento != null) {
-				if (!tipoDocumento.equals(Constantes.EMPTY)) {
-					if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + tipoDocumento.toString() + "'", "="));
-					}
-				}
-			}
-
-			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
-				fechaInicio = Utils.parseDate(inicio);
-				fechaFinal = Utils.parseDate(fin);
-				if (fechaFinal == null) {
-					fechaFinal = new Date(System.currentTimeMillis());
-				}
-				if (fechaFinal != null && fechaFinal != null) {
-					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-				}
-
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
-
-				inicio = dateFormat.format(fechaInicio);
-				fin = dateFormat.format(fechaFinal);
-
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
-			}
-			return delimitador;
-		}
-
-		static DataTableDelimitador getAnulacion(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento) {
-			// Consulta por fechas
-			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
-			Date fechaInicio = new Date();
-			Date fechaFinal = new Date();
-
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
-
-			if (cliente != null) {
-				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
-			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if (usuarioBo.isAdministrador_vendedor(usuario)) {
-
-				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
-			}
-			if (tipoDocumento != null) {
-				if (!tipoDocumento.equals(Constantes.EMPTY)) {
-					if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + tipoDocumento.toString() + "'", "="));
-					}
-				}
-			}
-
-			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
-				fechaInicio = Utils.parseDate(inicio);
-				fechaFinal = Utils.parseDate(fin);
-				if (fechaFinal == null) {
-					fechaFinal = new Date(System.currentTimeMillis());
-				}
-				if (fechaFinal != null && fechaFinal != null) {
-					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-				}
-
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
-
-				inicio = dateFormat.format(fechaInicio);
-				fin = dateFormat.format(fechaFinal);
-
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
-			}
-			return delimitador;
-		}
-
-	}
-
+	
 	static class RESPONSES {
 
 		@SuppressWarnings("unused")

@@ -1226,210 +1226,198 @@
             </div>       
         <!--Fin Ventana de los billetes--> 
 <style type="text/css">
-.btn-PagarICON:before {
-    font-family: FontAwesome;
-    content: "\f09d ";
-}
-.btn-Pagar {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 24px;
-    padding-right: 20px;
-    font-size: 30px;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.containerBotonesPagar{
-    display:flex;
-    margin-top: 2%;
-}
-.elementoPagar{
-
-}
-.teclashift {
-    font-weight: 700;
-    font-size: 27px !important;
-    text-align: center;
-    color: red;
-
-}
-.tituloDescuento{
-    font-size: 50px;
-}
-.cambiarDescripcionArticulo{
-    font-size: 40px;
-    font-weight: 800;
-    color: black;
-    height: 3%;
-    text-align: center;
-
-}
-.cambiarCantidadArticulo{
-    font-size: 80px;
-    font-weight: 800;
-    color: black;
-    height: 3%;
-    text-align: center;
-
-}
-.cambiarprecioArticulo{
-    font-size: 40px;
-    font-weight: 800;
-    color: black;
-    height: 3%;
-    text-align: center;
-
-}
-.aplicarDescuento{
-    font-size: 40px;
-    font-weight: 800;
-    color: black;
-    height: 3%;
-    text-align: center;
-}
-.billetes1{
-    margin-left: 1%;
-    /* margin-bottom: 9px; */
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 30px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 30px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.elementoTotales{
-    display: flex;
-    justify-content: space-around;
-   
-}
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
-
-@media only screen and (max-width: 1024px) and (min-width:768px)  {
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-
-
-
-}
-
-    .clickable {
+    .btn-PagarICON:before {
+        font-family: FontAwesome;
+        content: "\f09d ";
+    }
+    .btn-Pagar {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 24px;
+        padding-right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
         cursor: pointer;
     }
-    .modal {
-position: fixed;
-top: 3%;
-right: 3%;
-left: 3%;
-bottom: 3%;
-width: auto;
-margin: 0;
-}
-.modal-body {
-max-height: 350px;
-padding: 15px;
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-}
+    .containerBotonesPagar{
+        display:flex;
+        margin-top: 2%;
+    }
+    .elementoPagar{
+
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
+
+    }
+    .tituloDescuento{
+        font-size: 50px;
+    }
+    .cambiarDescripcionArticulo{
+        font-size: 40px;
+        font-weight: 800;
+        color: black;
+        height: 3%;
+        text-align: center;
+
+    }
+    .cambiarCantidadArticulo{
+        font-size: 80px;
+        font-weight: 800;
+        color: black;
+        height: 3%;
+        text-align: center;
+
+    }
+    .cambiarprecioArticulo{
+        font-size: 40px;
+        font-weight: 800;
+        color: black;
+        height: 3%;
+        text-align: center;
+
+    }
+    .aplicarDescuento{
+        font-size: 40px;
+        font-weight: 800;
+        color: black;
+        height: 3%;
+        text-align: center;
+    }
+    .billetes1{
+        margin-left: 1%;
+        /* margin-bottom: 9px; */
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: flex-start;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+         border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto, sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+    }
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .elementoTotales{
+        display: flex;
+        justify-content: space-around;
+    
+    }
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
+
+    @media only screen and (max-width: 1024px) and (min-width:768px)  {
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+
+    }
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+
+
+
+    }
+
+        .clickable {
+            cursor: pointer;
+        }
+        .modal {
+    position: fixed;
+    top: 3%;
+    right: 3%;
+    left: 3%;
+    bottom: 3%;
+    width: auto;
+    margin: 0;
+    }
+    .modal-body {
+    max-height: 350px;
+    padding: 15px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    }
 
 .modal-body { height: 60%; }
 
@@ -4247,8 +4235,8 @@ function __calculate() {
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
-         montoExoneracion        += parseFloat(e.montoExoneracion) 
-          montoExoneracion        += parseFloat(e.montoExoneracion1) 
+         montoExoneracion       += parseFloat(e.montoExoneracion) 
+          montoExoneracion      += parseFloat(e.montoExoneracion1) 
     });
    
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
@@ -4264,7 +4252,11 @@ function __calculate() {
     self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto)) + Math.round(__valorNumerico(totalImpuesto1))
     
     //Se verifica si la mesa tiene impuestos
+
     var tieneMesa = typeof self.factura.mesa !== 'undefined'?true:false;
+    tieneMesa = self.factura.mesa == null?false:true
+
+
     var tieneImpuestoServiciot = false
     if(tieneMesa){
       tieneImpuestoServiciot = typeof self.factura.mesa.impuestoServicio !== 'undefined'?true:false;  

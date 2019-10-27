@@ -173,7 +173,7 @@
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 </div>
-<imprimir-caja></imprimir-caja>
+
 <style type ="text/css">
     .fondoEncabezado {
         background: #00539B;
@@ -347,7 +347,7 @@ function __consultar(){
         url: "MostrarUsuarioCajaAjax.do",
         datatype: "json",
         data: formulario,
-        method:"GET",
+        method:"Post",
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -498,26 +498,14 @@ function FormatoMontos(valor){
    var resultado = __valorNumerico(valor)
    return resultado;
 }
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+
 /**
 *Formato de la fecha con hora
 **/
 function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
-}
-                                    
+}                                    
 /**
 * Opciones listado de los clientes
 */
@@ -602,7 +590,6 @@ __consultarTotalesArticulo(){
                          confirmButtonText: $.i18n.prop("btn.aceptar"),
                        })
                 }
-                
             } else {
             	var informacion = {
             		nombreImpresora:"factura",
@@ -611,8 +598,6 @@ __consultarTotalesArticulo(){
             		detalles:data.listaObjetos
             	}
         		var JSONData = JSON.stringify(informacion);		
-
-            	
             	if (data.listaObjetos != null && data.listaObjetos.length > 0) {
             		$.ajax({
             	        contentType: 'application/json',
@@ -644,7 +629,6 @@ __consultarTotalesArticulo(){
         }
     });
 }
-
 /**
 *Cerrar caja
 **/
@@ -681,7 +665,6 @@ function cerrarCajaAjax(){
       	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
       	                         })
                             }
-                            
                         } else {
                         	serverMessageJson(data);
                                swal({
@@ -692,7 +675,6 @@ function cerrarCajaAjax(){
 	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
 	                         })
                              __listado()
-	                        
                         }
                     },
                     error : function(xhr, status) {
@@ -702,8 +684,6 @@ function cerrarCajaAjax(){
                 });
             }
         });
-        
-    
 }
 /**
 *  Agregar los inpust  y select de las tablas
