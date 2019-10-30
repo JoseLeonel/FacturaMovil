@@ -11,10 +11,36 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "listar_facturas", query = "SELECT empresas.nofactura_elec,facturas.tipo_doc,facturas.estado,facturas.consecutivo_proforma, facturas.condicion_venta, facturas.act_comercial,facturas.fecha_emision,clientes.cedula,facturas.total_impuesto,facturas.total_descuentos,facturas.id,facturas.tipo_cambio,facturas.numero_consecutivo,facturas.nombre_factura,clientes.nombre_completo,facturas.total_descuentos,facturas.total_impuesto,facturas.codigo_moneda,facturas.total_comprobante ,facturas.created_at,usuarios.nombre_usuario from facturas" 
+@BaseNativeQuery(name = "listar_facturas", query = "SELECT empresas.nofactura_elec,"
+		+ " facturas.tipo_doc,"
+		+ " facturas.estado,"
+		+ " facturas.consecutivo_proforma,"
+		+ " facturas.condicion_venta, "
+		+ " facturas.act_comercial,"
+		+ " facturas.fecha_emision,"
+		+ " clientes.cedula,"
+		+ " if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_impuesto * -1,facturas.total_impuesto) AS total_impuesto, \n" 
+		+ " if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_descuentos * -1,facturas.total_descuentos) AS total_descuentos, \n"
+		+ " facturas.id,"
+		+ " facturas.tipo_cambio,"
+		+ " facturas.numero_consecutivo,"
+		+ " facturas.nombre_factura,"
+		+ " clientes.nombre_completo,"
+		+ " facturas.codigo_moneda,"
+		+ " if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_comprobante * -1,facturas.total_comprobante) AS total_comprobante, \n"
+		+ " facturas.created_at,"
+		+ " usuarios.nombre_usuario from facturas" 
 + " inner join clientes on clientes.id = facturas.cliente_id " 
 + " inner join empresas on empresas.id = facturas.empresa_id " 
-+ " inner join usuarios on usuarios.id = facturas.usuario_id " + " where facturas.empresa_id = :ID_EMPRESA and facturas.created_at >=  :fechaInicial and  facturas.created_at <=  :fechaFinal and facturas.cliente_id  and facturas.tipo_doc  and facturas.act_comercial and facturas.estado and facturas.usuario_id order by facturas.created_at desc ")
++ " inner join usuarios on usuarios.id = facturas.usuario_id " 
++ " where facturas.empresa_id = :ID_EMPRESA "
++ " and facturas.created_at >=  :fechaInicial "
++ " and  facturas.created_at <=  :fechaFinal "
++ " and facturas.cliente_id  "
++ " and facturas.tipo_doc  "
++ " and facturas.act_comercial "
++ " and facturas.estado "
++ " and facturas.usuario_id ")
 @Entity
 public class ListarFacturasNativa implements Serializable {
 

@@ -325,7 +325,14 @@ public class DetalleFacturaCommand {
 	}
 
 	public String getMontoTotalSTR() {
-		return Utils.formateadorMiles(this.montoTotal);
+		return Utils.formateadorMiles(Utils.round(this.montoTotal, 2));
+	}
+
+	public String getMontoTotalSinImpuestoSTR() {
+		Double totalIVA = this.montoImpuesto == null ? Constantes.ZEROS_DOUBLE : this.montoImpuesto;
+		totalIVA = this.montoImpuesto1 == null ? totalIVA : totalIVA + this.montoImpuesto1;
+		Double resultado = this.montoTotalLinea - totalIVA;
+		return Utils.formateadorMiles(Utils.round(resultado, 2));
 	}
 
 	public Double getMontoDescuento() {

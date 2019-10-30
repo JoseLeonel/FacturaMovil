@@ -36,12 +36,12 @@ public class TotalDetallesCommand {
 		this.total = total;
 		this.totalGanancia = totalGanancia;
 
-		this.totalGravado_n = totalGravado_n;
-		this.totalDescuento_n = totalDescuento_n;
-		this.totalImpuesto_n = totalImpuesto_n;
-		this.totalExento_n = totalExento_n;
-		this.total_n = total_n;
-		this.totalGanancia_n = totalGanancia_n;
+		this.totalGravado_n = totalGravado_n * -1;
+		this.totalDescuento_n = totalDescuento_n * -1 ;
+		this.totalImpuesto_n = totalImpuesto_n * -1 ;
+		this.totalExento_n = totalExento_n * -1;
+		this.total_n = total_n * -1;
+		this.totalGanancia_n = totalGanancia_n * -1;
 
 	}
 
@@ -127,6 +127,7 @@ public class TotalDetallesCommand {
 	}
 
 	public String getTotalGravadoNC() {
+	
 		return Utils.formateadorMiles(this.totalGravado_n);
 	}
 

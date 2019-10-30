@@ -49,6 +49,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
@@ -60,7 +61,9 @@ import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
+import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
@@ -120,11 +123,22 @@ public class ComprasController {
 	@Autowired
 	private StringPropertyEditor																			stringPropertyEditor;
 
+	@Autowired
+	private FechaPropertyEditor																				fechaPropertyEditor;
+	
+	@Autowired
+	private ClientePropertyEditor																			clientePropertyEditor;
+
+
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Proveedor.class, proveedorPropertyEditor);
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
+		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
+		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
+		
 	}
 
 	@RequestMapping(value = "/ListaCompras", method = RequestMethod.GET)
@@ -388,7 +402,7 @@ public class ComprasController {
 	
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam String tipoGasto, @RequestParam String actividadEconomica) {
+	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) {
 		Date inicio = Utils.parseDate(fechaInicio);
 		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -427,7 +441,7 @@ public class ComprasController {
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam String tipoGasto, String actividadEconomica) {
+	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
@@ -518,7 +532,7 @@ public class ComprasController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam String tipoGasto, String actividadEconomica) throws IOException {
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) throws IOException {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		
 		// Se buscan las facturas
@@ -604,7 +618,7 @@ public class ComprasController {
 	}
 
 	@RequestMapping(value = "/DescargarDetalladaAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam String tipoGasto, @RequestParam String actividadEconomica) throws IOException {
+	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 

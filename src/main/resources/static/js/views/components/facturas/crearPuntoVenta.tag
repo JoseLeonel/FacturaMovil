@@ -1445,6 +1445,7 @@ __ConsultarHacienda(e){
 function getTipoCambioDolar(){
     $.ajax({
     "url": "https://api.hacienda.go.cr/indicadores/tc",
+     global: false,
     "method": "GET",
     statusCode: {
         
@@ -2758,6 +2759,7 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalEfectivo').select()
     __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
+    __calculate()
 }
 /** 
 *Formato de la fecha con hora

@@ -29,5 +29,9 @@ public interface DetalleDao {
 	Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa);
 
 	Detalle findById(Long idDetalle);
+	
+	Collection<Detalle>  findbyIdFactura (Long idFactura);
+	
+	Collection<Detalle>  findbyConsecutivoAndEmpresa (String consecutivo,Empresa empresa);
 
 }

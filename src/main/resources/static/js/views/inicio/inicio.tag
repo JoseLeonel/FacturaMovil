@@ -4,8 +4,7 @@
 			<div class="col-md-9 col-sx-12 col-sm-9 col-lg-9">
 				<div class="card-box p-t-40"><iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
 					
-					<canvas id="chart-totalventas" width="500" height="320" style="display: block; width: 1011px; height: 252px;">
-				</canvas></div>
+					<canvas id="chart-totalventas" ></canvas></div>
 			</div>
 			<div class="col-md-3 col-sx-12 col-sm-3 col-lg-3" show="{mostrarVentasXMes == false}">	
 				<!-- circliful Chart -->
@@ -596,6 +595,7 @@ function graficoVentas(){
 					},
 			scales:{
 				yAxes:[{
+					
 					ticks:{
 						beginAtZero:true,
 						 min: minData

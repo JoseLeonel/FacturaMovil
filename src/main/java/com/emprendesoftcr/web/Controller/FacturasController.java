@@ -892,6 +892,7 @@ public class FacturasController {
 		return respuestaService;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasGananciaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Cliente cliente, @RequestParam Integer idCategoria, @RequestParam String codigo) {
@@ -1417,6 +1418,7 @@ public class FacturasController {
 			
 			
 			FacturaCommand facturaAplicarCommand = new FacturaCommand();
+			facturaAplicarCommand.setMesa(facturaBD.getMesa());
 			facturaAplicarCommand.setCliente(facturaBD.getCliente());
 			facturaAplicarCommand.setEmpresa(facturaBD.getEmpresa());
 			facturaAplicarCommand.setId(null);
@@ -1649,7 +1651,7 @@ public class FacturasController {
 			if (facturaCommand.getCliente() == null) {
 				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
 				cliente = cliente == null ? clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_CREDITO, usuario.getEmpresa()) : cliente;
-				;
+				
 				if (cliente == null) {
 					cliente = clienteBo.crearClienteFrecuente(usuario.getEmpresa(), usuario);
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.intente.nuevo", result.getAllErrors());
@@ -1735,7 +1737,6 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-	//		Factura facturaCreada = facturaBo.findById(factura.getId());
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}

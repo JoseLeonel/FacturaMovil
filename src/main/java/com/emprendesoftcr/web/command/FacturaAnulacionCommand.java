@@ -141,10 +141,6 @@ public class FacturaAnulacionCommand {
 	public FacturaAnulacionCommand(ListarFacturaNCNativa facturasSinNotasCredito) {
 		super();
 		this.id = facturasSinNotasCredito.getId();
-
-		this.cantidad = facturasSinNotasCredito.getCantidad();
-		this.cantidadNotasCredito = facturasSinNotasCredito.getCantidadNotas();
-
 		this.numeroConsecutivo = facturasSinNotasCredito.getNumeroConsecutivo();
 
 		this.totalComprobante = facturasSinNotasCredito.getTotalComprobante();

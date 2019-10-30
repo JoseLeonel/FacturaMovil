@@ -22,6 +22,7 @@ public class GraficoVentasDaoImpl implements GraficoVentasDao {
 	@PersistenceContext
 	EntityManager entityManager;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<GraficoVenta> findByAll() {
 		StringBuilder hql = new StringBuilder();
@@ -32,6 +33,7 @@ public class GraficoVentasDaoImpl implements GraficoVentasDao {
 
 	
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<GraficoVenta> findByAllEmpresaAndAnno(Empresa empresa,Integer anno) {
 		StringBuilder hql = new StringBuilder();

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -49,7 +49,6 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
-import com.emprendesoftcr.web.command.DetalleFacturaParaNotaCreditoCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -66,54 +65,46 @@ import com.google.common.base.Function;
 @Controller
 public class DetalleController {
 
-	private static final Function<Object, DetalleFacturaCommand>								TO_COMMAND_DETALLE							= new Function<Object, DetalleFacturaCommand>() {
+	private static final Function<Object, DetalleFacturaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleFacturaCommand>() {
 
-																																																								@Override
-																																																								public DetalleFacturaCommand apply(Object f) {
-																																																									return new DetalleFacturaCommand((Detalle) f);
-																																																								};
-																																																							};
-
-	private static final Function<Object, DetalleFacturaParaNotaCreditoCommand>	TO_COMMAND_DETALLE_NOTA_CREDITO	= new Function<Object, DetalleFacturaParaNotaCreditoCommand>() {
-
-																																																								@Override
-																																																								public DetalleFacturaParaNotaCreditoCommand apply(Object f) {
-																																																									return new DetalleFacturaParaNotaCreditoCommand((Detalle) f);
-																																																								};
-																																																							};
+																																											@Override
+																																											public DetalleFacturaCommand apply(Object f) {
+																																												return new DetalleFacturaCommand((Detalle) f);
+																																											};
+																																										};
 
 	@Autowired
-	private DataTableBo																													dataTableBo;
+	private DataTableBo																						dataTableBo;
 
 	@Autowired
-	private DetalleBo																														detalleBo;
+	private DetalleBo																							detalleBo;
 
 	@Autowired
-	private UsuarioBo																														usuarioBo;
+	private UsuarioBo																							usuarioBo;
 
 	@Autowired
-	private ClienteBo																														clienteBo;
+	private ClienteBo																							clienteBo;
 
 	@Autowired
-	private CorreosBo																														correosBo;
+	private CorreosBo																							correosBo;
 
 	@Autowired
-	private ConsultasNativeBo																										consultasNativeBo;
+	private ConsultasNativeBo																			consultasNativeBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																								empresaPropertyEditor;
+	private EmpresaPropertyEditor																	empresaPropertyEditor;
 
 	@Autowired
-	private ClientePropertyEditor																								clientePropertyEditor;
+	private ClientePropertyEditor																	clientePropertyEditor;
 
 	@Autowired
-	private VendedorPropertyEditor																							vendedorPropertyEditor;
+	private VendedorPropertyEditor																vendedorPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor																								stringPropertyEditor;
+	private StringPropertyEditor																	stringPropertyEditor;
 
 	@Autowired
-	private FechaPropertyEditor																									fechaPropertyEditor;
+	private FechaPropertyEditor																		fechaPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -166,19 +157,26 @@ public class DetalleController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+//		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 		// criptografica desde linux
 		// certificadoBo.agregar(usuario.getEmpresa(),"","");
 
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Detalle");
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<Detalle> objetos = detalleBo.findbyIdFactura(idFactura);
+		for (Detalle detalle : objetos) {
+				solicitudList.add(new DetalleFacturaCommand(detalle));
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 
-		JqGridFilter dataTableFilter = new JqGridFilter("factura.id", "'" + idFactura + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
 
 	@SuppressWarnings("all")
@@ -186,17 +184,25 @@ public class DetalleController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsecutivoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
 
-		DataTableDelimitador delimitadores = null;
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		delimitadores = new DataTableDelimitador(request, "Detalle");
-		delimitadores.addFiltro(new JqGridFilter("factura.empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
+		
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<Detalle> objetos = detalleBo.findbyConsecutivoAndEmpresa(consecutivo, usuarioSesion.getEmpresa());
+		for (Detalle detalle : objetos) {
+				solicitudList.add(new DetalleFacturaCommand(detalle));
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 
-		JqGridFilter dataTableFilter = new JqGridFilter("factura.numeroConsecutivo", "'" + consecutivo + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
+	
 	}
 
 	@SuppressWarnings("all")
@@ -204,7 +210,6 @@ public class DetalleController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsecutivoParaNotaCreditoEspecificaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
 
-	
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -344,7 +349,7 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision","Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente","Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total", "Tipo Moneda", "Tipo Cambio");
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total", "Tipo Moneda", "Tipo Cambio");
 		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuestoNC, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}

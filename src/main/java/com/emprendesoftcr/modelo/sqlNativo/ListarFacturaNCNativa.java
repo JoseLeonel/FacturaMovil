@@ -19,22 +19,19 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 
 @BaseNativeQuery(name = "facturas_nc", query = "SELECT DISTINCT y.id,y.fecha_emision,y.numero_consecutivo,y.tipo_doc,y.condicion_venta,y.nombre_completo,\n" + 
-		"       y.nombre_factura,y.total_comprobante,y.estado, y.cantidad,y.cantidad_notas,\n" + 
+		"       y.nombre_factura,y.total_comprobante,y.estado,\n" + 
 		"       y.act_comercial,y.cedula,y.nombre_usuario\n" + 
 		"  FROM (SELECT fac.id,fac.fecha_emision,fac.numero_consecutivo,\n" + 
 		"              fac.tipo_doc,fac.condicion_venta,clientes.nombre_completo,\n" + 
 		"              fac.nombre_factura,fac.total_comprobante,fac.estado,fac.act_comercial,\n" + 
-		"              clientes.cedula,usuarios.nombre_usuario, \n" + 
-		"       (select sum(detalles.cantidad) from detalles where detalles.factura_id = fac.id) as cantidad ,\n" + 
-		"       (select sum(detalles.cant_notac) from detalles where detalles.factura_id = fac.id) as cantidad_notas\n" + 
+		"              clientes.cedula,usuarios.nombre_usuario \n" + 
 		"         FROM facturas fac\n" + 
 		"         inner join detalles det on det.factura_id = fac.id  \n" + 
 		"         inner join clientes on clientes.id = fac.cliente_id  \n" + 
 		"         inner join usuarios on usuarios.id = fac.usuario_id\n" + 
-		" WHERE fac.empresa_id = :ID_EMPRESA and fac.fecha_emision >=  :fechaInicial and  fac.fecha_emision <=  :fechaFinal  and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado  \n" + 
-		"     ORDER BY fac.id) y\n" + 
-		"where y.cantidad > y.cantidad_notas\n" + 
-		"ORDER BY y.fecha_emision desc")
+		" WHERE fac.empresa_id = :ID_EMPRESA and fac.fecha_emision >=  :fechaInicial and  "
+		+ " fac.fecha_emision <=  :fechaFinal  and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado  \n" + 
+		"     ) y\n" )
 @Entity
 public class ListarFacturaNCNativa implements Serializable {
 	
@@ -82,11 +79,6 @@ public class ListarFacturaNCNativa implements Serializable {
 	@Column(name = "total_comprobante", precision = 18, scale = 5)
 	private Double						totalComprobante;
 
-	@Column(name = "cantidad_notas", precision = 18, scale = 5)
-	private Double						cantidadNotas;
-	
-	@Column(name = "cantidad", precision = 18, scale = 5)
-	private Double						cantidad;
 	
 	
 	public Long getId() {
@@ -215,40 +207,12 @@ public class ListarFacturaNCNativa implements Serializable {
 		this.totalComprobante = totalComprobante;
 	}
 
-	
-	
-
-	
-	public Double getCantidadNotas() {
-		return cantidadNotas;
-	}
-
-
-	
-	public void setCantidadNotas(Double cantidadNotas) {
-		this.cantidadNotas = cantidadNotas;
-	}
-
-
-	
-	public Double getCantidad() {
-		return cantidad;
-	}
-
-
-	
-	public void setCantidad(Double cantidad) {
-		this.cantidad = cantidad;
-	}
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((NombreCompleto == null) ? 0 : NombreCompleto.hashCode());
-		result = prime * result + ((cantidad == null) ? 0 : cantidad.hashCode());
-		result = prime * result + ((cantidadNotas == null) ? 0 : cantidadNotas.hashCode());
 		result = prime * result + ((cedula == null) ? 0 : cedula.hashCode());
 		result = prime * result + ((codigoActividad == null) ? 0 : codigoActividad.hashCode());
 		result = prime * result + ((condicionVenta == null) ? 0 : condicionVenta.hashCode());
@@ -277,16 +241,6 @@ public class ListarFacturaNCNativa implements Serializable {
 			if (other.NombreCompleto != null)
 				return false;
 		} else if (!NombreCompleto.equals(other.NombreCompleto))
-			return false;
-		if (cantidad == null) {
-			if (other.cantidad != null)
-				return false;
-		} else if (!cantidad.equals(other.cantidad))
-			return false;
-		if (cantidadNotas == null) {
-			if (other.cantidadNotas != null)
-				return false;
-		} else if (!cantidadNotas.equals(other.cantidadNotas))
 			return false;
 		if (cedula == null) {
 			if (other.cedula != null)
@@ -346,7 +300,10 @@ public class ListarFacturaNCNativa implements Serializable {
 		return true;
 	}
 
+	
+	
 
+	
 	
 
 	

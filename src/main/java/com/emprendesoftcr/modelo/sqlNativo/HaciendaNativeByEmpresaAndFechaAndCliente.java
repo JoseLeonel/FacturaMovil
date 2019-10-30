@@ -15,15 +15,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.modelo.Empresa;
 
-@BaseNativeQuery(name = "hacienda_fecha_cliente", query = "SELECT id,fecha_emisor,tipo_doc,consecutivo,nombre_receptor,total_receptor,estado,empresa_id,created_at,cedula_receptor from hacienda_xml" 
-    + " where hacienda_xml.empresa_id = :ID_EMPRESA and created_at >=  :fechaInicial and  created_at <=  :fechaFinal and cedula_receptor = :CEDULA  order by created_at desc " )
+@BaseNativeQuery(name = "hacienda_fecha_cliente", query = "SELECT id,fecha_emisor,tipo_doc,"
+		+ " consecutivo,"
+		+ " nombre_receptor,"
+		+ " total_receptor,"
+		+ " estado,"
+		+ " empresa_id,"
+		+ " created_at,cedula_receptor"
+		+ " from hacienda_xml" 
+    + " where created_at >=  :fechaInicial "
+    + " and created_at <=  :fechaFinal "
+		+ " and hacienda_xml.empresa_id = :ID_EMPRESA "
+    + " and cedula_receptor = :CEDULA  ")
 @Entity
 public class HaciendaNativeByEmpresaAndFechaAndCliente  implements Serializable {
 
-
-	/**
-	 * Comentario para <code>serialVersionUID</code>
-	 */
 	private static final long serialVersionUID = -4314170632050336252L;
 
 	@Id

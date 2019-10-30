@@ -980,7 +980,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 						}
 						facturaCommand.setNota(getNotaRazon(facturaCommand, facturaAnular.getNumeroConsecutivo().trim()));
-						modificar(facturaAnular);
+				//		modificar(facturaAnular);
 						facturaCommand.setCliente(facturaAnular.getCliente());
 					}
 				}

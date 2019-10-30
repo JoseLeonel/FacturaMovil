@@ -12,14 +12,32 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @BaseNativeQuery(name = "facturas_dia", 
-query = "Select empresas.print_cel,empresas.imprimir_direc,empresas.nofactura_elec,clientes.cedula,clientes.nombre_completo,facturas.updated_at,facturas.created_at,facturas.estado,facturas.total_comprobante,facturas.total_impuesto,facturas.total_descuentos,facturas.sub_total," + 
-		"facturas.nombre_factura,facturas.tipo_doc,facturas.plazo_credito,facturas.condicion_venta,facturas.fecha_emision,facturas.clave,facturas.consecutivo_proforma,facturas.numero_consecutivo," + 
+query = "Select empresas.print_cel,"
+		+ "empresas.imprimir_direc,"
+		+ "empresas.nofactura_elec,"
+		+ "clientes.cedula,"
+		+ "clientes.nombre_completo,"
+		+ "facturas.updated_at,"
+		+ "facturas.created_at,"
+		+ "facturas.estado,"
+		+ "facturas.total_comprobante,"
+		+ "facturas.total_impuesto,"
+		+ "facturas.total_descuentos,"
+		+ "facturas.sub_total," + 
+		"facturas.nombre_factura,"
+		+ "facturas.tipo_doc,"
+		+ "facturas.plazo_credito,"
+		+ "facturas.condicion_venta,"
+		+ "facturas.fecha_emision,"
+		+ "facturas.clave,"
+		+ "facturas.consecutivo_proforma,"
+		+ "facturas.numero_consecutivo," + 
 		"facturas.id,facturas.usuario_id," + 
 		"facturas.empresa_id" + 
 		" from facturas" 
 		+ " left join clientes on clientes.id = facturas.cliente_id " 
 		+ " left join empresas on empresas.id = facturas.empresa_id " 
-		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado in :ESTADO and facturas.tipo_doc !='88'  and facturas.fecha_emision >= :FECHA and facturas.usuario_id = order by facturas.fecha_emision desc ")
+		+ " where facturas.fecha_emision >= :FECHA and facturas.estado in :ESTADO and facturas.empresa_id = :ID_EMPRESA  and facturas.tipo_doc !='88' and facturas.usuario_id = ")
 @Entity
 public class FacturasDelDiaNative  implements Serializable {
 

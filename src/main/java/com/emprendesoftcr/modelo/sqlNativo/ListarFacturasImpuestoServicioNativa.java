@@ -11,19 +11,39 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "listarimp_servicio", query = "SELECT facturas.total_otros_cargos, facturas.total_servicio, empresas.nofactura_elec,facturas.tipo_doc,facturas.estado,facturas.consecutivo_proforma, facturas.condicion_venta, facturas.act_comercial,facturas.fecha_emision,clientes.cedula,facturas.total_impuesto,facturas.total_descuentos,facturas.id,facturas.tipo_cambio,facturas.numero_consecutivo,facturas.nombre_factura,clientes.nombre_completo,facturas.total_descuentos,facturas.total_impuesto,facturas.codigo_moneda,facturas.total_comprobante ,facturas.created_at,usuarios.nombre_usuario from facturas" 
+@BaseNativeQuery(name = "listarimp_servicio", query = "SELECT  "
+		+ "if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_otros_cargos * -1,facturas.total_otros_cargos) AS total_otros_cargos, \n"
+		+ "if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_servicio * -1,facturas.total_servicio) AS total_servicio, \n" 
+		+ " empresas.nofactura_elec,facturas.tipo_doc,"
+		+ " facturas.estado,facturas.consecutivo_proforma, "
+		+ " facturas.condicion_venta, "
+		+ " facturas.act_comercial,"
+		+ " facturas.fecha_emision,"
+		+ " clientes.cedula,"
+		+ "if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_impuesto * -1,facturas.total_impuesto) AS total_impuesto, \n" 
+		+ " facturas.id,"
+		+ " facturas.tipo_cambio,"
+		+ " facturas.numero_consecutivo,"
+		+ " facturas.nombre_factura,"
+		+ " clientes.nombre_completo,"
+		+ "if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_descuentos * -1,facturas.total_descuentos) AS total_descuentos, \n"
+		+ " facturas.codigo_moneda,"
+		+ "if(facturas.tipo_doc = '03' or facturas.tipo_doc = '86' ,facturas.total_comprobante * -1,facturas.total_comprobante) AS total_comprobante, \n"
+		+ " facturas.created_at,"
+		+ "  usuarios.nombre_usuario from facturas" 
 + " inner join clientes on clientes.id = facturas.cliente_id " 
 + " inner join empresas on empresas.id = facturas.empresa_id " 
-+ " inner join usuarios on usuarios.id = facturas.usuario_id " + " where facturas.empresa_id = :ID_EMPRESA and facturas.created_at >=  :fechaInicial and  facturas.created_at <=  :fechaFinal and facturas.cliente_id  and facturas.tipo_doc  and facturas.act_comercial and facturas.estado and  facturas.ref_codigo !='01' order by facturas.created_at desc ")
++ " inner join usuarios on usuarios.id = facturas.usuario_id " + 
+" where facturas.empresa_id = :ID_EMPRESA "
++ " and facturas.created_at >=  :fechaInicial "
++ " and facturas.created_at <=  :fechaFinal "
++ " and facturas.cliente_id  "
++ " and facturas.tipo_doc  "
++ " and facturas.act_comercial "
++ " and facturas.estado "
++ " order by facturas.created_at desc ")
 @Entity
 public class ListarFacturasImpuestoServicioNativa implements Serializable {
-
-	
-
-
-	/**
-	 * Comentario para <code>serialVersionUID</code>
-	 */
 	private static final long serialVersionUID = 1019942655002912158L;
 
 	@Id

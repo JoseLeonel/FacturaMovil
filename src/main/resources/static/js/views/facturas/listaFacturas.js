@@ -207,7 +207,6 @@ function suma(data){
     var total =  0
 	$.each(data, function( index, modeloTabla ) {
         if($('.tipoDocumento').val() =='0'){
-             if(modeloTabla.tipoDoc =='04' || modeloTabla.tipoDoc =='87' || modeloTabla.tipoDoc =='01'){
 				var estado = $('.selectEstado').val()
 				if(estado =='0'){
 					if(modeloTabla.estado == 2 || modeloTabla.estado == 7 || modeloTabla.estado == 6){
@@ -220,7 +219,6 @@ function suma(data){
 					}	
 				}
                    
-			 }
 		} else{
            total = __valorFloat(modeloTabla.totalComprobante) + total;  
 		} 

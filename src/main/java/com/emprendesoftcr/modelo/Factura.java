@@ -539,7 +539,7 @@ public class Factura implements Serializable {
 	public String getSubTotalGeneralSTR() {
 		Double valorSubTotal = this.subTotal != null ? this.subTotal : Constantes.ZEROS;
 		Double valorDescuento = this.totalDescuentos != null ? this.totalDescuentos : Constantes.ZEROS;
-		return Utils.formateadorMiles(valorSubTotal + valorDescuento);
+		return Utils.formateadorMiles(Utils.round(valorSubTotal + valorDescuento,2));
 	}
 	
 	
@@ -709,8 +709,15 @@ public class Factura implements Serializable {
 		this.totalDescuentos = totalDescuentos;
 	}
 
-	public String getTotalDescuentosSTR() {
-		return Utils.formateadorMiles(this.totalDescuentos);
+	public String getTotalDescuentosProformaREstSTR() {
+		Double resultado = this.totalDescuentos == null?Constantes.ZEROS_DOUBLE:this.totalDescuentos;
+		return Utils.formateadorMiles(Utils.round(resultado,2));
+	}
+	
+
+	public String getTotalOtrosCargosProformaREstSTR() {
+		Double resultado = this.totalOtrosCargos == null?Constantes.ZEROS_DOUBLE:this.totalOtrosCargos;
+		return Utils.formateadorMiles(Utils.round(resultado,2));
 	}
 
 	public Double getTotalVentaNetaNC() {
@@ -750,7 +757,14 @@ public class Factura implements Serializable {
 	}
 
 	public String getTotalImpuestoSTR() {
+		
 		return Utils.formateadorMiles(this.totalImpuesto);
+	}
+	
+public String getTotalImpuestoRestSTR() {
+		Double resultado = this.totalImpuesto ==null?Constantes.ZEROS_DOUBLE:this.totalImpuesto;
+		
+		return Utils.formateadorMiles(Utils.round(resultado, 2));
 	}
 	
 	public Double getTotalComprobanteNC() {

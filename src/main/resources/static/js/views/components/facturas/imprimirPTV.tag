@@ -96,7 +96,8 @@
                                     <tr show={facturaImpresa.totalDescuentos >0}>
                                     <td></td>
                                     <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
-                                    <td ><strong>{facturaImpresa.totalDescuentosSTR}</strong></td>
+                                    <td ><strong>{facturaImpresa.totalDescuentoSTR}</strong></td>
+                                                                   
                                     </tr>
                                     <tr>
                                     <td></td>

@@ -85,7 +85,6 @@
                                         <option value="6">{$.i18n.prop("estado.factura.aceptada")}</option>
                                         <option value="2">{$.i18n.prop("estado.factura.facturada")}</option>
                                     	<option  value="7">{$.i18n.prop("estado.factura.rechazada")}</option>
-                                        <option  value="5">{$.i18n.prop("estado.factura.anulada")}</option>                                    
                                     </select>
                                 </div>  
                             </div> 

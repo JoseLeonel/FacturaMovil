@@ -316,7 +316,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/18 04 * * ?")
+	@Scheduled(cron = "0 0/28 02 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -635,22 +635,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
 				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+			//	 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -675,7 +675,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/20 * * * ?")
+	@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1041,7 +1041,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/14 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

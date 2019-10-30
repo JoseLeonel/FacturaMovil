@@ -2,7 +2,6 @@ package com.emprendesoftcr.Bo;
 
 
 import java.util.Collection;
-import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.GraficoVenta;

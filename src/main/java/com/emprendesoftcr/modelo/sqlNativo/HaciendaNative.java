@@ -15,8 +15,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.modelo.Empresa;
 
-@BaseNativeQuery(name = "s_hacienda", query = "SELECT id,fecha_emisor,tipo_doc,consecutivo,nombre_receptor,total_receptor,estado,empresa_id,created_at from hacienda_xml" 
-                                       + " where hacienda_xml.empresa_id = :ID_EMPRESA and created_at >=  :fechaInicial and  created_at <=  :fechaFinal")
+@BaseNativeQuery(name = "s_hacienda", query = "SELECT id,fecha_emisor,tipo_doc,"
+		+ "consecutivo,"
+		+ "nombre_receptor,"
+		+ "total_receptor,"
+		+ "estado,"
+		+ "empresa_id,"
+		+ "created_at from hacienda_xml" 
+    + " where hacienda_xml.empresa_id = :ID_EMPRESA and created_at >=  :fechaInicial and  created_at <=  :fechaFinal")
 @Entity
 public class HaciendaNative implements Serializable {
 

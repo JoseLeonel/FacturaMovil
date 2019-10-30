@@ -470,6 +470,7 @@ function getTipoCambioDolar(){
     $.ajax({
     "url": "https://api.hacienda.go.cr/indicadores/tc",
     "method": "GET",
+     global: false,
     statusCode: {
         
         404: function() {

@@ -81,13 +81,13 @@ public class FacturaImpuestoServicioCommand {
 		this.noFacturaElectronica = facturasSinNotaCreditoNative.getNoFacturaElectronica();
 		this.estadoSTR = MapEnums.ENUM_ESTADO_FACTURA.get(facturasSinNotaCreditoNative.getEstado().toString());
 		if (facturasSinNotaCreditoNative.getTotalImpuestoServicio() != null) {
-			if(facturasSinNotaCreditoNative.getTotalImpuestoServicio() > 0) {
+			if(facturasSinNotaCreditoNative.getTotalImpuestoServicio() != 0) {
 				this.impuestoServicio = facturasSinNotaCreditoNative.getTotalImpuestoServicio(); 	
 			}
 			
 		}
 		if (facturasSinNotaCreditoNative.getTotalOtrosCargos() != null) {
-			if(facturasSinNotaCreditoNative.getTotalOtrosCargos()  >  0) {
+			if(facturasSinNotaCreditoNative.getTotalOtrosCargos()  !=  0) {
 				this.impuestoServicio = facturasSinNotaCreditoNative.getTotalOtrosCargos();	
 			}
 			

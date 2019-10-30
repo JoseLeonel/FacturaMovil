@@ -94,5 +94,17 @@ public class DetalleBoImpl implements DetalleBo {
 		return detalleDao.findById(idDetalle);
 	}
 
+	@Override
+	public Collection<Detalle> findbyIdFactura(Long idFactura) {
+
+		return detalleDao.findbyIdFactura(idFactura);
+	}
+
+	@Override
+	public Collection<Detalle> findbyConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
+	
+		return detalleDao.findbyConsecutivoAndEmpresa(consecutivo, empresa);
+	}
+
 
 }

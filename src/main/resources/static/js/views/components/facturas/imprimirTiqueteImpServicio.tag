@@ -28,8 +28,8 @@
 	                        <tbody>
 	                            <tr class = "" each={detalles} class="detalleTables">
 	                                <td class="cantidad">{cantidadSTR}</td>
-	                                <td class="producto" >{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
-	                                <td class="precio">{montoTotalLineaSTR}</td>
+	                                <td class="producto" >{descripcion.length>26?descripcion.substring(0, 26):descripcion}</td>
+	                                <td class="precio">{montoTotalSinImpuestoSTR}</td>
 	                            </tr>
 	                            <tr>
 		                            <td colspan="3"></td>
@@ -40,8 +40,25 @@
 	                            	<td > *********  </td>
 	                            </tr>
 	                            <tr>
-	                            	<td class="text-left" colspan="2"><h3><strong>{$.i18n.prop("tikect.total")}:</strong></h3></td>
-	                            	<td colspan="1"><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
+	                            	<td class="text-left" colspan="2"><strong>SubTotal:</strong></td>
+	                            	<td colspan="1"><strong>{facturaImpresa.subTotalGeneralSTR}</strong></td>
+	                            </tr>
+                                <tr show ="{facturaImpresa.totalDescuentosProformaREstSTR != 0?true:false}">
+	                            	<td class="text-left" colspan="2"><strong>Desc:</strong></td>
+	                            	<td colspan="1"><strong>{facturaImpresa.totalDescuentosProformaREstSTR}</strong></td>
+	                            </tr>
+                                <tr show ="{tieneImServ == true}">
+	                            	<td class="text-left" colspan="2"><strong>10% Serv:</strong></td>
+	                            	<td colspan="1"><strong>{impServicioTotalSTR}</strong></td>
+	                            </tr>
+                                <tr show ="{facturaImpresa.totalImpuestoRestSTR != 0?true:false}">
+	                            	<td class="text-left" colspan="2"><strong>IVAI:</strong></td>
+	                            	<td colspan="1"><strong>{facturaImpresa.totalImpuestoRestSTR}</strong></td>
+	                            </tr>
+                                
+	                            <tr>
+	                            	<td class="text-left" colspan="2"><strong>Total:</strong></td>
+	                            	<td colspan="1"><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
 	                            </tr>
                                 <tr show={facturaImpresa.tipoCambio > 1}>
                                     <td></td>
@@ -49,13 +66,7 @@
                                     <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
                                     <br>
                                 </tr>
-	                            <tr>
-		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
-	                            </tr>                        
-	  
-                                <tr>
-		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
-	                            </tr>                        
+	                                            
 	                        </tbody>
                         </table> 
                     </div>
@@ -135,7 +146,7 @@
         color: #000;
         float: left;
         font-family: 'Times New Roman';
-        font-size: 14px;
+        font-size: 12px;
         font-style: normal;
         font-variant: normal;
         font-weight: normal;
@@ -211,16 +222,16 @@
         text-align: left;
     }
   @media print {
-* {
-    -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
-    color-adjust: exact !important;  /*Firefox*/
-  }
-}
-@media only print
-{
-    body * { display: none !important; }
-    body:after { content: "Don't waste paper!"; }
-}
+    * {
+        -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
+        color-adjust: exact !important;  /*Firefox*/
+    }
+    }
+    @media only print
+    {
+        body * { display: none !important; }
+        body:after { content: "Don't waste paper!"; }
+    }
 
 </style>    
 <script>
@@ -230,11 +241,13 @@ self.parametros = opts.parametros;
 self.detalles = []
 self.subTotalGeneralImp = 0
 self.totalComprobanteImp = 0
+self.tieneImServ = false
 self.impServicioTotal = 0
+self.impServicioTotalSTR = 0
 self.on('mount',function(){
     if(self.parametros.facturaParametro.id > 0){
         self.facturaImpresa = self.parametros.facturaParametro
-        self.impServicioTotal = self.parametros.impuestoServicio
+        self.impServicioTotal = __valorNumerico(self.parametros.impuestoServicio)
         self.update()
         consultar()
          
@@ -245,6 +258,8 @@ self.on('mount',function(){
 
 function consultar(){
      self.detalles = []
+     self.tieneImServ = false    
+
      self.update()
      var totalComprobante = 0
     $.ajax({
@@ -263,7 +278,11 @@ function consultar(){
                     totalComprobante = totalComprobante + __valorNumerico(modeloTabla.montoTotalLinea)    
                     self.update()
                 })
-                self.facturaImpresa.totalComprobante = totalComprobante + self.impServicioTotal
+                self.facturaImpresa.totalComprobante = __valorNumerico(redondeoDecimales(totalComprobante + self.impServicioTotal,0))
+                self.impServicioTotalSTR  = formatoDecimales(__valorNumerico(redondeoDecimales( self.impServicioTotal,2)),2)
+                if(__valorNumerico(self.impServicioTotal) > 0 ){
+                   self.tieneImServ = true    
+                }
                 self.update()
                 self.detalles.forEach(function(elemen){
                    elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
@@ -276,9 +295,12 @@ function consultar(){
                 buscarTipoDocumentoPrint()
                 __comboCondicionPagoPrint()
                 buscarCondicionPagoPrint()
+                
                 self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
                 self.detalles.forEach(function(elemen){
                     elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+                    self.impServicioTotal = __valorNumerico
+
                 })
                 self.update()
                 if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){

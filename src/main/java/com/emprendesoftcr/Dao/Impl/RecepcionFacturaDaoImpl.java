@@ -89,7 +89,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,String tipoGasto,String actividadEconocimica) {
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto,String actividadEconocimica) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFactura obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -105,11 +105,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		}
 		if (tipoGasto != null) {
 			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
-				hql.append("and obj.tipoGasto in (:tipoGasto) ");
+				hql.append("and obj.tipoGasto = :tipoGasto ");
 			}
 		}
 		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
-			hql.append("and obj.codigoActividad in (:actividadEconocimica)");
+			hql.append("and obj.codigoActividad in (:codigoActividad)");
 		}
 		
 		
@@ -137,7 +137,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
-	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,String tipoGasto,String actividadEconocimica) {
+	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto,String actividadEconocimica) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFacturaDetalle obj ");
 		hql.append(" where obj.recepcionFactura.empresa = :empresa ");

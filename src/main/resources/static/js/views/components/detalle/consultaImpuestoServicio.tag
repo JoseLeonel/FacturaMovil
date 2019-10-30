@@ -50,7 +50,6 @@
                                         <option  value="6">Aceptada</option>
                                         <option  value="2">Facturada</option>
                                     	<option  value="7">Rechazada</option>
-                                        <option  value="5">Anulada</option>                                    
                                     </select>
                                 </div>  
                             </div> 
@@ -497,6 +496,18 @@ self.on('mount',function(){
     agregarInputsCombos()
     _init()
     __ListaActividadesComercales()
+    $('.datepickerFechaFinal').datepicker(
+    {
+        format: 'yyyy-mm-dd',
+        todayHighlight:true,
+    }
+    );
+    $('.datepickerFechaInicial').datepicker(
+    {
+        format: 'yyyy-mm-dd',
+        todayHighlight:true,
+    }
+    );
     window.addEventListener( "keydown", function(evento){
       $(".errorServerSideJgrid").remove();
     }, false );
@@ -584,6 +595,7 @@ __limpiarFiltros(){
 **/
 __Busqueda(){
     self.listaFacturas = []
+    self.totalImpuestoServicio = 0
     self.update()
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {

@@ -88,6 +88,7 @@
                             <input type="hidden" id='totalDescuentos'         name='totalDescuentos'         value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalImpuestoServ'       name='totalImpuestoServ'       value="{factura.totalImpuestoServ}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
@@ -1500,6 +1501,23 @@ function __calculate() {
     self.factura.subTotal                = __valorNumerico(subTotal)
     self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) 
     self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
+//Se verifica si la mesa tiene impuestos
+
+    var tieneMesa = typeof self.factura.mesa !== 'undefined'?true:false;
+    tieneMesa = self.factura.mesa == null?false:true
+
+
+    var tieneImpuestoServiciot = false
+    if(tieneMesa){
+      tieneImpuestoServiciot = typeof self.factura.mesa.impuestoServicio !== 'undefined'?true:false;  
+    }
+    if (tieneMesa && tieneImpuestoServiciot){
+        if(self.factura.mesa.impuestoServicio  == true){
+            self.factura.totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10))
+            self.factura.totalVentaNeta    = Math.round(__valorNumerico(totalVenta-totalDescuento) + __valorNumerico(self.factura.totalImpuestoServ))
+            totalComprobante          = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(self.factura.totalImpuestoServ))
+        }
+    }    
     self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);

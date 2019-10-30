@@ -93,7 +93,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		hql.append(" where obj.factura.estado = :estado ");
 		hql.append("and obj.factura.empresa.id = :idEmpresa ");
 
-		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo ");
+		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin  ");
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			hql.append("and obj.tipoImpuesto = :tipoImpuesto");
 		}
@@ -110,7 +110,7 @@ public class DetalleDaoImpl implements DetalleDao {
 			query.setParameter("codigoActividad", actividadEconomica);
 		}
 
-		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
+	//	query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		query.setParameter("idEmpresa", empresa.getId());
@@ -228,6 +228,30 @@ public class DetalleDaoImpl implements DetalleDao {
 			}
 		
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Detalle> findbyIdFactura(Long idFactura) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Detalle obj");
+		hql.append(" where obj.factura.id = :idFactura ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("idFactura", idFactura);
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Detalle> findbyConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Detalle obj");
+		hql.append(" where obj.factura.consecutivo = :idconsecutivo ");
+		hql.append("and obj.factura.empresa.id = :idEmpresa ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("idconsecutivo", consecutivo);
+		query.setParameter("idEmpresa", empresa.getId());
+		return query.getResultList();																			
 	}
 	
 	

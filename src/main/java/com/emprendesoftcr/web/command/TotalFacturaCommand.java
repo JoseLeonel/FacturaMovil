@@ -67,7 +67,7 @@ public class TotalFacturaCommand {
 		this.totalBanco_n = totalBanco_n * -1;
 		this.totalTarjeta_n = totalTarjeta_n * -1;
 		this.totalCredito_n = totalCredito_n * -1;
-		this.totalPagos_n = (this.totalBanco_n + this.totalEfectivo_n + this.totalTarjeta_n + this.totalCredito_n) * -1;
+		this.totalPagos_n = (this.totalBanco_n + this.totalEfectivo_n + this.totalTarjeta_n + this.totalCredito_n);
 		
 		
 	}

@@ -37,8 +37,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 		"        FROM facturas fac \n" + 
 		"        inner join clientes on clientes.id = fac.cliente_id\n" + 
 		"        inner join usuarios on usuarios.id = fac.usuario_id\n" + 
-		" WHERE fac.empresa_id = :ID_EMPRESA and fac.fecha_emision >=  :fechaInicial and  fac.fecha_emision <=  :fechaFinal and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado  \n" + 
-		"     ORDER BY fac.id ASC" )
+		" WHERE fac.fecha_emision >=  :fechaInicial and fac.empresa_id = :ID_EMPRESA   "
+		+ "  and  fac.fecha_emision <= :fechaFinal "
+		+ "  and fac.act_comercial "
+		+ "  and fac.usuario_id "
+		+ "  and fac.cliente_id "
+		+ "  and fac.tipo_doc and fac.estado  \n" )
 @Entity
 public class ListaNotasNative implements Serializable {
 
