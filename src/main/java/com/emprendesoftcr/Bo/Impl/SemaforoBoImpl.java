@@ -34,4 +34,10 @@ public class SemaforoBoImpl implements SemaforoBo {
 		semaforoDao.modificar(semaforo);
 	}
 
+	@Override
+	public Semaforo findByEstadoAndID(Integer estado, Integer id) {
+	
+		return semaforoDao.findByEstadoAndID(estado, id);
+	}
+
 }

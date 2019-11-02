@@ -27,5 +27,5 @@ public interface CuentaCobrarBo {
 	
 	Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado);
 	void modificarCuentaXCobrarPorNotaCredito(Factura notaCredito,Factura facturaAplicar);
-
+	void modificarCuentaXCobrarPorNotaDebito(Factura notaCredito, Factura facturaAplicar);
 }

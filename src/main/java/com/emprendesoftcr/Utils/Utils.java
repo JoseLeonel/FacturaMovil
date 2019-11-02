@@ -49,6 +49,19 @@ public final class Utils {
 		return resultado;
 	}
 
+	public static Integer fechaDiaAnterior(Date fechaAnterior, Date fechaHoy) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String hoy = dateFormat.format(fechaHoy);
+		String anterior = dateFormat.format(fechaAnterior);
+		
+		Date fechaInicial = dateFormat.parse(anterior);
+		Date fechaFinal = dateFormat.parse(hoy);
+
+		int dias = (int) ((fechaFinal.getTime() - fechaInicial.getTime()) / 86400000);
+
+		return dias;
+	}
+
 	public static Boolean validarCedulaDiferenteCaracter(String valor) {
 		Boolean resultado = Boolean.FALSE;
 		if (valor == null) {
@@ -130,6 +143,7 @@ public final class Utils {
 
 		return resultado;
 	}
+
 	public static String formateadorMilesExcel(Double valor) {
 		String resultado = Constantes.EMPTY;
 
@@ -686,22 +700,20 @@ public final class Utils {
 			}
 		}
 	}
-	
+
 	public static void rejectIfNotValidCedulaFisica(Errors errors, String campo) {
 		String cedula = (String) errors.getFieldValue(campo);
 		if (!(cedula.matches(Constantes.PATRON_CEDULA_FISICA_NACIONALES) || cedula.matches(Constantes.PATRON_CEDULA_FISICA_OTROS))) {
-		errors.rejectValue(campo, Constantes.KEY_CEDULA_FISICA_FORMATO_INCORRECTO);
+			errors.rejectValue(campo, Constantes.KEY_CEDULA_FISICA_FORMATO_INCORRECTO);
 		}
-		}
-	
-	
+	}
+
 	public static void rejectIfNotValidCedulaJuridica(Errors errors, String campo) {
 		String cedula = (String) errors.getFieldValue(campo);
 		if (!(cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_AUTONOMA) || cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_GOBIERNO) || cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_PERSONERIA))) {
-		errors.rejectValue(campo, Constantes.KEY_CEDULA_JURIDICA_FORMATO_INCORRECTO);
+			errors.rejectValue(campo, Constantes.KEY_CEDULA_JURIDICA_FORMATO_INCORRECTO);
 		}
-		}
-	
+	}
 
 	/**
 	 * Determina si un caracter representa un digito numerico en una mascara

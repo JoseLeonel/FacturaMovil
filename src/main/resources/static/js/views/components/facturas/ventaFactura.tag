@@ -3729,7 +3729,12 @@ function __informacionData(){
 										            return __Opcionesclientes(id,type,row);
 	 							                }	 
 								            },
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false,
+        									"render":function(cedula,type, row){
+        										return stringVacio(cedula)?cedula:row.identificacionExtranjero;
+        									}
+                                        
+                                        },
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'nombreComercial'   ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
@@ -3756,7 +3761,23 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
-        __aplicarExoneracionPorCliente()
+       // __aplicarExoneracionPorCliente()
+
+         if(!verificarSiClienteFrecuente(self.cliente)){
+            self.factura.tipoDoc ='01'
+            if(stringVacio(self.cliente.identificacionExtranjero)== false){
+               self.factura.tipoDoc ='01'
+               self.update()
+               __aplicarExoneracionPorCliente()
+            }else{
+               self.factura.tipoDoc ='04'
+               self.update()
+            }
+           __ComboTipoDocumentos(1)
+        }else{
+            self.factura.tipoDoc = "04";
+            __ComboTipoDocumentos(0)
+        }
         
         
          $('#modalClientes').modal('hide') 

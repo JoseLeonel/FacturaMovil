@@ -94,7 +94,11 @@ var idioma_espanol =
 }
 
  var informacion_tabla = [ 
-								{'data' :'cedula'             ,"name":"cedula"               ,"title" : "Cedula"              ,"autoWidth" :false },
+								{'data' :'cedula'             ,"name":"cedula"               ,"title" : "Cedula"              ,"autoWidth" :false ,
+									"render":function(cedula,type, row){
+										return stringVacio(cedula)?cedula:row.identificacionExtranjero;
+									}
+							     },
 								{'data' :'nombreCompleto'     ,"name":"nombreCompleto"       ,"title" : "Nombre"              ,"autoWidth" :false },
 								{'data' :'nombreComercial'    ,"name":"nombreComercial"      ,"title" : "Nombre Comercial"    ,"autoWidth" :false },
 								{'data' : 'celular'           ,"name":"celular"              ,"title" : "Celular"             ,"autoWidth" :false},

@@ -21,10 +21,9 @@
                             <h4 class="panel-title"><span class="fa fa-user col-md-offset-5"></span> Datos del Cliente</h4>
                         </div>
                         </a>
-                        <div id="collapse1" class="panel-collapse collapse">
+                        <div id="collapse1" class="panel-collapse collapse abrirDatos">
                             <div class="panel-body">
                             
-                                <input type="hidden" name="identificacionExtranjero" id="identificacionExtranjero" value="{cliente.identificacionExtranjero}">
                                 <input type="hidden" name="id" id="id" value="{cliente.id}">
                                 <input type="hidden" id="descuento" name="descuento" value="{cliente.descuento}"  >
                                 <input type="hidden"  id="celular" name="celular" value="{cliente.celular}"  >
@@ -57,35 +56,46 @@
                                     
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label >Cedula Extranjero</label>
+                                        <input type="text" class="form-control identificacionExtranjero" placeHolder ="Cedula Extranjero" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
+                                    </div>
+
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
                                         <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.telefono")} </label>
                                         <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico")}</label>
                                         <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                                     </div>
-                                
                                 </div>
                                                     
                                 <div class="row">    
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    
+
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >{$.i18n.prop("cliente.correoElectronico1")}</label>
                                         <input type="text" class="form-control correoElectronico1" placeHolder ="{$.i18n.prop("cliente.correoElectronico1")}" id="correoElectronico1" name="correoElectronico1" value="{cliente.correoElectronico1}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico2")}</label>
                                         <input type="text" class="form-control correoElectronico2" placeHolder ="{$.i18n.prop("cliente.correoElectronico2")}" id="correoElectronico2" name="correoElectronico2" value="{cliente.correoElectronico2}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico3")}</label>
                                         <input type="text" class="form-control correoElectronico3" placeHolder ="{$.i18n.prop("cliente.correoElectronico3")}" id="correoElectronico3" name="correoElectronico3" value="{cliente.correoElectronico3}"  >
                                     </div>
-                                    
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label >{$.i18n.prop("cliente.estado")}</label>
+                                        <select  class="form-control" id="estado" name="estado" >
+                                            <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="row">    
@@ -99,14 +109,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                        <label >{$.i18n.prop("cliente.estado")}</label>
-                                        <select  class="form-control" id="estado" name="estado" >
-                                            <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
-                                </div>     
+                                
                             </div>
                         </div>
                     </div>
@@ -122,7 +125,7 @@
                                 <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion con afiliacion a Exonet/Exento de IVA,Extensiones articulo 8 de la ley 9635</h4>
                             </div>
                         </a>
-                        <div id="collapse2" class="panel-collapse collapse">
+                        <div id="collapse2" class="panel-collapse collapse abrirDatos1">
                             <div class="panel-body">
                                 <div class="row">    
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -279,6 +282,7 @@ self.on('mount',function(){
     }
     __ComboTipoDocumentoExonerados()
     configuracionDatePicker()
+   
     
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
@@ -456,6 +460,9 @@ __ConsultarHacienda(e){
     getClienteHacienda(cedula)
 }
 function getClienteHacienda(cedula){
+    if(stringVacio($(".cedula").val()) == false){
+       return    
+    }
     self.clienteHacienda= {
         nombre:"",
         tipoIdentificacion:"",
@@ -472,7 +479,7 @@ function getClienteHacienda(cedula){
     statusCode: {
         
         404: function() {
-            alert( "Cedula invalidad" )
+            mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
             __listadoTipoCedulas()
         }
     }
@@ -542,13 +549,12 @@ var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			cedula : {
-				required : true,
+			
                 maxlength:12,
                 minlength:9,
 			},
-
-			nombreCompleto : {
-				required : true,
+            nombreCompleto : {
+				
                 maxlength:80,
                 minlength:1,
                 lettersOnly : true
@@ -601,7 +607,7 @@ var reglasDeValidacion = function() {
 			},
             identificacionExtranjero : {
                 maxlength:20,
-                minlength:9,
+                minlength:6,
 			},
             porcentajeExoneracion:{
              number:true,
@@ -718,16 +724,15 @@ __regresarAlListado(){
 
 function validarTamanosCedulas(){
     //fisicas
+    var valiExtranjero = stringVacio($(".identificacionExtranjero").val())
+    if(valiExtranjero == true){
+        return false
+    }
+
     if($("#tipoCedula").val()=="01"){
         var resul = $("#cedula").val()
         if(resul.length < 9 || resul.length > 9  ){
-            swal({
-      	        title: '',
-      	        text: "Formato Invalido , Cedula Fisica es de 9 digitos",
-      	        type: 'error',
-      	        showCancelButton: false,
-      	        confirmButtonText: 'Aceptar',
-            })
+            mensajeErrorTiempo("Formato Invalido , Cedula Fisica es de 9 digitos")
             return true
 
         }
@@ -737,13 +742,7 @@ function validarTamanosCedulas(){
     if($("#tipoCedula").val()=="02"){
         var resul = $("#cedula").val()
         if(resul.length < 10 || resul.length > 10  ){
-            swal({
-      	        title: '',
-      	        text: "Formato Invalido , Cedula Juridicas es de 10 digitos",
-      	        type: 'error',
-      	        showCancelButton: false,
-      	        confirmButtonText: 'Aceptar',
-            })
+            mensajeErrorTiempo("Formato Invalido , Cedula Juridicas es de 10 digitos")
             return true
 
         }
@@ -752,13 +751,7 @@ function validarTamanosCedulas(){
     if($("#tipoCedula").val()=="03"){
         var resul = $("#cedula").val()
         if(resul.length < 12 || resul.length > 12  ){
-            swal({
-      	        title: '',
-      	        text: "Formato Invalido , Cedula Dimex es de 12 digitos",
-      	        type: 'error',
-      	        showCancelButton: false,
-      	        confirmButtonText: 'Aceptar',
-            })
+            mensajeErrorTiempo("Formato Invalido , Cedula Dimex es de 12 digitos")
             return true
 
         }
@@ -829,18 +822,11 @@ __agregar(){
     if(validaExoneracion()){
         return
     }
-
-     if ($("#formulario").valid()) {
+    if ($("#formulario").valid()) {
         aplicarCreacion()
     }else{
-        swal({
-      	        title: '',
-      	        text: "Error Faltan datos requeridos",
-      	        type: 'error',
-      	        showCancelButton: false,
-      	        confirmButtonText: 'Aceptar',
-            })
-            return true
+        mensajeErrorTiempo("Error Faltan datos requeridos")
+        return true
     }
 }
 
@@ -871,25 +857,11 @@ function aplicarCreacion(){
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: 'Aceptar',
-      	                                	  
-      	                         })
+                                mensajeErrorTiempo(data.message)
                             }
                         } else {
                         	serverMessageJson(data);
-                             swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                                	  
-	                         })
+                            mensajeExito(data.message)
 	                         _incializarCampos()
                             self.cliente = data
                             self.update()
@@ -920,7 +892,7 @@ function __consultar(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeErrorTiempo("", data.message, "error");
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {

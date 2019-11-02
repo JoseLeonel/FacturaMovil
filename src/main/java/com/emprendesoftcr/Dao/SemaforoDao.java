@@ -10,5 +10,6 @@ public interface SemaforoDao {
 	Semaforo findByEmpresa(Empresa empresa, Integer estado);
 
 	Semaforo findByEstado(Integer estado);
+	Semaforo findByEstadoAndID(Integer estado,Integer id);
 
 }

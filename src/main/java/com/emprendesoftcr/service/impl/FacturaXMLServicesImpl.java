@@ -566,7 +566,6 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
           } else {
          		resultado = "<Receptor>" +
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
-                xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";

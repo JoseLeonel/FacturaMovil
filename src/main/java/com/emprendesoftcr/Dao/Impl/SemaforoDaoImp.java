@@ -49,4 +49,17 @@ public 	void modificar(Semaforo semaforo) {
 		entityManager.merge(semaforo);
 		
 	}
+
+@Override
+public Semaforo findByEstadoAndID(Integer estado, Integer id) {
+	Query query = entityManager.createQuery("select obj from Semaforo obj where obj.estado = :estado and obj.id = :idSemaforo");
+	query.setParameter("estado", estado);
+	query.setParameter("idSemaforo", id);
+	List<Semaforo> results = query.getResultList();
+	if (!results.isEmpty()) {
+		return (Semaforo) results.get(0);
+	} else {
+		return null;
+	}
+}
 }

@@ -95,7 +95,7 @@ public class MesasController {
 	 * @param response
 	 * @return
 	 */
-	@Cacheable(value="mesasCacheable")
+	@Cacheable(value="mesasCache")
 	@RequestMapping(value = "/ListarMesasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -112,7 +112,7 @@ public class MesasController {
 	}
 
 	@SuppressWarnings("all")
-	@Cacheable(value="mesasCacheable")
+	@Cacheable(value="mesasCache")
 	@RequestMapping(value = "/ListarPaginacionMesasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarPaginacionMesasAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
@@ -144,7 +144,7 @@ public class MesasController {
 	 * @param response
 	 * @return
 	 */
-	@Cacheable(value="mesasCacheable")
+	@Cacheable(value="mesasCache")
 	@RequestMapping(value = "/ListarMesasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarMesasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -161,8 +161,7 @@ public class MesasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
-	@CacheEvict(value="mesasCacheable",allEntries=true)
+	@CacheEvict(value="mesasCache",allEntries=true)
 	@RequestMapping(value = "/AgregarMesaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Mesa mesa, BindingResult result, SessionStatus status) throws Exception {
@@ -189,7 +188,7 @@ public class MesasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	@CacheEvict(value="mesasCacheable",allEntries=true)
+	@CacheEvict(value="mesasCache",allEntries=true)
 	@RequestMapping(value = "/ModificarMesaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Mesa mesa, BindingResult result, SessionStatus status) throws Exception {

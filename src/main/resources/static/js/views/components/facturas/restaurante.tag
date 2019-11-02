@@ -200,6 +200,20 @@
 
 <!--Inicio mostrar mesas-->
 <div show={mostrarMesas}>
+<div id="pagina1" style="padding-bottom:15px" >
+   <div class="row">
+        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+            <div class="box-tools ">
+                
+                <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+
+                <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
+                
+
+            </div>
+        </div>      
+    </div>              
+</div>
    	<div class="container-fluid">
            <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" style="padding: 0px 10px">
              <!--Ventana de los productos-->
@@ -996,23 +1010,25 @@
             <div class="modal-body">
                 <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                    <thead>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                         <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                         <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                         <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                         <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
                         <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                        
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
+                            <th>                                          </th>
                             <th>{$.i18n.prop("cliente.cedula")}           </th>
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
                             <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                             <th>{$.i18n.prop("cliente.correoElectronico")}</th>
                             <th>{$.i18n.prop("cliente.telefono")}         </th>
                             <th>{$.i18n.prop("cliente.celular")}          </th>
-                            <th>                                          </th>
+                            
                         </tr>
                     </tfoot>                    
                 </table>
@@ -4407,17 +4423,24 @@ function __seleccionarVendedor() {
 **/
 function __informacionData(){
     self.informacion_tabla_clientes = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                      {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+									            "render":function(id,type, row){
+										            return __Opcionesclientes(id,type,row);
+	 							                }	 
+								            },
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false,
+        									"render":function(cedula,type, row){
+        										return stringVacio(cedula)?cedula:row.identificacionExtranjero;
+        									}
+                                        
+                                        },
+                                        
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'nombreComercial'   ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
                                         {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
                                         {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									            "render":function(id,type, row){
-										            return __Opcionesclientes(id,type,row);
-	 							                }	 
-								            },
+                                       
                                         ];                              
    
 }
@@ -4442,16 +4465,23 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
-         if(self.cliente.cedula != data.cedula){
+       //  if(self.cliente.cedula != data.cedula){
             self.cliente = data
             self.update();
-            __aplicarExoneracionPorCliente()
+         //   __aplicarExoneracionPorCliente()
 
-        }
+        //}
         $('#modalClientes').modal('hide') 
         if(!verificarSiClienteFrecuente(self.cliente)){
             self.factura.tipoDoc ='01'
-            
+            if(stringVacio(self.cliente.identificacionExtranjero)== false){
+               self.factura.tipoDoc ='01'
+               self.update()
+               __aplicarExoneracionPorCliente()
+            }else{
+               self.factura.tipoDoc ='04'
+               self.update()
+            }
            __ComboTipoDocumentos(1)
         }else{
             self.factura.tipoDoc = "04";
@@ -4637,7 +4667,7 @@ function agregarInputsCombos_Clientes(){
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         cont = cont +1 ;
-        if ( $(this).index() != 6    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

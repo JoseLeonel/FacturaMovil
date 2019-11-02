@@ -28,7 +28,7 @@
                         
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
-                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
+                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {cedula}   </strong></div>
                         <table class = "forma-table"  >
                             <thead>
                                 <tr class = "forma-table">
@@ -66,7 +66,7 @@
                             <tr show="{facturaImpresa.totalDescuentos >0}">
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalDescuentosSTR}</strong></td>
+                            <td ><strong>{facturaImpresa.totalDescuentoSTR}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
@@ -285,6 +285,7 @@
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
+self.cedula = ''
 
 self.titulo = ""
 self.claveParteUno =""
@@ -331,6 +332,7 @@ function consultaFactura(idFactura){
                 if(self.facturaImpresa == null){
                     if(self.facturaImpresa == null){
                         self.facturaImpresa = modeloTabla.factura
+                        self.cedula = getCedulaOrIdentificacionExtranjero(self.facturaImpresa.cliente.cedula,self.facturaImpresa.cliente.identificacionExtranjero)
                         self.update()
                     }
                     self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""

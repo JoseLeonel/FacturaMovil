@@ -246,7 +246,7 @@ public class DetalleDaoImpl implements DetalleDao {
 	public Collection<Detalle> findbyConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
-		hql.append(" where obj.factura.consecutivo = :idconsecutivo ");
+		hql.append(" where obj.factura.numeroConsecutivo = :idconsecutivo ");
 		hql.append("and obj.factura.empresa.id = :idEmpresa ");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("idconsecutivo", consecutivo);

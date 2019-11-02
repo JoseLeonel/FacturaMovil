@@ -22,7 +22,17 @@ $(document)
 
 function __informacionData_formato_cliente(){
     var informacion_tabla_clientes = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+							        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+								            "render":function(id,type, row){
+									            return __Opcionesclientes(id,type,row);
+								                }	 
+							            },
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false,
+        									"render":function(cedula,type, row){
+        										return stringVacio(cedula)?cedula:row.identificacionExtranjero;
+        									}
+                                        
+                                        },
                                         
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false,
 									            "render":function(id,type, row){
@@ -38,12 +48,7 @@ function __informacionData_formato_cliente(){
     								            "render":function(id,type, row){
     									            return __TamanoNombre(row.nombreComercial);
 	 							                }	 
-                                        },
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									            "render":function(id,type, row){
-										            return __Opcionesclientes(id,type,row);
-	 							                }	 
-								            },
+                                        }
 
 
                                         ];                              
@@ -51,7 +56,41 @@ function __informacionData_formato_cliente(){
    return informacion_tabla_clientes
 }
 
+/**
+ * Obtener la cedula de extranjero o fisica o emprsa
+ * @param mensaje
+ * @returns
+ */
+function getCedulaOrIdentificacionExtranjero(cedula,identificacionExtranjero){
+	var resultado = "";
+	if(stringVacio(cedula) == false){
+		return identificacionExtranjero;
+	}else{
+		return cedula
+	}
+	
+	
+	
+	return resultado;
+}
 
+function mensajeExito(mensaje){
+	 swal({
+         type: 'success',
+         title:mensaje,
+         showConfirmButton: false,
+         timer: 1500
+     });
+}
+
+function mensajeErrorTiempo(mensaje){
+	 swal({
+        type: 'error',
+        title:mensaje,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
 
 /**
 * Opciones del modal de clientes
@@ -67,7 +106,14 @@ function __TamanoNombre(nombre){
     if(nombreCliente == null){
         return ""
     }
-    return nombreCliente.length > 31 ?nombreCliente.substring(0,31) + "..." :nombreCliente;
+    return nombreCliente.length > 26 ?nombreCliente.substring(0,26) + "..." :nombreCliente;
+}
+
+function stringVacio(object){
+	if(object == null || typeof object == "undefined"  ){
+        return false;
+    }
+	return object.length > 0 ? true: false;
 }
 
 

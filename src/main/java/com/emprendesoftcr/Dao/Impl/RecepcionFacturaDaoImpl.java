@@ -104,7 +104,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		if (tipoGasto != null) {
-			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
+			if (!tipoGasto.equals(0)) {
 				hql.append("and obj.tipoGasto = :tipoGasto ");
 			}
 		}
@@ -128,7 +128,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		if (!estado.equals(0)) {
 			query.setParameter("estado", estado);
 		}
-		if (!tipoGasto.equals(Constantes.COMBO_TODOS)) { 
+		if (!tipoGasto.equals(0)) { 
 			query.setParameter("tipoGasto", tipoGasto);
 		}
 	
@@ -157,7 +157,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		if (tipoGasto != null) {
-			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
+			if (!tipoGasto.equals(0)) {
 				hql.append("and obj.tipoGasto = :tipoGasto ");
 			}
 		}
@@ -179,7 +179,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			query.setParameter("codigoActividad", actividadEconocimica);
 		}
 		if (tipoGasto != null) {
-			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
+			if (!tipoGasto.equals(0)) {
 				query.setParameter("tipoGasto", tipoGasto);
 			}
 		}

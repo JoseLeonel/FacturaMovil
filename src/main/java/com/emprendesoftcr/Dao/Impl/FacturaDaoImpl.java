@@ -124,11 +124,6 @@ public class FacturaDaoImpl implements FacturaDao {
 			query.setParameter("factura", factura);
 			int deletedCount = query.executeUpdate();
 
-//			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
-//			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
-//			storedProcedure.setParameter(0, factura.getId().intValue());
-//			
-//			storedProcedure.execute();
 
 			log.info("** find de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
 
@@ -144,10 +139,8 @@ public class FacturaDaoImpl implements FacturaDao {
 	 */
 	@Override
 	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
-		// Query query = entityManager.createQuery("select obj from Factura obj where obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado = :estado and obj.empresa.id = :idEmpresa order by obj.empresa.id");
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado order by obj.empresa.id");
 		query.setParameter("estadoFirma", estadoFirma);
-		// query.setParameter("idEmpresa", Constantes.EMPRESA_VIVIANA_MARTINEZ_8085);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
 		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
@@ -172,9 +165,13 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa, String actividadEconomica) {
-		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa  and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
+		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa   and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.estado = :estado and obj.codigoActividad = :codigoActividad  and obj.tipoDoc  != '86'  ";
 		if (actividadEconomica.equals(Constantes.COMBO_TODOS)) {
 			sql = sql.replaceAll("and obj.codigoActividad = :codigoActividad","");
+		}
+		if(estado.equals(Constantes.FACTURA_ESTADO_RECHAZADA)) {
+			sql = sql.replaceAll("and obj.tipoDoc  != '86'","");
+			
 		}
 		Query query = entityManager.createQuery(sql);
 		query.setParameter("idEmpresa", idEmpresa);

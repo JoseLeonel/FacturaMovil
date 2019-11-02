@@ -14,12 +14,16 @@
                                     <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                         <button type="button" class="btn btn-danger boton-imprimirCelular" onclick="printJS('imprimeme', 'html')" show={mostrarImprimiCelular == true}>Imprimir desde el <br>Celular</button>    
                                     </div>
-                                </div>        
+                                </div>     
+                                 <div class="modal-footer">
+              <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+    </div>   
                     
                     </div>
                     <section class="">
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
+                                
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong> {$.i18n.prop("regimen.simplificado")} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
@@ -47,17 +51,17 @@
                                 <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
-                                <div class="encabezado" show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
-                                <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
-                                <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {cedula}   </strong></div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
+                                <div class="encabezado" show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }"><strong>A nombre:     </strong>{facturaImpresa.nombreFactura}</div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }"><strong show={facturaImpresa.cliente.nombreComercial.length > 0}>{facturaImpresa.cliente.nombreComercial}</strong ></div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
                                 <div class="encabezado" show ="{facturaImpresa.cliente.correoAlternativo != ''}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></div>
-                                
                                 <div class="tamanoClaveencabezado" show ="{facturaImpresa.referenciaNumero.length > 0}"><strong > {$.i18n.prop("informacion.numero.referencia")} </strong></div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteUnoRef}</div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteDosRef}</div>
                                 <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
-                                
+                                <div class="encabezado" show="{facturaImpresa.mesa != null}"><strong> {facturaImpresa.mesa.descripcion} </strong><br></div> 
                                 <table class = "forma-table">
                                     <thead>
                                         <tr class = "forma-table">
@@ -160,9 +164,7 @@
                 </div>
                 </div>
     </div>    
-    <div class="modal-footer">
-              <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-    </div>
+   
     </div>
   </div>
 </div>
@@ -398,6 +400,7 @@ self.claveParteUnoRef =""
 self.claveParteDosRef =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
+self.cedula = ""
 self.facturaActiva = 0
 self.facturaImpresa = {
     id:0,
@@ -548,7 +551,9 @@ function consultaFactura(idFactura){
                         self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
                         self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
                       if(self.facturaImpresa == null){
-                            self.facturaImpresa = modeloTabla.factura
+                            self.facturaImpresa = modeloTabla.factura 
+                            //factura.js
+                            self.cedula = getCedulaOrIdentificacionExtranjero(self.facturaImpresa.cliente.cedula,self.facturaImpresa.cliente.identificacionExtranjero)
                             if(self.facturaImpresa.empresa.imprimirCelular == 1){
                                 self.mostrarImprimiCelular = true
                             }

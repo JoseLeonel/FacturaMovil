@@ -208,6 +208,7 @@
 </style>
 <script>
     self = this
+     
     self.hay_datos             = false   
     self.mostrarListado        = true
     self.fechaInicio =null
@@ -224,6 +225,7 @@
         totalNotaDebitoImpuesto:0,
     }    
     self.on('mount',function(){
+        $("#filtros").validate(reglasDeValidacion());
         $('.datepickerFechaFinal').datepicker(
                 {
                 format: 'yyyy-mm-dd',

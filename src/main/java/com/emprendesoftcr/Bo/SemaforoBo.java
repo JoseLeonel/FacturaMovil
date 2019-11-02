@@ -10,4 +10,6 @@ public interface SemaforoBo {
 	Semaforo findByEstado(Integer estado);
 	
 	void modificar(Semaforo semaforo);
+	
+	Semaforo findByEstadoAndID(Integer estado, Integer id);
 }

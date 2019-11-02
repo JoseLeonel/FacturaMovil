@@ -107,7 +107,7 @@ public class ClientesController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@Cacheable(value = "clientesCache")
+	@Cacheable(value="clienteCache")
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -125,7 +125,6 @@ public class ClientesController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	@Cacheable(value = "clientesCache")
 	@RequestMapping(value = "/movil/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public Collection<Cliente> listarClientesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa) {
@@ -134,7 +133,7 @@ public class ClientesController {
 	}
 
 	@SuppressWarnings("all")
-	@Cacheable(value = "clientesCache")
+	@Cacheable(value="clienteCache")
 	@RequestMapping(value = "/ListarClientesActivosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivosAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -188,7 +187,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value = "clientesCache", allEntries = true)
+	@CacheEvict(value="clienteCache",allEntries=true)
 	@RequestMapping(value = "/AgregarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -214,10 +213,20 @@ public class ClientesController {
 			clienteCommand.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getTipoDocumentoExoneracion());
 			clienteCommand.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : clienteCommand.getPorcentajeExoneracion());
 			clienteCommand.setLibreImpuesto(clienteCommand.getLibreImpuesto() == null ? Constantes.LIBRE_IMPUESTOS_INACTIVO : clienteCommand.getLibreImpuesto());
+			if (!clienteCommand.getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
+				clienteCommand.setCedula(Constantes.EMPTY);
+				clienteCommand.setTipoCedula(Constantes.EMPTY);
+			} else {
+				if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+					result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
+				}
+				if (Utils.validarCedulaDiferenteCaracter(clienteCommand.getCedula()).equals(Boolean.FALSE)) {
+					result.rejectValue("cedula", "error.cliente.cedula.tiene.mismo.digito");
 
-			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
-				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
+				}
+
 			}
+
 			if (clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
 				result.rejectValue("nombreCompleto", Constantes.KEY_REQUERIDO);
 			}
@@ -235,13 +244,24 @@ public class ClientesController {
 				if (clienteCommand.getCedula().length() > 10) {
 					result.rejectValue("cedula", "error.cliente.cedula.juridica.tamano.incorrecto");
 				}
+
 			}
 			Cliente clienteValidar = null;
 
-			clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
-			if (clienteValidar != null) {
-				result.rejectValue("cedula", "error.cliente.existe.cedula");
+			if(!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+				clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
+				if (clienteValidar != null) {
+					result.rejectValue("cedula", "error.cliente.existe.cedula");
+				}
+				
+			}else {
+				clienteValidar = clienteBo.buscarPorCedulaExtranjera(clienteCommand.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
+				if (clienteValidar != null) {
+					result.rejectValue("cedula", "error.cliente.existe.cedula");
+				}
+				
 			}
+			
 
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 
@@ -263,19 +283,6 @@ public class ClientesController {
 					}
 
 				}
-			}
-			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
-				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					if (clienteCommand.getLibreImpuesto() != null) {
-						if (clienteCommand.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
-							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.ya.tiene.exoneracion", result.getAllErrors());
-						}
-					}
-				}
-			}
-			if (Utils.validarCedulaDiferenteCaracter(clienteCommand.getCedula()).equals(Boolean.FALSE)) {
-				result.rejectValue("cedula", "error.cliente.cedula.tiene.mismo.digito");
-
 			}
 
 			if (result.hasErrors()) {
@@ -345,7 +352,7 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value = "clientesCache", allEntries = true)
+	@CacheEvict(value="clienteCache",allEntries=true)
 	@RequestMapping(value = "/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -354,10 +361,39 @@ public class ClientesController {
 			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
 			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
 			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
+			clienteCommand.setNombreComercial(clienteCommand.getNombreComercial() == null ? Constantes.EMPTY : clienteCommand.getNombreComercial());
+			clienteCommand.setOtraSena(clienteCommand.getOtraSena() == null ? Constantes.EMPTY : clienteCommand.getOtraSena());
+			clienteCommand.setDescuento(clienteCommand.getDescuento() == null ? Constantes.ZEROS : clienteCommand.getDescuento());
+			clienteCommand.setEstado(clienteCommand.getEstado() == null ? Constantes.ESTADO_ACTIVO : clienteCommand.getEstado());
+			clienteCommand.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero() == null ? Constantes.EMPTY : clienteCommand.getIdentificacionExtranjero());
+			clienteCommand.setCorreoElectronico1(clienteCommand.getCorreoElectronico1() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico1());
+			clienteCommand.setCorreoElectronico2(clienteCommand.getCorreoElectronico2() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico2());
+			clienteCommand.setCorreoElectronico3(clienteCommand.getCorreoElectronico3() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico3());
+			clienteCommand.setObservacionVenta(clienteCommand.getObservacionVenta() == null ? Constantes.EMPTY : clienteCommand.getObservacionVenta());
+			clienteCommand.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : clienteCommand.getNombreInstitucionExoneracion());
+			clienteCommand.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getNumeroDocumentoExoneracion());
+			clienteCommand.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getTipoDocumentoExoneracion());
+			clienteCommand.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : clienteCommand.getPorcentajeExoneracion());
+			clienteCommand.setLibreImpuesto(clienteCommand.getLibreImpuesto() == null ? Constantes.LIBRE_IMPUESTOS_INACTIVO : clienteCommand.getLibreImpuesto());
+			
+			if (!clienteCommand.getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
+				clienteCommand.setCedula(Constantes.EMPTY);
+				clienteCommand.setTipoCedula(Constantes.EMPTY);
+			} else {
+				if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+					result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
+				}
+				if (Utils.validarCedulaDiferenteCaracter(clienteCommand.getCedula()).equals(Boolean.FALSE)) {
+					result.rejectValue("cedula", "error.cliente.cedula.tiene.mismo.digito");
 
-			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
-				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
+				}
+				if (Utils.validarCedulaDiferenteCaracter(clienteCommand.getCedula()).equals(Boolean.FALSE)) {
+					result.rejectValue("cedula", "error.cliente.cedula.tiene.mismo.digito");
+				}
+
 			}
+
+
 			if (clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
 				result.rejectValue("nombreCompleto", Constantes.KEY_REQUERIDO);
 			}
@@ -395,9 +431,18 @@ public class ClientesController {
 					}
 				}
 				if (verificarFacturas == false) {
-					clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula(), usuarioSesion.getEmpresa());
-					if (clienteValidar != null) {
-						result.rejectValue("cedula", "error.cliente.existe.cedula");
+					if(!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+						clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
+						if (clienteValidar != null) {
+							result.rejectValue("cedula", "error.cliente.existe.cedula");
+						}
+						
+					}else {
+						clienteValidar = clienteBo.buscarPorCedulaExtranjera(clienteCommand.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
+						if (clienteValidar != null) {
+							result.rejectValue("cedula", "error.cliente.existe.cedula");
+						}
+						
 					}
 
 				}
@@ -422,18 +467,6 @@ public class ClientesController {
 					}
 
 				}
-			}
-			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
-				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					if (clienteCommand.getLibreImpuesto() != null) {
-						if (clienteCommand.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
-							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.ya.tiene.exoneracion", result.getAllErrors());
-						}
-					}
-				}
-			}
-			if (Utils.validarCedulaDiferenteCaracter(clienteCommand.getCedula()).equals(Boolean.FALSE)) {
-				result.rejectValue("cedula", "error.cliente.cedula.tiene.mismo.digito");
 			}
 
 			if (result.hasErrors()) {

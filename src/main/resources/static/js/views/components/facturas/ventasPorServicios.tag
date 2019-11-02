@@ -31,7 +31,7 @@
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("factura.tipoDocumento")}</label> 
                                 <select  onchange= {__formaReferencias} class="form-control has-success tipoDoc" id="tipoDoc" name="tipoDoc" >
-                                    <option each={comboTipoDocumentos}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
+                                    <option each={comboTipoDocumentos}  value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("factura.tipo.moneda")}</label> 
                                 <select class="form-control has-success codigoMoneda" id="codigoMoneda" name="codigoMoneda" >
-                                    <option each={monedas}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
+                                    <option each={monedas}  value="{estado}" selected="{factura.codigoMoneda ==estado?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>
@@ -584,6 +584,7 @@ function __ListaActividadesComercales(){
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
         datatype: "json",
+         global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1209,41 +1210,10 @@ _EscogerClientes(){
 function __combocodigosReferencia(){
     self.codigosReferencias = []
     self.update()
-    self.codigosReferencias.push({
-         estado:"01",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.electronica")
-    })
-    self.codigosReferencias.push({
-         estado:"02",
-        descripcion:$.i18n.prop("referencia.tipo.documento.nota.debito")
-    })
-    self.codigosReferencias.push({
-         estado:"03",
-        descripcion:$.i18n.prop("referencia.tipo.documento.nota.credito")
-    })
+    
      self.codigosReferencias.push({
-        estado:"04",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.tiquete")
-    })
-     self.codigosReferencias.push({
-        estado:"05",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.nota.despacho")
-    })
-    self.codigosReferencias.push({
-        estado:"06",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.contrato")
-    })
-    self.codigosReferencias.push({
-        estado:"07",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.procedimiento")
-    })
-    self.codigosReferencias.push({
-        estado:"08",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.comprobante.contigencia")
-    })
-    self.codigosReferencias.push({
-        estado:"99",
-        descripcion:$.i18n.prop("referencia.tipo.documento.factura.otros")
+            estado:'01',
+            descripcion:$.i18n.prop("referencia.anula.documento")
     })
     self.update()
 }
@@ -1270,6 +1240,7 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
+         global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1291,12 +1262,17 @@ function __ListaDeClientes(){
 **/
 function __informacionData(){
     self.informacion_tabla_clientes = [	
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+                                       {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __Opcionesclientes(id,type,row);
 	 							                }	 
 								            },
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false,
+        									"render":function(cedula,type, row){
+        										return stringVacio(cedula)?cedula:row.identificacionExtranjero;
+        									}
+                                        
+                                        },
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
                                         {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
@@ -1325,14 +1301,24 @@ function __seleccionarClientes() {
 	     }
           self.cliente = data
          self.update();
-        __aplicarExoneracionPorCliente()
-        
-       //factura.js
-         if(verificarSiClienteFrecuente(self.cliente)){
-             __ComboTipoDocumentos(1)
-         }else{
-             __ComboTipoDocumentos(2)
-         }
+         if(!verificarSiClienteFrecuente(self.cliente)){
+            self.factura.tipoDoc ='01'
+            if(stringVacio(self.cliente.identificacionExtranjero)== false){
+               self.factura.tipoDoc ='01'
+               self.update()
+               __aplicarExoneracionPorCliente()
+               __ComboTipoDocumentos(1)
+            }else{
+               self.factura.tipoDoc ='04'
+               self.update()
+               __ComboTipoDocumentos(0)
+            }
+            
+           
+        }else{
+            self.factura.tipoDoc = "04";
+            __ComboTipoDocumentos(0)
+        }
          $('#modalClientes').modal('hide') 
     });
 }
@@ -1454,18 +1440,29 @@ function __ComboTipoDocumentos(valor){
             estado:"01",
             descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
         })
-      
-       self.update()
-       return true 
-    }
-     if(valor == 2){
-         self.comboTipoDocumentos.push({
+        self.comboTipoDocumentos.push({
             estado:"04",
             descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
         })
-       self.update()
-       return true 
-    }
+
+    } 
+    if(valor == 0){
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+
+
+    } 
+ //   self.comboTipoDocumentos.push({
+ //       estado:"03",
+ //       descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+ //   })
+
     self.update()
 }
 /**

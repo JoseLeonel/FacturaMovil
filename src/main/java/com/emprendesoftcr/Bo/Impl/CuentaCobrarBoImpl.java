@@ -100,31 +100,34 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 
 		try {
 			CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(notaCredito.getEmpresa(), facturaAplicar.getNumeroConsecutivo());
-			Double saldo = cuentaCobrar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : cuentaCobrar.getTotalSaldo();
-			saldo = Utils.roundFactura(saldo,2) - Utils.roundFactura(notaCredito.getTotalComprobante(),2);
-			String estado = Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE;
-			if (saldo <= Constantes.ZEROS_DOUBLE) {
-				estado = Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO;
+			if (cuentaCobrar != null) {
+				Double saldo = cuentaCobrar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : cuentaCobrar.getTotalSaldo();
+				saldo = Utils.roundFactura(saldo,2) - Utils.roundFactura(notaCredito.getTotalComprobante(),2);
+				String estado = Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE;
+				if (saldo <= Constantes.ZEROS_DOUBLE) {
+					estado = Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO;
+				}
+				cuentaCobrar.setTotalSaldo(saldo);
+				cuentaCobrar.setTotalAbono(Utils.roundFactura(cuentaCobrar.getTotalAbono(),2) + Utils.roundFactura(notaCredito.getTotalComprobante(),2));
+				cuentaCobrar.setEstado(estado);
+				modificar(cuentaCobrar);
+				Abono abono = new Abono();
+				abono.setCreated_at(new Date());
+				abono.setUpdated_at(new Date());
+				abono.setCuentaCobrar(cuentaCobrar);
+				abono.setEstado(Constantes.ABONO_PAGAR_ESTADO_PAGADO);
+				abono.setRecibo("NC:"+facturaAplicar.getNumeroConsecutivo());
+				abono.setNota("Por concepto de nota credito,factura referencia:" + facturaAplicar.getNumeroConsecutivo());
+				abono.setTotal(Utils.roundFactura(notaCredito.getTotalComprobante(),2));
+				abono.setTotalBanco(Constantes.ZEROS_DOUBLE);
+				abono.setTotalEfectivo(Utils.roundFactura(notaCredito.getTotalComprobante(),2));
+				abono.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
+				abono.setTransferencia(Constantes.EMPTY);
+				abono.setUsuario(notaCredito.getUsuarioCreacion());
+				abono.setFechaPago(new Date());
+				abonoDao.agregar(abono);
+				
 			}
-			cuentaCobrar.setTotalSaldo(saldo);
-			cuentaCobrar.setTotalAbono(Utils.roundFactura(cuentaCobrar.getTotalAbono(),2) + Utils.roundFactura(notaCredito.getTotalComprobante(),2));
-			cuentaCobrar.setEstado(estado);
-			modificar(cuentaCobrar);
-			Abono abono = new Abono();
-			abono.setCreated_at(new Date());
-			abono.setUpdated_at(new Date());
-			abono.setCuentaCobrar(cuentaCobrar);
-			abono.setEstado(Constantes.ABONO_PAGAR_ESTADO_PAGADO);
-			abono.setRecibo("NC:"+facturaAplicar.getNumeroConsecutivo());
-			abono.setNota("Por concepto de nota credito,factura referencia:" + facturaAplicar.getNumeroConsecutivo());
-			abono.setTotal(Utils.roundFactura(notaCredito.getTotalComprobante(),2));
-			abono.setTotalBanco(Constantes.ZEROS_DOUBLE);
-			abono.setTotalEfectivo(Utils.roundFactura(notaCredito.getTotalComprobante(),2));
-			abono.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-			abono.setTransferencia(Constantes.EMPTY);
-			abono.setUsuario(notaCredito.getUsuarioCreacion());
-			abono.setFechaPago(new Date());
-			abonoDao.agregar(abono);
 
 		} catch (Exception e) {
 			log.error("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
@@ -133,4 +136,47 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 
 	}
 
+	@Transactional
+	@Override
+	public void modificarCuentaXCobrarPorNotaDebito(Factura notaCredito, Factura facturaAplicar) {
+
+		try {
+			CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(notaCredito.getEmpresa(), facturaAplicar.getNumeroConsecutivo());
+			if (cuentaCobrar != null) {
+				Double saldo = cuentaCobrar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : cuentaCobrar.getTotalSaldo();
+				saldo = Utils.roundFactura(saldo,2) + Utils.roundFactura(notaCredito.getTotalComprobante(),2);
+				String estado = Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE;
+				if (saldo <= Constantes.ZEROS_DOUBLE) {
+					estado = Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO;
+				}
+				cuentaCobrar.setTotalSaldo(saldo);
+				cuentaCobrar.setTotalAbono(Utils.roundFactura(cuentaCobrar.getTotalAbono(),2) - Utils.roundFactura(notaCredito.getTotalComprobante(),2));
+				cuentaCobrar.setEstado(estado);
+				modificar(cuentaCobrar);
+				Abono abono = new Abono();
+				abono.setCreated_at(new Date());
+				abono.setUpdated_at(new Date());
+				abono.setCuentaCobrar(cuentaCobrar);
+				abono.setEstado(Constantes.ABONO_PAGAR_ESTADO_PAGADO);
+				abono.setRecibo("NB:"+facturaAplicar.getNumeroConsecutivo());
+				abono.setNota("Por concepto de nota debito,factura referencia:" + facturaAplicar.getNumeroConsecutivo());
+				abono.setTotal(Utils.roundFactura(notaCredito.getTotalComprobante() * -1,2));
+				abono.setTotalBanco(Constantes.ZEROS_DOUBLE);
+				abono.setTotalEfectivo(Utils.roundFactura(notaCredito.getTotalComprobante()* -1,2));
+				abono.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
+				abono.setTransferencia(Constantes.EMPTY);
+				abono.setUsuario(notaCredito.getUsuarioCreacion());
+				abono.setFechaPago(new Date());
+				abonoDao.agregar(abono);
+				
+			}
+
+		} catch (Exception e) {
+			log.error("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+	}
+	
+	
 }

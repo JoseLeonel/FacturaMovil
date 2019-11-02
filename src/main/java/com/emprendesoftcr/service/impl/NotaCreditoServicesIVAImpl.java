@@ -475,7 +475,6 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
           } else {
          		resultado = "<Receptor>" +
                 "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
-                xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getIdentificacionExtranjero()) + "</IdentificacionExtranjero>" +
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";

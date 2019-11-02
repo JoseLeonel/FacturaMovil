@@ -262,6 +262,8 @@ public class UsuarioCajasController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
 		try {
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCaja.getId());
+			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBo.buscar(usuarioCaja.getId()));
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", usuarioCajaCommand);
 		} catch (Exception e) {

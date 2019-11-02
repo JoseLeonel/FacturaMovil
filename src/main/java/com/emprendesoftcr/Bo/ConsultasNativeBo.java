@@ -12,6 +12,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoArticuloMasVendidoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
@@ -75,4 +76,5 @@ public interface ConsultasNativeBo {
 	Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa);
 	
 	Collection<GraficoCuentasPorPagarNative> findByGraficoCuentasXPagar(Empresa empresa);
+	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
 }

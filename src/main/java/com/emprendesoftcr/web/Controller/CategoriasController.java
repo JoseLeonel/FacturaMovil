@@ -122,7 +122,6 @@ public class CategoriasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	@Cacheable(value="categoriaCache")
 	@RequestMapping(value = "/movil/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public Collection<Categoria> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {

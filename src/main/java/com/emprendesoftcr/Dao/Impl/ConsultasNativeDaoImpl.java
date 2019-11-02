@@ -22,6 +22,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoArticuloMasVendidoNative;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
@@ -489,6 +490,14 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		Query query = entityManager.createNativeQuery(queryStr, GraficoCuentasPorPagarNative.class);
 		return (Collection<GraficoCuentasPorPagarNative>) query.getResultList();
+	}
+
+	@Override
+	public Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa) {
+		String queryStr = getQueryBase(FacturasEsperaNativa.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		Query query = entityManager.createNativeQuery(queryStr, FacturasEsperaNativa.class);
+		return (Collection<FacturasEsperaNativa>) query.getResultList();
 	}
 
 }

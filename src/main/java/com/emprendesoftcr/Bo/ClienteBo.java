@@ -22,4 +22,6 @@ public interface ClienteBo {
 	
 	Cliente crearClienteFrecuente(Empresa empresa,Usuario usuario); 
 	Collection<Cliente> findByEmpresa(Integer idEmpresa);
+	
+	Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa);
 }

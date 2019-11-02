@@ -313,22 +313,7 @@ private String informacionFerencia(Factura factura) {
  * @param codigoPais
  * @return
  */
-	private String getFax(Integer telefono,Integer codigoPais) throws Exception{
-		String resultado = Constantes.EMPTY;
-		try {
-			if(telefono > Constantes.ZEROS) {
-				 resultado = "<Fax>" +
-		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";
-		        resultado += "</Fax>";
-			}
-			
-		} catch (Exception e) {
-			log.info("** Error  getFax: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		return resultado;
-	}
+
 	
 	/**
 	 * 
@@ -530,7 +515,6 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
           } else {
          		resultado = "<Receptor>" +
                 "<Nombre>" +  FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
-                xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
                 "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
@@ -561,7 +545,8 @@ private String xmlIdentificacion (Factura factura) throws Exception {
 	}
 	return resultado;
 }
-  
+
+
   
 
 }

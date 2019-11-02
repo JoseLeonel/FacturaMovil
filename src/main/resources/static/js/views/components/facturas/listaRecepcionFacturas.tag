@@ -100,7 +100,6 @@
                     <div class="box-body">
                         <div class="planel-body" >
                             <div class="listaContainer" >    
-
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   style="width:100%">
                                        <thead>
                                             <tr>
@@ -124,13 +123,10 @@
                                                 <th>{$.i18n.prop("factura.totalComprobante")} </th>
                                                 <th>{$.i18n.prop("factura.documento")}</th>
                                                  <th>#Compra</th>
-                                                
                                             </tr>
                                         </tfoot>
                                     </table>
-
                             </div> 
-  
                         </div>    
                     </div>
                 </div>
@@ -507,6 +503,8 @@ self.hay_datos             = false
 self.fechaInicio =null
 self.fechaFin =null
 self.cedula =""
+self.mostrarFiltros = false;
+self.valorMarginBottom  = '10px'
 self.totalGeneral = 0
 self.totalImpuestoGeneral = 0
 self.estado = 6
@@ -531,7 +529,6 @@ function __ListaActividadesComercales(){
                 self.empresaActividadComercial   = result.aaData
                 self.update()
 				BuscarActividadComercial()
- 
             }
         },
         error: function (xhr, status) {
@@ -610,7 +607,6 @@ __Busqueda(){
     self.totalImpuestoGeneral = 0
     self.listaFacturas = []
     self.update()
-    
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
         var parametros = {

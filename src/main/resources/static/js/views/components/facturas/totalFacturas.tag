@@ -113,7 +113,7 @@
     </div>    
 	<!-- Fin Filtros-->
     <br>
-  	<!-- Detalle  -->
+  	<!-- Detalle  --> 
 	<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
     	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">

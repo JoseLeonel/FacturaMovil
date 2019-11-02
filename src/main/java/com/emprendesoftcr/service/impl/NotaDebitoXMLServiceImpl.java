@@ -305,52 +305,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 		
       return resultado;
 	}
-	/**
-	 * 
-	 * @param telefono
-	 * @param codigoPais
-	 * @return
-	 */
-	private String getTelefono(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			 if(telefono > Constantes.ZEROS) {
-				 resultado = "<Telefono>" +
-		        "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO) + "</NumTelefono>";
-			      resultado += "</Telefono>";
-		   	  }		
-		} catch (Exception e) {
-			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-			
-		}
-		return resultado;
-	}
 	
-/**
-* 
-* @param telefono
-* @param codigoPais
-* @return
-*/
-	private String getFax(Integer telefono,Integer codigoPais) throws Exception  {
-		String resultado = Constantes.EMPTY;
-		try {
-			if(telefono > Constantes.ZEROS) {
-				 resultado = "<Fax>" +
-		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";
-		        resultado += "</Fax>";
-			}
-			
-		} catch (Exception e) {
-			log.info("** Error  getFax: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-
-		}
-		return resultado;
-	}
 	
 	/**
 	 * 
@@ -368,34 +323,13 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
          		resultado = "<Receptor>" +
                 "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
                 xmlIdentificacion(factura) + 
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
             "</Receptor>";
           	
           } else {
          		resultado = "<Receptor>" +
                 "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
-                xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
-//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-//                "<Ubicacion>" +
-//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-//                "</Ubicacion>" +
-//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-              //  getFax(0,factura.getCliente().getCodigoPais()) +    
                 "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
             "</Receptor>";
           	

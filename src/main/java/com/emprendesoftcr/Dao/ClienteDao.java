@@ -20,4 +20,5 @@ public interface ClienteDao {
 	Cliente buscarPorCedulaYEmpresa(String cedula, Empresa empresa);
 
 	Collection<Cliente> findByEmpresa(Integer idEmpresa);
+	Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa);
 }

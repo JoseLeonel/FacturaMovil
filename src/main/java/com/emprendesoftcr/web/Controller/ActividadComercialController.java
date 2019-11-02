@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -79,6 +81,7 @@ public class ActividadComercialController {
 		return "views/actividadComercial/ListarActividadComercialPorEmpresa";
 	}
 
+	@Cacheable(value="actcomericalCache")
 	@RequestMapping(value = "/ListarEmpresaActividadComercialAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable<?> listarEmpresaAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -97,6 +100,7 @@ public class ActividadComercialController {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Cacheable(value="actcomericalCache")
 	@RequestMapping(value = "/ListaEmpresaActividadComercialPorPricipalAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarEmpresa(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -112,6 +116,7 @@ public class ActividadComercialController {
 		
 	}
 
+	@CacheEvict(value="actcomericalCache",allEntries=true)
 	@RequestMapping(value = "/AgregarEmpresaActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator<?> agregarEmpresa(HttpServletRequest request, ModelMap model, @ModelAttribute EmpresaActividadComercialCommand empresaActividadComercialCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -155,7 +160,7 @@ public class ActividadComercialController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
+	@CacheEvict(value="actcomericalCache",allEntries=true)
 	@RequestMapping(value = "/ModificarEmpresaActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator<?> modificarEmpresa(HttpServletRequest request, ModelMap model, @ModelAttribute EmpresaActividadComercialCommand empresaActividadComercialCommand, BindingResult result, SessionStatus status) throws Exception {

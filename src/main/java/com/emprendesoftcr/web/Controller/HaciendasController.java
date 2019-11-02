@@ -34,13 +34,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
-import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -51,7 +49,6 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
-import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -81,295 +78,204 @@ import com.itextpdf.text.DocumentException;
 @Controller
 public class HaciendasController {
 
-	private static final Function<String, String>													BIND_CONDICION_VENTA							= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
+	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
-	private static final Function<Detalle, DetalleFacturaElectronica>			TO_DETALLE												= (d) -> {
-																																																						//
-																																																						DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
-																																																						detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
-																																																						detalleFacturaElectronica.setCodigo(d.getCodigo());
-																																																						detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
-																																																						detalleFacturaElectronica.setCantidad(d.getCantidad() != null ? d.getCantidad() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setDescripcion(d.getDescripcion());
-																																																						detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario() != null ? d.getPrecioUnitario() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setMonto(d.getMontoTotal() != null ? d.getMontoTotal() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setDescuento(d.getMontoDescuento() != null ? d.getMontoDescuento() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
-																																																						detalleFacturaElectronica.setTarifaIva(d.getImpuesto() != null ? d.getImpuesto() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() != null ? d.getImpuesto1() : Constantes.ZEROS_DOUBLE);
-																																																						Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
-																																																						resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
-																																																						detalleFacturaElectronica.setImpuesto(resultado);
-																																																						detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null?Constantes.EMPTY:d.getTipoImpuesto());
-																																																						detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
-																																																						detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
-																																																						detalleFacturaElectronica.setFechaEmisionExoneracion(d.getFechaEmisionExoneracion() != null ? Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()) : Constantes.EMPTY);
-																																																						detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion() != null ? d.getNumeroDocumentoExoneracion() : Constantes.EMPTY);
-																																																						//
-																																																						return detalleFacturaElectronica;
-																																																					};
-	private static final Function<CompraSimplificada, FacturaElectronica>	DOCUMENTO_TO_FACTURA_SIMPLIFICADO	= (d) -> {
-																																																						FacturaElectronica facturaElectronica = new FacturaElectronica();
-																																																						if (d.getCodigoActividad() == null) {
-																																																							facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
-																																																						} else {
-																																																							facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
-																																																						}
+	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
+																																																			//
+																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
+																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
+																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
+																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
+																																																			detalleFacturaElectronica.setCantidad(d.getCantidad() != null ? d.getCantidad() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setDescripcion(d.getDescripcion());
+																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario() != null ? d.getPrecioUnitario() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal() != null ? d.getMontoTotal() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento() != null ? d.getMontoDescuento() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
+																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto() != null ? d.getImpuesto() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() != null ? d.getImpuesto1() : Constantes.ZEROS_DOUBLE);
+																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
+																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
+																																																			detalleFacturaElectronica.setImpuesto(resultado);
+																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null ? Constantes.EMPTY : d.getTipoImpuesto());
+																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(d.getFechaEmisionExoneracion() != null ? Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()) : Constantes.EMPTY);
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion() != null ? d.getNumeroDocumentoExoneracion() : Constantes.EMPTY);
+																																																			//
+																																																			return detalleFacturaElectronica;
+																																																		};
 
-																																																						// Emisor
-																																																						facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
-																																																						facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
-																																																						facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
-																																																						facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
-																																																						facturaElectronica.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
-																																																						// Total Factura
-																																																						facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
-																																																						facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
-																																																						facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
-																																																						facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
-																																																						facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																						facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
-																																																						facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
-																																																						facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
+	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
+																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			if (d.getCodigoActividad() == null) {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
+																																																			} else {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
+																																																			}
+
+																																																			// Emisor
+																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
+																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
+																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
+																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
+																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
+																																																			// Total Factura
+																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
+																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
+																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
+																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
+																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
 //		
-																																																						facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
-																																																						facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
-																																																						facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
-																																																						facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
-																																																						facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
-																																																						facturaElectronica.set_nota(Constantes.EMPTY);
-																																																						facturaElectronica.setClienteNombre(d.getProveedorSimplificado().getNombreCompleto());
-																																																						facturaElectronica.setClienteNombreComercial(Constantes.EMPTY);
-																																																						facturaElectronica.setClienteCorreo(d.getProveedorSimplificado().getCorreoElectronico());
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
+																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
+																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
+																																																			String correo = Constantes.EMPTY;
+																																																			if (d.getEmpresa().getCorreoPDF() != null) {
+																																																				if (!d.getEmpresa().getCorreoPDF().equals(Constantes.EMPTY)) {
+																																																					correo = d.getEmpresa().getCorreoPDF();
+																																																				}
+																																																			}
+																																																			if (d.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+																																																				if (d.getEmpresa().getCorreoCredito() != null) {
+																																																					if (!d.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+																																																						correo = d.getEmpresa().getCorreoCredito();
+																																																					}
+																																																				}
+																																																			}
+																																																			if (correo.equals(Constantes.EMPTY)) {
+																																																				facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			} else {
+																																																				facturaElectronica.setEmisorCorreo(correo);
+																																																			}
+																																																			facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta1());
+																																																			facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta2());
+																																																			facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta3());
+																																																			facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta4());
+																																																			facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta5());
+																																																			facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta6());
+																																																			facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta7());
+																																																			facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta8());
 
-																																																						facturaElectronica.setClienteCedula(d.getProveedorSimplificado().getCedula());
-																																																						if (d.getProveedorSimplificado().getTelefono() != null) {
-																																																							if (d.getProveedorSimplificado().getTelefono() != Constantes.ZEROS) {
-																																																								facturaElectronica.setClienteTelefono(d.getProveedorSimplificado().getTelefono().toString());
-																																																							} else {
-																																																								facturaElectronica.setClienteTelefono(Constantes.EMPTY);
-																																																							}
-																																																						}
-																																																						facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
+																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+																																																				if (d.getNombreFactura() != null) {
+																																																					if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
+																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
+																																																					}
+																																																				}
+																																																			}
+																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
+																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 
-																																																						facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																						facturaElectronica.set_logo(d.getEmpresa().getLogo());
-																																																						facturaElectronica.set_clienteDireccion(Constantes.EMPTY);
-																																																						// Otros
-																																																						facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
-																																																						facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
-																																																						facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? Constantes.EMPTY : d.getNumeroConsecutivo());
-																																																						facturaElectronica.setConsecutivoProforma(Constantes.EMPTY);
-																																																						facturaElectronica.setFechaEmision(Utils.getFechaGeneraReporte(d.getFechaEmision()));
-																																																						facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
-																																																						facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
-																																																						facturaElectronica.setMedioEfectivo(Constantes.EMPTY);
-																																																						facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
-																																																						facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
+																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
+																																																			if(facturaElectronica.getClienteCedula() != null) {
+																																																				if(facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
+																																																					facturaElectronica.setClienteCedula(d.getCliente().getIdentificacionExtranjero());
+																																																				}
+																																																				
+																																																			}
+																																																			if (d.getCliente().getTelefono() != null) {
+																																																				if (d.getCliente().getTelefono() != Constantes.ZEROS) {
+																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());
+																																																				} else {
+																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
+																																																				}
+																																																			}
+																																																			if (d.getCliente().getLibreImpuesto() != null) {
+																																																				if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
+																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
+																																																				} else {
+																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+																																																				}
 
-																																																						facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																						facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
-																																																						facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
-																																																						facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
-																																																						facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
-																																																						facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
-																																																						return facturaElectronica;
-																																																					};
-	private static final Function<Detalle, DetalleFacturaElectronica>			TO_DETALLE_COMPRA_SIMPLIFICADA		= (d) -> {
-																																																						//
-																																																						DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
-																																																						detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
-																																																						detalleFacturaElectronica.setCodigo(d.getCodigo());
-																																																						detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
-																																																						detalleFacturaElectronica.setCantidad(d.getCantidad() != null ? d.getCantidad() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setDescripcion(d.getDescripcion());
-																																																						detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario() != null ? d.getPrecioUnitario() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setMonto(d.getMontoTotal() != null ? d.getMontoTotal() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setDescuento(d.getMontoDescuento() != null ? d.getMontoDescuento() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
-																																																						detalleFacturaElectronica.setTarifaIva(d.getImpuesto() != null ? d.getImpuesto() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() != null ? d.getImpuesto1() : Constantes.ZEROS_DOUBLE);
-																																																						Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
-																																																						resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
-																																																						detalleFacturaElectronica.setImpuesto(resultado);
-																																																						detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
-																																																						detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
-																																																						detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
-																																																						detalleFacturaElectronica.setFechaEmisionExoneracion(d.getFechaEmisionExoneracion() != null ? Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()) : Constantes.EMPTY);
-																																																						detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion() != null ? d.getNumeroDocumentoExoneracion() : Constantes.EMPTY);
-																																																						//
-																																																						return detalleFacturaElectronica;
-																																																					};
-	private static final Function<Factura, FacturaElectronica>						DOCUMENTO_TO_FACTURAELECTRONICA		= (d) -> {
-																																																						FacturaElectronica facturaElectronica = new FacturaElectronica();
-																																																						if (d.getCodigoActividad() == null) {
-																																																							facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
-																																																						} else {
-																																																							facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
-																																																						}
+																																																			} else {
+																																																				facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+																																																			}
 
-																																																						// Emisor
-																																																						facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
-																																																						facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
-																																																						facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
-																																																						facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
-																																																						facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
-																																																						// Total Factura
-																																																						facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
-																																																						facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
-																																																						facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
-																																																						facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
-																																																						facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																						facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
-																																																						facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
-																																																						facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
-//		
-																																																						facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
-																																																						facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
-																																																						facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
-																																																						facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
-																																																						String correo = Constantes.EMPTY;
-																																																						if (d.getEmpresa().getCorreoPDF() != null) {
-																																																							if (!d.getEmpresa().getCorreoPDF().equals(Constantes.EMPTY)) {
-																																																								correo = d.getEmpresa().getCorreoPDF();
-																																																							}
-																																																						}
-																																																						if (d.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-																																																							if (d.getEmpresa().getCorreoCredito() != null) {
-																																																								if (!d.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
-																																																									correo = d.getEmpresa().getCorreoCredito();
-																																																								}
-																																																							}
-																																																						}
-																																																						if (correo.equals(Constantes.EMPTY)) {
-																																																							facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
-																																																						} else {
-																																																							facturaElectronica.setEmisorCorreo(correo);
-																																																						}
-																																																						facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta1());
-																																																						facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta2());
-																																																						facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta3());
-																																																						facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta4());
-																																																						facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta5());
-																																																						facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta6());
-																																																						facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta7());
-																																																						facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta8());
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
+																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
+																																																			// Otros
+																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
+																																																			facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
+																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? Constantes.EMPTY : d.getNumeroConsecutivo());
+																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
+																																																			facturaElectronica.setFechaEmision(Utils.getFechaGeneraReporte(d.getFechaEmision()));
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
+																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
+																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
+																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
+																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 
-																																																						facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
-																																																						facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
-																																																						if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
-																																																							if (d.getNombreFactura() != null) {
-																																																								if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
-																																																									facturaElectronica.setClienteNombre(d.getNombreFactura());
-																																																								}
-																																																							}
-																																																						}
-																																																						facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
-																																																						facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+																																																			// Nota Credito y Nota Debito
+																																																			if (d.getReferenciaCodigo() != null) {
+																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					facturaElectronica.setReferenciaCodigo(MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
+																																																					facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
+																																																					facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
+																																																					facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
+																																																					facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null ? d.getReferenciaFechaEmision().toString() : Constantes.EMPTY);
 
-																																																						facturaElectronica.setClienteCedula(d.getCliente().getCedula());
-																																																						if (d.getCliente().getTelefono() != null) {
-																																																							if (d.getCliente().getTelefono() != Constantes.ZEROS) {
-																																																								facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());
-																																																							} else {
-																																																								facturaElectronica.setClienteTelefono(Constantes.EMPTY);
-																																																							}
-																																																						}
-																																																						if(d.getCliente().getLibreImpuesto() !=null) {
-																																																							if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
-																																																								facturaElectronica.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
-																																																							} else {
-																																																								facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
-																																																							}
-															
-																																																						}else {
-																																																							facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
-																																																						}
+																																																				}
 
-																																																						facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																						facturaElectronica.set_logo(d.getEmpresa().getLogo());
-																																																						facturaElectronica.set_clienteDireccion(d.getDireccion());
-																																																						// Otros
-																																																						facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
-																																																						facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
-																																																						facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? Constantes.EMPTY : d.getNumeroConsecutivo());
-																																																						facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
-																																																						facturaElectronica.setFechaEmision(Utils.getFechaGeneraReporte(d.getFechaEmision()));
-																																																						facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
-																																																						facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
-																																																						facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
-																																																						facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
-																																																						facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
+																																																			} else {
+																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
 
-																																																						// Nota Credito y Nota Debito
-																																																						if (d.getReferenciaCodigo() != null) {
-																																																							if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
-																																																								facturaElectronica.setReferenciaCodigo(MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
-																																																								facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
-																																																								facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
-																																																								facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
-																																																								facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null ? d.getReferenciaFechaEmision().toString() : Constantes.EMPTY);
+																																																			}
+																																																			return facturaElectronica;
+																																																		};
 
-																																																							}
+	private static final Function<Object, HaciendaCommand>						TO_COMMAND											= new Function<Object, HaciendaCommand>() {
 
-																																																						} else {
-																																																							facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																							facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
-																																																							facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
-																																																							facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
-																																																							facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
-																																																							facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
+																																																			@Override
+																																																			public HaciendaCommand apply(Object f) {
+																																																				return new HaciendaCommand((Hacienda) f);
+																																																			};
+																																																		};
 
-																																																						}
-																																																						return facturaElectronica;
-																																																					};
-
-	private static final Function<Object, HaciendaCommand>								TO_COMMAND												= new Function<Object, HaciendaCommand>() {
-
-																																																						@Override
-																																																						public HaciendaCommand apply(Object f) {
-																																																							return new HaciendaCommand((Hacienda) f);
-																																																						};
-																																																					};
-
-	private Logger																												log																= LoggerFactory.getLogger(this.getClass());
+	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	DataTableBo																														dataTableBo;
+	DataTableBo																												dataTableBo;
 
 	@Autowired
-	private FacturaBo																											facturaBo;
+	private FacturaBo																									facturaBo;
 
 	@Autowired
-	private DetalleBo																											detalleBo;
+	private DetalleBo																									detalleBo;
 
 	@Autowired
-	private ConsultasNativeBo																							haciendaNativeBo;
+	private ConsultasNativeBo																					haciendaNativeBo;
 
 	@Autowired
-	private ProcesoHaciendaService																				procesoHaciendaService;
+	private ProcesoHaciendaService																		procesoHaciendaService;
 
 	@Autowired
-	private HaciendaBo																										haciendaBo;
+	private HaciendaBo																								haciendaBo;
 
 	@Autowired
-	private UsuarioBo																											usuarioBo;
+	private UsuarioBo																									usuarioBo;
 
 	@Autowired
-	private RecepcionFacturaBo																						recepcionFacturaBo;
+	private FechaPropertyEditor																				fechaPropertyEditor;
 
 	@Autowired
-	private CompraSimplificadaBo																					compraSimplificadaBo;
+	private StringPropertyEditor																			stringPropertyEditor;
 
 	@Autowired
-	private FechaPropertyEditor																						fechaPropertyEditor;
-
-	@Autowired
-	private StringPropertyEditor																					stringPropertyEditor;
-
-	@Autowired
-	private RespuestaHaciendaXMLService																		respuestaHaciendaXMLService;
+	private RespuestaHaciendaXMLService																respuestaHaciendaXMLService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -498,7 +404,7 @@ public class HaciendasController {
 						}
 
 					}
-	
+
 				}
 			}
 			log.info("Estado para actualizar Factura: {}", estadoHacienda);
@@ -516,7 +422,6 @@ public class HaciendasController {
 
 	}
 
-	
 	/**
 	 * Retorna el status de la respuesta de hacienda
 	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
@@ -883,7 +788,7 @@ public class HaciendasController {
 			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)) {
 				fileName = "RespuestaXML_Compra_SimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			}
-			
+
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();

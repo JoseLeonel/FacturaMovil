@@ -32,4 +32,6 @@ public interface CuentaCobrarDao {
 	Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Empresa empresa,Cliente cliente,String estado);
 	Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado);
 
+	
+
 }

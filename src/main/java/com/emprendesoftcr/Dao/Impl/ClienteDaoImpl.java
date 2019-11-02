@@ -89,6 +89,19 @@ public class ClienteDaoImpl implements ClienteDao {
 			return null;
 		}
 	}
+	
+	@Override
+	public Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Cliente obj where obj.identificacionExtranjero = :cedula and obj.empresa = :empresa");
+		query.setParameter("cedula", cedula);
+		query.setParameter("empresa", empresa);
+		List<Cliente> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Cliente) results.get(0);
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public Collection<Cliente> findByEmpresa(Integer idEmpresa) {

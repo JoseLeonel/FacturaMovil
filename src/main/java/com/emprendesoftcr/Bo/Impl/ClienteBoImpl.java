@@ -114,4 +114,10 @@ public class ClienteBoImpl implements ClienteBo {
 		return clienteDao.findByEmpresa(idEmpresa);
 	}
 
+	@Override
+	public Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa) {
+
+		return clienteDao.buscarPorCedulaExtranjera(cedula, empresa);
+	}
+
 }

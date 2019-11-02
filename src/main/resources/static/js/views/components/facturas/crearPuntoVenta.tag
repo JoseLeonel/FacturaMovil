@@ -320,8 +320,8 @@
                     </div>
                     <section   class="lista-factura-espera">
                         <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{cliente !=null?cliente.nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
-                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" class="fondoVentaEspera"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
+                            <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{nombreCompleto !=null?nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
+                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}">V: {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -333,11 +333,8 @@
                                  <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
                                  <div  show="{soloParaChinos == false }" class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
                                  <div  show="{soloParaChinos == false }" class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
-                                 
                                  <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                  <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
-                                 
-                                 
                             </div>
                             <div class="gananciaContainer">
                                 <div class="formatoTituloGanancia">IG: {totalGananciaByProducto}</div>
@@ -367,7 +364,6 @@
                             <ul class="seleccionOtroPrecioVenta">
                                 <li class="opcionPrecioPublico">
                                     <span class="ssCambioCentral">Tipo Cambio del Banco Central</span>
-                                    
                                 </li>
                                 <li class="opcionPrecioPublico">
                                     <span class="ssCambio">Compra USD $ </span>
@@ -493,22 +489,22 @@
                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                         <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                         <thead>
-                                
+                                <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                                 <th style="width:5%" class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th style="width:8%"  class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
-                                <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                                
                                 
                             </thead>
                             <tfoot style="display: table-header-group;">
                                 <tr>
-                                    
-                                    <th style="width:5%">{$.i18n.prop("cliente.cedula")}           </th>
-                                    <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                                    <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
-                                    <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                                     <th>                                          </th>
+                                    <th style="width:5%">{$.i18n.prop("cliente.cedula")}</th>
+                                    <th>{$.i18n.prop("cliente.nombreCompleto")}</th>
+                                    <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th>{$.i18n.prop("cliente.nombreComercial")}</th>
+                                    
                                     
                                 </tr>
                             </tfoot>                    
@@ -2406,8 +2402,6 @@ Lista de articulos
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
-    self.factura =  e.item
-    self.update()
    __FacturaEnEspera(e.item)
 }
 /**
@@ -2469,10 +2463,10 @@ function aplicarFactura(estado){
                 }
                 var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
                 montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
-                if(montoEntregado > 20000000){
-                    mensajeError("Monto entregado es muy alto")
-                    return
-                }
+               // if(montoEntregado > 20000000){
+               //     mensajeError("Monto entregado es muy alto")
+               //     return
+               // }
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
@@ -2802,7 +2796,6 @@ function crearFactura(estado){
     self.factura.codigoMoneda = self.parametros.codigoMoneda
     self.factura.tipoCambio = self.tipoCambio.total
     self.update();
-    var dataTemporal = null
     var formulario = $("#formularioFactura").serialize();
     $.ajax({
         type : "POST",
@@ -2821,8 +2814,6 @@ function crearFactura(estado){
             } else {
                	self.cantidadEnterFacturar =0
                 self.update()
-                serverMessageJsonClase(data);
-                dataTemporal = data
                 evaluarFactura(data)
                 self.transaccion = false
                 self.update()
@@ -2885,7 +2876,7 @@ function evaluarFactura(data){
             id:null,
             nombreCompleto:""
         }
-    }                            
+    }     
     self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
@@ -2921,10 +2912,10 @@ function evaluarFactura(data){
                 type: 'success',
                 title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
-                timer: 1000
+                timer: 800
             })
             __Init()
-            __ListaFacturasEnEspera()
+          
         }
           
     }
@@ -4123,8 +4114,15 @@ function __seleccionarClientes() {
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
-            self.factura.tipoDoc ='01'
+            if(stringVacio(self.cliente.identificacionExtranjero)== false){
+               self.factura.tipoDoc ='01'
+               self.update()
                __aplicarExoneracionPorCliente()
+            }else{
+               self.factura.tipoDoc ='04'
+               self.update()
+            }
+               
            __ComboTipoDocumentos(1)
         }else{
             self.factura.tipoDoc ='04'
@@ -4339,7 +4337,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 4    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
