@@ -124,10 +124,15 @@ public class Hacienda implements Serializable {
 	// 1= callback 0=cron
 	@Column(name = "call_back", columnDefinition = "INT default '0'")
 	private Integer						callBack;
+	
+	@Column(name = "id_factura")
+	private Long							numeroFactura;
 
 
 	
-	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack) {
+	
+
+	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack, Long numeroFactura) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -154,6 +159,7 @@ public class Hacienda implements Serializable {
 		this.updated_at = updated_at;
 		this.observacion = observacion;
 		this.callBack = callBack;
+		this.numeroFactura = numeroFactura;
 	}
 
 	public Hacienda() {
@@ -368,6 +374,16 @@ public class Hacienda implements Serializable {
 	
 	public void setCallBack(Integer callBack) {
 		this.callBack = callBack;
+	}
+
+	
+	public Long getNumeroFactura() {
+		return numeroFactura;
+	}
+
+	
+	public void setNumeroFactura(Long numeroFactura) {
+		this.numeroFactura = numeroFactura;
 	}
 
 	

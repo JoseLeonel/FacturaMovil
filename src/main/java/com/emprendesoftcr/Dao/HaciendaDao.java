@@ -18,7 +18,7 @@ public interface HaciendaDao {
 	Hacienda findByEmpresaAndClave(Empresa empresa,String clave);	
 	Hacienda findByClave(String clave);
 	
-	void findByClaveSP(String clave,Integer estado,String xml,String mensajeHacienda) throws Exception;
+	void findByClaveSP(Long idHacienda, Long numeroFactura,String clave, Integer estado, String xml, String mensajeHacienda) throws Exception;
 	
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa,Integer estado);
 	

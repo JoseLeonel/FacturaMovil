@@ -415,17 +415,19 @@ public class ComprasController {
 		Double totalCompraNotaCredito = Constantes.ZEROS_DOUBLE;
 		Double totalCompraNotaDebito = Constantes.ZEROS_DOUBLE;
 		Double totalCompra = Constantes.ZEROS_DOUBLE;
+		Double tipoCambio = Constantes.ZEROS_DOUBLE;
 		for (RecepcionFactura recepcionFactura : recepcionFacturas) {
+			tipoCambio = recepcionFactura.getFacturaTipoCambio() == null?1:recepcionFactura.getFacturaTipoCambio();
 			if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + (recepcionFactura.getFacturaTotalImpuestos()*tipoCambio) : Constantes.ZEROS_DOUBLE;
+				totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
 			} else if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-				totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + (recepcionFactura.getFacturaTotalImpuestos()*tipoCambio) : Constantes.ZEROS_DOUBLE;
+				totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
 			}
 			if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + (recepcionFactura.getFacturaTotalImpuestos() *tipoCambio) : Constantes.ZEROS_DOUBLE;
+				totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
 
 			}
 		}
@@ -612,8 +614,8 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Total Impuestos", "Total", "Tipo Moneda", "Tipo Cambio", "Tipo Documento","Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo, totalImpuestosSTR,totalFacturaSTR, facturaCodigoMoneda, facturaTipoCambio, tipoDocumentoStr,tipoGastoStr", baos);
+		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo Documento","Tipo de Gasto");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo,facturaCodigoMoneda,facturaTipoCambio, totalImpuestosSTR,totalImpuestosSTRTipoCambio,totalFacturaSTR,totalFacturaSTRTipoCambio,   tipoDocumentoStr,tipoGastoStr", baos);
 		return baos;
 	}
 
@@ -646,8 +648,8 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica","Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoNeto,recepcionFactura.tipoGastoStr", baos);
+		List<String> headers = Arrays.asList("Actividad Economica","Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo de Gasto");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoMontoSTR,impuestoMontoSTRTimpoCambio,montoLineaSTR,montoLineaSTRTimpoCambio,recepcionFactura.tipoGastoStr", baos);
 		return baos;
 	}
 

@@ -39,8 +39,8 @@ public class HaciendaBoImpl implements HaciendaBo {
 
 	@Transactional
 	@Override
-	public void findByClaveSP(String clave, Integer estado,String xml,String mensajeHacienda) throws Exception {
-		haciendaDao.findByClaveSP(clave, estado,xml,mensajeHacienda);
+	public void findByClaveSP(Long idHacienda, Long numeroFactura,String clave, Integer estado, String xml, String mensajeHacienda) throws Exception {
+		haciendaDao.findByClaveSP(idHacienda,numeroFactura,clave, estado,xml,mensajeHacienda);
 	}
 
 	@Override

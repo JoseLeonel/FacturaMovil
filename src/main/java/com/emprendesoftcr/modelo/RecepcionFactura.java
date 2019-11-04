@@ -337,11 +337,30 @@ public class RecepcionFactura implements Serializable {
 
 	}
 
+	public Double getTotalImpuestosSTRTipoCambio() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.facturaTotalImpuestos != null ? (this.facturaTotalImpuestos * resultadoTipoCambio) * -1 : (this.facturaTotalImpuestos * resultadoTipoCambio);
+		} else {
+			return this.facturaTotalImpuestos != null ? (this.facturaTotalImpuestos * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
+		}
+
+	}
+
 	public Double getTotalFacturaSTR() {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			return this.facturaTotalComprobante != null ? this.facturaTotalComprobante * -1 : this.facturaTotalComprobante;
 		} else {
 			return this.facturaTotalComprobante != null ? this.facturaTotalComprobante : Constantes.ZEROS_DOUBLE;
+		}
+	}
+
+	public Double getTotalFacturaSTRTipoCambio() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.facturaTotalComprobante != null ? (this.facturaTotalComprobante * resultadoTipoCambio) * -1 : (this.facturaTotalComprobante * resultadoTipoCambio);
+		} else {
+			return this.facturaTotalComprobante != null ? (this.facturaTotalComprobante * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
 		}
 	}
 

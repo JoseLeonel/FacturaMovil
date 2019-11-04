@@ -122,12 +122,12 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																		= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 600;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 50;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 30;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 20;
 
 	// 48 horas cada 5 minutos
 
-	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																= 20;
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																= 4;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR														= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_ACTIVO																			= 1;
@@ -137,7 +137,7 @@ public class Constantes {
 	public static final Integer					SEMAFORO_ESTADO_ENVIO																				= 2;
 	public static final Integer					SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS												= 3;
 	public static final Integer					SEMAFORO_ESTADO_ENVIAR_CORREOS															= 4;
-	public static final Integer					SEMAFORO_ESTADO_CALLBACK														= 5;
+	public static final Integer					SEMAFORO_ESTADO_CALLBACK																		= 5;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO_COMPRAS															= 6;
 
 	public static final String					IDP_URI_PRODUCCION																					= "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect";
@@ -181,7 +181,7 @@ public class Constantes {
 	public static final String					FORMATO_TELEFONO																						= "00000000";
 	public static final String					FORMATO_CODIGO_PAIS																					= "000";
 	public static final String					FORMATO_MEDIOPAGO																						= "00";
-	public static final String					FORMATO_PLAZO_CREDITO																				= "00";
+	public static final String					FORMATO_PLAZO_CREDITO																				= "000";
 	public static final String					CODIGO_PRODUCTO_VENDEDOR																		= "01";
 	public static final Integer					PLAZO_CREDITO																								= 15;
 	public static final String					OTROS_TEXTOS																								= "Obs";
@@ -625,8 +625,10 @@ public class Constantes {
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS_N												= "total_exc_n";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA_N											= "total_gananc_n";
 //Procedimiento callback para actualizar la aceptacion de hacienda
-	public static final String					SP_CALLBACK_HACIENDA																				= "sp_callback";
+	public static final String					SP_CALLBACK_HACIENDA																				= "sp_call_back";
 	public static final String					SP_CALLBACK_HACIENDA_CLAVE																	= "clave_e";
+	public static final String					SP_CALLBACK_HACIENDA_ID_HACIENDA														= "id_hacienda";
+	public static final String					SP_CALLBACK_HACIENDA_ID_FACTURA															= "id_factura";
 	public static final String					SP_CALLBACK_HACIENDA_ESTADO																	= "estado_e";
 	public static final String					SP_CALLBACK_HACIENDA_XML																		= "xml_e";
 	public static final String					SP_CALLBACK_HACIENDA_MENSAJE																= "mensaje_e";

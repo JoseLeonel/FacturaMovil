@@ -157,16 +157,21 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	 * @see com.emprendesoftcr.Dao.HaciendaDao#findByClaveSP(java.lang.String)
 	 */
 	@Override
-	public void findByClaveSP(String clave, Integer estado, String xml, String mensajeHacienda) throws Exception {
+	public void findByClaveSP(Long idHacienda, Long numeroFactura,String clave, Integer estado, String xml, String mensajeHacienda) throws Exception {
 		try {
 			
 			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_CALLBACK_HACIENDA);
 			// set parametros entrada
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_ID_HACIENDA, Long.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_ID_FACTURA, Long.class, ParameterMode.IN);
+
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_CLAVE, String.class, ParameterMode.IN);
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_ESTADO, Integer.class, ParameterMode.IN);
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_XML, Blob.class, ParameterMode.IN);
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_MENSAJE, Blob.class, ParameterMode.IN);
 			// Valores de entrada Blob
+			storedProcedure.setParameter(Constantes.SP_CALLBACK_HACIENDA_ID_HACIENDA, idHacienda);
+			storedProcedure.setParameter(Constantes.SP_CALLBACK_HACIENDA_ID_FACTURA, numeroFactura);
 			storedProcedure.setParameter(Constantes.SP_CALLBACK_HACIENDA_CLAVE, clave);
 			storedProcedure.setParameter(Constantes.SP_CALLBACK_HACIENDA_ESTADO, estado);
 			storedProcedure.setParameter(Constantes.SP_CALLBACK_HACIENDA_XML, FacturaElectronicaUtils.convertirStringToblod(xml));

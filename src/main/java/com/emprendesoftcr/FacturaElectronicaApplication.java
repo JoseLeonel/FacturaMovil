@@ -1,4 +1,6 @@
- package com.emprendesoftcr;
+
+
+package com.emprendesoftcr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

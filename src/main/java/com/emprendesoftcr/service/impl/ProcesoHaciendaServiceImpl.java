@@ -321,7 +321,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/20 02 * * ?")
+	@Scheduled(cron = "0 0/30 02 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -362,7 +362,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/50 22 * 5 ?")
+	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
@@ -658,13 +658,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
 					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -697,7 +697,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/20 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -722,7 +722,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									resta = resta / (1000 * 60);
 								}
 								log.info("Comprobando Documentos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
-								if (resta >= 7 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+								if (resta >= 5 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 									log.info("Documento cumplio 10 minutos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
 									if (hacienda.getReintentosAceptacion() != null) {
 										if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -844,78 +844,34 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
 						log.info("*status: " + status);
-						Boolean rechazado = Boolean.TRUE;
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-							aplicarCambioEstadoFactura = Boolean.TRUE;
+						if(haciendaBD.getNumeroFactura() == null) {
+							Factura facturaAplicar = haciendaBD.getNumeroFactura() != null ? facturaBo.findById(haciendaBD.getNumeroFactura()) : null;
+							if (facturaAplicar == null) {
+								facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+							}
+							haciendaBD.setNumeroFactura(facturaAplicar !=null? facturaAplicar.getId():null);
 						}
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-							aplicarCambioEstadoFactura = Boolean.TRUE;
-						}
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-							rechazado = Boolean.FALSE;
+            
+						haciendaBD.setEstado(getEstado(status,respuestaHacienda));
+			      			
+						if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 							if (haciendaBD.getReintentosAceptacion() != null) {
 								if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
-									aplicarCambioEstadoFactura = Boolean.TRUE;
 									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
-								} else {
-
-									haciendaBD.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
-								}
-							} else {
-								haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
-							}
-						}
-						log.info("*status1: " + status);
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
-							aplicarCambioEstadoFactura = Boolean.TRUE;
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-						}
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-							aplicarCambioEstadoFactura = Boolean.TRUE;
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-						}
-						log.info("*status2: " + status);
-						// Hacienda no envia mensaje
-						if (respuestaHacienda.mensajeHacienda() != null) {
-							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
-								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-									aplicarCambioEstadoFactura = Boolean.TRUE;
-								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO) && rechazado) {
-									if (haciendaBD.getReintentosAceptacion() != null) {
-										if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-											haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
-											aplicarCambioEstadoFactura = Boolean.TRUE;
-											haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
-										} else {
-
-											haciendaBD.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
-										}
-									} else {
-										haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
-									}
-
-								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
-								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-									aplicarCambioEstadoFactura = Boolean.TRUE;
-								}
-							}
-						} else {
-							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-								if (haciendaBD.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
-
 								} else {
 									haciendaBD.setReintentosAceptacion(haciendaBD.getReintentosAceptacion() == null ? 1 : haciendaBD.getReintentosAceptacion() + 1);
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
 								}
+							} else {
+								haciendaBD.setReintentosAceptacion(haciendaBD.getReintentosAceptacion() == null ? 1 : haciendaBD.getReintentosAceptacion() + 1);
+								haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
 							}
+						}else {
+							aplicarCambioEstadoFactura = true;
 						}
+
+			
 						haciendaBD.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
 						haciendaBD.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(haciendaBD);
@@ -952,6 +908,39 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
+	/**
+	 * Devolver estado
+	 * @return
+	 */
+	private Integer getEstado(String status, RespuestaHacienda respuesta) {
+		Integer resultado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
+
+		if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR) || status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+			return Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
+		}
+
+		if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+			return Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO;
+		}
+
+		if (respuesta == null) {
+			return resultado;
+		}
+		if (respuesta.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO) || respuesta.mensajeHacienda().mensaje().contains(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+			return Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
+		}
+
+		if (respuesta.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
+			return Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL;
+		}
+
+		if (respuesta.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
+			return Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO;
+		}
+
+		return resultado;
+	}
+
 	private void cambiarEstado(Hacienda hacienda) throws Exception {
 		try {
 			if (hacienda != null) {
@@ -980,7 +969,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						}
 					}
 				} else {
-					Factura factura = facturaBo.findByClaveAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
+					
+					Factura factura = hacienda.getNumeroFactura() != null ? facturaBo.findById(hacienda.getNumeroFactura()) : null;
+					if (factura == null) {
+						facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					}
 					if (factura != null) {
 						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
@@ -1103,7 +1096,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										}
 									}
 								} else {
-									Factura factura = facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+									Factura factura = haciendaBD.getNumeroFactura() != null ? facturaBo.findById(haciendaBD.getNumeroFactura()) : null;
+									if (factura == null) {
+										facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+									}
 									if (factura != null) {
 										if (factura.getCorreoAlternativo() != null) {
 											if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
@@ -1147,14 +1143,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 											} else {
 												listaCorreos.add(correo);
 											}
-
 										} else {// Cuando un cliente quiere que le llegue un correo alternativo
 											haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_FRECUENTE_NO_ENVIADO);
 											haciendaBo.modificar(haciendaBD);
 											noEnviarCorreoClienteFrecuente = true;
-
 										}
-
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
@@ -1162,9 +1155,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 											if (noEnviarCorreoClienteFrecuente == false) {
 												haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
 												haciendaBo.modificar(haciendaBD);
-
 											}
-
 										}
 									}
 
@@ -1409,7 +1400,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/7 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1485,6 +1476,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																	hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
 																}
 															}
+															hacienda.setNumeroFactura(factura !=null?factura.getId():null);
 															hacienda.setEmpresa(factura.getEmpresa());
 															hacienda.setClave(factura.getClave());
 															hacienda.setFechaEmisor(factura.getFechaEmision());
@@ -1622,7 +1614,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/20 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

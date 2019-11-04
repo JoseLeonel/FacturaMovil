@@ -113,187 +113,331 @@
     </div>    
 	<!-- Fin Filtros-->
     <br>
+ <div class="row" >  
+    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default" >
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
+                    <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                        <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Resumen Ventas</h4>
+                    </div>
+                </a>
+                <div id="collapse1" class="panel-collapse collapse abrirDatos2" onclick={mostrar}>
+                    <div class="panel-body">
+						<div  class="row center" show={mostrarDetalle} >
+							<div class="col-md-6 col-lg-6 col-sx-12 col-sm-6">
+								<div class="box box-solid box-primary">
+									<div class="box-body">
+										<h1>Ventas </h1>
+										<form class="advanced-search-form">
+											<div class="row">
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasGravadasSTR}">
+												</div>
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasExentasSTR}">
+												</div>
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasNetas")} (Grav+Exen -Desc) </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasNetasSTR}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalImpuestosSTR}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalDescuentosSTR}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalOtrosCargosSTR}">
+												</div>
+
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.total")}  </label>
+													<input type="text" readonly="readonly" class="form-control "  value="{factura.totalSTR}">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>   
+							</div>
+							<div class="col-md-6 col-lg-6 col-sx-12 col-sm-6">
+								<div class="box box-solid box-primary">
+									<div class="box-body">
+										<h1 class="tituloNotaCredito">Notas de Credito </h1>
+										<form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
+											<div class="row">
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
+													<input type="text" readonly="readonly" class="form-control inputNotaCredito "  value="{factura.totalVentasGravadasNC}">
+												</div>
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
+													<input type="text" readonly="readonly" class="form-control inputNotaCredito "  value="{factura.totalVentasExentasNC}">
+												</div>
+												<div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4">
+													<label> {$.i18n.prop("factura.totalVentasNetas")} (Grav+Exen -Desc)  </label>
+													<input type="text" readonly="readonly" class="form-control inputNotaCredito "  value="{factura.totalVentasNetasNC}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+													<input type="text" readonly="readonly" class="form-control  inputNotaCredito"  value="{factura.totalImpuestosNC}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+													<input type="text" readonly="readonly" class="form-control  inputNotaCredito" value="{factura.totalDescuentosNC}">
+												</div>
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
+													<input type="text" readonly="readonly" class="form-control  inputNotaCredito"  value="{factura.totalOtrosCargosNC}">
+												</div>
+
+												<div class= "col-md-3 col-sx-6 col-sm-3 col-lg-3">
+													<label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
+													<input type="text" readonly="readonly" class="form-control  inputNotaCredito"  value="{factura.totalNC}">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>   
+							</div>	
+						</div>
+						<div class="row center" show={mostrarDetalle} >
+							<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+									<div class="box box-solid box-primary">
+										<div class="box-body">
+											<div class="ticuloContainer">
+												<div class="ticuloItem">Resumen    (Ventas -</div>
+												<div class="ticuloItemNota">Notas de Credito</div>
+												<div class="ticuloItem">)</div>
+											</div> 
+											
+											<form  class="advanced-search-form">
+												<div class="row">
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalVentasGravadasG}">
+													</div>
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalVentasExentasG}">
+													</div>
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.totalVentasNetas")} (Grav+Exen -Desc)  </label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalVentasNetasG}">
+													</div>
+													<div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+														<label> {$.i18n.prop("factura.totalImpuestos")}  </label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalImpuestosG}">
+													</div>
+													<div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+														<label> {$.i18n.prop("factura.totalDescuentos")}  </label>
+														<input type="text" readonly="readonly" class="form-control  " value="{factura.totalDescuentosG}">
+													</div>
+													<div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+														<label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalOtrosCargosG}">
+													</div>
+
+													<div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+														<label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
+														<input type="text" readonly="readonly" class="form-control  "  value="{factura.totalG}">
+													</div>                            
+													
+												</div>
+											</form>
+										</div>
+									</div>   
+							</div>
+						</div>
+
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>				
+</div>
   	<!-- Detalle  --> 
-	<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-body">
-				    <h1>Ventas </h1>
-                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
-                        <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasGravadasSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasExentasSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasNetas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasNetasSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalImpuestosSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalDescuentosSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalOtrosCargosSTR}">
-                            </div>
+	
 
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalSTR}">
-                            </div>
-							<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> Total Ventas - Notas de Credito  </label>
-                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalGeneralSTR}">
-                            </div>
-                        </div>
-                	</form>
-                </div>
-            </div>   
-	        <div class="col-md-12 col-lg-12 col-sm-12">
-		        </div>
-        </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
-    </div>
 
-<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-body">
-				    <h1>Ventas </h1>  
-                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
-                        <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
-                                <input type="text" readonly="readonly" class="form-control " value="{factura.totalEfectivoSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.banco")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoSTR}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoSTR}">
-                            </div>
-                            
+ <div class="row" >  
+    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default" >
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
+                    <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                        <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Resumen Ventas detalles de Dineros</h4>
+                    </div>
+                </a>
+                <div id="collapse2" class="panel-collapse collapse abrirDatos1">
+                    <div class="panel-body">
+						<div  class="row center" show={mostrarDetalle} >
+							<div class="col-md-6 col-lg-6 col-sx-12 col-sm-6">
+								<div class="row center" show={mostrarDetalle} >
+									<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+											<div class="box box-solid box-primary">
+												<div class="box-body">
+													<h1>Ventas </h1>  
+													<form  class="advanced-search-form">
+														<div class="row">
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
+																<input type="text" readonly="readonly" class="form-control " value="{factura.totalEfectivoSTR}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
+																<input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaSTR}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.banco")}  </label>
+																<input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoSTR}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
+																<input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoSTR}">
+															</div>
+															
 
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalPagosSTR}">
-                            </div>
-							
-                        </div>
-                	</form>
-                </div>
-            </div>   
-        </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
-    </div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.total")}  </label>
+																<input type="text" readonly="readonly" class="form-control "   value="{factura.totalPagosSTR}">
+															</div>
+															
+														</div>
+													</form>
+												</div>
+											</div>   
+									</div>
+								</div>
 
-<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-body">
-				    <h1>Notas de Credito </h1>
-                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
-                        <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasGravadas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasGravadasNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasExentas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasExentasNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalVentasNetas")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalVentasNetasNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalImpuestosNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control " value="{factura.totalDescuentosNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total.otros.cargos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalOtrosCargosNC}">
-                            </div>
+							</div>
+							<div class="col-md-6 col-lg-6 col-sx-12 col-sm-6">
+								<div class="row center" show={mostrarDetalle} >
+									<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+											<div class="box box-solid box-primary">
+												<div class="box-body">
+													<h1 class="tituloNotaCredito">Notas de Credito </h1>  
+													<form  class="advanced-search-form">
+														<div class="row">
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
+																<input type="text" readonly="readonly" class="form-control inputNotaCredito " value="{factura.totalEfectivoNC}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
+																<input type="text" readonly="readonly" class="form-control inputNotaCredito"  value="{factura.totalTarjetaNC}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.banco")}  </label>
+																<input type="text" readonly="readonly" class="form-control inputNotaCredito"  value="{factura.totalBancoNC}">
+															</div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
+																<input type="text" readonly="readonly" class="form-control  inputNotaCredito"  value="{factura.totalCreditoNC}">
+															</div>
+															
 
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalNC}">
-                            </div>
-                        </div>
-                	</form>
-                </div>
-            </div>   
-	        <div class="col-md-12 col-lg-12 col-sm-12">
-		        </div>
-        </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
-    </div>
+															<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+																<label> {$.i18n.prop("factura.total")}  </label>
+																<input type="text" readonly="readonly" class="form-control inputNotaCredito"   value="{factura.totalPagosNC}">
+															</div>
+															
+														</div>
+													</form>
+												</div>
+											</div>   
+									</div>
+								</div>
+							</div>
+						</div>	
+						<div class="row center" show={mostrarDetalle} >
+							<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+									<div class="box box-solid box-primary">
+										<div class="box-body">
+											<div class="ticuloContainer">
+												<div class="ticuloItem">Resumen    (Ventas -</div>
+												<div class="ticuloItemNota">Notas de Credito</div>
+												<div class="ticuloItem">)</div>
+											</div> 
+											
+											<form  class="advanced-search-form">
+												<div class="row">
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
+														<input type="text" readonly="readonly" class="form-control " value="{factura.totalEfectivoG}">
+													</div>
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
+														<input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaG}">
+													</div>
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.resumen.banco")}  </label>
+														<input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoG}">
+													</div>
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
+														<input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoG}">
+													</div>
+													
 
-<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-body">
-				    <h1>Notas de Credito </h1>  
-                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
-                        <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "   value="{factura.totalEfectivoNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalTarjetaNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.banco")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalBancoNC}">
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{factura.totalCreditoNC}">
-                            </div>
-                            
+													<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+														<label> {$.i18n.prop("factura.total")}  </label>
+														<input type="text" readonly="readonly" class="form-control "   value="{factura.totalPagosG}">
+													</div>
+													
+												</div>
+											</form>
+										</div>
+									</div>   
+							</div>
+						</div>
 
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> {$.i18n.prop("factura.total")}  </label>
-                                <input type="text" readonly="readonly" class="form-control totalPagos"   value="{factura.totalPagosNC}">
-                            </div>
-                        </div>
-                	</form>
-                </div>
-            </div>   
-        </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
-    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>				
+</div>
+<br>
+<br>
+
+
+
+<style type="text/css"  >
+  .ticuloContainer{
+    display: flex;
+  } 
+  .ticuloItemNota{
+    color: red;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .ticuloItem{
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .tituloNotaCredito{
+	  color:red;
+  }
+  .inputNotaCredito{
+	  color:red;
+  }
+
+</style> 
 
 
 
 
 	<script>
 		self = this;
+		self.showOrHide = true;
+
 		//Se presentan los filtros
 		self.mostrarFiltros = true;
 		self.valorMarginBottom  = '0px'
@@ -324,6 +468,9 @@
 		    limpiarFactura();
 			__ListaActividadesComercales()
 		})
+	
+
+
 __AsignarActividad(e){
     BuscarActividadComercial()
 }
