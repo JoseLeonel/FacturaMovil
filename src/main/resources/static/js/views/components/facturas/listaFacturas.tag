@@ -1,17 +1,8 @@
 <lista-facturas>
    
 
- <div class="box box-solid box-primary" show={mostrarDetalleFactura}>
+    <div class="box box-solid box-primary" show={mostrarDetalleFactura}>
         <div class="box-body">
-             <div class="box-header with-border">
-                <div class="row">
-                  <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
-                  <div class="box-tools ">
-                  </div>
-                  </div>
-                </div>  
-                  <br>
-             </div>
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                         <form id="formularioFacturaFactura">
@@ -21,14 +12,12 @@
                                         <label>{$.i18n.prop("factura.condicion.pago")} </label> 
                                         <input type="text" class="form-control"  value="{factura.condicionVenta}"  readonly>
                                     </div>
- 
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
                                        <input type="text" class="form-control"  value="{factura.tipoDoc}" readonly >
                                     </div>
- 
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
@@ -87,26 +76,6 @@
                             </div> 
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.vendedor")}</label> 
-                                        <input type="text"  class="form-control"  value="{vendedor.nombreCompleto}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("vendedor.correoElectronico")}</label> 
-                                        <input type="text" class="form-control " value="{vendedor.correoElectronico}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("vendedor.celular")}</label> 
-                                        <input type="text" class="form-control " value="{vendedor.celular}" readonly>
-                                    </div>
-                                </div>
-                            </div>      
-                            <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div show = {factura.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("compra.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
@@ -134,7 +103,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </form>   
                         <br>
                     <table class="table table-striped">
@@ -182,79 +150,68 @@
                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-     
                 </div>
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
-                     <div class="row">
-                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                    <aside class="left-sidebar">
-                            <!--Booking details-->
-                        <article class="booking-details clearfix">
-                            <div  id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                <table id="pagarTable" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
-                                            </td>
-                                            <td width="70%" id="">
-                                            
-                                                <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobanteSTR}</span>
-                                                </div>
-                                            </td>
-                                        </tr>                     
-                                    </tbody>
-                                </table>
-                            </div>
-                        </article>
-                    </aside>
+                    <div class="row">
+                        <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                            <aside class="left-sidebar">
+                                    <article class="booking-details clearfix">
+                                        <div  id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                                            <table id="pagarTable" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="30%" id="">
+                                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
+                                                        </td>
+                                                        <td width="70%" id="">
+                                                        
+                                                            <div id="">
+                                                                <span class="label label-info textShadow" id="total-show"> {factura.totalComprobanteSTR}</span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>                     
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </article>
+                                </aside>
+                        </div>
                     </div>
-
-                    </div>
-                    
                 </section>
-                      
             </div><!-- fin contenedor-compra-->
-            
         </div><!-- fin box-body-->
 	</div><!-- fin box -->
 
 <!-- Modal correo alternativo-->
 <div class="modal fade" id="ModalCorreoAlternativoFactura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-          
-                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
-          
-      </div>
-      <div class="modal-body">
-        <form id = "formularioFactura" name ="formularioFactura "   class="advanced-search-form">
-            <div class="row">   
-                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
-                    <input type="email" class="form-control correoAlternativoFactura" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativoFactura" name="correoAlternativoFactura" value=""  >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"> <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")} </h1> </div>
+            <div class="modal-body">
+                <form id = "formularioFactura" name ="formularioFactura "   class="advanced-search-form">
+                    <div class="row">   
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
+                            <input type="email" class="form-control correoAlternativoFactura" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativoFactura" name="correoAlternativoFactura" value=""  >
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                            {$.i18n.prop("btn.volver")}
+                        </button>
+                    </div>
+                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <button  onclick={__Enviar}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
+                    </div>
                 </div>
             </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <div class="row">
-            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                    {$.i18n.prop("btn.volver")}
-                </button>
-            </div>
-            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                <button  onclick={__Enviar}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
-            </div>
-         </div>
-       
-      </div>
-    </div>
-  </div>
+        </div>
+     </div>
 </div>
 <style type="text/css">
 .clickable {
@@ -800,12 +757,19 @@ function __ComboEstados(){
     case 2:
          self.factura.estado=  $.i18n.prop("factura.estado.facturado")
         break;
+    case 6:
+         self.factura.estado=  "Aceptada"
+        break;
+    case 7:
+         self.factura.estado=  "Rechazada"
+        break;
 
     default:
         self.factura.condicionVenta
     }
     self.update()
 }
+
 /**
 * Codicion de Pago
 **/

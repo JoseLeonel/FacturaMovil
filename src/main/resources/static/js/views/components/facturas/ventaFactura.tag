@@ -2698,21 +2698,21 @@ function cargarDetallesFacturaEnEspera(data){
             tipoImpuesto    : modeloTabla.tipoImpuesto,
             tipoImpuesto1   : modeloTabla.tipoImpuesto1,
             descripcion     : modeloTabla.descripcion,
-            cantidad        : parseFloat(modeloTabla.cantidad),
-            precioUnitario  : parseFloat(modeloTabla.precioUnitario),
-            impuesto        : parseFloat(modeloTabla.impuesto),
-            montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
-            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
-            montoDescuento  : parseFloat(modeloTabla.montoDescuento),
-            porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
-            subTotal        : parseFloat(modeloTabla.subTotal),
-            montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-            montoTotal      : parseFloat(modeloTabla.montoTotal),
-            costo           : parseFloat(modeloTabla.costo),
-            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
-            montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
-            montoExoneracion1:parseFloat(modeloTabla.montoExoneracion1),
-            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            cantidad        : __valorNumerico(modeloTabla.cantidad),
+            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+            impuesto        : __valorNumerico(modeloTabla.impuesto),
+            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+            subTotal        : __valorNumerico(modeloTabla.subTotal),
+            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+            costo           : __valorNumerico(modeloTabla.costo),
+            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
             fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
             nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
             numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
@@ -3531,28 +3531,11 @@ function __calculate() {
     totalDescuento = 0
     totalImpuesto  = 0
     totalImpuesto1  = 0
-    totalMercanciasGravadas = 0
-    totalMercanciasExentas  = 0
-    totalServGravados       = 0
-    totalServExentos        = 0
-    totalGravado            = 0
-    totalExento             = 0
     totalComprobante        = 0
     totalventaNeta          = 0
     self.cantArticulos      = 0
     var montoExoneracion = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
@@ -3563,12 +3546,6 @@ function __calculate() {
          montoExoneracion        += parseFloat(e.montoExoneracion) 
          montoExoneracion        += parseFloat(e.montoExoneracion1) 
     });
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)

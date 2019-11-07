@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 
@@ -136,7 +137,7 @@ public class DetalleFacturaCommand {
 	}
 
 	public DetalleFacturaCommand(Detalle detalle) {
-
+		
 		this.id = detalle.getId();
 		this.numeroLinea = detalle.getNumeroLinea();
 		this.precioUnitario = detalle.getPrecioUnitario();

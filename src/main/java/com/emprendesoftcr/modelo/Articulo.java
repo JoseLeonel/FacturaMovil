@@ -118,7 +118,7 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
 
-	// 1 = Articulo cocina
+	// 1 = Articulo cocina 2 cocina 
 	@Column(name = "comanda")
 	private Integer						comanda						= 0;
 

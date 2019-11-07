@@ -23,120 +23,100 @@
 	<script type = "riot/tag"  src="/js/views/components/caja/cajaCerradas.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/caja/imprimirCorte.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
-	
-    
+ <style type ="text/css">	
+ .scrollerT {
+    width: 100% !important;
+    height: 650px;
+    overflow-y: scroll;
+  }
+ </style>
 </head>
 <body>
-<section layout:fragment="header">
 
-<ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
-    <li class="active"> Cajas Cerradas</li>
-</ol>
-</section>
-<div layout:fragment="content">
- 	<cerrada-caja></cerrada-caja>
- 	<ptv-imprimir></ptv-imprimir>
- 	<imprimir-caja></imprimir-caja>
- 	
- 	 <div id="mostrarListado"> 
-    <!-- Titulos -->
-    <div  class="row "  >
-        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h1 > <i class="fa fa-lock" th:text="#{usuarioCaja.titulo.cajas.cerradas}"></i >&nbsp&nbsp</h1>
-        </div>
-        
-    </div>
-
-
-   <!-- Inicio Filtros-->
-<div class="mostrarListadoDeFacturas"  id="mostrarListadoDeFacturas">
-        <div class="row" >
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
-                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltro avanzado <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
-                </div>  
-                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
-                    <form id="filtros" name="filtros">              
-                        <div class= "row">
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
-                                        <div class="input-group-addon">
-                                            <span class="glyphicon glyphicon-th"></span>
-                                        </div>
-                                    </div>	                             
-                                </div>  
-                            </div>             
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>	                             
-                                    </div>
-                                </div>  
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label>Usuario </label>  
-                                    <select  class="form-control selectUsuario" id= "usuario" name="usuario" data-live-search="true">
-                                    </select>
-                                </div>  
-                            </div>    
-                             
-                        </div>
-                       
-                    </form>  
-                </div>
-            </div>
-            <div class="col-xs-12 text-right">
-                <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-            	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
-            </div>
-        </div>
-        <br>
-
-     <!-- Listado  -->
-    
-     
-                            <div class="row" >        
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th class = "table-header" th:text="#{usuarioCaja.caja}"></th>
-                                                <th class = "table-header" th:text="#{usuarioCaja.created_at}"></th>
-                                                <th class = "table-header" th:text="#{usuarioCaja.updated_at}"></th>
-                                                <th class = "table-header" th:text="#{usuarioCaja.usuario}"></th>
-                                                <th class = "table-header" th:text="#{usuarioCaja.fondoIncial}"></th>
-                                                <th class = "table-header" th:text="#{usuarioCaja.totalNeto}"></th>
-                                                <th class = "table-header" th:text="#{listado.acciones}"></th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot style="display: table-header-group;">
-                                            <tr>
-                                                <th ></th>
-                                                <th ></th>
-                                                <th ></th>
-                                                <th th:text="#{usuarioCaja.usuario}"></th>
-                                                <th th:text="#{usuarioCaja.fondoIncial}"></th>
-                                                <th th:text="#{usuarioCaja.totalNeto}"></th>
-                                                <th></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                           </div>   
-     
-    <!-- Fin del Listado -->
+<div layout:fragment="content" >
+	<cerrada-caja></cerrada-caja>
+	<ptv-imprimir></ptv-imprimir>
+	<imprimir-caja></imprimir-caja>
+	<div class="mostrarListadoDeFacturas"  id="mostrarListadoDeFacturas">
+		<!-- Titulos -->
+		    <div  class="row "  >
+		        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		            <h1 > <i class="fa fa-lock" th:text="#{usuarioCaja.titulo.cajas.cerradas}"></i ></h1>
+		        </div>
+		    </div>
+	        <div class="row" >
+	            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	                <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
+	                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltro avanzado <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+	                </div>  
+	                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+	                    <form id="filtros" name="filtros">              
+	                        <div class= "row">
+	                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+	                                <div class="form-group">
+	                                    <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
+	                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+	                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+	                                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+	                                    </div>	                             
+	                                </div>  
+	                            </div>             
+	                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+	                                <div class="form-group">
+	                                    <div class="form-group">
+	                                        <label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
+	                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+	                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+	                                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+	                                        </div>	                             
+	                                    </div>
+	                                </div>  
+	                            </div>
+	                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+	                                <div class="form-group">
+	                                    <label>Usuario </label>  
+	                                    <select  class="form-control selectUsuario" id= "usuario" name="usuario" data-live-search="true">
+	                                    </select>
+	                                </div>  
+	                            </div>    
+	                        </div>
+	                    </form>  
+	                </div>
+	            </div>
+	        </div>    
+	        <div class="col-xs-12 text-right">
+	            <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+	         	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+	        </div>
+	        <div class="row" >        
+	            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+	                 <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   >
+	                    <thead>
+	                             <tr>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.caja}"></th>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.created_at}"></th>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.updated_at}"></th>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.usuario}"></th>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.fondoIncial}"></th>
+	                                                <th class = "table-header" th:text="#{usuarioCaja.totalNeto}"></th>
+	                                                <th class = "table-header" th:text="#{listado.acciones}"></th>
+	                                            </tr>
+	                         </thead>
+	                    <tfoot style="display: table-header-group;">
+	                                            <tr>
+	                                                <th ></th>
+	                                                <th ></th>
+	                                                <th ></th>
+	                                                <th th:text="#{usuarioCaja.usuario}"></th>
+	                                                <th th:text="#{usuarioCaja.fondoIncial}"></th>
+	                                                <th th:text="#{usuarioCaja.totalNeto}"></th>
+	                                                <th></th>
+	                                            </tr>
+	                                        </tfoot>
+	                 </table>
+	             </div>
+	        </div>   
+	</div>
 </div>
-
 </body>
 </html>

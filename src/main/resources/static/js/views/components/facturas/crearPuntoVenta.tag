@@ -3898,12 +3898,6 @@ function __calculate() {
     var totalDescuento = 0
     var totalImpuesto  = 0
     var totalImpuesto1 = 0
-    var totalMercanciasGravadas = 0
-    var totalMercanciasExentas  = 0
-    var totalServGravados       = 0
-    var totalServExentos        = 0
-    var totalGravado            = 0
-    var totalExento             = 0
     var totalComprobante        = 0
     var totalventaNeta          = 0
     var totalGanancia           = 0
@@ -3911,17 +3905,6 @@ function __calculate() {
     var totalPesoByFactura = 0
     var montoExoneracion = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
@@ -3937,12 +3920,6 @@ function __calculate() {
     self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
     self.totalPesoByFactura = __valorNumerico(totalPesoByFactura)
     self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)

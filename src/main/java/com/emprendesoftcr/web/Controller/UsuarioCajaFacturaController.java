@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
-import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
 import com.emprendesoftcr.web.command.UsuarioCajaFacturaCommand;
@@ -40,9 +38,7 @@ public class UsuarioCajaFacturaController {
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-	@Autowired
-	private UsuarioBo																									usuarioBo;
-
+	
 	@Autowired
 	private UsuarioCajaFacturaPropertyEditor													usuarioCajaFacturaPropertyEditor;
 
@@ -64,11 +60,16 @@ public class UsuarioCajaFacturaController {
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCajaFactura");
 		JqGridFilter dataTableFilter = null;
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		dataTableFilter = new JqGridFilter("usuarioCaja.id", "'" + usuarioCaja.getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
-		dataTableFilter = new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_FACTURADO.toString() + "'", "=");
+		dataTableFilter = new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "!=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "!=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "!=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA.toString() + "'", "!=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS__FACTURAS);

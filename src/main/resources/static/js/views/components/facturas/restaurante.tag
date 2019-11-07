@@ -1902,8 +1902,11 @@ td.col-xl-12, th.col-xl-12 {
         codigo:"",
         descripcion:""
     }
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.on('mount',function(){
-       
         __ListaActividadesComercales()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -2631,11 +2634,7 @@ __CambiarPrecio(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {
-        total:0,
-        id:null
-    }
-    self.update()
+    
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
         datatype: "json",
@@ -2846,6 +2845,10 @@ __CambiarNombreTiquete(){
 __CrearFacturaTemporal(){
 	__CrearFacturaTemporalFunc();
 }
+/**
+*Crear Factura Temporal
+
+**/
 function __CrearFacturaTemporalFunc(){
     self.seIncluyoUnArticulo = null
     self.update()
@@ -3006,6 +3009,9 @@ function aplicarFactura(estado, separarFactura){
 __Limpiar(){
     __SeguridadLimpiar()
 }
+/**
+*Seguridad
+**/
 function __SeguridadLimpiar(){
      self.autorizarBorrado = 2
     self.update()
@@ -3316,7 +3322,6 @@ function __InitDatos(){
     self.numeroLinea =0
     self.cantArticulos =0
     self.update()    
-    
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -3477,7 +3482,6 @@ function crearFactura(estado, separarFactura){
       //Abrir cajon sin comanda
       abrirCajonDineroSinComanda()
     }  
-  
 }
 /**
 *Si fue facturada o tiquete
@@ -3503,7 +3507,6 @@ function evaluarFactura(data, separarFactura){
                 if(self.enviarCocina == true){
                 //Se envian los datos a la comanda
                 __EnviarCocina();
-               
                 }
                 if(!separarFactura){
                     __Init()                	
@@ -3785,7 +3788,7 @@ function __agregarArticulo(cantidad){
         __nuevoArticuloAlDetalle(cantidad);
     	//Se almacena en los casos de articulos de comanda
     	if(self.articulo.comanda == 1){	
-            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.commanda);
     	}		
         self.seIncluyoUnArticulo = 0
         self.update()
@@ -3797,7 +3800,7 @@ function __agregarArticulo(cantidad){
                self.item.cantidad = self.item.cantidad + __valorNumerico(cantidad)
                self.update();
 	  	      	if(self.articulo.comanda == 1){	
-	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion),self.articulo.comanda;
 	  	    	}	
                ActualizarLineaDEtalle()   	
                self.detail[count] = self.item;
@@ -3814,7 +3817,7 @@ function __agregarArticulo(cantidad){
 
       __nuevoArticuloAlDetalle(cantidad);
 	  	if(self.articulo.comanda == 1){	
-	        __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+	        __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
 		}		
     }
     __calculate(); 
@@ -3892,13 +3895,13 @@ function __nuevoArticuloAlDetalle(cantidad){
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
-    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
     var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
-    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
@@ -4010,7 +4013,7 @@ function __storege(){
 * Monto Total de la Facturra 
 **/
 function getMontoTotal(precioUnitario,cantidad){
-    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+    var resultado = __valorNumerico(precioUnitario) * __valorNumerico(cantidad)
     return resultado;
 }
 /**
@@ -4035,7 +4038,7 @@ function _calcularImpuesto(precio,iva){
     if(iva == 0){
         return 0;
     }
-    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+    var impuesto = iva > 0 ?__valorNumerico(iva)/100:0
     impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
     var total = total - precio 
@@ -4132,7 +4135,7 @@ function ActualizarLineaDEtalle(){
     self.item.montoImpuesto    = montoImpuesto
     self.item.montoImpuesto1   = montoImpuesto1
     self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
+    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
     self.totalGananciaByProducto = formatoDecimales(__valorNumerico(self.item.ganancia),2)
     self.update()
 }
@@ -4223,44 +4226,21 @@ function __calculate() {
     var totalDescuento = 0
     var totalImpuesto  = 0
     var totalImpuesto1 = 0
-    var totalMercanciasGravadas = 0
-    var totalMercanciasExentas  = 0
-    var totalServGravados       = 0
-    var totalServExentos        = 0
-    var totalGravado            = 0
-    var totalExento             = 0
     var totalComprobante        = 0
     var totalventaNeta          = 0
     self.cantArticulos      = 0
     var montoExoneracion = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
-         montoExoneracion       += parseFloat(e.montoExoneracion) 
-          montoExoneracion      += parseFloat(e.montoExoneracion1) 
+        montoExoneracion       += __valorNumerico(e.montoExoneracion) 
+        montoExoneracion      += __valorNumerico(e.montoExoneracion1) 
     });
    
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
     self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
     self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
@@ -5232,7 +5212,7 @@ __ComentariosComanda(e){
 /**
 *   Agregar el articulo a la lista de pendientes en la comanda en session
 **/
-function __nuevoArticuloComanda(cantidad, codigo, descripcion){	
+function __nuevoArticuloComanda(cantidad, codigo, descripcion,commanda){	
 	
     
 	//Se almacenan los productos por separados en la comanda
@@ -5244,6 +5224,7 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion){
 		        codigo          : codigo,
 		        descripcion     : descripcion,
 		        comentario      : "",
+                comanda         : comanda,
 		    });	
 		}else{
 			var datos = [];
@@ -5251,6 +5232,7 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion){
 		        codigo          : codigo,
 		        descripcion     : descripcion,
 		        comentario      : "",
+                comanda         : comanda,
 		    });		
 			self.pendientesComanda.push({	        
 				key : codigo,
@@ -5271,67 +5253,6 @@ function eliminaArticuloComanda(codigoArticulo){
     self.update()
 } 
 
-/**
-*   Se actualizan los productos pendientes en la comanda en session, acutaliza los detalles
-**/
-/* function __actualizaArticuloComanda(cantidad, codigo, descripcion, cantidadAnterior){
-	
-
-	//Se obtiene la cantidad de los pendientes en session
-	var obj = self.pendientesComanda.find(o => o.key === codigo);
-	if(typeof obj !== "undefined"){
-
-		var cantidadComanda = 0;
-		var cantidadTemp = 0;
-		obj.data.forEach(function(elemen){
-			//Se busca por codigo
-			if (codigo == elemen.codigo){
-				cantidadComanda = cantidadComanda + 1;
-			}     
-	    })
-
-	    //Caso 1: Si la cantidad anterior y la nueva son iguales se deja todo igual
-	    if(cantidad == cantidadAnterior){
-	    
-	    }else{
-	    	//Si la cantidad anterior es superior a la cantidad nueva
-	    	if(cantidadAnterior > cantidad){
-	    		//Se determina si la cantidad anterior menos la comand sigue
-	    	}
-	    	//Caso 2: La cantidad anterior menos lo que esta en la comanda, es mayor a la cantidad que se quiere poner
-		    cantidadTemp = cantidadAnterior - cantidadComanda;
-			if(cantidadTemp > cantidad){
-				//Se elimnan los articulos de la comanda
-				eliminaArticuloComanda(codigo)
-			}else{
-				
-			}
-	    }
-	    
-	    //Caso 1: La cantidad anterior menos lo que esta en la comanda es mayor a la cantidad
-	    cantidadTemp = cantidadAnterior - cantidadComanda;
-		if(cantidadTemp > cantidad){
-			//Se elimnan los articulos de la comanda
-			eliminaArticuloComanda(codigo)
-		}else{
-			
-		    //Caso 2: La cantidad anterior menos la comanda, es menor a la cantidad
-		    cantidadTemp = cantidadAnterior - cantidadComanda;
-		    if(cantidadTemp < cantidad){
-				//Se agrega a la comanda la diferencia	
-				cantidadTemp = cantidad - cantidadAnterior;
-		 	    
-				//Se envia agregar la cantidad de articulos nuevos
-				__nuevoArticuloComanda(cantidadTemp, codigo, descripcion);			
-		    }else{
-		    	//Caso 3: Los valores son iguales no se hace nada
-		    }
-
-		}	    
-	}
-} 
- */
-
 
 /**
 *   Envia a la comanda de la cocina, se imprimen mediante el local host
@@ -5339,18 +5260,29 @@ function eliminaArticuloComanda(codigoArticulo){
 function __EnviarCocina(){
 	
 	//Se forman los detalles a enviar a la comanda
-	var detalles = [];
+    var ur = 'http://localhost:8033/service/CrearOrdenCocinaAjax';
+	var detalles_cocina_1 = [];
+    var detalles_cocina_2 = [];
 	self.pendientesComanda.forEach(function(elemenKey){
 		elemenKey.data.forEach(function(elemen){
-			detalles.push({	        
-		        codigo          : elemen.codigo,
-		        descripcion     : elemen.descripcion,
-		        comentario      : elemen.comentario,
-		     });			
+            if(esCocina1(elemen.comanda) ){
+                detalles_cocina_1.push({	        
+                    codigo          : elemen.codigo,
+                    descripcion     : elemen.descripcion,
+                    comentario      : elemen.comentario,
+                });			
+            }
+            if(esCocina2(elemen.comanda) ){
+                detalles_cocina_2.push({	        
+                    codigo          : elemen.codigo,
+                    descripcion     : elemen.descripcion,
+                    comentario      : elemen.comentario,
+                });			
+            }
+
 		});
 	});
-	
-	if(detalles.length > 0){
+	if(detalles_cocina_1.length > 0){
 		//Se forman los datos genales para la comanda
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
@@ -5362,10 +5294,32 @@ function __EnviarCocina(){
 		}    
 
 		var JSONData = JSON.stringify(informacion);		
+        enviarImpresoraCocina(url,JSONData);
+	}
+    if(detalles_cocina_2.length > 0){
+		//Se forman los datos genales para la comanda
+		var informacion = {
+			mesa: self.mesa.descripcion,        	
+			mesero: "",        	
+		    nombreImpresora:"cocina",
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:detalles
+		}    
+
+		var JSONData = JSON.stringify(informacion);		
+        enviarImpresoraCocina(url,JSONData);
+	}
+} 
+
+/**
+*Enviar a las impresoras de cocina
+**/
+function enviarImpresoraCocina(url,parametros){
 		//Envia a imprimir a la comanda
 	    $.ajax({
 	        contentType: 'application/json',
-	        url: 'http://localhost:8033/service/CrearOrdenCocinaAjax',
+	        url: url,
 	        datatype: "json",
 	        data : JSONData,
 	        method:"POST",
@@ -5380,8 +5334,8 @@ function __EnviarCocina(){
 	            //mensajeErrorServidor(xhr, status);
 	        }
 	    });		
-	}
-} 
+
+}
  
 __MostrarSeperarCuentas(){
 	mostrarSeperarCuentasFun();
@@ -5609,12 +5563,6 @@ function cargaFacturaRespaldo(){
 	self.facturaRespaldo.subTotal = self.factura.subTotal;
 	self.facturaRespaldo.totalTransporte = self.factura.totalTransporte;
 	self.facturaRespaldo.total = self.factura.total;
-	self.facturaRespaldo.totalServGravados = self.factura.totalServGravados;
-	self.facturaRespaldo.totalServExentos = self.factura.totalServExentos;
-	self.facturaRespaldo.totalMercanciasGravadas = self.factura.totalMercanciasGravadas;
-	self.facturaRespaldo.totalMercanciasExentas = self.factura.totalMercanciasExentas;
-	self.facturaRespaldo.totalGravado = self.factura.totalGravado;
-	self.facturaRespaldo.totalExento = self.factura.totalExento;
 	self.facturaRespaldo.totalVenta = self.factura.totalVenta;
 	self.facturaRespaldo.totalDescuentos = self.factura.totalDescuentos;
     self.facturaRespaldo.totalVentaNeta = self.factura.totalVentaNeta;
@@ -5654,12 +5602,6 @@ function cargaFacturaConRespaldo(){
 	self.factura.subTotal = self.facturaRespaldo.subTotal;
 	self.factura.totalTransporte = self.facturaRespaldo.totalTransporte;
 	self.factura.total = self.facturaRespaldo.total;
-	self.factura.totalServGravados = self.facturaRespaldo.totalServGravados;
-	self.factura.totalServExentos = self.facturaRespaldo.totalServExentos;
-	self.factura.totalMercanciasGravadas = self.facturaRespaldo.totalMercanciasGravadas;
-	self.factura.totalMercanciasExentas = self.facturaRespaldo.totalMercanciasExentas;
-	self.factura.totalGravado = self.facturaRespaldo.totalGravado;
-	self.factura.totalExento = self.facturaRespaldo.totalExento;
 	self.factura.totalVenta = self.facturaRespaldo.totalVenta;
 	self.factura.totalDescuentos = self.facturaRespaldo.totalDescuentos;
     self.factura.totalVentaNeta = self.facturaRespaldo.totalVentaNeta;
@@ -5771,22 +5713,10 @@ function __calculatePorSeparar() {
     totalDescuento = 0
     totalImpuesto  = 0
     totalImpuestoServ  = 0
-    totalMercanciasGravadas = 0
-    totalMercanciasExentas  = 0
-    totalServGravados       = 0
-    totalServExentos        = 0
-    totalGravado            = 0
-    totalExento             = 0
     totalComprobante        = 0
     totalventaNeta          = 0
 
     self.detailPorSeparar.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
@@ -5814,22 +5744,10 @@ function __calculatePorSeparar() {
     totalDescuento = 0
     totalImpuesto  = 0
     totalImpuestoServ  = 0
-    totalMercanciasGravadas = 0
-    totalMercanciasExentas  = 0
-    totalServGravados       = 0
-    totalServExentos        = 0
-    totalGravado            = 0
-    totalExento             = 0
     totalComprobante        = 0
     totalventaNeta          = 0
 
     self.detailFacturaSeparada.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0

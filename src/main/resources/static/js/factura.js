@@ -115,8 +115,53 @@ function stringVacio(object){
     }
 	return object.length > 0 ? true: false;
 }
+/**
+ * Es Grabado por servicio
+ */
+function esGravadoServicio(unidad ){
+	if(unidad == null || typeof unidad == "undefined"  ){
+        valorUnidad = "";
+    }else{
+    	valorUnidad = unidad;
+    }
+	if(valorUnidad == 'Sp' || valorUnidad == 'Spe'  || valorUnidad == 'Os' || valorUnidad == 'St'){
+		return true;
+	}
+	return false;
+}
 
-
+/**
+ * Es exento
+ */
+function esExento(tipoImpuesto){
+	if(tipoImpuesto == null || typeof tipoImpuesto == "undefined"  ){
+       return true;
+    }
+	return tipoImpuesto.length == 0 ? true:false
+	
+}
+/**
+ * Valida si esta e la cocina 1
+ * @param object
+ * @returns
+ */
+function esCocina1(object){
+	if(object == null || typeof object == "undefined"  ){
+        return false;
+    }
+	return __valorNumerico(object) == 1 ? true: false;
+}
+/**
+ * Valida si es la cocina 2
+ * @param object
+ * @returns
+ */
+function esCocina2(object){
+	if(object == null || typeof object == "undefined"  ){
+        return false;
+    }
+	return __valorNumerico(object) == 2 ? true: false;
+}
 
 
 function verificarClienteFrecuente(clienteFrecuente){

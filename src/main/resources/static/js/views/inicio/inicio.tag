@@ -370,7 +370,7 @@ function __ArticulosMinimo(){
             success: function (result) {
                 if(result.aaData.length > 0){
                     __InformacionDataTable_Minimo_Stock();
-                    loadListar(".tableListarDebajoMinimo",idioma_espanol,self.formato_tabla_Strock_minimo,result.aaData)
+                    loadListarArticuloMinimo(".tableListarDebajoMinimo",idioma_espanol,self.formato_tabla_Strock_minimo,result.aaData)
                     agregarInputsCombos_Minimo_Stock()
                     ActivarEventoFiltro(".tableListarDebajoMinimo")
                 }else{
@@ -382,6 +382,23 @@ function __ArticulosMinimo(){
                 mensajeErrorServidor(xhr, status);
             }
         });
+}
+function loadListarArticuloMinimo(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [2, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
 }
 
 function agregarInputsCombos_Minimo_Stock(){
@@ -420,7 +437,7 @@ function __CuentasXCobrarGrafico(){
             success: function (result) {
                 if(result.aaData.length > 0){
                     __InformacionDataTable_CuentaPorCobrar();
-                    loadListar(".tableListarCuentaPorCobrar",idioma_espanol,self.formato_tabla_CuentaPorCobrar,result.aaData)
+                    loadListarCuentaCobrar(".tableListarCuentaPorCobrar",idioma_espanol,self.formato_tabla_CuentaPorCobrar,result.aaData)
                     agregarInputsCombos_CuentaPorCobrar()
                     ActivarEventoFiltro(".tableListarCuentaPorCobrar")
                 }else{
@@ -433,6 +450,24 @@ function __CuentasXCobrarGrafico(){
             }
         });
 }
+function loadListarCuentaCobrar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [4, 'asc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+
 
 function agregarInputsCombos_CuentaPorCobrar(){
      // Agregar los input de busqueda 
@@ -477,7 +512,7 @@ function __CuentasXPagarGrafico(){
             success: function (result) {
                 if(result.aaData.length > 0){
                     __InformacionDataTable_CuentaPorPagar();
-                    loadListar(".tableListarCuentaPorPagar",idioma_espanol,self.formato_tabla_CuentaPorPagar,result.aaData)
+                    loadListarCuentaCobrar(".tableListarCuentaPorPagar",idioma_espanol,self.formato_tabla_CuentaPorPagar,result.aaData)
                     agregarInputsCombos_CuentaPorPagar()
                     ActivarEventoFiltro(".tableListarCuentaPorPagar")
                 }else{

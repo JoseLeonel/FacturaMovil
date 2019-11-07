@@ -271,7 +271,7 @@ function __VerDetalleFacturaXCaja(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        $("#mostrarListado").hide();
+        $("#mostrarListadoDeFacturas").hide();
         riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:1,
@@ -294,7 +294,7 @@ function __VerDetalle(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        $("#mostrarListado").hide();
+        $("#mostrarListadoDeFacturas").hide();
         riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:2,
@@ -328,5 +328,5 @@ function __Imprimir(){
 }
 
 function mostrarListadoPrincipal(){
-    $("#mostrarListado").show();
+    $("#mostrarListadoDeFacturas").show();
 }

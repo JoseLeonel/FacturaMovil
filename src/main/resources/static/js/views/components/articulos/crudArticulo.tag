@@ -1493,12 +1493,17 @@ function __ComboComanda(){
     self.comanda =[]
     self.update()
     self.comanda.push({
-        codigo: $.i18n.prop("combo.comanda.no.valor"),
-        descripcion: $.i18n.prop("combo.comanda.no")
+        codigo: 0,
+        descripcion: "No enviar"
+     });
+
+    self.comanda.push({
+        codigo: 1,
+        descripcion: $.i18n.prop("combo.comanda.cocina.1")
      });
     self.comanda.push({
-        codigo: $.i18n.prop("combo.comanda.si.valor"),
-        descripcion:$.i18n.prop("combo.comanda.si")
+        codigo:2,
+        descripcion:$.i18n.prop("combo.comanda.cocina.2")
      });
      self.update();
 }
