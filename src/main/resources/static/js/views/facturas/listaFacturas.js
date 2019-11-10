@@ -32,15 +32,59 @@ var _Init = function () {
 		if ($("#filtros").valid()) {
 		    ListarFacturas()
 		}
+	});
+	$('.descargarExcel').click(function () {
+		if ($("#filtros").valid()) {
+		    descargarExcel()
+		}
     });
     $('.btnLimpiarFiltros').click(function () {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
+	});
+	
+	$('.enviarCorreo').click(function () {
+		if ($("#filtros").valid()) {
+		    enviarCorreo()
+		}
+	});
+	
+	$('.enviarListarCorreo').click(function () {
+		if ($("#formularioListarEnviarCorreo").valid()) {
+		    enviarCorreoListar()
+		}
     });
+
+	$("#formularioListarEnviarCorreo").validate(reglasDeValidacionListarCorreo());
 	$("#filtros").validate(reglasDeValidacion());
 	listaActividadEconomica();
 	listaUsuarios();
+	$('.descargarExcel').hide();
+	$('.enviarCorreo').hide();
+	$('#correoAlternativo').val(null);
+	var advanced_search_section = $('#filtrosAvanzados');
+        advanced_search_section.slideToggle(750);
 }
+
+/**
+		* Camps requeridos
+		**/
+		var reglasDeValidacionListarCorreo = function() {
+			var validationOptions = $.extend({}, formValidationDefaults, {
+				rules : {
+					correo : {
+						required : true,
+		                email:true,
+		                maxlength:240,
+		                minlength:1,
+					}                                   
+		                        
+				},
+				ignore : []
+
+			});
+			return validationOptions;
+		};
 
 /**
 * Reglas aplicadas
@@ -59,6 +103,44 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+function enviarCorreoListar(){
+	if ($("#formularioListarEnviarCorreo").valid()) {
+		var fechaInicio=$('.fechaInicial').val();
+		var correo=$('.correo').val();
+		var fechaFin = $('.fechaFinal').val();
+		var idCliente = $('#cliente').val();
+		var tipoDocumento=$('#tipoDocumento').val();
+		var actividadEconomica=$('.selectActividadEconocimica').val();
+		var estado =$('.selectEstado').val();
+		var selectUsuarios = $('#usuario').val();
+		var parametros = {
+			correoAlternativo:correo,
+			fechaInicio: fechaInicio,
+			fechaFin:fechaFin,
+			idCliente:idCliente,
+			tipoDocumento:tipoDocumento,
+			actividadEconomica:actividadEconomica,
+			estado:estado,
+			idUsuario:selectUsuarios
+		}
+	
+		
+		$.ajax({
+			url: "envioCorreoListarFacturasAjax.do",
+			datatype: "json",
+			data:parametros ,
+			method:"POST",
+			success: function (data) {
+				mensajeExito("Enviado al correo exitosamente");
+			},
+			error: function (xhr, status) {
+				console.log(xhr);
+				mensajeErrorServidor(xhr, status);
+			}
+		});
+	 }		
+}
 /**
 *  inicializar el listado
 **/
@@ -74,6 +156,15 @@ function __Inicializar_Table(nombreTabla){
         "lengthChange": true,
         
     });    
+}
+
+function enviarCorreo(){
+	$('#correoAlternativoListar').val(null);
+	$('#correoAlternativoListar').modal({
+	    backdrop: 'static',
+	    keyboard: false
+	 });
+	$('#correoAlternativoListar').modal('show'); 
 }
 /**
  * Listar las actividades economicas 
@@ -150,6 +241,8 @@ function listaUsuarios(){
 var facturas = {data:[]};
 
 function ListarFacturas(){
+	$('.descargarExcel').hide();
+	$('.enviarCorreo').hide();
 	$('.total').val(0)   
 	var fechaInicio=$('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
@@ -189,6 +282,9 @@ function ListarFacturas(){
                 __EnviarCorreos();
 				EventoFiltro();
 				suma(facturas.data);
+				$('.descargarExcel').show();
+				$('.enviarCorreo').show();
+				
 		   }else{
 			__Inicializar_Table('.tableListar');  
 		   }           
@@ -198,6 +294,21 @@ function ListarFacturas(){
 		   console.log(xhr);
 	   }
 	});
+}
+
+/**
+ * Descargar Excel de la consulta del usuario
+ */
+function descargarExcel(){
+	var fechaInicio=$('.fechaInicial').val();
+    var fechaFin = $('.fechaFinal').val();
+	var idCliente = $('#cliente').val();
+	var tipoDocumento=$('#tipoDocumento').val();
+	var actividadEconomica=$('.selectActividadEconocimica').val();
+	var estado =$('.selectEstado').val();
+	var selectUsuarios = $('#usuario').val();
+	var table = $('.tableListar').DataTable();
+    location.href = "DescargarFacturasExcelAjax.do?fechaInicio=" + fechaInicio + "&fechaFin="+fechaFin+"&idCliente="+idCliente+"&tipoDocumento="+tipoDocumento+"&actividadEconomica="+actividadEconomica+"&estado="+estado+"&idUsuario="+selectUsuarios;
 }
 /**
  * 
@@ -288,7 +399,7 @@ function agregarInputsCombos(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 10    ){
+		if ( $(this).index() != 9 ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })

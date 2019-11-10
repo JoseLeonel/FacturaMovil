@@ -447,24 +447,28 @@
                         <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.condicion.pago")}      
                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.condicion.pago")}      
+                                
                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                                
                             </tr>
                             </thead>
                                 <tfoot style="display: table-header-group;">
                                     <tr>
+                                        <th>                                                  </th>
                                         <th>{$.i18n.prop("factura.fecha.emision")}            </th>
-                                        <th>{$.i18n.prop("factura.condicion.pago")}                </th>
                                         <th>{$.i18n.prop("factura.documento")}                </th>
+                                        <th>{$.i18n.prop("factura.condicion.pago")}           </th>
+                                        
                                         <th>{$.i18n.prop("factura.cliente")}                  </th>
                                         <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                         <th>{$.i18n.prop("factura.total")}                    </th>
-                                        <th>                                                  </th>
+                                        
                                     </tr>
                                 </tfoot>
                             </table>
@@ -2032,7 +2036,7 @@ function loadListar(table,idioma,formatoTabla,data){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'flrtip',
-        "order": [0, 'desc'],
+        "order": [1, 'desc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,
@@ -2048,15 +2052,21 @@ function loadListar(table,idioma,formatoTabla,data){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
+                               {'data' : 'id'                 ,"name":"id"                      ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(id,type, row){
+                                      return __Opciones(id,type,row);
+                                 }
+                               },
+
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
-                             
-                               {'data' :'condicionVentaSTR'                    ,"name":"condicionVentaSTR"                     ,"title" : "Pago"   ,"autoWidth" :true },
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
+                             
+                               {'data' :'condicionVentaSTR'                    ,"name":"condicionVentaSTR"                     ,"title" : "Pago"   ,"autoWidth" :true },
                                 {'data' :'cliente'  ,"name":"cliente"  ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
 									    return __ClienteNombreFactura(row);
@@ -2064,11 +2074,6 @@ function __InformacionDataTableDia(){
                                },
                                {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
                                {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
-                               {'data' : 'id'                 ,"name":"id"                      ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-                               },
 	      		            ];
     self.update();
    
@@ -4327,7 +4332,7 @@ function agregarInputsCombos_Facturas_Dias(){
     $('.tableListarFacturasDia tfoot th').each( function (e) {
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 6    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

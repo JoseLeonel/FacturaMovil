@@ -54,6 +54,41 @@
 </head>
 <body>
 <div layout:fragment="content">
+
+ <!-- Modal correo alternativo-->
+	<div class="modal fade" id="correoAlternativoListar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+                <h1 class="box-title"><i class="btn-correo"></i>&nbsp Correo Alternativo </h1>
+	      </div>
+	      <div class="modal-body">
+	        <form id = "formularioListarEnviarCorreo" name ="formularioListarEnviarCorreo "   class="advanced-search-form">
+	            <div class="row">   
+	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+	                    <label class="knob-label" >Correo </label>
+	                    <input type="email" class="form-control correo"  id="correo" name="correo" value=""  >
+	                </div>
+	            </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <div class="row">
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button   type="button" class="btn-dark-gray btn-back  pull-left"  data-dismiss="modal">
+	                    Volver
+	                </button>
+	            </div>
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button  class="btn-green btn-correo pull-right enviarListarCorreo" > Enviar </button>
+	            </div>
+	         </div>		       
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
     <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -155,6 +190,8 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right formatoEntrada">
+                <button type="button" class="btn btn-success btnBusquedaAvanzada descargarExcel" title="Descargar excel" name="button"> Descargar  <i class="fa fa-download"></i></button>
+                <button type="button" class="btn btn-success btnBusquedaAvanzada enviarCorreo" title="Enviar corre " name="button"> Enviar  <i class="fa fa-envelope"></i></button>
                 <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>

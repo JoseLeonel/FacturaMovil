@@ -38,6 +38,7 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO														= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS													= "email/emailResumenCompras.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA									= "email/emailResumenFactura.vm";
+	public static final String					PLANTILLA_CORREO_LISTAR_FACTURAS														= "email/emailResumenListarFactura.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA	= "email/emailResumenComprasSimplificadas.vm";
 
 // Version de los tipos de documentos 
@@ -122,7 +123,7 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																		= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 30;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 200;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 20;
 
 	// 48 horas cada 5 minutos

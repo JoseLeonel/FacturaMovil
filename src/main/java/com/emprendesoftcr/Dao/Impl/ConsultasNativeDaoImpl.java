@@ -248,32 +248,32 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
 
 		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
-			queryStr = queryStr.replaceAll("and facturas.act_comercial", "");
+			queryStr = queryStr.replaceAll("and fac.act_comercial", "");
 
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.act_comercial", " and facturas.act_comercial in ('" + actividadComercial + "') ");
+			queryStr = queryStr.replaceAll("and fac.act_comercial", " and fac.act_comercial in ('" + actividadComercial + "') ");
 		}
 
 		if (idUsuario > Constantes.ZEROS) {
-			queryStr = queryStr.replaceAll("and facturas.usuario_id", "and facturas.usuario_id ='" + idUsuario.toString() + "' ");
+			queryStr = queryStr.replaceAll("and fac.usuario_id", "and fac.usuario_id ='" + idUsuario.toString() + "' ");
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.usuario_id", " ");
+			queryStr = queryStr.replaceAll("and fac.usuario_id", " ");
 		}
 		if (cliente != null) {
-			queryStr = queryStr.replaceAll("and facturas.cliente_id", " and facturas.cliente_id =" + cliente.getId().toString() + " ");
+			queryStr = queryStr.replaceAll("and fac.cliente_id", " and fac.cliente_id =" + cliente.getId().toString() + " ");
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.cliente_id ", " ");
+			queryStr = queryStr.replaceAll("and fac.cliente_id ", " ");
 		}
 		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
-			queryStr = queryStr.replaceAll("and facturas.tipo_doc", " and facturas.tipo_doc in ('" + tipoDocumento + "') ");
+			queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('" + tipoDocumento + "') ");
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.tipo_doc ", "and facturas.tipo_doc in ('04','86','87','01','03') ");
+			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('04','86','87','01','03') ");
 		}
 
 		if (estado > Constantes.ZEROS) {
-			queryStr = queryStr.replaceAll("and facturas.estado", " and facturas.estado in (" + estado + ") ");
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + estado + ") ");
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.estado", " and facturas.estado in (" + "2,6,7,5" + ") ");
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7,5" + ") ");
 		}
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasNativa.class);

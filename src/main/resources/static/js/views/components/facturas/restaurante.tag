@@ -772,24 +772,20 @@
                 <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
                    <thead>
                     <tr>
+                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                         <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                         <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                         <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                         <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                     </tr>
                     </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
+                                <th>                                                  </th>
                                 <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                 <th>{$.i18n.prop("factura.documento")}                </th>
                                 <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                 <th>{$.i18n.prop("factura.total")}                    </th>
-                                <th>                                                  </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -2435,7 +2431,7 @@ function agregarInputsCombos_Facturas_Dias(){
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         cont = cont +1
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -2445,6 +2441,12 @@ function agregarInputsCombos_Facturas_Dias(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
+                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(id,type, row){
+                                      return __Opciones(id,type,row);
+                                 }
+                               },
+
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
                              
@@ -2458,14 +2460,7 @@ function __InformacionDataTableDia(){
 									    return cliente ==null?"":row.cedula != "999999999999"?cliente:row.nombreFactura;
 	 							    }
                                },
-                               {'data' :'totalImpuestoSTR'               ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
-                               {'data' :'totalDescuentosSTR'             ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
                                {'data' :'totalComprobanteSTR'            ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
-                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-                               },
 	      		            ];
     self.update();
    
@@ -5301,7 +5296,7 @@ function __EnviarCocina(){
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
 			mesero: "",        	
-		    nombreImpresora:"cocina",
+		    nombreImpresora:"cocina2",
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:detalles
