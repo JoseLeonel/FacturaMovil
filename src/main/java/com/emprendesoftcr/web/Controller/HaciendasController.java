@@ -396,7 +396,7 @@ public class HaciendasController {
 					log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
 
 					if (xmlFirmado != null) {
-						if (!xmlFirmado.equals(Constantes.EMPTY)) {
+						if (xmlFirmado.length() > 0 ) {
 							log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
 							haciendaBo.findByClaveSP(hacienda.getId(),hacienda.getNumeroFactura() == null?Constantes.ZEROS_LONG:hacienda.getNumeroFactura(),  respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {

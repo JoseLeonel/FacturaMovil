@@ -3783,7 +3783,7 @@ function __agregarArticulo(cantidad){
         __nuevoArticuloAlDetalle(cantidad);
     	//Se almacena en los casos de articulos de comanda
     	if(self.articulo.comanda == 1){	
-            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.commanda);
+            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
     	}		
         self.seIncluyoUnArticulo = 0
         self.update()
@@ -3795,7 +3795,7 @@ function __agregarArticulo(cantidad){
                self.item.cantidad = self.item.cantidad + __valorNumerico(cantidad)
                self.update();
 	  	      	if(self.articulo.comanda == 1){	
-	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion),self.articulo.comanda;
+	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
 	  	    	}	
                ActualizarLineaDEtalle()   	
                self.detail[count] = self.item;
@@ -5219,7 +5219,7 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion,commanda){
 		        codigo          : codigo,
 		        descripcion     : descripcion,
 		        comentario      : "",
-                comanda         : comanda,
+                comanda         : commanda,
 		    });	
 		}else{
 			var datos = [];
@@ -5227,7 +5227,7 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion,commanda){
 		        codigo          : codigo,
 		        descripcion     : descripcion,
 		        comentario      : "",
-                comanda         : comanda,
+                comanda         : commanda,
 		    });		
 			self.pendientesComanda.push({	        
 				key : codigo,
@@ -5255,7 +5255,7 @@ function eliminaArticuloComanda(codigoArticulo){
 function __EnviarCocina(){
 	
 	//Se forman los detalles a enviar a la comanda
-    var ur = 'http://localhost:8033/service/CrearOrdenCocinaAjax';
+    var url = 'http://localhost:8033/service/CrearOrdenCocinaAjax';
 	var detalles_cocina_1 = [];
     var detalles_cocina_2 = [];
 	self.pendientesComanda.forEach(function(elemenKey){
@@ -5285,7 +5285,7 @@ function __EnviarCocina(){
 		    nombreImpresora:"cocina",
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
-		    detalles:detalles
+		    detalles:detalles_cocina_1
 		}    
 
 		var JSONData = JSON.stringify(informacion);		
@@ -5299,7 +5299,7 @@ function __EnviarCocina(){
 		    nombreImpresora:"cocina2",
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
-		    detalles:detalles
+		    detalles:detalles_cocina_2
 		}    
 
 		var JSONData = JSON.stringify(informacion);		
@@ -5316,7 +5316,7 @@ function enviarImpresoraCocina(url,parametros){
 	        contentType: 'application/json',
 	        url: url,
 	        datatype: "json",
-	        data : JSONData,
+	        data : parametros,
 	        method:"POST",
 	        success: function (result) {
 	      	   $('#modalComandasPendientes').modal('hide')  

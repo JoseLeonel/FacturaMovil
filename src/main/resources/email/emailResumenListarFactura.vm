@@ -216,7 +216,7 @@ a[x-apple-data-detectors=true] {
 
                                   <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                   <div style="color:#222222;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">	
-	                <div style="font-size:12px;line-height:14px;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;color:#222222;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><span style="font-size: 18px; line-height: 57px;"><strong><span style="line-height: 57px; font-size: 14px;"><em><span style="line-height: 57px; font-size: 16px;">La empresa cedula:$cedula , $nombreEmpresa envia las ventas realizadas en el rango de fechas $fechaInicial al $fechaFinal.  </span></em></span></strong></span></p></div>	
+	                <div style="font-size:12px;line-height:14px;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;color:#222222;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><span style="font-size: 18px; line-height: 57px;"><strong><span style="line-height: 57px; font-size: 14px;"><em><span style="line-height: 57px; font-size: 16px;">La empresa cedula:$cedula , $nombreEmpresa le adjunta sus ventas realizadas en nuestra tienda en el rango de fechas $fechaInicial al $fechaFinal.  </span></em></span></strong></span></p></div>	
                   </div>
 <!--[if mso]></td></tr></table><![endif]-->
                         
@@ -295,7 +295,7 @@ a[x-apple-data-detectors=true] {
         
                       <!--  ******************************************  CUENTAS  ******************************************  -->   
               <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
-                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 40px; line-height: 16px;">Ventas</span></p></div>
+                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 40px; line-height: 16px;">Resumen de Ventas - Notas de Credito </span></p></div>
               </div>
               <br>
               
@@ -344,7 +344,7 @@ a[x-apple-data-detectors=true] {
       
           <!--  ******************************************  Notas de Credito  ******************************************  -->   
           <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
-            <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 30px; line-height: 16px;">Notas de Creditos</span></p></div>
+            <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 30px; line-height: 16px;">Notas de Creditos Aplicadas</span></p></div>
         </div>
         <br>
         

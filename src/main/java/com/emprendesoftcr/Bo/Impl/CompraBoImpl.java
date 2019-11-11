@@ -93,7 +93,7 @@ public class CompraBoImpl implements CompraBo {
 					compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
 				}
 			} else {
-				compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
+				compra.setFechaCompra(new Date());
 			}
 
 			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {

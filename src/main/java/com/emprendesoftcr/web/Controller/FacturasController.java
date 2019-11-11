@@ -1164,7 +1164,7 @@ public class FacturasController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Emision", "# Documento", "#Proforma", "Cedula", "Cliente", "A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedula, nombreCompleto,nombreFactura, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
+		new SimpleExporter().gridExport(headers, facturas, "nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaPrin, nombreCompleto,nombreFactura, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,referenciaNumero,nota", baos);
 		return baos;
 	}
 
@@ -1243,7 +1243,7 @@ public class FacturasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuarioSesion.getEmpresa().getNombre());
-		modelEmail.put("cedula", "Cedula:" + usuarioSesion.getEmpresa().getCedula());
+		modelEmail.put("cedula", usuarioSesion.getEmpresa().getCedula());
 		modelEmail.put("fechaInicial", fechaInicio);
 		modelEmail.put("fechaFinal", fechaFin);
 		modelEmail.put("totalVentasGravadas",Utils.formateadorMiles(totalVentasGravadas));
@@ -1253,13 +1253,13 @@ public class FacturasController {
 		modelEmail.put("totalDescuentos", Utils.formateadorMiles(totalDescuentos));
 		modelEmail.put("totalOtrosCargos", Utils.formateadorMiles(totalOtrosCargos));
 		modelEmail.put("total", Utils.formateadorMiles(total));
-		modelEmail.put("totalVentasGravadas_n", Utils.formateadorMiles(totalVentasGravadas_n * -1));
-		modelEmail.put("totalVentasExentas_n", Utils.formateadorMiles(totalVentasExentas_n * -1));
-		modelEmail.put("totalVentasNetas_n", Utils.formateadorMiles(totalVentasNetas_n * -1));
-		modelEmail.put("totalImpuestos_n", Utils.formateadorMiles(totalImpuestos_n * -1));
-		modelEmail.put("totalDescuentos_n", Utils.formateadorMiles(totalDescuentos_n * -1));
-		modelEmail.put("totalOtrosCargos_n", Utils.formateadorMiles(totalOtrosCargos_n * -1));
-		modelEmail.put("total_n", Utils.formateadorMiles(total_n * -1));
+		modelEmail.put("totalVentasGravadas_n", Utils.formateadorMiles(totalVentasGravadas_n ));
+		modelEmail.put("totalVentasExentas_n", Utils.formateadorMiles(totalVentasExentas_n ));
+		modelEmail.put("totalVentasNetas_n", Utils.formateadorMiles(totalVentasNetas_n ));
+		modelEmail.put("totalImpuestos_n", Utils.formateadorMiles(totalImpuestos_n));
+		modelEmail.put("totalDescuentos_n", Utils.formateadorMiles(totalDescuentos_n ));
+		modelEmail.put("totalOtrosCargos_n", Utils.formateadorMiles(totalOtrosCargos_n ));
+		modelEmail.put("total_n", Utils.formateadorMiles(total_n ));
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_LISTAR_FACTURAS, modelEmail);
 	}

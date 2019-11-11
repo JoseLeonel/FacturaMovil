@@ -66,10 +66,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	private CuentaCobrarBo				cuentaCobrarBo;
-	
+
 	@Autowired
 	private CuentaCobrarDao				cuentaCobrarDao;
-	
 
 	@Autowired
 	private UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
@@ -361,8 +360,6 @@ public class FacturaBoImpl implements FacturaBo {
 		return detallesFacturaCommand;
 	}
 
-	
-	
 	/**
 	 * Crear la factura o el tiquete temporal
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
@@ -483,14 +480,14 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 
 				factura.setNoAplicarEnCaja(Constantes.SI_APLICA_EN_CAJA);
-				//Si la factura que se le va aplicar la nota de credito o debido es de un dia anterior 
-				if(facturaAnular != null ) {
-					if(facturaAnular.getFechaEmision() !=null) {
-						  Integer valor = Utils.fechaDiaAnterior(facturaAnular.getFechaEmision(),new Date());
-						  if(valor > Constantes.ZEROS) {
-						  	factura.setNoAplicarEnCaja(Constantes.NO_APLICA_EN_CAJA);
-						  }
-						
+				// Si la factura que se le va aplicar la nota de credito o debido es de un dia anterior
+				if (facturaAnular != null) {
+					if (facturaAnular.getFechaEmision() != null) {
+						Integer valor = Utils.fechaDiaAnterior(facturaAnular.getFechaEmision(), new Date());
+						if (valor > Constantes.ZEROS) {
+							factura.setNoAplicarEnCaja(Constantes.NO_APLICA_EN_CAJA);
+						}
+
 					}
 				}
 //				// Paga a credito
@@ -563,8 +560,7 @@ public class FacturaBoImpl implements FacturaBo {
 						}
 					}
 				}
-				
-				
+
 				// Actualiza articulo y inventario
 				if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
@@ -582,36 +578,34 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 
-				
-				//Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
-			// Nota de Credito Anulacion Documento
+				// Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
+				// Nota de Credito Anulacion Documento
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) ) {
+						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 							if (facturaAnular != null) {
-									cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura,facturaAnular);
+								cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaAnular);
 							}
 						}
 					}
 				}
-				
-				//Si es nota de debito se crea un abono por nota de debito
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ) {
+
+				// Si es nota de debito se crea un abono por nota de debito
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) ) {
+						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 							if (facturaAnular != null) {
-								  Factura facturaOriginal = findByConsecutivoAndEmpresa(facturaAnular.getReferenciaNumero(), empresa);
-								  facturaOriginal = facturaOriginal == null ? facturaDao.findByClaveAndEmpresa(facturaAnular.getReferenciaNumero(), usuario.getEmpresa()) : facturaOriginal;
-								  if(facturaOriginal != null) {
-									   	cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura,facturaOriginal);	
-                  		
-								  }
-									
+								Factura facturaOriginal = findByConsecutivoAndEmpresa(facturaAnular.getReferenciaNumero(), empresa);
+								facturaOriginal = facturaOriginal == null ? facturaDao.findByClaveAndEmpresa(facturaAnular.getReferenciaNumero(), usuario.getEmpresa()) : facturaOriginal;
+								if (facturaOriginal != null) {
+									cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura, facturaOriginal);
+
+								}
+
 							}
 						}
 					}
 				}
-				
 
 			} catch (Exception e) {
 				throw e;
@@ -628,7 +622,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 		return factura;
 	}
-	
+
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para

@@ -321,7 +321,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Grafico de ventas
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
 	 */
-	@Scheduled(cron = "0 0/45 03 * * ?")
+	@Scheduled(cron = "0 0/10 04 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -482,7 +482,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -502,7 +502,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							try {
 								log.info("Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
 								haciendaBD = haciendaBo.findById(hacienda.getId());
-								openIDConnectHacienda = envioHacienda(haciendaBD, openIDConnectHacienda);
+									openIDConnectHacienda = envioHacienda(haciendaBD, openIDConnectHacienda); 	
+								
 							} catch (Exception e) {
 								// Se modifica el registros
 								if (hacienda.getReintentos() == null) {
@@ -649,13 +650,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 				if (semaforoCallback != null) {
 					// Ambiente de pruebas
-					 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 					// San Ana
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
 					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -664,10 +665,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-				//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -697,7 +698,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -722,7 +723,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									resta = resta / (1000 * 60);
 								}
 								log.info("Comprobando Documentos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
-								if (resta >= 1 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+								if (resta >= 20 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 									log.info("Documento cumplio 30 minutos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
 									if (hacienda.getReintentosAceptacion() != null) {
 										if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -1059,7 +1060,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1105,7 +1106,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 												listaCorreos.add(factura.getCorreoAlternativo());
 											}
 										}
-										if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) ) {
+										if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 											if (factura.getCliente().getCorreoElectronico() != null) {
 												if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
 													listaCorreos.add(factura.getCliente().getCorreoElectronico());
@@ -1149,6 +1150,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
+
 											enviarCorreos(factura, haciendaBD, listaCorreos);
 											if (noEnviarCorreoClienteFrecuente == false) {
 												haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
@@ -1239,7 +1241,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				modelEmail.put("tituloDocumento", "Nota de credito Electronico:");
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
-
+			log.info("Documento enviado al correo: " + hacienda.getNumeroFactura() + " Empresa:" + hacienda.getEmpresa().getNombre());
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre() + " Consecutivo" + hacienda.getConsecutivo());
@@ -1398,7 +1400,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1532,13 +1534,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			throw e;
 		}
 	}
-	
-	
-/**
- * Verifica si debe enviar correo al cliente  en las facturas
- * @param factura
- * @return
- */
+
+	/**
+	 * Verifica si debe enviar correo al cliente en las facturas
+	 * @param factura
+	 * @return
+	 */
 	private Boolean siEnviarCorreo(Factura factura) {
 		Boolean siEnviar = Boolean.FALSE;
 		if (factura.getCorreoAlternativo() != null) {
@@ -1546,7 +1547,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				siEnviar = Boolean.TRUE;
 			}
 		}
-		if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)  ) {
+		if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
 			if (factura.getCliente().getCorreoElectronico() != null) {
 				if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
 					siEnviar = Boolean.TRUE;

@@ -23,6 +23,7 @@ import com.emprendesoftcr.fisco.MapEnums;
 		+ " fac.act_comercial,"
 		+ " fac.fecha_emision,"
 		+ " clientes.cedula,"
+		+ " clientes.identificacion_Extranjero,"
 		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_impuesto * -1,fac.total_impuesto) AS total_impuesto, \n" 
 		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_descuentos * -1,fac.total_descuentos) AS total_descuentos, \n"
 		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_serv_exentos * -1,fac.total_serv_exentos) AS total_serv_exentos, \n"
@@ -107,6 +108,9 @@ public class ListarFacturasNativa implements Serializable {
 	@Column(name = "nombre_completo")
 	private String						NombreCompleto;
 
+	@Column(name = "identificacion_Extranjero")
+	private String						identificacionExtranjero;
+	
 	@Column(name = "cedula")
 	private String						cedula;
 
@@ -208,6 +212,20 @@ public class ListarFacturasNativa implements Serializable {
 	}
 
 	public String getCedula() {
+		return cedula;
+	}
+	
+	public String getCedulaPrin() {
+		if(this.cedula !=null) {
+			if(!cedula.equals(Constantes.EMPTY)) {
+				return cedula;
+			}
+		}
+		if(this.identificacionExtranjero != null) {
+		  if(!this.identificacionExtranjero.equals(Constantes.EMPTY)) {
+		  	return this.identificacionExtranjero;
+		  }	
+		}	
 		return cedula;
 	}
 
@@ -476,7 +494,7 @@ public class ListarFacturasNativa implements Serializable {
 	
 	public Double getTotalColonesNC() {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalComprobante != null ? (totalComprobante * tipoCambio) * -1 : (totalComprobante * tipoCambio);
+			return this.totalComprobante != null ? (totalComprobante * tipoCambio)  : (totalComprobante * tipoCambio);
 		} else {
 			return (totalComprobante * tipoCambio);
 		}
@@ -679,6 +697,7 @@ public class ListarFacturasNativa implements Serializable {
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fechaEmision == null) ? 0 : fechaEmision.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((identificacionExtranjero == null) ? 0 : identificacionExtranjero.hashCode());
 		result = prime * result + ((montoCambio == null) ? 0 : montoCambio.hashCode());
 		result = prime * result + ((noFacturaElectronica == null) ? 0 : noFacturaElectronica.hashCode());
 		result = prime * result + ((nombreFactura == null) ? 0 : nombreFactura.hashCode());
@@ -766,6 +785,11 @@ public class ListarFacturasNativa implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (identificacionExtranjero == null) {
+			if (other.identificacionExtranjero != null)
+				return false;
+		} else if (!identificacionExtranjero.equals(other.identificacionExtranjero))
 			return false;
 		if (montoCambio == null) {
 			if (other.montoCambio != null)
@@ -900,7 +924,7 @@ public class ListarFacturasNativa implements Serializable {
 		return true;
 	}
 
-
+	
 	
 		
 	
