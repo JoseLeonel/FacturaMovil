@@ -123,8 +123,8 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																		= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 200;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 60;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 50;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 100;
 
 	// 48 horas cada 5 minutos
 

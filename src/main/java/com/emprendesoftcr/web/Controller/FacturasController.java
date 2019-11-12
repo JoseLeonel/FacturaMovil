@@ -1661,12 +1661,12 @@ public class FacturasController {
 	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFacturaTurismo(@RequestBody TurismoCommand turismoCommand, BindingResult result) throws ParseException {
+	public RespuestaServiceValidator crearFacturaTurismo(@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
 
 		try {
 
 			Usuario usuario = null;
-			FacturaCommand facturaCommand = null;
+			
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);

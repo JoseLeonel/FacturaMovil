@@ -21,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 		+ ",empresas.nombre FROM hacienda_xml " 
     + " LEFT join empresas on empresas.id = hacienda_xml.empresa_id "
     + "WHERE hacienda_xml.estado = 3 or hacienda_xml.estado = 10 "
-		+ " ORDER by hacienda_xml.empresa_id  asc LIMIT 100" )
+		+ " ORDER by hacienda_xml.empresa_id  asc LIMIT 80" )
 @Entity
 public class HaciendaComprobarNative implements Serializable {
 	

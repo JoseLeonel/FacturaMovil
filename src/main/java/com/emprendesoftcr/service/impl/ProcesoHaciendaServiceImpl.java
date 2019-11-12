@@ -317,11 +317,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Autowired
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
-	/**
-	 * Grafico de ventas
-	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#graficoVenta()
-	 */
-	@Scheduled(cron = "0 0/10 04 * * ?")
+	
+	
+	
+	@Scheduled(cron = "0 0/30 01 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -331,6 +330,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		log.info("fin Totales de Grafico  {}", new Date());
 
 	}
+	
 
 	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
@@ -662,10 +662,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
-					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
 					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);

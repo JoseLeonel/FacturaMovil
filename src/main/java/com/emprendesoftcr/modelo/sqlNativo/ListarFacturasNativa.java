@@ -44,7 +44,7 @@ import com.emprendesoftcr.fisco.MapEnums;
 		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_comprobante * -1,fac.total_comprobante) AS total_comprobante, \n"
 		+ " fac.id,"
 		+ " fac.tipo_cambio,"
-		+ "(select facturas.numero_consecutivo from facturas where facturas.clave = fac.ref_numero and facturas.empresa_id = fac.empresa_id ) ref_numero , \n" 
+		+ "(select facturas.numero_consecutivo from facturas where facturas.clave = fac.ref_numero and facturas.empresa_id = fac.empresa_id LIMIT 1 ) ref_numero , \n" 
 		+ " fac.numero_consecutivo,"
 		+ " fac.nombre_factura,"
 		+ " clientes.nombre_completo,"

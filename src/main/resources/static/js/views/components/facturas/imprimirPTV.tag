@@ -6,7 +6,7 @@
       <div  class= "wrap">
         <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                <h2 >{titulo}</h2>
+                <h2 class="tituloPrincipal" >{titulo}</h2>
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
                         <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
@@ -169,6 +169,9 @@
   </div>
 </div>
 <style type="text/css"  >
+    .tituloPrincipal{
+        text-align: center;
+    }
     .formatoTotal{
         
     } 
@@ -858,7 +861,7 @@ function imprimirElemento(elemento){
   ventana.close();
  // document.body.innerHTML = originalContents;
   
- // printJS('imprimeme', 'html');
+//  printJS('imprimeme', 'html');
   
   return true;
 }

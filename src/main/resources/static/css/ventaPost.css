@@ -724,27 +724,6 @@ content {
 	width: 20%;
 }
 
-.botones-imprimir .boton-imprimir {
-	cursor: pointer;
-	padding: 10px;
-	margin: 15px;
-	border: none;
-	color: #fff;
-	text-decoration: none;
-	font-size: 30px;
-	padding-top: 8px !important;
-	padding-bottom: 8px !important;
-	margin-bottom: 8px;
-	text-align: center !important;
-	background-color: #6dca42 !important;
-	box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
-	border-radius: 30px;
-	-webkit-transition: background-color 100ms linear;
-	-moz-transition: background-color 100ms linear;
-	-o-transition: background-color 100ms linear;
-	-ms-transition: background-color 100ms linear;
-	transition: background-color 100ms linear;
-}
 
 .zona-impresion {
 	width: 80%;

@@ -1450,15 +1450,19 @@ function getTipoCambioDolar(){
     statusCode: {
         
         404: function() {
-             __TipoCambio()
+            
         }
     }
     }).done(function (response) {
          self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
          self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
          self.update()
-        // localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
-    });
+         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
+    }).fail(function () {
+       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
+       self.update()
+      console.log('fail')
+    });;
 }
 
 
