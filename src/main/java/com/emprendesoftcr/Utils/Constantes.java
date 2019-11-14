@@ -214,7 +214,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML																= 2;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA														= 3;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR											= 4;
-	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS						= 99;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS						= 200;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA														= 6;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO													= 7;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_PARCIAL														= 8;

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -68,6 +69,7 @@ public class CertificadoBoImpl implements CertificadoBo {
 		return certificadoDao.findById(id);
 	}
 
+	@Cacheable(value="certificadoCache")
 	@Override
 	public Certificado findByEmpresa(Empresa empresa) {
 

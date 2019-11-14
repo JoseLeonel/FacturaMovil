@@ -320,7 +320,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	
 	
 	
-	@Scheduled(cron = "0 0/30 01 * * ?")
+	@Scheduled(cron = "0 0/17 03 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -644,7 +644,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			if (valor.length() > 0) {
 
 				String base64 = FacturaElectronicaUtils.base64Encode(valor);
-
 				recepcion.setComprobanteXml(base64);
 				Semaforo semaforoCallback = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_CALLBACK);
 
@@ -656,13 +655,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
 					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
-					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
 					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
@@ -698,7 +697,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/25 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1165,7 +1164,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								// Se modifica el registros
 								Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 								if (haciendaBD != null) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO);
+							//		haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO);
 									haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
 									haciendaBo.modificar(haciendaBD);
 									soporteProblemaEnvioCorreos(haciendaBD.getEmpresa(), haciendaBD.getConsecutivo(), e);
@@ -1400,7 +1399,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")
+	@Scheduled(cron = "0 0/6 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
