@@ -11,6 +11,7 @@ import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
@@ -178,6 +179,11 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	@Override
 	public Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa) {
 		return consultasNativeDao.findByVentaEspera(empresa);
+	}
+
+	@Override
+	public Collection<ArticuloByFechaNative> findByInventario(Empresa empresa, String fechaInicial, String fechaFinal) {
+		return consultasNativeDao.findByInventario(empresa, fechaInicial, fechaFinal);
 	}
 
 }

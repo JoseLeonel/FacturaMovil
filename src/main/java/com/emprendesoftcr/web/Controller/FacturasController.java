@@ -1676,6 +1676,7 @@ public class FacturasController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -1845,7 +1846,7 @@ public class FacturasController {
 				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
 					facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
 					if (facturaReferenciaValidar != null) {
-						if (!facturaReferenciaValidar.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+						if (facturaReferenciaValidar.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 							Hacienda hacienda = haciendaBo.findByEmpresaAndClave(facturaReferenciaValidar.getEmpresa(), facturaReferenciaValidar.getClave());
 							if (hacienda != null) {
 								if (!hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA) && !hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
@@ -1893,15 +1894,7 @@ public class FacturasController {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
 
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-//				if (facturaReferenciaValidar != null) {
-//					if (facturaReferenciaValidar.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-//						cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferenciaValidar);
-//					}
-//
-//				}
-//
-//			}
+
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 

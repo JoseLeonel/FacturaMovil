@@ -117,8 +117,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 	}
 
 	@Override
-	public TotalInventarioCommand sumarInventarios(Integer idEmpresa) {
-		return articuloDao.sumarInventarios(idEmpresa);
+	public TotalInventarioCommand sumarInventarios(Integer idEmpresa,Date fechaInicial,Date FechaFinal) {
+		return articuloDao.sumarInventarios(idEmpresa,fechaInicial,FechaFinal);
 	}
 
 	@Override

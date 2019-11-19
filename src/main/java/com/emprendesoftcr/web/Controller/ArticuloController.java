@@ -46,6 +46,7 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
@@ -212,9 +213,21 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response) {
+	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) {
+		// Se buscan las facturas
+		Date fechaI = Utils.parseDate(fechaInicio);
+		Date fechaF = Utils.parseDate(fechaInicio);
+		if (fechaF == null) {
+			fechaF = new Date(System.currentTimeMillis());
+		}
+		if (fechaF != null && fechaF != null) {
+			fechaF = Utils.sumarDiasFecha(fechaF, 1);
+		}
+//		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+//		String inicio1 = dateFormat1.format(fechaI);
+//		String fin1 = dateFormat1.format(fechaF);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return articuloBo.sumarInventarios(usuario.getEmpresa().getId());
+		return articuloBo.sumarInventarios(usuario.getEmpresa().getId(),fechaI,fechaF);
 	}
 
 	// Descarga de manuales de usuario de acuerdo con su perfil

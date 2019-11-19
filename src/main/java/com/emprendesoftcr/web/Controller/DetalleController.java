@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
-import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
@@ -167,7 +165,7 @@ public class DetalleController {
 		List<Object> solicitudList = new ArrayList<Object>();
 		Collection<Detalle> objetos = detalleBo.findbyIdFactura(idFactura);
 		for (Detalle detalle : objetos) {
-				solicitudList.add(new DetalleFacturaCommand(detalle));
+			solicitudList.add(new DetalleFacturaCommand(detalle));
 		}
 		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
 		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
@@ -187,12 +185,11 @@ public class DetalleController {
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
 		Collection<Detalle> objetos = detalleBo.findbyConsecutivoAndEmpresa(consecutivo, usuarioSesion.getEmpresa());
 		for (Detalle detalle : objetos) {
-				solicitudList.add(new DetalleFacturaCommand(detalle));
+			solicitudList.add(new DetalleFacturaCommand(detalle));
 		}
 		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
 		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
@@ -202,7 +199,6 @@ public class DetalleController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 
-	
 	}
 
 	@SuppressWarnings("all")
@@ -354,6 +350,7 @@ public class DetalleController {
 		return baos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListaDetallesxCodigoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable ListaDetallesxCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String codigo, @RequestParam String tipoDocumento, @RequestParam String idCliente, @RequestParam String tipoImpuesto, @RequestParam Integer estado) {
@@ -424,26 +421,6 @@ public class DetalleController {
 				delimitador.addFiltro(new JqGridFilter("factura.fechaEmision", fin, "dateFinal<="));
 			}
 			return delimitador;
-		}
-	}
-
-	static class RESPONSES {
-
-		private static class OK {
-
-			private static class FACTURA {
-
-				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente");
-				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente");
-			}
-		}
-
-		private static class ERROR {
-
-			private static class FACTURA {
-
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.noExiste");
-			}
 		}
 	}
 

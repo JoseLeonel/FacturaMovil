@@ -5,25 +5,29 @@ import com.emprendesoftcr.Utils.Utils;
 public class TotalInventarioCommand {
 
 	private Double	totalCosto;
-	private Double	totalVenta;
-	private String	totalCostoSTR;
-	private String	totalVentasSTR;
+	private Double	totalPublico;
+	private Double	totalMayorista;
+	private Double	totalEspecial;
 
 	public TotalInventarioCommand() {
 		super();
 	}
 
-	public TotalInventarioCommand(Double totalCosto, Double totalVenta) {
+	public TotalInventarioCommand(Double totalCosto,Double totalMayorista,Double totalEspecial,Double totalPublico) {
 		super();
 		this.totalCosto = totalCosto;
-		this.totalVenta = totalVenta;
-		this.totalCostoSTR = Utils.formateadorMiles(totalCosto);
-		this.totalVentasSTR = Utils.formateadorMiles(totalVenta);
+		this.totalEspecial = totalEspecial;
+		this.totalMayorista = totalMayorista;
+		this.totalPublico = totalPublico;
 	}
 
 	
 	public Double getTotalCosto() {
 		return totalCosto;
+	}
+
+	public String getTotalCostoSTR() {
+		return Utils.formateadorMiles(totalCosto);
 	}
 
 	
@@ -32,33 +36,45 @@ public class TotalInventarioCommand {
 	}
 
 	
-	public Double getTotalVenta() {
-		return totalVenta;
+	public String getTotalPublicoSTR() {
+		return Utils.formateadorMiles(totalPublico);
+	}
+
+	public Double getTotalPublico() {
+		return totalPublico;
+	}
+	
+	public void setTotalPublico(Double totalPublico) {
+		this.totalPublico = totalPublico;
 	}
 
 	
-	public void setTotalVenta(Double totalVenta) {
-		this.totalVenta = totalVenta;
+	public Double getTotalMayorista() {
+		return totalMayorista;
+	}
+
+	public String getTotalMayoristaSTR() {
+		return Utils.formateadorMiles(totalMayorista) ;
 	}
 
 	
-	public String getTotalCostoSTR() {
-		return totalCostoSTR;
+	public void setTotalMayorista(Double totalMayorista) {
+		this.totalMayorista = totalMayorista;
 	}
 
 	
-	public void setTotalCostoSTR(String totalCostoSTR) {
-		this.totalCostoSTR = totalCostoSTR;
+	public Double getTotalEspecial() {
+		return totalEspecial;
+	}
+
+
+	public String getTotalEspecialSTR() {
+		return Utils.formateadorMiles(totalEspecial) ;
 	}
 
 	
-	public String getTotalVentasSTR() {
-		return totalVentasSTR;
-	}
-
-	
-	public void setTotalVentasSTR(String totalVentasSTR) {
-		this.totalVentasSTR = totalVentasSTR;
+	public void setTotalEspecial(Double totalEspecial) {
+		this.totalEspecial = totalEspecial;
 	}
 
 	

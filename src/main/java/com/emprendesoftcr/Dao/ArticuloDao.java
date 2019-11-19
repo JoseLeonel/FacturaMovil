@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
@@ -27,7 +28,7 @@ public interface ArticuloDao {
 
 	Double getTotalCosto(Articulo articulo, Double cantidad) throws Exception;
 
-	TotalInventarioCommand sumarInventarios(Integer idEmpresa);
+	TotalInventarioCommand sumarInventarios(Integer idEmpresa,Date fechaInicial,Date FechaFinal);
 
 	Collection<Articulo> articulosBy(Empresa empresa);
 

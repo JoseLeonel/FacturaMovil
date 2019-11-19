@@ -213,25 +213,41 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	}
 
 	@Override
-	public TotalInventarioCommand sumarInventarios(Integer idEmpresa) {
+	public TotalInventarioCommand sumarInventarios(Integer idEmpresa,Date fechaInicial,Date FechaFinal) {
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_INVENTARIO);
 
 		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_INVENTARIO_ID_EMPRESA, Integer.class, ParameterMode.IN);
+	
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_INVENTARIO_FECHA_INICIAL_IN, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_INVENTARIO_FECHA_FINAL_IN, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_INVENTARIO_ID_EMPRESA_IN, Integer.class, ParameterMode.IN);
 
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COSTO_OUT, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_VENTA_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_MAYORISTA_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ESPECIAL_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_PUBLICO_OUT, Double.class, ParameterMode.OUT);
+		
 
 		// Valores de entrada
-		storedProcedure.setParameter(Constantes.SP_INVENTARIO_ID_EMPRESA, idEmpresa);
+		
+		storedProcedure.setParameter(Constantes.SP_INVENTARIO_FECHA_INICIAL_IN, fechaInicial);
+		storedProcedure.setParameter(Constantes.SP_INVENTARIO_FECHA_FINAL_IN, FechaFinal);
+		storedProcedure.setParameter(Constantes.SP_INVENTARIO_ID_EMPRESA_IN, idEmpresa);
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalInventarioCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COSTO_OUT), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_VENTA_OUT));
+		return new TotalInventarioCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COSTO_OUT),
+				                          (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_MAYORISTA_OUT),
+				                          (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_ESPECIAL_OUT),
+				                          (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_PUBLICO_OUT));
+				
+			
 
 	}
 
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Articulo> articulosBy(Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.categoria.id,obj.descripcion");

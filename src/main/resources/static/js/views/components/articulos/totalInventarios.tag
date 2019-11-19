@@ -8,20 +8,39 @@
         </div>
     </div>
     <br>
-    <br>
-    <br>   
 
     
     <!-- Inicio Filtros-->
     <div>
-        <div class="row">
-            <div class="col-xs-12 text-right">
-                <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+            </div>  
+            <div class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+              <form id="filtros" name="filtros">       
+                <div class= "row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <label class="knob-label" >Fecha <span class="requeridoDato">*</span></label>
+                            <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                <input type="text" class="form-control fechaInicial " id="fechaInicial"  name= "fechaInicial" readonly>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>	                             
+                        </div>  
+                    </div>             
+                </div>    
+
+
+              </form>
             </div>
+        </div>      
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+            <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada formatoBoton" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
         </div>
     </div>    
 	<!-- Fin Filtros-->
-    <br>
   	<!-- Detalle  -->
 	<div id="formularioDetalle" class="row center"  >
     	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
@@ -31,13 +50,22 @@
                     <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label> {$.i18n.prop("inventario.total.costo")}  </label>
-                                <input type="text" readonly="readonly" class="form-control" placeHolder ="{$.i18n.prop("inventario.total.costo")}"  value="{inventario.totalCostoSTR}">
+                                <label> Total Costo  </label>
+                                <input type="text" readonly="readonly" class="form-control" value="{inventario.totalCostoSTR}">
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label> {$.i18n.prop("inventario.total.venta.esperada")}  </label>
-                                <input type="text" readonly="readonly" class="form-control" placeHolder ="{$.i18n.prop("inventario.total.venta.esperada")}"  value="{inventario.totalVentasSTR}">
+                                <label> Total Venta Publico  </label>
+                                <input type="text" readonly="readonly" class="form-control"  value="{inventario.totalPublicoSTR}">
                             </div>
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label> Total Venta Especial  </label>
+                                <input type="text" readonly="readonly" class="form-control" value="{inventario.totalEspecialSTR}">
+                            </div>
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label> Total Venta Mayorista </label>
+                                <input type="text" readonly="readonly" class="form-control"  value="{inventario.totalMayoristaSTR}">
+                            </div>
+
                         </div>
                 	</form>
                 </div>
@@ -49,6 +77,11 @@
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
+<style type="text/css">
+  .formatoBoton{
+      margin:2%;
+  }
+</style>
 
 <script>
 	self = this;
@@ -57,6 +90,8 @@
 		totalCostoSTR:"0",
 		totalVentasSTR:"0",
 	}
+    self.valorMarginBottom  = '10px'		
+
 	self.mostrarDescarga = false
 		self.empresa = {
 			id:0
@@ -64,28 +99,69 @@
     self.mostrarDescargas = false
 	//Se cargan al montar el tag
 	self.on('mount',function(){
+         $("#filtros").validate(reglasDeValidacion());
+         $('.datepickerFechaInicial').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
 		_Empresa();
 	})
+/**
+* Camps requeridos
+**/
+var reglasDeValidacion = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicial : {
+				required : true,
+			},
+		},ignore : []
+
+	});
+	return validationOptions;
+};
+
+/*
+ * Muestra los filtros avanzados
+ */
+ __mostrarFiltros(){
+    if(self.mostrarFiltros){
+        self.mostrarFiltros = false;
+        self.valorMarginBottom  = '10px'
+    }else{
+        self.mostrarFiltros = true;
+        self.valorMarginBottom  = '0px'
+    }
+    self.update();
+}
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
     self.mostrarDescargas = true   
     self.update();
-   $.ajax({
-        url: "TotalInventarioAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (data) {
-           	self.inventario = data;
-            self.mostrarDescargas = true   
-		    self.update();
-	    },
-	    error: function (xhr, status) {
-	        console.log(xhr);
-	        mensajeErrorServidor(xhr, status);
-	    }
-	});
+    var parametros = {
+       	fechaInicio:$('#fechaInicial').val(),
+    };
+     if ($("#filtros").valid()) {
+        $.ajax({
+                url: "TotalInventarioAjax.do",
+                datatype: "json",
+                data:parametros ,
+                method:"GET",
+                success: function (data) {
+                    self.inventario = data;
+                    self.mostrarDescargas = true   
+                    self.update();
+                },
+                error: function (xhr, status) {
+                    console.log(xhr);
+                    mensajeErrorServidor(xhr, status);
+                }
+        });
+     }
 }
 /**
 * Consultar la empresa

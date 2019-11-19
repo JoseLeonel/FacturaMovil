@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
@@ -492,12 +494,24 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<GraficoCuentasPorPagarNative>) query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa) {
 		String queryStr = getQueryBase(FacturasEsperaNativa.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		Query query = entityManager.createNativeQuery(queryStr, FacturasEsperaNativa.class);
 		return (Collection<FacturasEsperaNativa>) query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<ArticuloByFechaNative> findByInventario(Empresa empresa, String fechaInicial, String fechaFinal) {
+		String queryStr = getQueryBase(ArticuloByFechaNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+		Query query = entityManager.createNativeQuery(queryStr, ArticuloByFechaNative.class);
+		return (Collection<ArticuloByFechaNative>) query.getResultList();
 	}
 
 }

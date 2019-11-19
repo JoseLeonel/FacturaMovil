@@ -3782,9 +3782,10 @@ function __agregarArticulo(cantidad){
     if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
     	//Se almacena en los casos de articulos de comanda
-    	if(self.articulo.comanda == 1){	
+    	if(self.articulo.comanda == 1 || self.articulo.comanda == 2 ){	
             __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
     	}		
+
         self.seIncluyoUnArticulo = 0
         self.update()
         encontrado = true;
@@ -3794,7 +3795,7 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + __valorNumerico(cantidad)
                self.update();
-	  	      	if(self.articulo.comanda == 1){	
+	  	      	if(self.articulo.comanda == 1 || self.articulo.comanda == 2){	
 	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
 	  	    	}	
                ActualizarLineaDEtalle()   	
@@ -3811,7 +3812,7 @@ function __agregarArticulo(cantidad){
        self.update()
 
       __nuevoArticuloAlDetalle(cantidad);
-	  	if(self.articulo.comanda == 1){	
+	  	if(self.articulo.comanda == 1 || self.articulo.comanda == 2){	
 	        __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
 		}		
     }
@@ -5282,7 +5283,7 @@ function __EnviarCocina(){
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
 			mesero: "",        	
-		    nombreImpresora:"cocina",
+		    nombreImpresora:self.empresa.impresoraCocina,
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:detalles_cocina_1
@@ -5296,7 +5297,7 @@ function __EnviarCocina(){
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
 			mesero: "",        	
-		    nombreImpresora:"cocina2",
+		    nombreImpresora:self.empresa.impresoraFactura,
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:detalles_cocina_2

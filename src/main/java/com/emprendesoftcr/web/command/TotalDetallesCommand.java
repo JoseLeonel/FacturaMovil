@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 /**
@@ -29,19 +30,19 @@ public class TotalDetallesCommand {
 
 	public TotalDetallesCommand(Double totalGravado, Double totalDescuento, Double totalImpuesto, Double totalExento, Double total, Double totalGanancia, Double totalGravado_n, Double totalDescuento_n, Double totalImpuesto_n, Double totalExento_n, Double total_n, Double totalGanancia_n) {
 		super();
-		this.totalGravado = totalGravado;
-		this.totalDescuento = totalDescuento;
-		this.totalImpuesto = totalImpuesto;
-		this.totalExento = totalExento;
-		this.total = total;
-		this.totalGanancia = totalGanancia;
+		this.totalGravado = totalGravado == null ? Constantes.ZEROS_DOUBLE : totalGravado;
+		this.totalDescuento = totalDescuento == null ? Constantes.ZEROS_DOUBLE : totalDescuento;
+		this.totalImpuesto = totalImpuesto == null ? Constantes.ZEROS_DOUBLE : totalImpuesto;
+		this.totalExento = totalExento == null ? Constantes.ZEROS_DOUBLE : totalExento;
+		this.total = total == null ? Constantes.ZEROS_DOUBLE : total;
+		this.totalGanancia = totalGanancia == null ? Constantes.ZEROS_DOUBLE : totalGanancia;
 
-		this.totalGravado_n = totalGravado_n * -1;
-		this.totalDescuento_n = totalDescuento_n * -1 ;
-		this.totalImpuesto_n = totalImpuesto_n * -1 ;
-		this.totalExento_n = totalExento_n * -1;
-		this.total_n = total_n * -1;
-		this.totalGanancia_n = totalGanancia_n * -1;
+		this.totalGravado_n = totalGravado_n == null ? Constantes.ZEROS_DOUBLE : totalGravado_n * -1;
+		this.totalDescuento_n = totalDescuento_n == null ? Constantes.ZEROS_DOUBLE : totalDescuento_n * -1;
+		this.totalImpuesto_n = totalImpuesto_n == null ? Constantes.ZEROS_DOUBLE : totalImpuesto_n * -1;
+		this.totalExento_n = totalExento_n == null ? Constantes.ZEROS_DOUBLE : totalExento_n * -1;
+		this.total_n = total_n == null ? Constantes.ZEROS_DOUBLE : total_n * -1;
+		this.totalGanancia_n = totalGanancia_n == null ? Constantes.ZEROS_DOUBLE : totalGanancia_n * -1;
 
 	}
 
@@ -53,12 +54,32 @@ public class TotalDetallesCommand {
 		return Utils.formateadorMiles(this.total);
 	}
 
+	public String getTotalMenosIVA() {
+		return Utils.formateadorMiles(this.total - this.totalImpuesto);
+	}
+
+	public String getTotalG() {
+		Double resultado = this.total_n == null ? Constantes.ZEROS_DOUBLE : this.total_n;
+		return Utils.formateadorMiles(this.total + resultado);
+	}
+
+	public String getTotalMenosIVAG() {
+		Double resultadoImpuesto = this.totalImpuesto + this.totalImpuesto_n;
+		Double resultadoTotal = this.total + this.total_n;
+		return Utils.formateadorMiles(resultadoTotal - resultadoImpuesto);
+	}
+
 	public void setTotal(Double total) {
 		this.total = total;
 	}
 
 	public Double getTotalDescuento() {
 		return totalDescuento;
+	}
+
+	public String getTotalDescuentoG() {
+		Double resultado = this.totalDescuento_n == null ? Constantes.ZEROS_DOUBLE : this.totalDescuento_n;
+		return Utils.formateadorMiles(this.totalDescuento + resultado);
 	}
 
 	public String getTotalDescuentoSTR() {
@@ -73,10 +94,15 @@ public class TotalDetallesCommand {
 		return totalImpuesto;
 	}
 
+	public String getTotalImpuestoG() {
+		Double resultado = this.totalImpuesto_n == null ? Constantes.ZEROS_DOUBLE : this.totalImpuesto_n;
+		return Utils.formateadorMiles(this.totalImpuesto + resultado);
+	}
+
 	public String getTotalImpuestoSTR() {
 		return Utils.formateadorMiles(this.totalImpuesto);
 	}
-	
+
 	public String getTotalImpuestoNC() {
 		return Utils.formateadorMiles(this.totalImpuesto_n);
 	}
@@ -93,7 +119,6 @@ public class TotalDetallesCommand {
 		return Utils.formateadorMiles(this.totalGanancia);
 	}
 
-	
 	public void setTotalGanancia(Double totalGanancia) {
 		this.totalGanancia = totalGanancia;
 	}
@@ -104,6 +129,11 @@ public class TotalDetallesCommand {
 
 	public String getTotalExentoSTR() {
 		return Utils.formateadorMiles(this.totalExento);
+	}
+
+	public String getTotalExentoG() {
+		Double resultado = this.totalExento_n == null ? Constantes.ZEROS_DOUBLE : this.totalExento_n;
+		return Utils.formateadorMiles(this.totalExento + resultado);
 	}
 
 	public void setTotalExento(Double totalExento) {
@@ -118,6 +148,11 @@ public class TotalDetallesCommand {
 		return Utils.formateadorMiles(this.totalGravado);
 	}
 
+	public String getTotalGravadoG() {
+		Double resultado = this.totalGravado_n == null ? Constantes.ZEROS_DOUBLE : this.totalGravado_n;
+		return Utils.formateadorMiles(this.totalGravado + resultado);
+	}
+
 	public void setTotalGravado(Double totalGravado) {
 		this.totalGravado = totalGravado;
 	}
@@ -127,7 +162,7 @@ public class TotalDetallesCommand {
 	}
 
 	public String getTotalGravadoNC() {
-	
+
 		return Utils.formateadorMiles(this.totalGravado_n);
 	}
 
@@ -151,8 +186,6 @@ public class TotalDetallesCommand {
 		return totalImpuesto_n;
 	}
 
-	
-
 	public void setTotalImpuesto_n(Double totalImpuesto_n) {
 		this.totalImpuesto_n = totalImpuesto_n;
 	}
@@ -175,6 +208,12 @@ public class TotalDetallesCommand {
 
 	public String getTotalNC() {
 		return Utils.formateadorMiles(this.total_n);
+	}
+
+	public String getTotalMenosIVANC() {
+		Double resultado1 = this.total_n * -1;
+		Double resultado2 = this.totalImpuesto_n * -1;
+		return Utils.formateadorMiles(resultado1 - resultado2);
 	}
 
 	public void setTotal_n(Double total_n) {

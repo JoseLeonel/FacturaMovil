@@ -1,9 +1,11 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
@@ -78,6 +80,7 @@ public interface ConsultasNativeDao {
 	Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa);
 	
 	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
+	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
 	
 	
 }

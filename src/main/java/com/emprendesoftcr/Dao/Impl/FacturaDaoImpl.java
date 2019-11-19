@@ -54,6 +54,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Factura findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.id = :id");
@@ -71,6 +72,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Busca por consecutivo y empresa
 	 * @see com.emprendesoftcr.Dao.CompraDao#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.numeroConsecutivo = :consecutivo and obj.empresa = :empresa");
@@ -85,6 +87,7 @@ public class FacturaDaoImpl implements FacturaDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.consecutivoProforma = :consecutivo and obj.empresa = :empresa");
@@ -99,6 +102,7 @@ public class FacturaDaoImpl implements FacturaDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.clave = :clave and obj.empresa = :empresa");
 		query.setParameter("clave", clave.toString());
@@ -116,6 +120,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Elimina los detalles de una factura para ser reemplazos por detalles nuevos Comparas Pendientes de ingresar el inventario
 	 * @see com.emprendesoftcr.Dao.FacturaDao#eliminarDetalleFacturaPorSP(com.emprendesoftcr.modelo.Factura)
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void eliminarDetalleFacturaPorSP(Factura factura) {
 		try {
@@ -137,6 +142,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado and  obj.empresa.noFacturaElectronica = 0   order by obj.empresa.id");
@@ -148,6 +154,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.empresa = :empresa and obj.cliente =  :cliente");
@@ -261,6 +268,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Reporte de listado de proformas
 	 * @see com.emprendesoftcr.Dao.FacturaDao#proformasByDateAndState(java.lang.Integer, java.util.Date, java.util.Date, java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> proformasByState(Integer estado, Integer idEmpresa) {
 		String sqlNative = "SELECT facturas.id,facturas.consecutivo_proforma,facturas.fecha_emision,usuarios.nombre_usuario,clientes.nombre_completo,facturas.nombre_factura,facturas.total_impuesto,facturas.total_descuentos ,facturas.total_comprobante ";
@@ -269,5 +277,6 @@ public class FacturaDaoImpl implements FacturaDao {
 		sqlNative += " and facturas.estado = '" + estado + "' ";
 		return entityManager.createNativeQuery(sqlNative).getResultList();
 	}
+
 
 }

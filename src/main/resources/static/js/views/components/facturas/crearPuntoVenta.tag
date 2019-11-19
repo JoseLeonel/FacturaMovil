@@ -1450,7 +1450,7 @@ function getTipoCambioDolar(){
     statusCode: {
         
         404: function() {
-            
+            __TipoCambio()
         }
     }
     }).done(function (response) {
@@ -1459,8 +1459,9 @@ function getTipoCambioDolar(){
          self.update()
          localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
     }).fail(function () {
-       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
-       self.update()
+        __TipoCambio()
+//       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
+//       self.update()
       console.log('fail')
     });;
 }

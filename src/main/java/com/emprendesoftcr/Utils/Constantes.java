@@ -569,10 +569,14 @@ public class Constantes {
 	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_DEBITO_ACEPTADAS_OUT				= "IMPDEBITO";
 
 	// Totales de inventarios
-	public static final String					SP_TOTAL_INVENTARIO																					= "SPTOTALINVENTARIOS";
-	public static final String					SP_INVENTARIO_ID_EMPRESA																		= "ID_EMPRESA";
-	public static final String					SP_TOTAL_COSTO_OUT																					= "TOTALCOSTO";
-	public static final String					SP_TOTAL_VENTA_OUT																					= "TOTALVENTA";
+	public static final String					SP_TOTAL_INVENTARIO																					= "sp_tota_invet";
+	public static final String					SP_INVENTARIO_ID_EMPRESA_IN																	= "id_empresa";
+	public static final String					SP_INVENTARIO_FECHA_INICIAL_IN															= "fecha_i";
+	public static final String					SP_INVENTARIO_FECHA_FINAL_IN																= "fecha_f";
+	public static final String					SP_TOTAL_COSTO_OUT																					= "tota_cost_o";
+	public static final String					SP_TOTAL_MAYORISTA_OUT																			= "tota_mayo_o";
+	public static final String					SP_TOTAL_PUBLICO_OUT																				= "tota_publ_o";
+	public static final String					SP_TOTAL_ESPECIAL_OUT																				= "tota_espe_o";
 
 	// Totales de cuentas por cobrar
 	public static final String					SP_TOTAL_CUENTA_COBRAR																			= "SPTOTALFACTURAS";
