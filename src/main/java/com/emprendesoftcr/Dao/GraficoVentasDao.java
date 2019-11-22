@@ -13,6 +13,6 @@ public interface GraficoVentasDao {
 	Collection<GraficoVenta> findByAll();
 	
 	GraficoVenta findByEmpresaAndAnno(Empresa empresa,Integer mes,Integer anno);
-	void actualizarGraficoVenta(Integer anno) throws Exception;
+	void actualizarGraficoVenta(Integer anno,Integer mes) throws Exception;
 
 }

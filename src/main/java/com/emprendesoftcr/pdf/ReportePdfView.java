@@ -301,7 +301,10 @@ public class ReportePdfView {
 				document.add(new Paragraph(" ", UtilsPdf.font_cabezera_tabla));
 
 			}
-			document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));
+			if (!fac_electro.getTipoDocumento().equals("Proforma")){
+				document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));	
+			}
+			
 		//}
 
 	}

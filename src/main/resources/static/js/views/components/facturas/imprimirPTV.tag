@@ -406,7 +406,7 @@ self.subTotal = 0
 self.cedula = ""
 self.facturaActiva = 0
 self.facturaImpresa = {
-    id:0,
+    id:null,
     nota:"",
     tipoDoc:"",
     plazoCredito:0,
@@ -434,22 +434,25 @@ self.on('mount',function(){
     self.claveParteDosRef =""
     self.update()
    // document.getElementById('divQR').innerHTML = '';
-    if(typeof self.parametro.factura.id != 'undefined'){
+    if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3){
         if(self.parametro.factura.id > 0){
            consultaFactura(self.parametro.factura.id) 
         }
        
-    }else if(typeof self.parametro.factura.consecutivo != 'undefined' ){
+    }else if(typeof self.parametro.factura.consecutivo != 'undefined' && self.parametro.facturaDia !=3){
         if(self.parametro.factura.consecutivo.length > 0){
            consultaFacturaPorConsecutivo(self.parametro.factura.consecutivo)
         }
        
     }
-    if (typeof self.parametro.factura.empresa != 'undefined') {
+    if(self.parametro.facturaDia == 3){
+        consultaDetalles(self.parametro.factura)
+    }
+    if (typeof self.parametro.factura.empresa != 'undefined' )  {
         if (self.parametro.factura.empresa.noFacturaElectronica ==0) {
            qr()
         }
-     }else if (typeof self.parametro.factura.noFacturaElectronica != 'undefined') {
+     }else if (typeof self.parametro.factura.noFacturaElectronica != 'undefined' ) {
         if (self.parametro.factura.noFacturaElectronica ==0) {
            qr()
         }
@@ -514,6 +517,84 @@ function qr(){
         image: null
     }
     $('#divQR').qrcode(options);
+}
+/**
+* Consulta detalles
+**/
+function consultaDetalles(data){
+            if(data.length > 0){
+                    self.detalles = []
+                    self.detalles =data
+                    self.detalles.sort(function(a,b) {
+                        if ( a.numeroLinea < b.numeroLinea )
+                            return -1;
+                        if ( a.numeroLinea > b.numeroLinea )
+                            return 1;
+                        return 0;
+                    } );
+                    self.detalles.forEach(function(elemen){
+                        if(elemen.codigo == "8888"){
+                            self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
+                            self.update()
+                        }
+                        elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
+                        self.update()
+                    })
+                   self.montoExoneracion = 0
+                   self.montoImpuesto = 0
+                   self.montoExoneracionSTR = ""
+                   self.montoImpuestoSTR = ""
+                   self.update()
+                    $.each(data, function( index, modeloTabla ) {
+                        self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
+                        self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
+                      if(self.facturaImpresa.id == null){
+                            self.facturaImpresa = modeloTabla.factura 
+                            //factura.js
+                            self.cedula = getCedulaOrIdentificacionExtranjero(self.facturaImpresa.cliente.cedula,self.facturaImpresa.cliente.identificacionExtranjero)
+                            if(self.facturaImpresa.empresa.imprimirCelular == 1){
+                                self.mostrarImprimiCelular = true
+                            }
+                            console.log(self.facturaImpresa)
+                            self.update()
+                            self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
+                            self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
+                            self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
+                            self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
+                              self.subTotal = 0
+                            self.update()
+                            getMoneda()
+                            _VersionTiquete()
+                            __ComboTipoDocumentos()
+                            buscarTipoDocumento()
+                            __comboCondicionPago()
+                            buscarCondicionPago()
+                            getMedioPago()
+                            if(self.facturaImpresa.estado ==2){
+                                self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
+                            }
+                            if(self.facturaImpresa.estado ==3){
+                                self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
+                            }
+                            if(self.facturaImpresa.estado == 4){
+                                self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
+                            }
+                            self.update()
+                            
+                      }
+                    });
+                   self.montoExoneracionSTR = formatoDecimales(self.montoExoneracion,0);
+                   self.montoImpuestoSTR = formatoDecimales(self.montoImpuesto,0);
+
+                    if(self.totalImpuestoServicio == 0 ){
+                        self.totalImpuestoServicio = self.facturaImpresa.totalOtrosCargos
+                    }
+                   self.totalImpuestoServicioSTR = ""
+                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                   self.update()
+                    __imprimir()
+            }
+
 }
 /**
 *consultar Facturas

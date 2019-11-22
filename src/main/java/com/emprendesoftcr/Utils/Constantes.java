@@ -520,6 +520,7 @@ public class Constantes {
 	// SP actualizar el grafico vena
 	public static final String					SP_GRAFICO_VENTAS																						= "sp_graf_ventas";
 	public static final String					SP_GRAFICO_VENTAS_ANNO_IN																		= "anno_in";
+	public static final String					SP_GRAFICO_VENTAS_MES_IN																		= "mes_in";
 
 	// Nombres de procedimientos
 	public static final String					SP_TOTAL_FACTURAS																						= "sp_total_facturas";

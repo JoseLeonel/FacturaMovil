@@ -91,19 +91,38 @@
         th, td {
             white-space: nowrap;
         }
-        .scroller {
-            width: 200px; height: 600px; overflow-y: scroll;
-        }
+       <style>
+	.tituloFacturas{
+	    font-size: 24px;
+        color: black;
+	}
+	.formatoEntrada{
+		margin-bottom: 1%;
+    }
+	.scrlollT{
+	overflow: scroll;
+	}
+	html {
+         scroll-behavior: smooth;
+    }
+	
+	boody {
+    margin: 0px;
+    padding: 0px;
+    min-width: 320px;
+    font-size: 14px;
+    height: inherit;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
     </style>
 </head>
 <body>
 
-<section layout:fragment="header">
-
-
-</section>
 <div layout:fragment="content">
-    <total-inventarios></total-inventarios>
+   <total-inventarios></total-inventarios>
+		   
 </div>
 </body>
 </html>

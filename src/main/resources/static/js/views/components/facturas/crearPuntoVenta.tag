@@ -1215,7 +1215,6 @@
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false 
     self.subTotalGeneral               = 0
-    self.vueltoImprimir               = 0
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
@@ -1925,7 +1924,6 @@ function _Empresa(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.empresa =   modeloTabla
-                       self.vueltoImprimir = modeloTabla.vueltoImprimir
                        if(self.empresa.abrirSinComanda == 0 && self.empresa.abrirConComanda == 0){
                          self.mostarAbrirCajon = false
                        }
@@ -2890,30 +2888,27 @@ function evaluarFactura(data){
     self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
-            self.facturaImprimir   = modeloTabla
+            self.facturaImprimir   = self.empresa.imprimirSiempre == 0 ? modeloTabla:modeloTabla.factura
+            self.facturaReimprimir = self.facturaImprimir
+            self.detallesFactura = self.empresa.imprimirSiempre == 0 ? null:modeloTabla
             self.bloqueoFactura = 1;
             self.update()
         });
         if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
                 __Init()
                 //Envia a la pantalla de impresion
-                self.facturaReimprimir = self.facturaImprimir
-                self.update()
                 localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
-                if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
-                    /**llamada desde factura.js**/
-                    
-                    swal({
+                if(self.empresa.imprimirSiempre == 0){
+                   swal({
                         type: 'success',
                         title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                         showConfirmButton: false,
                         timer: 1500
                      })
-                   
                 }else{
                   var parametros = {
-                          factura: self.facturaReimprimir ,
-                          facturaDia:0
+                        factura: self.empresa.imprimirSiempre == 0 ? self.facturaReimprimir : data.listaObjetos  ,
+                        facturaDia:self.empresa.imprimirSiempre == 0 ? 0 : 3
                       }
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
@@ -3024,15 +3019,10 @@ function mostrarPAgo(){
         $('.codigo').focus()
         return
     }
-    if(self.vueltoImprimir == 0){
-        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
-        $('#totalTarjeta').val(null)
-        $('#totalBanco').val(null)
-    }else{
-        $('#totalEfectivo').val(null)
-        $('#totalTarjeta').val(null)
-        $('#totalBanco').val(null)
-    }
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    
     getSubTotalGeneral()
     self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
@@ -4360,13 +4350,11 @@ function agregarInputsCombos_Vendedores(){
 **/
 function __EnviarFacturar(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
-        if(self.vueltoImprimir == 0){
             self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
             self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
             self.primeraVezBilleteClick == false
             self.update()
             $(".totalEfectivo").val(self.totalCambioPagar)
-        }  
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
           self.primeraVezBilleteClick == false

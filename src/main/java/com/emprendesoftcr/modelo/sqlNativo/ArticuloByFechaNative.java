@@ -11,48 +11,50 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "invet_fech", 
-query = "SELECT a.id, \n" + 
-		"       a.codigo, \n" + 
-		"       a.contable,\n" + 
-		"       a.costo,\n" + 
-		"       a.created_at,\n" + 
-		"       a.descripcion,\n" + 
-		"       a.estado,\n" + 
-		"       a.ganancia_precio_especial,\n" + 
-		"       a.ganancia_precio_mayorista,\n" + 
-		"       a.ganancia_precio_publico,\n" + 
-		"       a.impuesto,\n" + 
-		"       a.precio_especial,\n" + 
-		"       a.precio_mayorista,\n" + 
-		"       a.precio_publico,\n" + 
-		"       a.tipo_codigo,\n" + 
-		"       a.tipo_impuesto,\n" + 
-		"       a.unidad_medida,\n" + 
-		"       a.updated_at,\n" + 
-		"       (select c.descripcion from categorias c where c.id = a.categoria_id) categoria,\n" + 
-		"       (select m.descripcion from marcas m where m.id = a.marca_id) marca,\n" + 
-		"       a.cantidad,\n" + 
-		"       a.maximo,a.minimo,\n" + 
-		"       a.prioridad,\n" + 
-		"       a.fecha_compra,\n" + 
-		"       a.peso_transporte,\n" + 
-		"       a.tipo_impuesto1,\n" + 
-		"       a.cons_compra, \n" + 
-		"       a.impuesto1,\n" + 
-		"       a.base_imponible, \n" + 
-		"       a.cod_tarifa, \n" + 
-		"       a.cod_tarifa1,\n" + 
-		"       (COALESCE((SELECT kardex.cantidad_nueva FROM kardex \n" + 
-		"                         WHERE kardex.codigo = a.codigo and \n" + 
-		"                               and kardex.created_at >= :fechaInicial \n" + 
-		"                               and kardex.created_at <= :fechaFinal \n" + 
-		"                               ORDER by kardex.created_at desc LIMIT 1),0)) cant_actual\n" + 
-		"FROM articulos a where a.empresa_id = :ID_EMPRESA")
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
+
+@BaseNativeQuery(name = "invet_fech", query = "SELECT a.id, \n" + 
+"       a.codigo, \n" + 
+"       a.contable,\n" + 
+"       a.costo,\n" + 
+"       a.created_at,\n" +
+"       a.descripcion,\n" + 
+"       a.estado,\n" + 
+"       a.ganancia_precio_especial,\n" + 
+"       a.ganancia_precio_mayorista,\n" + 
+"       a.ganancia_precio_publico,\n" + 
+"       a.impuesto,\n" + 
+"       a.precio_especial,\n" + 
+"       a.precio_mayorista,\n" + 
+"       a.precio_publico,\n" + 
+"       a.tipo_codigo,\n" + 
+"       a.tipo_impuesto,\n" + 
+"       a.unidad_medida,\n" + 
+"       a.updated_at,\n" + 
+"       (select c.descripcion from categorias c where c.id = a.categoria_id) categoria,\n" +
+"       (select m.descripcion from marcas m where m.id = a.marca_id) marca,\n" + 
+"       a.cantidad,\n"
+		+ " a.maximo,a.minimo,\n" + 
+"       a.prioridad,\n" + 
+		"   a.fecha_compra,\n" + 
+"       a.peso_transporte,\n" + 
+		"   a.tipo_impuesto1,\n" + 
+"       a.cons_compra, \n" + 
+		"   a.impuesto1,\n" + 
+"       a.base_imponible, \n" + 
+		"   a.cod_tarifa, \n" +
+"       a.cod_tarifa1,\n" + 
+		"   (COALESCE((SELECT kardex.cantidad_nueva FROM kardex \n" + 
+"    WHERE kardex.codigo = a.codigo  \n" + 
+		"    and kardex.created_at >= :fechaInicial \n" + 
+"        and kardex.created_at <= :fechaFinal \n" + 
+		"    ORDER by kardex.created_at desc LIMIT 1),0)) cant_actual\n" + 
+"FROM articulos a where a.empresa_id = :ID_EMPRESA")
 @Entity
 public class ArticuloByFechaNative implements Serializable {
 
-	private static final long serialVersionUID = 3807188734031661970L;
+	private static final long	serialVersionUID	= 3807188734031661970L;
 
 	@Id
 	@Column(name = "id")
@@ -103,10 +105,10 @@ public class ArticuloByFechaNative implements Serializable {
 	@Column(name = "estado")
 	private String						estado;
 
-	@Column(name = "tipo_impuesto", length=2)
+	@Column(name = "tipo_impuesto", length = 2)
 	private String						tipoImpuesto;
 	// Tipo de codigo del producto
-	@Column(name = "tipo_codigo", length=2)
+	@Column(name = "tipo_codigo", length = 2)
 	private String						tipoCodigo;
 
 	@Column(name = "maximo")
@@ -123,14 +125,11 @@ public class ArticuloByFechaNative implements Serializable {
 	private Date							updated_at;
 
 	@Column(name = "marca")
-	private String							marca;
-
+	private String						marca;
 
 	@Column(name = "categoria")
-	private String					categoria;
+	private String						categoria;
 
-	
-	
 	@Column(name = "prioridad")
 	private Integer						prioridad;
 
@@ -144,226 +143,197 @@ public class ArticuloByFechaNative implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_compra")
 	private Date							fechaUltimaCompra;
+	
+
 
 	@Column(name = "tipo_impuesto1")
 	private String						tipoImpuesto1;
 
 	@Column(name = "impuesto1")
 	private Double						impuesto1;
-	
+
 	@Column(name = "cod_tarifa")
 	private String						codigoTarifa;
-	
+
 	@Column(name = "cod_tarifa1")
 	private String						codigoTarifa1;
 
 	@Column(name = "base_imponible")
 	private Integer						baseImponible;
-	
+
 	@Column(name = "cant_actual")
 	private Double						cantidadActual;
 
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
 	public String getCodigo() {
 		return codigo;
 	}
 
-	
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 
-	
 	public String getDescripcion() {
 		return descripcion;
 	}
 
-	
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
-	
 	public String getUnidadMedida() {
 		return unidadMedida;
 	}
 
-	
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
 	}
 
-	
 	public String getContable() {
 		return contable;
 	}
 
-	
 	public void setContable(String contable) {
 		this.contable = contable;
 	}
 
-	
 	public Double getCosto() {
 		return costo;
 	}
 
-	
 	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
 
-	
 	public Double getImpuesto() {
 		return impuesto;
 	}
 
-	
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	
 	public Double getPrecioPublico() {
 		return precioPublico;
 	}
 
-	
 	public void setPrecioPublico(Double precioPublico) {
 		this.precioPublico = precioPublico;
 	}
 
-	
 	public Double getGananciaPrecioPublico() {
 		return gananciaPrecioPublico;
 	}
 
-	
 	public void setGananciaPrecioPublico(Double gananciaPrecioPublico) {
 		this.gananciaPrecioPublico = gananciaPrecioPublico;
 	}
 
-	
 	public Double getPrecioMayorista() {
 		return precioMayorista;
 	}
 
-	
 	public void setPrecioMayorista(Double precioMayorista) {
 		this.precioMayorista = precioMayorista;
 	}
 
-	
 	public Double getGananciaPrecioMayorista() {
 		return gananciaPrecioMayorista;
 	}
 
-	
 	public void setGananciaPrecioMayorista(Double gananciaPrecioMayorista) {
 		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
 	}
 
-	
 	public Double getPrecioEspecial() {
 		return precioEspecial;
 	}
 
-	
 	public void setPrecioEspecial(Double precioEspecial) {
 		this.precioEspecial = precioEspecial;
 	}
 
-	
 	public Double getGananciaPrecioEspecial() {
 		return gananciaPrecioEspecial;
 	}
 
-	
 	public void setGananciaPrecioEspecial(Double gananciaPrecioEspecial) {
 		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
 	}
 
-	
 	public Double getCantidad() {
 		return cantidad;
 	}
 
-	
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	
 	public Double getMinimo() {
 		return minimo;
 	}
 
-	
 	public void setMinimo(Double minimo) {
 		this.minimo = minimo;
 	}
 
-	
 	public String getEstado() {
 		return estado;
 	}
 
-	
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
-	
 	public String getTipoImpuesto() {
 		return tipoImpuesto;
 	}
 
-	
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
 	}
 
-	
 	public String getTipoCodigo() {
 		return tipoCodigo;
 	}
 
-	
 	public void setTipoCodigo(String tipoCodigo) {
 		this.tipoCodigo = tipoCodigo;
 	}
 
-	
 	public Double getMaximo() {
 		return maximo;
 	}
 
-	
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
 	}
 
-	
 	public Date getCreated_at() {
 		return created_at;
 	}
-
-	
+	public String getCreated_atSTR() {
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
+		}
+		return Constantes.EMPTY;
+	}
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
-
-	
+	public String getUpdated_atSTR() {
+		if (this.updated_at != null) {
+			return Utils.getFechaGeneraReporte(this.updated_at);
+		}
+		return Constantes.EMPTY;
+	}
 	public Date getUpdated_at() {
 		return updated_at;
 	}
@@ -373,125 +343,130 @@ public class ArticuloByFechaNative implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	
 	public String getMarca() {
 		return marca;
 	}
 
-	
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
 
-	
 	public String getCategoria() {
 		return categoria;
 	}
 
-	
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 
-	
 	public Integer getPrioridad() {
 		return prioridad;
 	}
 
-	
 	public void setPrioridad(Integer prioridad) {
 		this.prioridad = prioridad;
 	}
 
-	
 	public Double getPesoTransporte() {
 		return pesoTransporte;
 	}
 
-	
 	public void setPesoTransporte(Double pesoTransporte) {
 		this.pesoTransporte = pesoTransporte;
 	}
 
-	
 	public String getConsecutivoCompra() {
 		return consecutivoCompra;
 	}
 
-	
 	public void setConsecutivoCompra(String consecutivoCompra) {
 		this.consecutivoCompra = consecutivoCompra;
 	}
 
-	
 	public Date getFechaUltimaCompra() {
 		return fechaUltimaCompra;
 	}
 
-	
 	public void setFechaUltimaCompra(Date fechaUltimaCompra) {
 		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 
-	
 	public String getTipoImpuesto1() {
 		return tipoImpuesto1;
 	}
 
-	
 	public void setTipoImpuesto1(String tipoImpuesto1) {
 		this.tipoImpuesto1 = tipoImpuesto1;
 	}
 
-	
 	public Double getImpuesto1() {
 		return impuesto1;
 	}
 
-	
 	public void setImpuesto1(Double impuesto1) {
 		this.impuesto1 = impuesto1;
 	}
 
-	
 	public String getCodigoTarifa() {
 		return codigoTarifa;
 	}
 
-	
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
 	}
 
-	
 	public String getCodigoTarifa1() {
 		return codigoTarifa1;
 	}
 
-	
 	public void setCodigoTarifa1(String codigoTarifa1) {
 		this.codigoTarifa1 = codigoTarifa1;
 	}
 
-	
 	public Integer getBaseImponible() {
 		return baseImponible;
 	}
 
-	
 	public void setBaseImponible(Integer baseImponible) {
 		this.baseImponible = baseImponible;
 	}
 
-	
 	public Double getCantidadActual() {
 		return cantidadActual;
 	}
 
-	
 	public void setCantidadActual(Double cantidadActual) {
 		this.cantidadActual = cantidadActual;
 	}
+
+	public String getCantidadActualSTR() {
+		Double resultado = this.cantidad == null ? Constantes.ZEROS_DOUBLE : this.cantidad;
+		Double resultadoCantidadActual = this.cantidadActual == null ? Constantes.ZEROS_DOUBLE : this.cantidadActual;
+		resultadoCantidadActual = resultadoCantidadActual > Constantes.ZEROS_DOUBLE ? resultadoCantidadActual : resultado;
+
+		return Utils.formateadorMiles(resultadoCantidadActual);
+	}
+
+	public Double getCantidadActualReal() {
+		Double resultado = this.cantidad == null ? Constantes.ZEROS_DOUBLE : this.cantidad;
+		Double resultadoCantidadActual = this.cantidadActual == null ? Constantes.ZEROS_DOUBLE : this.cantidadActual;
+		resultadoCantidadActual = resultadoCantidadActual > Constantes.ZEROS_DOUBLE ? resultadoCantidadActual : resultado;
+
+		return resultadoCantidadActual;
+	}
+	public Double getTotalCosto() {
+		Double costoTem = this.costo != null ? this.costo : Constantes.ZEROS_DOUBLE;
+		Double cantidadTem = this.getCantidadActualReal() != null ? this.getCantidadActualReal() : Constantes.ZEROS_DOUBLE;
+		return costoTem * cantidadTem;
+	}
+	
+	public Double getTotalPrecioPublico() {
+		Double precioPublicoTem = this.precioPublico != null ? this.precioPublico : Constantes.ZEROS_DOUBLE;
+		Double cantidadTem = this.getCantidadActualReal() != null ? this.getCantidadActualReal() : Constantes.ZEROS_DOUBLE;
+		return precioPublicoTem * cantidadTem;
+
+	}
+
 
 
 	@Override
@@ -533,7 +508,6 @@ public class ArticuloByFechaNative implements Serializable {
 		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -711,8 +685,5 @@ public class ArticuloByFechaNative implements Serializable {
 			return false;
 		return true;
 	}
-
-	
-	
 
 }

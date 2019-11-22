@@ -48,14 +48,16 @@ public class GraficoVentasDaoImpl implements GraficoVentasDao {
 
 
 	@Override
-	public void actualizarGraficoVenta(Integer anno) throws Exception  {
+	public void actualizarGraficoVenta(Integer anno,Integer mes) throws Exception  {
 		try {
 			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_GRAFICO_VENTAS);
 			
 			// set parametros entrada
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_GRAFICO_VENTAS_ANNO_IN, Integer.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_GRAFICO_VENTAS_MES_IN, Integer.class, ParameterMode.IN);
 		
 			storedProcedure.setParameter(Constantes.SP_GRAFICO_VENTAS_ANNO_IN, anno);
+			storedProcedure.setParameter(Constantes.SP_GRAFICO_VENTAS_MES_IN, mes);
 			
 			storedProcedure.execute();
 		

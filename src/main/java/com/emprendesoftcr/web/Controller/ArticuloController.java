@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,6 +55,8 @@ import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
@@ -229,22 +233,74 @@ public class ArticuloController {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		return articuloBo.sumarInventarios(usuario.getEmpresa().getId(),fechaI,fechaF);
 	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticulosActivosFechaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosFechaActivosAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) {
+
+		// Se buscan las facturas
+		Date fechaI = Utils.parseDate(fechaInicio);
+		Date fechaF = Utils.parseDate(fechaInicio);
+		if (fechaF == null) {
+			fechaF = new Date(System.currentTimeMillis());
+		}
+		if (fechaF != null && fechaF != null) {
+			fechaF = Utils.sumarDiasFecha(fechaF, 1);
+		}
+		
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaI);
+		String fin1 = dateFormat1.format(fechaF);
+		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+	
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
+		for (ArticuloByFechaNative articuloByFechaNative : objetos) {
+			solicitudList.add(articuloByFechaNative);
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+		
+
+	}
+
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioAjax.do", method = RequestMethod.GET)
-	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
 
 		// Se buscan las facturas
-		Collection<Articulo> articulos = articuloBo.articulosBy(usuario.getEmpresa());
+		Date fechaI = Utils.parseDate(fechaInicio);
+		Date fechaF = Utils.parseDate(fechaInicio);
+		if (fechaF == null) {
+			fechaF = new Date(System.currentTimeMillis());
+		}
+		if (fechaF != null && fechaF != null) {
+			fechaF = Utils.sumarDiasFecha(fechaF, 1);
+		}
+		
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaI);
+		String fin1 = dateFormat1.format(fechaF);
+	
+		// Se buscan las facturas
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
 
 		String nombreArchivo = "Inventario.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelArticulos(articulos);
+		ByteArrayOutputStream baos = createExcelArticulos(objetos);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
@@ -255,29 +311,43 @@ public class ArticuloController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelArticulos(Collection<Articulo> articulos) {
+	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative>  articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
-		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
+		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
 
 //Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioExistenciasAjax.do", method = RequestMethod.GET)
-	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
 
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	// Se buscan las facturas
+			Date fechaI = Utils.parseDate(fechaInicio);
+			Date fechaF = Utils.parseDate(fechaInicio);
+			if (fechaF == null) {
+				fechaF = new Date(System.currentTimeMillis());
+			}
+			if (fechaF != null && fechaF != null) {
+				fechaF = Utils.sumarDiasFecha(fechaF, 1);
+			}
+			
+			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+			String inicio1 = dateFormat1.format(fechaI);
+			String fin1 = dateFormat1.format(fechaF);
+		
+			// Se buscan las facturas
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
 
-		// Se buscan las facturas
-		Collection<Articulo> articulos = articuloBo.articulosOrderCategoria(usuario.getEmpresa());
 
 		String nombreArchivo = "InventarioExistencias.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelArticulosExistencias(articulos);
+		ByteArrayOutputStream baos = createExcelArticulosExistencias(objetos);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
@@ -288,11 +358,11 @@ public class ArticuloController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<Articulo> articulos) {
+	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative>  articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos, " categoria.descripcion,codigo, descripcion, cantidad", baos);
+		new SimpleExporter().gridExport(headers, articulos, " categoria,codigo, descripcion, cantidadActualReal", baos);
 		return baos;
 	}
 
@@ -348,7 +418,8 @@ public class ArticuloController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-
+	
+	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosUsoInternoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody

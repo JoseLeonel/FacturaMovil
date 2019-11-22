@@ -103,7 +103,6 @@ import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
-import com.emprendesoftcr.web.command.TurismoCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -1228,7 +1227,7 @@ public class FacturasController {
 				totalDescuentos = totalDescuentos + factura.getTotalDescuentos();
 				totalOtrosCargos = totalOtrosCargos + factura.getTotalOtrosCargos();
 				total = total + factura.getTotalComprobante();
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)  ) {
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 					totalVentasGravadas_n = totalVentasGravadas_n + factura.getTotalGravado();
 					totalVentasExentas_n = totalVentasExentas_n + factura.getTotalExento();
 					totalVentasNetas_n = totalVentasNetas_n + factura.getTotalVentaNeta();
@@ -1236,7 +1235,7 @@ public class FacturasController {
 					totalDescuentos_n = totalDescuentos_n + factura.getTotalDescuentos();
 					totalOtrosCargos_n = totalOtrosCargos_n + factura.getTotalOtrosCargos();
 					total_n = total_n + factura.getTotalComprobante();
-					
+
 				}
 			}
 		}
@@ -1246,20 +1245,20 @@ public class FacturasController {
 		modelEmail.put("cedula", usuarioSesion.getEmpresa().getCedula());
 		modelEmail.put("fechaInicial", fechaInicio);
 		modelEmail.put("fechaFinal", fechaFin);
-		modelEmail.put("totalVentasGravadas",Utils.formateadorMiles(totalVentasGravadas));
+		modelEmail.put("totalVentasGravadas", Utils.formateadorMiles(totalVentasGravadas));
 		modelEmail.put("totalVentasExentas", Utils.formateadorMiles(totalVentasExentas));
 		modelEmail.put("totalVentasNetas", Utils.formateadorMiles(totalVentasNetas));
 		modelEmail.put("totalImpuestos", Utils.formateadorMiles(totalImpuestos));
 		modelEmail.put("totalDescuentos", Utils.formateadorMiles(totalDescuentos));
 		modelEmail.put("totalOtrosCargos", Utils.formateadorMiles(totalOtrosCargos));
 		modelEmail.put("total", Utils.formateadorMiles(total));
-		modelEmail.put("totalVentasGravadas_n", Utils.formateadorMiles(totalVentasGravadas_n ));
-		modelEmail.put("totalVentasExentas_n", Utils.formateadorMiles(totalVentasExentas_n ));
-		modelEmail.put("totalVentasNetas_n", Utils.formateadorMiles(totalVentasNetas_n ));
+		modelEmail.put("totalVentasGravadas_n", Utils.formateadorMiles(totalVentasGravadas_n));
+		modelEmail.put("totalVentasExentas_n", Utils.formateadorMiles(totalVentasExentas_n));
+		modelEmail.put("totalVentasNetas_n", Utils.formateadorMiles(totalVentasNetas_n));
 		modelEmail.put("totalImpuestos_n", Utils.formateadorMiles(totalImpuestos_n));
-		modelEmail.put("totalDescuentos_n", Utils.formateadorMiles(totalDescuentos_n ));
-		modelEmail.put("totalOtrosCargos_n", Utils.formateadorMiles(totalOtrosCargos_n ));
-		modelEmail.put("total_n", Utils.formateadorMiles(total_n ));
+		modelEmail.put("totalDescuentos_n", Utils.formateadorMiles(totalDescuentos_n));
+		modelEmail.put("totalOtrosCargos_n", Utils.formateadorMiles(totalOtrosCargos_n));
+		modelEmail.put("total_n", Utils.formateadorMiles(total_n));
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_LISTAR_FACTURAS, modelEmail);
 	}
@@ -1666,7 +1665,7 @@ public class FacturasController {
 		try {
 
 			Usuario usuario = null;
-			
+
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
@@ -1893,10 +1892,16 @@ public class FacturasController {
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
+			List<Object> solicitudList = new ArrayList<Object>();
+			if (factura.getEmpresa().getImprimirSiempre() == 1) {
+				Collection<Detalle> objetos = detalleBo.findbyIdFactura(factura.getId());
+				for (Detalle detalle : objetos) {
+					solicitudList.add(new DetalleFacturaCommand(detalle));
+				}
 
+			}
 
-
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", solicitudList.size() > 0 ? solicitudList : factura);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
