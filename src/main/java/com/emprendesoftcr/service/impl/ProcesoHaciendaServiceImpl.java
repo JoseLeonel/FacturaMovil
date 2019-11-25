@@ -338,36 +338,35 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	// @Scheduled(cron = "0 0/1 * * * ?")
-	@Override
-	public synchronized void procesoCambiarConsecutivo() throws Exception {
+	 @Scheduled(cron = "0 0/1 * * * ?")
+		@Override
+		public synchronized void procesoCambiarConsecutivo() throws Exception {
 
-		Date fechaInicio = Utils.parseDate("2019-08-01");
-		Date fechaFinal = Utils.parseDate("2019-08-31");
-		if (fechaFinal == null) {
-			fechaFinal = new Date(System.currentTimeMillis());
-		}
-		if (fechaFinal != null && fechaFinal != null) {
-			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-		}
-		Integer contador = 0;
+			Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(2, 2);
+			log.info("Inicio de actualizar estado - {}", formatter.format(LocalDateTime.now()));
+			Integer cont =0;
+			for (Factura factura : listaHacienda) {
 
-		Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndEstadoAndFechas(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, fechaInicio, fechaFinal);
-		for (Hacienda hacienda : listaHacienda) {
+				Hacienda hacienda  = haciendaBo.findByEmpresaAndClave(factura.getEmpresa(),factura.getClave());
+				
+				if (cont >= 100) {
+					cont = 0;
+					log.info(cont + "contador - {}", formatter.format(LocalDateTime.now()));
+				}
 
-			Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
+				if (hacienda != null) {
+					if(hacienda.getEstado() == 7 || hacienda.getEstado() == 6  ) {
+						cont +=1;
+						factura.setEstado(hacienda.getEstado());
+						facturaBo.modificar(factura);
+						
+					}
 
-			if (factura != null) {
-				contador += 1;
-				log.info("Total:" + contador + " clave actual: " + factura.getClave() + " clave anterior " + factura.getReferenciaNumero());
-				factura.setEstado(hacienda.getEstado());
-				facturaBo.modificar(factura);
-
+				}
 			}
+			log.info("fin de actualizar estado - {}", formatter.format(LocalDateTime.now()));
+
 		}
-
-	}
-
 	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {

@@ -589,8 +589,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "Fecha Emision", "# Documento", "#Proforma", "Cedula", "Cliente", "A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaCliente, nombreCliente,nombreFactura, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
+		List<String> headers = Arrays.asList("Cedula", "Cliente", "A nombre","Fecha Emision","Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito",  "# Documento", "#Proforma",  "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
+		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaCliente, nombreCliente,nombreFactura,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR, numeroConsecutivo,consecutivoProforma, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,referenciaNumero,nota", baos);
 		return baos;
 	}
 
@@ -1162,8 +1162,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelListar(Collection<ListarFacturasNativa> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Emision", "# Documento", "#Proforma", "Cedula", "Cliente", "A nombre", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma,cedulaPrin, nombreCompleto,nombreFactura, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,referenciaNumero,nota", baos);
+		List<String> headers = Arrays.asList("Fecha Emision","Cedula", "Cliente", "A nombre","Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta",  "# Documento", "#Proforma",  "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Clave Referencia Factura/tiquete aplico Nota Credito", "Nota");
+		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,referenciaNumero,nota", baos);
 		return baos;
 	}
 

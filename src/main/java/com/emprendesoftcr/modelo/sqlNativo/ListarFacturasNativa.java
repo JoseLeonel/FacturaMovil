@@ -62,7 +62,7 @@ import com.emprendesoftcr.fisco.MapEnums;
 + " and fac.tipo_doc  "
 + " and fac.act_comercial "
 + " and fac.estado "
-+ " and fac.usuario_id ")
++ " and fac.usuario_id order by fac.cliente_id,fac.created_at asc ")
 @Entity
 public class ListarFacturasNativa implements Serializable {
 
