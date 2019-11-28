@@ -17,6 +17,10 @@ public class MapEnums {
        put(0, "Desactivo")
        .build();
 
+	public static final Map<Integer, String> ENUM_TIPO_PAGO_CONTROL_PAGO = ImmutableMap.<Integer, String>builder()
+  		.put(1, "Efectivo").
+       put(2, "Transferencia")
+       .build();
 	
    public static final Map<Integer, String> ENUM_ESTADO_HACIENTA = ImmutableMap.<Integer, String>builder()
   		.put(1, "Pendiente Firmar xml").

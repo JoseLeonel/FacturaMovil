@@ -338,7 +338,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	 @Scheduled(cron = "0 0/1 * * * ?")
+//	 @Scheduled(cron = "0 0/1 * * * ?")
 		@Override
 		public synchronized void procesoCambiarConsecutivo() throws Exception {
 
