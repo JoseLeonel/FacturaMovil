@@ -323,7 +323,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 
-	@Scheduled(cron = "0 0/10 04 * * ?")
+//	@Scheduled(cron = "0 0/10 04 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -368,7 +368,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("fin de actualizar estado - {}", formatter.format(LocalDateTime.now()));
 
 		}
-	@Scheduled(cron = "0 0/50 22 * 6 ?")
+//	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {

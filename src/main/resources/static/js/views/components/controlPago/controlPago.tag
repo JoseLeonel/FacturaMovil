@@ -29,25 +29,44 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <label  >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selectCategoria campoNumerico "   name="categoria" data-live-search="true">
-                                            <option  each={empresas.aaData}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
-                                        </select>
+                                        <div class="form-group">
+                                            <label  >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
+                                            <select  class="form-control selectEmpresa  "   name="selectEmpresa" data-live-search="true">
+                                                 <option  each={empresas.data}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
+                                            </select>
+                                        </div>
                                     </div>   
                                     <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra">{$.i18n.prop("controlPago.tipoPago")}</label>
-                                        <select  class="form-control selectTipoCodigo campoNumerico" id="tipoCodigo" name="tipoCodigo"  >
-                                            <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
-                                        </select>
+                                        <div class="form-group">
+                                            <label class="tamanoLetra">{$.i18n.prop("controlPago.tipoPago")}</label>
+                                            <select  class="form-control selectTipoPago " id="tipoPago" name="tipoPago"  >
+                                                <option  each={tipoPagos}  value="{codigo}" selected="{controlPago.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra" >{$.i18n.prop("controlPago.fechaPago")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}"  >
+                                        <div class="form-group">
+                                            <label class="knob-label" >{$.i18n.prop("controlPago.fechaPago")} <span class="requeridoDato">*</span></label>
+                                            <div  class="form-group input-group date datepickerFechaPago" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                                <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly>
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>	                             
+                                        </div>  
+                                                          
                                     </div>
                                     <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra" >{$.i18n.prop("controlPago.fechaLimite")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}"  >
+                                        <div class="form-group">
+                                            <label class="knob-label" >{$.i18n.prop("controlPago.fechaLimite")}<span class="requeridoDato">*</span></label>
+                                            <div  class="form-group input-group date datepickerFechaPago" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                                <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly>
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>	                             
+                                        </div>  
                                     </div>
                                   
                                 </div> 
@@ -92,23 +111,23 @@
 <!-- Fin Formulario -->   
 
 <style type ="text/css">
-.scrollerT {
-    width: 100% !important;
-    height: 650px;
-    overflow-y: scroll;
-}
-.botones{
-    margin-bottom: 0.5%;
-}
-.tituloBotones{
-    display: flex;
-}
-.articulo-title{
-   font-size: 20px;
-    font-weight: 600;
-    flex: 1;
+    .scrollerT {
+        width: 100% !important;
+        height: 650px;
+        overflow-y: scroll;
+    }
+    .botones{
+        margin-bottom: 0.5%;
+    }
+    .tituloBotones{
+        display: flex;
+    }
+    .articulo-title{
+    font-size: 20px;
+        font-weight: 600;
+        flex: 1;
 
-}
+    }
         .campoNumerico {
         display: block;
         width: 100%;
@@ -208,20 +227,73 @@
     self.mostrarFormularioSalida     = false
     self.mostrarBotonAgregarEntrada  = false
     self.mostrarBotonAgregarSalida   = false 
-   
+    self.empresas               = {data:[]}
+    self.tipoPagos =[]
+    self.estados =[]
 
 self.on('mount',function(){
     __Eventos()
     __Consulta()
-    
-   
+    listaEmpresasActivas()
+    __tipoPagos() 
+    __ComboEstados()
 
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
-
+/**
+*  Crear el combo comanda
+**/
+function __ComboEstados(){
+    self.estados =[]
+    self.update()
+    self.estados.push({
+        codigo: $.i18n.prop("combo.estado.Activo"),
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+    self.estados.push({
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+     self.update();
+}
+function __tipoPagos(){
+    self.tipoPagos =[]
+    self.update()
+    self.tipoPagos.push({
+        codigo:1,
+        descripcion:'Efectivo'
+     });
+    self.tipoPagos.push({
+        codigo:2,
+        descripcion:'Transferencia'
+     });
+     self.update();
+}
+/**
+*  Obtiene la lista de las empresas activas
+**/
+function listaEmpresasActivas(){
+	$.ajax({
+		 url: "ListarEmpresasAjax.do",
+		 datatype: "json",
+		 global: false,
+		 method:"GET",
+		 success: function (result) {
+				if(result.aaData.length > 0){
+                   self.empresas.data = result.aaData
+                   self.update() 
+					$('.selectEmpresa').selectpicker();
+				} 
+		 },
+		 error: function (xhr, status) {
+			  mensajeErrorServidor(xhr, status);
+			  console.log(xhr);
+		 }
+	})
+}
 
 /**
 *  Consultar  especifico
