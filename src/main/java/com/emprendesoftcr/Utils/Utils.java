@@ -82,6 +82,13 @@ public final class Utils {
 
 	public static Double Maximo5Decimales(Double valor) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
+		if(valor == null) {
+			return resultado;	
+		}
+		if(valor.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
 		String[] splitter = valor.toString().split("\\.");
 		splitter[0].length(); // Before Decimal Count
 		splitter[1].length(); // After Decimal Count
@@ -138,7 +145,7 @@ public final class Utils {
 
 		}
 
-		DecimalFormat formateador = new DecimalFormat("###,###,##0.00");
+		DecimalFormat formateador = new DecimalFormat("#,##0.0");
 		resultado = formateador.format(valor);
 
 		return resultado;

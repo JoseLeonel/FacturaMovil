@@ -36,6 +36,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasTableNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -512,6 +513,52 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
 		Query query = entityManager.createNativeQuery(queryStr, ArticuloByFechaNative.class);
 		return (Collection<ArticuloByFechaNative>) query.getResultList();
+	}
+
+	@Override
+	public Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
+		String queryStr = getQueryBase(ListarFacturasTableNativa.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+
+		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", "");
+
+		} else {
+			queryStr = queryStr.replaceAll("and fac.act_comercial", " and fac.act_comercial in ('" + actividadComercial + "') ");
+		}
+
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", "and fac.usuario_id ='" + idUsuario.toString() + "' ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.usuario_id", " ");
+		}
+		if (cliente != null) {
+			queryStr = queryStr.replaceAll("and fac.cliente_id", " and fac.cliente_id =" + cliente.getId().toString() + " ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.cliente_id ", " ");
+		}
+		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+			if(tipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('03','86' ) ");
+			}else {
+				queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('" + tipoDocumento + "') ");	
+			}
+			
+		} else {
+			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('04','86','87','01','03') ");
+		}
+
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + estado + ") ");
+		} else {
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7,5" + ") ");
+		}
+
+		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasTableNativa.class);
+		return (Collection<ListarFacturasTableNativa>) query.getResultList();
 	}
 
 }

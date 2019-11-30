@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
-import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -26,6 +25,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasTableNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -48,6 +48,7 @@ public interface ConsultasNativeDao {
 	Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa, Integer idusuario, String estado, String fecha);
 
 	Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
+	Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
 
 	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente, String codigo);
 

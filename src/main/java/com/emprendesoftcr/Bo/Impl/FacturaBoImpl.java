@@ -675,7 +675,7 @@ public class FacturaBoImpl implements FacturaBo {
 			precioUnitario = Constantes.ZEROS_DOUBLE;
 			costo = Constantes.ZEROS_DOUBLE;
 			if (detalleFacturaCommand.getPrecioUnitario() != null) {
-				precioUnitario = Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario();
+				precioUnitario = Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario());
 			}
 			if (articulo != null) {
 				if (articulo.getCosto() != null) {
@@ -683,12 +683,12 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento());
+			gananciaProducto = Utils.Maximo5Decimales(getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
-			detalle.setCosto(costo);
+			detalle.setCosto(Utils.Maximo5Decimales(costo));
 			detalle.setGanancia(gananciaProducto);
 			detalle.setMontoGanancia(gananciaProducto);
 			detalle.setPorcentajeGanancia(getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
@@ -711,15 +711,15 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoTotal(getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
 			detalle.setMontoDescuento(getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
 			detalle.setSubTotal(getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
-			detalle.setMontoImpuesto1(getMontoImpuestoSin13(detalle.getSubTotal(), detalle.getImpuesto1()));
-			detalle.setMontoExoneracion(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto()));
-			detalle.setMontoExoneracion1(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto1()));
+			detalle.setMontoImpuesto1(Utils.Maximo5Decimales(getMontoImpuestoSin13(detalle.getSubTotal(), detalle.getImpuesto1())));
+			detalle.setMontoExoneracion(Utils.Maximo5Decimales(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto())));
+			detalle.setMontoExoneracion1(Utils.Maximo5Decimales(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto1())));
 
-			detalle.setMontoImpuesto(getMontoImpuestoCon13(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion1(), detalle.getImpuesto()));
+			detalle.setMontoImpuesto(Utils.Maximo5Decimales(getMontoImpuestoCon13(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion1(), detalle.getImpuesto())));
 
-			detalle.setImpuestoNeto(getImpuestoNetoTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion() + detalle.getMontoExoneracion1()));
+			detalle.setImpuestoNeto(Utils.Maximo5Decimales(getImpuestoNetoTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion() + detalle.getMontoExoneracion1())));
 			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
-			detalle.setBaseImponible(getBaseImponibleTotal(articulo.getTipoImpuesto(), detalle.getSubTotal(), baseImponible));
+			detalle.setBaseImponible(Utils.Maximo5Decimales(getBaseImponibleTotal(articulo.getTipoImpuesto(), detalle.getSubTotal(), baseImponible)));
 
 			detalle.setNaturalezaDescuento(detalle.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
 			detalle.setNumeroLinea(numeroLinea);
@@ -746,7 +746,7 @@ public class FacturaBoImpl implements FacturaBo {
 			montoTotalLinea = getMontoTotalLinea(detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getImpuestoNeto(), detalle.getTipoDocumentoExoneracion());
 			totalComprobante = totalComprobante + montoTotalLinea;
 
-			detalle.setMontoTotalLinea(montoTotalLinea);
+			detalle.setMontoTotalLinea(Utils.Maximo5Decimales(montoTotalLinea));
 			descuentoTotal = descuentoTotal + detalle.getMontoDescuento();
 			subTotal = subTotal + detalle.getSubTotal();
 			detalle.setNumeroLinea(numeroLinea);
@@ -779,17 +779,35 @@ public class FacturaBoImpl implements FacturaBo {
 		totalVentaNeta = totalVenta - totalDescuentos;
 
 		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
-			factura.setTotalOtrosCargos(totalOtrosCargos);
+			factura.setTotalOtrosCargos(Utils.Maximo5Decimales(totalOtrosCargos));
 		} else {
 			if (factura.getTotalOtrosCargos() != null) {
-				factura.setTotalOtrosCargos(factura.getTotalOtrosCargos());
+				factura.setTotalOtrosCargos(Utils.Maximo5Decimales(factura.getTotalOtrosCargos()));
 				totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
 
 			}
 		}
 		totalComprobante = factura.getTotalOtrosCargos() + totalImpuesto + totalVentaNeta;
 		totalComprobante = totalComprobante - totalIVADevuelto;
-
+		
+		totalComprobante = Utils.Maximo5Decimales(totalComprobante);
+		totalIVADevuelto = Utils.Maximo5Decimales(totalIVADevuelto);
+		totalImpuesto = Utils.Maximo5Decimales(totalImpuesto);
+		totalServExonerado = Utils.Maximo5Decimales(totalServExonerado);
+		totalMercExonerada = Utils.Maximo5Decimales(totalMercExonerada);
+		totalExonerado = Utils.Maximo5Decimales(totalExonerado);
+		totalMercanciasGravadas = Utils.Maximo5Decimales(totalMercanciasGravadas);
+		totalMercanciasExentas = Utils.Maximo5Decimales(totalMercanciasExentas);
+		totalServExentos = Utils.Maximo5Decimales(totalServExentos);
+		totalServGravados = Utils.Maximo5Decimales(totalServGravados);
+		totalGravado = Utils.Maximo5Decimales(totalGravado);
+		totalExento = Utils.Maximo5Decimales(totalExento);
+		totalVenta = Utils.Maximo5Decimales(totalVenta);
+		totalVentaNeta = Utils.Maximo5Decimales(totalVentaNeta);
+		totalDescuentos = Utils.Maximo5Decimales(totalDescuentos);
+		totalImpServicios = Utils.Maximo5Decimales(totalImpServicios);
+		 
+		
 		factura.setTotalServExonerado(Utils.aplicarRedondeo(totalServExonerado) ? Utils.roundFactura(totalServExonerado, 5) : totalServExonerado);
 		factura.setTotalMercExonerada(Utils.aplicarRedondeo(totalMercExonerada) ? Utils.roundFactura(totalMercExonerada, 5) : totalMercExonerada);
 		factura.setTotalExonerado(Utils.aplicarRedondeo(totalExonerado) ? Utils.roundFactura(totalExonerado, 6) : totalExonerado);

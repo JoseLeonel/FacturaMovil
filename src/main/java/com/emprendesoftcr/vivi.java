@@ -16,10 +16,13 @@ public class vivi {
 		// TODO Auto-generated method stub
 //		Double valor = 9.29204;
 //		
+		Double resultado = Utils.Maximo5Decimales(12045.132755840703d);
+		Double resultado1 = Utils.Maximo5Decimales(12045.132751399999);
 		
 			
 //	 
-       	System.out.println("Hay "+Utils.fechaDiaAnterior(new Date(),new Date()) +" dias de diferencia");
+       	System.out.println("resultado: "+resultado);
+       	System.out.println("resultado: "+resultado1);
 //		String resultado= "45123";
 //			resultado = FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 //			System.out.println(resultado);

@@ -32,6 +32,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasTableNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -184,6 +185,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	@Override
 	public Collection<ArticuloByFechaNative> findByInventario(Empresa empresa, String fechaInicial, String fechaFinal) {
 		return consultasNativeDao.findByInventario(empresa, fechaInicial, fechaFinal);
+	}
+
+	@Override
+	public Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
+		
+		return consultasNativeDao.findByFacturasTableAndFechaAndTipoDocAndUsuario(empresa, idUsuario, estado, fechaInicial, fechaFinal, cliente, tipoDocumento, actividadComercial);
 	}
 
 }

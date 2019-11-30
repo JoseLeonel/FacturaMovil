@@ -44,7 +44,6 @@ import com.emprendesoftcr.fisco.MapEnums;
 		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_comprobante * -1,fac.total_comprobante) AS total_comprobante, \n"
 		+ " fac.id,"
 		+ " fac.tipo_cambio,"
-		+ "(select facturas.numero_consecutivo from facturas where facturas.clave = fac.ref_numero and facturas.empresa_id = fac.empresa_id LIMIT 1 ) ref_numero , \n" 
 		+ " fac.numero_consecutivo,"
 		+ " fac.nombre_factura,"
 		+ " clientes.nombre_completo,"
@@ -56,8 +55,8 @@ import com.emprendesoftcr.fisco.MapEnums;
 + " inner join empresas on empresas.id = fac.empresa_id " 
 + " inner join usuarios on usuarios.id = fac.usuario_id " 
 + " where fac.empresa_id = :ID_EMPRESA "
-+ " and fac.created_at >=  :fechaInicial "
-+ " and  fac.created_at <=  :fechaFinal "
++ " and fac.fecha_emision >=  :fechaInicial "
++ " and  fac.fecha_emision <=  :fechaFinal "
 + " and fac.cliente_id  "
 + " and fac.tipo_doc  "
 + " and fac.act_comercial "
@@ -95,9 +94,7 @@ public class ListarFacturasNativa implements Serializable {
 	@Column(name = "numero_consecutivo")
 	private String						numeroConsecutivo;
 	
-	@Column(name = "ref_numero")
-	private String						referenciaNumero;
-
+	
 
 	@Column(name = "consecutivo_proforma")
 	private String						consecutivoProforma;
@@ -435,104 +432,52 @@ public class ListarFacturasNativa implements Serializable {
 		return Utils.formateadorMiles(this.tipoCambio);
 	}
 	public Double getTotalEfectivoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalEfectivo != null ? totalEfectivo * -1 : 0d;
-		} else {
 			return totalEfectivo;
-		}
 	}
 	
 	public Double getTotalTarjetaNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalTarjeta != null ? totalTarjeta * -1 : 0d;
-		} else {
 			return totalTarjeta;
-		}
 	}
 	public Double getTotalBancoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalBanco != null ? totalBanco * -1 : 0d;
-		} else {
 			return totalBanco;
-		}
 	}
 	public Double getTotalCreditoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalCredito != null ? totalCredito * -1 : 0d;
-		} else {
 			return totalCredito;
-		}
 	}
 	public Double getMontoCambioNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.montoCambio != null ? montoCambio * -1 : 0d;
-		} else {
 			return montoCambio;
-		}
 	}
 	public Double getTotalComprobanteNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalComprobante != null ? totalComprobante * -1 : 0d;
-		} else {
 			return totalComprobante;
-		}
 	}
 	public Double getTotalOtrosCargosNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalOtrosCargos != null ? totalOtrosCargos * -1 : 0d;
-		} else {
 			return totalOtrosCargos;
-		}
 	}
 	public Double getTotalServExentosNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalServExentos != null ? totalServExentos * -1 : 0d;
-		} else {
 			return totalServExentos;
-		}
 	}
 	
 	public Double getTotalColonesNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalComprobante != null ? (totalComprobante * tipoCambio)  : (totalComprobante * tipoCambio);
-		} else {
 			return (totalComprobante * tipoCambio);
-		}
 	}
 	
 	public Double getTotalImpuestoServicioNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalImpuestoServicio != null ? this.totalImpuestoServicio * -1 : this.totalImpuestoServicio;
-		} else {
 			return this.totalImpuestoServicio;
-		}
 	}
 
 	
 	public Double getTotalServGravadosNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalServGravados != null ? totalServGravados * -1 : 0d;
-		} else {
 			return totalServGravados;
-		}
 	}
 
 	public Double getTotalMercanciasGravadas() {
 		return totalMercanciasGravadas;
 	}
 	public Double getTotalMercanciasGravadasNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalMercanciasGravadas != null ? totalMercanciasGravadas * -1 : 0d;
-		} else {
 			return totalMercanciasGravadas;
-		}
 	}
 	public Double getTotalDescuentosNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalDescuentos != null ? totalDescuentos * -1 : 0d;
-		} else {
 			return totalDescuentos;
-		}
 	}
 	
 	public void setTotalMercanciasGravadas(Double totalMercanciasGravadas) {
@@ -545,25 +490,13 @@ public class ListarFacturasNativa implements Serializable {
 	}
 	
 	public Double getTotalVentaNetaNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalVentaNeta != null ? totalVentaNeta * -1 : 0d;
-		} else {
 			return totalVentaNeta;
-		}
 	}
 	public Double getTotalImpuestoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalImpuesto != null ? totalImpuesto * -1 : 0d;
-		} else {
 			return totalImpuesto;
-		}
 	}
 	public Double getTotalMercanciasExentasNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalMercanciasExentas != null ? totalMercanciasExentas * -1 : 0d;
-		} else {
 			return totalMercanciasExentas;
-		}
 	}
 	
 	public void setTotalMercanciasExentas(Double totalMercanciasExentas) {
@@ -575,11 +508,7 @@ public class ListarFacturasNativa implements Serializable {
 		return totalGravado;
 	}
 	public Double getTotalGravadoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalGravado != null ? totalGravado * -1 : 0d;
-		} else {
 			return totalGravado;
-		}
 	}
 	
 	public void setTotalGravado(Double totalGravado) {
@@ -591,11 +520,7 @@ public class ListarFacturasNativa implements Serializable {
 		return totalExento;
 	}
 	public Double getTotalExentoNC() {
-		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.totalExento != null ? totalExento * -1 : 0d;
-		} else {
 			return totalExento;
-		}
 	}
 	
 	public void setTotalExento(Double totalExento) {
@@ -624,15 +549,6 @@ public class ListarFacturasNativa implements Serializable {
 	
 
 	
-	public String getReferenciaNumero() {
-		return referenciaNumero;
-	}
-
-	
-	public void setReferenciaNumero(String referenciaNumero) {
-		this.referenciaNumero = referenciaNumero;
-	}
-
 	
 	public Double getTotalEfectivo() {
 		return totalEfectivo;
@@ -704,7 +620,6 @@ public class ListarFacturasNativa implements Serializable {
 		result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
 		result = prime * result + ((nota == null) ? 0 : nota.hashCode());
 		result = prime * result + ((numeroConsecutivo == null) ? 0 : numeroConsecutivo.hashCode());
-		result = prime * result + ((referenciaNumero == null) ? 0 : referenciaNumero.hashCode());
 		result = prime * result + ((tipoCambio == null) ? 0 : tipoCambio.hashCode());
 		result = prime * result + ((tipoDoc == null) ? 0 : tipoDoc.hashCode());
 		result = prime * result + ((totalBanco == null) ? 0 : totalBanco.hashCode());
@@ -821,11 +736,6 @@ public class ListarFacturasNativa implements Serializable {
 				return false;
 		} else if (!numeroConsecutivo.equals(other.numeroConsecutivo))
 			return false;
-		if (referenciaNumero == null) {
-			if (other.referenciaNumero != null)
-				return false;
-		} else if (!referenciaNumero.equals(other.referenciaNumero))
-			return false;
 		if (tipoCambio == null) {
 			if (other.tipoCambio != null)
 				return false;
@@ -924,6 +834,7 @@ public class ListarFacturasNativa implements Serializable {
 		return true;
 	}
 
+	
 	
 	
 		
