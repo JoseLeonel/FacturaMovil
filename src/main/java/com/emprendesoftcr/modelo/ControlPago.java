@@ -64,6 +64,13 @@ public class ControlPago implements Serializable {
 	
 
 	
+	public ControlPago() {
+		super();
+	}
+
+
+
+
 	public ControlPago(Long id, Date fechaPago, Date fechaLimite, String mensaje, Integer tipoPago, Double totalDolar, Double totalColones, Double tipoCambio, Integer cantidadNotificacion, Integer estado, Empresa empresa) {
 		super();
 		this.id = id;

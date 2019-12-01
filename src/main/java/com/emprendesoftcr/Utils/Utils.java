@@ -1429,6 +1429,13 @@ public final class Utils {
 		String horaStr = hora.format(date);
 		return fechaStr + " " + horaStr;
 	}
+	
+
+	public static String getFechat(Date date) {
+		DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
+		String fechaStr = fecha.format(date);
+		return fechaStr;
+	}
 
 	/**
 	 * Cambiar el formato de fecha

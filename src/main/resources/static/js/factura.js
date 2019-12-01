@@ -56,6 +56,13 @@ function __informacionData_formato_cliente(){
    return informacion_tabla_clientes
 }
 
+function financial(x) {
+	if(x == null || typeof x == "undefined"  ){
+        return 0;
+    } 	
+  return Number.parseFloat(x).toFixed(2);
+}
+
 /**
  * Obtener la cedula de extranjero o fisica o emprsa
  * @param mensaje

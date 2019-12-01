@@ -1,7 +1,7 @@
 <controlPago-crud>
 <div show ={mostrarFormulario}>
 <div class="tituloBotones">
-    <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {controlPago.id !=null  ? $.i18n.prop("titulo.modificar.controlPago")   :$.i18n.prop("titulo.agregar.controlPago")}     </div>
+    <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {controlPago.id !=null  ? $.i18n.prop("titulo.modificar.controlPago")   :$.i18n.prop("titulo.agregar.controlPago")}  </div>
     <div class="botones">
         <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
             {$.i18n.prop("btn.volver")}
@@ -13,86 +13,82 @@
 </div>            
 
  <div class="row scrollerT"  >
-    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-sx-12 col-sm-12 col-md-8 col-lg-8">
         <div id="divFormulario" >
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
-                <input type="hidden" name="id" id="id" value="{articulo.id}">
+                <input type="hidden" name="id" id="id" value="{controlPago.id}">
+                <input type="hidden" id="tipoCambio" name="tipoCambio"   value="{tipoCambio.total}">
+
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
-                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Control de Pago</h4>
+                            <div class="panel-heading tituloContainer" style="background: #3c8dbc; color: white;">
+                                 <div class="elemento1"><h4 class="panel-title">Control de Pago  </h4></div>
+                                 <div class="elemento1"><h4 class='panel-title pull-right'>Tipo Cambio Dolar:{tipoCambio.total}</h4></div>
+                                 
                             </div>
                         </a>             
                         <div id="collapse1" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <div class="form-group">
-                                            <label  >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
-                                            <select  class="form-control selectEmpresa  "   name="selectEmpresa" data-live-search="true">
-                                                 <option  each={empresas.data}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
-                                            </select>
-                                        </div>
+                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
+                                        <label  class="knob-label" >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
+                                        <select  class="form-control selectEmpresa  "   name="selectEmpresa" data-live-search="true">
+                                            <option  each={empresas.data}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
+                                        </select>
                                     </div>   
-                                    <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <div class="form-group">
-                                            <label class="tamanoLetra">{$.i18n.prop("controlPago.tipoPago")}</label>
-                                            <select  class="form-control selectTipoPago " id="tipoPago" name="tipoPago"  >
-                                                <option  each={tipoPagos}  value="{codigo}" selected="{controlPago.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="row">    
+                                    <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
+                                        <label class="knob-label" >{$.i18n.prop("controlPago.fechaPago")} <span class="requeridoDato">*</span></label>
+                                        <div  class="input-group date datepickerFechaPago" data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly value="{controlPago.fechaPagoT}" >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
                                     </div>
-
-                                    <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <div class="form-group">
-                                            <label class="knob-label" >{$.i18n.prop("controlPago.fechaPago")} <span class="requeridoDato">*</span></label>
-                                            <div  class="form-group input-group date datepickerFechaPago" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                                <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly>
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>	                             
-                                        </div>  
-                                                          
-                                    </div>
-                                    <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                                        <div class="form-group">
-                                            <label class="knob-label" >{$.i18n.prop("controlPago.fechaLimite")}<span class="requeridoDato">*</span></label>
-                                            <div  class="form-group input-group date datepickerFechaPago" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                                <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly>
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>	                             
-                                        </div>  
+                                    <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
+                                        <label class="knob-label" >{$.i18n.prop("controlPago.fechaLimite")}</label>
+                                        <div  class="input-group date datepickerFechaLimite" data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaLimite" id="fechaLimite"  name= "fechaLimite" readonly  value="{controlPago.fechaLimiteT}" >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
                                     </div>
                                   
                                 </div> 
                                 <div class="row">   
                                   <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("controlPago.mensaje")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control descripcion campoNumerico" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
+                                        <input type="text" class="form-control mensaje campoNumerico" id="mensaje" name="mensaje" value="{controlPago.mensaje}"  >
                                     </div>
                                 </div>    
                                 <div class="row">   
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
+                                        <label  class="knob-label">{$.i18n.prop("controlPago.tipoPago")}</label>
+                                        <select  class="form-control selectTipoPago " id="tipoPago" name="tipoPago"  >
+                                            <option  each={tipoPagos}  value="{codigo}" selected="{controlPago.tipoPago ==codigo?true:false}"  >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">    
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("controlPago.total.dolares")} </label>
-                                        <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                        <input onkeyup ={__CalculoColones} type="number" step="any" class="form-control totalDolar campoNumerico" id="totalDolar" name="totalDolar" value="{controlPago.totalDolar}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                                        <label  class="tamanoLetra">{$.i18n.prop("controlPago.tipoCambio")}  <span class="requeridoDato">*</span></label>
-                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                        <label  class="tamanoLetra">{$.i18n.prop("controlPago.total.colones")} </label>
+                                        <input onkeyup ={__CalculoDolares}  type="number" step="any" class="form-control totalColones campoNumerico" id="totalColones" name="totalColones" value="{controlPago.totalColones}" >
                                     </div>
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("controlPago.estado")}</label>
                                         <select  class="form-control campoNumerico" id="estado" name="estado"  >
-                                            <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
+                                            <option  each={estados}  value="{codigo}" selected="{controlPago.estado ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>     
-
-
                                 </div>    
                             </div>
 
@@ -111,6 +107,13 @@
 <!-- Fin Formulario -->   
 
 <style type ="text/css">
+    .tituloContainer{
+        display:flex;
+        flex-direction: row;
+    }
+    .elemento1{
+        flex: 1;
+    }
     .scrollerT {
         width: 100% !important;
         height: 650px;
@@ -209,6 +212,16 @@
     var self = this;
     self.controlPago = {
         id:null,
+        fechaPago:'',
+        fechaLimite:'',
+        mensaje:'',
+        tipoPago:'',
+        totalDolar:'',
+        totalColones:'',
+        estado:0,
+        empresa:{
+            id:0
+        }
 
     }
     self.parametros   = opts.parametros;  
@@ -230,11 +243,18 @@
     self.empresas               = {data:[]}
     self.tipoPagos =[]
     self.estados =[]
+    self.tipoCambio ={
+        total:0,
+        totalCompra:0
+    }
+
 
 self.on('mount',function(){
     __Eventos()
+    __Limpiar()
     __Consulta()
     listaEmpresasActivas()
+    getTipoCambioDolar()
     __tipoPagos() 
     __ComboEstados()
 
@@ -243,6 +263,102 @@ self.on('mount',function(){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+
+
+__CalculoColones(e){
+    var resultado  =  __valorNumerico($('#totalDolar').val()) * self.tipoCambio.total
+    $('#totalColones').val(financial(resultado))
+}
+
+__CalculoDolares(e){
+    var resultado  =  __valorNumerico($('#totalColones').val()) / self.tipoCambio.total
+    $('#totalDolar').val(financial(resultado))
+}
+
+
+
+/**
+*Tipo Cambio del Dolar 
+**/
+function getTipoCambioDolar(){
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/indicadores/tc",
+     global: false,
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+            __TipoCambio()
+        }
+    }
+    }).done(function (response) {
+         self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
+         self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
+         self.update()
+    }).fail(function () {
+        __TipoCambio()
+      console.log('fail')
+    });;
+}
+/**
+* Tipo Cambio de moneda
+**/
+function __TipoCambio(){
+    self.tipoCambio = {
+        total:0,
+        totalCompra:0,
+        id:null
+    }
+    self.update()
+    $.ajax({
+        url: "MostrarTipoCambioActivoAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.tipoCambio = modeloTabla
+                       self.tipoCambio.totalCompra = self.tipoCambio.total
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+/**
+* Limpiar Pantalla
+**/
+function __Limpiar(){
+    self.controlPago = {
+        id:null,
+        fechaPago:'',
+        fechaLimite:'',
+        mensaje:'',
+        tipoPago:'',
+        totalDolar:'',
+        totalColones:'',
+        estado:0,
+        empresa:{
+            id:0
+        }
+
+    }
+    self.update()
+     $("#formulario").validate(reglasDeValidacion());
+     __Eventos()
+}
 /**
 *  Crear el combo comanda
 **/
@@ -300,81 +416,28 @@ function listaEmpresasActivas(){
 * 1  Mostrar  2  Modificar
 **/
  function __Consulta(){
+    __Limpiar()
+
     //Agregar
-    if(self.parametros.tipoEjecucion ==1){
-        LimpiarArticulo()
+    if(self.parametros.tipoEjecucion == 1){
         self.mostrarTituloArticulo = true  
         self.mostrarFormulario = true
         self.botonModificar = false
-        self.mostrarFormularioEntrada = false
         self.botonAgregar = true
-        self.precioPantalla = true
-        self.impuestosIVAIPantalla = false
-        self.otrosPantalla = false                        
         self.update()
-        $("#formulario").validate(reglasDeValidacion());     
     }   
     //modificar
-    if(self.parametros.tipoEjecucion ==2){
-        self.articulo = self.parametros.articulo
+    if(self.parametros.tipoEjecucion == 2){
+        self.controlPago = self.parametros.controlPago
         self.mostrarTituloArticulo = true  
         self.mostrarFormulario = true
         self.botonModificar = true
         self.mostrarFormulario = true 
         self.botonModificar   = true;
-        self.mostrarFormularioEntrada = false
         self.botonAgregar  = false;            
         self.update()
-       // __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
-        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
-        $("#formulario").validate(reglasDeValidacion());     
        
     }  
-}
-
-/**
-* Limpiar Articulo
-**/
-function LimpiarArticulo(){
-   self.articulo = {
-		id:null,
-        codigo:"",
-        tipoCodigo:"",
-		descripcion:"",
-        serie:"",
-		unidadMedida:"",
-		costo:null,
-		impuesto:null,
-        impuesto1:null,
-        codigoTarifa:null,
-        codigoTarifa1:null,
-        minimo:0,
-        maximo:0,
-		precioPublico:null,
-		gananciaPrecioPublico:null,
-		precioMayorista:null,
-		gananciaPrecioMayorista:null,
-		precioEspecial:null,
-		gananciaPrecioEspecial:null,
-        tipoImpuesto:null,
-		estado:"",
-		marca:{
-            id:null
-        },
-		categoria:{
-            id:null
-        },
-		empresa:{
-            id:null
-        }
-    }    
-    self.update() 
-   $('.precioEspecial').val(null)
-   $('.gananciaPrecioEspecial').val(null)
-   $('.prioridad').val(null)
-   $('.pesoTransporte').val(null)
-   $(".errorServerSideJgrid").remove();
-   $("#formulario").validate(reglasDeValidacion());
 }
 /**
 * Camps requeridos
@@ -382,37 +445,22 @@ function LimpiarArticulo(){
 var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			descripcion : {
+			mensaje : {
 				required : true,
-                maxlength:80,
+                maxlength:250,
                 minlength:1,
-                lettersOnly : true
-			},
-            codigo : {
-				required : true,
-                maxlength:20,
-                minlength:1,
-                lettersOnly : true
 			},                                                
-            marca : {
+            fechaPago : {
 				required : true,
 			},                                                
-            categoria : {
-				required : true,
-			},                                                
-            unidadMedida : {
-				required : true,
-			},                                                
-            precioPublico : {
+            totalDolar : {
 				required : true,
                 numeroMayorCero:true,
                 number:true,
-			} ,                                                
-                                                             
-            precioMayorista : {
-                number:true,
 			},                                                
-            precioEspecial : {
+            totalColones : {
+				required : true,
+                numeroMayorCero:true,
                 number:true,
 			}                                          
                         
@@ -427,15 +475,7 @@ var reglasDeValidacion = function() {
 **/
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#descripcion").attr("maxlength", 80);
-    $("#codigo").attr("maxlength", 20);
-    $('#impuesto').mask('00', {
-		'translation' : {
-			0 : {
-				pattern : /[0-9]/
-			}
-		}
-	});
+    $("#mensaje").attr("maxlength", 250);
 }
 /**
 *  Crear el combo comanda
@@ -465,18 +505,14 @@ __regresarAlListado(){
     self.mostrarFormularioEntrada    = false
     self.mostrarFormularioSalida     = false
     self.update()
-    //articulo.js se encuentra rutina
+    //controlPago.js se encuentra rutina
     __mostrarListado()
-   // LimpiarArticulo()
 }
 /**
 *   Agregar 
 **/
 __agregar(){
-    if(validarPrecios()){
-         return
-     }
-
+    
         if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
@@ -509,19 +545,7 @@ __agregar(){
 	                         })
 	                        $("#formulario").validate(reglasDeValidacion());
                             $(".errorServerSideJgrid").remove();
-                            $('#codigo').val(null)
-                            $('#descripcion').val(null)
-                            $('#serie').val(null)
-                            $('#costo').val(null)
-                            $('#impuesto').val(null)
-                            $('#impuesto1').val(null)
-                            $('#precioPublico').val(null)
-                            $('#gananciaPrecioPublico').val(null)
-                            $('#precioMayorista').val(null)
-                            $('#gananciaPrecioMayorista').val(null)
-                            $('#precioEspecial').val(null)
-                            $('#gananciaPrecioEspecial').val(null)
-                              __Eventos()
+                             __Limpiar()
                         }
                     },
                     error : function(xhr, status) {
@@ -530,16 +554,14 @@ __agregar(){
                     }
                 });
     }else{
-          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+          sweetAlert("", "Falta ingresar datos del control de pago que son obligatorios, verificar lo indicado en ROJO", "error");
       }
 }
 /**
 ** Modificar la Empresa
 **/
 __Modificar(){
-     if(validarPrecios()){
-         return
-     }
+     
 
     var AplicoImpuesto1 = false
     var AplicoImpuesto2 = false
@@ -547,48 +569,14 @@ __Modificar(){
         self.error = false;
         self.exito = false;
         self.update();
-        __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
+        __modificarRegistro("#formulario",$.i18n.prop("controlPago.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
 
     }   else{
-          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+          sweetAlert("", "Falta ingresar datos del control de pago que son obligatorios, verificar lo indicado en ROJO", "error");
       }
     
 }
 
-/**
-* Inicializar el articulo
-**/
-function _inicializarArticulo(){
-    self.articulo = {
-		id:null,
-        codigo:"",
-        tipoCodigo :"",
-		descripcion:"",
-        serie:"",
-		unidadMedida:"",
-		costo:"",
-		impuesto:0,
-        minimo:0,
-        maximo:0,
-		precioPublico:null,
-		gananciaPrecioPublico:null,
-		precioMayorista:null,
-		gananciaPrecioMayorista:null,
-		precioEspecial:null,
-		gananciaPrecioEspecial:null,
-		estado:"",
-		marca:{
-            id:null
-        },
-		categoria:{
-            id:null
-        },
-		empresa:{
-            id:null
-        },
-        prioridad:1
-    }    
-    self.update()
-}
+
 </script>
 </controlPago-crud>

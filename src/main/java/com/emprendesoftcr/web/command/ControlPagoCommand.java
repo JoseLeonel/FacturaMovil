@@ -14,6 +14,10 @@ public class ControlPagoCommand {
 	private Date		fechaPago;
 	
 	private Date		fechaLimite;
+	
+  private String		fechaPagoT;
+	
+	private String		fechaLimiteT;
 
 	private String	mensaje;
 
@@ -95,6 +99,32 @@ public class ControlPagoCommand {
 	}
 
 	
+	
+	
+	
+	public String getFechaPagoT() {
+		return Utils.getFechat(this.fechaPago);
+	}
+
+
+	
+	public void setFechaPagoT(String fechaPagoT) {
+		this.fechaPagoT = fechaPagoT;
+	}
+
+
+	
+	public String getFechaLimiteT() {
+		return Utils.getFechat(this.fechaLimite);
+	}
+
+
+	
+	public void setFechaLimiteT(String fechaLimiteT) {
+		this.fechaLimiteT = fechaLimiteT;
+	}
+
+
 	public String getMensaje() {
 		return mensaje;
 	}

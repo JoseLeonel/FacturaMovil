@@ -11,14 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
@@ -94,7 +98,42 @@ public class ControlPagoController {
 		return respuestaService;
 
 	}
-	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/AgregarControlPagoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPagoCommand controlPagoCommand, BindingResult result, SessionStatus status) throws Exception {
+
+		@SuppressWarnings("unused")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+		
+//			Caja cajaBd = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
+//			if (cajaBd != null) {
+//				result.rejectValue("descripcion", "error.caja.descripcion.existe");
+//			}
+
+		
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+
+			ControlPago controlPago = new ControlPago();
+			controlPago.setEmpresa(controlPagoCommand.getEmpresa());
+			controlPago.setEstado(controlPagoCommand.getEstado());
+			controlPago.setTipoCambio(controlPagoCommand.getTipoCambio());
+			controlPago.setTipoPago(controlPago.getTipoPago());
+			controlPago.setTotalColones(controlPagoCommand.getTotalColones());
+			controlPago.setTotalDolar(controlPagoCommand.getTotalDolar());
+			controlPago.setCantidadNotificacion(Constantes.ZEROS);
+			
+			
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("controlPago.agregar.correctamente", controlPago);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {
