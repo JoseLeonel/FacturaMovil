@@ -295,7 +295,7 @@ function configuracionDatePicker(){
     });
     $('#fechaEmisionExoneracionSTR').datetimepicker({
         locale: 'es',
-        format: 'YYYY-MM-DD hh:mm:ss a',
+        format: 'YYYY-MM-DD HH:mm',
         keyBinds: {
            'delete': function () {
                 return false;

@@ -667,6 +667,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 			if (articulo != null) {
+			
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}

@@ -1725,6 +1725,7 @@ public class FacturasController {
 				}
 
 			}
+			
 			if (facturaCommand.getCondicionVenta().equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.vacia", result.getAllErrors());
 			}
@@ -1813,6 +1814,16 @@ public class FacturasController {
 				}
 
 			}
+			if (facturaCommand.getCliente() != null) {
+				if(facturaCommand.getCliente().getIdentificacionExtranjero() != null) {
+					if(!facturaCommand.getCliente().getIdentificacionExtranjero().equals(Constantes.EMPTY) ) {
+						if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA))
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.cedula.extrajera.only.tiquete", result.getAllErrors());
+					}
+				}
+				
+			}
+
 
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 				if (facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE) || facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_CREDITO)) {

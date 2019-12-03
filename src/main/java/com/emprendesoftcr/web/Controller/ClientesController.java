@@ -474,7 +474,7 @@ public class ClientesController {
 			}
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					Date fechaInicio = Utils.parseDateExoneracion(clienteCommand.getFechaEmisionExoneracionSTR());
 					clienteBD.setFechaEmisionExoneracion(fechaInicio);
 					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
