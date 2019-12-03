@@ -108,6 +108,34 @@ public final class Utils {
 
 	}
 
+	public static Double Maximo6Decimales(Double valor) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if(valor == null) {
+			return resultado;	
+		}
+		if(valor.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
+		String[] splitter = valor.toString().split("\\.");
+		splitter[0].length(); // Before Decimal Count
+		splitter[1].length(); // After Decimal Count
+		String digitos = splitter[1];
+		if (splitter[1].length() >= 6) {
+			String decimales = digitos.substring(0, 6);
+			String valor1 = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+		} else {
+			String decimales = digitos.substring(0, splitter[1].length());
+			String valor1 = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+
+		}
+
+		return resultado;
+
+	}
+
 	/**
 	 * Si el sexto digito es mayor 5 o igual
 	 * @param valor
