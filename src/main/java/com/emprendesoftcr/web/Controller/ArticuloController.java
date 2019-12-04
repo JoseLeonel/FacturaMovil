@@ -56,7 +56,6 @@ import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
-import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;

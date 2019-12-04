@@ -299,7 +299,7 @@ public class ClientesController {
 			cliente.setCorreoElectronico2(clienteCommand.getCorreoElectronico2());
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					Date fechaInicio = Utils.parseDate(clienteCommand.getFechaEmisionExoneracionSTR());
 					cliente.setFechaEmisionExoneracion(fechaInicio);
 					cliente.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					cliente.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
@@ -474,7 +474,7 @@ public class ClientesController {
 			}
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					Date fechaInicio = Utils.parseDateExoneracion(clienteCommand.getFechaEmisionExoneracionSTR());
+					Date fechaInicio = Utils.parseDate(clienteCommand.getFechaEmisionExoneracionSTR());
 					clienteBD.setFechaEmisionExoneracion(fechaInicio);
 					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());

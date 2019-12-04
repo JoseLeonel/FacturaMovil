@@ -1383,6 +1383,15 @@ public final class Utils {
 		return mesDesc;
 	}
 
+	
+	public static String fechaExoneracionSTR(Date fecha) {
+		if(fecha == null) {
+			return Constantes.EMPTY;
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fecha);
+		return inicio1;
+	}
 	/**
 	 * El metodo retorna fecha con formato
 	 * @param

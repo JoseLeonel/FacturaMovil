@@ -136,11 +136,19 @@
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label >Numero Documento Autorizacion </label> 
-                                        <input  type="text"  class="form-control numeroDocumentoExoneracion" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
+                                        <input  type="text"  class="form-control numeroDocumentoExoneracion" placeHolder ="Formato si es Exonet :AL-XXXXXXXX-19" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label >Fecha Autorizacion  </label> 
-                                        <input  type="text"  class="form-control fechaEmisionExoneracionSTR" id="fechaEmisionExoneracionSTR" name = "fechaEmisionExoneracionSTR" autofocus="autofocus"  value ="{cliente.fechaEmisionExoneracionSTR}">                    
+                                        <div class="form-group">
+                                           <label class="knob-label" >Fecha Autorizacion </label>
+                                           <div  class="form-group input-group date datepickerfechaEmisionExoneracionSTR" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                                <input type="text" class="form-control fechaEmisionExoneracionSTR" id="fechaEmisionExoneracionSTR"  name= "fechaEmisionExoneracionSTR" readonly>
+                                                <div class="input-group-addon">
+                                                  <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>	                             
+                                        </div>                                          
                                     </div>
                                 </div>
                                 <div class="row">
@@ -281,47 +289,55 @@ self.on('mount',function(){
        __Agregar()
     }
     __ComboTipoDocumentoExonerados()
-    configuracionDatePicker()
+    //configuracionDatePicker()
    
-    
+    $('.datepickerfechaEmisionExoneracionSTR').datepicker(
+    {
+        format: 'yyyy-mm-dd',
+        todayHighlight:true,
+    }
+    );
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
     }, false );
 })
 
-function configuracionDatePicker(){
-    $("#fechaEmisionExoneracionSTR").keydown(function(e) {
-        e.preventDefault();
-    });
-    $('#fechaEmisionExoneracionSTR').datetimepicker({
-        locale: 'es',
-        format: 'YYYY-MM-DD HH:mm',
-        keyBinds: {
-           'delete': function () {
-                return false;
-            }
-        },
-        tooltips: {
-           today: 'Hoy',
-           clear: 'Limpiar',
-           close: 'Cerrar',
-           selectMonth: 'Seleccionar Mes',
-           prevMonth: 'Mes Anterior',
-           nextMonth: 'Mes Siguiente',
-           selectYear: 'Seleccionar A\u00F1o',
-           prevYear: 'A\u00F1o Anterior',
-           nextYear: 'A\u00F1o Siguiente',
-           selectTime: 'Seleccionar',
-           incrementHour: 'Incrementar Hora',
-           decrementHour: 'Decrementar Hora',
-           incrementMinute: 'Incrementar Minutos',
-           decrementMinute: 'Decrementar Minutos',
-           togglePeriod: 'Cambiar',
-           pickHour: 'Seleccionar Hora',
-           pickMinute: 'Seleccionar Minutos'
-        }
-    });
-}
+
+
+
+//function configuracionDatePicker(){
+//    $("#fechaEmisionExoneracionSTR").keydown(function(e) {
+//        e.preventDefault();
+//    });
+//    $('#fechaEmisionExoneracionSTR').datetimepicker({
+//        locale: 'es',
+//        format: 'YYYY-MM-DD HH:mm',
+//        keyBinds: {
+//           'delete': function () {
+//                return false;
+//            }
+//        },
+//        tooltips: {
+//           today: 'Hoy',
+//           clear: 'Limpiar',
+//           close: 'Cerrar',
+//           selectMonth: 'Seleccionar Mes',
+//           prevMonth: 'Mes Anterior',
+//           nextMonth: 'Mes Siguiente',
+//           selectYear: 'Seleccionar A\u00F1o',
+//           prevYear: 'A\u00F1o Anterior',
+//           nextYear: 'A\u00F1o Siguiente',
+//           selectTime: 'Seleccionar',
+//           incrementHour: 'Incrementar Hora',
+//           decrementHour: 'Decrementar Hora',
+//           incrementMinute: 'Incrementar Minutos',
+//           decrementMinute: 'Decrementar Minutos',
+//           togglePeriod: 'Cambiar',
+//           pickHour: 'Seleccionar Hora',
+//           pickMinute: 'Seleccionar Minutos'
+//        }
+//    });
+//}
 
 /**
 * cargar los tipos de Documento de la factura
@@ -409,7 +425,7 @@ function _incializarCampos(){
     $('.nombreComercial').val(null)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
-    configuracionDatePicker()
+   // configuracionDatePicker()
     self.cliente = {
         id:null,
         nombreCompleto:"",
