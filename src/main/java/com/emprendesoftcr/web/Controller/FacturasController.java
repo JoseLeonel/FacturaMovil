@@ -1836,7 +1836,10 @@ public class FacturasController {
 
 			if (facturaCommand.getCliente().getTipoDocumentoExoneracion() != null) {
 				if (!facturaCommand.getCliente().getTipoDocumentoExoneracion().equals(Constantes.EMPTY)) {
-					if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+					if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && facturaCommand.getCliente().getTipoDocumentoExoneracion().equals(Constantes.TIPO_EXONERACION_DIPLOTAMATICO)) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.exoneracion.diplomatico", result.getAllErrors());
+					}
+					if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getCliente().getTipoDocumentoExoneracion().equals(Constantes.TIPO_EXONERACION_DIPLOTAMATICO)) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.exoneracion.libre.impuesto", result.getAllErrors());
 					}
 				}

@@ -271,11 +271,11 @@ public class ClientesController {
 					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
 						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
 					}
-					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
-						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
-							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+						if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
+							if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+								result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+							}
 						}
-					}
 					if (clienteCommand.getPorcentajeExoneracion() != null) {
 						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");

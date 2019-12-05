@@ -1388,7 +1388,7 @@ public final class Utils {
 		if(fecha == null) {
 			return Constantes.EMPTY;
 		}
-		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT6);
 		String inicio1 = dateFormat1.format(fecha);
 		return inicio1;
 	}

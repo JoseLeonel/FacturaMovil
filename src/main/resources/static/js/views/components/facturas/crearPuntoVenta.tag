@@ -4091,10 +4091,15 @@ function __seleccionarClientes() {
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
+            __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
                self.factura.tipoDoc ='01'
                self.update()
-               __aplicarExoneracionPorCliente()
+               
+               if(self.item.tipoDocumentoExoneracion =='02'){
+                 self.factura.tipoDoc ='04'  
+                 self.update()
+                }
             }else{
                self.factura.tipoDoc ='04'
                self.update()

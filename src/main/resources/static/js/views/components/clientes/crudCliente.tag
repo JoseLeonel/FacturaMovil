@@ -140,15 +140,12 @@
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label >Fecha Autorizacion  </label> 
-                                        <div class="form-group">
-                                           <label class="knob-label" >Fecha Autorizacion </label>
-                                           <div  class="form-group input-group date datepickerfechaEmisionExoneracionSTR" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                           <div  class="input-group date datepickerfechaEmisionExoneracionSTR" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                                 <input type="text" class="form-control fechaEmisionExoneracionSTR" id="fechaEmisionExoneracionSTR"  name= "fechaEmisionExoneracionSTR" readonly>
                                                 <div class="input-group-addon">
                                                   <span class="glyphicon glyphicon-th"></span>
                                                 </div>
                                             </div>	                             
-                                        </div>                                          
                                     </div>
                                 </div>
                                 <div class="row">
@@ -799,11 +796,13 @@ function validaExoneracion(){
     if($("#numeroDocumentoExoneracion").val() == "" && $('#fechaEmisionExoneracionSTR').val() == ""){
        return false
    }
-   var valor  = $("#numeroDocumentoExoneracion").val()
-   if(valor.length ==0){
-       sweetAlert("", "Campo requerido Indique el numero autorizacion de Exonet", "error");
-       return true
-   }
+        var valor  = $("#numeroDocumentoExoneracion").val()
+        if(valor.length ==0){
+            sweetAlert("", "Campo requerido Indique el numero autorizacion de Exonet", "error");
+            return true
+        }
+
+   
    if($('#fechaEmisionExoneracionSTR').val() == null){
        sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
        return true

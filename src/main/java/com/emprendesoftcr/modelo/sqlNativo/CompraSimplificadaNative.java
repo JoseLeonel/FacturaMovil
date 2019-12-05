@@ -19,7 +19,7 @@ import com.emprendesoftcr.Utils.Utils;
 + " from compra_simpli" 
 + " inner join usuarios on usuarios.id = compra_simpli.usuario_id " 
 + " inner join provee_simpli on provee_simpli.id = compra_simpli.proveedorsimpl_id " 
-+ "  where  compra_simpli.empresa_id = :ID_EMPRESA and compra_simpli.created_at >= :FECHAINICIAL and compra_simpli.created_at <= :FechaFinal and compra_simpli.estado = :Estado and compra_simpli.usuario_id =  and compra_simpli.proveedorsimpl_id =  ")
++ "  where  compra_simpli.empresa_id = :ID_EMPRESA and compra_simpli.fecha_emision >= :FECHAINICIAL and compra_simpli.fecha_emision <= :FechaFinal and compra_simpli.estado = :Estado and compra_simpli.usuario_id =  and compra_simpli.proveedorsimpl_id =  ")
 @Entity
 public class CompraSimplificadaNative implements Serializable {
 
