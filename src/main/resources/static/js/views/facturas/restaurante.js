@@ -4,7 +4,8 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	cargaMantenimiento()
+	consultaControlPago();
+	cargaMantenimiento();
 }
 
 

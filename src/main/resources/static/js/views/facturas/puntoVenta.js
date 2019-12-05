@@ -1,11 +1,13 @@
 $(document).ready(function() {
 	_Init();
+		//__MensajesToasControlPago()
+	consultaControlPago();
 	
 } );/*fin document*/
 
 var _Init = function () {
 	
-	cargaMantenimiento()
+	cargaMantenimiento();
 }
 /**
  * LLamar al componente Riot 

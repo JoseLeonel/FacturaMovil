@@ -11,6 +11,9 @@ public class Constantes {
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA												= 2;
 	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA															= 3;
 
+	public static final Integer					CONTROL_PAGO_ESTADO_INACTIVO																= 1;
+	public static final Integer					CONTROL_PAGO_ESTADO_ACTIVO																	= 0;
+	
 	public static final Integer					NO_APLICA_EN_CAJA																						= 1;
 	public static final Integer					SI_APLICA_EN_CAJA																						= 0;
 

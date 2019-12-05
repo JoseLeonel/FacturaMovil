@@ -38,6 +38,7 @@ public class CajaDaoImpl implements CajaDao {
 	public Caja buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Caja obj where obj.id = :id");
 		query.setParameter("id", id);
+		@SuppressWarnings("unchecked")
 		List<Caja> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Caja) results.get(0);

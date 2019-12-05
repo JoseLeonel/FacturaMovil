@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.emprendesoftcr.Utils.Utils;
 @Entity
 @Table(name = "contr_pago")
 public class ControlPago implements Serializable {
@@ -103,7 +105,9 @@ public class ControlPago implements Serializable {
 		return fechaPago;
 	}
 
-	
+	public String getFechaPagoSTR() {
+		return Utils.getFechat(this.fechaPago);
+	}
 	public void setFechaPago(Date fechaPago) {
 		this.fechaPago = fechaPago;
 	}
@@ -113,6 +117,10 @@ public class ControlPago implements Serializable {
 		return fechaLimite;
 	}
 
+	public String getFechaLimiteSTR() {
+		
+		return fechaLimite == null?"":Utils.getFechat(this.fechaLimite);
+	}
 	
 	public void setFechaLimite(Date fechaLimite) {
 		this.fechaLimite = fechaLimite;
@@ -142,7 +150,9 @@ public class ControlPago implements Serializable {
 	public Double getTotalDolar() {
 		return totalDolar;
 	}
-
+	public String getTotalDolarSTR() {
+		return Utils.formateadorMiles(totalDolar);
+	}
 	
 	public void setTotalDolar(Double totalDolar) {
 		this.totalDolar = totalDolar;
@@ -152,7 +162,9 @@ public class ControlPago implements Serializable {
 	public Double getTotalColones() {
 		return totalColones;
 	}
-
+	public String getTotalColonesSTR() {
+		return Utils.formateadorMiles(totalColones);
+	}
 	
 	public void setTotalColones(Double totalColones) {
 		this.totalColones = totalColones;
@@ -161,6 +173,9 @@ public class ControlPago implements Serializable {
 	
 	public Double getTipoCambio() {
 		return tipoCambio;
+	}
+	public String getTipoCambioSTR() {
+		return Utils.formateadorMiles(tipoCambio);
 	}
 
 	

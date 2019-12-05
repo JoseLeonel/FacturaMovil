@@ -34,7 +34,7 @@
                                 <div class="row">
                                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
                                         <label  class="knob-label" >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selectEmpresa  "   name="selectEmpresa" data-live-search="true">
+                                        <select  class="form-control empresa"   name="empresa" id='empresa' data-live-search="true">
                                             <option  each={empresas.data}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
                                         </select>
                                     </div>   
@@ -43,7 +43,7 @@
                                     <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                         <label class="knob-label" >{$.i18n.prop("controlPago.fechaPago")} <span class="requeridoDato">*</span></label>
                                         <div  class="input-group date datepickerFechaPago" data-provide="datepicker" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaPago" id="fechaPago"  name= "fechaPago" readonly value="{controlPago.fechaPagoT}" >
+                                            <input type="text" class="form-control fechaPagoT" id="fechaPagoT"  name= "fechaPagoT" readonly value="{controlPago.fechaPagoSTR}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -52,7 +52,7 @@
                                     <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                         <label class="knob-label" >{$.i18n.prop("controlPago.fechaLimite")}</label>
                                         <div  class="input-group date datepickerFechaLimite" data-provide="datepicker" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaLimite" id="fechaLimite"  name= "fechaLimite" readonly  value="{controlPago.fechaLimiteT}" >
+                                            <input type="text" class="form-control fechaLimiteT" id="fechaLimiteT"  name= "fechaLimiteT" readonly  value="{controlPago.fechaLimiteSTR}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -366,12 +366,12 @@ function __ComboEstados(){
     self.estados =[]
     self.update()
     self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Activo"),
-        descripcion:$.i18n.prop("combo.estado.Activo")
+        codigo: 0,
+        descripcion:"Pendiente"
      });
     self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Inactivo"),
-        descripcion: $.i18n.prop("combo.estado.Inactivo")
+        codigo: 1,
+        descripcion: "Pagado"
      });
      self.update();
 }
@@ -450,9 +450,13 @@ var reglasDeValidacion = function() {
                 maxlength:250,
                 minlength:1,
 			},                                                
-            fechaPago : {
+            fechaPagoT : {
 				required : true,
 			},                                                
+            fechaLimiteT : {
+				required : true,
+			},                                                
+
             totalDolar : {
 				required : true,
                 numeroMayorCero:true,
@@ -477,22 +481,7 @@ function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     $("#mensaje").attr("maxlength", 250);
 }
-/**
-*  Crear el combo comanda
-**/
-function __ComboEstados(){
-    self.estados =[]
-    self.update()
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Activo"),
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Inactivo"),
-        descripcion: $.i18n.prop("combo.estado.Inactivo")
-     });
-     self.update();
-}
+
 /**
 *  Regresar al listado
 **/
@@ -520,7 +509,7 @@ __agregar(){
                     type : "POST",
                     dataType : "json",
                     data : formulario,
-                    url : 'AgregarArticuloAjax.do',
+                    url : 'AgregarControlPagoAjax.do',
                     success : function(data) {
                         if (data.status != 200) {
                         	serverMessageJson(data);
@@ -569,7 +558,7 @@ __Modificar(){
         self.error = false;
         self.exito = false;
         self.update();
-        __modificarRegistro("#formulario",$.i18n.prop("controlPago.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
+        __modificarRegistro("#formulario",$.i18n.prop("controlPago.mensaje.alert.modificar"),'ModificarControlPagoAjax.do','ListarControlPagoAjax.do','#tableListar')
 
     }   else{
           sweetAlert("", "Falta ingresar datos del control de pago que son obligatorios, verificar lo indicado en ROJO", "error");

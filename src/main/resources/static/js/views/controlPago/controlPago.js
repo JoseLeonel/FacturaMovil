@@ -18,10 +18,10 @@ var ListarControlPago = function(){
              "bPaginate": true,
              "bFilter" : true,
              "bDeferRender": true ,
-             "sDom": 'lrtip',
+             "sDom": 'lfrtip',
              "searching":true,
      "processing": false,
-     "serverSide": true,
+     "serverSide": false,
      "sort" : "position",
      "lengthChange": true,
      "ajax" : {
@@ -82,7 +82,8 @@ function EventoFiltro(){
 var informacion_tabla = [ 
                                {'data' :'empresa' ,"name":"empresa" ,"title" : "Empresa"        ,"autoWidth" :true,
                                "render":function(empresa,type, row){
-                                     return empresa.nombreComercial.length > 0?empresa.nombreComercial:empresa.nombre;
+                                    var nombreComercial  = row.empresa.nombreComercial = null?"":row.empresa.nombreComercial
+                                     return nombreComercial.length > 0?row.empresa.nombreComercial:row.empresa.nombre;
                                 }},
                                
                                 {'data' :'fechaPagoSTR' ,"name":"fechaPagoSTR" ,"title" : "Fecha Pago","autoWidth" :true },
@@ -194,7 +195,15 @@ function agregarInputsCombos(){
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 7    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
+         }
+               // Select
+    	if ($(this).index() == 6 ){
+          var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
+          // se cargan los valores por defecto que existen en el combo
+              select.append( '<option value="'+"Pendiente"+'">'+"Pendiente"+'</option>' );
+         select.append( '<option value="'+"Pagado"+'">'+"Pagado"+'</option>' );
+              $(this).html(select);
+    }
     })
 }
 

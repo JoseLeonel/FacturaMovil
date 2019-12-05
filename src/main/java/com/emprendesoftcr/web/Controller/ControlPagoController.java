@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.Controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,36 +24,45 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.ControlPagoBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.ControlPago;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ControlPagoCommand;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 
 /**
- * Cajas por empresa CajasController.
+ * 
+ * ControlPagoController.
  * @author jose.
- * @since 11 jun. 2018
+ * @since 4 dic. 2019
  */
 @Controller
 public class ControlPagoController {
 
-	
 	@Autowired
-	private DataTableBo																	dataTableBo;
-
-	
+	private DataTableBo						dataTableBo;
 
 	@Autowired
-	private EmpresaPropertyEditor												empresaPropertyEditor;
+	private UsuarioBo						usuarioBo;
 
 	@Autowired
-	private StringPropertyEditor												stringPropertyEditor;
+	private ControlPagoBo					controlPagoBo;
+
+	@Autowired
+	private EmpresaPropertyEditor	empresaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor	stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -98,7 +110,9 @@ public class ControlPagoController {
 		return respuestaService;
 
 	}
+
 	@SuppressWarnings("rawtypes")
+	@CacheEvict(value="controlPagoCache",allEntries=true)
 	@RequestMapping(value = "/AgregarControlPagoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPagoCommand controlPagoCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -106,35 +120,99 @@ public class ControlPagoController {
 		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-		
-//			Caja cajaBd = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
-//			if (cajaBd != null) {
-//				result.rejectValue("descripcion", "error.caja.descripcion.existe");
-//			}
-
-		
+      ControlPago controlPagoBd = controlPagoBo.findByEstadoAndEmpresa(Constantes.CONTROL_PAGO_ESTADO_ACTIVO,controlPagoCommand.getEmpresa());
+      if(controlPagoBd != null) {
+      	
+      	return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("controlPago.error.existe.activo", result.getAllErrors());
+      }
+			Date fechaLimite = Utils.parseDate(controlPagoCommand.getFechaLimiteT());
+			Date fechaPago = Utils.parseDate(controlPagoCommand.getFechaPagoT());
+			
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
 			ControlPago controlPago = new ControlPago();
+			controlPago.setFechaLimite(fechaLimite);
+			controlPago.setFechaPago(fechaPago);
 			controlPago.setEmpresa(controlPagoCommand.getEmpresa());
 			controlPago.setEstado(controlPagoCommand.getEstado());
 			controlPago.setTipoCambio(controlPagoCommand.getTipoCambio());
-			controlPago.setTipoPago(controlPago.getTipoPago());
+			controlPago.setTipoPago(controlPagoCommand.getTipoPago());
 			controlPago.setTotalColones(controlPagoCommand.getTotalColones());
 			controlPago.setTotalDolar(controlPagoCommand.getTotalDolar());
 			controlPago.setCantidadNotificacion(Constantes.ZEROS);
+			controlPago.setEstado(Constantes.CONTROL_PAGO_ESTADO_ACTIVO);
+			controlPago.setMensaje(controlPagoCommand.getMensaje());
 			
-			
-			
+			controlPagoBo.agregar(controlPago);
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("controlPago.agregar.correctamente", controlPago);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@CacheEvict(value="controlPagoCache",allEntries=true)
+	@RequestMapping(value = "/ModificarControlPagoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPagoCommand controlPagoCommand, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("caja.no.modificado", result.getAllErrors());
+			}
+			ControlPago controlPagoBD = controlPagoBo.buscar(controlPagoCommand.getId());
+			Date fechaLimite = Utils.parseDate(controlPagoCommand.getFechaLimiteT());
+			Date fechaPago = Utils.parseDate(controlPagoCommand.getFechaPagoT());
+	
+			if (controlPagoBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("controlPago.error.no.existe", result.getAllErrors());
+			} 
+				if (result.hasErrors()) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				}
+				controlPagoBD.setFechaLimite(fechaLimite);
+				controlPagoBD.setFechaPago(fechaPago);
+				controlPagoBD.setEmpresa(controlPagoCommand.getEmpresa());
+				controlPagoBD.setEstado(controlPagoCommand.getEstado());
+				controlPagoBD.setTipoCambio(controlPagoCommand.getTipoCambio());
+				controlPagoBD.setTipoPago(controlPagoCommand.getTipoPago());
+				controlPagoBD.setTotalColones(controlPagoCommand.getTotalColones());
+				controlPagoBD.setTotalDolar(controlPagoCommand.getTotalDolar());
+				controlPagoBD.setCantidadNotificacion(Constantes.ZEROS);
+				controlPagoBD.setEstado(controlPagoCommand.getEstado());
+				controlPagoBD.setMensaje(controlPagoCommand.getMensaje());
+				controlPagoBo.modificar(controlPagoBD);
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("controlPago.modificado.correctamente", controlPagoBD);
+			
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@SuppressWarnings("all")
+	@Cacheable(value="controlPagoCache")
+	@RequestMapping(value = "/ControlPagoEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			ControlPago controlPago = null;
+			if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+				   controlPago = controlPagoBo.findByEstadoAndEmpresa(Constantes.CONTROL_PAGO_ESTADO_ACTIVO,usuario.getEmpresa());	
+			}
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", controlPago);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

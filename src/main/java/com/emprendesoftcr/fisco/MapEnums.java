@@ -14,7 +14,12 @@ public class MapEnums {
 
 	public static final Map<Integer, String> ENUM_ESTADO_ = ImmutableMap.<Integer, String>builder()
   		.put(1, "Activo").
-       put(0, "Desactivo")
+       put(0, "Inactivo")
+       .build();
+
+	public static final Map<Integer, String> ENUM_ESTADO_CONTROL_PAGO_ = ImmutableMap.<Integer, String>builder()
+  		.put(0, "Pendiente").
+       put(1, "Pagado")
        .build();
 
 	public static final Map<Integer, String> ENUM_TIPO_PAGO_CONTROL_PAGO = ImmutableMap.<Integer, String>builder()

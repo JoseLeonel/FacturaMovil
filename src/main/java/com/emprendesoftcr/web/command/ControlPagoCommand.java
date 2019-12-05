@@ -37,6 +37,11 @@ public class ControlPagoCommand {
 	
 	
 	
+	public ControlPagoCommand() {
+		super();
+	}
+
+
 	public ControlPagoCommand(ControlPago controlPago) {
 		super();
 		this.id = controlPago.getId();
@@ -77,7 +82,7 @@ public class ControlPagoCommand {
 	}
 
 	public String getFechaPagoSTR() {
-		return Utils.getFechaGeneraReporte(this.fechaPago);
+		return Utils.getFechat(this.fechaPago);
 	}
 
 	
@@ -90,7 +95,7 @@ public class ControlPagoCommand {
 		return fechaLimite;
 	}
 	public String getFechaLimiteSTR() {
-		return Utils.getFechaGeneraReporte(this.fechaLimite);
+		return Utils.getFechat(this.fechaLimite);
 	}
 
 	
@@ -103,7 +108,7 @@ public class ControlPagoCommand {
 	
 	
 	public String getFechaPagoT() {
-		return Utils.getFechat(this.fechaPago);
+		return this.fechaPagoT;
 	}
 
 
@@ -115,7 +120,7 @@ public class ControlPagoCommand {
 
 	
 	public String getFechaLimiteT() {
-		return Utils.getFechat(this.fechaLimite);
+		return this.fechaLimiteT;
 	}
 
 
@@ -208,7 +213,7 @@ public class ControlPagoCommand {
 	}
 
 	public String getEstadoSTR() {
-		return MapEnums.ENUM_ESTADO_.get(estado);
+		return MapEnums.ENUM_ESTADO_CONTROL_PAGO_.get(estado);
 	}
 
 	

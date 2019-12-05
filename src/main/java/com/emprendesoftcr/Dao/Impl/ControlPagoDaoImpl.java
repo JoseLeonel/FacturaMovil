@@ -6,11 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.stereotype.Repository;
+
 import com.emprendesoftcr.Dao.ControlPagoDao;
 import com.emprendesoftcr.modelo.ControlPago;
 import com.emprendesoftcr.modelo.Empresa;
 
-
+@Repository("controlPagoDao")
 public class ControlPagoDaoImpl implements ControlPagoDao {
 
 	@PersistenceContext

@@ -19,6 +19,71 @@ $(document)
                     );
                 }).ajaxStop($.unblockUI);
 
+var myControlPago;
+//$.toast().reset('all');
+setInterval(function() {
+	 consultaControlPago()
+ }.bind(this),900000)
+
+function __MensajesToasControlPago(){
+	
+	
+	
+}
+
+function consultaControlPago(){
+	 $.ajax({
+         type : "POST",
+         global: false,
+         dataType : "json",
+         url : 'ControlPagoEmpresaAjax.do',
+         success : function(data) {
+             if (data.status != 200) {
+                 if (data.message != null && data.message.length > 0) {
+                    // swal('',data.message,'error');
+                     swal({
+                         title: '',
+                         text: data.message,
+                         type: 'error',
+                         showCancelButton: false,
+                         confirmButtonText: 'Aceptar',
+                              	  
+                       })
+                 }
+             } else {
+            	 if (data.message != null && data.message.length > 0) {
+                     $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR)     	 
+                     })
+            	 }    
+            	 
+                 
+             }
+     },
+         error : function(xhr, status) {
+         console.log(status);
+         mensajeErrorServidor(xhr, status);
+     }
+ });
+}
+
+function mensaje(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
+	$.toast({
+	    heading: 'Pendiente Pago ',
+	    text: mensaje + " Dolares:"+"$" + dolares + " Total:"+ colones + " Pago:"+ fechaPago +  " Cambio$:"+cambio ,
+	    icon: 'error',
+	    loader: true,        // Change it to false to disable loader
+	    showHideTransition: 'slide',
+	    loaderBg: '#9EC600',  // To change the background
+	    hideAfter: 300000,   // in milli seconds
+	    position: 'bottom-right',
+	    bgColor: 'red',
+	    textColor: 'white'
+	    
+	})
+	
+}
+
 
 function __informacionData_formato_cliente(){
     var informacion_tabla_clientes = [	
