@@ -87,6 +87,8 @@ public class Constantes {
 	public static final String					PATRON_REGISTRO_CLAVE																				= "^((?=.*[\\d])(?=.*[A-Za-z])|(?=.*[^\\w\\d\\s])(?=.*[A-Za-z])).{6,}$";
 	public static final String					PATRON_ICECLAVE																							= "^\\d{6}$";
 
+	// Tipo de exoneracion
+	public static final String					TIPO_EXONERACION_DIPLOTAMATICO																= "02";
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO																= "01";
 	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL										= "07";

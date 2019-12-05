@@ -82,12 +82,47 @@ public final class Utils {
 
 	public static Double Maximo5Decimales(Double valor) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
+		if(valor == null) {
+			return resultado;	
+		}
+		if(valor.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
 		String[] splitter = valor.toString().split("\\.");
 		splitter[0].length(); // Before Decimal Count
 		splitter[1].length(); // After Decimal Count
 		String digitos = splitter[1];
 		if (splitter[1].length() >= 5) {
 			String decimales = digitos.substring(0, 5);
+			String valor1 = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+		} else {
+			String decimales = digitos.substring(0, splitter[1].length());
+			String valor1 = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+
+		}
+
+		return resultado;
+
+	}
+
+	public static Double Maximo6Decimales(Double valor) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if(valor == null) {
+			return resultado;	
+		}
+		if(valor.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		
+		String[] splitter = valor.toString().split("\\.");
+		splitter[0].length(); // Before Decimal Count
+		splitter[1].length(); // After Decimal Count
+		String digitos = splitter[1];
+		if (splitter[1].length() >= 6) {
+			String decimales = digitos.substring(0, 6);
 			String valor1 = splitter[0] + "." + decimales;
 			resultado = Double.parseDouble(valor1);
 		} else {
@@ -138,7 +173,7 @@ public final class Utils {
 
 		}
 
-		DecimalFormat formateador = new DecimalFormat("###,###,##0.00");
+		DecimalFormat formateador = new DecimalFormat("#,##0.0");
 		resultado = formateador.format(valor);
 
 		return resultado;
@@ -230,6 +265,25 @@ public final class Utils {
 	public static Date parseDateImpuestoServicio(String dateString) {
 		Date date = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+		try {
+			// parse() will throw an exception if the given dateString doesn't
+			// match
+			// the current format
+			date = dateFormat.parse(dateString);
+//			date = new SimpleDateFormat("ddMMyyyyhhmmss").parse(dateString);
+
+		} catch (ParseException e) {
+			// don't do anything. just let the loop continue.
+			// we may miss on 99 format attempts, but match on one format,
+			// but that's all we need.
+		}
+
+		return date;
+	}
+	public static Date parseDateExoneracion(String dateString) {
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 		try {
 			// parse() will throw an exception if the given dateString doesn't
@@ -1329,6 +1383,15 @@ public final class Utils {
 		return mesDesc;
 	}
 
+	
+	public static String fechaExoneracionSTR(Date fecha) {
+		if(fecha == null) {
+			return Constantes.EMPTY;
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT6);
+		String inicio1 = dateFormat1.format(fecha);
+		return inicio1;
+	}
 	/**
 	 * El metodo retorna fecha con formato
 	 * @param

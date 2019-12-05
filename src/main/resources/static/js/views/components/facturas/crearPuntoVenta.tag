@@ -196,7 +196,7 @@
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
                                     <div  show= "{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
-                                    <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
+                                    <div  show="{soloParaChinos == false && montoExoneracion.length > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
@@ -1129,8 +1129,8 @@
     self.totalDescuentos       = 0
     self.totalImpuesto         = 0
     self.totalImpuesto1         = 0
-    self.montoExoneracion     = 0
-    self.montoExoneracion1     = 0
+    self.montoExoneracion     = ""
+    self.montoExoneracion1     = ""
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
@@ -1230,8 +1230,8 @@
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalImpuesto1                 = 0
-    self.montoExoneracion              = 0
-    self.montoExoneracion1             = 0
+    self.montoExoneracion              = ""
+    self.montoExoneracion1             = ""
     self.totalComprobante              = 0
     self.primeraVezBilleteClick = false
     self.totalCambioPagar              = 0
@@ -2619,8 +2619,8 @@ function __Init(){
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalImpuesto1                 = 0
-    self.montoExoneracion              = 0
-    self.montoExoneracion1              = 0
+    self.montoExoneracion              = ""
+    self.montoExoneracion1              = ""
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.totalCambioPagarSTR           = 0
@@ -3931,7 +3931,7 @@ function __calculate() {
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
     self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
-    self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
+    self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
     self.update(); 
     $('.precioVenta').val(null)
     $('.codigo').val(null)
@@ -4091,10 +4091,15 @@ function __seleccionarClientes() {
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
+            __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
                self.factura.tipoDoc ='01'
                self.update()
-               __aplicarExoneracionPorCliente()
+               
+               if(self.item.tipoDocumentoExoneracion =='02'){
+                 self.factura.tipoDoc ='04'  
+                 self.update()
+                }
             }else{
                self.factura.tipoDoc ='04'
                self.update()

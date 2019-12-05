@@ -4450,10 +4450,15 @@ function __seleccionarClientes() {
         $('#modalClientes').modal('hide') 
         if(!verificarSiClienteFrecuente(self.cliente)){
             self.factura.tipoDoc ='01'
+            __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
                self.factura.tipoDoc ='01'
                self.update()
-               __aplicarExoneracionPorCliente()
+                if(self.item.tipoDocumentoExoneracion =='02'){
+                 self.factura.tipoDoc ='04'  
+                 self.update()
+                }
+               
             }else{
                self.factura.tipoDoc ='04'
                self.update()

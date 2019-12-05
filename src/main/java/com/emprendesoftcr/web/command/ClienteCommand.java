@@ -94,7 +94,7 @@ public class ClienteCommand {
 		this.numeroDocumentoExoneracion = cliente.getNumeroDocumentoExoneracion();
 		this.nombreInstitucionExoneracion = cliente.getNombreInstitucionExoneracion();
 		this.fechaEmisionExoneracion = cliente.getFechaEmisionExoneracion();
-		this.fechaEmisionExoneracionSTR = Utils.getFechaGeneraHacienda(cliente.getFechaEmisionExoneracion());
+		this.fechaEmisionExoneracionSTR = Utils.fechaExoneracionSTR(cliente.getFechaEmisionExoneracion());
 		this.libreImpuesto = cliente.getLibreImpuesto();
 
 	}

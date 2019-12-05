@@ -271,11 +271,11 @@ public class ClientesController {
 					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
 						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
 					}
-					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
-						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
-							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+						if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
+							if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+								result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+							}
 						}
-					}
 					if (clienteCommand.getPorcentajeExoneracion() != null) {
 						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
@@ -299,7 +299,7 @@ public class ClientesController {
 			cliente.setCorreoElectronico2(clienteCommand.getCorreoElectronico2());
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					Date fechaInicio = Utils.parseDate(clienteCommand.getFechaEmisionExoneracionSTR());
 					cliente.setFechaEmisionExoneracion(fechaInicio);
 					cliente.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					cliente.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
@@ -474,7 +474,7 @@ public class ClientesController {
 			}
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
-					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					Date fechaInicio = Utils.parseDate(clienteCommand.getFechaEmisionExoneracionSTR());
 					clienteBD.setFechaEmisionExoneracion(fechaInicio);
 					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
