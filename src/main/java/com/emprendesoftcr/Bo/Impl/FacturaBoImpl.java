@@ -490,48 +490,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 					}
 				}
-//				// Paga a credito
-//				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-//					factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalCredito(factura.getTotalComprobante());
-//				}
-//
-//				// Paga solo en efectivo
-//				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalEfectivo() > Constantes.ZEROS_DOUBLE && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
-//					factura.setTotalEfectivo(factura.getTotalComprobante());
-//					factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-//				}
-//				// Paga solo en banco
-//				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco() > Constantes.ZEROS_DOUBLE && factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
-//					factura.setTotalBanco(factura.getTotalComprobante());
-//					factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-//				}
-//				// Paga solo en tarjeta
-//				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
-//					factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalTarjeta(factura.getTotalComprobante());
-//					factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-//				}
-//				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalEfectivo() > Constantes.ZEROS_DOUBLE && factura.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
-//					Double resultado = factura.getTotalComprobante() - factura.getTotalTarjeta();
-//					factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalEfectivo(resultado);
-//					factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-//				}
-//				// Paga tarjeta y banco
-//				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco() > Constantes.ZEROS_DOUBLE && factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
-//					Double resultado = factura.getTotalComprobante() - factura.getTotalTarjeta();
-//					factura.setTotalBanco(resultado);
-//					factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-//					factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-//				}
+
 
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los
 				// procesos de hacienda
@@ -718,6 +677,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoDescuento(getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
 			detalle.setSubTotal(getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
 			detalle.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
+			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(getMontoImpuestoCon13(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion1(), detalle.getImpuesto()));
 			detalle.setMontoExoneracion(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto()));
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
@@ -1106,19 +1066,7 @@ public class FacturaBoImpl implements FacturaBo {
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
 
-	/**
-	 * Monto impuesto sin 13 = subTotal * tarifa
-	 * @param subTotal
-	 * @param tarifa
-	 * @return
-	 */
-	private Double getMontoImpuestoSin13(Double subTotal, Double tarifa) {
-		Double valor = tarifa / 100d;
-		Double resultado = subTotal * valor;
-
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-
-	}
+	
 
 	/**
 	 * SubTotal = Monto Total - Monto Descuento

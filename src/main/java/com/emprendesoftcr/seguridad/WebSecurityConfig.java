@@ -59,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll().antMatchers("/movil/ListarArticulosAjax.do")
 		.permitAll().antMatchers("/webjars/**")
 		.permitAll().antMatchers("/login")
+		.permitAll().antMatchers("https://api.hacienda.go.cr/")
+		.permitAll().antMatchers("https://api.hacienda.go.cr/indicadores/tc")
 		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
 		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
 		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")

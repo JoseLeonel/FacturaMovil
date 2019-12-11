@@ -246,6 +246,30 @@ public class UsuarioCajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator actualizarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status,@RequestParam Long idUsuarioCaja)  throws Exception {
+
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(idUsuarioCaja);
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+
+			// Se acutalizan los registros
+			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+
+		
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
 	/**
 	 * Mostrar el usuario caja

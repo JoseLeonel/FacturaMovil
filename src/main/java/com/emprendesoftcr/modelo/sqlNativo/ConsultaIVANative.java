@@ -234,4 +234,6 @@ public class ConsultaIVANative implements Serializable {
 	}
 
 	
+
+	
 }

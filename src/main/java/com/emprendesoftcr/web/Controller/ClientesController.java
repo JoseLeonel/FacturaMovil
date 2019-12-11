@@ -283,6 +283,8 @@ public class ClientesController {
 					}
 
 				}
+			}else {
+				
 			}
 
 			if (result.hasErrors()) {
@@ -314,7 +316,15 @@ public class ClientesController {
 					cliente.setPorcentajeExoneracion(Constantes.ZEROS);
 
 				}
+			} else {
+				cliente.setFechaEmisionExoneracion(null);
+				cliente.setNombreInstitucionExoneracion(Constantes.EMPTY);
+				cliente.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+				cliente.setTipoDocumentoExoneracion(Constantes.EMPTY);
+				cliente.setPorcentajeExoneracion(Constantes.ZEROS);
+
 			}
+
 			cliente.setCodigoPais(clienteCommand.getCodigoPais());
 			cliente.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
 			cliente.setEstado(clienteCommand.getEstado());
@@ -482,7 +492,15 @@ public class ClientesController {
 					clienteBD.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
 
 				}
+			} else {
+				clienteBD.setFechaEmisionExoneracion(null);
+				clienteBD.setNombreInstitucionExoneracion(Constantes.EMPTY);
+				clienteBD.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+				clienteBD.setTipoDocumentoExoneracion(Constantes.EMPTY);
+				clienteBD.setPorcentajeExoneracion(Constantes.ZEROS);
+
 			}
+
 
 			clienteBD.setProvincia(Constantes.EMPTY);
 			clienteBD.setDistrito(Constantes.EMPTY);

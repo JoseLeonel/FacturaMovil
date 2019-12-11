@@ -4095,11 +4095,14 @@ function __seleccionarClientes() {
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
                self.factura.tipoDoc ='01'
                self.update()
-               
-               if(self.item.tipoDocumentoExoneracion =='02'){
-                 self.factura.tipoDoc ='04'  
-                 self.update()
+               if(self.item != null){
+                if(self.item.tipoDocumentoExoneracion !=null){
+                    if(self.item.tipoDocumentoExoneracion =='02'){
+                        self.factura.tipoDoc ='04'  
+                        self.update()
+                        }
                 }
+               }
             }else{
                self.factura.tipoDoc ='04'
                self.update()
@@ -4124,7 +4127,7 @@ function __seleccionarClientes() {
 **/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
     if(porcentaje == 0){
         return
     }
@@ -4173,6 +4176,15 @@ function __aplicarExoneracionPorCliente(){
                     aplicaExo = true
                 }
                
+            }else{
+                self.item.porcentajeExoneracion = 0
+                self.item.fechaEmisionExoneracion = null
+                self.item.nombreInstitucionExoneracion = ""
+                self.item.numeroDocumentoExoneracion = ""
+                self.item.tipoDocumentoExoneracion = ""
+                self.item.montoExoneracion = 0
+                self.item.montoExoneracion1 = 0
+
             }
     }
     __calculate()

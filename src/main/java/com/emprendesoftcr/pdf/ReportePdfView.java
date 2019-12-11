@@ -92,7 +92,7 @@ public class ReportePdfView {
 		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 		Double totalExoneracion = Constantes.ZEROS_DOUBLE;
 		fac_electro.setMontoExoneracion(Constantes.ZEROS_DOUBLE);
-		;
+		
 		int indice_ = 0;
 		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
 			// Total Impuesto

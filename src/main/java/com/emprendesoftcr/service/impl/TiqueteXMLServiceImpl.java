@@ -76,12 +76,13 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 				resta = resta / (1000 * 60);	
 			}
 			
-			if (resta > 80) {
-				factura.setFechaEmision(fecha);
-				facturaBo.modificar(factura);
-			}else {
-				fecha = factura.getFechaEmision();
-			}
+//			if (resta > 80) {
+//				factura.setFechaEmision(fecha);
+//				facturaBo.modificar(factura);
+//			}else {
+//				fecha = factura.getFechaEmision();
+//			}
+			fecha = factura.getFechaEmision();
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new Date());
 			cal.set(Calendar.HOUR, cal.get(Calendar.HOUR)+ 2);

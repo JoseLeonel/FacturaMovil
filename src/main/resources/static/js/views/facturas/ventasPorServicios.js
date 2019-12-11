@@ -3,6 +3,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
+	consultaControlPago();
 	cargaMantenimientoCategorias()
 }
 

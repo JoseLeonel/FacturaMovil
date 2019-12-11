@@ -70,7 +70,7 @@ function consultaControlPago(){
 function mensaje(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
 	$.toast({
 	    heading: 'Pendiente Pago ',
-	    text: mensaje + " Dolares:"+"$" + dolares + " Total:"+ colones + " Pago:"+ fechaPago +  " Cambio$:"+cambio ,
+	    text: mensaje  ,
 	    icon: 'error',
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',

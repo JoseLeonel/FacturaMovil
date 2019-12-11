@@ -35,7 +35,7 @@
                                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
                                         <label  class="knob-label" >{$.i18n.prop("controlPago.empresa")}  <span class="requeridoDato">*</span></label>
                                         <select  class="form-control empresa"   name="empresa" id='empresa' data-live-search="true">
-                                            <option  each={empresas.data}  data-tokens ={nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombre}</option>
+                                            <option  each={empresas.data}  data-tokens ={nombreComercial.length >0?nombreComercial:nombre} value="{id}" selected="{controlPago.empresa.id ==id?true:false}" >{nombreComercial.length >0?nombreComercial:nombre}</option>
                                         </select>
                                     </div>   
                                 </div>

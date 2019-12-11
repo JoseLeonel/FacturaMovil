@@ -76,12 +76,12 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 				resta = resta / (1000 * 60);	
 			}
 			
-			if (resta > 80) {
-				factura.setFechaEmision(fecha);
-				facturaBo.modificar(factura);
-			}else {
-				fecha = factura.getCreated_at();
-			}
+//			if (resta > 80) {
+//				factura.setFechaEmision(fecha);
+//				facturaBo.modificar(factura);
+//			}else {
+//				fecha = factura.getCreated_at();
+//			}
 			String observacion = Constantes.EMPTY;
 			if(factura.getCliente().getObservacionVenta() !=null) {
 				if(!factura.getCliente().getObservacionVenta().equals(Constantes.EMPTY)) {

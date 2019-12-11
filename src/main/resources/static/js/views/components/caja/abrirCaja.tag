@@ -545,11 +545,49 @@ function __Imprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.usuarioCaja  = data
-        self.update()
-        riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+        self.usuarioCaja  = null
+        __ActualizarCajaAntesImprimir(data.id)
 	});
 }
+
+function __ActualizarCajaAntesImprimir(id){
+   // $("#tableListar").dataTable().fnClearTable(); 
+    $.ajax({
+        url: "ActualizarUsuarioCajaAjax.do",
+        datatype: "json",
+        data: {
+			"idUsuarioCaja":id,
+	    },
+
+        method:"GET",
+        success: function (result) {
+             if (result.status != 200) {
+                if (result.message != null && result.message.length > 0) {
+                   	swal({
+      	                title: '',
+      	                text: result.message,
+      	                type: 'error',
+      	                showCancelButton: false,
+      	                confirmButtonText: $.i18n.prop("btn.aceptar"),
+      	            })
+                }
+            } else {
+                $.each(result.listaObjetos, function( index, modeloTabla ) {
+                    self.usuarioCaja = modeloTabla    
+                    self.update()
+                })
+                riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+
+            }
+                    
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
+} 
+
 /**
  * Funcion para Modificar del Listar
  */
