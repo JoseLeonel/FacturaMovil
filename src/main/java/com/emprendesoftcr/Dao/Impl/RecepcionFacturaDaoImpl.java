@@ -143,22 +143,22 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		hql.append(" where obj.recepcionFactura.empresa = :empresa ");
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {
-				hql.append("and obj.receptorCedula = :cedula ");
+				hql.append("and obj.recepcionFactura.receptorCedula = :cedula ");
 			}
 		}
 		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
-			hql.append("and obj.codigoActividad in (:codigoActividad) ");
+			hql.append("and obj.recepcionFactura.codigoActividad in (:codigoActividad) ");
 		}
 		
 		
 		if (estado != null) {
 			if (!estado.equals(0)) {
-				hql.append("and obj.estado = :estado ");
+				hql.append("and obj.recepcionFactura.estado = :estado ");
 			}
 		}
 		if (tipoGasto != null) {
 			if (!tipoGasto.equals(0)) {
-				hql.append("and obj.tipoGasto = :tipoGasto ");
+				hql.append("and obj.recepcionFactura.tipoGasto = :tipoGasto ");
 			}
 		}
 
