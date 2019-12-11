@@ -750,8 +750,6 @@ __Busqueda(){
        if(_validarDiasAConsultar()){
            return true;
        }
-
-        
        $.ajax({
             url: "TotalVentasPorDetalleAjax.do",
             datatype: "json",
