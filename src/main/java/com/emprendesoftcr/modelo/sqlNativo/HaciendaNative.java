@@ -22,7 +22,7 @@ import com.emprendesoftcr.modelo.Empresa;
 		+ "estado,"
 		+ "empresa_id,"
 		+ "created_at from hacienda_xml" 
-    + " where hacienda_xml.empresa_id = :ID_EMPRESA and created_at >=  :fechaInicial and  created_at <=  :fechaFinal")
+    + " where hacienda_xml.empresa_id = :ID_EMPRESA and fecha_emisor >=  :fechaInicial and  fecha_emisor <=  :fechaFinal")
 @Entity
 public class HaciendaNative implements Serializable {
 

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
@@ -22,6 +23,7 @@ import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
 import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaMesaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -81,7 +83,10 @@ public interface ConsultasNativeDao {
 	Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa);
 	
 	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
+	
 	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
+	
+	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa,Mesa mesa);
 	
 	
 }

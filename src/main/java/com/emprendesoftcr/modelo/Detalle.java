@@ -160,7 +160,7 @@ public class Detalle implements Serializable {
 
 	@Column(name = "mont_exone1", precision = 18, scale = 5)
 	private Double						montoExoneracion1;
-	
+
 	@Column(name = "cant_notaC", precision = 18, scale = 5)
 	private Double						cantidadAplicadaNotaCredito;
 
@@ -172,8 +172,6 @@ public class Detalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
-
-	
 
 	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
 			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1, Double cantidadAplicadaNotaCredito, Factura factura, Usuario usuario) {
@@ -264,7 +262,7 @@ public class Detalle implements Serializable {
 		this.montoExoneracion = detalleFacturaCommand.getMontoExoneracion();
 		this.montoExoneracion1 = detalleFacturaCommand.getMontoExoneracion1();
 		this.cantidadAplicadaNotaCredito = detalleFacturaCommand.getCantidadAplicadaNotaCredito();
-		
+
 	}
 
 	public Long getId() {
@@ -284,8 +282,9 @@ public class Detalle implements Serializable {
 	}
 
 	public String getCodigoTarifaSTR() {
-		return codigoTarifa !=null?MapEnums.ENUM_TARIFAS_IMPUESTOS.get(codigoTarifa):codigoTarifa;
+		return codigoTarifa != null ? MapEnums.ENUM_TARIFAS_IMPUESTOS.get(codigoTarifa) : codigoTarifa;
 	}
+
 	public String getCodigoTarifa1() {
 		return codigoTarifa1;
 	}
@@ -301,12 +300,10 @@ public class Detalle implements Serializable {
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
 	}
-	
-	
-	public String getTipoImpuestoSTR() {
-		return  tipoImpuesto !=null?MapEnums.ENUM_TIPOS_IMPUESTOS.get(tipoImpuesto):tipoImpuesto;
-	}
 
+	public String getTipoImpuestoSTR() {
+		return tipoImpuesto != null ? MapEnums.ENUM_TIPOS_IMPUESTOS.get(tipoImpuesto) : tipoImpuesto;
+	}
 
 	public String getDescripcion() {
 		return descripcion;
@@ -375,17 +372,94 @@ public class Detalle implements Serializable {
 	public Double getMontoTotal() {
 		return montoTotal;
 	}
-	
+
 	public Double getMontoTotalNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoTotal != null ? this.montoTotal * -1 : this.montoTotal;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoTotal != null ? this.montoTotal * -1 : this.montoTotal;
+			}
+		}
 		return this.montoTotal;
 	}
 
+	public Double getTotalOtrosCargos() {
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
+	
+	public Double getTotalServicioExentos() {
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
+	public Double getTotalServicioExonerados() {
+		Double resultado = Utils.getTotalServExonerado(this.tipoImpuesto,this.unidadMedida, this.montoExoneracion);
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+
+	
+	public Double getTotalServicioGravados() {
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
+
+	public Double getTotalMercanciaExonerada() {
+		Double resultado = Utils.getTotalMercExonerada(this.tipoImpuesto, this.unidadMedida, this.montoTotal, this.porcentajeExoneracion);
+		
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
+
+	
+	public Double getTotalMercanciaGravada() {
+		Double resultado = Utils.getTotalMercanciasGravadas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal, this.porcentajeExoneracion);
+		
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
+	public Double getTotalMercanciaExenta() {
+		Double resultado = Utils.getTotalMercanciasExentas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal);
+		
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
+			}
+		}
+		return resultado * this.factura.getTipoCambio();
+	}
+	
 
 	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
@@ -398,18 +472,16 @@ public class Detalle implements Serializable {
 	public Double getMontoDescuento() {
 		return montoDescuento;
 	}
-	
-	
+
 	public Double getMontoDescuentoNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoDescuento != null ? this.montoDescuento * -1 : this.montoDescuento;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoDescuento != null ? this.montoDescuento * -1 : this.montoDescuento;
+			}
+		}
 		return this.montoDescuento;
 	}
-	
+
 	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
@@ -429,15 +501,13 @@ public class Detalle implements Serializable {
 	public Double getSubTotal() {
 		return subTotal;
 	}
-	
-	
+
 	public Double getSubTotalNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.subTotal != null ? this.subTotal * -1 : this.subTotal;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.subTotal != null ? this.subTotal * -1 : this.subTotal;
+			}
+		}
 		return this.subTotal;
 	}
 
@@ -452,7 +522,6 @@ public class Detalle implements Serializable {
 	public Double getImpuesto() {
 		return impuesto;
 	}
-	
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
@@ -465,18 +534,27 @@ public class Detalle implements Serializable {
 	public Double getMontoImpuesto() {
 		return montoImpuesto;
 	}
-	
 
 	public Double getMontoImpuestoNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoImpuesto != null ? this.montoImpuesto * -1 : this.montoImpuesto;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoImpuesto != null ? this.montoImpuesto * -1 : Constantes.ZEROS_DOUBLE;
+			}
+		}
 		return this.montoImpuesto;
 	}
 
+	public Double getMontoImpuestoNeto() {
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.ImpuestoNeto != null ? this.ImpuestoNeto * -1 : Constantes.ZEROS_DOUBLE;
+			}
+		}
+		return this.ImpuestoNeto;
+	}
+
+	
+	
 	public void setMontoImpuesto(Double montoImpuesto) {
 		this.montoImpuesto = montoImpuesto;
 	}
@@ -492,15 +570,13 @@ public class Detalle implements Serializable {
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
-	
 
 	public Double getMontoTotalLineaNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoTotalLinea != null ? this.montoTotalLinea * -1 : this.montoTotalLinea;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoTotalLinea != null ? this.montoTotalLinea * -1 : this.montoTotalLinea;
+			}
+		}
 		return this.montoTotalLinea;
 	}
 
@@ -515,8 +591,6 @@ public class Detalle implements Serializable {
 	public Double getGanancia() {
 		return ganancia;
 	}
-	
-	
 
 	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
@@ -575,20 +649,18 @@ public class Detalle implements Serializable {
 	}
 
 	public Double getMontoGananciaNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoGanancia != null ? this.montoGanancia * -1 : this.montoGanancia;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoGanancia != null ? this.montoGanancia * -1 : this.montoGanancia;
+			}
+		}
 		return this.montoGanancia;
 	}
-	
+
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
 	}
 
-	
 	public Double getPorcentajeGanancia() {
 		return porcentajeGanancia;
 	}
@@ -704,15 +776,13 @@ public class Detalle implements Serializable {
 	public Double getMontoExoneracion() {
 		return montoExoneracion;
 	}
-	
-	
+
 	public Double getMontoExoneracionNC() {
-		if (this.factura.getTipoDoc() != null ) {
-			if(this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)
-					|| this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-			    return this.montoExoneracion != null ? this.montoExoneracion * -1 : this.montoExoneracion;
-		} 
-	}
+		if (this.factura.getTipoDoc() != null) {
+			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				return this.montoExoneracion != null ? this.montoExoneracion * -1 : this.montoExoneracion;
+			}
+		}
 		return this.montoExoneracion;
 	}
 
@@ -728,16 +798,12 @@ public class Detalle implements Serializable {
 		this.montoExoneracion1 = montoExoneracion1;
 	}
 
-	
 	public Double getCantidadAplicadaNotaCredito() {
 		return cantidadAplicadaNotaCredito;
 	}
 
-	
 	public void setCantidadAplicadaNotaCredito(Double cantidadAplicadaNotaCredito) {
 		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
 	}
-	
-	
 
 }

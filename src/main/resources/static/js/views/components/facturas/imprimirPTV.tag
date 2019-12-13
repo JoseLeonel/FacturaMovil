@@ -445,9 +445,14 @@ self.on('mount',function(){
         }
        
     }
+    llamarQR()
     if(self.parametro.facturaDia == 3){
         consultaDetalles(self.parametro.factura)
     }
+    
+})
+
+function  llamarQR(){
     if (typeof self.parametro.factura.empresa != 'undefined' )  {
         if (self.parametro.factura.empresa.noFacturaElectronica ==0) {
            qr()
@@ -457,8 +462,8 @@ self.on('mount',function(){
            qr()
         }
      }
-    
-})
+
+}
 /**
 * Muestra el QR
 **/

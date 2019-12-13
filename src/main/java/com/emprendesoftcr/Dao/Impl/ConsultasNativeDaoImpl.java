@@ -14,6 +14,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
@@ -33,6 +34,7 @@ import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
 import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaMesaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -559,6 +561,18 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasTableNativa.class);
 		return (Collection<ListarFacturasTableNativa>) query.getResultList();
+	}
+
+	@Override
+	public Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa) {
+		String queryStr = getQueryBase(ListarFacturaMesaNative.class);
+		queryStr = queryStr.replaceAll("facturas.estado", "facturas.estado ='" + Constantes.FACTURA_ESTADO_PENDIENTE+ "' ");
+		
+		queryStr = queryStr.replaceAll("and facturas.empresa_id", "and facturas.empresa_id ='" + empresa.getId() + "' ");
+		queryStr = queryStr.replaceAll("and facturas.mesa_id", "and facturas.mesa_id ='" + mesa.getId() + "' ");
+		
+		Query query = entityManager.createNativeQuery(queryStr, ListarFacturaMesaNative.class);
+		return (Collection<ListarFacturaMesaNative>) query.getResultList();
 	}
 
 }

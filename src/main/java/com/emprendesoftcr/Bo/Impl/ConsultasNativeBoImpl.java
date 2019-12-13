@@ -11,6 +11,7 @@ import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
@@ -29,6 +30,7 @@ import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
 import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaMesaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -191,6 +193,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	public Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
 		
 		return consultasNativeDao.findByFacturasTableAndFechaAndTipoDocAndUsuario(empresa, idUsuario, estado, fechaInicial, fechaFinal, cliente, tipoDocumento, actividadComercial);
+	}
+
+	@Override
+	public Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa) {
+		
+		return consultasNativeDao.findByFacturaPorMesas(empresa, mesa);
 	}
 
 }

@@ -614,8 +614,8 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo Documento","Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo,facturaCodigoMoneda,facturaTipoCambio, totalImpuestosSTR,totalImpuestosSTRTipoCambio,totalFacturaSTR,totalFacturaSTRTipoCambio,   tipoDocumentoStr,tipoGastoStr", baos);
+		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor","Correo","Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo Documento","Tipo de Gasto");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre,emisorCorreo,emisorTelefono, facturaConsecutivo,facturaCodigoMoneda,facturaTipoCambio, totalImpuestosSTR,totalImpuestosSTRTipoCambio,totalFacturaSTR,totalFacturaSTRTipoCambio,   tipoDocumentoStr,tipoGastoStr", baos);
 		return baos;
 	}
 
@@ -648,8 +648,8 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica","Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoMontoSTR,impuestoMontoSTRTimpoCambio,montoLineaSTR,montoLineaSTRTimpoCambio,recepcionFactura.tipoGastoStr", baos);
+		List<String> headers = Arrays.asList("Actividad Economica","Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor","Correo","Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo de Gasto");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre,recepcionFactura.emisorCorreo,recepcionFactura.emisorTelefono, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoMontoSTR,impuestoMontoSTRTimpoCambio,montoLineaSTR,montoLineaSTRTimpoCambio,recepcionFactura.tipoGastoStr", baos);
 		return baos;
 	}
 

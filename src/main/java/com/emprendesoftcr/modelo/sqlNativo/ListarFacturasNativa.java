@@ -24,24 +24,25 @@ import com.emprendesoftcr.fisco.MapEnums;
 		+ " fac.fecha_emision,"
 		+ " clientes.cedula,"
 		+ " clientes.identificacion_Extranjero,"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_impuesto * -1,fac.total_impuesto) AS total_impuesto, \n" 
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_descuentos * -1,fac.total_descuentos) AS total_descuentos, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_serv_exentos * -1,fac.total_serv_exentos) AS total_serv_exentos, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_mercancias_gravadas * -1,fac.total_mercancias_gravadas) AS total_mercancias_gravadas, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_mercancias_exentas * -1,fac.total_mercancias_exentas) AS total_mercancias_exentas, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_gravado * -1,fac.total_gravado) AS total_gravado, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_exento * -1,fac.total_exento) AS total_exento, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_exento * -1,fac.total_venta) AS total_venta, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_venta_neta * -1,fac.total_venta_neta) AS total_venta_neta, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_servicio * -1,fac.total_servicio) AS total_servicio, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_serv_gravados * -1,fac.total_serv_gravados) AS total_serv_gravados, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_otros_cargos * -1,fac.total_otros_cargos) AS total_otros_cargos, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_efectivo * -1,fac.total_efectivo) AS total_efectivo, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_tarjeta * -1,fac.total_tarjeta) AS total_tarjeta, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_banco * -1,fac.total_banco) AS total_banco, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_credito * -1,fac.total_credito) AS total_credito, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.monto_cambio * -1,fac.monto_cambio) AS monto_cambio, \n"
-		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.total_comprobante * -1,fac.total_comprobante) AS total_comprobante, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_impuesto * fac.tipo_cambio) * -1,(fac.total_impuesto * fac.tipo_cambio)) AS total_impuesto, \n" 
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_exo * fac.tipo_cambio) * -1,(fac.total_exo * fac.tipo_cambio)) AS total_exo , \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_descuentos * fac.tipo_cambio) * -1,(fac.total_descuentos * fac.tipo_cambio)) AS total_descuentos, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_serv_exentos * fac.tipo_cambio) * -1,(fac.total_serv_exentos * fac.tipo_cambio)) AS total_serv_exentos , \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_mercancias_gravadas * fac.tipo_cambio) * -1,(fac.total_mercancias_gravadas * fac.tipo_cambio)) AS total_mercancias_gravadas, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_mercancias_exentas * fac.tipo_cambio) * -1,(fac.total_mercancias_exentas * fac.tipo_cambio)) AS total_mercancias_exentas, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_gravado * fac.tipo_cambio) * -1,(fac.total_gravado * fac.tipo_cambio)) AS total_gravado, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_exento * fac.tipo_cambio) * -1,(fac.total_exento * fac.tipo_cambio)) AS total_exento, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_exento * fac.tipo_cambio) * -1,(fac.total_venta * fac.tipo_cambio)) AS total_venta, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_venta_neta * fac.tipo_cambio) * -1,(fac.total_venta_neta * fac.tipo_cambio)) AS total_venta_neta, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_servicio * fac.tipo_cambio) * -1,(fac.total_servicio * fac.tipo_cambio)) AS total_servicio, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_serv_gravados * fac.tipo_cambio) * -1,(fac.total_serv_gravados * fac.tipo_cambio) ) AS total_serv_gravados, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_otros_cargos * fac.tipo_cambio) * -1,(fac.total_otros_cargos * fac.tipo_cambio)) AS total_otros_cargos, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_efectivo * fac.tipo_cambio) * -1,(fac.total_efectivo * fac.tipo_cambio)) AS total_efectivo, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_tarjeta * fac.tipo_cambio) * -1,(fac.total_tarjeta * fac.tipo_cambio)) AS total_tarjeta, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_banco * fac.tipo_cambio) * -1,(fac.total_banco * fac.tipo_cambio)) AS total_banco, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_credito * fac.tipo_cambio) * -1,(fac.total_credito * fac.tipo_cambio)) AS total_credito, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,fac.monto_cambio * -1,fac.tipo_cambio ) AS monto_cambio, \n"
+		+ " if(fac.tipo_doc = '03' or fac.tipo_doc = '86' ,(fac.total_comprobante * fac.tipo_cambio) * -1,fac.total_comprobante) AS total_comprobante, \n"
 		+ " fac.id,"
 		+ " fac.tipo_cambio,"
 		+ " fac.numero_consecutivo,"
@@ -176,6 +177,9 @@ public class ListarFacturasNativa implements Serializable {
 
 	@Column(name = "total_serv_gravados", precision = 18, scale = 5)
 	private Double						totalServGravados;
+	
+	@Column(name = "total_exo", precision = 18, scale = 5)
+	private Double						totalExonerado;
 	
 	
 
@@ -599,6 +603,28 @@ public class ListarFacturasNativa implements Serializable {
 		this.montoCambio = montoCambio;
 	}
 
+	
+	
+	
+	public String getIdentificacionExtranjero() {
+		return identificacionExtranjero;
+	}
+
+	
+	public void setIdentificacionExtranjero(String identificacionExtranjero) {
+		this.identificacionExtranjero = identificacionExtranjero;
+	}
+
+	
+	public Double getTotalExonerado() {
+		return totalExonerado;
+	}
+
+	
+	public void setTotalExonerado(Double totalExonerado) {
+		this.totalExonerado = totalExonerado;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -628,6 +654,7 @@ public class ListarFacturasNativa implements Serializable {
 		result = prime * result + ((totalDescuentos == null) ? 0 : totalDescuentos.hashCode());
 		result = prime * result + ((totalEfectivo == null) ? 0 : totalEfectivo.hashCode());
 		result = prime * result + ((totalExento == null) ? 0 : totalExento.hashCode());
+		result = prime * result + ((totalExonerado == null) ? 0 : totalExonerado.hashCode());
 		result = prime * result + ((totalGravado == null) ? 0 : totalGravado.hashCode());
 		result = prime * result + ((totalImpuesto == null) ? 0 : totalImpuesto.hashCode());
 		result = prime * result + ((totalImpuestoServicio == null) ? 0 : totalImpuestoServicio.hashCode());
@@ -776,6 +803,11 @@ public class ListarFacturasNativa implements Serializable {
 				return false;
 		} else if (!totalExento.equals(other.totalExento))
 			return false;
+		if (totalExonerado == null) {
+			if (other.totalExonerado != null)
+				return false;
+		} else if (!totalExonerado.equals(other.totalExonerado))
+			return false;
 		if (totalGravado == null) {
 			if (other.totalGravado != null)
 				return false;
@@ -833,6 +865,8 @@ public class ListarFacturasNativa implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 
 	
 	

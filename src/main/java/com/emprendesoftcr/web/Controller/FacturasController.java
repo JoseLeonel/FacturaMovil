@@ -80,6 +80,7 @@ import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListaNotasNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaMesaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturaNCNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
@@ -798,30 +799,51 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasEsperaPorMesaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasEsperaPorMesaAjax(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
 
+//		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+//		DataTableDelimitador delimitadores = null;
+//		delimitadores = new DataTableDelimitador(request, "Factura");
+//		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+//		delimitadores.addFiltro(dataTableFilter);
+//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
+//		delimitadores.addFiltro(dataTableFilter);
+//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
+//		delimitadores.addFiltro(dataTableFilter);
+//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
+//		delimitadores.addFiltro(dataTableFilter);
+//		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+//		delimitadores.addFiltro(dataTableFilter);
+//		dataTableFilter = new JqGridFilter("mesa.id", "'" + parametrosPaginacionMesa.getMesa().getId() + "'", "=");
+//		delimitadores.addFiltro(dataTableFilter);
+//
+//		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
+//		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
+//		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+//		
+//		
+//		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Factura");
-		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new JqGridFilter("mesa.id", "'" + parametrosPaginacionMesa.getMesa().getId() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
-		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+//		if (!usuarioBo.isAdministrador_cajero(usuarioSesion)) {
+//			return respuestaServiceDataTable;
+//
+//		}
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<ListarFacturaMesaNative> objetos = consultasNativeBo.findByFacturaPorMesas(usuarioSesion.getEmpresa(), parametrosPaginacionMesa.getMesa());
+		for (ListarFacturaMesaNative facturasEsperaNativa : objetos) {
+			solicitudList.add(facturasEsperaNativa);
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 	}
 
 	/**
@@ -1163,8 +1185,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelListar(Collection<ListarFacturasNativa> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision","Cedula", "Cliente", "A nombre","Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta",  "# Documento", "#Proforma",  "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito",  "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
+		List<String> headers = Arrays.asList("Fecha Emision","Cedula", "Cliente", "A nombre","Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta",  "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito",  "Nota");
+		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma,totalExonerado, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
 		return baos;
 	}
 

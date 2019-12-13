@@ -230,10 +230,10 @@
                 </div>
              </section>
            </div>    
-           <div onclick = {__BotonAnteriorMesas}  class="pull-left btnNavegacion " >
+           <div onclick = {__BotonAnteriorMesas}  class="pull-left btnNavegacion "  >
            		<i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
            </div>
-           <div onclick = {__BotonSiguienteMesas} class="pull-right btnNavegacion " >
+           <div onclick = {__BotonSiguienteMesas} class="pull-right btnNavegacion "  >
            		<i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
            </div>
      </div>
@@ -2144,7 +2144,7 @@ __BotonAnterior(){
         self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page > 1?self.facturasXMesa.pagination.current_page:0;
         self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
         self.update()
-        __ListaFacturasXMesas()
+      //  __ListaFacturasXMesas()
     }else {
         if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
             self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
@@ -2171,7 +2171,7 @@ __BotonSiguiente(){
 	        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page + 1
 	        self.parametrosPaginacion.paginaActual += 12
 	        self.update()
-	       	__ListaFacturasXMesas()
+	       	//__ListaFacturasXMesas()
         }
     }else {
 	    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
@@ -4490,7 +4490,7 @@ function __aplicarExoneracionPorCliente(){
     var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
-        self.item          = self.detail[count];
+        self.item  = self.detail[count];
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0  ){
@@ -5112,7 +5112,7 @@ function __ListaFacturasXMesas(){
 	//Primera vez 
     if( self.facturasXMesa.pagination.current_page == 0){
         self.facturasXMesa.pagination.current_page = 0    
-        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.cantidadPorPagina = 40
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
         self.parametrosPaginacion.tipoVenta = 1

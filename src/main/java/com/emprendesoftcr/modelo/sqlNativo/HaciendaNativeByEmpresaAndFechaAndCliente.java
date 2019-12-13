@@ -23,8 +23,8 @@ import com.emprendesoftcr.modelo.Empresa;
 		+ " empresa_id,"
 		+ " created_at,cedula_receptor"
 		+ " from hacienda_xml" 
-    + " where created_at >=  :fechaInicial "
-    + " and created_at <=  :fechaFinal "
+    + " where fecha_emisor >=  :fechaInicial "
+    + " and fecha_emisor <=  :fechaFinal "
 		+ " and hacienda_xml.empresa_id = :ID_EMPRESA "
     + " and cedula_receptor = :CEDULA  ")
 @Entity
