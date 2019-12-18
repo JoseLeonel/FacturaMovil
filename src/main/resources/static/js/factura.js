@@ -25,11 +25,8 @@ setInterval(function() {
 	 consultaControlPago()
  }.bind(this),900000)
 
-function __MensajesToasControlPago(){
-	
-	
-	
-}
+var bloqueoPorControlPago = false;
+
 
 function consultaControlPago(){
 	 $.ajax({
@@ -53,7 +50,9 @@ function consultaControlPago(){
              } else {
             	 if (data.message != null && data.message.length > 0) {
                      $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR)     	 
+                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR)
+                    	 bloqueoPorControlPago = modeloTabla.bloqueo = 1 ? true:false; 
+                    	  
                      })
             	 }    
             	 
@@ -81,6 +80,10 @@ function mensaje(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
 	    textColor: 'white'
 	    
 	})
+	
+	if(bloqueoPorControlPago == true){
+		location.href ="/";
+	}
 	
 }
 

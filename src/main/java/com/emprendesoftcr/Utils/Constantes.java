@@ -8,12 +8,13 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
 
 	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA														= 1;
+	public static final String					DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR										= "/home/jose/respaldo/";
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA												= 2;
 	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA															= 3;
 
 	public static final Integer					CONTROL_PAGO_ESTADO_INACTIVO																= 1;
 	public static final Integer					CONTROL_PAGO_ESTADO_ACTIVO																	= 0;
-	
+
 	public static final Integer					NO_APLICA_EN_CAJA																						= 1;
 	public static final Integer					SI_APLICA_EN_CAJA																						= 0;
 
@@ -88,7 +89,7 @@ public class Constantes {
 	public static final String					PATRON_ICECLAVE																							= "^\\d{6}$";
 
 	// Tipo de exoneracion
-	public static final String					TIPO_EXONERACION_DIPLOTAMATICO																= "02";
+	public static final String					TIPO_EXONERACION_DIPLOTAMATICO															= "02";
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO																= "01";
 	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL										= "07";

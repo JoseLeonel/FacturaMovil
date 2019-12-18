@@ -1,30 +1,40 @@
 package com.emprendesoftcr;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Year;
-import java.util.Date;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 
 public class vivi {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, IOException, ParserConfigurationException, SAXException {
+//      File directorio = Utils.crearDirectorioServidor("109360677");
+//      if(directorio.exists()) {
+//      	System.out.println("Listo");
+//      }
+		
+//		
+		
+//		 String s = Utils.leerXMLServidor();
+//		 System.out.println(s);
 		// TODO Auto-generated method stub
 //		Double valor = 9.29204;
 //		
-		Double resultado = Utils.Maximo6Decimales(4689.999991d);
-		Double resultado1 = Utils.roundFactura(4689.99999, 2);
+//		Double resultado = Utils.Maximo6Decimales(4689.999991d);
+//		Double resultado1 = Utils.roundFactura(4689.99999, 2);
 		
 			
-//	 
-       	System.out.println("resultado: "+resultado);
-       	System.out.println("resultado: "+resultado1);
-       	Boolean valor = Utils.aplicarRedondeo(4689.999991d);
-       	System.out.println("resultado: "+valor);
+////	 
+//       	System.out.println("resultado: "+resultado);
+//       	System.out.println("resultado: "+resultado1);
+//       	Boolean valor = Utils.aplicarRedondeo(4689.999991d);
+//       	System.out.println("resultado: "+valor);
 //		String resultado= "45123";
 //			resultado = FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 //			System.out.println(resultado);
@@ -74,6 +84,8 @@ public class vivi {
 //		System.out.println(Utils.roundFactura(valor, 5));
 
 	}
+	
+
 
 	public static Boolean validarCedula(String valor) {
 		Boolean resultado = Boolean.FALSE;

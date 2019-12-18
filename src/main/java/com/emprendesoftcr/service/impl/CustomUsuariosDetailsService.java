@@ -23,7 +23,7 @@ public class CustomUsuariosDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<Usuario> optionalUsuario = usuarioRepository.findByNombreUsuario(username);
 
-		optionalUsuario.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		optionalUsuario.orElseThrow(() -> new UsernameNotFoundException("Username not found  4 4545"));
 		
 		return new org.springframework.security.core.userdetails.User(optionalUsuario.map(CustomUsuarioDetails::new).get().getNombreUsuario(), optionalUsuario.map(CustomUsuarioDetails::new).get().getPassword(),optionalUsuario.map(CustomUsuarioDetails::new).get().getAuthorities());
 	//	return optionalUsuario.map(CustomUsuarioDetails::new).get();

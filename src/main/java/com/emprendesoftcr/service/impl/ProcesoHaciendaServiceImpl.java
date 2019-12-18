@@ -488,7 +488,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-//	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -642,8 +642,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			if (receptor != null) {
 				recepcion.setReceptor(receptor);
 			}
+			
+		//	Utils.getXMLServidor( hacienda.getConsecutivo() +"_"+ hacienda.getTipoDoc(), hacienda.getEmpresa().getCedula());
 			// XML se convierte en base 64
-			String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+			//String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+			
+			String valor = Utils.leerXMLServidor(hacienda.getEmpresa().getCedula(),hacienda.getConsecutivo(),hacienda.getTipoDoc());
 
 			// valor = valor.replaceAll("\n", "");
 
@@ -1409,7 +1413,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	@Scheduled(cron = "0 0/11 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1490,6 +1494,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setEmpresa(factura.getEmpresa());
 															hacienda.setClave(factura.getClave());
 															hacienda.setFechaEmisor(factura.getFechaEmision());
+															Utils.agregarXMLServidor(comprobanteXML, factura.getNumeroConsecutivo() +"_"+ factura.getTipoDoc(), factura.getEmpresa().getCedula());
 															Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
 															hacienda.setComprobanteXML(b);
 															hacienda.setCreated_at(new Date());

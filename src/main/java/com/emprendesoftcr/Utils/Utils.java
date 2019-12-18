@@ -1,9 +1,20 @@
 package com.emprendesoftcr.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -29,12 +40,18 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.google.common.base.Strings;
 
@@ -57,6 +74,105 @@ public final class Utils {
 	 * @param subTotal
 	 * @return
 	 */
+
+	public static void generateXml(String path, String datosXml, String name) throws Exception {
+		File archivo = new File(path + name + ".xml");
+		BufferedWriter bw;
+		if (archivo.exists()) {
+			// bw = new BufferedWriter(new FileWriter(archivo));
+			bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
+
+			bw.write(datosXml);
+
+			System.out.println("Archivo creado con éxito");
+		} else {
+			// bw = new BufferedWriter(new FileWriter(archivo));
+
+			//
+			bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
+			bw.write(datosXml);
+			System.out.println("Archivo creado con éxito");
+		}
+		bw.close();
+	}
+
+	public static String leerXMLServidor(String cedula, String name , String tipoDoc) throws IOException {
+		String resultado = Constantes.EMPTY;
+		String sCadena = "";
+		BufferedReader bf = new BufferedReader(new FileReader("/home/jose/respaldo/" + cedula +"/"+ name + "_"+tipoDoc+".xml"));
+    while ((sCadena = bf.readLine())!=null) {
+    	resultado += sCadena;
+     // System.out.println(sCadena);
+   }
+		return resultado;
+	}
+	
+	public static String convertDocumentToString(Document doc) {
+    TransformerFactory tf = TransformerFactory.newInstance();
+    Transformer transformer;
+    try {
+        transformer = tf.newTransformer();
+        // below code to remove XML declaration
+        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        String output = writer.getBuffer().toString();
+        return output;
+    } catch (TransformerException e) {
+        e.printStackTrace();
+    }
+    
+    return null;
+}
+
+public static Document convertStringToDocument(String xmlStr) {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
+    DocumentBuilder builder;  
+    try  
+    {  
+        builder = factory.newDocumentBuilder();  
+        Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) ); 
+        return doc;
+    } catch (Exception e) {  
+        e.printStackTrace();  
+    } 
+    return null;
+}
+	
+	/**
+	 * Crear directorio en el Servidor
+	 * @param cedulaEmpresa
+	 * @return
+	 */
+	public static File crearDirectorioServidor(String cedulaEmpresa) {
+		File directorio = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + cedulaEmpresa);
+		if (!directorio.exists()) {
+			directorio.mkdir();
+		}
+
+		return directorio;
+	}
+
+	public static void agregarXMLServidor(String datosXML, String name, String cedulaEmpresa) throws Exception {
+
+		File directorio = Utils.crearDirectorioServidor(cedulaEmpresa);
+		if (directorio.exists()) {
+			generateXml(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + cedulaEmpresa + "/", datosXML, name);
+		}
+
+	}
+	/**
+	 * Leer XML
+	 * @param path
+	 * @throws Exception
+	 */
+	public static void getXMLServidor(String path) throws Exception {
+		
+		
+	}
+	
+	
+
 	public static Double getTotalExentos(String tipoImpuesto, Double montoImpuesto, Double montoImpuesto1, Double montoTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
