@@ -212,10 +212,10 @@ public class Empresa implements Serializable {
 
 	@Column(name = "nota_cred_intern", columnDefinition = "INT default '1'")
 	private Integer						notaCreditoConsecutivo;
-	
+
 	@Column(name = "nota_debe_intern", columnDefinition = "INT default '1'")
 	private Integer						notaDebitoConsecutivo;
-	
+
 	@Column(name = "correo_pdf")
 	private String						correoPDF;
 
@@ -227,32 +227,31 @@ public class Empresa implements Serializable {
 
 	@Column(name = "cuenta2")
 	private String						cuenta2;
-	
+
 	@Column(name = "cuenta3")
 	private String						cuenta3;
-	
 
 	@Column(name = "cuenta4")
 	private String						cuenta4;
-	
+
 	@Column(name = "cuenta5")
 	private String						cuenta5;
-	
+
 	@Column(name = "cuenta6")
 	private String						cuenta6;
-	
+
 	@Column(name = "cuenta7")
 	private String						cuenta7;
-	
+
 	@Column(name = "cuenta8")
 	private String						cuenta8;
-	
-	
-	
+
+	@Column(name = "ip_impresion", length = 12)
+	private String						ipImprimirComanda;
 
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
 			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma, String codigoActividad, Integer consecutivoCompraSimplificada, Integer notaCreditoConsecutivo, Integer notaDebitoConsecutivo, String correoPDF, String correoCredito, String cuenta1, String cuenta2, String cuenta3,
-			String cuenta4, String cuenta5, String cuenta6, String cuenta7, String cuenta8) {
+			String cuenta4, String cuenta5, String cuenta6, String cuenta7, String cuenta8, String ipImprimirComanda) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -325,6 +324,7 @@ public class Empresa implements Serializable {
 		this.cuenta6 = cuenta6;
 		this.cuenta7 = cuenta7;
 		this.cuenta8 = cuenta8;
+		this.ipImprimirComanda = ipImprimirComanda;
 	}
 
 	public Empresa() {
@@ -345,6 +345,14 @@ public class Empresa implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getIpImprimirComanda() {
+		return ipImprimirComanda;
+	}
+
+	public void setIpImprimirComanda(String ipImprimirComanda) {
+		this.ipImprimirComanda = ipImprimirComanda;
 	}
 
 	public Integer getNotaCreditoConsecutivo() {
@@ -819,121 +827,92 @@ public class Empresa implements Serializable {
 		this.consecutivoProforma = consecutivoProforma;
 	}
 
-	
 	public String getCorreoPDF() {
 		return correoPDF;
 	}
 
-	
 	public void setCorreoPDF(String correoPDF) {
 		this.correoPDF = correoPDF;
 	}
 
-	
 	public String getCorreoCredito() {
 		return correoCredito;
 	}
 
-	
 	public void setCorreoCredito(String correoCredito) {
 		this.correoCredito = correoCredito;
 	}
 
-	
 	public String getCuenta1() {
 		return cuenta1;
 	}
 
-	
 	public void setCuenta1(String cuenta1) {
 		this.cuenta1 = cuenta1;
 	}
 
-	
 	public String getCuenta2() {
 		return cuenta2;
 	}
 
-	
 	public void setCuenta2(String cuenta2) {
 		this.cuenta2 = cuenta2;
 	}
 
-	
 	public String getCuenta3() {
 		return cuenta3;
 	}
 
-	
 	public void setCuenta3(String cuenta3) {
 		this.cuenta3 = cuenta3;
 	}
 
-	
 	public String getCuenta4() {
 		return cuenta4;
 	}
 
-	
 	public void setCuenta4(String cuenta4) {
 		this.cuenta4 = cuenta4;
 	}
 
-	
 	public String getCuenta5() {
 		return cuenta5;
 	}
 
-	
 	public void setCuenta5(String cuenta5) {
 		this.cuenta5 = cuenta5;
 	}
 
-	
 	public String getCuenta6() {
 		return cuenta6;
 	}
 
-	
 	public void setCuenta6(String cuenta6) {
 		this.cuenta6 = cuenta6;
 	}
 
-	
 	public String getCuenta7() {
 		return cuenta7;
 	}
 
-	
 	public void setCuenta7(String cuenta7) {
 		this.cuenta7 = cuenta7;
 	}
 
-	
 	public String getCuenta8() {
 		return cuenta8;
 	}
 
-	
 	public void setCuenta8(String cuenta8) {
 		this.cuenta8 = cuenta8;
 	}
 
-	
 	public Integer getNotaDebitoConsecutivo() {
 		return notaDebitoConsecutivo;
 	}
 
-	
 	public void setNotaDebitoConsecutivo(Integer notaDebitoConsecutivo) {
 		this.notaDebitoConsecutivo = notaDebitoConsecutivo;
 	}
-
-	
-	
-	
-	
-	
-	
 
 }

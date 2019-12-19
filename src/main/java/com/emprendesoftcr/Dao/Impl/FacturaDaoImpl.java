@@ -153,6 +153,17 @@ public class FacturaDaoImpl implements FacturaDao {
 
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Factura> findByEnvioCorreoSimplificado(Integer estadoFirma) {
+		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma = :estadoFirma  and obj.estado =  :estado ");
+		query.setParameter("estadoFirma", estadoFirma);
+		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+
+		return query.getResultList();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

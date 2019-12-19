@@ -174,6 +174,7 @@ public class FacturasController {
 																																																			} else {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
 																																																			}
+																																																			facturaElectronica.setAplicaFacturaElectronica(d.getEmpresa().getNoFacturaElectronica());
 
 																																																			// Emisor
 																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());

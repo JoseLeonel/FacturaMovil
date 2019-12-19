@@ -13,7 +13,7 @@ public class Constantes {
 
 	public static final Integer					CONTROL_PAGO_ESTADO_INACTIVO																= 1;
 	public static final Integer					CONTROL_PAGO_ESTADO_ACTIVO																	= 0;
-	
+
 	public static final Integer					NO_APLICA_EN_CAJA																						= 1;
 	public static final Integer					SI_APLICA_EN_CAJA																						= 0;
 
@@ -49,6 +49,7 @@ public class Constantes {
 	public static final String					FACTURA_ELECTRONICO_VERSION_4_2															= "Factura Electrónica ver 4.2";
 	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2												= "Nota Credito Electrónica ver 4.2";
 	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2													= "Nota Debito Electrónica ver 4.2";
+	public static final String					REGIMEN_SIMPLIFICADO																				= "Régimen Simplificado";
 
 	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3															= "Tiquete Electrónico ver 4.3";
 	public static final String					FACTURA_ELECTRONICO_VERSION_4_3															= "Factura Electrónica ver 4.3";
@@ -88,7 +89,7 @@ public class Constantes {
 	public static final String					PATRON_ICECLAVE																							= "^\\d{6}$";
 
 	// Tipo de exoneracion
-	public static final String					TIPO_EXONERACION_DIPLOTAMATICO																= "02";
+	public static final String					TIPO_EXONERACION_DIPLOTAMATICO															= "02";
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO																= "01";
 	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL										= "07";
@@ -517,6 +518,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO														= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO																= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS														= 3;
+	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO					= 4;
 	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR														= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";

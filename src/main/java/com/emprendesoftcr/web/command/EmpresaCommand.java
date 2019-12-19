@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 
 public class EmpresaCommand {
@@ -77,9 +78,10 @@ public class EmpresaCommand {
 	private Integer	imprimirSiempre;
 	private Integer	ordenaCategoriaArticulos;
 	private Integer	seguridadEnVentas;
-		
-	private Integer descargarInventario;
-	private String codigoActividad;
+
+	private Integer	descargarInventario;
+	private String	codigoActividad;
+	private String	ipImprimirComanda;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -134,6 +136,8 @@ public class EmpresaCommand {
 		this.seguridadEnVentas = empresa.getSeguridadEnVentas();
 		this.descargarInventario = empresa.getDescargarInventario();
 		this.codigoActividad = empresa.getCodigoActividad();
+
+		this.ipImprimirComanda = empresa.getIpImprimirComanda() == null?Constantes.EMPTY:empresa.getIpImprimirComanda();
 	}
 
 	public EmpresaCommand() {
@@ -146,6 +150,14 @@ public class EmpresaCommand {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getIpImprimirComanda() {
+		return ipImprimirComanda;
+	}
+
+	public void setIpImprimirComanda(String ipImprimirComanda) {
+		this.ipImprimirComanda = ipImprimirComanda;
 	}
 
 	public Integer getPantChino() {
@@ -492,34 +504,28 @@ public class EmpresaCommand {
 		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
 	}
 
-	
 	public Integer getSeguridadEnVentas() {
 		return seguridadEnVentas;
 	}
 
-	
 	public void setSeguridadEnVentas(Integer seguridadEnVentas) {
 		this.seguridadEnVentas = seguridadEnVentas;
 	}
+
 	public Integer getDescargarInventario() {
 		return descargarInventario;
 	}
 
-	
 	public void setDescargarInventario(Integer descargarInventario) {
 		this.descargarInventario = descargarInventario;
 	}
 
-	
 	public String getCodigoActividad() {
 		return codigoActividad;
 	}
 
-	
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
 	}
-	
-	
 
 }

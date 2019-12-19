@@ -107,7 +107,6 @@ public class ClientesController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@Cacheable(value="clienteCache")
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -133,7 +132,6 @@ public class ClientesController {
 	}
 
 	@SuppressWarnings("all")
-	@Cacheable(value="clienteCache")
 	@RequestMapping(value = "/ListarClientesActivosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivosAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -187,7 +185,6 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="clienteCache",allEntries=true)
 	@RequestMapping(value = "/AgregarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -362,7 +359,6 @@ public class ClientesController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="clienteCache",allEntries=true)
 	@RequestMapping(value = "/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {

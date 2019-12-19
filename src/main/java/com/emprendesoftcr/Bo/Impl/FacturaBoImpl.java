@@ -453,6 +453,7 @@ public class FacturaBoImpl implements FacturaBo {
 				// xml en el proceso automatico
 				if (factura.getEmpresa().getNoFacturaElectronica() != null && factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+					
 				} else {
 					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_ACEPTADA)) {
@@ -494,6 +495,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los
 				// procesos de hacienda
+				if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
+				}
 				if (factura.getId() == null) {
 					factura.setCreated_at(new Date());
 					agregar(factura);
@@ -897,5 +901,11 @@ public class FacturaBoImpl implements FacturaBo {
 			log.info("** Error  actualizar contadores del detalle de la factura: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+	}
+
+	@Override
+	public Collection<Factura> findByEnvioCorreoSimplificado(Integer estadoFirma) {
+		
+		return facturaDao.findByEnvioCorreoSimplificado(estadoFirma);
 	}
 }
