@@ -27,6 +27,7 @@ public interface FacturaDao {
 	void eliminarDetalleFacturaPorSP(Factura factura);
 	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
+	Collection<Factura> findByEnvioCorreoSimplificado(Integer estadoFirma);
 	
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconomica);
 	

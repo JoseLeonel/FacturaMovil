@@ -50,6 +50,7 @@ public class Constantes {
 	public static final String					FACTURA_ELECTRONICO_VERSION_4_2															= "Factura Electrónica ver 4.2";
 	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2												= "Nota Credito Electrónica ver 4.2";
 	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2													= "Nota Debito Electrónica ver 4.2";
+	public static final String					REGIMEN_SIMPLIFICADO																				= "Régimen Simplificado";
 
 	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3															= "Tiquete Electrónico ver 4.3";
 	public static final String					FACTURA_ELECTRONICO_VERSION_4_3															= "Factura Electrónica ver 4.3";
@@ -518,6 +519,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO														= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO																= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS														= 3;
+	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO					= 4;
 	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR														= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";

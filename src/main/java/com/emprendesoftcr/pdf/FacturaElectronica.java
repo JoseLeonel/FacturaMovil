@@ -91,6 +91,7 @@ public class FacturaElectronica {
 	private String                           cuenta6;
 	private String                           cuenta7;
 	private String                           cuenta8;
+	private Integer                          aplicaFacturaElectronica;
 	
 	private Empresa  empresa;
 
@@ -703,6 +704,16 @@ public class FacturaElectronica {
 	
 	public void setCuenta8(String cuenta8) {
 		this.cuenta8 = cuenta8;
+	}
+
+	
+	public Integer getAplicaFacturaElectronica() {
+		return aplicaFacturaElectronica;
+	}
+
+	
+	public void setAplicaFacturaElectronica(Integer aplicaFacturaElectronica) {
+		this.aplicaFacturaElectronica = aplicaFacturaElectronica;
 	}
 
 	

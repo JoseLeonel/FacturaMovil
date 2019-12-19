@@ -26,6 +26,8 @@ public interface ProcesoHaciendaService {
 	OpenIDConnectHacienda envioHacienda(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception;
 
 	void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
+	
+	 void taskEnvioDeCorreosSimplificado() throws Exception;
 
 	void enviarCorreosRecepcion(RecepcionFactura recepcionFactura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 

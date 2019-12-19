@@ -48,6 +48,9 @@ public class HeaderFooter extends PdfPageEventHelper {
 
 	private String tipoDocVersion() {
 		String resultado = Constantes.EMPTY;
+		if(this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+			 return Constantes.REGIMEN_SIMPLIFICADO;
+		}
 		if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.TIQUETE_ELECTRONICO_VERSION_4_2 : Constantes.TIQUETE_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
