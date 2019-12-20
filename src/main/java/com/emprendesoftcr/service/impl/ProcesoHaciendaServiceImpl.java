@@ -490,7 +490,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -642,12 +642,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			if (receptor != null) {
 				recepcion.setReceptor(receptor);
 			}
-			
-		//	Utils.getXMLServidor( hacienda.getConsecutivo() +"_"+ hacienda.getTipoDoc(), hacienda.getEmpresa().getCedula());
+
+			// Utils.getXMLServidor( hacienda.getConsecutivo() +"_"+ hacienda.getTipoDoc(), hacienda.getEmpresa().getCedula());
 			// XML se convierte en base 64
-			//String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-			
-			String valor = Utils.leerXMLServidor(hacienda.getEmpresa().getCedula(),hacienda.getConsecutivo(),hacienda.getTipoDoc());
+			String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+
+//			String valor = Utils.leerXMLServidor(hacienda.getEmpresa().getCedula(),hacienda.getConsecutivo(),hacienda.getTipoDoc());
 
 			// valor = valor.replaceAll("\n", "");
 
@@ -1086,7 +1086,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							try {
 
 								Factura facturaBD = facturaBo.findById(factura.getId());
-								ArrayList<String> listaCorreos = listaCorreosAsociadosFactura(factura);
+								ArrayList<String> listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
 								// Se determina si es una recepcion de factura
 								if (listaCorreos != null) {
 									if (!listaCorreos.isEmpty()) {
@@ -1188,7 +1188,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 
 									if (factura != null) {
-										listaCorreos = listaCorreosAsociadosFactura(factura);
+										listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
@@ -1243,56 +1243,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			throw e;
 		}
 	}
-
-	private ArrayList<String> listaCorreosAsociadosFactura(Factura factura) {
-		ArrayList<String> listaCorreos = new ArrayList<String>();
-		if (factura.getCorreoAlternativo() != null) {
-			if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
-				listaCorreos.add(factura.getCorreoAlternativo());
-			}
-		}
-		if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
-			if (factura.getCliente().getCorreoElectronico() != null) {
-				if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico());
-				}
-			}
-			if (factura.getCliente().getCorreoElectronico1() != null) {
-				if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico1());
-				}
-			}
-			if (factura.getCliente().getCorreoElectronico2() != null) {
-				if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico2());
-				}
-
-			}
-			if (factura.getCliente().getCorreoElectronico3() != null) {
-				if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico3());
-				}
-			}
-			String correo = Constantes.EMPTY;
-
-			if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-				if (factura.getEmpresa().getCorreoCredito() != null) {
-					if (!factura.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
-						correo = factura.getEmpresa().getCorreoCredito();
-					}
-				}
-			}
-			if (correo.equals(Constantes.EMPTY)) {
-				listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-			} else {
-				listaCorreos.add(correo);
-			}
-		}
-
-		return listaCorreos;
-
-	}
-
+ 
+	
 	/**
 	 * Envios de correos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
@@ -1300,8 +1252,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception {
 		try {
-			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+			String xmlFactura = Constantes.EMPTY;
+			String xmlRespuesta = Constantes.EMPTY;
+			if(hacienda.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
+				xmlFactura = Utils.leerXMLServidor(hacienda.getPathMigracion());
+				xmlRespuesta = Utils.leerXMLServidor(hacienda.getPathMigracionRespuesta());
+				
+			}else {
+				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+				
+			}
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
@@ -1347,8 +1308,20 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public void enviarCorreosRecepcion(RecepcionFactura recepcionFactura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception {
 		try {
-			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+			String xmlFactura = Constantes.EMPTY;
+			String xmlRespuesta = Constantes.EMPTY;
+			
+			if(hacienda.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
+				xmlFactura = Utils.leerXMLServidor(hacienda.getPathMigracion());
+				xmlRespuesta = Utils.leerXMLServidor(hacienda.getPathMigracionRespuesta());
+				
+			}else {
+				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+				
+			}
+			
+			
 			String tipoDoc = "compra";
 			if (hacienda != null) {
 				if (!hacienda.getTipoDoc().equals(Constantes.EMPTY)) {
@@ -1572,7 +1545,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setEmpresa(factura.getEmpresa());
 															hacienda.setClave(factura.getClave());
 															hacienda.setFechaEmisor(factura.getFechaEmision());
-															Utils.agregarXMLServidor(comprobanteXML, factura.getNumeroConsecutivo() +"_"+ factura.getTipoDoc(), factura.getEmpresa().getCedula());
+//															Utils.agregarXMLServidor(comprobanteXML, factura.getNumeroConsecutivo() +"_"+ factura.getTipoDoc(), factura.getEmpresa().getCedula());
 															Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
 															hacienda.setComprobanteXML(b);
 															hacienda.setCreated_at(new Date());
@@ -1587,6 +1560,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
 															hacienda.setTotalReceptor(factura.getTotalComprobante());
 															hacienda.setNotificacion(siEnviarCorreo(factura) ? Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE : Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+															hacienda.setPathMigracion(Constantes.EMPTY);
+															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
 															haciendaBo.agregar(hacienda);
 
 														}
@@ -1712,6 +1687,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									hacienda.setCorreoReceptor(compraSimplificada.getProveedorSimplificado().getCorreoElectronico());
 									hacienda.setTotalReceptor(compraSimplificada.getTotalComprobante());
 									hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+									hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
 									haciendaBo.agregar(hacienda);
 									if (compraSimplificada != null) {
 										CompraSimplificada compraSimplificadaBD = compraSimplificadaBo.findById(compraSimplificada.getId());
@@ -1797,6 +1773,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setCorreoReceptor(recepcionFactura.getEmpresa().getCorreoElectronico());
 								hacienda.setTotalReceptor(recepcionFactura.getFacturaTotalComprobante());
 								hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+								hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+								hacienda.setPathMigracion(Constantes.EMPTY);
 								haciendaBo.agregar(hacienda);
 
 								recepcionFactura = recepcionFactura.getId() == null || recepcionFactura.getId() == Constantes.ZEROS_LONG ? null : recepcionFacturaBo.findById(recepcionFactura.getId());
@@ -1825,6 +1803,74 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+	}
+
+	/**
+	 * Mueve los archivos xml a  disco
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#guardarXMLPeridoConsecutivo()
+	 */
+	@Scheduled(cron = "0 0/1 * * * ?")
+	@Override
+	public void guardarXMLPeridoConsecutivo() throws Exception {
+		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);
+		String pathXMLDocumento = Constantes.EMPTY;
+		String pathMigracionRespuesta = Constantes.EMPTY;
+		try {
+			String xmlFactura = Constantes.EMPTY;
+			String xmlRespuesta = Constantes.EMPTY;
+			String nombreDocumento = Constantes.EMPTY;
+			if (semaforoMigracion != null) {
+				Date fechaInicial = semaforoMigracion.getFechaInicial();
+				Date FechaFinal = semaforoMigracion.getFechaFinal();
+				Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndMigracionAndFechas(Constantes.MIGRADO_XMLS_A_DISCO_NO, fechaInicial, FechaFinal,semaforoMigracion.getCantidadMigracion());
+				for (Hacienda hacienda : listaHacienda) {
+					Factura facturaMigrada = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					if (facturaMigrada != null) {
+						nombreDocumento = getTipoDocMigrado(hacienda.getTipoDoc());
+						xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+						xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+						pathXMLDocumento = Utils.agregarXMLServidor(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR_8080, xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo() + "_" + facturaMigrada.getTipoDoc(), facturaMigrada.getEmpresa().getCedula(), hacienda.getFechaEmisor());
+						pathMigracionRespuesta = Utils.agregarXMLServidor(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR_8080, xmlRespuesta, nombreDocumento + "respuesta_" + facturaMigrada.getNumeroConsecutivo() + "_" + facturaMigrada.getTipoDoc(), facturaMigrada.getEmpresa().getCedula(), hacienda.getFechaEmisor());
+						hacienda.setPathMigracion(pathXMLDocumento);
+						hacienda.setPathMigracionRespuesta(pathMigracionRespuesta);
+						hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_SI);
+						haciendaBo.modificar(hacienda);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			semaforoMigracion.setEstado(Constantes.SEMAFORO_ESTADO_INACTIVO);
+			semaforoBo.modificar(semaforoMigracion);
+			log.error("** Error2  guardado de xmls: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+	}
+
+	private String getTipoDocMigrado(String tipoDoc) {
+		String resultado = "factura_";
+		switch (tipoDoc) {
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA:
+				resultado = "factura_";
+				break;
+			case Constantes.FACTURA_TIPO_DOC_TIQUETE:
+				resultado = "tiquete_";
+				break;
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO:
+				resultado = "notaDebido_";
+				break;
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO:
+				resultado = "notaCredito_";
+				break;
+
+			default:
+				resultado = "factura";
+				break;
+		}
+
+		return resultado;
+
 	}
 
 }

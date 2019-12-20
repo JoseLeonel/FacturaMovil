@@ -49,5 +49,8 @@ public interface FacturaBo {
 	void actualizarCantidadesNotaCredito(Factura factura, DetalleFacturaCommand detalleFacturaCommand) throws Exception;
 
 	ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception;
+
 	Collection<Factura> findByEnvioCorreoSimplificado(Integer estadoFirma);
+
+	ArrayList<String> listaCorreosAsociadosFactura(Factura factura);
 }

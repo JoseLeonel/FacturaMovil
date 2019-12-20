@@ -119,7 +119,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal){
-		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");
+		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.estado = :estado and obj.fechaEmisor >= :fechaInicio and obj.fechaEmisor <= :fechaFin");
 		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicial);
 		query.setParameter("fechaFin", FechaFinal);
@@ -183,5 +183,15 @@ public class HaciendaDaoImpl implements HaciendaDao {
 			throw e;
 		}
 
+	}
+
+	@Override
+	public Collection<Hacienda> findByEmpresaAndMigracionAndFechas(Integer migradoADisco, Date fechaInicial, Date FechaFinal,Integer cantidadMigrar) {
+		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.migradoADisco = :migradoADisco and obj.fechaEmisor >= :fechaInicio and obj.fechaEmisor <= :fechaFin");
+		query.setParameter("migradoADisco", migradoADisco);
+		query.setParameter("fechaInicio", fechaInicial);
+		query.setParameter("fechaFin", FechaFinal);
+		query.setMaxResults(cantidadMigrar);
+		return query.getResultList();
 	}
 }

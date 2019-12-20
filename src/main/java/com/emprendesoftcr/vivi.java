@@ -3,18 +3,24 @@ package com.emprendesoftcr;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.time.Year;
+import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 
 public class vivi {
 
 	public static void main(String[] args) throws ParseException, IOException, ParserConfigurationException, SAXException {
-//      File directorio = Utils.crearDirectorioServidor("109360677");
+		
+	//Getting the current date
+//		Date date = new Date();
+//	  String resultado  = Utils.getDirectorioPorFechaMes(date);
+//		System.out.println("Local Date is: "+resultado);
+////      File directorio = Utils.crearDirectorioServidor("109360677");
 //      if(directorio.exists()) {
 //      	System.out.println("Listo");
 //      }
@@ -75,8 +81,8 @@ public class vivi {
 //			System.out.println("cedula igual caracter");
 //		}
 		
-		Year anno = Year.now(); 
-    System.out.printf("Este año:" + anno.getValue()); 
+//		Year anno = Year.now(); 
+//    System.out.printf("Este año:" + anno.getValue()); 
 //		List<String>  ejemplos = Arrays.asList("leo","alberto","pedro");
 //		String ejemplo = ejemplos.stream().collect(Collectors.joining(","));
 //		System.out.println(ejemplo);

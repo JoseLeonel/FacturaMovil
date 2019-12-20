@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,6 +19,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -73,105 +76,198 @@ public final class Utils {
 	 * @param montoImpuesto1
 	 * @param subTotal
 	 * @return
+	 * @throws Exception
 	 */
 
-	public static void generateXml(String path, String datosXml, String name) throws Exception {
-		File archivo = new File(path + name + ".xml");
-		BufferedWriter bw;
-		if (archivo.exists()) {
-			// bw = new BufferedWriter(new FileWriter(archivo));
-			bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
-
-			bw.write(datosXml);
-
-			System.out.println("Archivo creado con éxito");
-		} else {
-			// bw = new BufferedWriter(new FileWriter(archivo));
-
-			//
-			bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
-			bw.write(datosXml);
-			System.out.println("Archivo creado con éxito");
-		}
-		bw.close();
-	}
-
-	public static String leerXMLServidor(String cedula, String name , String tipoDoc) throws IOException {
+	public static String generateXml(String path, String datosXml, String name, Date fecha) throws Exception {
+		// String resultado = Utils.getDirectorioPorFechaMes(fecha);
 		String resultado = Constantes.EMPTY;
-		String sCadena = "";
-		BufferedReader bf = new BufferedReader(new FileReader("/home/jose/respaldo/" + cedula +"/"+ name + "_"+tipoDoc+".xml"));
-    while ((sCadena = bf.readLine())!=null) {
-    	resultado += sCadena;
-     // System.out.println(sCadena);
-   }
+		try {
+			File archivo = new File(path + "/" + name + ".xml");
+			BufferedWriter bw;
+			if (archivo.exists()) {
+				// bw = new BufferedWriter(new FileWriter(archivo));
+				bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
+
+				bw.write(datosXml);
+
+				System.out.println("Archivo creado con éxito");
+			} else {
+				// bw = new BufferedWriter(new FileWriter(archivo));
+
+				//
+				bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
+				bw.write(datosXml);
+				System.out.println("Archivo creado con éxito");
+			}
+			bw.close();
+			resultado = archivo.getPath();
+
+		} catch (Exception e) {
+			throw e;
+		}
 		return resultado;
 	}
-	
-	public static String convertDocumentToString(Document doc) {
-    TransformerFactory tf = TransformerFactory.newInstance();
-    Transformer transformer;
-    try {
-        transformer = tf.newTransformer();
-        // below code to remove XML declaration
-        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        String output = writer.getBuffer().toString();
-        return output;
-    } catch (TransformerException e) {
-        e.printStackTrace();
-    }
-    
-    return null;
-}
 
-public static Document convertStringToDocument(String xmlStr) {
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
-    DocumentBuilder builder;  
-    try  
-    {  
-        builder = factory.newDocumentBuilder();  
-        Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) ); 
-        return doc;
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    } 
-    return null;
-}
-	
+	public static String leerXMLServidor(String path) throws IOException {
+		String resultado = Constantes.EMPTY;
+		String sCadena = "";
+		BufferedReader bf = new BufferedReader(new FileReader(path));
+		while ((sCadena = bf.readLine()) != null) {
+			resultado += sCadena;
+			// System.out.println(sCadena);
+		}
+		return resultado;
+	}
+
+	public static String convertDocumentToString(Document doc) {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer transformer;
+		try {
+			transformer = tf.newTransformer();
+			// below code to remove XML declaration
+			// transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			StringWriter writer = new StringWriter();
+			transformer.transform(new DOMSource(doc), new StreamResult(writer));
+			String output = writer.getBuffer().toString();
+			return output;
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static Document convertStringToDocument(String xmlStr) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
+			return doc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * Crear directorio en el Servidor
 	 * @param cedulaEmpresa
 	 * @return
 	 */
-	public static File crearDirectorioServidor(String cedulaEmpresa) {
-		File directorio = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + cedulaEmpresa);
-		if (!directorio.exists()) {
-			directorio.mkdir();
-		}
-
-		return directorio;
-	}
-
-	public static void agregarXMLServidor(String datosXML, String name, String cedulaEmpresa) throws Exception {
-
-		File directorio = Utils.crearDirectorioServidor(cedulaEmpresa);
+	public static File crearDirectorioServidor(String servidor, String cedulaEmpresa, Date fecha) {
+		String mes = Utils.getDirectorioMes(fecha);
+		String anno = Utils.getDirectorioAnno(fecha);
+		String direccion = Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		File directorio = new File(direccion);
 		if (directorio.exists()) {
-			generateXml(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + cedulaEmpresa + "/", datosXML, name);
+			return directorio;
 		}
 
+		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
+		File directorio_servicio80 = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor);
+		if (!directorio_servicio80.exists()) {
+			directorio_servicio80.mkdir();
+		}
+
+		File directorio_empresa = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa);
+		if (!directorio_empresa.exists()) {
+			directorio_empresa.mkdir();
+		}
+		File directorio_anno = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno);
+		if (!directorio_anno.exists()) {
+			directorio_anno.mkdir();
+		}
+		File directorio_mes = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
+		if (!directorio_mes.exists()) {
+			directorio_mes.mkdir();
+		}
+
+		File directorio1 = new File(direccion);
+		if (!directorio1.exists()) {
+			return null;
+		}
+
+		return directorio1;
 	}
+
+	public static LocalDate getFechaLocalDate(Date date) {
+		// Getting the default zone id
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+
+		// Converting the date to Instant
+		Instant instant = date.toInstant();
+
+		// Converting the Date to LocalDate
+		LocalDate localDate = instant.atZone(defaultZoneId).toLocalDate();
+
+		return localDate;
+	}
+
+	public static String getDirectorioMes(Date date) {
+		String resultado = Constantes.EMPTY;
+		LocalDate localDate = getFechaLocalDate(date);
+		Month mes = localDate.getMonth();
+		resultado = mes.toString();
+
+		return resultado;
+
+	}
+
+	public static String getDirectorioAnno(Date date) {
+		String resultado = Constantes.EMPTY;
+		LocalDate localDate = getFechaLocalDate(date);
+
+		int anno = localDate.getYear();
+
+		resultado = resultado + anno;
+
+		return resultado.trim();
+
+	}
+
+	public static String getDirectorioAnnoAndMes(Date date) {
+		String resultado = Constantes.EMPTY;
+		LocalDate localDate = getFechaLocalDate(date);
+
+		int anno = localDate.getYear();
+		Month mes = localDate.getMonth();
+
+		resultado = anno + "/" + mes + "/";
+
+		return resultado.trim();
+
+	}
+
+	public static String agregarXMLServidor(String servidor, String datosXML, String name, String cedulaEmpresa, Date fecha) throws Exception {
+
+		String path = Constantes.EMPTY;
+		try {
+			File directorio = Utils.crearDirectorioServidor(servidor, cedulaEmpresa, fecha);
+			if (directorio != null) {
+				if (directorio.exists()) {
+					path = generateXml(directorio.getPath(), datosXML, name, fecha);
+				}
+
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+
+		return path;
+
+	}
+
 	/**
 	 * Leer XML
 	 * @param path
 	 * @throws Exception
 	 */
 	public static void getXMLServidor(String path) throws Exception {
-		
-		
+
 	}
-	
-	
 
 	public static Double getTotalExentos(String tipoImpuesto, Double montoImpuesto, Double montoImpuesto1, Double montoTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;

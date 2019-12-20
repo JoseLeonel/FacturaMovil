@@ -56,18 +56,38 @@ public class Semaforo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "fech_migra_inic")
+	private Date							fechaInicial;
 
-	public Semaforo(Integer id, String descripcion, Integer estado, Date created_at, Date updated_at, Empresa empresa, Integer maximoReintentosEnviar) {
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "fech_migra_fina")
+	private Date							fechaFinal;
+
+	@Column(name = "cant_migra", columnDefinition = "INT default '0'")
+	private Integer						cantidadMigracion;
+
+	
+	
+	
+	public Semaforo(Integer id, String descripcion, Integer estado, Integer maximoReintentosEnviar, Date created_at, Date updated_at, Empresa empresa, Date fechaInicial, Date fechaFinal, Integer cantidadMigracion) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
 		this.estado = Constantes.SEMAFORO_ESTADO_FIRMADO;
-		this.created_at = new Date();
-		this.updated_at = new Date();
-		this.empresa = empresa;
 		this.maximoReintentosEnviar = Constantes.SEMAFORO_ESTADO_REINTENTOS;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.empresa = empresa;
+		this.fechaInicial = fechaInicial;
+		this.fechaFinal = fechaFinal;
+		this.cantidadMigracion = cantidadMigracion;
 	}
 
+	
 	public Semaforo() {
 		super();
 		this.estado = Constantes.SEMAFORO_ESTADO_FIRMADO;
@@ -132,5 +152,43 @@ public class Semaforo implements Serializable {
 	public void setMaximoReintentosEnviar(Integer maximoReintentosEnviar) {
 		this.maximoReintentosEnviar = maximoReintentosEnviar;
 	}
+
+
+	
+	public Date getFechaInicial() {
+		return fechaInicial;
+	}
+
+
+	
+	public void setFechaInicial(Date fechaInicial) {
+		this.fechaInicial = fechaInicial;
+	}
+
+
+	
+	public Date getFechaFinal() {
+		return fechaFinal;
+	}
+
+
+	
+	public void setFechaFinal(Date fechaFinal) {
+		this.fechaFinal = fechaFinal;
+	}
+
+
+	
+	public Integer getCantidadMigracion() {
+		return cantidadMigracion;
+	}
+
+
+	
+	public void setCantidadMigracion(Integer cantidadMigracion) {
+		this.cantidadMigracion = cantidadMigracion;
+	}
+	
+	
 
 }

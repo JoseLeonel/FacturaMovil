@@ -46,6 +46,9 @@ public interface ProcesoHaciendaService {
 	Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception;
 
 	void procesoCambiarConsecutivo() throws Exception;
+	
+	
+	void guardarXMLPeridoConsecutivo() throws Exception;
 
 	void graficoVenta() throws Exception;
 }
