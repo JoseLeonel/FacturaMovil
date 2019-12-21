@@ -324,7 +324,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
 
-	@Scheduled(cron = "0 0/15 04 * * ?")
+	@Scheduled(cron = "0 0/35 02 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -490,7 +490,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -658,22 +658,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 					// San Ana
-					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-//					recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -703,7 +703,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/18 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1068,7 +1068,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
 
-//	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/40 * * * ?")
 	@Override
 	public synchronized void taskEnvioDeCorreosSimplificado() throws Exception {
 		try {
@@ -1141,22 +1141,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
 			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS);
 			if (semaforoEnvioCorreo != null) {
-				Boolean noEnviarCorreoClienteFrecuente = false;
-				// Listado de los documentos Pendientes de aceptar por hacienda
+					// Listado de los documentos Pendientes de aceptar por hacienda
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
 						for (Hacienda hacienda : listaHacienda) {
 							try {
 								log.info("Inicio Envios de correos - {}", formatter.format(LocalDateTime.now()));
-
-								noEnviarCorreoClienteFrecuente = false;
 								Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 								ArrayList<String> listaCorreos = new ArrayList<String>();
 								// Se determina si es una recepcion de factura
@@ -1180,7 +1177,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								} else {
 									Factura factura = haciendaBD.getNumeroFactura() != null ? facturaBo.findById(haciendaBD.getNumeroFactura()) : null;
 									if (factura == null) {
-										facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+										factura =facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 									}
 
 									if (factura != null) {
@@ -1188,16 +1185,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
-
 											enviarCorreos(factura, haciendaBD, listaCorreos);
-											if (noEnviarCorreoClienteFrecuente == false) {
-												haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-												haciendaBo.modificar(haciendaBD);
-											}
 										}
 									}
 
 								}
+								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+								haciendaBo.modificar(haciendaBD);
 
 							} catch (Exception e) {
 								// Se modifica el registros
@@ -1328,7 +1322,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				modelEmail.put("tituloDocumento", "Nota de credito Electronico:");
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
-			log.info("Documento enviado al correo: " + hacienda.getNumeroFactura() + " Empresa:" + hacienda.getEmpresa().getNombre());
+			log.info("Documento enviado al correo: " + hacienda.getConsecutivo() + " Empresa:" + hacienda.getEmpresa().getNombre());
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre() + " Consecutivo" + hacienda.getConsecutivo());
@@ -1487,7 +1481,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1743,7 +1737,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	@Scheduled(cron = "0 0/30 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

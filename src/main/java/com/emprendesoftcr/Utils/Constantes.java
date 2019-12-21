@@ -130,7 +130,7 @@ public class Constantes {
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 600;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 100;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 300;
 
 	// 48 horas cada 5 minutos
 
