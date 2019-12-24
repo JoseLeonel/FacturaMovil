@@ -16,15 +16,24 @@ public class vivi {
 		// TODO Auto-generated method stub
 //		Double valor = 9.29204;
 //		
-		Double resultado = Utils.Maximo6Decimales(4689.999991d);
-		Double resultado1 = Utils.roundFactura(4689.99999, 2);
+//		Double resultado = Utils.Maximo6Decimales(4689.999991d);
+//		Double resultado1 = Utils.roundFactura(4689.99999, 2);
+		BigDecimal bd = BigDecimal.valueOf(2.787610619469027E7);
+		Double monto1 = bd.doubleValue();
+		System.out.println(monto1); // prints 10.0001
 		
+		Double cantidad = 4500d;
+		Double subtotaltotal = 7000d * cantidad;
+		Double impuesto =  Utils.Maximo5Decimales(subtotaltotal) * 0.13;
+		Double montolinea = Utils.Maximo5Decimales(subtotaltotal) + Utils.Maximo5Decimales(impuesto);
+		BigDecimal resultadoDecimal = new BigDecimal(montolinea);
+		System.out.println("resultado: "+ resultadoDecimal.toString());
 			
 //	 
-       	System.out.println("resultado: "+resultado);
-       	System.out.println("resultado: "+resultado1);
-       	Boolean valor = Utils.aplicarRedondeo(4689.999991d);
-       	System.out.println("resultado: "+valor);
+//       	System.out.println("resultado: "+resultado);
+//       	System.out.println("resultado: "+resultado1);
+//       	Boolean valor = Utils.aplicarRedondeo(4689.999991d);
+//       	System.out.println("resultado: "+valor);
 //		String resultado= "45123";
 //			resultado = FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 //			System.out.println(resultado);
@@ -65,8 +74,8 @@ public class vivi {
 //			System.out.println("cedula igual caracter");
 //		}
 		
-		Year anno = Year.now(); 
-    System.out.printf("Este año:" + anno.getValue()); 
+//		Year anno = Year.now(); 
+//    System.out.printf("Este año:" + anno.getValue()); 
 //		List<String>  ejemplos = Arrays.asList("leo","alberto","pedro");
 //		String ejemplo = ejemplos.stream().collect(Collectors.joining(","));
 //		System.out.println(ejemplo);

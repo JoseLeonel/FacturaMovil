@@ -501,8 +501,13 @@ public final class Utils {
 		if (valor.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
+		BigDecimal resultadoDecimal = new BigDecimal(valor);
+		String cadena = resultadoDecimal.toString();
+		if(!cadena.contains(".")) {
+			return valor;
+		}
 
-		String[] splitter = valor.toString().split("\\.");
+		String[] splitter = resultadoDecimal.toString().split("\\.");
 		splitter[0].length(); // Before Decimal Count
 		splitter[1].length(); // After Decimal Count
 		String digitos = splitter[1];
@@ -520,7 +525,8 @@ public final class Utils {
 		return resultado;
 
 	}
-
+	
+	
 	public static Double Maximo6Decimales(Double valor) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		if (valor == null) {

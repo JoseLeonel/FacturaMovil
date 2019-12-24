@@ -1145,14 +1145,7 @@ function cargarDetallesFacturaEnEspera(data){
 * Aplicar la exoneracion de detalles
 **/
 function __aplicarExoneracionPorCliente(){
-    self.item.porcentajeExoneracion = 0
-    self.item.fechaEmisionExoneracion = null
-    self.item.nombreInstitucionExoneracion = ""
-    self.item.numeroDocumentoExoneracion = ""
-    self.item.tipoDocumentoExoneracion = ""
-    self.item.montoExoneracion = 0
-    self.item.montoExoneracion1 = 0
-    self.update()
+   
 
     var aplicaExo = false
     var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)

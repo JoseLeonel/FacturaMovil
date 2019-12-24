@@ -805,33 +805,7 @@ public class FacturasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasEsperaPorMesaAjax(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
 
-//		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		DataTableDelimitador delimitadores = null;
-//		delimitadores = new DataTableDelimitador(request, "Factura");
-//		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
-//		delimitadores.addFiltro(dataTableFilter);
-//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
-//		delimitadores.addFiltro(dataTableFilter);
-//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
-//		delimitadores.addFiltro(dataTableFilter);
-//		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
-//		delimitadores.addFiltro(dataTableFilter);
-//		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-//		delimitadores.addFiltro(dataTableFilter);
-//		dataTableFilter = new JqGridFilter("mesa.id", "'" + parametrosPaginacionMesa.getMesa().getId() + "'", "=");
-//		delimitadores.addFiltro(dataTableFilter);
-//
-//		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
-//		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
-//		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
-//		
-//		
-//		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		if (!usuarioBo.isAdministrador_cajero(usuarioSesion)) {
-//			return respuestaServiceDataTable;
-//
-//		}
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
 		Collection<ListarFacturaMesaNative> objetos = consultasNativeBo.findByFacturaPorMesas(usuarioSesion.getEmpresa(), parametrosPaginacionMesa.getMesa());

@@ -649,10 +649,10 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			gananciaProducto = Utils.Maximo6Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
-			if(detalle.getCodigo().equals("57")) {
-				String valor = "uy";
-				detalle.setObservacion(valor);
-			}
+//			if(detalle.getCodigo().equals("57")) {
+//				String valor = "uy";
+//				detalle.setObservacion(valor);
+//			}
 			detalle.setId(null);
 		//	detalle.setPrecioUnitario(precioUnitario);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
@@ -706,10 +706,10 @@ public class FacturaBoImpl implements FacturaBo {
 			totalMercExonerada = totalMercExonerada + Utils.getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 
 			totalImpuesto = totalImpuesto + Utils.getTotalImpuesto(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getTipoDocumentoExoneracion(), detalle.getImpuestoNeto());
-			if(totalImpuesto > 0d) {
-				String valor = "uy";
-				detalle.setObservacion(valor);
-			}
+//			if(totalImpuesto > 0d) {
+//				String valor = "uy";
+//				detalle.setObservacion(valor);
+//			}
 			totalMercanciasGravadas = totalMercanciasGravadas + Utils.getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 			totalMercanciasExentas = totalMercanciasExentas + Utils.getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
