@@ -618,6 +618,7 @@ public class FacturaBoImpl implements FacturaBo {
 		Double costo = Constantes.ZEROS_DOUBLE;
 		Double descuentoTotal = Constantes.ZEROS_DOUBLE;
 		Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
+		ArrayList<Detalle> listaDetalles = new ArrayList<Detalle>();
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
@@ -639,7 +640,7 @@ public class FacturaBoImpl implements FacturaBo {
 			precioUnitario = Constantes.ZEROS_DOUBLE;
 			costo = Constantes.ZEROS_DOUBLE;
 			if (detalleFacturaCommand.getPrecioUnitario() != null) {
-				precioUnitario = Utils.Maximo6Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario());
+				precioUnitario = Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario());
 			}
 			if (articulo != null) {
 				if (articulo.getCosto() != null) {
@@ -647,7 +648,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			gananciaProducto = Utils.Maximo6Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
+			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 //			if(detalle.getCodigo().equals("57")) {
 //				String valor = "uy";
@@ -728,8 +729,9 @@ public class FacturaBoImpl implements FacturaBo {
 			numeroLinea += 1;
 			detalle.setFactura(factura);
 			detalleDao.agregar(detalle);
-
+			listaDetalles.add(detalle);
 		}
+	//	totalDescuentos = listaDetalles.stream().mapToDouble(d->d.getMontoDescuento()).sum();
 		totalExonerado = totalExonerado + Utils.getTotalExonerado(totalServExonerado, totalMercExonerada);
 		totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
 		totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
@@ -785,6 +787,7 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalComprobante(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante));
 
 	}
+
 
 	
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {

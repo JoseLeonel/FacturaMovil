@@ -193,9 +193,14 @@ public final class Utils {
 	public static Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		porcentajeDescuento = porcentajeDescuento == null ? Constantes.ZEROS_DOUBLE : porcentajeDescuento;
-		Double resultado = montoTotal * porcentajeDescuento;
-		resultado = resultado / 100d;
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		BigDecimal bd1 = new BigDecimal(montoTotal);
+		BigDecimal bd2 = new BigDecimal(porcentajeDescuento);
+		bd1 = bd1.multiply(bd2);
+		//Double resultado = montoTotal * porcentajeDescuento;
+		BigDecimal divisor = new BigDecimal(100d);
+		BigDecimal resultado = bd1.divide(divisor);
+		Double valor = resultado.doubleValue();
+		return Utils.aplicarRedondeo(valor) ? Utils.roundFactura(valor, 5) : valor;
 	}
 
 	/**
@@ -314,6 +319,13 @@ public final class Utils {
 
 		return resultado;
 	}
+	
+	public static Double getMontoDescuento(Double monto,Double total) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+			resultado += total + monto; 
+
+		return  Utils.Maximo5Decimales(resultado);
+	}
 
 	/**
 	 * Monto Linea
@@ -331,12 +343,19 @@ public final class Utils {
 		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
 		tipoDocumentoExoneracion = tipoDocumentoExoneracion == null ? Constantes.EMPTY : tipoDocumentoExoneracion;
 		subTotal = subTotal == null ? Constantes.ZEROS_DOUBLE : subTotal;
+		BigDecimal subTotalB = new BigDecimal(subTotal);
+		BigDecimal montoImpuestoNetoB = new BigDecimal(montoImpuestoNeto);
+		BigDecimal montoImpuestoB = new BigDecimal(montoImpuesto);
+		BigDecimal montoImpuesto1B = new BigDecimal(montoImpuesto1);
 		if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
-			resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuestoNeto);
+			subTotalB = subTotalB.add(montoImpuestoNetoB);
 		} else {
-			resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuesto) + Utils.Maximo5Decimales(montoImpuesto1);
+			subTotalB = subTotalB.add(montoImpuestoB);
+			subTotalB = subTotalB.add(montoImpuesto1B);
+			//resultado = subTotal + montoImpuesto + montoImpuesto1;
 		}
 
+		resultado = subTotalB.doubleValue();
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
 
@@ -501,13 +520,21 @@ public final class Utils {
 		if (valor.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
-		BigDecimal resultadoDecimal = new BigDecimal(valor);
-		String cadena = resultadoDecimal.toString();
-		if(!cadena.contains(".")) {
-			return valor;
+		String cadena = Constantes.EMPTY;
+		String verificar = valor.toString();
+		if(verificar.contains("E")) {
+			BigDecimal resultadoDecimal = new BigDecimal(valor);
+			cadena = resultadoDecimal.toString();
+			if(!cadena.contains(".")) {
+				return valor;
+			}
+		
+			
+		}else {
+			cadena = valor.toString();
 		}
 
-		String[] splitter = resultadoDecimal.toString().split("\\.");
+		String[] splitter = cadena.toString().split("\\.");
 		splitter[0].length(); // Before Decimal Count
 		splitter[1].length(); // After Decimal Count
 		String digitos = splitter[1];
@@ -527,33 +554,7 @@ public final class Utils {
 	}
 	
 	
-	public static Double Maximo6Decimales(Double valor) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		if (valor == null) {
-			return resultado;
-		}
-		if (valor.equals(Constantes.ZEROS_DOUBLE)) {
-			return resultado;
-		}
-
-		String[] splitter = valor.toString().split("\\.");
-		splitter[0].length(); // Before Decimal Count
-		splitter[1].length(); // After Decimal Count
-		String digitos = splitter[1];
-		if (splitter[1].length() >= 6) {
-			String decimales = digitos.substring(0, 6);
-			String valor1 = splitter[0] + "." + decimales;
-			resultado = Double.parseDouble(valor1);
-		} else {
-			String decimales = digitos.substring(0, splitter[1].length());
-			String valor1 = splitter[0] + "." + decimales;
-			resultado = Double.parseDouble(valor1);
-
-		}
-
-		return resultado;
-
-	}
+	
 
 	/**
 	 * Si el sexto digito es mayor 5 o igual
@@ -561,8 +562,20 @@ public final class Utils {
 	 * @return
 	 */
 	public static Boolean aplicarRedondeo(Double valor) {
+		valor = valor == null?Constantes.ZEROS_DOUBLE:valor;
 		Boolean resultado = Boolean.FALSE;
-		String[] splitter = valor.toString().split("\\.");
+		String cadena = Constantes.EMPTY;
+		String verificar = valor.toString();
+		if(verificar.contains("E")) {
+			BigDecimal resultadoDecimal = new BigDecimal(valor);
+			cadena = resultadoDecimal.toString();
+			if(!cadena.contains(".")) {
+				return resultado;
+			}
+		}else {
+			cadena = valor.toString();
+		}
+		String[] splitter = cadena.toString().split("\\.");
 		splitter[0].length(); // Before Decimal Count
 		splitter[1].length(); // After Decimal Count
 		if (splitter[1].length() > 5) {
