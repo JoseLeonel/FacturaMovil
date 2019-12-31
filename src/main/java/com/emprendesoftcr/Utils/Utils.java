@@ -83,7 +83,7 @@ public final class Utils {
 		// String resultado = Utils.getDirectorioPorFechaMes(fecha);
 		String resultado = Constantes.EMPTY;
 		try {
-			File archivo = new File(path + "/" + name + ".xml");
+			File archivo = new File( path + "/" + name + ".xml");
 			BufferedWriter bw;
 			if (archivo.exists()) {
 				// bw = new BufferedWriter(new FileWriter(archivo));
@@ -157,29 +157,30 @@ public final class Utils {
 	 * @return
 	 */
 	public static File crearDirectorioServidor(String servidor, String cedulaEmpresa, Date fecha) {
+		String dir = System.getProperty("user.dir");
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
-		String direccion = Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		String direccion = dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
 			return directorio;
 		}
 
 		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
-		File directorio_servicio80 = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor);
+		File directorio_servicio80 = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor);
 		if (!directorio_servicio80.exists()) {
 			directorio_servicio80.mkdir();
 		}
 
-		File directorio_empresa = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa);
+		File directorio_empresa = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
 			directorio_empresa.mkdir();
 		}
-		File directorio_anno = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno);
+		File directorio_anno = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno);
 		if (!directorio_anno.exists()) {
 			directorio_anno.mkdir();
 		}
-		File directorio_mes = new File(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
+		File directorio_mes = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 		if (!directorio_mes.exists()) {
 			directorio_mes.mkdir();
 		}
