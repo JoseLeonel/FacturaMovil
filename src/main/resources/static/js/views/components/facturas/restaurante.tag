@@ -1958,6 +1958,7 @@ function __ListaActividadesComercales(){
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -5308,7 +5309,7 @@ function eliminaArticuloComanda(codigoArticulo){
 function __EnviarCocina(){
 	
 	//Se forman los detalles a enviar a la comanda
-    var url = self.IpImprmirComanda.lenght > 0 ? 'http://'+self.IpImprmirComanda+':8033/service/CrearOrdenCocinaAjax':'http://localhost:8033/service/CrearOrdenCocinaAjax';
+    var url = self.IpImprmirComanda.length > 0 ? 'http://'+self.IpImprmirComanda+':8033/service/CrearOrdenCocinaAjax':'http://localhost:8033/service/CrearOrdenCocinaAjax';
 	var detalles_cocina_1 = [];
     var detalles_cocina_2 = [];
 	self.pendientesComanda.forEach(function(elemenKey){
@@ -5369,6 +5370,7 @@ function enviarImpresoraCocina(url,parametros){
 	        contentType: 'application/json',
 	        url: url,
 	        datatype: "json",
+            global: false,
 	        data : parametros,
 	        method:"POST",
 	        success: function (result) {
@@ -5932,6 +5934,7 @@ function abrirCajonDineroConComanda(){
 	        contentType: 'application/json',
 	        url: 'http://localhost:8033/service/abrirCajonDinero',
 	        datatype: "json",
+            global: false,
 	        data : JSONData,
 	        method:"POST",
 	        success: function (result) {

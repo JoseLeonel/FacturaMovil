@@ -35,8 +35,47 @@ public class vivi {
 //		Double resultado = Utils.Maximo6Decimales(4689.999991d);
 //		Double resultado1 = Utils.roundFactura(4689.99999, 2);
 		
+		Double valor1 = 35000000.3699d* 4566.5555d;
+		Double valor4 = 35000000.36565699d* 4.55554545454d;
+		Double valor5 = 35000000.3699d* 4566.5555d;
+		System.out.println("suma4:"+Utils.Maximo5Decimales(valor4)); // prints 10.0001
+		System.out.println("suma5:"+Utils.Maximo5Decimales(valor5)); // prints 10.0001
+		String[] splitter = valor1.toString().split("\\.");
+		//System.out.println("parte decimal:"+splitter); // prints 10.0001
+		System.out.println("suma:"+Utils.Maximo5Decimales(valor1)); // prints 10.0001
+		
+		
+		Double valor = 651.3274336283187d+56.63717d+617.69912d+1663.7168141592922d+920.3539824d;
+		System.out.println("suma:"+Utils.Maximo5Decimales(valor)); // prints 10.0001
+		
+		Double resultado  = 651.32743d;
+		Double resultado1  = 56.63716d;
+		Double total = Utils.getMontoDescuento(resultado1, resultado);
+		System.out.println(total ); // prints 10.0001
+		Double resultado2  = 617.69911d;
+		total = Utils.getMontoDescuento(resultado2, total);
+		System.out.println(total ); // prints 10.0001
+		Double resultado3  = 1663.71681d;
+		total = Utils.getMontoDescuento(resultado3, total);
+		System.out.println(total ); // prints 10.0001
+		Double resultado4  = 920.35398d;
+		total = Utils.getMontoDescuento(resultado4, total);
+		System.out.println(total ); // prints 10.0001
+		
+		
+//		BigDecimal bd = BigDecimal.valueOf(2.787610619469027E7);
+//		Double monto1 = bd.doubleValue();
+//		System.out.println(monto1); // prints 10.0001
+//		
+//		Double cantidad = 4500d;
+//		Double subtotaltotal = 7000d * cantidad;
+//		Double impuesto =  Utils.Maximo5Decimales(subtotaltotal) * 0.13;
+//		Double montolinea = Utils.Maximo5Decimales(subtotaltotal) + Utils.Maximo5Decimales(impuesto);
+//		BigDecimal resultadoDecimal = new BigDecimal(montolinea);
+//		System.out.println("resultado: "+ resultadoDecimal.toString());
 			
 ////	 
+//	 
 //       	System.out.println("resultado: "+resultado);
 //       	System.out.println("resultado: "+resultado1);
 //       	Boolean valor = Utils.aplicarRedondeo(4689.999991d);

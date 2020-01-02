@@ -227,33 +227,6 @@ public class DetalleController {
 		return respuestaService;
 	}
 
-	/**
-	 * Listado de los impuestos de servicio 10%
-	 * @param request
-	 * @param response
-	 * @param fechaInicio
-	 * @param fechaFin
-	 * @return
-	 */
-
-	/**
-	 * Enviar Correo
-	 * @param request
-	 * @param response
-	 * @param fechaInicialParam
-	 * @param fechaFinalParam
-	 * @param codigoParam
-	 * @param tipoDocumentoParam
-	 * @param idClienteParam
-	 * @param correoAlternativo
-	 * @param totalDescuentoGeneral
-	 * @param totalImpuestoGeneral
-	 * @param totalGeneral
-	 * @param codigo
-	 * @param descripcion
-	 * @throws IOException
-	 * @throws Exception
-	 */
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
 	public void envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
 		Boolean isVededor = false;

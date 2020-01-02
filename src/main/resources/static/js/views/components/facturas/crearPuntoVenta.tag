@@ -1462,7 +1462,7 @@ function getTipoCambioDolar(){
 //       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
 //       self.update()
       console.log('fail')
-    });;
+    });
 }
 
 

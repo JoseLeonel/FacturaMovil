@@ -137,11 +137,11 @@ public class Constantes {
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																= 600;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 100;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS												= 300;
 
 	// 48 horas cada 5 minutos
 
-	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																= 60;
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																= 10;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR														= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_ACTIVO																			= 1;
