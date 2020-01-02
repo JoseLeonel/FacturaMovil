@@ -160,27 +160,27 @@ public final class Utils {
 		String dir = System.getProperty("user.dir");
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
-		String direccion = dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		String direccion = dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
 			return directorio;
 		}
 
 		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
-		File directorio_servicio80 = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor);
+		File directorio_servicio80 = new File(dir + "/" + servidor);
 		if (!directorio_servicio80.exists()) {
 			directorio_servicio80.mkdir();
 		}
 
-		File directorio_empresa = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa);
+		File directorio_empresa = new File(dir + "/"  + servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
 			directorio_empresa.mkdir();
 		}
-		File directorio_anno = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno);
+		File directorio_anno = new File(dir + "/" +  servidor + cedulaEmpresa + "/" + anno);
 		if (!directorio_anno.exists()) {
 			directorio_anno.mkdir();
 		}
-		File directorio_mes = new File(dir + "/" + Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
+		File directorio_mes = new File(dir + "/" +  servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 		if (!directorio_mes.exists()) {
 			directorio_mes.mkdir();
 		}

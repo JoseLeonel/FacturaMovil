@@ -15,8 +15,6 @@ public class Constantes {
 	
 
 	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA														= 1;
-	public static final String					DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR										= "respaldos/";
-	public static final String					DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR_8080 							= "servicio8080/";
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA												= 2;
 	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA															= 3;
 

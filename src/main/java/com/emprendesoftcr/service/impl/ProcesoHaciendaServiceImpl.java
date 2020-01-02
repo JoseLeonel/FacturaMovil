@@ -490,7 +490,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-//	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -643,13 +643,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setReceptor(receptor);
 			}
 
-			// Utils.getXMLServidor( hacienda.getConsecutivo() +"_"+ hacienda.getTipoDoc(), hacienda.getEmpresa().getCedula());
 			// XML se convierte en base 64
 			String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-
-//			String valor = Utils.leerXMLServidor(hacienda.getEmpresa().getCedula(),hacienda.getConsecutivo(),hacienda.getTipoDoc());
-
-			// valor = valor.replaceAll("\n", "");
 
 			if (valor.length() > 0) {
 
@@ -1545,7 +1540,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setEmpresa(factura.getEmpresa());
 															hacienda.setClave(factura.getClave());
 															hacienda.setFechaEmisor(factura.getFechaEmision());
-//															Utils.agregarXMLServidor(comprobanteXML, factura.getNumeroConsecutivo() +"_"+ factura.getTipoDoc(), factura.getEmpresa().getCedula());
 															Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
 															hacienda.setComprobanteXML(b);
 															hacienda.setCreated_at(new Date());
@@ -1820,23 +1814,26 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String xmlRespuesta = Constantes.EMPTY;
 			String nombreDocumento = Constantes.EMPTY;
 			if (semaforoMigracion != null) {
+				log.info("Iniciando la migracion de archivos {}", new Date());
 				Date fechaInicial = semaforoMigracion.getFechaInicial();
 				Date FechaFinal = semaforoMigracion.getFechaFinal();
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndMigracionAndFechas(Constantes.MIGRADO_XMLS_A_DISCO_NO, fechaInicial, FechaFinal,semaforoMigracion.getCantidadMigracion());
-				for (Hacienda hacienda : listaHacienda) {
-					Factura facturaMigrada = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+				for (Hacienda haciendaMigrada : listaHacienda) {
+					Factura facturaMigrada = facturaBo.findByConsecutivoAndEmpresa(haciendaMigrada.getConsecutivo(), haciendaMigrada.getEmpresa());
 					if (facturaMigrada != null) {
-						nombreDocumento = getTipoDocMigrado(hacienda.getTipoDoc());
-						xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-						xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
-						pathXMLDocumento = Utils.agregarXMLServidor(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR_8080, xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo() + "_" + facturaMigrada.getTipoDoc(), facturaMigrada.getEmpresa().getCedula(), hacienda.getFechaEmisor());
-						pathMigracionRespuesta = Utils.agregarXMLServidor(Constantes.DIRECCION_RESPALDO_ARCHIVOS_XML_SERVIDOR_8080, xmlRespuesta, nombreDocumento + "respuesta_" + facturaMigrada.getNumeroConsecutivo() + "_" + facturaMigrada.getTipoDoc(), facturaMigrada.getEmpresa().getCedula(), hacienda.getFechaEmisor());
-						hacienda.setPathMigracion(pathXMLDocumento);
-						hacienda.setPathMigracionRespuesta(pathMigracionRespuesta);
-						hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_SI);
-						haciendaBo.modificar(hacienda);
+						nombreDocumento = getTipoDocMigrado(haciendaMigrada.getTipoDoc());
+						xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getComprobanteXML());
+						xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getMensajeHacienda());
+						log.info("Documento migrado: "+haciendaMigrada.getNumeroFactura());
+						pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+						pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+						haciendaMigrada.setPathMigracion(pathXMLDocumento);
+						haciendaMigrada.setPathMigracionRespuesta(pathMigracionRespuesta);
+						haciendaMigrada.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_SI);
+						haciendaBo.modificar(haciendaMigrada);
 					}
 				}
+				log.info("Finalizando la migracion de archivos {}", new Date());
 			}
 
 		} catch (Exception e) {
@@ -1849,23 +1846,23 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	private String getTipoDocMigrado(String tipoDoc) {
-		String resultado = "factura_";
+		String resultado = "fact_";
 		switch (tipoDoc) {
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA:
-				resultado = "factura_";
+				resultado = "fact_";
 				break;
 			case Constantes.FACTURA_TIPO_DOC_TIQUETE:
-				resultado = "tiquete_";
+				resultado = "tiq_";
 				break;
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO:
-				resultado = "notaDebido_";
+				resultado = "notaD_";
 				break;
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO:
-				resultado = "notaCredito_";
+				resultado = "notaCred_";
 				break;
 
 			default:
-				resultado = "factura";
+				resultado = "fact";
 				break;
 		}
 
