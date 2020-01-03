@@ -25,6 +25,9 @@ setInterval(function() {
 	 consultaControlPago()
  }.bind(this),900000)
 
+ 
+var bloqueoPorControlPago = false; 
+ 
 function __MensajesToasControlPago(){
 	
 	
@@ -53,7 +56,8 @@ function consultaControlPago(){
              } else {
             	 if (data.message != null && data.message.length > 0) {
                      $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR)     	 
+                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR);
+                    	 bloqueoPorControlPago = modeloTabla.bloqueo = 1 ? true:false; 
                      })
             	 }    
             	 
@@ -66,6 +70,28 @@ function consultaControlPago(){
      }
  });
 }
+
+function mensajeAdvertencia(mensaje){
+	$.toast({
+	    heading: 'Advertencia ',
+	    text: mensaje  ,
+	    icon: 'error',
+	    loader: true,        // Change it to false to disable loader
+	    showHideTransition: 'slide',
+	    loaderBg: '#9EC600',  // To change the background
+	    hideAfter: 5000,   // in milli seconds
+	    position: 'bottom-right',
+	    bgColor: 'red',
+	    textColor: 'white'
+
+	});
+	if(bloqueoPorControlPago == true){
+		location.href ="/";
+	}
+
+}
+
+
 
 function mensaje(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
 	$.toast({

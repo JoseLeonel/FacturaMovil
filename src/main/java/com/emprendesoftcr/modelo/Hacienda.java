@@ -72,7 +72,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "comprobante_xml")
 	@Lob
-	@Basic(fetch=FetchType.LAZY)
+	@Basic(fetch = FetchType.LAZY)
 	private Blob							comprobanteXML;
 
 	@Column(name = "consecutivo")
@@ -91,7 +91,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "mensaje_Hacienda")
 	@Lob
-	@Basic(fetch=FetchType.LAZY)
+	@Basic(fetch = FetchType.LAZY)
 	private Blob							mensajeHacienda;
 
 	@Column(name = "notificacion")
@@ -99,7 +99,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "xErrorCause")
 	@Lob
-	@Basic(fetch=FetchType.LAZY)
+	@Basic(fetch = FetchType.LAZY)
 	private Blob							xErrorCause;
 
 	@ManyToOne
@@ -118,21 +118,26 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "observa")
 	@Lob
-	@Basic(fetch=FetchType.LAZY)
-	private Blob						observacion;
+	@Basic(fetch = FetchType.LAZY)
+	private Blob							observacion;
 
 	// 1= callback 0=cron
 	@Column(name = "call_back", columnDefinition = "INT default '0'")
 	private Integer						callBack;
-	
+
 	@Column(name = "id_factura")
 	private Long							numeroFactura;
 
+	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
+	private Integer						migradoADisco;
 
-	
-	
+	@Column(name = "path_migra")
+	private String						pathMigracion;
 
-	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack, Long numeroFactura) {
+	@Column(name = "path_resp")
+	private String						pathMigracionRespuesta;
+
+	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack, Long numeroFactura, Integer migradoADisco, String pathMigracion, String pathMigracionRespuesta) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -160,6 +165,9 @@ public class Hacienda implements Serializable {
 		this.observacion = observacion;
 		this.callBack = callBack;
 		this.numeroFactura = numeroFactura;
+		this.migradoADisco = migradoADisco;
+		this.pathMigracion = pathMigracion;
+		this.pathMigracionRespuesta = pathMigracionRespuesta;
 	}
 
 	public Hacienda() {
@@ -356,36 +364,52 @@ public class Hacienda implements Serializable {
 		this.totalReceptor = totalReceptor;
 	}
 
-	
 	public Blob getObservacion() {
 		return observacion;
 	}
 
-	
 	public void setObservacion(Blob observacion) {
 		this.observacion = observacion;
 	}
 
-	
 	public Integer getCallBack() {
 		return callBack;
 	}
 
-	
 	public void setCallBack(Integer callBack) {
 		this.callBack = callBack;
 	}
 
-	
 	public Long getNumeroFactura() {
 		return numeroFactura;
 	}
 
-	
 	public void setNumeroFactura(Long numeroFactura) {
 		this.numeroFactura = numeroFactura;
 	}
 
-	
-	
+	public Integer getMigradoADisco() {
+		return migradoADisco;
+	}
+
+	public void setMigradoADisco(Integer migradoADisco) {
+		this.migradoADisco = migradoADisco;
+	}
+
+	public String getPathMigracion() {
+		return pathMigracion;
+	}
+
+	public void setPathMigracion(String pathMigracion) {
+		this.pathMigracion = pathMigracion;
+	}
+
+	public String getPathMigracionRespuesta() {
+		return pathMigracionRespuesta;
+	}
+
+	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
+		this.pathMigracionRespuesta = pathMigracionRespuesta;
+	}
+
 }

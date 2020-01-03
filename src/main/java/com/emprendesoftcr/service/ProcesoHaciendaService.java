@@ -48,4 +48,7 @@ public interface ProcesoHaciendaService {
 	void procesoCambiarConsecutivo() throws Exception;
 
 	void graficoVenta() throws Exception;
+	
+	void guardarXMLPeridoConsecutivo() throws Exception;
+	
 }

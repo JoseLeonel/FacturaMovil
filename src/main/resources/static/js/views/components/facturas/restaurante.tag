@@ -18,13 +18,15 @@
                 </div>      
                 <div class="form-group ">
                     <label>Clave</label> 
-                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
+                    <input  type="password"  class="form-control claveSistema password"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}" autocomplete="off">
                 </div>      
             </form>
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
+          <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+          
+          <button type="button" class="btn btn_big btn-danger pull-right"  onclick ="{__SeguridadVentas}" >Autorizar</button>
         </div>
       </div>
     </div>
@@ -1913,6 +1915,16 @@ td.col-xl-12, th.col-xl-12 {
              $(".errorServerSideJgrid").remove();
         }, false );
         function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+        // Enable jQuery disableAutoFill plugin
+        $('#formularioModalRolUsuario').disableAutoFill({
+            passwordField: '.password',
+            debugMode: false,
+            hidingChar:'$',
+            randomizeInputName: true,
+            callback: function() {
+                return $('.form-signin').valid();
+            }
+        });
     })
 
 __AsignarActividad(e){
@@ -2019,6 +2031,9 @@ function __RolAdministrador(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.rol = modeloTabla
+                       if(self.rol.rolAdministrador == 0){
+                         self.separarCuenta = false;
+                       }
                        self.update()
                     });
                 }
@@ -2055,12 +2070,7 @@ function __validarRolAdministrador(formulario,url){
              if (data.status != 200) {
             	 serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                	 swal({
-                         type: 'error',
-                         title:"No autorizado",
-                         showConfirmButton: false,
-                         timer: 1500
-                     });
+                	  mensajeAdvertencia("No Autorizado,Su usuario no es una administrador")
                  }
                 return resultado;
              } else {
@@ -2615,11 +2625,23 @@ __CambiarCantidad(e){
 __CambiarDescripcion(e){
    self.item = e.item; 
    self.update()
-   $("#cambiarDescripcionArticulo" ).focus()
-   $("#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-   $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true})   // initialized with no keyboard 
-   $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+   self.rutaAutorizada = '';
+   self.update()
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
+
+    self.rutaAutorizada = '#modalCambiarDescripcion';
+    self.update()
+    $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: false}) 
+        $('#modalRolUsuario').modal('show')     
+   }else{
+        $("#cambiarDescripcionArticulo" ).focus()
+        $("#cambiarDescripcionArticulo" ).val(self.item.descripcion)
+        $('#modalCambiarDescripcion').modal()                      // initialized with defaults
+        $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true})   // initialized with no keyboard 
+        $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+   }
 }
 /**
 *Cambiar precio del producto
@@ -2962,30 +2984,30 @@ function aplicarFactura(estado){
 **/
 function aplicarFactura(estado, separarFactura){
     if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("factura.alert.sin.detalles"))
+        mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+            mensajeAdvertencia($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
         if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
+            mensajeAdvertencia($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
         if(estado !=1){
             if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                 mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
             var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
@@ -2993,7 +3015,7 @@ function aplicarFactura(estado, separarFactura){
             var banco = __valorNumerico($('#totalBanco').val())
             if(tarjeta != 0 || banco !=0){
                 if(resultado != montoEntregado  ){
-                    mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                    mensajeAdvertencia($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                     return
                         
                 }
@@ -3467,7 +3489,7 @@ function crearFactura(estado, separarFactura){
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
+                     mensajeAdvertencia(data.message)
                 }
             } else {
                	serverMessageJsonClase(data);
@@ -3584,7 +3606,7 @@ __MostrarFormularioDePago(){
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
-        swal("Verificar","No hay detalles en la factura ", "info")
+        mensajeAdvertencia("Verificar,No hay detalles en la factura ")
         return
     }
     self.mostarParaCrearNuevaVentas = false
@@ -4179,7 +4201,7 @@ function _actualizarDesc(e){
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
      if(descuento > 100){
-         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+          mensajeAdvertencia("Error el descuento no puede ser mayor al 100% ")
          return false
     }
       //Descuento

@@ -85,5 +85,10 @@ public class HaciendaBoImpl implements HaciendaBo {
 	public Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal){
 		return haciendaDao.findByEmpresaAndEstadoAndFechas(estado, fechaInicial, FechaFinal);
 	}
+	
+	@Override
+	public Collection<Hacienda> findByEmpresaAndMigracionAndFechas(Integer migradoADisco, Date fechaInicial, Date FechaFinal,Integer cantidadMigrar) {
+		return haciendaDao.findByEmpresaAndMigracionAndFechas(migradoADisco, fechaInicial, FechaFinal,cantidadMigrar);
+	}
 
 }

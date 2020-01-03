@@ -58,6 +58,9 @@ public class ControlPago implements Serializable {
 
 	@Column(name = "estado",columnDefinition = "INT default '0'")
 	private Integer	estado;
+	
+	@Column(name = "bloqueo", columnDefinition = "INT default '0'")
+	private Integer						bloqueo;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
@@ -73,7 +76,11 @@ public class ControlPago implements Serializable {
 
 
 
-	public ControlPago(Long id, Date fechaPago, Date fechaLimite, String mensaje, Integer tipoPago, Double totalDolar, Double totalColones, Double tipoCambio, Integer cantidadNotificacion, Integer estado, Empresa empresa) {
+	
+	
+	
+
+	public ControlPago(Long id, Date fechaPago, Date fechaLimite, String mensaje, Integer tipoPago, Double totalDolar, Double totalColones, Double tipoCambio, Integer cantidadNotificacion, Integer estado, Integer bloqueo, Empresa empresa) {
 		super();
 		this.id = id;
 		this.fechaPago = fechaPago;
@@ -85,11 +92,16 @@ public class ControlPago implements Serializable {
 		this.tipoCambio = tipoCambio;
 		this.cantidadNotificacion = cantidadNotificacion;
 		this.estado = estado;
+		this.bloqueo = bloqueo;
 		this.empresa = empresa;
 	}
 
-	
-	
+
+
+
+
+
+
 
 	public Long getId() {
 		return id;
@@ -211,6 +223,30 @@ public class ControlPago implements Serializable {
 	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+
+
+
+
+
+
+
+	
+	public Integer getBloqueo() {
+		return bloqueo;
+	}
+
+
+
+
+
+
+
+
+	
+	public void setBloqueo(Integer bloqueo) {
+		this.bloqueo = bloqueo;
 	}
 	
 	

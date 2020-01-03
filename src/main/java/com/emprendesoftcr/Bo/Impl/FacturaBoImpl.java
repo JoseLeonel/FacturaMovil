@@ -911,4 +911,55 @@ public class FacturaBoImpl implements FacturaBo {
 		
 		return facturaDao.findByEnvioCorreoSimplificado(estadoFirma);
 	}
+
+
+	@Override
+	public  ArrayList<String> listaCorreosAsociadosFactura(Factura factura) {
+		ArrayList<String> listaCorreos = new ArrayList<String>();
+		if (factura.getCorreoAlternativo() != null) {
+			if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+				listaCorreos.add(factura.getCorreoAlternativo());
+			}
+		}
+		if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
+			if (factura.getCliente().getCorreoElectronico() != null) {
+				if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCliente().getCorreoElectronico());
+				}
+			}
+			if (factura.getCliente().getCorreoElectronico1() != null) {
+				if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCliente().getCorreoElectronico1());
+				}
+			}
+			if (factura.getCliente().getCorreoElectronico2() != null) {
+				if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCliente().getCorreoElectronico2());
+				}
+
+			}
+			if (factura.getCliente().getCorreoElectronico3() != null) {
+				if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCliente().getCorreoElectronico3());
+				}
+			}
+			String correo = Constantes.EMPTY;
+
+			if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+				if (factura.getEmpresa().getCorreoCredito() != null) {
+					if (!factura.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+						correo = factura.getEmpresa().getCorreoCredito();
+					}
+				}
+			}
+			if (correo.equals(Constantes.EMPTY)) {
+				listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+			} else {
+				listaCorreos.add(correo);
+			}
+		}
+
+		return listaCorreos;
+
+	}
 }

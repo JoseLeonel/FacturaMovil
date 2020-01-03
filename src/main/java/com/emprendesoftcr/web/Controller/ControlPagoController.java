@@ -145,6 +145,7 @@ public class ControlPagoController {
 			controlPago.setCantidadNotificacion(Constantes.ZEROS);
 			controlPago.setEstado(Constantes.CONTROL_PAGO_ESTADO_ACTIVO);
 			controlPago.setMensaje(controlPagoCommand.getMensaje());
+			controlPago.setBloqueo(controlPagoCommand.getBloqueo());
 			
 			controlPagoBo.agregar(controlPago);
 
@@ -185,6 +186,7 @@ public class ControlPagoController {
 				controlPagoBD.setCantidadNotificacion(Constantes.ZEROS);
 				controlPagoBD.setEstado(controlPagoCommand.getEstado());
 				controlPagoBD.setMensaje(controlPagoCommand.getMensaje());
+				controlPagoBD.setBloqueo(controlPagoCommand.getBloqueo());
 				controlPagoBo.modificar(controlPagoBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("controlPago.modificado.correctamente", controlPagoBD);
 			

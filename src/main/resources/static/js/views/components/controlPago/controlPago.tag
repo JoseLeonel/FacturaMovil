@@ -88,7 +88,13 @@
                                         <select  class="form-control campoNumerico" id="estado" name="estado"  >
                                             <option  each={estados}  value="{codigo}" selected="{controlPago.estado ==codigo?true:false}" >{descripcion}</option>
                                         </select>
-                                    </div>     
+                                    </div>  
+                                       <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra">{$.i18n.prop("controlPago.bloqueo")}</label>
+                                        <select  class="form-control campoNumerico" id="bloqueo" name="bloqueo"  >
+                                            <option  each={bloqueos}  value="{codigo}" selected="{controlPago.bloqueo ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>       
                                 </div>    
                             </div>
 
@@ -241,6 +247,7 @@
     self.mostrarBotonAgregarEntrada  = false
     self.mostrarBotonAgregarSalida   = false 
     self.empresas               = {data:[]}
+    self.bloqueos                  = []
     self.tipoPagos =[]
     self.estados =[]
     self.tipoCambio ={
@@ -257,13 +264,26 @@ self.on('mount',function(){
     getTipoCambioDolar()
     __tipoPagos() 
     __ComboEstados()
+     __ComboBloqueos()
 
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
-
+function __ComboBloqueos(){
+    self.bloqueos =[]
+    self.update()
+    self.bloqueos.push({
+        codigo: 0,
+        descripcion:"No"
+     });
+    self.bloqueos.push({
+        codigo: 1,
+        descripcion: "Si"
+     });
+     self.update();
+}
 
 __CalculoColones(e){
     var resultado  =  __valorNumerico($('#totalDolar').val()) * self.tipoCambio.total
