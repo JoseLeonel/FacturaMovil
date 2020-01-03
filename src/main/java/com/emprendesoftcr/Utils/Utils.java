@@ -32,6 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,11 +70,21 @@ public final class Utils {
 		return resultado;
 	}
 
+	public static String claveMigradoXML() {
+		Random rnd = new Random();
+		int dig3 = rnd.nextInt(900) + 100; // siempre 3 digitos
+		int dig5 = rnd.nextInt(90000) + 10000; // siempre 5 digitos
+		Integer valor3 = dig3;
+		Integer valor5 = dig5;
+		return valor3.toString() + valor5.toString();
+
+	}
+
 	public static String generateXml(String path, String datosXml, String name, Date fecha) throws Exception {
 		// String resultado = Utils.getDirectorioPorFechaMes(fecha);
 		String resultado = Constantes.EMPTY;
 		try {
-			File archivo = new File( path + "/" + name + ".xml");
+			File archivo = new File(path + "/" + name + "_" + claveMigradoXML() + ".xml");
 			BufferedWriter bw;
 			if (archivo.exists()) {
 				// bw = new BufferedWriter(new FileWriter(archivo));
@@ -162,15 +173,15 @@ public final class Utils {
 			directorio_servicio80.mkdir();
 		}
 
-		File directorio_empresa = new File(dir + "/"  + servidor + cedulaEmpresa);
+		File directorio_empresa = new File(dir + "/" + servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
 			directorio_empresa.mkdir();
 		}
-		File directorio_anno = new File(dir + "/" +  servidor + cedulaEmpresa + "/" + anno);
+		File directorio_anno = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno);
 		if (!directorio_anno.exists()) {
 			directorio_anno.mkdir();
 		}
-		File directorio_mes = new File(dir + "/" +  servidor + cedulaEmpresa + "/" + anno + "/" + mes);
+		File directorio_mes = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 		if (!directorio_mes.exists()) {
 			directorio_mes.mkdir();
 		}
@@ -254,6 +265,7 @@ public final class Utils {
 	public static void getXMLServidor(String path) throws Exception {
 
 	}
+
 	/**
 	 * Total Exento
 	 * @param tipoImpuesto
@@ -401,7 +413,7 @@ public final class Utils {
 		BigDecimal bd1 = new BigDecimal(montoTotal);
 		BigDecimal bd2 = new BigDecimal(porcentajeDescuento);
 		bd1 = bd1.multiply(bd2);
-		//Double resultado = montoTotal * porcentajeDescuento;
+		// Double resultado = montoTotal * porcentajeDescuento;
 		BigDecimal divisor = new BigDecimal(100d);
 		BigDecimal resultado = bd1.divide(divisor);
 		Double valor = resultado.doubleValue();
@@ -524,12 +536,12 @@ public final class Utils {
 
 		return resultado;
 	}
-	
-	public static Double getMontoDescuento(Double monto,Double total) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
-			resultado += total + monto; 
 
-		return  Utils.Maximo5Decimales(resultado);
+	public static Double getMontoDescuento(Double monto, Double total) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		resultado += total + monto;
+
+		return Utils.Maximo5Decimales(resultado);
 	}
 
 	/**
@@ -557,7 +569,7 @@ public final class Utils {
 		} else {
 			subTotalB = subTotalB.add(montoImpuestoB);
 			subTotalB = subTotalB.add(montoImpuesto1B);
-			//resultado = subTotal + montoImpuesto + montoImpuesto1;
+			// resultado = subTotal + montoImpuesto + montoImpuesto1;
 		}
 
 		resultado = subTotalB.doubleValue();
@@ -727,15 +739,14 @@ public final class Utils {
 		}
 		String cadena = Constantes.EMPTY;
 		String verificar = valor.toString();
-		if(verificar.contains("E")) {
+		if (verificar.contains("E")) {
 			BigDecimal resultadoDecimal = new BigDecimal(valor);
 			cadena = resultadoDecimal.toString();
-			if(!cadena.contains(".")) {
+			if (!cadena.contains(".")) {
 				return valor;
 			}
-		
-			
-		}else {
+
+		} else {
 			cadena = valor.toString();
 		}
 
@@ -757,9 +768,6 @@ public final class Utils {
 		return resultado;
 
 	}
-	
-	
-	
 
 	/**
 	 * Si el sexto digito es mayor 5 o igual
@@ -767,17 +775,17 @@ public final class Utils {
 	 * @return
 	 */
 	public static Boolean aplicarRedondeo(Double valor) {
-		valor = valor == null?Constantes.ZEROS_DOUBLE:valor;
+		valor = valor == null ? Constantes.ZEROS_DOUBLE : valor;
 		Boolean resultado = Boolean.FALSE;
 		String cadena = Constantes.EMPTY;
 		String verificar = valor.toString();
-		if(verificar.contains("E")) {
+		if (verificar.contains("E")) {
 			BigDecimal resultadoDecimal = new BigDecimal(valor);
 			cadena = resultadoDecimal.toString();
-			if(!cadena.contains(".")) {
+			if (!cadena.contains(".")) {
 				return resultado;
 			}
-		}else {
+		} else {
 			cadena = valor.toString();
 		}
 		String[] splitter = cadena.toString().split("\\.");

@@ -293,7 +293,7 @@ function __Opciones(id,type,row){
 	}
 	
 	if(row.estado == "Aceptada"){
-		if(row.tipoDoc.indexOf('Simplificada') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
+		if(row.tipoDoc !='Simplificada'  && row.tipoDoc !='Compras' ){
 		  menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
 		}
 		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
