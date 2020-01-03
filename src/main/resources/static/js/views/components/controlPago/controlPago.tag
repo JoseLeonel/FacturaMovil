@@ -89,13 +89,6 @@
                                             <option  each={estados}  value="{codigo}" selected="{controlPago.estado ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>     
-                                    <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
-                                        <label class="tamanoLetra">{$.i18n.prop("controlPago.bloqueo")}</label>
-                                        <select  class="form-control campoNumerico" id="bloqueo" name="bloqueo"  >
-                                            <option  each={bloqueos}  value="{codigo}" selected="{controlPago.bloqueo ==codigo?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>     
-
                                 </div>    
                             </div>
 
@@ -235,7 +228,6 @@
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.estados                   = []
-    self.bloqueos                  = []
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarTituloArticulo     = true
@@ -265,7 +257,6 @@ self.on('mount',function(){
     getTipoCambioDolar()
     __tipoPagos() 
     __ComboEstados()
-    __ComboBloqueos()
 
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
@@ -384,24 +375,6 @@ function __ComboEstados(){
      });
      self.update();
 }
-/**
-*  Crear el combo comanda
-**/
-function __ComboBloqueos(){
-    self.bloqueos =[]
-    self.update()
-    self.bloqueos.push({
-        codigo: 0,
-        descripcion:"No"
-     });
-    self.bloqueos.push({
-        codigo: 1,
-        descripcion: "Si"
-     });
-     self.update();
-}
-
-
 function __tipoPagos(){
     self.tipoPagos =[]
     self.update()

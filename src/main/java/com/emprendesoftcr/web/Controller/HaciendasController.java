@@ -598,7 +598,40 @@ public class HaciendasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.factura.no.existe");
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
-			listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				listaCorreos.add(factura.getCliente().getCorreoElectronico());
+			}
+			// Correo Alternativo 1
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico1() != null) {
+					if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico1());
+					}
+				}
+			}
+			// Correo Alternativo 2
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico2() != null) {
+					if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico2());
+					}
+				}
+			}
+			// Correo Alternativo 3
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico3() != null) {
+					if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico3());
+					}
+				}
+			}
+			// Correo indicado en la factura
+			if (factura.getCorreoAlternativo() != null) {
+				if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCorreoAlternativo());
+				}
+			}
+
 			if (listaCorreos != null) {
 				if (listaCorreos.size() == 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");
@@ -715,16 +748,7 @@ public class HaciendasController {
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();
-			String xmlFactura = Constantes.EMPTY;
-			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracion());
-				
-			}else {
-				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
-					
-			}
-			
-			out.println(xmlFactura);
+			out.println(FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML()));
 			out.flush();
 			out.close();
 
@@ -769,16 +793,7 @@ public class HaciendasController {
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();
-			String xmlFactura = Constantes.EMPTY;
-			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracionRespuesta());
-				
-			}else {
-				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getMensajeHacienda());
-					
-			}
-
-			out.println(xmlFactura);
+			out.println(FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getMensajeHacienda()));
 			out.flush();
 			out.close();
 

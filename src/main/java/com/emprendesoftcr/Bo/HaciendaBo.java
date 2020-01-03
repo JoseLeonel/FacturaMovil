@@ -26,6 +26,4 @@ public interface HaciendaBo {
 	Collection<Hacienda>  findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
 	Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal);
 	
-	Collection<Hacienda> findByEmpresaAndMigracionAndFechas(Integer estado,Date fechaInicial, Date FechaFinal,Integer cantidadMigrar);
-	
 }

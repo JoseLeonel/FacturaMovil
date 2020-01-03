@@ -32,7 +32,6 @@ public class ControlPagoCommand {
 	private Integer	cantidadNotificacion;
 
 	private Integer	estado;
-	private Integer	bloqueo;
 	private Empresa	empresa;
 
 	
@@ -65,7 +64,6 @@ public class ControlPagoCommand {
 
 		this.estado = controlPago.getEstado();
 		this.empresa = controlPago.getEmpresa();
-		this.bloqueo = controlPago.getBloqueo();
 	}
 
 
@@ -233,18 +231,6 @@ public class ControlPagoCommand {
 	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
-	}
-
-
-	
-	public Integer getBloqueo() {
-		return bloqueo;
-	}
-
-
-	
-	public void setBloqueo(Integer bloqueo) {
-		this.bloqueo = bloqueo;
 	}
 	
 	

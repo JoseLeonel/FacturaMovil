@@ -17,7 +17,6 @@ function cargaMantenimiento() {
 	var parametros = {
 		codigoMoneda :'CRC'
 	}
-	
 	riot.mount('punto-venta',{parametros:parametros});
 
 }

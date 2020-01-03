@@ -1,34 +1,18 @@
 package com.emprendesoftcr;
 
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.Date;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 public class vivi {
 
-	public static void main(String[] args) throws ParseException, IOException, ParserConfigurationException, SAXException {
-		
-	//Getting the current date
-//		Date date = new Date();
-//	  String resultado  = Utils.getDirectorioPorFechaMes(date);
-//		System.out.println("Local Date is: "+resultado);
-////      File directorio = Utils.crearDirectorioServidor("109360677");
-//      if(directorio.exists()) {
-//      	System.out.println("Listo");
-//      }
-		
-//		
-		
-//		 String s = Utils.leerXMLServidor();
-//		 System.out.println(s);
+	public static void main(String[] args) throws ParseException {
 		// TODO Auto-generated method stub
 //		Double valor = 9.29204;
 //		
@@ -74,7 +58,6 @@ public class vivi {
 //		BigDecimal resultadoDecimal = new BigDecimal(montolinea);
 //		System.out.println("resultado: "+ resultadoDecimal.toString());
 			
-////	 
 //	 
 //       	System.out.println("resultado: "+resultado);
 //       	System.out.println("resultado: "+resultado1);
@@ -129,8 +112,6 @@ public class vivi {
 //		System.out.println(Utils.roundFactura(valor, 5));
 
 	}
-	
-
 
 	public static Boolean validarCedula(String valor) {
 		Boolean resultado = Boolean.FALSE;

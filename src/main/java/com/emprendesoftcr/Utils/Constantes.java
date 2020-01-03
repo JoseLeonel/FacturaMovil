@@ -7,13 +7,6 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
 
-	public static final Integer					MIGRADO_XMLS_A_DISCO_NO																			= 0;
-	public static final Integer					MIGRADO_XMLS_A_DISCO_SI																			= 1;
-	
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_DISCO													= 400;
-	
-	
-
 	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA														= 1;
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA												= 2;
 	public static final Integer					APLICA_SUMA_INVENTARIO_POR_NOTA															= 3;
@@ -153,7 +146,6 @@ public class Constantes {
 	public static final Integer					SEMAFORO_ESTADO_ENVIAR_CORREOS															= 4;
 	public static final Integer					SEMAFORO_ESTADO_CALLBACK																		= 5;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO_COMPRAS															= 6;
-	public static final Integer					SEMAFORO_ESTADO_GUARDADO_XML																= 7;
 
 	public static final String					IDP_URI_PRODUCCION																					= "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect";
 	public static final String					IDP_URI_DOCUMENTOS_PRODUCCION																= "https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion";
