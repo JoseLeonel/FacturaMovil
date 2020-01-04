@@ -50,6 +50,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
@@ -91,15 +93,15 @@ public final class Utils {
 				bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
 
 				bw.write(datosXml);
-
-				System.out.println("Archivo creado con éxito");
+				resultado = archivo.getPath();
+				//System.out.println("Archivo creado con éxito");
 			} else {
 				// bw = new BufferedWriter(new FileWriter(archivo));
 
 				//
 				bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
 				bw.write(datosXml);
-				System.out.println("Archivo creado con éxito");
+				//System.out.println("Archivo creado con éxito");
 			}
 			bw.close();
 			resultado = archivo.getPath();
@@ -151,6 +153,7 @@ public final class Utils {
 		}
 		return null;
 	}
+	
 
 	/**
 	 * Crear directorio en el Servidor
@@ -162,11 +165,11 @@ public final class Utils {
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
 		String direccion = dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		//log.info("directorio: {}",direccion);
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
 			return directorio;
 		}
-
 		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
 		File directorio_servicio80 = new File(dir + "/" + servidor);
 		if (!directorio_servicio80.exists()) {
@@ -175,6 +178,7 @@ public final class Utils {
 
 		File directorio_empresa = new File(dir + "/" + servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
+			
 			directorio_empresa.mkdir();
 		}
 		File directorio_anno = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno);

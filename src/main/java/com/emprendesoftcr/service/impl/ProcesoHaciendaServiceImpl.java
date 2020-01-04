@@ -476,7 +476,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -603,6 +603,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
+//	@Scheduled(cron = "0 0/30 01 * * ?")
 	@Scheduled(cron = "0 0/30 01 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
@@ -704,7 +705,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/25 * * * ?")
+//	@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1111,7 +1112,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+//	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1423,7 +1424,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/08 * * * ?")
+//	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1683,7 +1684,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/35 * * * ?")
+//	@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -1765,7 +1766,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 	
-	@Scheduled(cron = "0 0/8 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);
@@ -1791,6 +1792,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
 						pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
 						haciendaMigrada.setPathMigracion(pathXMLDocumento);
+						log.info("Direccion: "+pathXMLDocumento);
+						
 						haciendaMigrada.setPathMigracionRespuesta(pathMigracionRespuesta);
 						haciendaMigrada.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_SI);
 						haciendaBo.modificar(haciendaMigrada);
