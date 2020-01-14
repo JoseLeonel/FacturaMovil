@@ -133,7 +133,7 @@
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group ">
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
+                                        <input onclick={_clickEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalEfectivo " id="totalEfectivo" name="totalEfectivo"  >
                                     </div>
                                     <div  class="form-group ">
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")}<span class="teclashift">(Tecla =shift )</span>  </label> 
@@ -1350,6 +1350,8 @@
 
         }
         
+        
+        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
@@ -1632,8 +1634,7 @@ var reglasDeValidacionClienteNuevo = function() {
 **/
 __regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
-    $('.totalEfectivo').select()
-    $('.totalEfectivo').focus()
+    seleccionarEfectivo()
 }
 
 /**
@@ -1643,13 +1644,7 @@ __AplicarAgregarCliente(){
      if ($("#formularioAgregarCliente").valid()) {
         aplicarCreacionClienteNuevo()
     }else{
-        swal({
-  	        title: '',
-   	        text: "Error Faltan datos requeridos",
-   	        type: 'error',
-   	        showCancelButton: false,
-   	        confirmButtonText: 'Aceptar',
-        })
+        mensajeAdvertencia("Error Faltan datos requeridos")
         return true
     }
 }
@@ -1678,13 +1673,7 @@ function aplicarCreacionClienteNuevo(){
                 if (data.status != 200) {
                    	serverMessageJson(data);
                     if (data.message != null && data.message.length > 0) {
-                      	swal({
-                           title: '',
-                           text: data.message,
-                           type: 'error',
-                           showCancelButton: false,
-                           confirmButtonText: 'Aceptar',
-                        })
+                        mensajeAdvertencia(data.message)
                     }
                 } else {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
@@ -1692,15 +1681,8 @@ function aplicarCreacionClienteNuevo(){
                        self.update()
                     });
                    	serverMessageJson(data);
-                    swal({
-                        title: '',
-                        text: data.message,
-                        type: 'success',
-                        showCancelButton: false,
-                        confirmButtonText: 'Aceptar',
-                    })
-                    $('.totalEfectivo').select()
-                    $('.totalEfectivo').focus()
+                    mensajeToasExito(data.message)   
+                    seleccionarEfectivo()
                 }
             },
             error : function(xhr, status) {
@@ -1868,7 +1850,7 @@ function __validarRolAdministrador(formulario,url){
     }
     
 }
-_SeleccionarEfectivo(){
+_clickEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
 }    
@@ -2432,7 +2414,7 @@ __AplicarYcrearFacturaTemporal(e){
 **/
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
-        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
+        mensajeAdvertencia($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
         return
 
     }
@@ -2440,12 +2422,7 @@ function aplicarFactura(estado){
          $('.precioVenta').val(null)
         $('.codigo').val("")
         $('.codigo').focus()
-         swal({
-                type: 'error',
-                title:$.i18n.prop("factura.alert.sin.detalles"),
-                showConfirmButton: false,
-                timer: 1500
-                })
+        mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
         $('.precioVenta').val(null)
         $('.codigo').val("")
         $('.codigo').focus()
@@ -2453,12 +2430,12 @@ function aplicarFactura(estado){
     }
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+           mensajeAdvertencia($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
         if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
-            return
+           mensajeAdvertencia($.i18n.prop("factura.alert.plazoCredito"))
+           return
         }
         
     }else{
@@ -2466,7 +2443,7 @@ function aplicarFactura(estado){
         if($("#tipoDoc").val() !="88"){
             if(estado == 2){
                 if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
-                    mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                    mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado"))
                     return
                 }
                 var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
@@ -2477,7 +2454,7 @@ function aplicarFactura(estado){
                // }
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
-                    mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                    mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
                 //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
@@ -2485,7 +2462,7 @@ function aplicarFactura(estado){
                 var banco = __valorNumerico($('#totalBanco').val())
                 if(tarjeta != 0 || banco !=0){
                     if(resultado != montoEntregado  ){
-                        mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                        mensajeAdvertencia($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                     return
                         
                     }
@@ -2656,12 +2633,16 @@ function __Init(){
      //Tipos de Documentos
       __ComboTipoDocumentos(0)
     __ListaFacturasEnEspera()
-    $('.codigo').select()
-    $(".codigo").focus()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.cliente));
+
+    $(".codigo").focus()
+    $('.codigo').select()
+
 }
+
+
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -2754,14 +2735,17 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
-    $('#totalEfectivo').val(self.factura.totalComprobante)
-    $('#totalTarjeta').val(null)
+    seleccionarEfectivo()
     $('#totalBanco').val(null)
-    $('#totalEfectivo').focus()
-    $('#totalEfectivo').select()
     __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
     __calculate()
+}
+
+function seleccionarEfectivo(){
+    $('#totalEfectivo').select()
+    $('#totalEfectivo').focus()
+
 }
 /** 
 *Formato de la fecha con hora
@@ -2778,7 +2762,7 @@ function crearFactura(estado){
     
     BuscarActividadComercial()
     if( self.factura.codigoActividad.length == 0 ){
-      mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
+      mensajeAdvertencia($.i18n.prop("error.factura.actividad.comercial.no.existe"))
       return
     }
       if (self.transaccion == true ){
@@ -2899,12 +2883,7 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
                 if(self.empresa.imprimirSiempre == 0){
-                   swal({
-                        type: 'success',
-                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
-                        showConfirmButton: false,
-                        timer: 1500
-                     })
+                    mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
                 }else{
                   var parametros = {
                         factura: self.empresa.imprimirSiempre == 0 ? self.facturaReimprimir : data.listaObjetos  ,
@@ -2913,12 +2892,7 @@ function evaluarFactura(data){
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
         }else{
-            swal({
-                type: 'success',
-                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
-                showConfirmButton: false,
-                timer: 800
-            })
+            mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
             __Init()
           
         }
@@ -3019,7 +2993,7 @@ function mostrarPAgo(){
         $('.codigo').focus()
         return
     }
-    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     
@@ -3028,11 +3002,10 @@ function mostrarPAgo(){
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
-    self.update()
-    $('#totalEfectivo').focus()
-    $('#totalEfectivo').select()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    seleccionarEfectivo()
 }
 /**
 Lectura de Codigos
@@ -3946,9 +3919,8 @@ function __calculate() {
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    $('#totalEfectivo').focus()
-    $('#totalEfectivo').select()
-    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    seleccionarEfectivo()
+    
 }
 /**
 *  Sub Total Generar
@@ -4117,8 +4089,7 @@ function __seleccionarClientes() {
        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
-       $('#totalEfectivo').focus()
-       $('#totalEfectivo').select()
+       seleccionarEfectivo()
     });
 }
 
@@ -4430,10 +4401,8 @@ function __Teclas(tecla){
         }else{
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo) 
-            $('.totalEfectivo').select()
-            $('.totalEfectivo').focus()
-
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            seleccionarEfectivo()
         }
         return
       } 
@@ -4446,9 +4415,8 @@ function __Teclas(tecla){
             self.update()  
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo) 
-            $('.totalEfectivo').select()
-            $('.totalEfectivo').focus()
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            seleccionarEfectivo()
             return
         }    
       }else{
@@ -4460,9 +4428,8 @@ function __Teclas(tecla){
             self.update()  
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo) 
-            $('.totalEfectivo').select()
-            $('.totalEfectivo').focus()
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            seleccionarEfectivo()
             return
         }    
 
@@ -4475,10 +4442,8 @@ function __Teclas(tecla){
         self.update()  
         $(".totalBanco").val(null)
         $(".totalTarjeta").val(null)
-        $(".totalEfectivo").val(self.factura.totalEfectivo) 
-        $('.totalEfectivo').select()
-        $('.totalEfectivo').focus()
-  
+        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+        seleccionarEfectivo()
       return 
     }
     //Factura en espera
@@ -4520,8 +4485,7 @@ function __Teclas(tecla){
 **/
 function refrescarPagina(){
      __Init()
-     $('.codigo').select()
-      $(".codigo").focus()
+     
 }
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
@@ -4543,7 +4507,7 @@ _sumarBilletes(e){
        self.totalCambioPagarSTR =0
     }else{
        self.factura.totalEfectivo += __valorNumerico(item.valor) 
-       $('.efectivo').val(self.factura.totalEfectivo)
+       $('.efectivo').val(self.factura.totalEfectivo.toFixed(2))
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
@@ -4553,7 +4517,7 @@ _sumarBilletes(e){
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
         self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.factura.totalEfectivo) 
+        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
     }
     self.update()
 }

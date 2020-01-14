@@ -148,8 +148,6 @@ public class DetalleController {
 		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto, estado, actividadEconomica);
 
 	}
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -158,9 +156,6 @@ public class DetalleController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		// criptografica desde linux
-//		 certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
@@ -320,7 +315,7 @@ public class DetalleController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA","Total IVA Neto","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuestoSTR, codigoTarifaSTR,impuesto, montoImpuestoNC,montoImpuestoNeto,totalMercanciaGravada,totalMercanciaExenta,totalMercanciaExonerada,totalServicioGravados,totalServicioExentos,totalServicioExonerados, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuestoSTR, codigoTarifaSTR,impuesto, montoImpuestoNC,montoImpuestoNeto(Excluye IVA Exoneracion),totalMercanciaGravada,totalMercanciaExenta,totalMercanciaExonerada,totalServicioGravados,totalServicioExentos,totalServicioExonerados, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 

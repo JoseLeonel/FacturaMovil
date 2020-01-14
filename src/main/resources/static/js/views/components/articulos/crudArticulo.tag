@@ -524,9 +524,9 @@ self.on('mount',function(){
     __ComboBaseImponibles()
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
-    __Impuestos() 
- //   __Impuestos1()
-    __tipoCodigo()
+    self.impuestos = __ComboImpuestos()
+    self.tipoCodigos =__CombotipoCodigo()
+    self.update()
      LimpiarArticulo()
     __Consulta()
     
@@ -607,7 +607,6 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
         self.mostrarFormularioEntrada = false
         self.botonAgregar  = false;            
         self.update()
-       // __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
         $("#formulario").validate(reglasDeValidacion());     
        
@@ -687,7 +686,6 @@ function LimpiarArticulo(){
     }    
     self.update() 
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
-   $('.selectTipoImpuesto1').prop("selectedIndex", 0);
    $('.selectTipoCodigo').prop("selectedIndex", 0);
    $('.selectTipoCodigo1').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
@@ -705,7 +703,6 @@ function LimpiarArticulo(){
    $('.codigoTarifa').val(null)
    $('.tipoImpuesto').val(null)
    $('.impuesto').val(null)
-   $('.impuesto1').val(null)
    $('.precioPublico').val(null)
    $('.gananciaPrecioPublico').val(null)
    $('.precioMayorista').val(null)
@@ -839,25 +836,12 @@ __agregarEntradaInventario(){
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: 'Aceptar',
-      	                         })
+                                mensajeAdvertencia(data.message)
                             }
                         } else {
                         	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                         })
+                            mensajeToasExito(data.message)
                             $(".errorServerSideJgrid").remove();
-                            
                             $('#observacion_entrada').val(null)
                             $('#cantidadNueva_entrada').val(null)
                             self.mostrarListado            = true
@@ -893,23 +877,11 @@ __agregarSalidaInventario(){
                         if (data.status != 200) {
                         	serverMessageJsonClase(data);
                             if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-      	                         })
+                                mensajeAdvertencia(data.message)
                             }
                         } else {
                         	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                         })
+                            mensajeToasExito(data.message)
                             $(".errorServerSideJgrid").remove();
                             $('#observacion_salida').val(null)
                             $('#cantidadNueva_salida').val(null)
@@ -998,15 +970,14 @@ MostrarBotonAgregarSalida(e){
 **/
 __CalculoGananciaMayorista(e){
     var impuesto  =  __valorNumerico($('#impuesto').val())
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
-    self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioMayorista):0
+    self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,0,precioMayorista):0
     self.articulo.gananciaPrecioMayorista  =__valorNumerico(self.articulo.gananciaPrecioMayorista)
     self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista
     self.articulo.precioMayorista = precioMayorista >0?precioMayorista:self.articulo.precioMayorista
-   self.articulo.precioMayorista = __valorNumerico(self.articulo.precioMayorista)
-   self.articulo.precioMayorista  = self.articulo.precioMayorista
+    self.articulo.precioMayorista = __valorNumerico(self.articulo.precioMayorista)
+    self.articulo.precioMayorista  = self.articulo.precioMayorista
     self.update()
 }
 /**
@@ -1014,10 +985,9 @@ __CalculoGananciaMayorista(e){
 **/
 __CalculoGananciaEspecial(e){
     var impuesto  =  __valorNumerico($('#impuesto').val())
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
-    self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioEspecial):0
+    self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,0,precioEspecial):0
     self.articulo.gananciaPrecioEspecial = __valorNumerico(self.articulo.gananciaPrecioEspecial)
     self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial
     self.articulo.precioEspecial = precioEspecial > 0?precioEspecial:self.articulo.precioEspecial
@@ -1040,10 +1010,9 @@ __ActualizarPreciosImpuestos1(e){
 **/
 __CalculoGananciaPublico(e){
     var impuesto  =  __valorNumerico($('#impuesto').val())
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
-    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
+    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,0,precioPublico):0
     self.articulo.gananciaPrecioPublico = __valorNumerico(self.articulo.gananciaPrecioPublico )
     self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico
     $('#gananciaPrecioPublico').val(self.articulo.gananciaPrecioPublico)
@@ -1055,8 +1024,6 @@ __CalculoGananciaSinPrecioEspecial(e){
     var ganancia = __valorNumerico($('#gananciaPrecioEspecial').val())
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioEspecial  = ganancia
     self.update()
@@ -1065,9 +1032,6 @@ __CalculoGananciaSinPrecioEspecial(e){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto>0){
         total = total * impuesto
     }
@@ -1084,8 +1048,6 @@ __CalculoGananciaSinPrecioMayorista(e){
     var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioMayorista  = ganancia
     self.update()
@@ -1094,9 +1056,6 @@ __CalculoGananciaSinPrecioMayorista(e){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto>0){
         total = total * impuesto
     }
@@ -1116,8 +1075,6 @@ function __ActualizarPreciosGananciaPrecioPublico(){
     var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioPublico  = ganancia
     self.update()
@@ -1126,9 +1083,6 @@ function __ActualizarPreciosGananciaPrecioPublico(){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto>0){
         total = total * impuesto
     }
@@ -1147,13 +1101,7 @@ __AsignarTarifa(){
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
 }
-__AsignarTarifa1(){
-    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas2.aaData)
-    self.update()
-    actualizarPreciosImpuestosMayorista()
-    actualizarPreciosImpuestosPublico()
-    actualizarPreciosImpuestosEspecial()
-}
+
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
@@ -1166,7 +1114,6 @@ __asignarImpuesto(){
         $('.impuesto').val(null)
         self.articulo.impuesto = 0  
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
-    //    self.articulo.impuesto = getMontoImpuesto(self.articulo.codigoTarifa,self.articulo.tipoImpuesto,self.tarifas1.aaData)
         self.update()
     } 
      __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
@@ -1176,21 +1123,6 @@ __asignarImpuesto(){
     self.tarifas1  = {aaData:[]}
     self.update()
 }
-
-/**
-* Asignar el Impuesto
-**/
-__asignarImpuesto1(){
-      $('.impuesto1').val(null)
-    self.articulo.impuesto1 = 0
-    self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Exento"?"":$('#tipoImpuesto1').val()
-    self.tarifas2  = {aaData:[]}
-    self.update()
-    actualizarPreciosImpuestosMayorista()
-    actualizarPreciosImpuestosPublico()
-    actualizarPreciosImpuestosEspecial()
-    __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
-}
 /**
 *  Mostrar listado datatable Categorias Actimpuestos
 **/
@@ -1198,10 +1130,7 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
     if (typeof tipoImpuesto == 'undefined') {
         return
     }
-    if (tipoImpuesto == "" ){
-        return
-    }
-    if (tipoImpuesto == " ") {
+    if (tipoImpuesto.length == 0 ){
         return
     }
     var selector = ""
@@ -1219,13 +1148,6 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
                     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
                     self.update()
                 }
-                // Tipo de impuesto 2
-                if(indicador ==2 ){
-                    self.tarifas2 =  result
-                    self.update()
-                    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas1.aaData)
-                    self.update();
-                }
             }            
         },
         error: function (xhr, status) {
@@ -1240,8 +1162,6 @@ function actualizarPreciosImpuestosPublico(){
     var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioPublico  = ganancia
     self.update()
@@ -1250,9 +1170,6 @@ function actualizarPreciosImpuestosPublico(){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto>0){
         total = total * impuesto
     }
@@ -1270,8 +1187,6 @@ function actualizarPreciosImpuestosMayorista(){
     }
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioMayorista  = ganancia
     self.update()
@@ -1280,9 +1195,6 @@ function actualizarPreciosImpuestosMayorista(){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto>0){
         total = total * impuesto
     }
@@ -1300,8 +1212,6 @@ function actualizarPreciosImpuestosEspecial(){
     }
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
-    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioEspecial  = ganancia
     self.update()
@@ -1310,9 +1220,6 @@ function actualizarPreciosImpuestosEspecial(){
     resultado = 1-resultado
     //resultado costo + ganancia
     var total = costo  / resultado
-    if(impuesto1 > 0){
-      total = total * impuesto1
-    } 
     if(impuesto > 0){
         total = total * impuesto
     }
@@ -1325,20 +1232,15 @@ function actualizarPreciosImpuestosEspecial(){
 **/
 __ActualizarPreciosCosto(e){
     var impuesto  =  __valorNumerico($('#impuesto').val())/100
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())/100
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico =  __valorNumerico($('#precioPublico').val())
-    var gananciaPublica = _porcentajeGanancia(costo,impuesto,impuesto1,precioPublico)
+    var gananciaPublica = _porcentajeGanancia(costo,impuesto,0,precioPublico)
     gananciaPublica = gananciaPublica >0?gananciaPublica/100:0
     
      //  Costo , ganancia digitada , impuestos digitados  Altera el precio
        var resultadoPorcentajeGanancia = gananciaPublica>0?1-gananciaPublica:0
        var resultadoImpuesto = 0
        precioPublico =  costo > 0 && resultadoPorcentajeGanancia >0? costo /resultadoPorcentajeGanancia:precioPublico
-       if(impuesto1 > 0){
-         resultadoImpuesto =  impuesto1 + 1 
-         precioPublico = precioPublico * resultadoImpuesto  
-       }
        if(impuesto > 0){
           resultadoImpuesto =  impuesto + 1 
           precioPublico = precioPublico * resultadoImpuesto  
@@ -1357,20 +1259,19 @@ __ActualizarPreciosCosto(e){
 **/
 function _CalculoPrecio(){
     var impuesto  =  __valorNumerico($('#impuesto').val())
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
-    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
-    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,impuesto1,self.articulo.gananciaPrecioPublico)
+    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,0,precioPublico):0
+    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioPublico)
      var precio = __valorNumerico($('#precioMayorista').val())
     if(precio > 0){
-        self.articulo.gananciaPrecioMayorista    = precio >0?_porcentajeGanancia(costo,impuesto,impuesto1,precio):0
-        self.articulo.precioMayorista = _PrecioPublicoConGanancia(costo,impuesto,impuesto1,self.articulo.gananciaPrecioMayorista)
+        self.articulo.gananciaPrecioMayorista    = precio >0?_porcentajeGanancia(costo,impuesto,0,precio):0
+        self.articulo.precioMayorista = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioMayorista)
     }
     precio = __valorNumerico($('#precioEspecial').val())
     if(precio > 0){
-        self.articulo.gananciaPrecioEspecial = precio >0?_porcentajeGanancia(costo,impuesto,impuesto1,precio):0
-        self.articulo.precioEspecial = _PrecioPublicoConGanancia(costo,impuesto,impuesto1,self.articulo.gananciaPrecioEspecial)
+        self.articulo.gananciaPrecioEspecial = precio >0?_porcentajeGanancia(costo,impuesto,0,precio):0
+        self.articulo.precioEspecial = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioEspecial)
     }
     self.update()
 }
@@ -1556,106 +1457,8 @@ function __ComboContables(){
      });
      self.update();
 }
-/**
-* Combo para verificar si es contabilizado en el inventario o no
-**/
-function __Impuestos(){
-    self.impuestos =[]
-    self.update()
-     self.impuestos.push({
-        codigo: "",
-         descripcion:"Exento"
-     });
-     
-    self.impuestos.push({
-        codigo: '01',
-        descripcion:$.i18n.prop("tipo.impuesto.ventas")
-     });
-  //    self.impuestos.push({
-  //      codigo: '02',
-  //      descripcion:$.i18n.prop("tipo.impuesto.consumo")
-  //   });
-    self.impuestos.push({
-        codigo: '07',
-        descripcion:$.i18n.prop("tipo.impuesto.servicio")
-     });
- //    self.impuestos.push({
- //       codigo: '06',
- //       descripcion:$.i18n.prop("tipo.impuesto.tabaco")
- //    });
- //   self.impuestos.push({
-//        codigo: '12',
-//        descripcion:$.i18n.prop("tipo.impuesto.cemento")
-//     });
-    self.impuestos.push({
-        codigo: '99',
-        descripcion:$.i18n.prop("tipo.impuesto.otros")
-     });
-   
-     self.update();
-}
-function __Impuestos1(){
-    self.impuestos1 =[]
-    self.update()
-     self.impuestos1.push({
-        codigo: "",
-        descripcion:"Exento"
-     });
-     
-    self.impuestos1.push({
-        codigo: '02',
-        descripcion:$.i18n.prop("tipo.impuesto.consumo")
-     });
-    self.impuestos1.push({
-        codigo: '07',
-        descripcion:$.i18n.prop("tipo.impuesto.servicio")
-     });
-     self.impuestos1.push({
-        codigo: '06',
-        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
-     });
-    self.impuestos1.push({
-        codigo: '12',
-        descripcion:$.i18n.prop("tipo.impuesto.cemento")
-     });
-    self.impuestos1.push({
-        codigo: '99',
-        descripcion:$.i18n.prop("tipo.impuesto.otros")
-     });
-   
-     self.update();
-}
 
-/**
-* Tipo codigo del producto/servicio del articulo
-**/
-function __tipoCodigo(){
-    self.tipoCodigos =[]
-    self.update()
-    self.tipoCodigos.push({
-        codigo: '01',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.vendedor")
-     });
 
-    self.tipoCodigos.push({
-        codigo: '02',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.comprador")
-     });
-    self.tipoCodigos.push({
-        codigo: '03',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.asignado.por.industria")
-     });
-    self.tipoCodigos.push({
-        codigo: '04',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.uso.interno")
-     });
-    self.tipoCodigos.push({
-        codigo: '99',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.otros")
-     });
-   
-     self.update();
-}
 /**
 *  Regresar al listado
 **/
@@ -1670,7 +1473,6 @@ __regresarAlListado(){
     self.update()
     //articulo.js se encuentra rutina
     __mostrarListado()
-   // LimpiarArticulo()
 }
 /**
 *   Agregar 
@@ -1685,7 +1487,7 @@ __agregar(){
             if(tipo == "07"){
                 var baseImponible = $('#baseImponible').val()
                 if(baseImponible == 0){
-                   mensajeError("Debe actualizar la base imponible debe ser Activo")
+                   mensajeAdvertencia("Debe actualizar la base imponible debe ser Activo") 
                    return 
                 }
                 
@@ -1693,7 +1495,7 @@ __agregar(){
             
         
         if(self.articulo.costo > self.articulo.precioPublico){
-            mensajeError("No se puede agregar el precio Publico es menor al costo")
+             mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo") 
             return 
         }
         // Permite obtener todos los valores de los elementos del form del jsp
@@ -1707,24 +1509,11 @@ __agregar(){
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: 'Aceptar',
-      	                                	  
-      	                         })
+                                mensajeAdvertencia(data.message)
                             }
                         } else {
                         	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                         })
+                            mensajeToasExito(data.message)
 	                        $("#formulario").validate(reglasDeValidacion());
                             $(".errorServerSideJgrid").remove();
                             $('#codigo').val(null)
@@ -1732,7 +1521,6 @@ __agregar(){
                             $('#serie').val(null)
                             $('#costo').val(null)
                             $('#impuesto').val(null)
-                            $('#impuesto1').val(null)
                             $('#precioPublico').val(null)
                             $('#gananciaPrecioPublico').val(null)
                             $('#precioMayorista').val(null)
@@ -1748,7 +1536,8 @@ __agregar(){
                     }
                 });
     }else{
-          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+
+        mensajeAdvertencia( "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO");
       }
 }
 /**
@@ -1759,38 +1548,20 @@ __Modificar(){
          return
      }
 
-    var AplicoImpuesto1 = false
-    var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
             var baseImponible = $('#baseImponible').val()
             if(baseImponible == 0){
-                mensajeError("Debe actualizar la base imponible debe ser Activo")
+                mensajeAdvertencia("Debe actualizar la base imponible debe ser Activo")
                return 
             }
-        }
-        tipo = $('#tipoImpuesto1').val() == "Exento"?"":$('#tipoImpuesto1').val()
-        if(tipo.length == 0){
-           var monto = parseFloat($(".impuesto1").val())
-           if (monto > 0){
-                mensajeError("Error el iva 2 , debe tener impuesto")
-                return 
-            } 
-        } 
-        if(tipo =='02'){
-           var monto = parseFloat($(".impuesto1").val())
-            if (monto != 10){
-               mensajeError("Error El IVA selectivo de consumo ,el porcentaje es incorrecto, consulte con su contador")
-               return 
-            }
-
         }
 
 
         if(self.articulo.costo > self.articulo.precioPublico){
-                mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")
-                return 
+            mensajeAdvertencia("No se puede modificar el Articulo el precio Publico es menor al costo")
+            return 
         }
         self.error = false;
         self.exito = false;
@@ -1798,31 +1569,24 @@ __Modificar(){
         __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
 
     }   else{
-          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+          mensajeAdvertencia("Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO");
       }
     
 }
 
 function validarPrecios(){
     var impuesto  =  __valorNumerico($('#impuesto').val())
-    var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
     var precioEspecial    =  __valorNumerico($('#precioEspecial').val())
-    var resultadoImpuesto =  impuesto + impuesto1
+    var resultadoImpuesto =  impuesto 
     resultadoImpuesto =resultadoImpuesto /100
     resultadoImpuesto = resultadoImpuesto + 1
     var total = precioPublico / resultadoImpuesto
     if(precioPublico > 0 && resultadoImpuesto > 0){
         if(total < costo ){
-            swal({
-                title: '',
-                text: 'El Precio Publico es menor al Costo',
-                type: 'error',
-                showCancelButton: false,
-                confirmButtonText: 'Aceptar',
-            })
+            mensajeAdvertencia('El Precio Publico es menor al Costo')
             return true
         }
 
@@ -1830,13 +1594,7 @@ function validarPrecios(){
     total = precioMayorista / resultadoImpuesto
     if(precioMayorista > 0 && resultadoImpuesto > 0){
         if(total < costo ){
-            swal({
-                title: '',
-                text: 'El Precio Mayorista es menor al Costo',
-                type: 'error',
-                showCancelButton: false,
-                confirmButtonText: 'Aceptar',
-            })
+            mensajeAdvertencia('El Precio Mayorista es menor al Costo')
             return true
         }
 
@@ -1844,13 +1602,7 @@ function validarPrecios(){
     total = precioEspecial / resultadoImpuesto
     if(precioEspecial > 0 && resultadoImpuesto > 0){
         if(total < costo ){
-            swal({
-                title: '',
-                text: 'El Precio Especial es menor al Costo',
-                type: 'error',
-                showCancelButton: false,
-                confirmButtonText: 'Aceptar',
-            })
+            mensajeAdvertencia('El Precio Especial es menor al Costo')
             return true
         }
 

@@ -128,16 +128,26 @@ public class Hacienda implements Serializable {
 	@Column(name = "id_factura")
 	private Long							numeroFactura;
 
-	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
-	private Integer						migradoADisco;
+//	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
+//	private Integer						migradoADisco;
+//
+//	@Column(name = "path_migra")
+//	private String						pathMigracion;
 
-	@Column(name = "path_migra")
-	private String						pathMigracion;
+//	@Column(name = "path_resp")
+//	private String						pathMigracionRespuesta;
 
-	@Column(name = "path_resp")
-	private String						pathMigracionRespuesta;
+	public Hacienda() {
+		super();
+		this.reintentos = Constantes.ZEROS;
+		this.created_at = new Date();
+		this.updated_at = new Date();
+		this.estado = Constantes.HACIENDA_ESTADO_PENDIENTE_FIRMAR;
+		this.notificacion = Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE;
 
-	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack, Long numeroFactura, Integer migradoADisco, String pathMigracion, String pathMigracionRespuesta) {
+	}
+
+	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack, Long numeroFactura) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -165,19 +175,6 @@ public class Hacienda implements Serializable {
 		this.observacion = observacion;
 		this.callBack = callBack;
 		this.numeroFactura = numeroFactura;
-		this.migradoADisco = migradoADisco;
-		this.pathMigracion = pathMigracion;
-		this.pathMigracionRespuesta = pathMigracionRespuesta;
-	}
-
-	public Hacienda() {
-		super();
-		this.reintentos = Constantes.ZEROS;
-		this.created_at = new Date();
-		this.updated_at = new Date();
-		this.estado = Constantes.HACIENDA_ESTADO_PENDIENTE_FIRMAR;
-		this.notificacion = Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE;
-
 	}
 
 	public Long getId() {
@@ -388,28 +385,28 @@ public class Hacienda implements Serializable {
 		this.numeroFactura = numeroFactura;
 	}
 
-	public Integer getMigradoADisco() {
-		return migradoADisco;
-	}
+//	public Integer getMigradoADisco() {
+//		return migradoADisco;
+//	}
+//
+//	public void setMigradoADisco(Integer migradoADisco) {
+//		this.migradoADisco = migradoADisco;
+//	}
+//
+//	public String getPathMigracion() {
+//		return pathMigracion;
+//	}
+//
+//	public void setPathMigracion(String pathMigracion) {
+//		this.pathMigracion = pathMigracion;
+//	}
 
-	public void setMigradoADisco(Integer migradoADisco) {
-		this.migradoADisco = migradoADisco;
-	}
-
-	public String getPathMigracion() {
-		return pathMigracion;
-	}
-
-	public void setPathMigracion(String pathMigracion) {
-		this.pathMigracion = pathMigracion;
-	}
-
-	public String getPathMigracionRespuesta() {
-		return pathMigracionRespuesta;
-	}
-
-	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
-		this.pathMigracionRespuesta = pathMigracionRespuesta;
-	}
+//	public String getPathMigracionRespuesta() {
+//		return pathMigracionRespuesta;
+//	}
+//
+//	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
+//		this.pathMigracionRespuesta = pathMigracionRespuesta;
+//	}
 
 }

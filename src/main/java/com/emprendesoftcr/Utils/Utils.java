@@ -114,11 +114,12 @@ public final class Utils {
 
 	public static String leerXMLServidor(String path) throws IOException {
 		String resultado = Constantes.EMPTY;
+		 System.out.println(path);
 		String sCadena = "";
 		BufferedReader bf = new BufferedReader(new FileReader(path));
 		while ((sCadena = bf.readLine()) != null) {
 			resultado += sCadena;
-			// System.out.println(sCadena);
+			
 		}
 		return resultado;
 	}

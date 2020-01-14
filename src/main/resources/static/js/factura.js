@@ -19,6 +19,51 @@ $(document)
                     );
                 }).ajaxStop($.unblockUI);
 
+
+/**
+* Tipo codigo del producto/servicio del articulo
+**/
+function __CombotipoCodigo(){
+    var tipoCodigos =[]
+    tipoCodigos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.vendedor")
+    });
+    tipoCodigos.push({
+        codigo: '04',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.uso.interno")
+     });
+    return tipoCodigos;
+}
+
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __ComboImpuestos(){
+    var impuestos =[]
+    impuestos.push({
+        codigo: "",
+        descripcion:"Exento"
+     });
+
+    impuestos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("tipo.impuesto.ventas")
+     });
+    impuestos.push({
+        codigo: '07',
+        descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+    impuestos.push({
+        codigo: '99',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
+    return impuestos;
+}
+
+
+
 var myControlPago;
 //$.toast().reset('all');
 setInterval(function() {
@@ -56,7 +101,7 @@ function consultaControlPago(){
              } else {
             	 if (data.message != null && data.message.length > 0) {
                      $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    	 mensaje(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR);
+                    	 mensajePagos(modeloTabla.mensaje,modeloTabla.totalDolarSTR,modeloTabla.totalColonesSTR,modeloTabla.tipoCambioSTR,modeloTabla.fechaPagoSTR,modeloTabla.fechaLimiteSTR);
                     	 bloqueoPorControlPago = modeloTabla.bloqueo = 1 ? true:false; 
                      })
             	 }    
@@ -85,15 +130,33 @@ function mensajeAdvertencia(mensaje){
 	    textColor: 'white'
 
 	});
-	if(bloqueoPorControlPago == true){
-		location.href ="/";
-	}
+	
 
 }
 
 
 
-function mensaje(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
+function mensajeToasExito(mensaje){
+	$.toast({
+	    heading: 'Exito ',
+	    text: mensaje  ,
+	    icon: 'success',
+	    loader: true,        // Change it to false to disable loader
+	    showHideTransition: 'slide',
+	    loaderBg: '#9EC600',  // To change the background
+	    hideAfter: 5000,   // in milli seconds
+	    position: 'bottom-right',
+	    bgColor: '#4cae4c',
+	    textColor: 'white'
+
+	});
+	
+
+}
+
+
+
+function mensajePagos(mensaje,dolares,colones,cambio,fechaPago,fechaLimite){
 	$.toast({
 	    heading: 'Pendiente Pago ',
 	    text: mensaje  ,
