@@ -30,7 +30,6 @@
                 <input type="hidden" id='totalTarjeta'            name='totalTarjeta'        value="{factura.totalTarjeta}" >
                 <input type="hidden" id='totalBanco'              name='totalBanco'        value="{factura.totalBanco}" >
                 <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-
             <div class="row">   
                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                     <label class="knob-label" >Motivo</label>
@@ -45,8 +44,6 @@
                 </select>
                 </div>
             </div>
-            
-
         </form>
       </div>
       <div class="modal-footer">
@@ -113,7 +110,7 @@ __regresarAlListadoAnulacion(){
 **/
 __Anular(){
     if($(".rebajaInventario").val() == 0){
-        mensajeError("Seleccione Si actualiza el inventario")
+        mensajeAdvertencia("Seleccione Si actualiza el inventario")
         return
    }
      if ($("#formularioFactura").valid()) {
@@ -145,7 +142,7 @@ function crearFactura(){
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
+                    mensajeAdvertencia(data.message)
                 }
             } else {
                
@@ -172,15 +169,7 @@ function evaluarFactura(data){
             self.update()
         });
        $('#ModalAnularDocumento').modal('hide')
-
-          swal({
-  	        title: "",
-   	        text: "Cons:" + self.facturaImprimir.numeroConsecutivo,
-   	        type: 'success',
-   	        showCancelButton: false,
-   	        confirmButtonText: 'Aceptar',
-        })
-          
+        mensajeToasExito("Cons:" + self.facturaImprimir.numeroConsecutivo)
         var parametros = {
             factura:self.facturaReimprimir,
             facturaDia:1
@@ -189,7 +178,6 @@ function evaluarFactura(data){
         riot.mount('ptv-imprimir',{parametros:parametros}); 
         $('.imprimirModal').modal('show');   
             __MostrarListado()
-        
     }
 }
 /**
@@ -266,10 +254,10 @@ function __Init(){
     self.articulo              = null;
     self.detalleFactura        ={data:[]}
     self.update();
- 
 }
-
-
+/**
+* Factura en espera
+**/
 function __FacturaEnEspera(){
     var numero  = self.parametro.consecutivo
     self.detail = [];
@@ -291,7 +279,6 @@ function __FacturaEnEspera(){
         }
     });
 }
-
 /**
 *  Cargar detalles Factura en espera
 **/
@@ -339,10 +326,8 @@ function cargarDetallesFacturaEnEspera(data){
             numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
             tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
         });
-    
         self.update()
     })
-
     __aplicarExoneracionPorCliente()
     
     $('#ModalAnularDocumento').modal({
@@ -350,11 +335,7 @@ function cargarDetallesFacturaEnEspera(data){
          keyboard: false
     })
     $('#ModalAnularDocumento').modal('show')      
-
-   
-    
 }
-
 /**
 * Aplicar la exoneracion de detalles
 **/
@@ -400,16 +381,9 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                 
-                    
                 }
-               
             }
     }
 }
-
-
-
-
 </script>
 </credito-completa>

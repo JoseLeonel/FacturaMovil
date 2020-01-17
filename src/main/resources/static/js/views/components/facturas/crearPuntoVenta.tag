@@ -171,15 +171,15 @@
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
-                            <div class="botonesContainer">
-                                       <div class="boton">
-                                           <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
-                                       </div> 
-                                       <div class="boton">
-                                           <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
-                                       </div>
+                        <div class="botonesContainer">
+                            <div class="boton">
+                                <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                            </div> 
+                            <div class="boton">
+                                <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                            </div>
                                        
-                                    </div>
+                        </div>
                     </div>
                   
                 </div>
@@ -200,11 +200,9 @@
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
-      
                                 <div class="precioTotalFactura" show={soloParaChinos == true}>
                                     <p class="total label-totalesChinos" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
-
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
                                     <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
@@ -225,10 +223,10 @@
 </div>  
 <!--Fin Ventana de los billetes-->      
  <div class="ventaEsperaSeleccionada" show={factura.id !=null && mostrarFormularioPago == false}>
-       <div class="tituloVentaEspera"> 
+    <div class="tituloVentaEspera"> 
            Venta en Espera: {factura.consecutivoProforma != null && factura.consecutivoProforma.length > 0  ?factura.consecutivoProforma :factura.id} 
             {factura.cliente.nombreCompleto === 'CLIENTE_FRECUENTE' || factura.cliente.nombreCompleto === 'CLIENTE_CREDITO'? factura.nombreFactura.length > 0?"-Nombre:" +factura.nombreFactura:'Sin Cliente Asociado' :"-Nombre:"+factura.cliente.nombreCompleto} 
-        </div>
+    </div>
 </div>
  <div  class="contenedorFactura" show={mostarParaCrearNuevaFactura}>
                 <div class="cabecera-izquierda">
@@ -256,12 +254,12 @@
                         </div>
                    </div>
                     <div class="codigoBarraPrecioContainer">
-                            <div class="inputCodigoPrecio">
-                                <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
-                            </div>
-                            <div class="inputCodigoPrecio">
-                                <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
-                            </div>
+                        <div class="inputCodigoPrecio">
+                            <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
+                        </div>
+                        <div class="inputCodigoPrecio">
+                            <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
+                        </div>
                     </div>
                     <div class="tituloProductoIngresadoContainer" show={descripcionArticulo.length>0?descripcionArticulo:""}>
                         <div class="tituloDescripcionProductoIngresado">
@@ -288,7 +286,6 @@
                             <tr each={detail}>
                                 <td>
                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
-                                   
                                 </td>
                                 <td style="width:5%;"  class="campoLabel"><label >{numeroLinea}</label> </td>
                                 <td  style="width:4%" class="campoLabel"> <label >{codigo}</label></td>
@@ -298,7 +295,6 @@
                                 </td>
                                 <td class="campoLabel">
                                     <label >{precioUnitario.toFixed(2)}</label>
-                                    
                                 </td>
                                 <td class="text-right" style="width:8%">
                                     <input  onclick={__CambiarDescuento} class="campoDetalle" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
@@ -315,9 +311,7 @@
                     </div>
                 </div>
                 <section class="cabecera-derecha">
-                    <div class="tituloCantidadArticulos" show={cantArticulos>0}>
-                        <div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div>
-                    </div>
+                    <div class="tituloCantidadArticulos" show={cantArticulos>0}><div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div></div>
                     <section   class="lista-factura-espera">
                         <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
                             <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{nombreCompleto !=null?nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
@@ -375,7 +369,6 @@
                                 </li>
 
                             </ul>
-
                         </article>
                     </aside>
                 </section>
@@ -2037,7 +2030,7 @@ function loadListar(table,idioma,formatoTabla,data){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
-                               {'data' : 'id'                 ,"name":"id"                      ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                               {'data' : 'id' ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
@@ -2051,14 +2044,14 @@ function __InformacionDataTableDia(){
 	 							    }
                                },
                              
-                               {'data' :'condicionVentaSTR'                    ,"name":"condicionVentaSTR"                     ,"title" : "Pago"   ,"autoWidth" :true },
+                               {'data' :'condicionVentaSTR' ,"name":"condicionVentaSTR","title" : "Pago"   ,"autoWidth" :true },
                                 {'data' :'cliente'  ,"name":"cliente"  ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
 									    return __ClienteNombreFactura(row);
 	 							    }
                                },
-                               {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
-                               {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
+                               {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR" ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR" ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
 	      		            ];
     self.update();
    
@@ -2416,7 +2409,6 @@ function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
         mensajeAdvertencia($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
         return
-
     }
     if(self.detail.length == 0 ){
          $('.precioVenta').val(null)
@@ -2432,12 +2424,10 @@ function aplicarFactura(estado){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
            mensajeAdvertencia($.i18n.prop("factura.alert.fechaCredito"))
             return
-        }
-        if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
+        }else if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
            mensajeAdvertencia($.i18n.prop("factura.alert.plazoCredito"))
            return
         }
-        
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
         if($("#tipoDoc").val() !="88"){
@@ -2758,8 +2748,6 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
-
-    
     BuscarActividadComercial()
     if( self.factura.codigoActividad.length == 0 ){
       mensajeAdvertencia($.i18n.prop("error.factura.actividad.comercial.no.existe"))
@@ -2879,24 +2867,22 @@ function evaluarFactura(data){
             self.update()
         });
         if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
-                __Init()
-                //Envia a la pantalla de impresion
-                localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
-                if(self.empresa.imprimirSiempre == 0){
-                    mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
-                }else{
-                  var parametros = {
-                        factura: self.empresa.imprimirSiempre == 0 ? self.facturaReimprimir : data.listaObjetos  ,
-                        facturaDia:self.empresa.imprimirSiempre == 0 ? 0 : 3
-                      }
-                      riot.mount('ptv-imprimir',{parametros:parametros});
+            __Init()
+            //Envia a la pantalla de impresion
+            localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
+            if(self.empresa.imprimirSiempre == 0){
+                mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
+            }else{
+               var parametros = {
+                    factura: self.empresa.imprimirSiempre == 0 ? self.facturaReimprimir : data.listaObjetos  ,
+                    facturaDia:self.empresa.imprimirSiempre == 0 ? 0 : 3
                 }
+                riot.mount('ptv-imprimir',{parametros:parametros});
+            }
         }else{
             mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
             __Init()
-          
         }
-          
     }
 }
 /**
@@ -2993,10 +2979,8 @@ function mostrarPAgo(){
         $('.codigo').focus()
         return
     }
-    
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    
     getSubTotalGeneral()
     self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
@@ -3656,7 +3640,6 @@ function getListaPrecioGanancia(articulo){
     return resultado > 0 ?resultado:__valorNumerico(articulo.gananciaPrecioEspecial )
 
 }
-
 
 function __storege(){
     self.bloqueoFactura = 0;
