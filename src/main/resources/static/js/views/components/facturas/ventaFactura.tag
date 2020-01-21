@@ -1438,7 +1438,7 @@ function __RolAdministrador(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -1481,12 +1481,7 @@ function __validarRolAdministrador(formulario,url){
              if (data.status != 200) {
             	 serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                	 swal({
-                         type: 'error',
-                         title:"No autorizado",
-                         showConfirmButton: false,
-                         timer: 1500
-                     });
+                    mensajeAdvertencia("No autorizado")
                  }
                 return resultado;
              } else {
@@ -1521,12 +1516,7 @@ function __validarRolAdministrador(formulario,url){
                	}else{
                     self.rutaAutorizada = '';
                     self.update()
-                    swal({
-                        type: 'error',
-                        title:"No autorizado",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })      
+                    mensajeAdvertencia("No autorizado")
                     return true;
                 }
           
@@ -1688,7 +1678,7 @@ function __ListaArticulosXCategorias(){
                self.mostrarArticulosXCategoria  = true //muestra la pantalla de imagenes de categorias                  
                self.update()
             }else{
-                sweetAlert("",$.i18n.prop("articulo.por.categoria"), "info");
+                mensajeAdvertencia($.i18n.prop("articulo.por.categoria"))
             }
         },
         error: function (xhr, status) {
@@ -1983,7 +1973,7 @@ function consultaParaReimprimir(data,tipoImpresion){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2135,14 +2125,7 @@ function __TipoCambio(){
         }
     });
 }
-/**
-* Imprimir 
-**/
-__Imprimir(){
-    var factura = self.factura
-    consultaParaReimprimir(factura,1)
-    //riot.mount('ptv-imprimir',{factura:factura});
-}
+
 /**
 * Imprimir tikete
 **/
@@ -2185,7 +2168,6 @@ __TotalDeBancoAPagar(e){
 **/
 __CalculaCambioAEntregarOnblur(e){
     self.totalCambioPagar    = 0
-   // self.totalCambioPagarSTR = 0
     self.update()
    _calculoEnterPago()
 }
@@ -2194,11 +2176,9 @@ __CalculaCambioAEntregarOnblur(e){
 **/
 __CalculaCambioAEntregarKeyPress(e){
     self.totalCambioPagar    = 0
-   // self.totalCambioPagarSTR = 0
     self.update()
-   // if (e.keyCode == 13) {
-       _calculoEnterPago()
-   // }
+    _calculoEnterPago()
+   
 }
 
 
@@ -2281,7 +2261,6 @@ function __ListaDeArticulosPorDescripcion(){
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
-              //  __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
              
                 
@@ -2393,8 +2372,7 @@ __ModificarNombreTiquete(){
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
-                sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
-
+                mensajeAdvertencia($.i18n.prop("error.factura.no.existe"))
             }else{
                 if (data.message != null && data.message.length > 0) {
                     self.factura = {
@@ -2405,9 +2383,9 @@ __ModificarNombreTiquete(){
                        self.update()
                     });
                     if(self.factura.id == null){
-                         sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                         mensajeAdvertencia($.i18n.prop("error.factura.no.existe"));
                     }else{
-                        sweetAlert("", data.message, "info");
+                        mensajeToasExito(data.message);
                     }
                 }
                  $('#ModalCambiarNombreTiquete').modal('hide') 
@@ -2451,18 +2429,18 @@ function aplicarFactura(estado){
     }
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+           mensajeAdvertencia($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
         if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
+           mensajeAdvertencia($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
         if(estado !=1){
             if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
             var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
@@ -2471,7 +2449,7 @@ function aplicarFactura(estado){
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             resultado = __valorNumerico(resultado);
             if(resultado > montoEntregado){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
@@ -2479,7 +2457,7 @@ function aplicarFactura(estado){
             var banco = __valorNumerico($('#totalBanco').val())
             if(tarjeta != 0 || banco !=0){
                 if(resultado != montoEntregado  ){
-                    mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                    mensajeAdvertencia($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                    return
                 }
             }
@@ -2822,13 +2800,7 @@ function evaluarFactura(data){
                 self.update()
                 if(self.vueltoImprimir == 0){
                     var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
-                    swal({
-                        position: 'top-end',
-                        type: 'success',
-                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
-                        showConfirmButton: false,
-                        timer: 1500
-                     })
+                    mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
                 }else{
                     var parametros = {
                           factura:modeloTabla,
@@ -2839,14 +2811,7 @@ function evaluarFactura(data){
                 }
                
             }else{
-                swal({
-                position: 'top-end',
-                type: 'success',
-                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
-                showConfirmButton: false,
-                timer: 1000
-                })
-               
+                mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
             }
              self.seIncluyoUnArticulo =null
                 self.update()
@@ -2944,8 +2909,8 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
-      self.factura.totalEfectivo = self.factura.totalComprobante
-        self.update()
+    self.factura.totalEfectivo = self.factura.totalComprobante
+    self.update()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -3106,7 +3071,7 @@ function __buscarcodigo(idArticulo,cantidad){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
                          if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
                          self.descripcionArticulo = modeloTabla.descripcion
@@ -3215,8 +3180,6 @@ function  eliminarDetalle(){
    
 
  }
-
-
 /**
 *   agregar Articulos nuevos en el detalle de la factura
 **/
@@ -3308,9 +3271,6 @@ function getListaPrecioGanancia(articulo){
     return resultado > 0 ?resultado:parseFloat(articulo.gananciaPrecioEspecial )
 
 }
-
-
-
 function __storege(){
     self.detail = []
     self.factura                = {
@@ -3360,9 +3320,6 @@ function __storege(){
     }   
     self.update()
 }
-
-
-
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
  * Se aplica una recalculacion de todo el detalle y Factura
@@ -3496,7 +3453,7 @@ function _actualizarDesc(e){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
      if(descuento > 100){
-         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+         mensajeAdvertencia("Error el descuento no puede ser mayor al 100%");
          return false
     }
     if(descuento > 100){
@@ -4229,7 +4186,7 @@ function _Empresa(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {

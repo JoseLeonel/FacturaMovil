@@ -125,7 +125,7 @@ function mensajeAdvertencia(mensaje){
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
 	    hideAfter: 5000,   // in milli seconds
-	    position: 'bottom-right',
+	    position: 'top-right',
 	    bgColor: 'red',
 	    textColor: 'white'
 
@@ -138,14 +138,14 @@ function mensajeAdvertencia(mensaje){
 
 function mensajeToasExito(mensaje){
 	$.toast({
-	    heading: 'Exito ',
+	    heading: 'Transaccion Exitomente realizada ',
 	    text: mensaje  ,
 	    icon: 'success',
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
 	    hideAfter: 5000,   // in milli seconds
-	    position: 'bottom-right',
+	    position: 'top-right',
 	    bgColor: '#4cae4c',
 	    textColor: 'white'
 
@@ -460,10 +460,29 @@ function verificarSiClienteFrecuente(clienteFrecuente){
 	    }else  if(data.tipoDoc == "88" && data.estado == 3){
 	        mensaje  = "Proforma:" + data.consecutivoProforma
 	    }else {
-	        mensaje = "En Espera" + + data.id
+	        mensaje = "En Espera:" + + data.id
 	    }
 	    return mensaje;
 	}
+	
+	/***
+	 * Funcion llamaa de venta nueva post  y restaurante
+	 * 
+	 * **/
+		function mostrarMensajeCreacionConsecutivoRestaurante(data){
+		    var mensaje = ""  
+		    if(data.tipoDoc == "01" && data.estado == 2 ){
+		        mensaje  = "Factura :" + data.numeroConsecutivo
+		    }else if(data.tipoDoc == "04" && data.estado == 2){
+		        mensaje  = "Tiquete :" + data.numeroConsecutivo
+		    }else  if(data.tipoDoc == "88" && data.estado == 3){
+		        mensaje  = "Proforma:" + data.consecutivoProforma
+		    }else {
+		        mensaje = "Proforma gravada exitosamente en la mesa numero:" + + data.id
+		    }
+		    return mensaje;
+		}	
+	
 function cambioColonesADolar(valor,venta){
   var resultado = parseFloat(valor)/parseFloat(venta);
   return resultado;
@@ -930,14 +949,7 @@ function __agregarPorClase(formulario,mensajeAlerAgregar,urlAgregar,urlListar,no
                         	serverMessageJsonClase(data);
                             var table = $(nombretable).DataTable();
                             table.ajax.url(urlListar)
-                             swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                                	  
-	                         })
+                            mensajeToasExito(data.message);
                         }
                     },
                     error : function(xhr, status) {
@@ -1010,14 +1022,7 @@ function __modificarClase(formulario,mensajeAlerModificar,urlModificar,urlListar
                                     var table = $(nombretable).DataTable();
 	                                table.ajax.url(urlListar)
 	                                
-	                                swal({
-	                                	  title: '',
-	                                	  text: data.message,
-	                                	  type: 'success',
-	                                	  showCancelButton: false,
-	                                	  confirmButtonText: 'Aceptar',
-	                                	  
-	                                	})
+	                                mensajeToasExito(data.message);
 	                                
 	                                	
                                 }
@@ -1082,14 +1087,7 @@ function __agregarRegistro(formulario,mensajeAlerAgregar,urlAgregar,urlListar,no
                         	serverMessageJson(data);
                             var table = $(nombretable).DataTable();
                            
-                             swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                                	  
-	                         })
+                            mensajeToasExito(data.message);
 	                         table.ajax.url(urlListar)
                         }
                     },
@@ -1148,14 +1146,7 @@ function __modificarRegistro(formulario,mensajeAlerModificar,urlModificar,urlLis
                                     var table = $(nombretable).DataTable();
 	                                table.ajax.url(urlListar)
 	                                
-	                                swal({
-	                                	  title: '',
-	                                	  text: data.message,
-	                                	  type: 'success',
-	                                	  showCancelButton: false,
-	                                	  confirmButtonText: 'Aceptar',
-	                                	  
-	                                	})
+	                                mensajeToasExito(data.message);
 	                                
                                     
                                 }

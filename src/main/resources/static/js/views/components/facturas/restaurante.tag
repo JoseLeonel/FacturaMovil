@@ -1915,16 +1915,6 @@ td.col-xl-12, th.col-xl-12 {
              $(".errorServerSideJgrid").remove();
         }, false );
         function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
-        // Enable jQuery disableAutoFill plugin
-        $('#formularioModalRolUsuario').disableAutoFill({
-            passwordField: '.password',
-            debugMode: false,
-            hidingChar:'$',
-            randomizeInputName: true,
-            callback: function() {
-                return $('.form-signin').valid();
-            }
-        });
     })
 
 __AsignarActividad(e){
@@ -2025,7 +2015,7 @@ function __RolAdministrador(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2105,12 +2095,7 @@ function __validarRolAdministrador(formulario,url){
                	}else{
                     self.rutaAutorizada = '';
                     self.update()
-                    swal({
-                        type: 'error',
-                        title:"No autorizado",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })      
+                    mensajeAdvertencia("No autorizado")
                     return true;
                 }
           
@@ -2283,7 +2268,7 @@ function __ListaArticulosXCategorias(){
                self.mostrarFacturasMesas        = false //muestra las facturas por mesa
                self.update()
             }else{
-                sweetAlert("",$.i18n.prop("articulo.por.categoria"), "info");
+                mensajeAdvertencia($.i18n.prop("articulo.por.categoria"))
             }
         },
         error: function (xhr, status) {
@@ -2544,7 +2529,7 @@ function consultaParaReimprimir(data,tipoImpresion){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2584,7 +2569,7 @@ var reglasDescuentoAplicar = function() {
 **/
 __CambiarDescuento(e){
     $("#aplicarDescuento").attr("maxlength", 7);
-     $("#formularioDescuento").validate(reglasDescuentoAplicar());
+    $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item; 
     $( "#aplicarDescuento" ).focus()
     $( "#aplicarDescuento" ).val(null)
@@ -2597,7 +2582,7 @@ __CambiarDescuento(e){
 __CambiarCantidad(e){
     var obj = self.pendientesComanda.find(o => o.key === self.item.codigo);
     if(typeof obj !== "undefined"){
-        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "warning");
+        mensajeAdvertencia($.i18n.prop("comanda.mensaje.elimina.articulo"));
         return true;    
     }		
     var cantidad = e.currentTarget.value;
@@ -2666,7 +2651,7 @@ function __TipoCambio(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2708,7 +2693,7 @@ function imprimirTiquete(){
         impuestoServicio:self.ImpuestoServicio
     }
     riot.mount('tiquete-imprimir',{parametros:parametros});
-    var a = 1
+
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -2907,7 +2892,7 @@ __ModificarNombreTiquete(){
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
-                sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                mensajeAdvertencia($.i18n.prop("error.factura.no.existe"));
                 return
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2919,9 +2904,9 @@ __ModificarNombreTiquete(){
                        self.update()
                     });
                     if(self.factura.id == null){
-                         sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                         mensajeAdvertencia($.i18n.prop("error.factura.no.existe"));
                     }else{
-                        sweetAlert("", data.message, "info");
+                        mensajeAdvertencia(data.message);
                     }
                 }
                  $('#ModalCambiarNombreTiquete').modal('hide') 
@@ -3447,7 +3432,7 @@ function __displayDate_detail(fecha) {
 function crearFactura(estado, separarFactura){
     BuscarActividadComercial()
     if( self.factura.codigoActividad.length == 0 ){
-      mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
+      mensajeAdvertencia($.i18n.prop("error.factura.actividad.comercial.no.existe"))
       return
     }
     self.enviarCocina = false
@@ -3527,6 +3512,7 @@ function evaluarFactura(data, separarFactura){
                       }
                 riot.mount('ptv-imprimir',{parametros:parametros});
             }else{
+                mensajeToasExito(mostrarMensajeCreacionConsecutivoRestaurante(self.facturaImprimir))
                 if(self.enviarCocina == true){
                 //Se envian los datos a la comanda
                 __EnviarCocina();
@@ -3777,7 +3763,7 @@ function __buscarcodigo(idArticulo,cantidad){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
                          if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
                         self.descripcionArticulo = modeloTabla.descripcion
@@ -4305,9 +4291,6 @@ function __calculate() {
     self.totalImpuestoServ  = formatoDecimales(self.factura.totalImpuestoServ,2);
     self.ImpuestoServicio  = self.factura.totalImpuestoServ;
     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
-//    self.totalImpuestoServ                = self.factura.totalImpuestoServ;
-
-  //  self.articulo              = null;
     self.update(); 
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
@@ -5567,7 +5550,7 @@ __removeCuentaSeparada(e) {
 
 __MostrarFormularioDePagoFactPrincipal(){
 	if(self.detailFacturaSeparada.length > 0 ){
-		mensajeError($.i18n.prop("factura.alert.con.detalles.separar"))
+		mensajeAdvertencia($.i18n.prop("factura.alert.con.detalles.separar"))
 		return
 	}else{
 		mostrarPAgo()		
@@ -5575,10 +5558,10 @@ __MostrarFormularioDePagoFactPrincipal(){
 }
 __NombreDividirFactura(){
 	if(self.detailFacturaSeparada.length == 0 ){
-	   mensajeError($.i18n.prop("factura.alert.sin.detalles.separar"))
+	   mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles.separar"))
 	   return
 	}else if(self.detailPorSeparar.length == 0 ){
-		mensajeError($.i18n.prop("factura.alert.sin.detalles.principal"))
+		mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles.principal"))
 		return
 	}else{
 		$('#ModalNombreTiqueteSepararCuenta').modal('show') 
@@ -5842,7 +5825,7 @@ function _Empresa(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {

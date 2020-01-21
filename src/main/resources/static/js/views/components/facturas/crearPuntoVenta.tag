@@ -367,8 +367,8 @@
                                     <span class="ssCambio">Venta USD $ </span> 
                                     <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
                                 </li>
-
                             </ul>
+                           
                         </article>
                     </aside>
                 </section>
@@ -1481,7 +1481,7 @@ function getClienteHacienda(cedula){
     statusCode: {
         
         404: function() {
-            alert( "Cedula invalidad" )
+            mensajeAdvertencia( "Cedula invalidad" )
             __listadoTipoCedulas()
         }
     }
@@ -1741,7 +1741,7 @@ function __RolAdministrador(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -1784,12 +1784,7 @@ function __validarRolAdministrador(formulario,url){
              if (data.status != 200) {
             	 serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                	 swal({
-                         type: 'error',
-                         title:"No autorizado",
-                         showConfirmButton: false,
-                         timer: 1500
-                     });
+                	 mensajeAdvertencia("No autorizado");
                  }
                 return resultado;
              } else {
@@ -1824,12 +1819,7 @@ function __validarRolAdministrador(formulario,url){
                	}else{
                     self.rutaAutorizada = '';
                     self.update()
-                    swal({
-                        type: 'error',
-                        title:"No autorizado",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })      
+                    mensajeAdvertencia("No autorizado");
                     return true;
                 }
           
@@ -1869,8 +1859,8 @@ function reimprimirFacturaEnMomento(){
     var retrievedObject = JSON.parse(localStorage.getItem('facturaReimprimir'));
     if(retrievedObject != null){
        self.facturaReimprimir = retrievedObject
-        var clienteObject = JSON.parse(localStorage.getItem('cliente'));
-        self.cliente = clienteObject
+       var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+       self.cliente = clienteObject
        self.update()
     }    
   }
@@ -1893,7 +1883,7 @@ function _Empresa(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2215,7 +2205,7 @@ function __TipoCambio(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -2787,7 +2777,7 @@ function crearFactura(estado){
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                     mensajeAlertErrorOConfirmacion('error',data.message);    	
+                     mensajeAdvertencia(data.message);    	
                 }
                 self.transaccion = false
                 self.update()
@@ -3310,7 +3300,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 self.articulo  = null
@@ -3370,13 +3360,8 @@ function __buscarcodigo(idArticulo,cantidad,precio){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                   
-                    
-                     swal({
-                        title: 'Error Articulo',
-                        text: data.message,
-                        timer: 500
-                    })
+                    mensajeAdvertencia("Error Articulo");
+              
                 }
             }else{
                 self.articulo  = null
@@ -3385,7 +3370,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
                         if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
                         self.articulo.precioPublico = getListaPrecio(self.articulo)
@@ -3393,7 +3378,6 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                         self.update()
                         if(self.articulo !=null){
                             if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
-                               // $('#codigo').val(self.articulo.codigo)
                                 $('.precioVenta').val(getListaPrecio(self.articulo))
                                 $('.precioVenta').select()
                                 $(".precioVenta").focus()
@@ -3528,20 +3512,18 @@ function __nuevoArticuloAlDetalle(cantidad){
         __storege()
     }
     if(verificarTarifa()){
-         mensajeError(" Error El articulo no tiene la Tarifa IVA ")
+         mensajeAdvertencia(" Error El articulo no tiene la Tarifa IVA ")
         return false
     }
     //Determinar el precio a incluir
     var resultadoPrecio = getListaPrecio(self.articulo)
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto1) 
-    precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
+    var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
@@ -3717,7 +3699,7 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
+                    mensajeAdvertencia(data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -3820,12 +3802,12 @@ function _actualizarDesc(e){
     var descuento = $(".aplicarDescuento").val();
     descuento = __valorNumerico(descuento)
     if(descuento > 100){
-         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+         mensajeAdvertencia("Error el descuento no puede ser mayor al 100%");
          return false
     }
     if(self.empresa.aplicaGanancia ==1){
         if(self.item.porcentajeGanancia < descuento ){
-            swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
+            mensajeAdvertencia("No se puede aplicar un descuento mayor a la ganancia");
             descuento  = __valorNumerico(self.item.porcentajeGanancia)
         }
     } 

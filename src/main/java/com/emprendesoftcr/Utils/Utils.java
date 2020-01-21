@@ -121,6 +121,7 @@ public final class Utils {
 			resultado += sCadena;
 			
 		}
+		System.out.println("Archivo:" + resultado);
 		return resultado;
 	}
 
