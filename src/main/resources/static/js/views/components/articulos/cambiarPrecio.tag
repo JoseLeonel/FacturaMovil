@@ -356,11 +356,12 @@ self.on('mount',function(){
     __ComboContables()
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
-    self.tipoCodigos =__CombotipoCodigo
-    
+    self.tipoCodigos =__CombotipoCodigo()
+    self.impuestos = __ComboImpuestos()
+    self.update() 
     LimpiarArticulo()
     __ComboBaseImponibles()
-    self.impuestos = __ComboImpuestos()
+    
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
         $(".errorServerSideJgrid").remove();
