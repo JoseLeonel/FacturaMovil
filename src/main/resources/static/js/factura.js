@@ -20,6 +20,100 @@ $(document)
                 }).ajaxStop($.unblockUI);
 
 
+
+/**
+* Tipo de Documento
+**/
+function __TipoDocumentos(numeroConsecutivo,row){
+    switch(row.tipoDoc) {
+    case "04":
+          return  "Tiq:"+numeroConsecutivo
+        break;
+    case "01":
+        return  "Fact:"+numeroConsecutivo
+        break;
+    case "02":
+        return  "N.Debito:"+numeroConsecutivo
+        break;
+    case "03":
+        return  "N.Credito:"+numeroConsecutivo
+        break;
+    case "88":
+        return  "Proforma:"+row.id
+        break;
+    case "87":
+        return  "TiqueteInterno:"+row.id
+        break;
+    case "86":
+        return  "NC.Interno:"+row.numeroConsecutivo
+        break;
+    default:
+        return  numeroConsecutivo
+}
+}
+
+var inicializarTipoCambio = function (){
+	getTipoCambioDolar();
+}
+/**
+*Tipo Cambio del Dolar 
+**/
+function getTipoCambioDolar(){
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/indicadores/tc",
+     global: false,
+    "method": "GET",
+    statusCode: {
+        404: function() {
+            __TipoCambio()
+        }
+    }
+    }).done(function (response) {
+         localStorage.setItem('tipoCambioTotal', __valorNumerico(response.dolar.venta.valor));
+         localStorage.setItem('tipoCambioCompra', __valorNumerico(response.dolar.compra.valor));
+    }).fail(function () {
+        __TipoCambio()
+    });
+}
+/**
+* Tipo Cambio de moneda
+**/
+function __TipoCambio(){
+    $.ajax({
+        url: "MostrarTipoCambioActivoAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message);
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       localStorage.setItem('tipoCambioTotal', __valorNumerico(response.dolar.venta.valor));
+                       localStorage.setItem('tipoCambioCompra', __valorNumerico(modeloTabla.total));
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+function __getTipoCambioCompra(){
+    return JSON.parse(localStorage.getItem('tipoCambioCompra'));
+} 
+
+function __getTipoCambioTotal(){
+    return JSON.parse(localStorage.getItem('tipoCambioTotal'));
+} 
+
+
 /**
 * Tipo codigo del producto/servicio del articulo
 **/

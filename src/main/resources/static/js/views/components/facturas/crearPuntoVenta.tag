@@ -368,7 +368,34 @@
                                     <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
                                 </li>
                             </ul>
-                           
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
+                                <div class = 'containerSumarRestar'>
+                                    <div class="BotonesSumarRestar ">
+                                        <span onclick = {__SumarConMouse} title="Suma +" class=" fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                            Tecla + = 
+                                            <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
+                                            Suma el ultimo Articulo
+                                        </span> 
+                                    </div>
+                                    <div class="BotonesSumarRestar">
+                                        
+                                        <span onclick = {__RestarConMouse} title="Resta -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                            Tecla - =
+                                            <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
+                                            Resta el ultimo Articulo
+                                        </span> 
+                                    </div>
+                                </div>
+                            
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Nuevo Cliente
+                                    </span> 
+                                </div>
+                            </div>
+                            
                         </article>
                     </aside>
                 </section>
@@ -675,123 +702,146 @@
 
 
 <style type="text/css"  >
-.campoDetalle {
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 8px 18px;
-    font-size: 10px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    font: 20px verdana, arial, helvetica, sans-serif;
-    /* margin: 2px 0; */
-    padding: 1px 2px;
-    overflow: visible;
-}
-.campoLabel{
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-}
-.teclashift {
-    font-weight: 700;
-    font-size: 27px !important;
-    text-align: center;
-    color: red;
+    .fontSumarRestar{
+        font-size: 20px;
+    }
+    .input-group-botonessumarrestarnuevocliente {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #151517;
+        border-radius: 4px;
+    }
+    .BotonesSumarRestar{
+        position: relative;
+        border-collapse: separate;
+    }
+    .containerSumarRestar{
+        flex:1;
+    }
+    .containerIconosSumaRestaAgregarCliente{
+        flex:1;
+    }
+    .campoDetalle {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        /* margin: 2px 0; */
+        padding: 1px 2px;
+        overflow: visible;
+    }
+    .campoLabel{
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
 
-}
-.teclaFuncion{
+    }
+    .teclaFuncion{
 
-}
-.opcionPrecioPublico{
-    display: flex;
-    flex-direction: column;
-}
-.tituloTipoCambio{
-    color: #0c3f65 !important;
-    float: left !important;
-    font-size: 13px !important;
-    background-color: transparent !important;
-    font-weight: normal;
-    text-align: left;
-}
-.ssCambioCentral{
-    color: #0c3f65 !important;
-    display: block;
-    text-align: center;
-        font-weight: 900;
+    }
+    .opcionPrecioPublico{
+        display: flex;
+        flex-direction: column;
+    }
+    .tituloTipoCambio{
+        color: #0c3f65 !important;
+        float: left !important;
+        font-size: 13px !important;
+        background-color: transparent !important;
+        font-weight: normal;
+        text-align: left;
+    }
+    .ssCambioCentral{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: center;
+            font-weight: 900;
 
-}
-.ssCambio{
-    color: #0c3f65 !important;
-    display: block;
-    text-align: left;
-}
-@media (min-width: 992px){
-.modal-lg {
-    width: 1024px !important;
-}
-}
-.facturaDiaContainer{
-  display:flex;
-}
-  .tamanoClienteNuevo{
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-    height: 10%;
+    }
+    .ssCambio{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: left;
+    }
+    @media (min-width: 992px){
+    .modal-lg {
+        width: 1024px !important;
+    }
+    }
+    .facturaDiaContainer{
+    display:flex;
+    }
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
 
-  }
-  .tituloClienteNuevo{
-    display: inline-block;
-    max-width: 100%;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-  }
-  .btn-dark-gray {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px!important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-   }
-   .btn-green {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px !important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
+    }
+    .tituloClienteNuevo{
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 600;
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+    }
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-green {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px !important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
     .botonesContainer{
        display:flex;
     }
@@ -817,11 +867,11 @@
     margin-top: 2%;
 
    }
-.input-group {
-    position: relative;
-    display: flex;
-    border-collapse: separate;
-}
+    .input-group {
+        position: relative;
+        display: flex;
+        border-collapse: separate;
+    }
      .input-group-addon.btnClientes {
        color: #66b12f;
         cursor: pointer;
@@ -862,7 +912,6 @@
         transition: background-color 100ms linear;
     }
     .contenedorExoneracion{
-
     }
     .label-totalesComprobanteChino {
         display: flex;
@@ -929,10 +978,7 @@
         flex: 1;
         border: 1px solid #3c8dbc;
         background: #ffffff;
-    
-
     }
-
     .precioTotalFacturaContainer{
         display:flex;
         flex:1;
@@ -995,18 +1041,14 @@
 
     }
     .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
-    display:flex;
+        display:flex;
     }
 
     .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
-    flex:1;
-    padding-right: 1%;
-    padding-bottom: 2%;
+        flex:1;
+        padding-right: 1%;
+        padding-bottom: 2%;
     }
-
-
-
-
     .gananciaContainer{
         display:flex;
         flex:1;
@@ -1021,7 +1063,7 @@
         display:flex;
     }
     .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
-    font-weight: 600 !important;
+        font-weight: 600 !important;
         font-size: 30px !important;
         font-family: Roboto,sans-serif !important;
         color: #edea17 !important;
@@ -1060,9 +1102,6 @@
     
     }
 
-
-
-
     .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
         flex: 0.15;
         font-weight: 600 !important;
@@ -1098,8 +1137,6 @@
         -o-transition: background-color 100ms linear;
         -ms-transition: background-color 100ms linear;
     }
-
-
 
 </style>    
 <script>
@@ -1272,9 +1309,10 @@
     }
     self.transaccion = false
     self.on('mount',function(){
-
         $("#formularioFactura").validate(reglasDeValidacionFactura());
          self.informacion_tabla_clientes =__informacionData_formato_cliente()
+         self.tipoCambio.total = __getTipoCambioTotal()
+         self.tipoCambio.totalCompra = __getTipoCambioCompra()
          self.update()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -1285,8 +1323,6 @@
         __ListaFacturasEnEspera()
         __comboCondicionPago()
         __RolAdministrador()
-       __Teclas()
-      
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
@@ -1295,10 +1331,7 @@
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
-       
-       
-        $('.codigo').select()
-        $(".codigo").focus()
+        getPosicionInputCodigo()   
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
             {
@@ -1307,7 +1340,6 @@
               todayHighlight:true,
             }
         );
-        
         var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -1316,9 +1348,14 @@
             if ( event.which == 13 ) {
                 lecturaCodigo($('.codigo').val())
            }
+           if(event.which == 107){
+            __SumarConTecla(event)
+            }
+             if(event.which == 109){
+            __RestarConTecla(event)
+            }
         });
-        
-            $.fn.delayPasteKeyUp = function(fn, ms)
+        $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
             $(this).on("propertychange input", function()
@@ -1327,10 +1364,7 @@
                 timer = setTimeout(fn, ms);
             });
         };
-       
-           getTipoCambioDolar()
-       
-
+        getTipoCambioDolar()
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1340,47 +1374,60 @@
             self.cliente = clienteObject
             self.update()
             __calculate()
-
         }
-        
-        
-        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
              __Teclas(evento.keyCode)
-  
             disableF5(evento);
         }, false );
 
       
     window.addEventListener( "mouseover", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "mouseout", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "mousedown", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "click", function(evento){  
         actualizaElPlazoDiasCredito();
         teclamodal(evento);
-      
     }, false );
      
     })
+function __ObtengoTipoCambio(){
+    var tempTipoCambio =__getTipoCambioCompra()
+    if(tempTipoCambio == null){
+       getTipoCambioDolar()  
+    }else{
+        self.tipoCambio.total = __getTipoCambioTotal()
+        self.tipoCambio.totalCompra = __getTipoCambioCompra()
+
+    }
+    self.update()
+    
+}
+function __SetUltimoArticuloIngresado(){
+   localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
+}    
+
+function __getUltimoArticuloIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoArticulo'));
+} 
+
+function __DeleteUltimoArticuloIngresado(){
+    localStorage.removeItem('ultimoArticulo');
+} 
 
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     } 
     if($('#modalFacturasDia').is(':visible')){
-        $('.codigo').select()
-        $('.codigo').focus()
+       getPosicionInputCodigo()   
     }
 }
 
@@ -1417,7 +1464,14 @@ function teclamodal(e){
          
         }
 
-
+/**
+* volver  a posicionar el cursor en input de codigo
+**/
+function getPosicionInputCodigo(){
+    $('.precioVenta').val(null)
+    $('.codigo').val("")
+    $('.codigo').focus()
+}
 /**
 *Consulta hacienda
 **/
@@ -1432,32 +1486,6 @@ __ConsultarHacienda(e){
     } 
     var cedula = $('#cedula').val()
     getClienteHacienda(cedula)
-}
-/**
-*Tipo Cambio del Dolar 
-**/
-function getTipoCambioDolar(){
-    $.ajax({
-    "url": "https://api.hacienda.go.cr/indicadores/tc",
-     global: false,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            __TipoCambio()
-        }
-    }
-    }).done(function (response) {
-         self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
-         self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
-         self.update()
-         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
-    }).fail(function () {
-        __TipoCambio()
-//       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
-//       self.update()
-      console.log('fail')
-    });
 }
 
 
@@ -1868,8 +1896,7 @@ function reimprimirFacturaEnMomento(){
       return
   }
   consultaFactura(self.facturaReimprimir,0)
-  $('.codigo').select()
-  $(".codigo").focus() 
+  getPosicionInputCodigo()
 }
 /**
 * Consultar la empresa
@@ -2092,39 +2119,9 @@ function consultaFactura(data,tipoImpresion){
         facturaDia:tipoImpresion
     }
     riot.mount('ptv-imprimir',{parametros:parametros});
-                   
     return 
 }
-/**
-* Tipo de Documento
-**/
-function __TipoDocumentos(numeroConsecutivo,row){
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-    case "88":
-        return  "Proforma:"+row.id
-        break;
-    case "87":
-        return  "TiqueteInterno:"+row.id
-        break;
-    case "86":
-        return  "NC.Interno:"+row.numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-}
-}
+
 
 
 /**
@@ -2187,42 +2184,7 @@ __CambiarCantidad(e){
         $('#modalCambiarCantidad').modal('show')      
    }
  }
-/**
-* Tipo Cambio de moneda
-**/
-function __TipoCambio(){
-    self.tipoCambio = {
-        total:0,
-        totalCompra:0,
-        id:null
-    }
-    self.update()
-    $.ajax({
-        url: "MostrarTipoCambioActivoAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.tipoCambio = modeloTabla
-                       self.tipoCambio.totalCompra = self.tipoCambio.total
-                       self.update()
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -2401,13 +2363,8 @@ function aplicarFactura(estado){
         return
     }
     if(self.detail.length == 0 ){
-         $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
         mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        getPosicionInputCodigo()
         return
     }
     if($('#condicionVenta').val() == "02"  ){
@@ -2465,6 +2422,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    __DeleteUltimoArticuloIngresado()
     self.facturaImpresa={
         cliente:{
             cedula:""
@@ -2616,13 +2574,8 @@ function __Init(){
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.cliente));
-
-    $(".codigo").focus()
-    $('.codigo').select()
-
+    getPosicionInputCodigo()
 }
-
-
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -2764,7 +2717,11 @@ function crearFactura(estado){
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.factura.codigoMoneda = self.parametros.codigoMoneda
-    self.factura.tipoCambio = self.tipoCambio.total
+    self.factura.tipoCambio = self.tipoCambio.total ==null?__getTipoCambioCompra():self.tipoCambio.total
+    if(self.factura.tipoCambio ==null){
+        self.factura.tipoCambio =575
+        
+    }
     self.update();
     var formulario = $("#formularioFactura").serialize();
     $.ajax({
@@ -2916,9 +2873,7 @@ _AtrasFacturaFinal(){
    self.primeraVezBilleteClick = false
    self.error = false
    self.update()
-   $('.codigo').val("")
-   $('.codigo').select()
-   $('.codigo').focus()
+   getPosicionInputCodigo()
 }
 /**
 *    Muesta el campo de la fecha de credito
@@ -2955,9 +2910,7 @@ __MostrarFormularioDePago(){
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        getPosicionInputCodigo()
         swal({
             type: 'error',
             title:$.i18n.prop("factura.alert.sin.detalles"),
@@ -3000,37 +2953,21 @@ function lecturaCodigo(leerCodigo){
             self.update()
         }
     }
-    var codigo = leerCodigo
-    var codigoActual = ""
-    var cantidadAct =""
-    var existe = false
-     var existeMas = false
-    for(i=0; i<codigo.length; i++){
-         existeMas = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          existe = codigo.charAt(i) == "*"?true : false  
-          if(codigo.charAt(i) !="*"){
-              codigoActual = codigoActual + codigo.charAt(i)  
-          }
-       }else{
-           cantidadAct = cantidadAct + codigo.charAt(i)
-       }
-    }
+    var objetos = getCantidadAdnCodigo_PV(leerCodigo);
+    var codigoActual = objetos.codigo
+    var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    if(existeMas == true){
-       __sumarMasArticulo(codigo,0)
-       $('.precioVenta').val(null)
-       $('.codigo').val("")
-       $('.codigo').focus()
+    var temArticulo = __getUltimoArticuloIngresado()
+    if(leerCodigo.indexOf("+") != -1){
+        
+       __sumarMasArticulo(temArticulo.codigo,0,codigoActual)
+       getPosicionInputCodigo()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-    if(self.articulo !=null){
-        if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
-            $('.precioVenta').val(null)
-            $('.codigo').val("")
-            $('.codigo').select()
-            $('.codigo').focus()
+    if(temArticulo !=null){
+        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
+           getPosicionInputCodigo()
         }
     }
 }
@@ -3041,63 +2978,84 @@ __addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
+    if(verificaSiSuma()){
+        return 
+    }
     var codigo = $('#codigo').val()
-    if(codigo == " "){
+    if(codigo.length == 0){
        __EnviarFacturar()
     }
-    var codigoActual = ""
-    var cantidadAct =""
-    var existe = false
-    var existeMas = false
-    for(i=0; i<codigo.length; i++){
-         existeMas = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          existe = codigo.charAt(i) == "*"?true : false  
-          if(codigo.charAt(i) !="*"){
-            codigoActual = codigoActual + codigo.charAt(i)  
-          }
-       }else{
-           cantidadAct = cantidadAct + codigo.charAt(i)
-       }
-    }
+    var objetos = getCantidadAdnCodigo_PV(codigo);
+    var codigoActual = objetos.codigo
+    var cantidadAct =objetos.cantidad
+
     var valor = __valorNumerico(cantidadAct)
     var precio = e.currentTarget.value
     // esto es para cuando un cliente quiere sumar varios productos
-    if(existeMas == true){
-       __sumarMasArticulo(codigo,0)
-       $('.precioVenta').val(null)
-        $('.codigo').val(null)
-        $('.codigo').focus()
+    if(codigo.indexOf("+") != -1){
+       __sumarMasArticulo(codigoActual,precio,cantidadAct)
+       getPosicionInputCodigo()
        return  
     }
-    __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
-    $('.precioVenta').val(null)
-    $('.codigo').val("")
-    $('.codigo').focus()
+    __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
+    getPosicionInputCodigo()
+}
+/**
+Busca el canidad digitado sin el mas o por
+**/
+function getCantidadAdnCodigo_PV(valor){
+    var objeto ={
+        codigo:'',
+        cantidad:0
+    }
+    var existe = false
+    var existeMas = false
+    for(i=0; i<valor.length; i++){
+         existeMas = valor.charAt(i) == "+"?true : false
+       if(existe == false && existeMas  == false ){
+          existe = valor.charAt(i) == "*"?true : false  
+         if(valor.charAt(i) !="*"){
+              objeto.codigo = objeto.codigo + valor.charAt(i)  
+          }
+       }else{
+           if(valor.charAt(i) != "+" && codigo.charAt(i) != "*"){
+              objeto.cantidad = objeto.cantidad + valor.charAt(i)  
+           }
+           
+       }
+    }
+    return objeto;
+  
 }
 /**
 *sumar mas cantidad al ultimor articulo ingresado
 **/
-function __sumarMasArticulo(codigo,precio){
-    if(self.articulo == null){
+function __sumarMasArticulo(codigo,precio,cant){
+    var temArticulo = __getUltimoArticuloIngresado()
+    if(temArticulo == null){
         return;
     }
-    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+    if(temArticulo.tipoCodigo == "04" || self.empresa.tieneLector !="Activo"){
        return
     }
     var valorPrecio =  parseFloat(precio)
-    var cantidadAct =""
-    var existe = false
-    for(i=0; i<codigo.length; i++){
-       existe = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          cantidadAct = cantidadAct + codigo.charAt(i)
-        }
+    var cantidadAct =cant
+    aplicarSumaAlCodigo(valorPrecio,cantidadAct,true);
+     
+}
+
+function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
+    var temArticulo = __getUltimoArticuloIngresado()
+    if(temArticulo == null){
+        getPosicionInputCodigo()
+        return
     }
    for (var count = 0; count < self.detail.length; count++) {
-        if (self.detail[count].codigo == self.articulo.codigo ){
+        if (self.detail[count].codigo == temArticulo.codigo ){
             self.item          = self.detail[count];
-            self.item.cantidad = self.item.cantidad + __valorNumerico(cantidadAct)
+            var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
+            self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
+
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
@@ -3106,7 +3064,7 @@ function __sumarMasArticulo(codigo,precio){
             self.update();
         }
     }
-    __calculate(); 
+    __calculate();
 }
 /**
 * Buscar codigo
@@ -3360,7 +3318,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia("Error Articulo");
+                    mensajeAdvertencia(data.message);
               
                 }
             }else{
@@ -3426,7 +3384,7 @@ function __agregarArticulo(cantidad){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
-  
+    __SetUltimoArticuloIngresado() 
     if( encontrado ==false){
         if(self.detail[0] == null){ // first element
             __nuevoArticuloAlDetalle(cantidad);
@@ -3443,6 +3401,7 @@ function __agregarArticulo(cantidad){
                 self.detail[count] = self.item;
                 encontrado = true;
                 self.update();
+                
                 }
             }
         }
@@ -3871,10 +3830,7 @@ function __calculate() {
     self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
     self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
     self.update(); 
-    $('.precioVenta').val(null)
-    $('.codigo').val(null)
-    $('.codigo').select()
-    $('.codigo').focus()
+    getPosicionInputCodigo()
     getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
@@ -4429,9 +4385,7 @@ function __Teclas(tecla){
     //Limpiar F2
     if(tecla ==113){
       __SeguridadLimpiar()
-      $('.codigo').val("")
-      $('.codigo').select()
-      $(".codigo").focus()
+      getPosicionInputCodigo()
       return 
     }
      //Insert = abrir Cajon
@@ -4439,11 +4393,50 @@ function __Teclas(tecla){
        __OpcionAbrirCajon()
     }
    if(tecla ==27){
-      $('.codigo').select()
-      $(".codigo").focus()
+      getPosicionInputCodigo()
       return 
     }
-    
+  
+}
+__SumarConMouse(){
+    aplicarSumaAlCodigo(0,1,true)
+    getPosicionInputCodigo()
+}
+
+__RestarConMouse(){
+    aplicarSumaAlCodigo(0,1,false)
+    getPosicionInputCodigo()
+}
+
+function __SumarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,true)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return 
+    }
+
+}
+
+function __RestarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,false)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return 
+    }
+
+}
+
+function verificaSiSuma(){
+   var codigo = $('.codigo').val()
+   
+    for(i=0; i<codigo.length; i++){
+        if(isNumber(codigo)){
+          return false        }
+    }
+    return true
+   
 }
 /**
 * refrescar una pagina
