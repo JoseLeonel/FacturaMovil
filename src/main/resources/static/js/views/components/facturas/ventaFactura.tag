@@ -1348,7 +1348,7 @@ td.col-xl-12, th.col-xl-12 {
         _Empresa()
         __comboCondicionPago()
         __RolAdministrador()
-        __ListaDeClientes()
+      //  __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
@@ -2996,7 +2996,8 @@ __agregarArticuloBotonAgregar(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')   
+    __ListaDeClientes()
+    
 }
 /**
 *  Muestra la lista de vendedores
@@ -3044,6 +3045,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                $('#modalClientes').modal('show')   
             }
         },
         error: function (xhr, status) {
@@ -3737,8 +3739,8 @@ function __seleccionarClientes() {
         }
         
         
-         $('#modalClientes').modal('hide') 
-         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+        $('#modalClientes').modal('hide') 
+        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
        $('#totalEfectivo').focus()

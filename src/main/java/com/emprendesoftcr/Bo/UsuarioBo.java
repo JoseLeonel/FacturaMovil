@@ -28,5 +28,8 @@ public interface UsuarioBo {
 	Boolean isAdministrador_restaurante(Usuario usuario);
 	Boolean isAdministrador_cajero(Usuario usuario);
 	Boolean isAdministrador_vendedor(Usuario usuario);
+	Boolean isUsuario_Vendedor(Usuario usuario);
+	Boolean isUsuario_Mesero(Usuario usuario);
+	Boolean isUsuario_Cajero(Usuario usuario);	
 
 }

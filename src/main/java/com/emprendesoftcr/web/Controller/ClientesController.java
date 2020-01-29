@@ -88,6 +88,11 @@ public class ClientesController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+	
+	@RequestMapping(value = "/nuevoCliente.do", method = RequestMethod.GET)
+	public String nuevoCliente(ModelMap model) {
+		return "views/cliente/nuevoCliente";
+	}
 	/**
 	 * Mostrar el JSP de la Clientes
 	 * @param model
@@ -108,16 +113,17 @@ public class ClientesController {
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
-
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Cliente");
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		if (usuarioBo.isAdministrador_sistema(usuario).equals(Boolean.FALSE) ) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
+		
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -158,10 +164,8 @@ public class ClientesController {
 				if (object.getEstado().equals(Constantes.ESTADO_ACTIVO)) {
 					solicitudList.add(new ClienteCommand(object));
 				}
-
 			}
 		}
-
 		respuestaService.setRecordsTotal(total);
 		respuestaService.setRecordsFiltered(total);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {

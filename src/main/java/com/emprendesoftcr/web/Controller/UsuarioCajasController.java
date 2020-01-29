@@ -101,6 +101,13 @@ public class UsuarioCajasController {
 		return "views/caja/abrirCajas";
 	}
 
+	@RequestMapping(value = "/CerrarCaja.do", method = RequestMethod.GET)
+	public String cerrarCajas(ModelMap model) {
+		return "views/caja/cerrarCajas";
+	}
+
+	
+	
 	@RequestMapping(value = "/ListarCajasInactivas", method = RequestMethod.GET)
 	public String liasCajas(ModelMap model) {
 		return "views/caja/ListarCajasInactivas";
@@ -120,8 +127,15 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)  ) {
+			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		
+		// Se incluye la empresa
+		dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+		
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
@@ -138,13 +152,13 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(idUsuario);
-		dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)  ) {
+			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
 			// Se incluye la empresa
 			dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-		}
 		
 
 		Date fechaInicio = new Date();

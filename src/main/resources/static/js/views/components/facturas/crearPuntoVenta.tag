@@ -374,7 +374,7 @@
                                         <span onclick = {__SumarConMouse} title="Suma +" class=" fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                             Tecla + = 
                                             <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
-                                            Suma el ultimo Articulo
+                                            Sumar 
                                         </span> 
                                     </div>
                                     <div class="BotonesSumarRestar">
@@ -382,7 +382,7 @@
                                         <span onclick = {__RestarConMouse} title="Resta -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                             Tecla - =
                                             <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
-                                            Resta el ultimo Articulo
+                                            Resta 
                                         </span> 
                                     </div>
                                 </div>
@@ -1325,7 +1325,7 @@
         __RolAdministrador()
        cargaBilletes()
        __InformacionDataTableDia()
-       __ListaDeClientes()
+     //  __ListaDeClientes()
        __ListaActividadesComercales()
        __ListaDeVendedores()
        __agregarArticulos()
@@ -2939,10 +2939,7 @@ Lectura de Codigos
 **/
 function lecturaCodigo(leerCodigo){
     var valor = $('.codigo').val()
-    if (valor.length == 0){
-        if(self.empresa.enterFacturar == 0){
-            return
-        }
+    if (valor == ""){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
             self.update() 
@@ -3127,7 +3124,8 @@ function __ListaDeArticulosPorDescripcion(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')  
+   
+    __ListaDeClientes()
  }
 /**
 *  Muestra la lista de vendedores
@@ -3167,7 +3165,6 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3187,6 +3184,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                 $('#modalClientes').modal('show')  
             }
         },
         error: function (xhr, status) {
@@ -3354,18 +3352,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
     });
    return 
 }
-/**
-*  Busca el codigo de uso interno
-* */
-function buscarCodigoUsoInterno(codigo){
-    self.articulo = null;
-    for (var count = 0; count < self.articulos_uso_interno.length; count++) {
-        if (self.articulos_uso_interno[count].codigo == codigo ){
-            self.articulo          = self.articulos_uso_interno[count];
-            self.update();
-        }
-    }    
-}
+
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -4573,5 +4560,35 @@ function abrirCajonDineroConComanda(){
 	        }
 	    });		
 }
+
+/**        Listado de proformas      **/
+/**
+*  Lista de Proformas Activas
+**/
+function __ListaProformas(){
+    $.ajax({
+        url: 'ListarVendedoresActivosAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __informacionData_vendedores()
+                loadListar(".tableListaVendedor",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
+                agregarInputsCombos_Vendedores()
+                ActivarEventoFiltro(".tableListaVendedor")
+                __seleccionarVendedor()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+
+
 </script>
 </punto-venta>

@@ -1967,7 +1967,7 @@ function __ListaActividadesComercales(){
                 agregarInputsCombos_Articulo()
                 __comboCondicionPago()
                 __ComboTipoDocumentos(0)
-                __ListaDeClientes()
+           //     __ListaDeClientes()
                 __ListaDeVendedores()
                 __Teclas()
                 __TipoCambio()
@@ -3688,7 +3688,7 @@ __agregarArticuloBotonAgregar(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')  
+    __ListaDeClientes()
 }
 /**
 *  Muestra la lista de vendedores
@@ -3727,7 +3727,6 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3736,6 +3735,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                $('#modalClientes').modal('show')   
             }
         },
         error: function (xhr, status) {
