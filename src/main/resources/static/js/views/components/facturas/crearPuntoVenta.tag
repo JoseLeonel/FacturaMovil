@@ -394,6 +394,13 @@
                                         Nuevo Cliente
                                     </span> 
                                 </div>
+                                <div class="BotonesSumarRestar" show ={rol.rolAdministrador == 1} >
+                                    <span onclick = {__AplicarCambioPrecio} title="Cambiar el precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                       Tecla /= Cambiar Precio
+                                    </span> 
+                                </div>
                             </div>
                             
                         </article>
@@ -580,57 +587,64 @@
     </div>
 </div>
 <!--fin del modal-->
- 
 
-<!--Modal Cambiar Cantidad-->
+
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >Cantidad:</label>
-                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
+                <form  >
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Cantidad </label>
+                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo" autofocus="autofocus"   autofocus="autofocus" min="0">
                         </div>
                     </div>
-                </div> 
+ 
+                </form>    
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalculacionDelDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!--Fin Cambiar Cantidad-->
 
 
-<!--Modal Cambiar Descuento-->
+
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al producto</h1>
             </div>
             <div class="modal-body">
-                <form id="formularioDescuento" name="formularioDescuento">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
+                <form id='formularioDescuento' name ='formularioDescuento'  >
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descuento </label>
+                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"   autofocus="autofocus" min="0">
                         </div>
                     </div>
-                </div> 
-                </form>
-
+ 
+                </form>    
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__actualizarDescuento}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
             </div>
         </div>
     </div>
@@ -701,7 +715,70 @@
 
 
 
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
+            </div>
+            <div class="modal-body">
+                <form  >
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >Codigo</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
+                        </div>
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descripcion</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.descripcion}">
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Precio al Publico </label>
+                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <style type="text/css"  >
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
+
     .fontSumarRestar{
         font-size: 20px;
     }
@@ -1354,7 +1431,47 @@
              if(event.which == 109){
             __RestarConTecla(event)
             }
+            if(event.which == 111){
+                if(self.rol.rolAdministrador == 0){
+                    return 
+                }
+                if(!$('#modalCambiarCantidad').is(':visible')){
+                    $(".codigo").val(null)
+                    __AplicarPrecioLinea()
+                    return
+                }else{
+                    $(".codigo").val('')
+                    event.preventDefault()
+                    return 
+                }
+            }
         });
+        $( "#precioAcambiar" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 && self.rol.rolAdministrador == 1) {
+               __AplicarCambioPrecioBD()
+           }
+        });
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               cambiarCantidadModal()
+           }
+        });
+        $( "#aplicarDescuento" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               aplicarDescuentoEnter()
+           }
+        });
+
+        
         $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
@@ -1378,7 +1495,7 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             __Teclas(evento.keyCode)
+             __Teclas(evento.keyCode,event)
             disableF5(evento);
         }, false );
 
@@ -1398,6 +1515,15 @@
     }, false );
      
     })
+
+__AplicarCambioPrecioUltimoArticulo(){
+    __AplicarCambioPrecioBD()
+}    
+__RegresarInputCodigo(){
+    $(".codigo").val('')
+    $('#modalCambiarPrecio').modal('hide')
+    getPosicionInputCodigo()
+}
 function __ObtengoTipoCambio(){
     var tempTipoCambio =__getTipoCambioCompra()
     if(tempTipoCambio == null){
@@ -1410,6 +1536,7 @@ function __ObtengoTipoCambio(){
     self.update()
     
 }
+
 function __SetUltimoArticuloIngresado(){
    localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
 }    
@@ -1463,6 +1590,55 @@ function teclamodal(e){
         }
          
         }
+
+/**
+*  Cambiar el precio  del producto 
+**/
+function __AplicarCambioPrecioBD(){
+    var parametros = __getUltimoArticuloIngresado();
+    if(parametros == null){
+        $('.codigo').val('')
+        getPosicionInputCodigo()
+        return 
+    }
+    parametros.precioPublico = $('.precioAcambiar').val()
+
+
+    $.ajax({
+        type : "POST",
+        dataType : "json",
+        data : {id:parametros.id,precioPublico:parametros.precioPublico},
+        url : 'CambiarPrecioArticulo.do',
+        success : function(data) {
+            if (data.status != 200) {
+              	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message)
+                }
+            } else {
+                mensajeToasExito(data.message)
+                self.articulo  = null
+                self.update()
+                if (data.message != null && data.message.length > 0) {
+                    self.articulo =null
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.articulo  = modeloTabla
+                        self.update()
+                        __SetUltimoArticuloIngresado()
+                        aplicarLineaFacturaCambioPrecio()
+                        $('#modalCambiarPrecio').modal('hide')
+                        getPosicionInputCodigo()
+                    });
+                }
+
+	        }
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
 
 /**
 * volver  a posicionar el cursor en input de codigo
@@ -1610,9 +1786,36 @@ __ClienteNuevo(){
     $("#telefono").val(null)
    
     $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true}) 
-    $('#modalAgregarClienteNuevo').modal('show')  
-    $('#cedula').select()
-    $("#cedula").focus()   
+
+    $('#modalAgregarClienteNuevo').on('shown.bs.modal', function () {
+        $('#cedula').select()
+        $("#cedula").focus()   
+     });
+}
+
+__AplicarCambioPrecio(){
+  
+    __AplicarPrecioLinea()
+}
+
+function __AplicarPrecioLinea(){
+    self.ultimoArticulo = __getUltimoArticuloIngresado()
+    self.update()
+    if(self.ultimoArticulo == null){
+        return 
+    }
+    if(self.ultimoArticulo.tipoCodigo == '04' ){
+        return 
+        
+    }
+
+    $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarPrecio').on('shown.bs.modal', function () {
+        $(".precioAcambiar").val( self.ultimoArticulo.precioPublico)
+        $(".precioAcambiar").focus()
+        $(".precioAcambiar").select()
+    })  
+
 }
 
 /**
@@ -2156,10 +2359,11 @@ __CambiarDescuento(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarDescuento').modal('show')      
+        $('#modalCambiarDescuento').on('shown.bs.modal', function () {
+            $( "#aplicarDescuento" ).focus()
+            $( "#aplicarDescuento" ).val(null)
+        }) 
     }
 }
 /**
@@ -2178,10 +2382,12 @@ __CambiarCantidad(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $( "#cambiarCantidadArticulo" ).focus()
-        $( "#cambiarCantidadArticulo" ).val(cantidad)
         $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarCantidad').modal('show')      
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+            $( "#cambiarCantidadArticulo" ).val(cantidad)
+            $( "#cambiarCantidadArticulo" ).focus()
+            $( "#cambiarCantidadArticulo" ).select()
+        })   
    }
  }
 
@@ -2329,9 +2535,13 @@ Lista de articulos
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    $('#descArticulo').select()
-    $('#descArticulo').focus()
-    $('#modalInventario').modal('show')    
+     $('#modalInventario').modal('show') 
+    $('#modalInventario').on('shown.bs.modal', function () {
+        $('#descArticulo').select()
+        $('#descArticulo').focus()
+    
+    })
+    
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -2744,6 +2954,7 @@ function crearFactura(estado){
                 evaluarFactura(data)
                 self.transaccion = false
                 self.update()
+                __DeleteUltimoArticuloIngresado()
             }
         },
         error : function(xhr, status) {
@@ -3124,7 +3335,6 @@ function __ListaDeArticulosPorDescripcion(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-   
     __ListaDeClientes()
  }
 /**
@@ -3264,7 +3474,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                 if (data.message != null && data.message.length > 0) {
                     self.articulo =null
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                             if(modeloTabla.estado  == "Inactivo"){
+                        if(modeloTabla.estado  == "Inactivo"){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
@@ -3401,6 +3611,28 @@ function __agregarArticulo(cantidad){
     __calculate(); 
     return encontrado
 }
+
+function aplicarLineaFacturaCambioPrecio(){
+    for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == self.articulo.codigo ){
+            self.item          = self.detail[count];
+            self.cantidadEnterFacturar = 0
+            self.cantArticulos = self.cantArticulos 
+            //Determinar el precio a incluir
+            var resultadoPrecio = getListaPrecio(self.articulo)
+            var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
+            var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
+            self.item.precioUnitario = precioUnitario
+            self.update();
+            ActualizarLineaDEtalle()
+            
+            self.detail[count] = self.item;
+            self.update();
+         }
+    }
+    __calculate(); 
+
+}
 /**
 * eliminar un detalle factura
 **/
@@ -3443,6 +3675,7 @@ function  eliminarDetalle(){
     }
     self.update()
      __calculate();
+     __DeleteUltimoArticuloIngresado()
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -3624,6 +3857,10 @@ function __storege(){
  * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
+    cambiarCantidadModal()
+  }
+
+ function cambiarCantidadModal(){
       var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -3632,7 +3869,9 @@ function __storege(){
     }
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
-  }
+    
+
+ } 
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -3723,6 +3962,7 @@ function agregarCantidadAlaVenta(cantidad){
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
+    getPosicionInputCodigo()
 }
 /**
 * Aplicar el cambio de linea Detalle
@@ -3737,14 +3977,17 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
+   aplicarDescuentoEnter()
+}
+function aplicarDescuentoEnter(){
     if ($("#formularioDescuento").valid()) {
-        _actualizarDesc(e)
+        _actualizarDesc()
     }
 }
 /**
 * Actualizar el descuento
 **/
-function _actualizarDesc(e){
+function _actualizarDesc(){
     var descuento = $(".aplicarDescuento").val();
     descuento = __valorNumerico(descuento)
     if(descuento > 100){
@@ -3765,8 +4008,10 @@ function _actualizarDesc(e){
     self.update()
     ActualizarLineaDEtalle()  
     aplicarCambioLineaDetalle()
+     $(".aplicarDescuento").val(null);
     $('#modalCambiarDescuento').modal('hide') 
-   $(".aplicarDescuento").val(null);
+  
+   getPosicionInputCodigo()
 }
 /**
 * calculacion de los detalle de la factura 
@@ -4262,13 +4507,27 @@ function __EnviarFacturar(){
 /**
 *  teclas de la pantalla
 **/      
-function __Teclas(tecla){
+function __Teclas(tecla,event){
    
     if(tecla ==119){
         __EnviarFacturar()
         return 
         
+    }
+    /**cambiar el precio**/
+    if(tecla ==111){
+        if( self.rol.rolAdministrador == 0){
+            return 
+        }
+        if(!$('#modalCambiarCantidad').is(':visible')){
+           __AplicarPrecioLinea()      
+        }else{
+            $(".codigo").val('')
+            event.preventDefault()
+        }
+        return 
     } 
+
     //alert(tecla)   
     //F4
     if(tecla ==115){

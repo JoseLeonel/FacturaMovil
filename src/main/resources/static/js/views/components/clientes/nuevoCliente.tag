@@ -1,8 +1,10 @@
 <cliente-nuevo>
 <div class="tituloBotones" show={mostrarFormulario}>
-    <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.agregar.cliente")}  </div>
+    <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {cliente.id > 0 ? $.i18n.prop("titulo.modificar.cliente")   :$.i18n.prop("titulo.agregar.cliente")}  </div>
     <div class="botones">
-        <button  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+        <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+        <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+
     </div>
 </div>    
 
@@ -276,6 +278,9 @@ self.on('mount',function(){
        __Agregar()
     __ComboTipoDocumentoExonerados()
     //configuracionDatePicker()
+    $("#collapse1").attr('class',"in");
+    $("#collapse2").attr('class',"in");
+    inicializarCursorCedula()
    
     $('.datepickerfechaEmisionExoneracionSTR').datepicker(
     {
@@ -286,6 +291,12 @@ self.on('mount',function(){
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
     }, false );
+    $( "#cedula" ).keyup(function( event ) {
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+                __consultar()
+           }
+        });
 })
 
 
@@ -407,21 +418,102 @@ function _incializarCampos(){
 *Consulta hacienda
 **/
 __ConsultarHaciendaBlur(){
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
-
+    __consultar()
 }
 __ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     } 
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
+    __consultar()
+    
+    
 }
-function getClienteHacienda(cedula){
+
+function inicializarCursorCedula(){
+    $('.cedula').focus();
+    
+}
+
+
+
+/**
+*  Consultar  especifico
+* 1  Mostrar  2  Modificar
+**/
+function __consultar(){
+    $("#id").val(null)
+    self.cliente.id = null
+    var formulario = $('#formulario').serialize();
+    $.ajax({
+        url: "MostrarClienteAjax.do",
+        datatype: "json",
+        data: formulario,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message);
+                }
+                getClienteHacienda()
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Inicializar el Formulario
+                        _incializarCampos()
+                        self.mostrarFormulario  = true 
+                        //desahabilita boton modificar
+                        self.botonModificar   = true;
+                        // habilita el formulario
+                        self.botonAgregar = false;
+                        self.cliente  =  modeloTabla
+                        self.update()
+                        $('#nombreCompleto').val(self.cliente.nombreCompleto)
+                        $('#cedula').val(self.cliente.cedula)
+                        $('#telefono').val(self.cliente.telefono)
+                        $('#correoElectronico').val(self.cliente.correoElectronico)
+                        $('#correoElectronico1').val(self.cliente.correoElectronico1)
+                        $('#correoElectronico2').val(self.cliente.correoElectronico2)
+                        $('#correoElectronico3').val(self.cliente.correoElectronico3)
+                        $('#otraSena').val(self.cliente.otraSena)
+                        $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
+                        
+                        $('.codigoPais').val(self.cliente.codigoPais)
+                       
+                        $('.nombreComercial').val(self.cliente.nombreComercial)
+                        __ComboEstados()
+                        __Eventos()
+                        
+                         $('.tipoCedula').val(self.cliente.tipoCedula)
+                         $("#fechaEmisionExoneracionSTR").val(self.cliente.fechaEmisionExoneracionSTR)
+                         $("#numeroDocumentoExoneracion").val(self.cliente.numeroDocumentoExoneracion)
+                         $("#porcentajeExoneracion").val(self.cliente.porcentajeExoneracion)
+                        
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+
+function getClienteHacienda(){
+        var cedula = $('#cedula').val()
     if(stringVacio($(".cedula").val()) == false){
        return    
     }
+    $('.correoElectronico').val('')
+    $('.correoElectronico1').val('')
+    $('.correoElectronico2').val('')
+    $('.correoElectronico3').val('')
+    $('.numeroDocumentoExoneracion').val('')
+    $('.nombreInstitucionExoneracion').val('')
+    $('.nombreComercial').val('')
+    $('.porcentajeExoneracion').val(0)
     self.clienteHacienda= {
         nombre:"",
         tipoIdentificacion:"",
@@ -438,8 +530,13 @@ function getClienteHacienda(cedula){
     statusCode: {
         
         404: function() {
-            mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
+            mensajeAdvertencia( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
             __listadoTipoCedulas()
+            self.mostrarFormulario  = true 
+            self.botonModificar   = false;
+            self.botonAgregar = true;
+            self.update()
+             __Eventos()
         }
     }
     }).done(function (response) {
@@ -447,6 +544,12 @@ function getClienteHacienda(cedula){
         self.update()
         __listadoTipoCedulas()
          $('#nombreCompleto').val(self.clienteHacienda.nombre)
+        self.mostrarFormulario  = true 
+        self.botonModificar   = false;
+        self.botonAgregar = true;
+        self.update()
+         __Eventos()
+         
     });
 }
 
@@ -679,7 +782,7 @@ function validarTamanosCedulas(){
     if($("#tipoCedula").val()=="01"){
         var resul = $("#cedula").val()
         if(resul.length < 9 || resul.length > 9  ){
-            mensajeErrorTiempo("Formato Invalido , Cedula Fisica es de 9 digitos")
+            mensajeAdvertencia("Formato Invalido , Cedula Fisica es de 9 digitos")
             return true
 
         }
@@ -689,7 +792,7 @@ function validarTamanosCedulas(){
     if($("#tipoCedula").val()=="02"){
         var resul = $("#cedula").val()
         if(resul.length < 10 || resul.length > 10  ){
-            mensajeErrorTiempo("Formato Invalido , Cedula Juridicas es de 10 digitos")
+            mensajeAdvertencia("Formato Invalido , Cedula Juridicas es de 10 digitos")
             return true
 
         }
@@ -698,7 +801,7 @@ function validarTamanosCedulas(){
     if($("#tipoCedula").val()=="03"){
         var resul = $("#cedula").val()
         if(resul.length < 12 || resul.length > 12  ){
-            mensajeErrorTiempo("Formato Invalido , Cedula Dimex es de 12 digitos")
+            mensajeAdvertencia("Formato Invalido , Cedula Dimex es de 12 digitos")
             return true
 
         }
@@ -717,27 +820,27 @@ function validaExoneracion(){
    }
         var valor  = $("#numeroDocumentoExoneracion").val()
         if(valor.length ==0){
-            sweetAlert("", "Campo requerido Indique el numero autorizacion de Exonet", "error");
+            mensajeAdvertencia("Campo requerido Indique el numero autorizacion de Exonet");
             return true
         }
 
    
    if($('#fechaEmisionExoneracionSTR').val() == null){
-       sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
+       mensajeAdvertencia( "Campo requerido La fecha de emision de la exoneracion");
        return true
    }
    valor  = $('#fechaEmisionExoneracionSTR').val()
    if(valor.length ==0){
-        sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
+        mensajeAdvertencia("Campo requerido La fecha de emision de la exoneracion");
        return true
    }
    valor  = __valorNumerico($('#porcentajeExoneracion').val())
    if(valor ==0){
-        sweetAlert("", "El porcentaje debe ser mayor a cero", "error");
+        mensajeAdvertencia( "El porcentaje debe ser mayor a cero");
        return true
    }
    if(valor > 100){
-        sweetAlert("", "El porcentaje debe ser menor o igual al 100%", "error");
+        mensajeAdvertencia( "El porcentaje debe ser menor o igual al 100%");
        return true
    }
 
@@ -759,7 +862,7 @@ __agregar(){
     if ($("#formulario").valid()) {
         aplicarCreacion()
     }else{
-        mensajeErrorTiempo("Error Faltan datos requeridos")
+        mensajeAdvertencia("Error Faltan datos requeridos")
         return true
     }
 }
@@ -791,15 +894,16 @@ function aplicarCreacion(){
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
-                                mensajeErrorTiempo(data.message)
+                                mensajeAdvertencia(data.message)
                             }
                         } else {
                         	serverMessageJson(data);
-                            mensajeExito(data.message)
+                            mensajeToasExito(data.message)
 	                         _incializarCampos()
                             self.cliente = data
                             self.update()
                             __Eventos()
+                            inicializarCursorCedula()
                         }
                     },
                     error : function(xhr, status) {
@@ -812,66 +916,57 @@ function aplicarCreacion(){
 
 }
 
+
 /**
-*  Consultar  especifico
-* 1  Mostrar  2  Modificar
+** Modificar la Empresa
 **/
-function __consultar(){
-    var formulario = $('#formulario').serialize();
+__Modificar(){
+    if(validarTamanosCedulas()){
+        return
+    }
+    if(validaExoneracion()){
+        return
+    }
+    if ($("#formulario").valid()) {
+        aplicarModificacion()
+    }else{
+        mensajeAdvertencia("Error Faltan datos requeridos")
+        return true
+    }
+}
+function aplicarModificacion(){    
+    var formulario = $("#formulario").serialize();
+    self.error = false;
+    self.exito = false;
+    self.update();
     $.ajax({
-        url: "MostrarClienteAjax.do",
-        datatype: "json",
-        data: formulario,
-        method:"GET",
-        success: function (data) {
+        type : "POST",
+        dataType : "json",
+        data : formulario,
+        url : 'ModificarClienteAjax.do',
+        success : function(data) {
             if (data.status != 200) {
+               	serverMessageJson(data);
                 if (data.message != null && data.message.length > 0) {
-                    mensajeErrorTiempo("", data.message, "error");
+                    mensajeAdvertencia(data.message)
                 }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Inicializar el Formulario
-                        _incializarCampos()
-                        self.mostrarFormulario  = true 
-                        //desahabilita boton modificar
-                        self.botonModificar   = true;
-                        // habilita el formulario
-                        self.botonAgregar = false;
-                        self.cliente  =  modeloTabla
-                        self.update()
-                        $('#nombreCompleto').val(self.cliente.nombreCompleto)
-                        $('#cedula').val(self.cliente.cedula)
-                        $('#telefono').val(self.cliente.telefono)
-                        $('#correoElectronico').val(self.cliente.correoElectronico)
-                        $('#correoElectronico1').val(self.cliente.correoElectronico1)
-                        $('#correoElectronico2').val(self.cliente.correoElectronico2)
-                        $('#correoElectronico3').val(self.cliente.correoElectronico3)
-                        $('#otraSena').val(self.cliente.otraSena)
-                        $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
-                        
-                        $('.codigoPais').val(self.cliente.codigoPais)
-                       
-                        $('.nombreComercial').val(self.cliente.nombreComercial)
-                        __ComboEstados()
-                        __Eventos()
-                        
-                         $('.tipoCedula').val(self.cliente.tipoCedula)
-                         $("#fechaEmisionExoneracionSTR").val(self.cliente.fechaEmisionExoneracionSTR)
-                         $("#numeroDocumentoExoneracion").val(self.cliente.numeroDocumentoExoneracion)
-                         $("#porcentajeExoneracion").val(self.cliente.porcentajeExoneracion)
-                        
-                        
-                    });
-                }
+            } else {
+               	serverMessageJson(data);
+                mensajeToasExito(data.message)
+                _incializarCampos()
+                self.cliente = data
+                self.update()
+                __Eventos()
+                inicializarCursorCedula()
             }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
+         },
+        error : function(xhr, status) {
+         console.log(xhr);
+          mensajeErrorServidor(xhr, status);
         }
     });
+
+
 }
 
 </script>

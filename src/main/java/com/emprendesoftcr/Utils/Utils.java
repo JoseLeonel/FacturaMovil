@@ -50,8 +50,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
@@ -94,14 +92,14 @@ public final class Utils {
 
 				bw.write(datosXml);
 				resultado = archivo.getPath();
-				//System.out.println("Archivo creado con éxito");
+				// System.out.println("Archivo creado con éxito");
 			} else {
 				// bw = new BufferedWriter(new FileWriter(archivo));
 
 				//
 				bw = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(archivo), StandardCharsets.UTF_8)));
 				bw.write(datosXml);
-				//System.out.println("Archivo creado con éxito");
+				// System.out.println("Archivo creado con éxito");
 			}
 			bw.close();
 			resultado = archivo.getPath();
@@ -114,12 +112,12 @@ public final class Utils {
 
 	public static String leerXMLServidor(String path) throws IOException {
 		String resultado = Constantes.EMPTY;
-		 System.out.println(path);
+		System.out.println(path);
 		String sCadena = "";
 		BufferedReader bf = new BufferedReader(new FileReader(path));
 		while ((sCadena = bf.readLine()) != null) {
 			resultado += sCadena;
-			
+
 		}
 		System.out.println("Archivo:" + resultado);
 		return resultado;
@@ -155,7 +153,6 @@ public final class Utils {
 		}
 		return null;
 	}
-	
 
 	/**
 	 * Crear directorio en el Servidor
@@ -167,7 +164,7 @@ public final class Utils {
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
 		String direccion = dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
-		//log.info("directorio: {}",direccion);
+		// log.info("directorio: {}",direccion);
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
 			return directorio;
@@ -180,7 +177,7 @@ public final class Utils {
 
 		File directorio_empresa = new File(dir + "/" + servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
-			
+
 			directorio_empresa.mkdir();
 		}
 		File directorio_anno = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno);
@@ -269,6 +266,53 @@ public final class Utils {
 	}
 
 	public static void getXMLServidor(String path) throws Exception {
+
+	}
+
+	public static Double getPorcentajeGananciaArticulo(Double costo, Double precioVenta, Double impuesto) {
+		Double porcentajeGanancia = Constantes.ZEROS_DOUBLE;
+		Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
+		if (costo == 0) {
+			return 100d;
+		}
+		if (precioVenta.equals(Constantes.ZEROS_DOUBLE)) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		if (costo == precioVenta) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (impuesto == 0 || impuesto == null) {
+			if (costo == precioVenta) {
+				resultado = Constantes.ZEROS_DOUBLE;
+			} else {
+				resultado = costo / precioVenta;
+				resultado = 1 - resultado;
+			}
+			porcentajeGanancia = resultado;
+		} else {
+			if (costo == precioVenta) {
+				porcentajeGanancia = Constantes.ZEROS_DOUBLE;
+			} else {
+				Double resultadoImpuesto = impuesto;
+				precioSinImpuesto = precioVenta / ((resultadoImpuesto / 100d) + 1d);
+				resultadoImpuesto = Constantes.ZEROS_DOUBLE;
+				precioSinImpuesto = precioSinImpuesto / ((resultadoImpuesto / 100d) + 1d);
+				if (precioSinImpuesto < costo) {
+					return Constantes.ZEROS_DOUBLE;
+				}
+
+				if (precioSinImpuesto == costo) {
+					resultado = Constantes.ZEROS_DOUBLE;
+				} else {
+					resultado = costo / precioSinImpuesto;
+					resultado = 1 - resultado;
+				}
+				porcentajeGanancia = resultado;
+
+			}
+		}
+		return porcentajeGanancia * 100d;
 
 	}
 

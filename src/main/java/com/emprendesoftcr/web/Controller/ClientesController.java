@@ -549,7 +549,24 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			ClienteCommand clienteCommand = new ClienteCommand(clienteBo.buscar(cliente.getId()));
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+			Cliente clienteBD  = null;
+			if(cliente.getId() != null) {
+				 clienteBD  = clienteBo.buscar(cliente.getId());
+			}else {
+				if(clienteBD == null && !cliente.getCedula().isEmpty()) {
+					clienteBD  = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+				}
+				if(clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
+					clienteBD  = clienteBo.buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(),usuarioSesion.getEmpresa());
+				}
+				
+			}
+			
+			
+			  
+			ClienteCommand clienteCommand = new ClienteCommand(clienteBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", clienteCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

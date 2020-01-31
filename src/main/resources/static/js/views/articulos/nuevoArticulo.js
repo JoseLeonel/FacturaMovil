@@ -14,7 +14,7 @@ function __MantenimientoAgregar(){
 					tipoEjecucion:1
 			};
      	  // here tags are compiled and riot.mount works synchronously
-		  var tags = riot.mount('articulo-crud',{parametros:parametros})
+		  var tags = riot.mount('articulo-nuevo',{parametros:parametros})
   
 		});
   

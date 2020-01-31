@@ -21,6 +21,8 @@ $(document)
 
 
 
+
+
 /**
 * Tipo de Documento
 **/
@@ -685,112 +687,7 @@ function cambioColonesADolar(valor,venta){
 	
 	
 	
-	/**
-	* autor : Leonel Hernandez Chaverri
-	* Fecha : 23-06-17
-	* obtener la ganancia del precio en decimal
-	**/
-	function _porcentajeGanancia(costo,impuesto,impuesto1,precioVenta) {
-		  var porcentajeGanancia = 0;
-		  var precioSinImpuesto  = 0;
-		  if(costo == 0){
-		      return 100
-		  } 
-		  if(precioVenta == 0){
-		    return 0;
-		  }
-		  if(costo == precioVenta){
-		      return 0
-		  }
-		  var resultado = 0
-		  if(impuesto == 0 || impuesto == null ){
-		      if(costo == precioVenta){
-		          resultado = 0
-		      }else{
-		        resultado =  costo / precioVenta 
-		        resultado = 1- resultado  
-		      }
-		    porcentajeGanancia  = resultado;
-		  }else{ 
-		    if(costo == precioVenta){
-		       porcentajeGanancia  = 0; 
-		    }else{
-		    	var resultadoImpuesto = impuesto;
-		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
-		    	resultadoImpuesto = impuesto1;
-		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioSinImpuesto/((resultadoImpuesto/100) + 1),5));
-		        if(precioSinImpuesto < costo){
-		        	return 0
-		        }
-
-		        if(precioSinImpuesto ==  costo){
-		            resultado = 0
-		        }else{
-		        resultado =   costo / precioSinImpuesto 
-		        resultado = 1-resultado  
-		        }
-		        porcentajeGanancia  = resultado;
-
-		    } 
-		  }
-		  return __valorNumerico(porcentajeGanancia * 100);
-		}	
 	
-
-	function esEntero(numero){
-	    if (isNaN(numero)){
-	        return false
-	    } else {
-	        // es entero
-	        if (numero % 1 == 0) {
-	            return true
-	            
-	        } else {
-	            return false
-	        }
-	    }
-	}
-
-	/**
-	* autor : Leonel Hernandez Chaverri
-	* Fecha : 23-06-17
-	* obtener Precio Publico con ganancia
-	**/
-	function _PrecioPublicoConGanancia(costo,impuesto,impuesto1,ganancia){
-		 
-		  if(costo == 0){
-		      return 0;
-		  } 
-		  
-		  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
-		  if(ganancia > 0){
-		    porcentajeGanancia = 1 - porcentajeGanancia
-		  }
-		  
-		  var totalImpuesto1 = __valorNumerico(impuesto1);
-		  totalImpuesto1 = totalImpuesto1/100;
-		  totalImpuesto1 = totalImpuesto1 == 0 ?0:totalImpuesto1 + 1
-		  // aplicando el 13
-		  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
-		  totalImpuesto = totalImpuesto/100;
-		  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
-		  var precio  = 0
-		  if(ganancia > 0){
-		    if(porcentajeGanancia < 1){
-		        precio = costo / porcentajeGanancia
-		    }else{
-		        if(porcentajeGanancia == 1){
-		            precio = costo * 2 
-		        }else{
-		            precio = costo * porcentajeGanancia
-		        }
-		    }
-		  }
-		  
-		  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
-		  precio = totalImpuesto >0? costo * totalImpuesto:precio;
-		  return __valorNumerico(redondeoDecimales(precio,0));
-		}
 	
 	function redondeoDecimales(numero,decimales)
 	{
@@ -1592,3 +1489,196 @@ function initDateRangePicker(element) {
     });
 }
 
+
+/**
+ * Functiones de Articulo
+ * **/
+
+function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
+	  return array.filter(
+	    function(data) {
+	      return data.tipoImpuesto == tipoImpuesto && data.tarifaIVAI.codigoTarifa == codigoTarifa?data.monto:0
+	    }
+	  );
+}
+
+
+function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
+	    if(tipoImpuesto.length ==0){
+	        return 0
+	    }
+	    if(tipoImpuesto ==null){
+	        return 0
+	    }
+	    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
+	    valor = valor !=null?valor[0]:null
+	    return valor == null?0:valor.monto
+}
+
+/**
+* autor : Leonel Hernandez Chaverri
+* Fecha : 23-06-17
+* obtener la ganancia del precio en decimal
+**/
+function _porcentajeGanancia(costo,impuesto,impuesto1,precioVenta) {
+	  var porcentajeGanancia = 0;
+	  var precioSinImpuesto  = 0;
+	  if(costo == 0){
+	      return 100
+	  } 
+	  if(precioVenta == 0){
+	    return 0;
+	  }
+	  if(costo == precioVenta){
+	      return 0
+	  }
+	  var resultado = 0
+	  if(impuesto == 0 || impuesto == null ){
+	      if(costo == precioVenta){
+	          resultado = 0
+	      }else{
+	        resultado =  costo / precioVenta 
+	        resultado = 1- resultado  
+	      }
+	    porcentajeGanancia  = resultado;
+	  }else{ 
+	    if(costo == precioVenta){
+	       porcentajeGanancia  = 0; 
+	    }else{
+	    	var resultadoImpuesto = impuesto;
+	        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
+	    	resultadoImpuesto = impuesto1;
+	        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioSinImpuesto/((resultadoImpuesto/100) + 1),5));
+	        if(precioSinImpuesto < costo){
+	        	return 0
+	        }
+
+	        if(precioSinImpuesto ==  costo){
+	            resultado = 0
+	        }else{
+	        resultado =   costo / precioSinImpuesto 
+	        resultado = 1-resultado  
+	        }
+	        porcentajeGanancia  = resultado;
+
+	    } 
+	  }
+	  return __valorNumerico(porcentajeGanancia * 100);
+	}	
+
+
+function esEntero(numero){
+    if (isNaN(numero)){
+        return false
+    } else {
+        // es entero
+        if (numero % 1 == 0) {
+            return true
+            
+        } else {
+            return false
+        }
+    }
+}
+
+/**
+* autor : Leonel Hernandez Chaverri
+* Fecha : 23-06-17
+* obtener Precio Publico con ganancia
+**/
+function _PrecioPublicoConGanancia(costo,impuesto,impuesto1,ganancia){
+	 
+	  if(costo == 0){
+	      return 0;
+	  } 
+	  
+	  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
+	  if(ganancia > 0){
+	    porcentajeGanancia = 1 - porcentajeGanancia
+	  }
+	  
+	  var totalImpuesto1 = __valorNumerico(impuesto1);
+	  totalImpuesto1 = totalImpuesto1/100;
+	  totalImpuesto1 = totalImpuesto1 == 0 ?0:totalImpuesto1 + 1
+	  // aplicando el 13
+	  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
+	  totalImpuesto = totalImpuesto/100;
+	  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
+	  var precio  = 0
+	  if(ganancia > 0){
+	    if(porcentajeGanancia < 1){
+	        precio = costo / porcentajeGanancia
+	    }else{
+	        if(porcentajeGanancia == 1){
+	            precio = costo * 2 
+	        }else{
+	            precio = costo * porcentajeGanancia
+	        }
+	    }
+	  }
+	  
+	  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
+	  precio = totalImpuesto >0? costo * totalImpuesto:precio;
+	  return __valorNumerico(redondeoDecimales(precio,0));
+	}
+
+function aplicarRedondeo(){
+    return 8
+}
+
+/**
+* autor : Leonel Hernandez Chaverri
+* Fecha : 23-06-17
+* obtener Precio General Ganancia Margen bruto
+**/
+function _ObtenerPrecio(costo,impuesto,impuesto1,ganancia){
+	 
+	  if(costo == 0){
+	      return 0;
+	  } 
+	  if(ganancia == 0){
+	      return 0;
+	  } 
+	  
+	  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
+	  if(ganancia > 0){
+	    porcentajeGanancia = 1 - porcentajeGanancia
+	  }
+	  
+	  var totalImpuesto1 = __valorNumerico(impuesto1);
+	  totalImpuesto1 = totalImpuesto1/100;
+	  totalImpuesto1 = totalImpuesto1 == 0 ?0:totalImpuesto1 + 1
+	  // aplicando el 13
+	  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
+	  totalImpuesto = totalImpuesto/100;
+	  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
+	  var precio  = 0
+	  if(ganancia > 0){
+	    if(porcentajeGanancia < 1){
+	        precio = costo / porcentajeGanancia
+	    }else{
+	        if(porcentajeGanancia == 1){
+	            precio = costo * 2 
+	        }else{
+	            precio = costo * porcentajeGanancia
+	        }
+	    }
+	  }
+	  
+	  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
+	  precio = totalImpuesto >0? costo * totalImpuesto:precio;
+	  return __valorNumerico(redondeoDecimales(precio,0));
+	}
+/**
+ * Calcula la ganancia del precio 
+ * @param impuesto
+ * @param costo
+ * @param precioMayorista
+ * @returns
+ */
+function __CalcularGanancia(impuesto,costo,precio){
+    var impuesto  =  __valorNumerico(impuesto);
+    var costo     =  __valorNumerico(costo);
+    var precioMayorista    =  __valorNumerico(precio);
+    return  precio >0?_porcentajeGanancia(costo,impuesto,0,precioMayorista):100;
+}

@@ -1,16 +1,17 @@
-<articulo-crud>
+<articulo-nuevo>
 <div show ={mostrarFormulario}>
 <div class="tituloBotones">
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {articulo.id > 0 ? $.i18n.prop("titulo.modificar.articulo")   :$.i18n.prop("titulo.agregar.articulo")}     </div>
     <div class="botones">
-        <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-            {$.i18n.prop("btn.volver")}
-        </button>
-        <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-        <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+            <button  title = "Salida del inventario" onclick={__AplicarSalida} show={articulo.cantidad > 0}  class="btn-salida btn-edit pull-right" > &nbsp Salida</button>
+            <button  title = "Entrada al inventario" onclick={__AplicarEntrada} show={botonEntrada}  class="btn-entrada btn-edit pull-right" > &nbsp Entrada</button>
+            <button  title = "Modificar el Articulo" onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+
     </div>
 </div>            
- <div class="row scrollerT"  >
+
+ <div class="row scrollerT"  show={mostrarFormularioPrincipal}>
     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
         <div id="divFormulario" >
             <!--Form-->
@@ -44,7 +45,7 @@
 
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}"  >
+                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}" onkeypress = {__ConsultarCodigo}  >
                                     </div>
                                   
                                 </div> 
@@ -77,7 +78,7 @@
 
                                      <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeypress ={__CalculoGananciaMayorista}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeyup ={__CalculoGananciaMayorista}>
                                     </div>
 
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
@@ -201,10 +202,6 @@
                                         </select>
                                     </div>     
                                 </div>
-
-
-
-
                             
                             </div>
                         </div>
@@ -274,7 +271,7 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    <button onclick ={__VolverPantallaPrincipal}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
                      <button show ={mostrarBotonAgregarEntrada} onclick={__agregarEntradaInventario}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
@@ -341,7 +338,7 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    <button onclick ={__VolverPantallaPrincipal}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
                      <button  show={mostrarBotonAgregarSalida} onclick={__agregarSalidaInventario}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
@@ -445,8 +442,36 @@
     .tamanoLetra {
         font-size: 16px;
     }
- 
-
+    .btn-salida {
+        background-color: red;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-entrada {
+        background-color: orange;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
 </style>
 <script>
     var self = this;
@@ -468,9 +493,6 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarTituloArticulo     = true
-    self.precioPantalla = true
-    self.impuestosIVAIPantalla = false;
-    self.otrosPantalla = false;
     self.articulo = {
 		id:null,
         codigo:"",
@@ -512,6 +534,9 @@
     self.mostrarFormularioSalida     = false
     self.mostrarBotonAgregarEntrada  = false
     self.mostrarBotonAgregarSalida   = false 
+    self.botonSalida = false
+    self.botonEntrada = false
+    self.mostrarFormularioPrincipal = true
    
 
 self.on('mount',function(){
@@ -525,134 +550,156 @@ self.on('mount',function(){
     self.impuestos = __ComboImpuestos()
     self.tipoCodigos =__CombotipoCodigo()
     self.update()
-     LimpiarArticulo()
     __Consulta()
+    enviarCargarCombos()
     
-   
+    //configuracionDatePicker()
+    $("#collapse1").attr('class',"in");
+    $("#collapse2").attr('class',"in");
+    inicializarCursorCodigo()
 
-    $('.collapse').collapse("show")
+    
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
 
-precioPantallaClick(){
-    self.precioPantalla = true
-    self.impuestosIVAIPantalla = false
-    self.otrosPantalla = false
+
+__AplicarSalida(){
+    // variables para modulo de inventario 
+    self.mostrarFormularioEntrada    = false
+    self.mostrarFormularioSalida     = true
+    self.mostrarBotonAgregarEntrada  = false
+    self.mostrarBotonAgregarSalida   = false 
+    self.botonSalida = false
+    self.botonEntrada = false
+    self.mostrarFormularioPrincipal = false
+    self.botonModificar = false
+    self.mostrarFormulario = false
     self.update()
-    $( ".nav-itemPrecio" ).addClass( "Active" );
-}
-impuestosIVAIPantallaClick(){
-    self.impuestosIVAIPantalla = true
-    self.precioPantalla = false
-    self.otrosPantalla = false
-    self.update()
-}
-otrosPantallaClick(){
-    self.impuestosIVAIPantalla = false
-    self.precioPantalla = false
-    self.otrosPantalla = true
-    self.update()
+    $('.observacion_salida').val(null)
+    $('.cantidadNueva_salida').val(null)
 
 }
-function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
-  return array.filter(
-    function(data) {
-      return data.tipoImpuesto == tipoImpuesto && data.tarifaIVAI.codigoTarifa == codigoTarifa?data.monto:0
-    }
-  );
-}
-function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
-    if(tipoImpuesto.length ==0){
-        return 0
-    }
-    if(tipoImpuesto ==null){
-        return 0
-    }
-    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
-    valor = valor !=null?valor[0]:null
-    return valor == null?0:valor.monto
+
+__AplicarEntrada(){
+    // variables para modulo de inventario 
+    self.mostrarFormularioEntrada    = true
+    self.mostrarFormularioSalida     = false
+    self.mostrarBotonAgregarEntrada  = false
+    self.mostrarBotonAgregarSalida   = false 
+    self.botonSalida = false
+    self.botonEntrada = false
+    self.mostrarFormularioPrincipal = false
+    self.botonModificar = false
+    self.mostrarFormulario = false
+    self.update()
+    $('.observacion_entrada').val(null)
+    $('.cantidadNueva_entrada').val(null)
+
 }
 
-/**
-*  Consultar  especifico
-* 1  Mostrar  2  Modificar
-**/
- function __Consulta(){
-    //Agregar
-    if(self.parametros.tipoEjecucion ==1){
-        LimpiarArticulo()
-        self.mostrarTituloArticulo = true  
-        self.mostrarFormulario = true
-        self.botonModificar = false
-        self.mostrarFormularioEntrada = false
-        self.botonAgregar = true
-        self.precioPantalla = true
-        self.impuestosIVAIPantalla = false
-        self.otrosPantalla = false                        
-        self.update()
-        $("#formulario").validate(reglasDeValidacion());     
-    }   
-    //modificar
-    if(self.parametros.tipoEjecucion ==2){
-        self.articulo = self.parametros.articulo
-        self.mostrarTituloArticulo = true  
-        self.mostrarFormulario = true
-        self.botonModificar = true
-        self.mostrarFormulario = true 
-        self.botonModificar   = true;
-        self.mostrarFormularioEntrada = false
-        self.botonAgregar  = false;            
-        self.update()
-        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
-        $("#formulario").validate(reglasDeValidacion());     
-       
-    }  
-    //Entrada
-    if(self.parametros.tipoEjecucion ==3){
-        LimpiarArticulo()
-        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
-        $(".errorServerSideJgrid").remove();
-        $(".observacion_entrada").val(null)
-        $(".cantidadNueva_entrada").val(null)
-        self.articulo  = self.parametros.articulo
-        self.mostrarFormularioEntrada = true
-        self.mostrarListado = false 
-        self.botonModificar = false
-        self.botonAgregar   = false
-        self.mostrarFormularioEntrada = true
-        self.mostrarFormularioSalida  = false
-        self.update()
-        _ListaMotivoEntradasActivas()
-    }
-    //Salida
-    if(self.parametros.tipoEjecucion ==4){
-        LimpiarArticulo()
-        $("#formularioSalida").validate(reglasDeValidacionSalida());
-        $(".errorServerSideJgrid").remove();
-        $(".observacion_salida").val(null)
-        $(".cantidadNueva_salida").val(null)
-        self.articulo  = self.parametros.articulo
-        self.mostrarListado = false 
-        self.botonModificar = false
-        self.botonAgregar = false
-        self.mostrarTituloArticulo = false
-        // variables para modulo de inventario 
-        self.mostrarFormularioEntrada = false
-        self.mostrarFormularioSalida  = true
-        self.update()
-        _ListaMotivoSalidasActivas()
-    }
+__VolverPantallaPrincipal(){
+    // variables para modulo de inventario 
+    self.mostrarFormularioEntrada    = false
+    self.mostrarFormularioSalida     = false
+    self.mostrarBotonAgregarEntrada  = false
+    self.mostrarBotonAgregarSalida   = false 
+    self.botonSalida = true
+    self.botonEntrada = true
+    self.mostrarFormularioPrincipal = true
+    self.botonModificar = true
+    self.mostrarFormulario = true
+    self.update()
+}
+
+
+function inicializarCursorCodigo(){
+    $('.codigo').focus();
+    $('.codigo').select();
+    return
 }
 
 /**
-* Limpiar Articulo
+*Consulta hacienda
 **/
-function LimpiarArticulo(){
-   self.articulo = {
+__ConsultarCodigo(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    findByCodigo()
+}
+
+/**
+** Buscar el codigo del articulo en el sistema
+**/
+function findByCodigo(){
+    
+    $("#id").val(null)
+    self.articulo.id = null
+    self.botonSalida = false
+    self.botonEntrada = false
+    self.update()
+
+    var formulario = $('#formulario').serialize();
+    $.ajax({
+        url: "MostrarArticuloAjax.do",
+        datatype: "json",
+        data: formulario,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message);
+                }
+                serverMessageJsonClase(data);
+                inicializarCursorCodigo()
+                self.mostrarTituloArticulo = true  
+                self.mostrarFormulario = true
+                self.botonModificar = false
+                self.mostrarFormulario = true 
+                self.botonModificar   = false;
+                self.mostrarFormularioEntrada = false
+                self.botonAgregar  = true;            
+                self.update()
+                __listadoTarifasByTipoImpuesto("",1)
+                enviarCargarCombos()
+                
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.articulo = modeloTabla
+                        self.mostrarTituloArticulo = true  
+                        self.mostrarFormulario = true
+                        self.botonModificar = true
+                        self.mostrarFormulario = true 
+                        self.botonModificar   = true;
+                        self.mostrarFormularioEntrada = false
+                        self.botonAgregar  = false;            
+                        self.botonSalida = true
+                        self.botonEntrada = true
+
+                        self.update()
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+                        $("#formulario").validate(reglasDeValidacion());   
+                        enviarCargarCombos()
+                        inicializarCursorCodigo()
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+
+function __InicializarDatos(){
+    self.articulo = {
 		id:null,
-        codigo:"",
         tipoCodigo:"",
 		descripcion:"",
         serie:"",
@@ -693,7 +740,6 @@ function LimpiarArticulo(){
    $("#marca").val($("#marca option:first").val()); 
    $("#unidadMedida").val($("#unidadMedida option:first").val()); 
    $("#contable").val($("#contable option:first").val()); 
-   $('.codigo').val(null)
    $('.descripcion').val(null)
    $('.serie').val(null)
    $('.costo').val(null)
@@ -712,7 +758,26 @@ function LimpiarArticulo(){
    $(".errorServerSideJgrid").remove();
    $("#formulario").validate(reglasDeValidacion());
    enviarCargarCombos()
+   enviarCargarCombos()
+   inicializarCursorCodigo()
 }
+
+/**
+*  Consultar  especifico
+* 1  Mostrar  2  Modificar
+**/
+ function __Consulta(){
+        self.mostrarTituloArticulo = true  
+        self.mostrarFormulario = true
+        self.botonModificar = false
+        self.mostrarFormularioEntrada = false
+        self.botonAgregar = true
+        self.update()
+        $("#formulario").validate(reglasDeValidacion());     
+    
+}
+
+
 /**
 *  Envia  a llamar a los eventos ajax de cada combo para actualizarlo de acuerdo a la empresa
 **/
@@ -840,16 +905,15 @@ __agregarEntradaInventario(){
                         	serverMessageJson(data);
                             mensajeToasExito(data.message)
                             $(".errorServerSideJgrid").remove();
-                            $('#observacion_entrada').val(null)
-                            $('#cantidadNueva_entrada').val(null)
-                            self.mostrarListado            = true
-                            self.mostrarTituloArticulo     = true
-                            self.botonModificar            = false
-                            self.botonAgregar              = false
-                            self.mostrarFormularioEntrada    = false
-                            self.mostrarFormularioSalida     = false
-                           self.update()
-                           __mostrarListado()
+                            $('.observacion_entrada').val(null)
+                            $('.cantidadNueva_entrada').val(null)
+                            if (data.message != null && data.message.length > 0) {
+                                 $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                     self.articulo = modeloTabla
+                                     self.update()
+                                 })
+                            }          
+           
                         }
                     },
                     error : function(xhr, status) {
@@ -881,16 +945,15 @@ __agregarSalidaInventario(){
                         	serverMessageJson(data);
                             mensajeToasExito(data.message)
                             $(".errorServerSideJgrid").remove();
-                            $('#observacion_salida').val(null)
-                            $('#cantidadNueva_salida').val(null)
-                            self.mostrarListado            = true
-                            self.mostrarTituloArticulo     = true
-                            self.botonModificar            = false
-                            self.botonAgregar              = false
-                            self.mostrarFormularioEntrada    = false
-                            self.mostrarFormularioSalida     = false
-                            self.update()
-                            __mostrarListado()
+                            $('.observacion_salida').val(null)
+                            $('.cantidadNueva_salida').val(null)
+                            if (data.message != null && data.message.length > 0) {
+                                 $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                     self.articulo = modeloTabla
+                                     self.update()
+                                 })
+                            }          
+
                         }
                     },
                     error : function(xhr, status) {
@@ -953,9 +1016,6 @@ MostrarBotonAgregarEntrada(e){
  self.mostrarBotonAgregarEntrada = cantidad > 0 ? true:false
  self.update()
 }
-
-
-
 /**
 * muestra el boton de agregar en una salida hasta que el valor de cantidad nueva sea mayor a cero o sea menor o igual cantidad inventario
 **/
@@ -965,7 +1025,7 @@ MostrarBotonAgregarSalida(e){
  self.mostrarBotonAgregarSalida = cantidad ==0 ? false:self.mostrarBotonAgregarSalida
  self.update()
 }
-
+/** Fin  funciones de inventario ----------------------------------------------------------------------------**/
 /**
 *  Ganancia del precio mayorista
 **/
@@ -1008,6 +1068,8 @@ function getPrecioMayorista(){
     $('#precioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.precioMayorista,aplicarRedondeo())))
 
 }
+
+
 /**
 * ganancia del precio especial
 **/
@@ -1166,75 +1228,6 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
 }
 /**
 **/
-function actualizarPreciosImpuestosPublico(){
-    var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioPublico  = ganancia
-    self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto>0){
-        total = total * impuesto
-    }
-    self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
-    self.update()
-    $('.precioPublico').val(self.articulo.precioPublico)
-
-
-}
-
-function actualizarPreciosImpuestosMayorista(){
-    var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
-    if(ganancia == 0){
-        return
-    }
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioMayorista  = ganancia
-    self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto>0){
-        total = total * impuesto
-    }
-    self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
-    self.articulo.precioMayorista =__valorNumerico(self.articulo.precioMayorista)
-    self.articulo.precioMayorista =  self.articulo.precioMayorista.toFixed(2) 
-    self.update()
-    $('.precioMayorista').val(self.articulo.precioMayorista)
-}
-
-function actualizarPreciosImpuestosEspecial(){
-    var ganancia = __valorNumerico($('#gananciaPrecioEspecial').val())
-    if(ganancia == 0){
-        return
-    }
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioEspecial  = ganancia
-    self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto > 0){
-        total = total * impuesto
-    }
-    self.articulo.precioEspecial = total>0?total:self.articulo.precioEspecial
-    self.update()
-    $('.precioEspecial').val(self.articulo.precioEspecial)
-}
 /**
 * Actualizar el precio costo
 **/
@@ -1243,61 +1236,37 @@ __ActualizarPreciosCosto(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico =  __valorNumerico($('#precioPublico').val())
     var gananciaPublica = _porcentajeGanancia(costo,impuesto,0,precioPublico)
-    gananciaPublica = gananciaPublica >0?gananciaPublica/100:0
-    
-     //  Costo , ganancia digitada , impuestos digitados  Altera el precio
-       var resultadoPorcentajeGanancia = gananciaPublica>0?1-gananciaPublica:0
-       var resultadoImpuesto = 0
-       precioPublico =  costo > 0 && resultadoPorcentajeGanancia >0? costo /resultadoPorcentajeGanancia:precioPublico
-       if(impuesto > 0){
-          resultadoImpuesto =  impuesto + 1 
-          precioPublico = precioPublico * resultadoImpuesto  
-       }
-       self.articulo.gananciaPrecioPublico    =  gananciaPublica * 100
-       self.articulo.gananciaPrecioPublico    = __valorNumerico(self.articulo.gananciaPrecioPublico)
-       self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico.toFixed()
-       self.articulo.precioPublico = precioPublico > 0?precioPublico:self.articulo.precioPublico
-       self.articulo.costo = costo
-       self.update()     
+
+    var precioMayorista =  __valorNumerico($('#precioMayorista').val())
+    var gananciaPrecioMayorista = precioMayorista > 0 ? _porcentajeGanancia(costo,impuesto,0,precioPublico): 0
+
+    var precioEspecial =  __valorNumerico($('#precioEspecial').val())
+    var gananciaPrecioEspecial = precioEspecial > 0 ? _porcentajeGanancia(costo,impuesto,0,precioPublico): 0
+   
+    self.articulo.costo = costo
+    self.articulo.precioPublico = precioPublico > 0 ? precioPublico : _ObtenerPrecio(costo,impuesto,0,gananciaPublica)
+    self.articulo.gananciaPublica = gananciaPublica
+
+    self.articulo.precioMayorista = precioMayorista > 0 ? precioMayorista:gananciaPrecioMayorista > 0 ? _ObtenerPrecio(costo,impuesto,0,gananciaPrecioMayorista):0
+    self.articulo.gananciaPrecioMayorista = gananciaPrecioMayorista
+
+    self.articulo.precioEspecial = precioEspecial > 0 ? precioEspecial: gananciaPrecioEspecial > 0 ? _ObtenerPrecio(costo,impuesto,0,gananciaPrecioEspecial):0
+    self.articulo.gananciaPrecioEspecial = gananciaPrecioEspecial
+
+    self.update()     
+    $('#precioPublico').val(self.articulo.precioPublico)
+    $('#gananciaPrecioPublico').val(self.articulo.gananciaPublica)
+
+    $('#precioMayorista').val(self.articulo.precioMayorista)
+    $('#gananciaPrecioMayorista').val(self.articulo.gananciaPrecioMayorista)
+
+    $('#precioEspecial').val(self.articulo.precioEspecial)
+    $('#gananciaPrecioEspecial').val(self.articulo.gananciaPrecioEspecial)
     
 
 }
-/**
-* calculo de Precio
-**/
-function _CalculoPrecio(){
-    var impuesto  =  __valorNumerico($('#impuesto').val())
-    var costo     =  __valorNumerico($('#costo').val())
-    var precioPublico    =  __valorNumerico($('#precioPublico').val())
-    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,0,precioPublico):0
-    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioPublico)
-     var precio = __valorNumerico($('#precioMayorista').val())
-    if(precio > 0){
-        self.articulo.gananciaPrecioMayorista    = precio >0?_porcentajeGanancia(costo,impuesto,0,precio):0
-        self.articulo.precioMayorista = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioMayorista)
-    }
-    precio = __valorNumerico($('#precioEspecial').val())
-    if(precio > 0){
-        self.articulo.gananciaPrecioEspecial = precio >0?_porcentajeGanancia(costo,impuesto,0,precio):0
-        self.articulo.precioEspecial = _PrecioPublicoConGanancia(costo,impuesto,0,self.articulo.gananciaPrecioEspecial)
-    }
-    self.update()
-}
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    if(valor ==null){
-        return
-    }
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+
+
 /**
 *  Actimpuestor validaciones del formulario
 **/
@@ -1467,21 +1436,7 @@ function __ComboContables(){
 }
 
 
-/**
-*  Regresar al listado
-**/
-__regresarAlListado(){
-    self.mostrarTituloArticulo = true
-    self.mostrarListado     = true;
-    self.botonAgregar       = false;
-    self.botonModificar     = false;
-    self.mostrarFormulario  = false 
-    self.mostrarFormularioEntrada    = false
-    self.mostrarFormularioSalida     = false
-    self.update()
-    //articulo.js se encuentra rutina
-    __mostrarListado()
-}
+
 /**
 *   Agregar 
 **/
@@ -1498,53 +1453,38 @@ __agregar(){
                    mensajeAdvertencia("Debe actualizar la base imponible debe ser Activo") 
                    return 
                 }
-                
             }
-            
-        
         if(self.articulo.costo > self.articulo.precioPublico){
              mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo") 
             return 
         }
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
-                $.ajax({
-                    type : "POST",
-                    dataType : "json",
-                    data : formulario,
-                    url : 'AgregarArticuloAjax.do',
-                    success : function(data) {
-                        if (data.status != 200) {
-                        	serverMessageJson(data);
-                            if (data.message != null && data.message.length > 0) {
-                                mensajeAdvertencia(data.message)
-                            }
-                        } else {
-                        	serverMessageJson(data);
-                            mensajeToasExito(data.message)
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $('#codigo').val(null)
-                            $('#descripcion').val(null)
-                            $('#serie').val(null)
-                            $('#costo').val(null)
-                            $('#impuesto').val(null)
-                            $('#precioPublico').val(null)
-                            $('#gananciaPrecioPublico').val(null)
-                            $('#precioMayorista').val(null)
-                            $('#gananciaPrecioMayorista').val(null)
-                            $('#precioEspecial').val(null)
-                            $('#gananciaPrecioEspecial').val(null)
-                              __Eventos()
-                        }
-                    },
-                    error : function(xhr, status) {
-                        console.log(xhr);
-                        mensajeErrorServidor(xhr, status);
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            data : formulario,
+            url : 'AgregarArticuloAjax.do',
+            success : function(data) {
+                if (data.status != 200) {
+                   	serverMessageJson(data);
+                    if (data.message != null && data.message.length > 0) {
+                        mensajeAdvertencia(data.message)
                     }
-                });
+                    inicializarCursorCodigo()
+                } else {
+                    __InicializarDatos()
+                   	serverMessageJson(data);
+                    mensajeToasExito(data.message)
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+                mensajeErrorServidor(xhr, status);
+            }
+        });
     }else{
-
+        inicializarCursorCodigo()
         mensajeAdvertencia( "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO");
       }
 }
@@ -1555,7 +1495,6 @@ __Modificar(){
      if(validarPrecios()){
          return
      }
-
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
@@ -1565,8 +1504,6 @@ __Modificar(){
                return 
             }
         }
-
-
         if(self.articulo.costo > self.articulo.precioPublico){
             mensajeAdvertencia("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 
@@ -1574,12 +1511,45 @@ __Modificar(){
         self.error = false;
         self.exito = false;
         self.update();
-        __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
+        __aplicarModificacion()
 
     }   else{
+          inicializarCursorCodigo()
           mensajeAdvertencia("Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO");
       }
     
+}
+
+
+function __aplicarModificacion(){
+    if(validarPrecios()){
+         return
+     }
+   var formulario = $("#formulario").serialize();
+    $.ajax({
+        type : "POST",
+        dataType : "json",
+        data : formulario,
+        url : 'ModificarArticuloAjax.do',
+        success : function(data) {
+            if (data.status != 200) {
+              	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message)
+                    inicializarCursorCodigo()
+                }
+            } else {
+                __InicializarDatos()
+               	serverMessageJson(data);
+                mensajeToasExito(data.message)
+            }
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+ 
 }
 
 function validarPrecios(){
@@ -1667,4 +1637,4 @@ function _inicializarArticulo(){
     self.update()
 }
 </script>
-</articulo-crud>
+</articulo-nuevo>

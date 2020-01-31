@@ -172,7 +172,7 @@ public class KardexController {
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			kardexBo.salida(articulo,articulo.getCantidad(), kardex.getCantidadNueva(), kardex.getObservacion(), Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_SALIDA,  kardex.getObservacion(), usuarioSesion);
-
+			articulo = articuloBo.buscar(IdArticulo);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("kardex.agregar.salida.correctamente", articulo);
 
 		} catch (Exception e) {

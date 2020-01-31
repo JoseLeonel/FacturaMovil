@@ -59,6 +59,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
+import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
@@ -91,9 +92,9 @@ public class ArticuloController {
 
 	@Autowired
 	private ArticuloBo																			articuloBo;
-	
+
 	@Autowired
-	ConsultasNativeBo  consultasNativeBo;
+	ConsultasNativeBo																				consultasNativeBo;
 
 	@Autowired
 	private DetalleBo																				detalleBo;
@@ -152,6 +153,16 @@ public class ArticuloController {
 		return "views/articulos/ListarArticulos";
 	}
 
+	/**
+	 * Listar JSP de los articulos
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/nuevoArticulo.do", method = RequestMethod.GET)
+	public String nuevoArticulo(ModelMap model) {
+		return "views/articulos/nuevoArticulo";
+	}
+
 	@RequestMapping(value = "/ListarKardex", method = RequestMethod.GET)
 	public String listarKardex(ModelMap model) {
 		return "views/articulos/ListarKardex";
@@ -161,13 +172,11 @@ public class ArticuloController {
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
 	}
-	
 
 	@RequestMapping(value = "/movil/ListarArticulosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa,@RequestParam Long idCategoria) {
+	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa, @RequestParam Long idCategoria) {
 
-	
 		return articuloBo.articulosByCategoriaAndEmpresa(idEmpresa, idCategoria);
 	}
 
@@ -230,9 +239,9 @@ public class ArticuloController {
 //		String inicio1 = dateFormat1.format(fechaI);
 //		String fin1 = dateFormat1.format(fechaF);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return articuloBo.sumarInventarios(usuario.getEmpresa().getId(),fechaI,fechaF);
+		return articuloBo.sumarInventarios(usuario.getEmpresa().getId(), fechaI, fechaF);
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosFechaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -247,16 +256,16 @@ public class ArticuloController {
 		if (fechaF != null && fechaF != null) {
 			fechaF = Utils.sumarDiasFecha(fechaF, 1);
 		}
-		
+
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaI);
 		String fin1 = dateFormat1.format(fechaF);
 		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-	
+
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
-		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 		for (ArticuloByFechaNative articuloByFechaNative : objetos) {
 			solicitudList.add(articuloByFechaNative);
 		}
@@ -267,10 +276,8 @@ public class ArticuloController {
 		}
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
-		
 
 	}
-
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioAjax.do", method = RequestMethod.GET)
@@ -285,14 +292,14 @@ public class ArticuloController {
 		if (fechaF != null && fechaF != null) {
 			fechaF = Utils.sumarDiasFecha(fechaF, 1);
 		}
-		
+
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaI);
 		String fin1 = dateFormat1.format(fechaF);
-	
+
 		// Se buscan las facturas
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 
 		String nombreArchivo = "Inventario.xls";
 		response.setContentType("application/octet-stream");
@@ -310,7 +317,7 @@ public class ArticuloController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative>  articulos) {
+	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
@@ -322,24 +329,23 @@ public class ArticuloController {
 	@RequestMapping(value = "/DescargarInventarioExistenciasAjax.do", method = RequestMethod.GET)
 	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
 
-	// Se buscan las facturas
-			Date fechaI = Utils.parseDate(fechaInicio);
-			Date fechaF = Utils.parseDate(fechaInicio);
-			if (fechaF == null) {
-				fechaF = new Date(System.currentTimeMillis());
-			}
-			if (fechaF != null && fechaF != null) {
-				fechaF = Utils.sumarDiasFecha(fechaF, 1);
-			}
-			
-			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-			String inicio1 = dateFormat1.format(fechaI);
-			String fin1 = dateFormat1.format(fechaF);
-		
-			// Se buscan las facturas
-			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),inicio1,fin1);
+		// Se buscan las facturas
+		Date fechaI = Utils.parseDate(fechaInicio);
+		Date fechaF = Utils.parseDate(fechaInicio);
+		if (fechaF == null) {
+			fechaF = new Date(System.currentTimeMillis());
+		}
+		if (fechaF != null && fechaF != null) {
+			fechaF = Utils.sumarDiasFecha(fechaF, 1);
+		}
 
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaI);
+		String fin1 = dateFormat1.format(fechaF);
+
+		// Se buscan las facturas
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 
 		String nombreArchivo = "InventarioExistencias.xls";
 		response.setContentType("application/octet-stream");
@@ -357,7 +363,7 @@ public class ArticuloController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative>  articulos) {
+	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
@@ -417,8 +423,7 @@ public class ArticuloController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosUsoInternoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -486,10 +491,6 @@ public class ArticuloController {
 
 	}
 
-	
-	
-
-	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -721,12 +722,12 @@ public class ArticuloController {
 			articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 			articulo.setCodigoTarifa1(Constantes.EMPTY);
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
-			articulo.setEstado(articulo.getEstado() == null? Constantes.EMPTY:articulo.getEstado());
-			
-			if(articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
+			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
+
+			if (articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
 				result.rejectValue("estado", "error.articulo.inactivo.agregar");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
-				
+
 			}
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -838,15 +839,14 @@ public class ArticuloController {
 					}
 
 				}
-				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-					if(articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
 						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
-					}	
+					}
 				}
-			
+
 			}
-		
-			
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -1017,10 +1017,10 @@ public class ArticuloController {
 					}
 
 				}
-				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-					if(articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
 						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
-					}	
+					}
 				}
 			}
 
@@ -1082,7 +1082,27 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			ArticuloCommand articuloCommand = new ArticuloCommand(articuloBo.buscar(articulo.getId()));
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+			Articulo articuloBD = articuloBo.buscar(articulo.getId());
+			;
+			if (articuloBD == null) {
+				if (articulo.getCodigo() != null) {
+					if (!articulo.getCodigo().equals(Constantes.EMPTY)) {
+						articuloBD = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), usuarioSesion.getEmpresa());
+					}
+
+				}
+
+			}
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
+			}
+
+			ArticuloCommand articuloCommand = new ArticuloCommand(articuloBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -1171,6 +1191,32 @@ public class ArticuloController {
 			articuloBD.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articuloBD.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
 			articuloBD.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articuloBo.modificar(articuloBD);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model,@ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscar(cambiarPrecioArticuloCommand.getId());
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			articuloBD.setUpdated_at(new Date());
+			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(),cambiarPrecioArticuloCommand.getPrecioPublico(),articuloBD.getImpuesto()));
+			articuloBD.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
+			articuloBD.setUsuario(usuario);
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
