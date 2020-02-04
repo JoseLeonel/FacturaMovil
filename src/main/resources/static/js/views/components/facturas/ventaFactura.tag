@@ -453,60 +453,10 @@
 <!--Modal Cambiar Cantidad-->
 
 
-<!--Modal Cambiar precio-->
-<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.precio")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label >Precio:</label>
-                            <input  type="number"  class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Fin Cambiar precio-->
 
 
-<!--Modal Cambiar Descuento-->
-<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioDescuento" name="formularioDescuento">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="campo tamanoLetraTotales aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-                </form>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Descuento-->
+
 
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -785,40 +735,120 @@
         </div>  
 </div>  
 
+<!--Modal Cambiar precio-->
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambio de Precio</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el nuevo Precio  </label>
+                        <input type="number" class="form-control cambiarprecioArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarprecioArticulo" name="cambiarprecioArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarElPrecio}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Fin Cambiar precio-->
+
+<!--Modal Cambiar Descuento-->
+<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el Porcentaje % </label>
+                        <input type="number" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__actualizarDescuento}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Descuento-->
+
+
 <style type="text/css">
-.btn-PagarICON:before {
-    font-family: FontAwesome;
-    content: "\f09d ";
-}
-.btn-Pagar {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 24px;
-    padding-right: 20px;
-    font-size: 30px;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.containerBotonesPagar{
-    display:flex;
-    margin-top: 2%;
-}
-.elementoPagar{
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+         font-size: 60px !important;
+    }
+    .btn-PagarICON:before {
+        font-family: FontAwesome;
+        content: "\f09d ";
+    }
+    .btn-Pagar {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 24px;
+        padding-right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .containerBotonesPagar{
+        display:flex;
+        margin-top: 2%;
+    }
+    .elementoPagar{
 
-}
-.teclashift {
-    font-weight: 700;
-    font-size: 27px !important;
-    text-align: center;
-    color: red;
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
 
-}
+    }
  .imagenesBilletes{
       height: 75px;
       width: 170px;
@@ -838,350 +868,350 @@
     margin-top: 2%;
 
    }
-.billetes1{
-    margin-left: 1%;
-    /* margin-bottom: 9px; */
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 25px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 25px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.elementoTotales{
-    display: flex;
-    justify-content: space-around;
-     font-weight: 600 !important;
+    .billetes1{
+        margin-left: 1%;
+        /* margin-bottom: 9px; */
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: flex-start;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
         font-size: 25px !important;
-        font-family: Roboto,sans-serif !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 30px; */
+        border-collapse: separate;
+        text-align: center;
+        /* cursor: pointer; */
+        /* padding: 10px; */
+        /* margin: 20px; */
+        border: none;
+        text-align: center !important;
+
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 25px !important;
+        font-family: Roboto, sans-serif !important;
         color: #30ed17 !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
-        align-items: center;
         text-align: left;
-   
-}
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
+        /* padding-left: 20px; */
+        /* line-height: 30px; */
+        border-collapse: separate;
+        text-align: center;
+        /* cursor: pointer; */
+        /* padding: 10px; */
+        /* margin: 20px; */
+        border: none;
+        text-align: center !important;
 
-@media only screen and (max-width: 1024px) and (min-width:768px)  {
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-
-
-
-}
-.labelDetalleVenta {
-    display: inline;
-    padding: .2em .6em .3em;
-    font-weight: 700;
-    line-height: 1;
-    color: black;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;
-}
-    .clickable {
-        cursor: pointer;
     }
-    .modal {
-position: fixed;
-top: 3%;
-right: 3%;
-left: 3%;
-bottom: 3%;
-width: auto;
-margin: 0;
-}
-.modal-body {
-max-height: 350px;
-padding: 15px;
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-}
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .elementoTotales{
+        display: flex;
+        justify-content: space-around;
+        font-weight: 600 !important;
+            font-size: 25px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            align-items: center;
+            text-align: left;
+    
+    }
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
 
-.modal-body { height: 60%; }
+    @media only screen and (max-width: 1024px) and (min-width:768px)  {
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
 
-@media (max-width: 480px) 
-{
-    .modal.fade.in {
-        top: 10px;
-  }
-}
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
 
-td.col-1, th.col-1 {
-  width: 8.33333%; }
+    }
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
 
-td.col-2, th.col-2 {
-  width: 16.66667%; }
 
-td.col-3, th.col-3 {
-  width: 25%; }
 
-td.col-4, th.col-4 {
-  width: 33.33333%; }
+    }
+    .labelDetalleVenta {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-weight: 700;
+        line-height: 1;
+        color: black;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+        .clickable {
+            cursor: pointer;
+        }
+        .modal {
+    position: fixed;
+    top: 3%;
+    right: 3%;
+    left: 3%;
+    bottom: 3%;
+    width: auto;
+    margin: 0;
+    }
+    .modal-body {
+    max-height: 350px;
+    padding: 15px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    }
 
-td.col-5, th.col-5 {
-  width: 41.66667%; }
+    .modal-body { height: 60%; }
 
-td.col-6, th.col-6 {
-  width: 50%; }
+    @media (max-width: 480px) 
+    {
+        .modal.fade.in {
+            top: 10px;
+    }
+    }
 
-td.col-7, th.col-7 {
-  width: 58.33333%; }
+    td.col-1, th.col-1 {
+    width: 8.33333%; }
 
-td.col-8, th.col-8 {
-  width: 66.66667%; }
+    td.col-2, th.col-2 {
+    width: 16.66667%; }
 
-td.col-9, th.col-9 {
-  width: 75%; }
+    td.col-3, th.col-3 {
+    width: 25%; }
 
-td.col-10, th.col-10 {
-  width: 83.33333%; }
+    td.col-4, th.col-4 {
+    width: 33.33333%; }
 
-td.col-11, th.col-11 {
-  width: 91.66667%; }
+    td.col-5, th.col-5 {
+    width: 41.66667%; }
 
-td.col-12, th.col-12 {
-  width: 100%; }
+    td.col-6, th.col-6 {
+    width: 50%; }
 
-td.col-sm-1, th.col-sm-1 {
-  width: 8.33333%; }
+    td.col-7, th.col-7 {
+    width: 58.33333%; }
 
-td.col-sm-2, th.col-sm-2 {
-  width: 16.66667%; }
+    td.col-8, th.col-8 {
+    width: 66.66667%; }
 
-td.col-sm-3, th.col-sm-3 {
-  width: 25%; }
+    td.col-9, th.col-9 {
+    width: 75%; }
 
-td.col-sm-4, th.col-sm-4 {
-  width: 33.33333%; }
+    td.col-10, th.col-10 {
+    width: 83.33333%; }
 
-td.col-sm-5, th.col-sm-5 {
-  width: 41.66667%; }
+    td.col-11, th.col-11 {
+    width: 91.66667%; }
 
-td.col-sm-6, th.col-sm-6 {
-  width: 50%; }
+    td.col-12, th.col-12 {
+    width: 100%; }
 
-td.col-sm-7, th.col-sm-7 {
-  width: 58.33333%; }
+    td.col-sm-1, th.col-sm-1 {
+    width: 8.33333%; }
 
-td.col-sm-8, th.col-sm-8 {
-  width: 66.66667%; }
+    td.col-sm-2, th.col-sm-2 {
+    width: 16.66667%; }
 
-td.col-sm-9, th.col-sm-9 {
-  width: 75%; }
+    td.col-sm-3, th.col-sm-3 {
+    width: 25%; }
 
-td.col-sm-10, th.col-sm-10 {
-  width: 83.33333%; }
+    td.col-sm-4, th.col-sm-4 {
+    width: 33.33333%; }
 
-td.col-sm-11, th.col-sm-11 {
-  width: 91.66667%; }
+    td.col-sm-5, th.col-sm-5 {
+    width: 41.66667%; }
 
-td.col-sm-12, th.col-sm-12 {
-  width: 100%; }
+    td.col-sm-6, th.col-sm-6 {
+    width: 50%; }
 
-td.col-md-1, th.col-md-1 {
-  width: 8.33333%; }
+    td.col-sm-7, th.col-sm-7 {
+    width: 58.33333%; }
 
-td.col-md-2, th.col-md-2 {
-  width: 16.66667%; }
+    td.col-sm-8, th.col-sm-8 {
+    width: 66.66667%; }
 
-td.col-md-3, th.col-md-3 {
-  width: 25%; }
+    td.col-sm-9, th.col-sm-9 {
+    width: 75%; }
 
-td.col-md-4, th.col-md-4 {
-  width: 33.33333%; }
+    td.col-sm-10, th.col-sm-10 {
+    width: 83.33333%; }
 
-td.col-md-5, th.col-md-5 {
-  width: 41.66667%; }
+    td.col-sm-11, th.col-sm-11 {
+    width: 91.66667%; }
 
-td.col-md-6, th.col-md-6 {
-  width: 50%; }
+    td.col-sm-12, th.col-sm-12 {
+    width: 100%; }
 
-td.col-md-7, th.col-md-7 {
-  width: 58.33333%; }
+    td.col-md-1, th.col-md-1 {
+    width: 8.33333%; }
 
-td.col-md-8, th.col-md-8 {
-  width: 66.66667%; }
+    td.col-md-2, th.col-md-2 {
+    width: 16.66667%; }
 
-td.col-md-9, th.col-md-9 {
-  width: 75%; }
+    td.col-md-3, th.col-md-3 {
+    width: 25%; }
 
-td.col-md-10, th.col-md-10 {
-  width: 83.33333%; }
+    td.col-md-4, th.col-md-4 {
+    width: 33.33333%; }
 
-td.col-md-11, th.col-md-11 {
-  width: 91.66667%; }
+    td.col-md-5, th.col-md-5 {
+    width: 41.66667%; }
 
-td.col-md-12, th.col-md-12 {
-  width: 100%; }
+    td.col-md-6, th.col-md-6 {
+    width: 50%; }
 
-td.col-lg-1, th.col-lg-1 {
-  width: 8.33333%; }
+    td.col-md-7, th.col-md-7 {
+    width: 58.33333%; }
 
-td.col-lg-2, th.col-lg-2 {
-  width: 16.66667%; }
+    td.col-md-8, th.col-md-8 {
+    width: 66.66667%; }
 
-td.col-lg-3, th.col-lg-3 {
-  width: 25%; }
+    td.col-md-9, th.col-md-9 {
+    width: 75%; }
 
-td.col-lg-4, th.col-lg-4 {
-  width: 33.33333%; }
+    td.col-md-10, th.col-md-10 {
+    width: 83.33333%; }
 
-td.col-lg-5, th.col-lg-5 {
-  width: 41.66667%; }
+    td.col-md-11, th.col-md-11 {
+    width: 91.66667%; }
 
-td.col-lg-6, th.col-lg-6 {
-  width: 50%; }
+    td.col-md-12, th.col-md-12 {
+    width: 100%; }
 
-td.col-lg-7, th.col-lg-7 {
-  width: 58.33333%; }
+    td.col-lg-1, th.col-lg-1 {
+    width: 8.33333%; }
 
-td.col-lg-8, th.col-lg-8 {
-  width: 66.66667%; }
+    td.col-lg-2, th.col-lg-2 {
+    width: 16.66667%; }
 
-td.col-lg-9, th.col-lg-9 {
-  width: 75%; }
+    td.col-lg-3, th.col-lg-3 {
+    width: 25%; }
 
-td.col-lg-10, th.col-lg-10 {
-  width: 83.33333%; }
+    td.col-lg-4, th.col-lg-4 {
+    width: 33.33333%; }
 
-td.col-lg-11, th.col-lg-11 {
-  width: 91.66667%; }
+    td.col-lg-5, th.col-lg-5 {
+    width: 41.66667%; }
 
-td.col-lg-12, th.col-lg-12 {
-  width: 100%; }
+    td.col-lg-6, th.col-lg-6 {
+    width: 50%; }
 
-td.col-xl-1, th.col-xl-1 {
-  width: 8.33333%; }
+    td.col-lg-7, th.col-lg-7 {
+    width: 58.33333%; }
 
-td.col-xl-2, th.col-xl-2 {
-  width: 16.66667%; }
+    td.col-lg-8, th.col-lg-8 {
+    width: 66.66667%; }
 
-td.col-xl-3, th.col-xl-3 {
-  width: 25%; }
+    td.col-lg-9, th.col-lg-9 {
+    width: 75%; }
 
-td.col-xl-4, th.col-xl-4 {
-  width: 33.33333%; }
+    td.col-lg-10, th.col-lg-10 {
+    width: 83.33333%; }
 
-td.col-xl-5, th.col-xl-5 {
-  width: 41.66667%; }
+    td.col-lg-11, th.col-lg-11 {
+    width: 91.66667%; }
 
-td.col-xl-6, th.col-xl-6 {
-  width: 50%; }
+    td.col-lg-12, th.col-lg-12 {
+    width: 100%; }
 
-td.col-xl-7, th.col-xl-7 {
-  width: 58.33333%; }
+    td.col-xl-1, th.col-xl-1 {
+    width: 8.33333%; }
 
-td.col-xl-8, th.col-xl-8 {
-  width: 66.66667%; }
+    td.col-xl-2, th.col-xl-2 {
+    width: 16.66667%; }
 
-td.col-xl-9, th.col-xl-9 {
-  width: 75%; }
+    td.col-xl-3, th.col-xl-3 {
+    width: 25%; }
 
-td.col-xl-10, th.col-xl-10 {
-  width: 83.33333%; }
+    td.col-xl-4, th.col-xl-4 {
+    width: 33.33333%; }
 
-td.col-xl-11, th.col-xl-11 {
-  width: 91.66667%; }
+    td.col-xl-5, th.col-xl-5 {
+    width: 41.66667%; }
 
-td.col-xl-12, th.col-xl-12 {
-  width: 100%; }
+    td.col-xl-6, th.col-xl-6 {
+    width: 50%; }
+
+    td.col-xl-7, th.col-xl-7 {
+    width: 58.33333%; }
+
+    td.col-xl-8, th.col-xl-8 {
+    width: 66.66667%; }
+
+    td.col-xl-9, th.col-xl-9 {
+    width: 75%; }
+
+    td.col-xl-10, th.col-xl-10 {
+    width: 83.33333%; }
+
+    td.col-xl-11, th.col-xl-11 {
+    width: 91.66667%; }
+
+    td.col-xl-12, th.col-xl-12 {
+    width: 100%; }
 </style> 
 
 <script>
@@ -1363,7 +1393,25 @@ td.col-xl-12, th.col-xl-12 {
               todayHighlight:true,
             }
         );
-        __agregarArticulos()   
+        __agregarArticulos()  
+
+        $( "#cambiarprecioArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarElPrecioModal()
+           }
+        });
+        $( "#aplicarDescuento" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               _actualizarDesc()
+           }
+        });
+
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -2028,10 +2076,14 @@ __CambiarDescuento(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
     }else{
-         $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarDescuento').modal('show')      
+         $('#modalCambiarDescuento').on('shown.bs.modal', function () {
+            
+            $( "#aplicarDescuento" ).val(null)
+            $( "#aplicarDescuento" ).focus()
+            $( "#aplicarDescuento" ).select()
+
+         })
     }
 }
 /**
@@ -2087,9 +2139,13 @@ __CambiarPrecio(e){
         return true
     } 
    self.update()
-   $( "#cambiarprecioArticulo" ).focus()
-   $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
-   $('#modalCambiarPrecio').modal('show')      
+   $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true}) 
+   $('#modalCambiarPrecio').on('shown.bs.modal', function () {
+       $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
+       $( "#cambiarprecioArticulo" ).focus()
+       $( "#cambiarprecioArticulo" ).select()
+   })
+
 }
 /**
 * Tipo Cambio de moneda
@@ -3350,11 +3406,17 @@ __cambiarDescripcionDetalle(e){
 * Cambiar el precio del detalle de la factura
 **/
 __cambiarElPrecio(){
+    __cambiarElPrecioModal()
+}
+
+function __cambiarElPrecioModal(){
     var precio = $(".cambiarprecioArticulo").val();
      self.item.precioUnitario = __valorNumerico(precio);
      self.update()
     agregarPrecioAlDetalle(precio)
+
 }
+
 /**
 * Cambiar el precio en el detalle
 **/
@@ -3444,14 +3506,12 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-     if ($("#formularioDescuento").valid()) {
-        _actualizarDesc(e)
-     }
+        _actualizarDesc()
 }
 /**
 *Actualizar el descuento
 **/
-function _actualizarDesc(e){
+function _actualizarDesc(){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
      if(descuento > 100){

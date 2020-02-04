@@ -8,35 +8,7 @@
     </div>
 <!--validar rol de usuario-->
 
-<!-- The Modal -->
-  <div class="modal fade" id="modalRolUsuario">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Seguridad</h4>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-           <form id="formularioModalRolUsuario">
-                <div class="form-group ">
-                    <label>Usuario</label> 
-                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
-                </div>      
-                <div class="form-group ">
-                    <label>Clave</label> 
-                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
-                </div>      
-            </form>
-        </div>
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<!--fin validar rol de usuario-->
+
 
 <!--Modal abrirCajon sin comanda-->
 <div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
@@ -394,7 +366,7 @@
                                         Nuevo Cliente
                                     </span> 
                                 </div>
-                                <div class="BotonesSumarRestar" show ={rol.rolAdministrador == 1} >
+                                <div class="BotonesSumarRestar"  >
                                     <span onclick = {__AplicarCambioPrecio} title="Cambiar el precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
@@ -601,7 +573,7 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Cantidad </label>
-                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo" autofocus="autofocus"   autofocus="autofocus" min="0">
+                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
                         </div>
                     </div>
  
@@ -633,7 +605,7 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Descuento </label>
-                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"   autofocus="autofocus" min="0">
+                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"   autofocus="autofocus" min="0" autocomplete="off">
                         </div>
                     </div>
  
@@ -740,7 +712,7 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Precio al Publico </label>
-                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}">
+                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
                         </div>
                     </div>
  
@@ -754,6 +726,50 @@
                 </div>
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
                     <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--fin validar rol de usuario-->
+
+<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
+            </div>
+            <div class="modal-body">
+                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
+                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
+                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
                 </div>
             </div>
         </div>
@@ -1226,7 +1242,6 @@
     self.error                 = false
     self.rutaAutorizada        = ""    // llama al modal correspondiente
     self.autorizarBorrado      = 0    // 0 = no autoriza 1 = si autorisa 
-
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
@@ -1304,7 +1319,6 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
@@ -1348,6 +1362,10 @@
     self.soloParaChinos = false
     self.totalGananciaByProducto = 0
     self.totalPesoByFactura = 0
+    self.ultimoArticulo ={
+        descripcion:"",
+        precioPublico:0
+        }
     self.rol = {
       rolAdministrador:0
     }
@@ -1402,7 +1420,6 @@
         __RolAdministrador()
        cargaBilletes()
        __InformacionDataTableDia()
-     //  __ListaDeClientes()
        __ListaActividadesComercales()
        __ListaDeVendedores()
        __agregarArticulos()
@@ -1432,12 +1449,9 @@
             __RestarConTecla(event)
             }
             if(event.which == 111){
-                if(self.rol.rolAdministrador == 0){
-                    return 
-                }
                 if(!$('#modalCambiarCantidad').is(':visible')){
                     $(".codigo").val(null)
-                    __AplicarPrecioLinea()
+                    seguridadCambiarPrecioLinea()
                     return
                 }else{
                     $(".codigo").val('')
@@ -1446,11 +1460,25 @@
                 }
             }
         });
+
+        
+
+        $( "#claveSistema" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+           }
+        });
+
+
+
         $( "#precioAcambiar" ).keyup(function( event ) {
             xTriggered++;
             var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
         }).keydown(function( event ) {
-            if ( event.which == 13 && self.rol.rolAdministrador == 1) {
+            if ( event.which == 13 ) {
                __AplicarCambioPrecioBD()
            }
         });
@@ -1524,6 +1552,12 @@ __RegresarInputCodigo(){
     $('#modalCambiarPrecio').modal('hide')
     getPosicionInputCodigo()
 }
+__RegresarInputSeguridad(){
+    $(".codigo").val('')
+    $('#modalRolUsuario').modal('hide')
+    getPosicionInputCodigo()
+}
+
 function __ObtengoTipoCambio(){
     var tempTipoCambio =__getTipoCambioCompra()
     if(tempTipoCambio == null){
@@ -1580,6 +1614,7 @@ function teclamodal(e){
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible') 
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible')
                     ) {
                         $('.codigo').focus() 
                      } 
@@ -1793,9 +1828,21 @@ __ClienteNuevo(){
      });
 }
 
+
 __AplicarCambioPrecio(){
-  
-    __AplicarPrecioLinea()
+   seguridadCambiarPrecioLinea()
+}
+
+function seguridadCambiarPrecioLinea(){
+    self.autorizarBorrado = 3
+    self.update()
+    if(self.rol.rolAdministrador == 0){
+        self.rutaAutorizada = '';
+        self.update()
+        inputCursorUsuario()    
+    }else{
+         __AplicarPrecioLinea()
+    }
 }
 
 function __AplicarPrecioLinea(){
@@ -1816,6 +1863,10 @@ function __AplicarPrecioLinea(){
         $(".precioAcambiar").select()
     })  
 
+}
+
+function modalCambiarPrecioVista(){
+    
 }
 
 /**
@@ -1994,10 +2045,7 @@ function __RolAdministrador(){
 * Validar seguridad de ruta autorizada
 **/ 
 __SeguridadVentas(){
-    if(self.rol.rolAdministrador == 0){
-        return true
-    }
-   __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+     __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
     
 }
 
@@ -2032,8 +2080,7 @@ function __validarRolAdministrador(formulario,url){
                	    $('#modalRolUsuario').modal('hide') 
                     $('.modal-backdrop').remove();
                     if(self.autorizarBorrado == 0){
-                        $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
-                        $(self.rutaAutorizada).modal('show')    	
+                        permitirModal()
                     }
                     if(self.autorizarBorrado == 1){
                         self.autorizarBorrado = 0
@@ -2044,6 +2091,12 @@ function __validarRolAdministrador(formulario,url){
                         self.autorizarBorrado = 0
                         self.update()
                         refrescarPagina()
+                    }
+                    //cambiar el precio
+                    if(self.autorizarBorrado == 3){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        __AplicarPrecioLinea()
                     }
 
                     return true;
@@ -2064,6 +2117,15 @@ function __validarRolAdministrador(formulario,url){
     }
     
 }
+function permitirModal(){
+    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true})     
+        $(self.rutaAutorizada).on('shown.bs.modal', function () {
+        $(self.inputCursorModal).val()
+        $(self.inputCursorModal ).focus()
+        $(self.inputCursorModal).select()
+    })
+}
+
 _clickEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
@@ -2159,10 +2221,7 @@ function __SeguridadLimpiar(){
         if(self.detail.length > 0){
             self.rutaAutorizada = '';
             self.update()
-            $("#usuarioSistema").val("")
-            $("#claveSistema").val("")
-            $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-            $('#modalRolUsuario').modal('show')     
+            inputCursorUsuario()
         }else{
            refrescarPagina()
         }
@@ -2170,6 +2229,17 @@ function __SeguridadLimpiar(){
     }else{
         refrescarPagina()
     }
+
+}
+
+function inputCursorUsuario(){
+    $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalRolUsuario').on('shown.bs.modal', function () {
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $(".usuarioSistema").focus()
+        $(".usuarioSistema").select()
+    })  
 
 }
 
@@ -2353,11 +2423,9 @@ __CambiarDescuento(e){
     self.update()
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarDescuento';
+        self.inputCursorModal = "#aplicarDescuento"
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()
    }else{
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarDescuento').on('shown.bs.modal', function () {
@@ -2376,11 +2444,9 @@ __CambiarCantidad(e){
    self.update()
    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarCantidad';
+        self.inputCursorModal = "#cambiarCantidadArticulo"
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()
    }else{
         $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarCantidad').on('shown.bs.modal', function () {
@@ -3165,19 +3231,18 @@ function lecturaCodigo(leerCodigo){
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    var temArticulo = __getUltimoArticuloIngresado()
     if(leerCodigo.indexOf("+") != -1){
         
-       __sumarMasArticulo(temArticulo.codigo,0,codigoActual)
+       __sumarMasArticulo(objetos.codigo,0,codigoActual)
        getPosicionInputCodigo()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-    if(temArticulo !=null){
-        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
-           getPosicionInputCodigo()
-        }
-    }
+//    if(temArticulo !=null){
+//        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
+//           getPosicionInputCodigo()
+//        }
+//    }
 }
 /**
 *  cambiar el precio
@@ -3643,10 +3708,7 @@ __removeProductFromDetail(e) {
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()  
     }else{
         eliminarDetalle()
     }
@@ -4520,7 +4582,7 @@ function __Teclas(tecla,event){
             return 
         }
         if(!$('#modalCambiarCantidad').is(':visible')){
-           __AplicarPrecioLinea()      
+           seguridadCambiarPrecioLinea()      
         }else{
             $(".codigo").val('')
             event.preventDefault()
