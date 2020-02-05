@@ -89,7 +89,61 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			Double totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE
 					: usuarioCaja.getTotalAbono();
 			resultado = totalEfectivo + totalAbono + totalTarjeta + totalBanco;
-			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado, 5));
+			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado, 2));
+			
+			usuarioCaja.setBillete50000( usuarioCaja.getBillete50000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete50000());
+
+			usuarioCaja.setBillete20000(usuarioCaja.getBillete20000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete20000());
+
+			
+			usuarioCaja.setBillete10000(usuarioCaja.getBillete10000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete10000());
+
+			usuarioCaja.setBillete5000(usuarioCaja.getBillete5000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete5000());
+
+			usuarioCaja.setBillete2000( usuarioCaja.getBillete2000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete2000());
+
+			usuarioCaja.setBillete1000( usuarioCaja.getBillete1000() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getBillete1000());
+
+			usuarioCaja.setMoneda500(usuarioCaja.getMoneda500() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda500());
+
+			usuarioCaja.setMoneda100( usuarioCaja.getMoneda100() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda100());
+			
+			usuarioCaja.setMoneda50(usuarioCaja.getMoneda50() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda50() );
+
+			usuarioCaja.setMoneda25( usuarioCaja.getMoneda25() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda25());
+
+			usuarioCaja.setMoneda10(usuarioCaja.getMoneda10() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda10());
+			
+			usuarioCaja.setMoneda5(usuarioCaja.getMoneda5() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getMoneda5() );
+			
+			usuarioCaja.setConteoTarjeta(usuarioCaja.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getConteoTarjeta());
+
+			usuarioCaja.setConteoDolar( usuarioCaja.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getConteoDolar());
+
+			usuarioCaja.setConteoManual(Constantes.ZEROS_DOUBLE);
+			
+			usuarioCaja.setConteoManual(usuarioCaja.getBillete5000() + usuarioCaja.getBillete20000() + usuarioCaja.getBillete10000() + usuarioCaja.getBillete5000() + usuarioCaja.getBillete2000() + usuarioCaja.getBillete1000() + usuarioCaja.getMoneda500() + usuarioCaja.getMoneda100() + usuarioCaja.getMoneda50() + usuarioCaja.getMoneda25() + usuarioCaja.getMoneda10() + usuarioCaja.getMoneda5() );
+			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(),2));
+			
+			usuarioCaja.setConteoManual(Utils.roundFactura(usuarioCaja.getConteoManual() + usuarioCaja.getTotalConversionColones(),2));
+			usuarioCaja.setDiferencia(usuarioCaja.getConteoManual()  - usuarioCaja.getTotalNeto());
+			
+			
+
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {

@@ -29,54 +29,8 @@
     </div>
   </div>
 <!--fin validar rol de usuario-->
-<!--Modal Cambiar Cantidad-->
-<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number"  class="campo tamanoLetraTotales cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Cantidad-->
-<!--Modal Cambiar Descripcion-->
-<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input  type="text" class="campo tamanoLetraTotales cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar descripcion-->
+
+
 <div id="pagina1">
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
@@ -421,36 +375,6 @@
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
 
-<!-- Modal correo alternativo-->
-<div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
-            </div>
-            <div class="modal-body">
-                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form"  autocomplete="off" >
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreFactura"  id="cambioNombreFactura" name="cambioNombreFactura" autofocus="autofocus"  > 
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
-<!--fin Modal agregar el nombre de el tiquete temporal-->
-<!--Modal Cambiar Cantidad-->
 
 
 
@@ -791,6 +715,88 @@
 </div>
 
 <!--Fin Cambiar Descuento-->
+
+<!-- Modal correo alternativo-->
+
+<div id='ModalAgregarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp {$.i18n.prop("factura.digite.nombreFactura")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("factura.nombreFactura")} </label>
+                        <input type="text" class="form-control cambioNombreFactura tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreFactura" name="cambioNombreFactura"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal correo alternativo-->
+
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("articulo.descripcion")} </label>
+                        <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarDescripcionDetalle}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</label>
+                        <input type="number" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalculacionDelDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <style type="text/css">
@@ -1411,6 +1417,32 @@
                _actualizarDesc()
            }
         });
+        $( "#cambioNombreFactura" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __AplicarCambioNombreModal()
+           }
+        });
+        $( "#cambiarDescripcionArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarDescripcionDetalleModal()
+           }
+        });
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __recalculacionDelDetalleModal()
+           }
+        });
+
+        
 
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
@@ -2105,11 +2137,12 @@ __CambiarCantidad(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $( "#cambiarCantidadArticulo" ).focus()
-        $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-        $('#modalCambiarCantidad').modal()                      // initialized with defaults
-        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-        $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately   
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+                $( "#cambiarCantidadArticulo" ).focus()
+                $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+                $('.cambiarCantidadArticulo').select()
+        })
    }
 }
 /**
@@ -2122,11 +2155,13 @@ __CambiarDescripcion(e){
         return true
     } 
   
-   $( "#cambiarDescripcionArticulo" ).focus()
-   $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-   $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-   $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+    $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+        $( ".cambiarDescripcionArticulo" ).val(self.item.descripcion)      
+        $('.cambiarDescripcionArticulo').focus()
+        $('.cambiarDescripcionArticulo').select()
+    })
+
 
 
 }
@@ -2358,8 +2393,11 @@ __CargarFacturaEspera(e){
       }  
     }else{
         if(self.detail.length != 0 ){
-            $('#ModalAgregarNombreTiquete').modal('show') 
-            $('.cambioNombreFactura').focus()
+            $('#ModalAgregarNombreTiquete').modal({backdrop: 'static', keyboard: true}) 
+            $('#ModalAgregarNombreTiquete').on('shown.bs.modal', function () {
+                $('.cambioNombreFactura').focus()
+                $('.cambioNombreFactura').select()
+            })
             return
          }
     }
@@ -2390,11 +2428,13 @@ __CrearFacturaTemporal(){
     if(self.factura.id == null){
         
         if(self.detail.length != 0 ){
-            $('.cambioNombreTiquete').val(self.factura.nombreFactura)
-            $('.cambioNombreFactura').focus()
-            $('#ModalAgregarNombreTiquete').modal() 
-         //   $('#ModalCambiarNombreTiquete').modal({ keyboard: false })     // initialized with no keyboard
-             $('#ModalAgregarNombreTiquete').modal('show') 
+            
+            $('#ModalAgregarNombreTiquete').modal({backdrop: 'static', keyboard: true}) 
+            $('#ModalAgregarNombreTiquete').on('shown.bs.modal', function () {
+                $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+                $('.cambioNombreFactura').focus()
+                $('.cambioNombreFactura').select()
+            })
             return
         }
 
@@ -2455,10 +2495,7 @@ __ModificarNombreTiquete(){
     });
     }
 }
-/**
-*  Agregar el nombre a la factura temporal
-**/
-__AgregarNombreFacturaTemporal(){
+function __AplicarCambioNombreModal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.update()
@@ -2468,6 +2505,13 @@ __AgregarNombreFacturaTemporal(){
     }
     self.factEspera =null
     self.update()
+
+}
+/**
+*  Agregar el nombre a la factura temporal
+**/
+__AgregarNombreFacturaTemporal(){
+    __AplicarCambioNombreModal()
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -3378,11 +3422,8 @@ function __storege(){
     }   
     self.update()
 }
- /**
- * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Factura
- **/ 
- __recalculacionDelDetalle(e){
+
+function __recalculacionDelDetalleModal(){
       var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -3391,16 +3432,28 @@ function __storege(){
     }
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
+
+}
+ /**
+ * Cuando se aplica un cambio de cantidad en un detalle
+ * Se aplica una recalculacion de todo el detalle y Factura
+ **/ 
+ __recalculacionDelDetalle(e){
+     __recalculacionDelDetalleModal()
   }
-/**
-* Cambiar el precio del detalle de la factura
-**/
-__cambiarDescripcionDetalle(e){
+  function  __cambiarDescripcionDetalleModal(){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
+
+  }
+/**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarDescripcionDetalle(e){
+    __cambiarDescripcionDetalleModal()
 }
 /**
 * Cambiar el precio del detalle de la factura
