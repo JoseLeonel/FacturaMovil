@@ -2,7 +2,10 @@ package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,131 +32,94 @@ import com.emprendesoftcr.Utils.Utils;
 @Table(name = "usuarios_cajas")
 public class UsuarioCaja implements Serializable {
 
-	private static final long	serialVersionUID	= 8895530294398977996L;
+	private static final long			serialVersionUID	= 8895530294398977996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long							id;
+	private Long									id;
 
 	@Column(name = "total_fondo_inicial")
-	private Double						totalFondoInicial;
+	private Double								totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private Double						totalEfectivo;
+	private Double								totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double						totalTarjeta;
+	private Double								totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double						totalBanco;
+	private Double								totalBanco;
 
 	@Column(name = "total_credito")
-	private Double						totalCredito;
+	private Double								totalCredito;
 
 	@Column(name = "total_abono")
-	private Double						totalAbono;
+	private Double								totalAbono;
 
 	@Column(name = "total_neto")
-	private Double						totalNeto;
+	private Double								totalNeto;
 
 	@Column(name = "impuesto_servicio")
-	private Double						totalServicio;
+	private Double								totalServicio;
 
 	@Column(name = "total_dolares")
-	private Double						totalDolares;
+	private Double								totalDolares;
 
-	@Column(name = "bille_50000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete50000;
+	@Column(name = "conte_tarj")
+	private Double								conteoTarjeta;
 
-	@Column(name = "bille_20000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete20000;
+	@Column(name = "conte_dolar")
+	private Double								conteoDolar;
 
-	@Column(name = "bille_10000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete10000;
+	@Column(name = "total_conver")
+	private Double								totalConversionColones;
 
-	@Column(name = "bille_5000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete5000;
+	@Column(name = "tipo_camb")
+	private Double								tipoCambio;
 
-	@Column(name = "bille_2000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete2000;
+	@Column(name = "nota_cred")
+	private Double								notaCredito;
 
-	@Column(name = "bille_1000", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						billete1000;
+	@Column(name = "nota_deb")
+	private Double								notaDebito;
 
-	@Column(name = "mone_500", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda500;
+	@Column(name = "conteo_manual")
+	private Double								ConteoManual;
 
-	@Column(name = "mone_100", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda100;
-
-	@Column(name = "mone_50", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda50;
-
-	@Column(name = "mone_25", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda25;
-
-	@Column(name = "mone_10", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda10;
-
-	@Column(name = "mone_5", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						moneda5;
-
-	@Column(name = "conte_tarj", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						conteoTarjeta;
-
-	@Column(name = "conte_dolar", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						conteoDolar;
-
-	@Column(name = "total_conver", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						totalConversionColones;
-
-	@Column(name = "tipo_camb", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						tipoCambio;
-
-	@Column(name = "nota_cred", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						notaCredito;
-
-	@Column(name = "nota_deb", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						notaDebito;
-	
-	@Column(name = "conteo_manual", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						ConteoManual;
-	
-	@Column(name = "diferencia", columnDefinition = "default '0.00'", precision = 18, scale = 2)
-	private Double						diferencia;
+	@Column(name = "diferencia")
+	private Double								diferencia;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario						usuario;
-
-	@ManyToOne
-	@JoinColumn(name = "caja_id")
-	private Caja							caja;
+	private Usuario								usuario;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date									created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date									updated_at;
 
 	@Column(name = "estado")
-	private String						estado;
+	private String								estado;
 
-	@Column(name = "notificacion", columnDefinition = "default '0'")
-	private Integer						notificacion;
+	@Column(name = "notificacion")
+	private Integer								notificacion;
 
-	
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
+	@OrderBy("usua_caja_id DESC")
+	private Set<ConteoManualCaja>	conteoManualCajas;
 
-	
+	@ManyToOne
+	@JoinColumn(name = "caja_id")
+	private Caja									caja;
 
-	
-
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double billete50000, Double billete20000, Double billete10000, Double billete5000, Double billete2000, Double billete1000, Double moneda500, Double moneda100, Double moneda50, Double moneda25, Double moneda10, Double moneda5, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado, Integer notificacion) {
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, String estado, Integer notificacion, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -163,32 +131,21 @@ public class UsuarioCaja implements Serializable {
 		this.totalNeto = totalNeto;
 		this.totalServicio = totalServicio;
 		this.totalDolares = totalDolares;
-		this.billete50000 = billete50000;
-		this.billete20000 = billete20000;
-		this.billete10000 = billete10000;
-		this.billete5000 = billete5000;
-		this.billete2000 = billete2000;
-		this.billete1000 = billete1000;
-		this.moneda500 = moneda500;
-		this.moneda100 = moneda100;
-		this.moneda50 = moneda50;
-		this.moneda25 = moneda25;
-		this.moneda10 = moneda10;
-		this.moneda5 = moneda5;
 		this.conteoTarjeta = conteoTarjeta;
 		this.conteoDolar = conteoDolar;
 		this.totalConversionColones = totalConversionColones;
 		this.tipoCambio = tipoCambio;
 		this.notaCredito = notaCredito;
 		this.notaDebito = notaDebito;
-		ConteoManual = conteoManual;
+		this.ConteoManual = conteoManual;
 		this.diferencia = diferencia;
 		this.usuario = usuario;
-		this.caja = caja;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.estado = estado;
 		this.notificacion = notificacion;
+		this.conteoManualCajas = conteoManualCajas;
+		this.caja = caja;
 	}
 
 	public UsuarioCaja() {
@@ -203,6 +160,18 @@ public class UsuarioCaja implements Serializable {
 		this.id = id;
 	}
 
+	public void addConteoManual(ConteoManualCaja conteoManualCaja) {
+    if (conteoManualCaja != null) {
+        if (conteoManualCajas == null) {
+        	conteoManualCajas = new HashSet<ConteoManualCaja>();
+        }
+        conteoManualCaja.setUsuarioCaja(this);
+        conteoManualCajas.add(conteoManualCaja);
+    }
+}
+	
+
+	
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
@@ -351,102 +320,6 @@ public class UsuarioCaja implements Serializable {
 		return Utils.formateadorMiles(this.totalDolares);
 	}
 
-	public Double getBillete50000() {
-		return billete50000;
-	}
-
-	public void setBillete50000(Double billete50000) {
-		this.billete50000 = billete50000;
-	}
-
-	public Double getBillete20000() {
-		return billete20000;
-	}
-
-	public void setBillete20000(Double billete20000) {
-		this.billete20000 = billete20000;
-	}
-
-	public Double getBillete10000() {
-		return billete10000;
-	}
-
-	public void setBillete10000(Double billete10000) {
-		this.billete10000 = billete10000;
-	}
-
-	public Double getBillete5000() {
-		return billete5000;
-	}
-
-	public void setBillete5000(Double billete5000) {
-		this.billete5000 = billete5000;
-	}
-
-	public Double getBillete2000() {
-		return billete2000;
-	}
-
-	public void setBillete2000(Double billete2000) {
-		this.billete2000 = billete2000;
-	}
-
-	public Double getBillete1000() {
-		return billete1000;
-	}
-
-	public void setBillete1000(Double billete1000) {
-		this.billete1000 = billete1000;
-	}
-
-	public Double getMoneda500() {
-		return moneda500;
-	}
-
-	public void setMoneda500(Double moneda500) {
-		this.moneda500 = moneda500;
-	}
-
-	public Double getMoneda100() {
-		return moneda100;
-	}
-
-	public void setMoneda100(Double moneda100) {
-		this.moneda100 = moneda100;
-	}
-
-	public Double getMoneda50() {
-		return moneda50;
-	}
-
-	public void setMoneda50(Double moneda50) {
-		this.moneda50 = moneda50;
-	}
-
-	public Double getMoneda25() {
-		return moneda25;
-	}
-
-	public void setMoneda25(Double moneda25) {
-		this.moneda25 = moneda25;
-	}
-
-	public Double getMoneda10() {
-		return moneda10;
-	}
-
-	public void setMoneda10(Double moneda10) {
-		this.moneda10 = moneda10;
-	}
-
-	public Double getMoneda5() {
-		return moneda5;
-	}
-
-	public void setMoneda5(Double moneda5) {
-		this.moneda5 = moneda5;
-	}
-
 	public Double getConteoTarjeta() {
 		return conteoTarjeta;
 	}
@@ -495,36 +368,36 @@ public class UsuarioCaja implements Serializable {
 		this.notificacion = notificacion;
 	}
 
-	
 	public Double getConteoManual() {
 		return ConteoManual;
 	}
 
-	
 	public void setConteoManual(Double conteoManual) {
 		ConteoManual = conteoManual;
 	}
 
-	
 	public Double getTotalConversionColones() {
 		return totalConversionColones;
 	}
 
-	
 	public void setTotalConversionColones(Double totalConversionColones) {
 		this.totalConversionColones = totalConversionColones;
 	}
 
-	
 	public Double getDiferencia() {
 		return diferencia;
 	}
 
-	
 	public void setDiferencia(Double diferencia) {
 		this.diferencia = diferencia;
 	}
-	
-	
+
+	public Set<ConteoManualCaja> getConteoManualCajas() {
+		return conteoManualCajas;
+	}
+
+	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
+		this.conteoManualCajas = conteoManualCajas;
+	}
 
 }

@@ -83,4 +83,16 @@ public class CajaDaoImpl implements CajaDao {
 		}
 	}
 
+	@Override
+	public Caja buscarCajaActiva(Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Caja obj where obj.empresa = :empresa and obj.estado = 'Activo'");
+		query.setParameter("empresa", empresa);
+		List<Caja> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Caja) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }

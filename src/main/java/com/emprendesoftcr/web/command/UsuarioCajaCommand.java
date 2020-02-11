@@ -1,11 +1,15 @@
 package com.emprendesoftcr.web.command;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
+import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class UsuarioCajaCommand {
 
@@ -59,6 +63,9 @@ public class UsuarioCajaCommand {
 	private String updated_atSTR;
 
 	private String estado;
+	
+	@JsonDeserialize(using = ClienteDeserializer.class)
+	private Set<ConteoManualCaja>	conteoManualCajas;
 
 	public UsuarioCajaCommand() {
 		super();
@@ -92,6 +99,8 @@ public class UsuarioCajaCommand {
 		this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
+		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
+		
 	}
 
 	public String getCreated_atSTR() {
@@ -301,5 +310,17 @@ public class UsuarioCajaCommand {
 	public void setTotalDolaresSTR(String totalDolaresSTR) {
 		this.totalDolaresSTR = totalDolaresSTR;
 	}
+
+	
+	public Set<ConteoManualCaja> getConteoManualCajas() {
+		return conteoManualCajas;
+	}
+
+	
+	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
+		this.conteoManualCajas = conteoManualCajas;
+	}
+	
+	
 
 }

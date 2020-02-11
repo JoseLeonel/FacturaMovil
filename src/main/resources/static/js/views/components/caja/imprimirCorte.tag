@@ -30,7 +30,37 @@
                        
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>{usuarioCaja.totalNetoSTR}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalDolares")}    : </strong>{usuarioCaja.totalDolaresSTR}<br></div>                                                 
-                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalServicio")}    : </strong>{usuarioCaja.totalServicioSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalServicio")}    : </strong>{usuarioCaja.totalServicioSTR}<br></div>                                                 
+                        <table class = "forma-table">
+                            <thead>
+                                <tr class = "forma-table">
+                                    <th class="cantidad"> Billete/Moneda  </th>
+                                    <th class="producto">Cantidad</th>
+                                    <th class="precio"> Total </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class = "" >
+                                    <td class="cantidad"> 50,000 </td>
+                                    <td class="producto" >1</td>
+                                    <td class="precio"   > 50,000</td>
+                                </tr>
+ 
+                                <tr>
+                                    <td colspan="3"></td>
+                                </tr>
+                                <tr class = "forma-table">
+                                    <td>*********</td>
+                                    <td >{$.i18n.prop("tikect.ultima.linea")}</td>
+                                    <td > *********  </td>
+                                </tr>
+                                <tr >
+                                    <td></td>
+                                    <td ><strong>Total Conteo Manual</strong></td>
+                                    <td ><strong>450,000</strong>  </td>
+                                </tr>
+                                </tbody>
+                                </table> 
                         <br>
                        
                     </div>
@@ -183,13 +213,19 @@
 var self = this;
 self.usuarioCaja   = opts.usuarioCaja;  
 
+self.conteoManual = {
+    moneda:"",
+    cantidad:"",
+    total:0
+}
+self.conteoManuals = [{}]
+
 
 self.on('mount',function(){
    consultaCaja()
     __Teclas()
-   
-
 })
+
 
 /**
 *consultar Facturas por Consecutivo
@@ -224,6 +260,31 @@ function consultaCaja(){
         }
     });
      
+
+}
+
+function __InitConteoManual(){
+   self.conteoManuals = [{}]
+   self.conteoManualls.push({
+       billete:"50,000"
+       cantidad:self.usuarioCaja.billete50000,
+       total:self.usuarioCaja.billete50000STR,
+   }) 
+   self.conteoManualls.push({
+       billete:"20,000"
+       cantidad:self.usuarioCaja.billete20000,
+       total:self.usuarioCaja.billete20000STR,
+   }) 
+   self.conteoManualls.push({
+       billete:"50,000"
+       cantidad:self.usuarioCaja.billete50000,
+       total:self.usuarioCaja.billete50000STR,
+   }) 
+   self.conteoManualls.push({
+       billete:"50,000"
+       cantidad:self.usuarioCaja.billete50000,
+       total:self.usuarioCaja.billete50000STR,
+   }) 
 
 }
 

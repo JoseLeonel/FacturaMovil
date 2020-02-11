@@ -2,6 +2,8 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.DoubleSummaryStatistics;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,18 +16,23 @@ import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Caja;
+import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
+import com.emprendesoftcr.web.command.DenominacionCommand;
 
 @EnableTransactionManagement
 @Service("usuarioCajaBo")
 public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	@Autowired
-	UsuarioCajaDao usuarioCajaDao;
+	UsuarioCajaDao			usuarioCajaDao;
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+
+
+	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
 	@Override
@@ -47,7 +54,6 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Buscar por id
-	 * 
 	 * @param id
 	 * @return
 	 */
@@ -58,9 +64,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Buscar por usuario y estado
-	 * 
-	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario,
-	 *      java.lang.String)
+	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario, java.lang.String)
 	 */
 	@Override
 	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
@@ -70,79 +74,32 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Cerrar la caja
-	 * 
 	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#cierreCaja(com.emprendesoftcr.modelo.UsuarioCaja)
 	 */
 	@Transactional
 	@Override
-	public void cierreCaja(UsuarioCaja usuarioCaja) throws Exception {
+	public UsuarioCaja cierreCaja(UsuarioCaja usuarioCaja, ArrayList<DenominacionCommand> listaCoteo, Usuario usuario) throws Exception {
 		try {
+
 			usuarioCaja.setUpdated_at(new Date());
 			usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
 			Double resultado = Constantes.ZEROS_DOUBLE;
-			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getTotalEfectivo();
-			Double totalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getTotalBanco();
-			Double totalTarjeta = usuarioCaja.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getTotalTarjeta();
-			Double totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getTotalAbono();
+			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalEfectivo();
+
+			Double totalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
+			Double totalTarjeta = usuarioCaja.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalTarjeta();
+			Double totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalAbono();
 			resultado = totalEfectivo + totalAbono + totalTarjeta + totalBanco;
+
 			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado, 2));
-			
-			usuarioCaja.setBillete50000( usuarioCaja.getBillete50000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete50000());
 
-			usuarioCaja.setBillete20000(usuarioCaja.getBillete20000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete20000());
+			usuarioCaja = agregarConteo(listaCoteo, usuarioCaja, usuario, 2);
 
-			
-			usuarioCaja.setBillete10000(usuarioCaja.getBillete10000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete10000());
+			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
+			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum());
 
-			usuarioCaja.setBillete5000(usuarioCaja.getBillete5000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete5000());
-
-			usuarioCaja.setBillete2000( usuarioCaja.getBillete2000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete2000());
-
-			usuarioCaja.setBillete1000( usuarioCaja.getBillete1000() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getBillete1000());
-
-			usuarioCaja.setMoneda500(usuarioCaja.getMoneda500() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda500());
-
-			usuarioCaja.setMoneda100( usuarioCaja.getMoneda100() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda100());
-			
-			usuarioCaja.setMoneda50(usuarioCaja.getMoneda50() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda50() );
-
-			usuarioCaja.setMoneda25( usuarioCaja.getMoneda25() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda25());
-
-			usuarioCaja.setMoneda10(usuarioCaja.getMoneda10() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda10());
-			
-			usuarioCaja.setMoneda5(usuarioCaja.getMoneda5() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getMoneda5() );
-			
-			usuarioCaja.setConteoTarjeta(usuarioCaja.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getConteoTarjeta());
-
-			usuarioCaja.setConteoDolar( usuarioCaja.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE
-					: usuarioCaja.getConteoDolar());
-
-			usuarioCaja.setConteoManual(Constantes.ZEROS_DOUBLE);
-			
-			usuarioCaja.setConteoManual(usuarioCaja.getBillete5000() + usuarioCaja.getBillete20000() + usuarioCaja.getBillete10000() + usuarioCaja.getBillete5000() + usuarioCaja.getBillete2000() + usuarioCaja.getBillete1000() + usuarioCaja.getMoneda500() + usuarioCaja.getMoneda100() + usuarioCaja.getMoneda50() + usuarioCaja.getMoneda25() + usuarioCaja.getMoneda10() + usuarioCaja.getMoneda5() );
-			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(),2));
-			
-			usuarioCaja.setConteoManual(Utils.roundFactura(usuarioCaja.getConteoManual() + usuarioCaja.getTotalConversionColones(),2));
-			usuarioCaja.setDiferencia(usuarioCaja.getConteoManual()  - usuarioCaja.getTotalNeto());
-			
-			
+			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
+			usuarioCaja.setDiferencia(usuarioCaja.getConteoManual() - usuarioCaja.getTotalNeto());
 
 			modificar(usuarioCaja);
 
@@ -151,20 +108,44 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			throw e;
 		}
 
+		return usuarioCaja;
+	}
+
+	@Transactional
+	private UsuarioCaja agregarConteo(ArrayList<DenominacionCommand> listaCoteo, UsuarioCaja usuarioCaja, Usuario usuario, Integer tipo) {
+		UsuarioCaja usuarioCajaTemp = usuarioCaja;
+		try {
+			for (DenominacionCommand denominacionCommand : listaCoteo) {
+				if (denominacionCommand.getTotal() != null && denominacionCommand.getTotal() > 0) {
+					ConteoManualCaja conteoManualCaja = new ConteoManualCaja();
+					conteoManualCaja.setCantidad(denominacionCommand.getCantidad() == null ? Constantes.ZEROS_DOUBLE : denominacionCommand.getCantidad());
+					conteoManualCaja.setDenominacion(denominacionCommand.getDenominacion() == null ? Constantes.EMPTY : denominacionCommand.getDenominacion());
+					conteoManualCaja.setTipo(denominacionCommand.getTipo() == null ? Constantes.ZEROS : denominacionCommand.getTipo());
+					conteoManualCaja.setTotal(denominacionCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : denominacionCommand.getTotal());
+					conteoManualCaja.setCreated_at(new Date());
+					conteoManualCaja.setUpdated_at(new Date());
+					conteoManualCaja.setUsuarioCaja(usuarioCaja);
+					conteoManualCaja.setUsuarioCierra(tipo.equals(1) ? null : usuario);
+					usuarioCajaTemp.addConteoManual(conteoManualCaja);
+				}
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  agregarConteo: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+    return usuarioCajaTemp;
 	}
 
 	/**
 	 * Actualiza Caja activa
-	 * 
-	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double,
-	 *      java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
+	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Transactional
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco,
-			Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
-		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono,
-				totalServicio);
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
+		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono, totalServicio);
 	}
 
 	@Transactional
@@ -176,6 +157,40 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	@Override
 	public ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId) {
 		return usuarioCajaDao.agrupaArticulosCategoria(empresaId, usuarioCajaId);
+	}
+
+	@Transactional
+	@Override
+	public UsuarioCaja aperturaCaja(ArrayList<DenominacionCommand> listaCoteo, Usuario usuario,Caja caja) throws Exception {
+		UsuarioCaja usuarioCaja = new UsuarioCaja();
+		try {
+
+			usuarioCaja.setCreated_at(new Date());
+			usuarioCaja.setCaja(caja);
+			usuarioCaja.setUsuario(usuario);
+			usuarioCaja.setUpdated_at(new Date());
+			usuarioCaja.setEstado(Constantes.ESTADO_ACTIVO);
+			usuarioCaja.setUsuario(usuario);
+			usuarioCaja.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalAbono(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalServicio(Constantes.ZEROS_DOUBLE);
+			usuarioCaja = agregarConteo(listaCoteo, usuarioCaja, usuario, 1);
+			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
+			usuarioCaja.setTotalFondoInicial(doubleSummaryStatistics.getSum());
+
+			agregar(usuarioCaja);
+			
+//			usuarioCajaDao.modificar(usuarioCaja);
+
+		} catch (Exception e) {
+			log.info("** Error  aplicar aperturaCaja : " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return usuarioCaja;
 	}
 
 }

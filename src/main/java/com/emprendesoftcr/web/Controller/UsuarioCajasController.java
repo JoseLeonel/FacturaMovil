@@ -2,11 +2,15 @@ package com.emprendesoftcr.web.Controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CajaBo;
+import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -33,6 +39,8 @@ import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.command.ConteoManualCommand;
+import com.emprendesoftcr.web.command.DenominacionCommand;
 import com.emprendesoftcr.web.command.UsuarioCajaCommand;
 import com.emprendesoftcr.web.propertyEditor.CajaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -40,6 +48,7 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.UsuarioCajaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.UsuarioPropertyEditor;
 import com.google.common.base.Function;
+import com.google.gson.Gson;
 
 /**
  * Abrir caja para facturar UsuarioCajasController.
@@ -59,6 +68,10 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
+	
+	@Autowired
+	private CajaBo																			cajaBo;
+
 
 	@Autowired
 	private UsuarioCajaBo																			usuarioCajaBo;
@@ -106,8 +119,6 @@ public class UsuarioCajasController {
 		return "views/caja/cerrarCajas";
 	}
 
-	
-	
 	@RequestMapping(value = "/ListarCajasInactivas", method = RequestMethod.GET)
 	public String liasCajas(ModelMap model) {
 		return "views/caja/ListarCajasInactivas";
@@ -127,15 +138,14 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)  ) {
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
-		
+
 		// Se incluye la empresa
 		dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
@@ -152,14 +162,13 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(idUsuario);
-		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)  ) {
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
-			// Se incluye la empresa
-			dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-		
+		// Se incluye la empresa
+		dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 
 		Date fechaInicio = new Date();
 		Date fechaFinal = new Date();
@@ -189,41 +198,49 @@ public class UsuarioCajasController {
 
 	@RequestMapping(value = "/AgregarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 			if (usuarioCajaBd != null) {
-				result.rejectValue("totalFondoInicial", "error.usuarioCaja.totalFondoInicial.existe.activo");
-			}
-			if (usuarioCaja.getCaja() == null) {
-				result.rejectValue("caja", "error.usuarioCaja.caja.no,existe");
-
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.usuarioCaja.totalFondoInicial.existe.activo", result.getAllErrors());
 			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			usuarioCaja.setCreated_at(new Date());
-			usuarioCaja.setUsuario(usuario);
-			usuarioCaja.setUpdated_at(new Date());
-			usuarioCaja.setEstado(Constantes.ESTADO_ACTIVO);
-			usuarioCaja.setUsuario(usuario);
-			usuarioCaja.setTotalBanco(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalAbono(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalServicio(Constantes.ZEROS_DOUBLE);
-			usuarioCajaBo.agregar(usuarioCaja);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCaja);
+			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
+			listaCoteo = denominacionCommand(conteoManualCommand);
+			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa());
+			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario,caja);
+			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCaja);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCajaCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
+
+	public ArrayList<DenominacionCommand> denominacionCommand(ConteoManualCommand conteoManualCommand) throws Exception {
+		JSONObject json = null;
+		ArrayList<DenominacionCommand> denominacionCommands = new ArrayList<>();
+		try {
+			json = (JSONObject) new JSONParser().parse(conteoManualCommand.getDenominacion());
+			// Agregar Lineas
+			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+			Gson gson = new Gson();
+			if (jsonArrayDetalleFactura != null) {
+				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+					DenominacionCommand denominacionCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DenominacionCommand.class);
+					denominacionCommands.add(denominacionCommand);
+				}
+			}
+		} catch (org.json.simple.parser.ParseException e) {
+			throw e;
+		}
+		return denominacionCommands;
 	}
 
 	/**
@@ -238,32 +255,51 @@ public class UsuarioCajasController {
 	 */
 	@RequestMapping(value = "/CerrarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCaja.getId());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(conteoManualCommand.getId());
+			
+			if (usuarioCajaBd == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.usuarioCaja.noExiste", result.getAllErrors());
+			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
+			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
+			listaCoteo = denominacionCommand(conteoManualCommand);
+
 			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
-			// Se cierra la caja
-			usuarioCajaBo.cierreCaja(usuarioCajaBd);
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
+			usuarioCajaBd.setConteoTarjeta(conteoManualCommand.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoTarjeta());
+
+			usuarioCajaBd.setConteoDolar(conteoManualCommand.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoDolar());
+
+			usuarioCajaBd.setTipoCambio(conteoManualCommand.getTipoCambio() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getTipoCambio());
+
+			usuarioCajaBd.setConteoManual(Constantes.ZEROS_DOUBLE);
+
+			// Se cierra la caja
+			usuarioCajaBo.cierreCaja(usuarioCajaBd, listaCoteo,  usuario);
+
+			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator actualizarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status,@RequestParam Long idUsuarioCaja)  throws Exception {
+	public RespuestaServiceValidator actualizarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status, @RequestParam Long idUsuarioCaja) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -275,8 +311,6 @@ public class UsuarioCajasController {
 
 			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
-
-		
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
 

@@ -3281,6 +3281,7 @@ function getCantidadAdnCodigo_PV(valor){
         codigo:'',
         cantidad:0
     }
+     var valor = $('.codigo').val()
     var existe = false
     var existeMas = false
     for(i=0; i<valor.length; i++){
@@ -3291,7 +3292,7 @@ function getCantidadAdnCodigo_PV(valor){
               objeto.codigo = objeto.codigo + valor.charAt(i)  
           }
        }else{
-           if(valor.charAt(i) != "+" && codigo.charAt(i) != "*"){
+           if(valor.charAt(i) != "+" && objeto.codigo.charAt(i) != "*"){
               objeto.cantidad = objeto.cantidad + valor.charAt(i)  
            }
            
@@ -4737,7 +4738,8 @@ function __RestarConTecla(e){
 }
 
 function verificaSiSuma(){
-   var codigo = $('.codigo').val()
+    var objetos =  getCantidadAdnCodigo_PV(codigo);
+   var codigo = objetos.codigo; 
    
     for(i=0; i<codigo.length; i++){
         if(isNumber(codigo)){

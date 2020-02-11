@@ -155,7 +155,7 @@ public class CajasController {
 			caja.setEmpresa(usuario.getEmpresa());
 			caja.setCreated_at(new Date());
 			caja.setUpdated_at(new Date());
-			
+
 			caja.setUsuario(usuario);
 			cajaBo.agregar(caja);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("caja.agregar.correctamente", caja);
