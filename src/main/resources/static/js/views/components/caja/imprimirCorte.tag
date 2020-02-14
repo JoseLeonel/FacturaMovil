@@ -22,48 +22,93 @@
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>{usuarioCaja.totalFondoInicialSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>{usuarioCaja.totalEfectivoSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>{usuarioCaja.totalTarjetaSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>{usuarioCaja.totalBancoSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>{usuarioCaja.totalAbonoSTR}<br></div>                                                 
+                        
                        
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>{usuarioCaja.totalNetoSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalDolares")}    : </strong>{usuarioCaja.totalDolaresSTR}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalServicio")}    : </strong>{usuarioCaja.totalServicioSTR}<br></div>                                                 
-                        <table class = "forma-table">
-                            <thead>
+                        <div class="encabezado"><strong> Apertura de Caja:{usuarioCaja.created_atSTR}</strong></div>    
+                        <br>                                             
+                        <div class="encabezado">
+                            <div class="elemen1"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong></div>
+                            <div class="elemen1"><strong> {usuarioCaja.totalFondoInicialSTR} </strong></div>
+                        </div>  
+                        <table class = "forma-table" show = {cierre}>
+                           <thead>
                                 <tr class = "forma-table">
-                                    <th class="cantidad"> Billete/Moneda  </th>
-                                    <th class="producto">Cantidad</th>
+                                    <th class="titulo">  </th>
+                                    <th class="titulo"></th>
+                                    <th class="titulo"> </th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" >{$.i18n.prop("imprimir.caja.totalEfectivo")}:</td>
+                                    <td class="valorPro" >{usuarioCaja.totalEfectivoSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalTarjeta")} :</td>
+                                    <td class="valorPro" >{usuarioCaja.totalTarjetaSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")}    : </td>
+                                    <td class="valorPro" >{usuarioCaja.totalBancoSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} : </td>
+                                    <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalNeto")}   </td>
+                                    <td class="valorPro" >{usuarioCaja.totalNetoSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("usuarioCaja.totalDolares")}    </td>
+                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
+                                </tr>
+                                <tr class = ""  class="detalleTables">
+                                    <td class="valorPro" >  {$.i18n.prop("usuarioCaja.totalServicio")}     </td>
+                                    <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
+                                </tr>
+
+                                
+                            </tbody>
+                            </table> 
+                            <br>
+                        <table class = "forma-table">
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="titulo">Cant  </th>
+                                    <th class="titulo">Moneda/Billete</th>
+                                    <th class="titulo"> Total </th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr class = "" each={usuarioCaja.aperturaCaja} class="detalleTables">
+                                    <td class="valorPro" >{cantidad}</td>
+                                    <td class="valorPro" >{denominacion}</td>
+                                    <td class="valorPro"   >{total}</td>
+                                </tr>
+                                
+                            </tbody>
+                            </table> 
+                            <div class="encabezado" show = {cierre}><strong> Cierre Caja : {cierreCajaSTR}</strong></div>    
+                            <table class = "forma-table" show = {cierre}>
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="cantidad">Cant  </th>
+                                    <th class="producto">Moneda/Billete</th>
                                     <th class="precio"> Total </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class = "" >
-                                    <td class="cantidad"> 50,000 </td>
-                                    <td class="producto" >1</td>
-                                    <td class="precio"   > 50,000</td>
+                             <tbody>
+                                <tr class = "" each={usuarioCaja.cierreCaja} class="detalleTables">
+                                    <td class="valorPro" >{cantidad}</td>
+                                    <td class="valorPro" >{denominacion}</td>
+                                    <td class="valorPro"   >{total}</td>
                                 </tr>
- 
-                                <tr>
-                                    <td colspan="3"></td>
-                                </tr>
-                                <tr class = "forma-table">
-                                    <td>*********</td>
-                                    <td >{$.i18n.prop("tikect.ultima.linea")}</td>
-                                    <td > *********  </td>
-                                </tr>
-                                <tr >
-                                    <td></td>
-                                    <td ><strong>Total Conteo Manual</strong></td>
-                                    <td ><strong>450,000</strong>  </td>
-                                </tr>
-                                </tbody>
-                                </table> 
-                        <br>
-                       
-                    </div>
+                                
+                            </tbody>
+                            </table> 
+
+                   </div>
                 </div>
             </section>
             
@@ -76,9 +121,23 @@
 
 
 <style type="text/css">
+  .valorPro{
+      font-size:15px!important;
+      padding: 2%!important;;
+  }
+    .titulo{
+        font-size:16px!important;
+        padding-right: 2%;
+
+    }
+
   .fondoEncabezado {
         background: #00539B;
         color: #f9fafc;
+        display:flex!important;
+    }
+    .elemen1{
+        font-size:18px!important;
     }
     
     .wrap{
@@ -212,20 +271,15 @@
 
 var self = this;
 self.usuarioCaja   = opts.usuarioCaja;  
-
-self.conteoManual = {
-    moneda:"",
-    cantidad:"",
-    total:0
-}
-self.conteoManuals = [{}]
+self.cierre =false;
 
 
 self.on('mount',function(){
    consultaCaja()
     __Teclas()
-})
+   
 
+})
 
 /**
 *consultar Facturas por Consecutivo
@@ -244,6 +298,12 @@ function consultaCaja(){
                 self.usuarioCaja = modeloTabla    
                 self.usuarioCaja.created_at = displayDate_detail(self.usuarioCaja.created_at)
                 self.usuarioCaja.updated_at = displayDate_detail(new Date())
+                
+                self.usuarioCaja.aperturaCaja =getDesglose(self.usuarioCaja.conteoManualCajas,1)
+                self.usuarioCaja.aperturaCaja = self.usuarioCaja.aperturaCaja.sort(compare)
+                self.usuarioCaja.cierreCaja =getDesglose(self.usuarioCaja.conteoManualCajas,2)
+                self.usuarioCaja.cierreCaja = self.usuarioCaja.cierreCaja.sort(compare)
+                self.cierre =self.usuarioCaja.cierreCaja.length > 0?true:false 
                 self.update()
                 
                 
@@ -263,31 +323,32 @@ function consultaCaja(){
 
 }
 
-function __InitConteoManual(){
-   self.conteoManuals = [{}]
-   self.conteoManualls.push({
-       billete:"50,000"
-       cantidad:self.usuarioCaja.billete50000,
-       total:self.usuarioCaja.billete50000STR,
-   }) 
-   self.conteoManualls.push({
-       billete:"20,000"
-       cantidad:self.usuarioCaja.billete20000,
-       total:self.usuarioCaja.billete20000STR,
-   }) 
-   self.conteoManualls.push({
-       billete:"50,000"
-       cantidad:self.usuarioCaja.billete50000,
-       total:self.usuarioCaja.billete50000STR,
-   }) 
-   self.conteoManualls.push({
-       billete:"50,000"
-       cantidad:self.usuarioCaja.billete50000,
-       total:self.usuarioCaja.billete50000STR,
-   }) 
+function getDesglose(conteoManualCajas,tipo){
+    var desglose = [{}]
 
+    $.each(conteoManualCajas, function( index, modeloTabla ) {
+        if(modeloTabla.tipo == tipo){
+            desglose.push({
+                id:modeloTabla.id,
+                moneda:modeloTabla.moneda,
+                cantidad : modeloTabla.cantidad,
+                total:modeloTabla.total,
+                denominacion : modeloTabla.denominacion
+            })
+        }
+
+    })
+    return desglose;
 }
+/**
+*   ordena de mayor a menor
+**/
+function compare(a, b) {
+  if (a.moneda < b.moneda) return 1;
+  if (b.moneda < a.moneda) return -1;
 
+  return 0;
+}
 
 /**
 *  teclas de la pantalla
@@ -331,5 +392,7 @@ __ImprimirFactura(){
 }
 
 </script>
+
+
 
 </imprimir-caja>

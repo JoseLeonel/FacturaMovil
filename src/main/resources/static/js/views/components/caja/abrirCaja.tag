@@ -706,6 +706,12 @@ function cerrarCajaAjax(){
                             mensajeToasExito(data.message)
                              __listado()
                              hidemodal()
+                             $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                self.usuarioCaja = modeloTabla    
+                                self.update()
+                            })
+                            riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+
                         }
                     },
                     error : function(xhr, status) {
@@ -724,81 +730,89 @@ function __CrearListaMonedas(tipo){
     var lista = {data:[]};
     lista.data.push({
         tipo:tipo,
+        moneda:50000,
         denominacion: "50,000",
         cantidad: __valorNumerico($(".billete50000").val() ),
         total:__valorNumerico($(".billete50000").val()) * 50000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:20000,
         denominacion: "20,000",
         cantidad: __valorNumerico($(".billete20000").val() ),
         total:__valorNumerico($(".billete20000").val()) * 20000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:10000,
         denominacion: "10,000",
         cantidad: __valorNumerico($(".billete10000").val() ),
         total:__valorNumerico($(".billete10000").val()) * 10000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:5000,
         denominacion: "5,000",
         cantidad: __valorNumerico($(".billete5000").val() ),
         total:__valorNumerico($(".billete5000").val()) * 5000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:2000,
         denominacion: "2,000",
         cantidad: __valorNumerico($(".billete2000").val() ),
         total:__valorNumerico($(".billete2000").val()) * 2000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:1000,
         denominacion: "1,000",
         cantidad: __valorNumerico($(".billete1000").val() ),
         total:__valorNumerico($(".billete1000").val()) * 1000
     })
     lista.data.push({
         tipo:tipo,
+        moneda:500,
         denominacion: "500",
         cantidad: __valorNumerico($(".moneda500").val() ),
         total:__valorNumerico($(".moneda500").val()) * 500
     })
     lista.data.push({
         tipo:tipo,
+        moneda:100,
         denominacion: "100",
         cantidad: __valorNumerico($(".moneda100").val() ),
         total:__valorNumerico($(".moneda100").val()) * 100
     })
     lista.data.push({
         tipo:tipo,
+        moneda:50,
         denominacion: "50",
         cantidad: __valorNumerico($(".moneda50").val() ),
         total:__valorNumerico($(".moneda50").val()) * 50
     })
     lista.data.push({
         tipo:tipo,
+        moneda:25,
         denominacion: "25",
         cantidad: __valorNumerico($(".moneda25").val() ),
         total:__valorNumerico($(".moneda25").val()) * 25
     })
     lista.data.push({
         tipo:tipo,
+        moneda:10,
         denominacion: "10",
         cantidad: __valorNumerico($(".moneda10").val() ),
         total:__valorNumerico($(".moneda10").val()) * 10
     })
     lista.data.push({
         tipo:tipo,
+        moneda:5,
         denominacion: "5",
         cantidad: __valorNumerico($(".moneda5").val() ),
         total:__valorNumerico($(".moneda5").val()) * 5
     })
-
     return lista;
-
-}
-
- 
+} 
 </script>
 </abrir-caja>

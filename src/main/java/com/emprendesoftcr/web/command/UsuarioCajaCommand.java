@@ -13,63 +13,66 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class UsuarioCajaCommand {
 
-	private Long id;
-	private Double totalFondoInicial;
+	private Long									id;
+	private Double								totalFondoInicial;
 
-	private Double totalEfectivo;
+	private Double								totalEfectivo;
 
-	private Double totalTarjeta;
+	private Double								totalTarjeta;
 
-	private Double totalBanco;
+	private Double								totalBanco;
 
-	private Double totalCredito;
+	private Double								totalCredito;
 
-	private Double totalNeto;
+	private Double								totalNeto;
 
-	private Double totalAbono;
+	private Double								totalAbono;
 
-	private Double totalServicio;
+	private Double								totalServicio;
 
-	private Double totalDolares;
+	private Double								totalDolares;
 
-	private String totalFondoInicialSTR;
+	private String								totalFondoInicialSTR;
 
-	private String totalEfectivoSTR;
+	private String								totalEfectivoSTR;
 
-	private String totalTarjetaSTR;
+	private String								totalTarjetaSTR;
 
-	private String totalBancoSTR;
+	private String								totalBancoSTR;
 
-	private String totalCreditoSTR;
+	private String								totalCreditoSTR;
 
-	private String totalNetoSTR;
+	private String								totalNetoSTR;
 
-	private String totalAbonoSTR;
+	private String								totalAbonoSTR;
 
-	private String totalServicioSTR;
+	private String								totalServicioSTR;
 
-	private String totalDolaresSTR;
+	private String								totalDolaresSTR;
 
-	private Usuario usuario;
+	private Usuario								usuario;
 
-	private Caja caja;
+	private Caja									caja;
 
-	private Date created_at;
+	private Date									created_at;
 
-	private Date updated_at;
+	private Date									updated_at;
 
-	private String created_atSTR;
+	private Date									cierreCaja;
 
-	private String updated_atSTR;
+	private String								created_atSTR;
 
-	private String estado;
-	
+	private String								updated_atSTR;
+
+	private String								estado;
+
 	@JsonDeserialize(using = ClienteDeserializer.class)
 	private Set<ConteoManualCaja>	conteoManualCajas;
 
 	public UsuarioCajaCommand() {
 		super();
 	}
+	
 
 	public UsuarioCajaCommand(UsuarioCaja usuarioCaja) {
 		super();
@@ -85,6 +88,7 @@ public class UsuarioCajaCommand {
 		this.caja = usuarioCaja.getCaja();
 		this.created_at = usuarioCaja.getCreated_at();
 		this.updated_at = usuarioCaja.getUpdated_at();
+		this.cierreCaja = usuarioCaja.getCierreCaja();
 		this.estado = usuarioCaja.getEstado();
 		this.totalAbono = usuarioCaja.getTotalAbono();
 		this.totalServicio = usuarioCaja.getTotalServicio();
@@ -100,7 +104,7 @@ public class UsuarioCajaCommand {
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
 		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
-		
+
 	}
 
 	public String getCreated_atSTR() {
@@ -311,16 +315,26 @@ public class UsuarioCajaCommand {
 		this.totalDolaresSTR = totalDolaresSTR;
 	}
 
-	
 	public Set<ConteoManualCaja> getConteoManualCajas() {
 		return conteoManualCajas;
 	}
 
-	
 	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
 		this.conteoManualCajas = conteoManualCajas;
 	}
+
+	public Date getCierreCaja() {
+		return cierreCaja;
+	}
 	
+
+	public String getCierreCajaSTR() {
+		return Utils.getFechaGeneraReporte(this.getCierreCaja());
+	}
 	
+
+	public void setCierreCaja(Date cierreCaja) {
+		this.cierreCaja = cierreCaja;
+	}
 
 }

@@ -45,13 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/administrativo/**", "/templates/**",  "/webjars/**","/resources/**", "/fonts/**","/static/**", "/css/**", "/js/**","/prueba/**", "/images/**", "/dist/**");
+		web.ignoring().antMatchers("/administrativo/**", "/templates/**","/resources/**", "/static/**","/css/**", "/js/**","/prueba/**", "/images/**", "/dist/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		 http.csrf().disable();
-		 http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
+		 http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/fonts/**","/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
 
 		.permitAll().antMatchers("/service/CrearFacturaServiceAjax")
 		.permitAll().antMatchers("/movil/ListarClientesAjax.do")

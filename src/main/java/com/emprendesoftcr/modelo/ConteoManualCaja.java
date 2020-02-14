@@ -27,8 +27,13 @@ public class ConteoManualCaja implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long							id;
+	
 	@Column(name = "denomina")
 	private String						denominacion;
+	
+	@Column(name = "moneda")
+	private Integer						moneda;
+
 	@Column(name = "cantidad")
 	private Double						cantidad;
 	@Column(name = "total")
@@ -52,26 +57,21 @@ public class ConteoManualCaja implements Serializable {
 	@JoinColumn(name = "usua_caja_id")
 	private UsuarioCaja				usuarioCaja;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuarioCierra;
 
+	
 	public ConteoManualCaja() {
 		super();
 	}
 
-	public ConteoManualCaja(Long id, String denominacion, Double cantidad, Double total, Date created_at, Date updated_at, Integer tipo, UsuarioCaja usuarioCaja, Usuario usuarioCierra) {
-		super();
-		this.id = id;
-		this.denominacion = denominacion;
-		this.cantidad = cantidad;
-		this.total = total;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.tipo = tipo;
-		this.usuarioCaja = usuarioCaja;
-		this.usuarioCierra = usuarioCierra;
+	public Integer getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(Integer moneda) {
+		this.moneda = moneda;
 	}
 
 	public Integer getTipo() {

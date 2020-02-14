@@ -6,12 +6,17 @@ public class DenominacionCommand {
 	private Double	cantidad;
 	private Double	total;
 	private Integer	tipo;
+	private Integer	moneda;
 
 	public DenominacionCommand(String denominacion, Double cantidad, Double total) {
 		super();
 		this.denominacion = denominacion;
 		this.cantidad = cantidad;
 		this.total = total;
+	}
+
+	public DenominacionCommand() {
+		super();
 	}
 
 	public String getDenominacion() {
@@ -44,6 +49,14 @@ public class DenominacionCommand {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public Integer getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(Integer moneda) {
+		this.moneda = moneda;
 	}
 
 }

@@ -100,7 +100,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
 			usuarioCaja.setDiferencia(usuarioCaja.getConteoManual() - usuarioCaja.getTotalNeto());
-
+			usuarioCaja.setCierreCaja(new Date());
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {
@@ -122,6 +122,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 					conteoManualCaja.setDenominacion(denominacionCommand.getDenominacion() == null ? Constantes.EMPTY : denominacionCommand.getDenominacion());
 					conteoManualCaja.setTipo(denominacionCommand.getTipo() == null ? Constantes.ZEROS : denominacionCommand.getTipo());
 					conteoManualCaja.setTotal(denominacionCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : denominacionCommand.getTotal());
+					conteoManualCaja.setMoneda(denominacionCommand.getMoneda());
 					conteoManualCaja.setCreated_at(new Date());
 					conteoManualCaja.setUpdated_at(new Date());
 					conteoManualCaja.setUsuarioCaja(usuarioCaja);

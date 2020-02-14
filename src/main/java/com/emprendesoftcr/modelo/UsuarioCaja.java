@@ -103,6 +103,11 @@ public class UsuarioCaja implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date									updated_at;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "cierre")
+	private Date									cierreCaja;
 
 	@Column(name = "estado")
 	private String								estado;
@@ -118,8 +123,9 @@ public class UsuarioCaja implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "caja_id")
 	private Caja									caja;
-
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, String estado, Integer notificacion, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
+	
+	
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -137,11 +143,12 @@ public class UsuarioCaja implements Serializable {
 		this.tipoCambio = tipoCambio;
 		this.notaCredito = notaCredito;
 		this.notaDebito = notaDebito;
-		this.ConteoManual = conteoManual;
+		ConteoManual = conteoManual;
 		this.diferencia = diferencia;
 		this.usuario = usuario;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.cierreCaja = cierreCaja;
 		this.estado = estado;
 		this.notificacion = notificacion;
 		this.conteoManualCajas = conteoManualCajas;
@@ -160,6 +167,7 @@ public class UsuarioCaja implements Serializable {
 		this.id = id;
 	}
 
+	
 	public void addConteoManual(ConteoManualCaja conteoManualCaja) {
     if (conteoManualCaja != null) {
         if (conteoManualCajas == null) {
@@ -170,7 +178,6 @@ public class UsuarioCaja implements Serializable {
     }
 }
 	
-
 	
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
@@ -399,5 +406,19 @@ public class UsuarioCaja implements Serializable {
 	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
 		this.conteoManualCajas = conteoManualCajas;
 	}
+
+	
+	public Date getCierreCaja() {
+		return cierreCaja;
+	}
+
+	
+	public void setCierreCaja(Date cierreCaja) {
+		this.cierreCaja = cierreCaja;
+	}
+	
+	
+	
+	
 
 }

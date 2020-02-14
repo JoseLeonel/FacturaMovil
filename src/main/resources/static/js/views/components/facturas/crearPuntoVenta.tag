@@ -284,12 +284,7 @@
                 </div>
                 <section class="cabecera-derecha">
                     <div class="tituloCantidadArticulos" show={cantArticulos>0}><div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div></div>
-                    <section   class="lista-factura-espera">
-                        <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{nombreCompleto !=null?nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
-                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}">V: {id}</a>
-                        </div>    
-                     </section >
+                    
                      <aside class="left-sidebar">
                         <article class="clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  show={soloParaChinos == true}>
@@ -342,38 +337,60 @@
                             </ul>
                             <div class = 'containerIconosSumaRestaAgregarCliente'>
                                 <div class = 'containerSumarRestar'>
-                                    <div class="BotonesSumarRestar ">
-                                        <span onclick = {__SumarConMouse} title="Suma +" class=" fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
-                                            Tecla + = 
-                                            <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
-                                            Sumar 
-                                        </span> 
-                                    </div>
-                                    <div class="BotonesSumarRestar">
-                                        
-                                        <span onclick = {__RestarConMouse} title="Resta -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
-                                            Tecla - =
-                                            <small class="fa " style="margin-top:0px; position: absolute; left: 0px; top:8px"></small>
-                                            Resta 
-                                        </span> 
-                                    </div>
                                 </div>
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-plus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                          Sumar
+                                    </span> 
+                                </div>                     
                             
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__RestarConMouse} title="Restar -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-minus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                          Restar
+                                    </span> 
+                                </div>                     
+                                
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__AplicarCambioPrecio} title="Cambio de Precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                       <strong class='simbolodividir'> /</strong> = cambio Precio
+                                    </span> 
+                                </div>                     
+
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-arrow-right" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Entrada de Dinero 
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa  fa-arrow-left" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Salida de Dinero
+                                    </span> 
+                                </div>                     
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        <span class="fa fa-arrow-up" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Nuevo Cliente
                                     </span> 
                                 </div>
-                                <div class="BotonesSumarRestar"  >
-                                    <span onclick = {__AplicarCambioPrecio} title="Cambiar el precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
-                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
-                                       Tecla /= Cambiar Precio
-                                    </span> 
-                                </div>
+
                             </div>
+                            <section   class="ventaEspera">
+                                <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                    <div show ="{consecutivoProforma.length>0?true:false}"  class="fondoVentaEspera" title="{nombreCompleto !=null?nombreCompleto:""}"><span class="tamanoVentaEspera">P: {consecutivoProforma} </span></div>  
+                                    <div show ="{consecutivoProforma.length == 0?true:false}" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}"><span class="tamanoVentaEspera">V: {id} </span></div>  
+                                </div>    
+                            </section >
                             
                         </article>
                     </aside>
@@ -779,6 +796,35 @@
 
 
 <style type="text/css"  >
+.tamanoVentaEspera{
+   font-size: 14px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+div.fondoVentaEspera:hover{
+    color:#30ed17 !important;
+    cursor: pointer;
+}
+.ventaEspera{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+    div.labelBotones:hover{
+        color:#30ed17 !important;
+
+    }
+    .simbolodividir{
+        font-size:20px;
+    }
+    span.fontSumarRestar:hover{
+        background-color: black;
+    }
+    div.BotonesSumarRestar:hover {
+        background-color: black;
+    }
     .modalTitleCambioPrecio{
         color: white;
     }
@@ -1062,9 +1108,9 @@
         padding-bottom: 0.2%;
     }  
     .ventaEsperaSeleccionada .tituloVentaEspera{
-        color: yellow;
-        background: black;
         font-weight: 700;
+        font-size:20px;
+            color: brown;
     }                           
     .contenedorFactura{
         display: flex;
@@ -1445,6 +1491,10 @@
            if(event.which == 107){
             __SumarConTecla(event)
             }
+            if(event.which == 38){
+                $(".codigo").val('')
+               return
+            }
              if(event.which == 109){
             __RestarConTecla(event)
             }
@@ -1543,6 +1593,20 @@
     }, false );
      
     })
+
+__EntradaDinero(){
+  modalEntradaSalidaDinero(1)
+}   
+__SalidaDinero(){
+    modalEntradaSalidaDinero(2)
+}
+
+function modalEntradaSalidaDinero(tipo){
+ var parametros = {
+        tipo:tipo,
+    }
+    riot.mount('entrada-salida',{parametros:parametros});
+}
 
 __AplicarCambioPrecioUltimoArticulo(){
     __AplicarCambioPrecioBD()
@@ -1687,21 +1751,23 @@ function getPosicionInputCodigo(){
 *Consulta hacienda
 **/
 __ConsultarHaciendaBlur(){
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
+    getClienteHacienda()
 
 }
 __ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     } 
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
+    getClienteHacienda()
 }
 
 
 
-function getClienteHacienda(cedula){
+function getClienteHacienda(){
+    var cedula = $('#cedula').val()
+    if(cedula.length  == 0){
+        return
+    }
     self.mostrarBotonAgregarCliente = false
     self.clienteHacienda= {
         nombre:"",
@@ -1787,6 +1853,10 @@ function __listadoTipoCedulas(){
 
 
 __ClienteNuevo(){
+    __nuevoCliente()
+}
+
+function __nuevoCliente(){
     $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
     $("#nombreCompleto").attr("maxlength", 80);
     $("#cedula").attr("maxlength", 20);
@@ -1826,8 +1896,8 @@ __ClienteNuevo(){
         $('#cedula').select()
         $("#cedula").focus()   
      });
-}
 
+}
 
 __AplicarCambioPrecio(){
    seguridadCambiarPrecioLinea()
@@ -1909,7 +1979,7 @@ var reglasDeValidacionClienteNuevo = function() {
 **/
 __regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
-    seleccionarEfectivo()
+    getPosicionInputCodigo()
 }
 
 /**
@@ -4705,6 +4775,12 @@ function __Teclas(tecla,event){
       getPosicionInputCodigo()
       return 
     }
+   if(tecla ==38){
+      __nuevoCliente()
+      return 
+    }
+
+    
   
 }
 __SumarConMouse(){
