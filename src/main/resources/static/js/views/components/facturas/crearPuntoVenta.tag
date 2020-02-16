@@ -365,21 +365,21 @@
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa fa-arrow-right" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Entrada de Dinero 
                                     </span> 
                                 </div>                     
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa  fa-arrow-left" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Salida de Dinero
                                     </span> 
                                 </div>                     
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa fa-arrow-up" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Nuevo Cliente
                                     </span> 
                                 </div>
@@ -1490,10 +1490,6 @@ div.fondoVentaEspera:hover{
            }
            if(event.which == 107){
             __SumarConTecla(event)
-            }
-            if(event.which == 38){
-                $(".codigo").val('')
-               return
             }
              if(event.which == 109){
             __RestarConTecla(event)
@@ -4773,10 +4769,6 @@ function __Teclas(tecla,event){
     }
    if(tecla ==27){
       getPosicionInputCodigo()
-      return 
-    }
-   if(tecla ==38){
-      __nuevoCliente()
       return 
     }
 

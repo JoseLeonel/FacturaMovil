@@ -8,7 +8,7 @@ public class SalidaEntradaDineroCommand {
 
 	private Double	tipo;
 
-	private Long		idUsuarioCaja;
+
 
 	public SalidaEntradaDineroCommand() {
 		super();
@@ -38,12 +38,6 @@ public class SalidaEntradaDineroCommand {
 		this.tipo = tipo;
 	}
 
-	public Long getIdUsuarioCaja() {
-		return idUsuarioCaja;
-	}
-
-	public void setIdUsuarioCaja(Long idUsuarioCaja) {
-		this.idUsuarioCaja = idUsuarioCaja;
-	}
+	
 
 }

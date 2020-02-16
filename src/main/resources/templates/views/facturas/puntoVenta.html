@@ -40,6 +40,7 @@
 	<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag}" ></script>
 	<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag}" ></script>
 	<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag}" ></script>
+	<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag}" ></script>
     <script type="text/javascript"  th:src="@{/js/printThis.js}"></script>
     <script type="text/javascript"  th:src="@{/js/print.min.js}"></script>
     
@@ -47,9 +48,12 @@
 <body>
 
 <div layout:fragment="content">
+
     <punto-venta></punto-venta>
     <ptv-imprimir></ptv-imprimir>
     <entrada-salida></entrada-salida>
+    <<impentrada-salida>></impentrada-salida>
+    
 </div>
 
 </body>

@@ -118,6 +118,11 @@ public class UsuarioCaja implements Serializable {
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
 	@OrderBy("usua_caja_id DESC")
+	private Set<SalidaEntradaDinero>	salidaEntradaDineros;
+	
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
+	@OrderBy("usua_caja_id DESC")
 	private Set<ConteoManualCaja>	conteoManualCajas;
 
 	@ManyToOne
@@ -125,7 +130,10 @@ public class UsuarioCaja implements Serializable {
 	private Caja									caja;
 	
 	
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
+	
+
+
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -151,6 +159,7 @@ public class UsuarioCaja implements Serializable {
 		this.cierreCaja = cierreCaja;
 		this.estado = estado;
 		this.notificacion = notificacion;
+		this.salidaEntradaDineros = salidaEntradaDineros;
 		this.conteoManualCajas = conteoManualCajas;
 		this.caja = caja;
 	}
@@ -177,7 +186,17 @@ public class UsuarioCaja implements Serializable {
         conteoManualCajas.add(conteoManualCaja);
     }
 }
-	
+
+	public void addSalidaEntradaDinero(SalidaEntradaDinero salidaEntradaDinero) {
+    if (salidaEntradaDinero != null) {
+        if (salidaEntradaDineros == null) {
+        	salidaEntradaDineros = new HashSet<SalidaEntradaDinero>();
+        }
+        salidaEntradaDinero.setUsuariocaja(this);
+        salidaEntradaDineros.add(salidaEntradaDinero);
+    }
+}
+
 	
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
@@ -415,6 +434,16 @@ public class UsuarioCaja implements Serializable {
 	
 	public void setCierreCaja(Date cierreCaja) {
 		this.cierreCaja = cierreCaja;
+	}
+
+	
+	public Set<SalidaEntradaDinero> getSalidaEntradaDineros() {
+		return salidaEntradaDineros;
+	}
+
+	
+	public void setSalidaEntradaDineros(Set<SalidaEntradaDinero> salidaEntradaDineros) {
+		this.salidaEntradaDineros = salidaEntradaDineros;
 	}
 	
 	

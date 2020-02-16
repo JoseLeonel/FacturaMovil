@@ -12,7 +12,7 @@
                     <div class="row">    
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Motivo</label>
-                            <input type="text" class="form-control tamanoClienteNuevo descripEntradaSalidaDinero " id="descripEntradaSalidaDinero" >
+                            <input type="text" class="form-control tamanoClienteNuevo descripEntradaSalidaDinero modalInputCambioPrecio " id="descripEntradaSalidaDinero" >
 
                         </div>                            
                     </div>
@@ -28,18 +28,72 @@
             </div>
             <div class="modal-footer">
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button data-dismiss="modal"   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  >
+                    <button data-dismiss="modal"   type="button" class="btn-ATRAS btn-back  pull-left modalCambioPrecioBotones"  >
                         {$.i18n.prop("btn.volver")}
                     </button>
                 </div>
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Entrada Dinero </button>
+                    <button show={parametro.tipo == 1} onclick={__RegistrarEntrada}   class=" btn-entrada pull-right modalCambioPrecioBotones"  > Entrada Dinero </button>
+                    <button show={parametro.tipo == 2}  onclick={__RegistrarSalida}   class=" btn-salida pull-right modalCambioPrecioBotones" > Salida Dinero </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+
 <style type ="text/css">
+    .btn-ATRAS {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 26px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-entrada {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 27px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+
+    .btn-salida {
+        background-color: #dd4b39;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 27px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+
     .colorEntrada{
         background: #d1304e;
         color: #ffffff;
@@ -48,13 +102,11 @@
         background: #30d13c;
         color: #ffffff;
     }
-
     .tamanoClienteNuevo{
         font-size: 30px;
         font-weight: 600;
         color: black;
         height: 10%;
-
     }
     .modalTitleCambioPrecio{
         color: white;
@@ -73,8 +125,6 @@
     .modalCambioPrecioBotones{
          border-radius: 16px !important;
     }
-
-   
     </style>
 <script>
     var selfEntradaDinero = this;
@@ -83,24 +133,27 @@
     selfEntradaDinero.entrada = false;
     selfEntradaDinero.motivo = ""
     selfEntradaDinero.colorTemp = "#30d13c;"
+    selfEntradaDinero.colorBoton = "#4cae4c;"
+
     selfEntradaDinero.valorTitulo = ""
     selfEntradaDinero.on('mount',function(){
-    //Entrada de Dinero
-  if(selfEntradaDinero.parametro.tipo == 1){
-     selfEntradaDinero.entrada = true;
-     selfEntradaDinero.colorTemp = "#30d13c;"
-     selfEntradaDinero.motivo = "Entrada de Dinero"
-     selfEntradaDinero.titulo = "Registrar Entrada de Efectivo"
-  }
-  // Salida de Dinero
-  if(selfEntradaDinero.parametro.tipo == 2){
-     selfEntradaDinero.salida = true;
-     selfEntradaDinero.colorTemp = "#d1304e;"
-     selfEntradaDinero.titulo = "Registrar Salida de Efectivo"
-     selfEntradaDinero.motivo = "Salida de Dinero"
-  }
-  selfEntradaDinero.update()
-  showModal(selfEntradaDinero.motivo)
+            //Entrada de Dinero
+        if(selfEntradaDinero.parametro.tipo == 1){
+            selfEntradaDinero.entrada = true;
+            selfEntradaDinero.colorTemp = "#30d13c;"
+            selfEntradaDinero.motivo = "Entrada de Dinero"
+            selfEntradaDinero.titulo = "Registrar Entrada de Efectivo"
+        }
+        // Salida de Dinero
+        if(selfEntradaDinero.parametro.tipo == 2){
+            selfEntradaDinero.salida = true;
+            selfEntradaDinero.colorBoton = "#dd4b39;"
+            selfEntradaDinero.colorTemp = "#d1304e;"
+            selfEntradaDinero.titulo = "Registrar Salida de Efectivo"
+            selfEntradaDinero.motivo = "Salida de Dinero"
+        }
+        selfEntradaDinero.update()
+        showModal(selfEntradaDinero.motivo)
 })
 
 
@@ -120,43 +173,39 @@ function showModal(motivo){
 
 
 
-__cierre(){
-    cerrarCajaAjax()
+__RegistrarEntrada(){
+    registrarEntradaSalidaAjax(1,$.i18n.prop("entradaSalidaDinero.mensaje.alert.entrada"))
 }
 
+
+
+__RegistrarSalida(){
+    registrarEntradaSalidaAjax(2,$.i18n.prop("entradaSalidaDinero.mensaje.alert.salida"))
+}
 
 
 /**
 *Cerrar caja
 **/
-function cerrarCajaAjax(){
-        var formulario = {
-             id:self.usuarioCaja.id,
-             caja:self.usuarioCaja.caja.id,
-             conteoTarjeta:$(".conteoTarjeta").val(),
-             tipoCambio:$(".tipoCambio").val(),
-             conteoDolar:$(".conteoDolar").val(),
-             denominacion :JSON.stringify(__CrearListaMonedas(2))
+function registrarEntradaSalidaAjax(tipo,mensaje){
+        var valor =__valorNumerico($(".montoEntradaSalidaDinero").val())
+        if(valor == 0){
+            mensajeAdvertencia("Digite el monto a registrar")
+            $(".montoEntradaSalidaDinero").val(0)
+            $(".montoEntradaSalidaDinero").focus()
+            $(".montoEntradaSalidaDinero").select()
+            return
+        } 
+        var parametros = {
+             descripcion:$(".descripEntradaSalidaDinero").val(),
+             total:$(".montoEntradaSalidaDinero").val(),
+             tipo :tipo
          }
-        swal({
-           title: '',
-           text: $.i18n.prop("usuarioCaja.mensaje.alert.cerrar"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
                 $.ajax({
                     type : "POST",
                     dataType : "json",
-                    data : formulario,
-                    url : 'CerrarUsuarioCajaAjax.do',
+                    data : parametros,
+                    url : 'AgregarSalidaEntradaDineroAjax.do',
                     success : function(data) {
                         if (data.status != 200) {
                         	serverMessageJson(data);
@@ -165,13 +214,12 @@ function cerrarCajaAjax(){
                             }
                         } else {
                             mensajeToasExito(data.message)
-                             __listado()
-                             hidemodal()
-                             $.each(data.listaObjetos, function( index, modeloTabla ) {
-                                self.usuarioCaja = modeloTabla    
-                                self.update()
+                            hidemodal()
+                            $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                __ImprimirSalidaDinero(modeloTabla)  
                             })
-                            riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+
+                            
 
                         }
                     },
@@ -180,9 +228,20 @@ function cerrarCajaAjax(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-            }
-        });
 }
+
+ function hidemodal(){
+   $( '.modalEntradaSalidaDinero' ).remove();
+   $( '.modal-backdrop' ).remove();
+   $( 'body' ).removeClass( "modal-open" );
+ }
+
+ function __ImprimirSalidaDinero(salidaEntradaDinero){
+     var parametros = {
+        salidaEntradaDinero:salidaEntradaDinero,
+    }
+    riot.mount('impentrada-salida',{parametros:parametros});
+ }
 
 </script>
 </entrada-salida>

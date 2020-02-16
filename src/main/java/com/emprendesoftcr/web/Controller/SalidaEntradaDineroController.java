@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.SalidaEntradaDineroCommand;
@@ -27,20 +30,15 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 @Controller
 public class SalidaEntradaDineroController {
 
+	@Autowired
+	private UsuarioBo							usuarioBo;
+
+	@Autowired
+	private UsuarioCajaBo					usuarioCajaBo;
+
 	
-	
-
 	@Autowired
-	private UsuarioBo																		usuarioBo;
-
-	@Autowired
-	private UsuarioCajaBo																usuarioCajaBo;
-
-	@Autowired
-	private SalidaEntradaDineroBo																			salidaEntradaDinero;
-
-	@Autowired
-	private StringPropertyEditor												stringPropertyEditor;
+	private StringPropertyEditor	stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -48,11 +46,10 @@ public class SalidaEntradaDineroController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarSalidaEntradaDineroAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model,  @ModelAttribute SalidaEntradaDineroCommand salidaEntradaDineroCommand, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute SalidaEntradaDineroCommand salidaEntradaDineroCommand, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -64,14 +61,22 @@ public class SalidaEntradaDineroController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			SalidaEntradaDinero salidaEntradaDinero = new SalidaEntradaDinero();
 			
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("salidaEntradaDinero.agregar.correctamente", salidaEntradaDineroCommand);
+			salidaEntradaDinero.setCreated_at(new Date());
+			salidaEntradaDinero.setTipo(salidaEntradaDineroCommand.getTipo());
+			salidaEntradaDinero.setDescripcion(salidaEntradaDineroCommand.getDescripcion());
+			salidaEntradaDinero.setTotal(salidaEntradaDineroCommand.getTotal());
+			salidaEntradaDinero.setUsuariocaja(usuarioCaja);
+			salidaEntradaDinero.setUsuarioResponsable(usuarioSesion);
+			usuarioCaja.addSalidaEntradaDinero(salidaEntradaDinero);
+			usuarioCajaBo.agregar(usuarioCaja);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("salidaEntradaDinero.agregar.correctamente", salidaEntradaDinero);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {
