@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -37,7 +39,7 @@ public class SalidaEntradaDinero implements Serializable {
 
 	// 1= Entrada 2= Salida
 	@Column(name = "tipo")
-	private Double						tipo;
+	private Integer						tipo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -52,6 +54,21 @@ public class SalidaEntradaDinero implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usua_caja_id")
 	private UsuarioCaja				usuariocaja;
+
+	public SalidaEntradaDinero() {
+		super();
+	}
+
+	public SalidaEntradaDinero(Long id, String descripcion, Double total, Integer tipo, Date created_at, Usuario usuarioResponsable, UsuarioCaja usuariocaja) {
+		super();
+		this.id = id;
+		this.descripcion = descripcion;
+		this.total = total;
+		this.tipo = tipo;
+		this.created_at = created_at;
+		this.usuarioResponsable = usuarioResponsable;
+		this.usuariocaja = usuariocaja;
+	}
 
 	public Long getId() {
 		return id;
@@ -73,20 +90,32 @@ public class SalidaEntradaDinero implements Serializable {
 		return total;
 	}
 
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
+	}
+
 	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public Double getTipo() {
+	public Integer getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(Double tipo) {
+	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
 	}
 
 	public Date getCreated_at() {
 		return created_at;
+	}
+
+	public String getCreated_atSTR() {
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
+		}
+		return Constantes.EMPTY;
+
 	}
 
 	public void setCreated_at(Date created_at) {

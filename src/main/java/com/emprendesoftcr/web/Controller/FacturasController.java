@@ -1542,7 +1542,7 @@ public class FacturasController {
 			if (facturaBD == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.consecutivo.no.existe", result.getAllErrors());
 			}
-			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
+			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) || facturaBD.getAnuladaCompleta().equals(Constantes.FACTURA_ANULACION_COMPLETA_SI)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
 			}
 

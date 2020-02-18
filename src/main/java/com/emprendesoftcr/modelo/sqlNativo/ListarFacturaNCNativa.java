@@ -30,7 +30,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 		"         inner join clientes on clientes.id = fac.cliente_id  \n" + 
 		"         inner join usuarios on usuarios.id = fac.usuario_id\n" + 
 		" WHERE fac.empresa_id = :ID_EMPRESA and fac.fecha_emision >=  :fechaInicial and  "
-		+ " fac.fecha_emision <=  :fechaFinal  and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado  \n" + 
+		+ " fac.fecha_emision <=  :fechaFinal  and fac.act_comercial and fac.usuario_id and fac.cliente_id and fac.tipo_doc and fac.estado and fac.anul_compl = 0 \n" + 
 		"     ) y\n" )
 @Entity
 public class ListarFacturaNCNativa implements Serializable {

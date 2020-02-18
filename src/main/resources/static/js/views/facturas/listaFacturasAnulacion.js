@@ -368,7 +368,7 @@ function __MostrarListado(){
  */
 function __MostrarListadoActualizado(){
 	$('.mostrarListadoDeFacturas').show();
-	ListarFacturas()
+	//ListarFacturas()
 
 }
 

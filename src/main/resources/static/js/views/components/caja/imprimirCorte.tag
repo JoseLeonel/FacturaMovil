@@ -18,78 +18,35 @@
                         </form>   
                   
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{usuarioCaja.created_atSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
                         
                        
                         <div class="encabezado"><strong> Apertura de Caja:{usuarioCaja.created_atSTR}</strong></div>    
-                        <br>                                             
-                        <div class="encabezado">
-                            <div class="elemen1"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong></div>
-                            <div class="elemen1"><strong> {usuarioCaja.totalFondoInicialSTR} </strong></div>
-                        </div>  
-                        <table class = "forma-table" show = {cierre}>
-                           <thead>
-                                <tr class = "forma-table">
-                                    <th class="titulo">  </th>
-                                    <th class="titulo"></th>
-                                    <th class="titulo"> </th>
-                                </tr>
-                            </thead>
-                             <tbody>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" >{$.i18n.prop("imprimir.caja.totalEfectivo")}:</td>
-                                    <td class="valorPro" >{usuarioCaja.totalEfectivoSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalTarjeta")} :</td>
-                                    <td class="valorPro" >{usuarioCaja.totalTarjetaSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")}    : </td>
-                                    <td class="valorPro" >{usuarioCaja.totalBancoSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} : </td>
-                                    <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalNeto")}   </td>
-                                    <td class="valorPro" >{usuarioCaja.totalNetoSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("usuarioCaja.totalDolares")}    </td>
-                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
-                                </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" >  {$.i18n.prop("usuarioCaja.totalServicio")}     </td>
-                                    <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
-                                </tr>
+                       
+                        <div class="encabezado" ><div class= "tituloCierre"><strong> Fondo Inicial : {usuarioCaja.totalFondoInicialSTR}</strong></div></div>    
+                        
 
-                                
-                            </tbody>
-                            </table> 
-                            <br>
-                        <table class = "forma-table">
+                        <table class = "forma-table" show ={apertura }>
                            <thead>
                                 <tr class = "forma-table">
                                     <th class="titulo">Cant  </th>
                                     <th class="titulo">Moneda/Billete</th>
-                                    <th class="titulo"> Total </th>
+                                    <th class="titulo">Total </th>
                                 </tr>
                             </thead>
                              <tbody>
-                                <tr class = "" each={usuarioCaja.aperturaCaja} class="detalleTables">
+                                <tr each={usuarioCaja.aperturaCaja} class="detalleTables">
                                     <td class="valorPro" >{cantidad}</td>
                                     <td class="valorPro" >{denominacion}</td>
-                                    <td class="valorPro"   >{total}</td>
+                                    <td class="valorPro" >{total}</td>
                                 </tr>
                                 
                             </tbody>
                             </table> 
-                            <div class="encabezado" show = {cierre}><strong> Cierre Caja : {cierreCajaSTR}</strong></div>    
+                             <div class="encabezado" show = {parametros.tipo == 2 }><div class= "tituloCierre"><strong> Cierre : {usuarioCaja.cierreCajaSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Conteo Cierre : {usuarioCaja.conteoManualSTR}</strong></div></div>    
                             <table class = "forma-table" show = {cierre}>
                            <thead>
                                 <tr class = "forma-table">
@@ -99,10 +56,80 @@
                                 </tr>
                             </thead>
                              <tbody>
-                                <tr class = "" each={usuarioCaja.cierreCaja} class="detalleTables">
+                                <tr  each={usuarioCaja.cierreCaja} class="detalleTables">
                                     <td class="valorPro" >{cantidad}</td>
                                     <td class="valorPro" >{denominacion}</td>
-                                    <td class="valorPro"   >{total}</td>
+                                    <td class="valorPro" >{total}</td>
+                                </tr>
+                                
+                            </tbody>
+                            </table> 
+                        <br>
+                        <table class = "forma-table" show = {parametros.tipo == 2 }>
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="titulo">  </th>
+                                    <th class="titulo"></th>
+                                    <th class="titulo"> </th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >{$.i18n.prop("imprimir.caja.totalEfectivo")}:</td>
+                                    <td class="valorPro" >{usuarioCaja.totalEfectivoSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalTarjeta")} :</td>
+                                    <td class="valorPro" >{usuarioCaja.totalTarjetaSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")}    : </td>
+                                    <td class="valorPro" >{usuarioCaja.totalBancoSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} : </td>
+                                    <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Ventas:   </td>
+                                    <td class="valorPro" >{usuarioCaja.totalNetoSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > + Entradas:   </td>
+                                    <td class="valorPro" >{usuarioCaja.sumaEntradasSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > - Salidas:   </td>
+                                    <td class="valorPro" >{usuarioCaja.sumaSalidaSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Dolares a Colones:   </td>
+                                    <td class="valorPro" >{usuarioCaja.conteoDolarConversionSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalNeto")}   </td>
+                                    <td class="valorPro" >{usuarioCaja.totalGeneralSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Diferencia   </td>
+                                    <td class="valorPro" >{usuarioCaja.diferenciaTotalSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Venta Dolares    </td>
+                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Conteo Dolares    </td>
+                                    <td class="valorPro" >{usuarioCaja.conteoDolarSTR}</td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Tipo Cambio Recibido    </td>
+                                    <td class="valorPro" >{usuarioCaja.tipoCambioSTR}</td>
+                                </tr>
+
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >  {$.i18n.prop("usuarioCaja.totalServicio")}     </td>
+                                    <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
                                 </tr>
                                 
                             </tbody>
@@ -121,6 +148,9 @@
 
 
 <style type="text/css">
+  .tituloCierre{
+      font-size:16px!important;
+  }
   .valorPro{
       font-size:15px!important;
       padding: 2%!important;;
@@ -270,11 +300,15 @@
 <script>
 
 var self = this;
-self.usuarioCaja   = opts.usuarioCaja;  
+self.parametros   = opts.parametros;  
 self.cierre =false;
+
+self.usuarioCaja = {}
 
 
 self.on('mount',function(){
+    self.usuarioCaja = self.parametros.usuarioCaja
+    self.update()
    consultaCaja()
     __Teclas()
    
@@ -303,7 +337,8 @@ function consultaCaja(){
                 self.usuarioCaja.aperturaCaja = self.usuarioCaja.aperturaCaja.sort(compare)
                 self.usuarioCaja.cierreCaja =getDesglose(self.usuarioCaja.conteoManualCajas,2)
                 self.usuarioCaja.cierreCaja = self.usuarioCaja.cierreCaja.sort(compare)
-                self.cierre =self.usuarioCaja.cierreCaja.length > 0?true:false 
+                self.cierre =Object.keys(self.usuarioCaja.cierreCaja) > 0 ?true:false 
+                self.apertura =Object.keys(self.usuarioCaja.aperturaCaja) > 0?true:false 
                 self.update()
                 
                 

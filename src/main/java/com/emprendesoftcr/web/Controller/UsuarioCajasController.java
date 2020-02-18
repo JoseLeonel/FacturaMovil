@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CajaBo;
-import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -68,10 +67,9 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
-	
-	@Autowired
-	private CajaBo																			cajaBo;
 
+	@Autowired
+	private CajaBo																						cajaBo;
 
 	@Autowired
 	private UsuarioCajaBo																			usuarioCajaBo;
@@ -142,14 +140,12 @@ public class UsuarioCajasController {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
-
 		// Se incluye la empresa
 		dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 
 	}
@@ -214,8 +210,9 @@ public class UsuarioCajasController {
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
 			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa());
-			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario,caja);
-			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCaja);
+			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario, caja);
+			UsuarioCaja usuarioCajaBd1 = usuarioCajaBo.buscar(usuarioCaja.getId());
+			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd1);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCajaCommand);
 
 		} catch (Exception e) {
@@ -261,7 +258,7 @@ public class UsuarioCajasController {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(conteoManualCommand.getId());
-			
+
 			if (usuarioCajaBd == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.usuarioCaja.noExiste", result.getAllErrors());
 			}
@@ -276,7 +273,6 @@ public class UsuarioCajasController {
 			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
-
 			usuarioCajaBd.setConteoTarjeta(conteoManualCommand.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoTarjeta());
 
 			usuarioCajaBd.setConteoDolar(conteoManualCommand.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoDolar());
@@ -286,7 +282,7 @@ public class UsuarioCajasController {
 			usuarioCajaBd.setConteoManual(Constantes.ZEROS_DOUBLE);
 
 			// Se cierra la caja
-			usuarioCajaBo.cierreCaja(usuarioCajaBd, listaCoteo,  usuario);
+			usuarioCajaBo.cierreCaja(usuarioCajaBd, listaCoteo, usuario);
 
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd);
 

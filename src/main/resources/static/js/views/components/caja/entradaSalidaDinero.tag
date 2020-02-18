@@ -154,6 +154,23 @@
         }
         selfEntradaDinero.update()
         showModal(selfEntradaDinero.motivo)
+         var xTriggered1 = 0;
+         $( "#montoEntradaSalidaDinero" ).keyup(function( event ) {
+            xTriggered1++;
+            var msg = "Handler for .keyup() called " + xTriggered1 + " time(s).";
+        }).keydown(function( event ) {
+            
+            if ( event.which == 13 ) {
+              if(selfEntradaDinero.entrada  == true){
+                  registrarEntradaSalidaAjax(1,$.i18n.prop("entradaSalidaDinero.mensaje.alert.entrada"))
+              }
+              if(selfEntradaDinero.salida  == true){
+                  registrarEntradaSalidaAjax(2,$.i18n.prop("entradaSalidaDinero.mensaje.alert.salida"))
+              }
+
+           }
+        });
+
 })
 
 
@@ -231,15 +248,17 @@ function registrarEntradaSalidaAjax(tipo,mensaje){
 }
 
  function hidemodal(){
-   $( '.modalEntradaSalidaDinero' ).remove();
+   $( '#modalEntradaSalidaDinero' ).remove();
    $( '.modal-backdrop' ).remove();
    $( 'body' ).removeClass( "modal-open" );
+ //  $( '.modalEntradaSalidaDinero' ).hide();
  }
 
  function __ImprimirSalidaDinero(salidaEntradaDinero){
      var parametros = {
         salidaEntradaDinero:salidaEntradaDinero,
     }
+     
     riot.mount('impentrada-salida',{parametros:parametros});
  }
 

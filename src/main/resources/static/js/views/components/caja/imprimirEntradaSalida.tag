@@ -10,19 +10,35 @@
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirEntradaSalidaDinero} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
                 <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
             </div>
-            <section class="zona-impresion" id="imprimemeCorte">
+            <section class="zona-impresion" id="imprimeEntradaSalidaDinero">
                 <div class="forma-impresion">
                     <div class="ticket" > 
-                        <form id = "formularioUsuarioCajaImprimir" name ="formularioUsuarioCajaImprimir"   class="advanced-search-form formularioUsuarioCajaImprimir">
-                           <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
-                        </form>   
-                  
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{salidaEntradaDinero.created_atSTR}<br></div>
-                        
-                       
+                        <table class = "forma-table" >
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="titulo">  </th>
+                                    
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > <span class="titulo">{titulo} #{salidaEntradaDinero.id} </span> </td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >  {$.i18n.prop("usuarioCaja.created_at")}: {salidaEntradaDinero.created_atSTR}</td>
+                                </tr>
+
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > <span class="titulo">{salidaEntradaDinero.usuarioResponsable.empresa.nombreComercial} </span> </td>
+                                </tr>
+                                <tr   class="detalleTables">
+                                    <td class="valorPro" > <strong>Usuario:</strong>{salidaEntradaDinero.usuarioResponsable.nombreUsuario} </td>
+                                </tr>
+                            </tbody>
+                            </table> 
+
                          <br>                                             
-                        <table class = "forma-table" show = {cierre}>
+                        <table class = "forma-table" >
                            <thead>
                                 <tr class = "forma-table">
                                     <th class="titulo">  </th>
@@ -31,22 +47,25 @@
                                 </tr>
                             </thead>
                              <tbody>
-                                <tr class = ""  class="detalleTables">
+                                <tr  class="detalleTables">
                                     <td class="valorPro" > Descripcion</td>
                                 </tr>
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > Descripcion</td>
+                                <tr   class="detalleTables">
+                                    <td class="valorPro" > {salidaEntradaDinero.descripcion}</td>
                                 </tr>
 
-                                <tr class = ""  class="detalleTables">
-                                    <td class="valorPro" > Total: </td>
-                                    <td class="valorPro" >{salidaEntradaDinero.totalBancoSTR}</td>
+                                <tr  class="detalleTables">
+                                    <td class="valorPro" > <h2>Total:</h2> </td>
+                                    <td class="valorPro" ><h2>{salidaEntradaDinero.total}</h2></td>
                                 </tr>
-  
-                                
+                            
+                                 <tr class = "forma-table">
+                                    <td><br><br><br><h3>Firma:___________________________</h3></td>
+                                 </tr>
+
+
                             </tbody>
                             </table> 
-  
                    </div>
                 </div>
             </section>
@@ -60,13 +79,20 @@
 
 
 <style type="text/css">
+
+
+  .fimarResponsable{
+      padding: 6%;
+
+  }
   .valorPro{
-      font-size:15px!important;
-      padding: 2%!important;;
+      font-size:16px!important;
+      padding: 1%!important;;
   }
     .titulo{
-        font-size:16px!important;
+        font-size: 20px!important;
         padding-right: 2%;
+        font-weight: 900;
 
     }
 
@@ -152,7 +178,6 @@
         border-collapse: collapse;
     }
     .forma-table {
-        border-top:1px solid black;
         border-collapse: collapse;
     }
     .ticket > td.producto,th.producto {
@@ -209,24 +234,36 @@
 <script>
 
 var selfImprimirSalida = this;
-selfImprimirSalida.salidaEntradaDinero   = opts.salidaEntradaDinero;  
+selfImprimirSalida.parametro = opts.parametros;  
+selfImprimirSalida.salidaEntradaDinero = {
+    id:null,
+    total:0,
+    descripcion:"",
+    created_atSTR:""
+}
 
+selfImprimirSalida.titulo = "Entrada de Dinero"
 
 selfImprimirSalida.on('mount',function(){
+
+    selfImprimirSalida.salidaEntradaDinero  = selfImprimirSalida.parametro.salidaEntradaDinero
+    if(selfImprimirSalida.salidaEntradaDinero.tipo == 2){
+      selfImprimirSalida.titulo = "Salida de Dinero" 
+    }
+    selfImprimirSalida.update()
     $('.imprimirModalEntradaSalidaDinero').modal('show');
 })
 /**
 *Imprimir factura
 **/    
 __ImprimirEntradaSalidaDinero(){
-    var objeto=document.getElementById('imprimemeCorte');  //obtenemos el objeto a imprimir
-          var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-          ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-          ventana.document.close();  //cerramos el documento
-          ventana.print();  //imprimimos la ventana
-          ventana.close();  //cerramos la ventana
-
-           $("#boton-regresar").focus()
+    var objeto=document.getElementById('imprimeEntradaSalidaDinero');  //obtenemos el objeto a imprimir
+    var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
+    ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
+    ventana.document.close();  //cerramos el documento
+    ventana.print();  //imprimimos la ventana
+    ventana.close();  //cerramos la ventana
+    $("#boton-regresar").focus()
 }
 </script>
 </impentrada-salida>

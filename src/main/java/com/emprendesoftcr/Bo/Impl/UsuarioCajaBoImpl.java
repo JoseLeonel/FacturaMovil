@@ -28,11 +28,9 @@ import com.emprendesoftcr.web.command.DenominacionCommand;
 public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	@Autowired
-	UsuarioCajaDao			usuarioCajaDao;
+	UsuarioCajaDao	usuarioCajaDao;
 
-
-
-	private Logger			log	= LoggerFactory.getLogger(this.getClass());
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
 	@Override
@@ -95,11 +93,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 			usuarioCaja = agregarConteo(listaCoteo, usuarioCaja, usuario, 2);
 
-			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
-			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum());
+			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().filter(x -> x.getTipo().equals(Constantes.CONTEO_CIERRE_CAJA_TIPO)).collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
+			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
+			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum() + usuarioCaja.getTotalConversionColones());
 
 			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
-			usuarioCaja.setDiferencia(usuarioCaja.getConteoManual() - usuarioCaja.getTotalNeto());
+
 			usuarioCaja.setCierreCaja(new Date());
 			modificar(usuarioCaja);
 
@@ -136,7 +135,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 			throw e;
 		}
-    return usuarioCajaTemp;
+		return usuarioCajaTemp;
 	}
 
 	/**
@@ -162,7 +161,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	@Transactional
 	@Override
-	public UsuarioCaja aperturaCaja(ArrayList<DenominacionCommand> listaCoteo, Usuario usuario,Caja caja) throws Exception {
+	public UsuarioCaja aperturaCaja(ArrayList<DenominacionCommand> listaCoteo, Usuario usuario, Caja caja) throws Exception {
 		UsuarioCaja usuarioCaja = new UsuarioCaja();
 		try {
 
@@ -180,11 +179,24 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setTotalServicio(Constantes.ZEROS_DOUBLE);
 			usuarioCaja = agregarConteo(listaCoteo, usuarioCaja, usuario, 1);
-			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
-			usuarioCaja.setTotalFondoInicial(doubleSummaryStatistics.getSum());
+			if (usuarioCaja.getConteoManualCajas() != null && usuarioCaja.getConteoManualCajas().size() > 0) {
+				DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().filter(x -> x.getTipo().equals(Constantes.CONTEO_APERTURA_CAJA_TIPO)).collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
+				usuarioCaja.setTotalFondoInicial(doubleSummaryStatistics.getSum());
+
+			} else {
+				usuarioCaja.setTotalFondoInicial(Constantes.ZEROS_DOUBLE);
+			}
+			usuarioCaja.setConteoManual(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setConteoTarjeta(Constantes.ZEROS_DOUBLE);
+
+			usuarioCaja.setTotalDolares(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTipoCambio(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalConversionColones(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setNotaCredito(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setNotaDebito(Constantes.ZEROS_DOUBLE);
 
 			agregar(usuarioCaja);
-			
+
 //			usuarioCajaDao.modificar(usuarioCaja);
 
 		} catch (Exception e) {

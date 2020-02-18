@@ -7,8 +7,14 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
 
+	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
+	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																		= 0;
+
+	
 	public static final Integer					ENTRADASALIDA_TIPO_ENTRADA																	= 1;
 	public static final Integer					ENTRADASALIDA_TIPO_SALIDA																		= 2;
+	public static final Integer					CONTEO_APERTURA_CAJA_TIPO																		= 1;
+	public static final Integer					CONTEO_CIERRE_CAJA_TIPO																			= 2;
 
 	public static final Integer					MIGRADO_XMLS_A_DISCO_NO																			= 0;
 	public static final Integer					MIGRADO_XMLS_A_DISCO_SI																			= 1;

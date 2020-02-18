@@ -445,6 +445,7 @@ function __MantenimientoAgregar(){
             id:null,
             totalFondoInicial:0
         }
+        self.update()
         showModal()
     })
 }
@@ -473,7 +474,7 @@ function __consultar(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -530,8 +531,17 @@ __agregar(){
                             }
                         } else {
                             mensajeToasExito(data.message)
-                             __listado()
-                             hidemodal()
+                             
+                              $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                self.usuarioCaja = modeloTabla    
+                                self.update()
+                            })
+                            var parametros  = {
+                                usuarioCaja:self.usuarioCaja,
+                                tipo:1
+                            }
+                            riot.mount('imprimir-caja',{parametros:parametros});
+                            __listado()
                         }
                     },
                     error : function(xhr, status) {
@@ -552,6 +562,7 @@ function __listado(){
     $.ajax({
         url: "ListarUsuariosCajasAjax.do",
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
@@ -710,7 +721,12 @@ function cerrarCajaAjax(){
                                 self.usuarioCaja = modeloTabla    
                                 self.update()
                             })
-                            riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+                            var parametros  = {
+                                usuarioCaja:self.usuarioCaja,
+                                tipo:2
+                            }
+                            riot.mount('imprimir-caja',{parametros:parametros});
+
 
                         }
                     },

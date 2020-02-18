@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 /**
@@ -32,108 +33,106 @@ import com.emprendesoftcr.Utils.Utils;
 @Table(name = "usuarios_cajas")
 public class UsuarioCaja implements Serializable {
 
-	private static final long			serialVersionUID	= 8895530294398977996L;
+	private static final long					serialVersionUID	= 8895530294398977996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long									id;
+	private Long											id;
 
 	@Column(name = "total_fondo_inicial")
-	private Double								totalFondoInicial;
+	private Double										totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private Double								totalEfectivo;
+	private Double										totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double								totalTarjeta;
+	private Double										totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double								totalBanco;
+	private Double										totalBanco;
 
 	@Column(name = "total_credito")
-	private Double								totalCredito;
+	private Double										totalCredito;
 
 	@Column(name = "total_abono")
-	private Double								totalAbono;
+	private Double										totalAbono;
 
 	@Column(name = "total_neto")
-	private Double								totalNeto;
+	private Double										totalNeto;
 
 	@Column(name = "impuesto_servicio")
-	private Double								totalServicio;
+	private Double										totalServicio;
 
 	@Column(name = "total_dolares")
-	private Double								totalDolares;
+	private Double										totalDolares;
 
 	@Column(name = "conte_tarj")
-	private Double								conteoTarjeta;
+	private Double										conteoTarjeta;
 
 	@Column(name = "conte_dolar")
-	private Double								conteoDolar;
+	private Double										conteoDolar;
 
 	@Column(name = "total_conver")
-	private Double								totalConversionColones;
+	private Double										totalConversionColones;
 
 	@Column(name = "tipo_camb")
-	private Double								tipoCambio;
+	private Double										tipoCambio;
 
 	@Column(name = "nota_cred")
-	private Double								notaCredito;
+	private Double										notaCredito;
 
 	@Column(name = "nota_deb")
-	private Double								notaDebito;
+	private Double										notaDebito;
 
 	@Column(name = "conteo_manual")
-	private Double								ConteoManual;
+	private Double										conteoManual;
 
-	@Column(name = "diferencia")
-	private Double								diferencia;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario								usuario;
+	private Usuario										usuario;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date									created_at;
+	private Date											created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date									updated_at;
-	
+	private Date											updated_at;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "cierre")
-	private Date									cierreCaja;
+	private Date											cierreCaja;
 
 	@Column(name = "estado")
-	private String								estado;
+	private String										estado;
 
 	@Column(name = "notificacion")
-	private Integer								notificacion;
+	private Integer										notificacion;
 
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
 	@OrderBy("usua_caja_id DESC")
 	private Set<SalidaEntradaDinero>	salidaEntradaDineros;
-	
+
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
 	@OrderBy("usua_caja_id DESC")
-	private Set<ConteoManualCaja>	conteoManualCajas;
+	private Set<ConteoManualCaja>			conteoManualCajas;
 
 	@ManyToOne
 	@JoinColumn(name = "caja_id")
-	private Caja									caja;
-	
-	
-	
+	private Caja											caja;
 
 
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
+
+	
+
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -151,8 +150,7 @@ public class UsuarioCaja implements Serializable {
 		this.tipoCambio = tipoCambio;
 		this.notaCredito = notaCredito;
 		this.notaDebito = notaDebito;
-		ConteoManual = conteoManual;
-		this.diferencia = diferencia;
+		this.conteoManual = conteoManual;
 		this.usuario = usuario;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
@@ -177,27 +175,68 @@ public class UsuarioCaja implements Serializable {
 	}
 
 	
+	
+
 	public void addConteoManual(ConteoManualCaja conteoManualCaja) {
-    if (conteoManualCaja != null) {
-        if (conteoManualCajas == null) {
-        	conteoManualCajas = new HashSet<ConteoManualCaja>();
-        }
-        conteoManualCaja.setUsuarioCaja(this);
-        conteoManualCajas.add(conteoManualCaja);
-    }
-}
+		if (conteoManualCaja != null) {
+			if (conteoManualCajas == null) {
+				conteoManualCajas = new HashSet<ConteoManualCaja>();
+			}
+			conteoManualCaja.setUsuarioCaja(this);
+			conteoManualCajas.add(conteoManualCaja);
+		}
+	}
 
 	public void addSalidaEntradaDinero(SalidaEntradaDinero salidaEntradaDinero) {
-    if (salidaEntradaDinero != null) {
-        if (salidaEntradaDineros == null) {
-        	salidaEntradaDineros = new HashSet<SalidaEntradaDinero>();
-        }
-        salidaEntradaDinero.setUsuariocaja(this);
-        salidaEntradaDineros.add(salidaEntradaDinero);
-    }
-}
+		if (salidaEntradaDinero != null) {
+			if (salidaEntradaDineros == null) {
+				salidaEntradaDineros = new HashSet<SalidaEntradaDinero>();
+			}
+			salidaEntradaDinero.setUsuariocaja(this);
+			salidaEntradaDineros.add(salidaEntradaDinero);
+		}
+	}
 
-	
+	public String getSumaEntradasSTR() {
+		String resultado = "0.00";
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_ENTRADA).mapToDouble(x -> x.getTotal()).sum();
+			return Utils.formateadorMiles(sum);
+		}
+
+		return resultado;
+	}
+
+	public Double getSumaEntradas() {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_ENTRADA).mapToDouble(x -> x.getTotal()).sum();
+			return sum;
+		}
+
+		return resultado;
+	}
+
+	public String getSumaSalidaSTR() {
+		String resultado = "0.00";
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_SALIDA).mapToDouble(x -> x.getTotal()).sum();
+			return Utils.formateadorMiles(sum);
+		}
+
+		return resultado;
+	}
+
+	public Double getSumaSalida() {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_SALIDA).mapToDouble(x -> x.getTotal()).sum();
+			return sum;
+		}
+
+		return resultado;
+	}
+
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
@@ -281,6 +320,8 @@ public class UsuarioCaja implements Serializable {
 	public String getTotalNetoSTR() {
 		return Utils.formateadorMiles(this.totalNeto);
 	}
+
+	
 
 	public Usuario getUsuario() {
 		return usuario;
@@ -395,11 +436,16 @@ public class UsuarioCaja implements Serializable {
 	}
 
 	public Double getConteoManual() {
-		return ConteoManual;
+		return conteoManual;
+	}
+	
+	public String getConteoManualSTR() {
+		
+		return Utils.formateadorMiles(conteoManual);
 	}
 
 	public void setConteoManual(Double conteoManual) {
-		ConteoManual = conteoManual;
+		this.conteoManual = conteoManual;
 	}
 
 	public Double getTotalConversionColones() {
@@ -410,13 +456,7 @@ public class UsuarioCaja implements Serializable {
 		this.totalConversionColones = totalConversionColones;
 	}
 
-	public Double getDiferencia() {
-		return diferencia;
-	}
-
-	public void setDiferencia(Double diferencia) {
-		this.diferencia = diferencia;
-	}
+	
 
 	public Set<ConteoManualCaja> getConteoManualCajas() {
 		return conteoManualCajas;
@@ -426,28 +466,21 @@ public class UsuarioCaja implements Serializable {
 		this.conteoManualCajas = conteoManualCajas;
 	}
 
-	
 	public Date getCierreCaja() {
 		return cierreCaja;
 	}
-
 	
+
 	public void setCierreCaja(Date cierreCaja) {
 		this.cierreCaja = cierreCaja;
 	}
 
-	
 	public Set<SalidaEntradaDinero> getSalidaEntradaDineros() {
 		return salidaEntradaDineros;
 	}
 
-	
 	public void setSalidaEntradaDineros(Set<SalidaEntradaDinero> salidaEntradaDineros) {
 		this.salidaEntradaDineros = salidaEntradaDineros;
 	}
-	
-	
-	
-	
 
 }

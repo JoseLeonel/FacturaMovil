@@ -6,7 +6,7 @@ public class SalidaEntradaDineroCommand {
 
 	private Double	total;
 
-	private Double	tipo;
+	private Integer	tipo;
 
 
 
@@ -30,13 +30,17 @@ public class SalidaEntradaDineroCommand {
 		this.total = total;
 	}
 
-	public Double getTipo() {
+	
+	public Integer getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(Double tipo) {
+	
+	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
 	}
+
+	
 
 	
 
