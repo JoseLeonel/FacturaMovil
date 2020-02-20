@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.json.simple.JSONArray;
@@ -342,8 +344,8 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
 			}
 
-		
 		} catch (Exception e) {
+			log.error(String.format("--error formaFactura :" + e.getMessage() + new Date()));
 			throw e;
 		}
 		return factura;
@@ -357,6 +359,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional
 	private Factura getNotaCreditoOrDebito(Factura factura, FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 		try {
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
@@ -409,9 +412,9 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setMontoCambio(facturaReferencia.getMontoCambio());
 						factura.setTotalCambio(facturaReferencia.getTotalCambio());
 						factura.setTotalCambioPagar(facturaReferencia.getTotalCambioPagar());
-						
+
 						facturaReferencia.setAnuladaCompleta(Constantes.FACTURA_ANULACION_COMPLETA_SI);
-						
+
 						this.modificar(facturaReferencia);
 
 					}
@@ -437,7 +440,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 						}
 					}
-				// Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
+					// Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
 					// Nota de Credito Anulacion Documento
 					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
@@ -448,18 +451,16 @@ public class FacturaBoImpl implements FacturaBo {
 							}
 						}
 					}
-				// Si es nota de debito se crea un abono por nota de debito
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					// Si es nota de debito se crea un abono por nota de debito
+					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 							if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 								if (facturaReferencia != null) {
-										cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura, facturaReferencia);
+									cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura, facturaReferencia);
 								}
 							}
 						}
 					}
-				
-				
 
 				}
 
@@ -474,13 +475,23 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 
 		} catch (Exception e) {
+			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
 			throw e;
 		}
 
 		return factura;
 	}
-	
-	private Factura  getConsecutivoAndClave(Factura factura, FacturaCommand facturaCommand, Usuario usuario) throws Exception {
+
+	/**
+	 * Obtiene el consecutivo de la orden o proforma
+	 * @param factura
+	 * @param facturaCommand
+	 * @param usuario
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional
+	private Factura getConsecutivoAndClave(Factura factura, FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 		try {
 			// Generar el consecutivo de venta
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
@@ -509,14 +520,16 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
 				factura.setNumeroConsecutivo(empresaBo.generarConsecutivoNotaDebitoInterno(factura.getEmpresa(), usuario));
 			}
-			
+
 		} catch (Exception e) {
+			log.error(String.format("--error getConsecutivoAndClave :" + e.getMessage() + new Date()));
 			throw e;
 		}
-		
+
 		return factura;
 	}
 
+	@Transactional
 	@Override
 	public ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
@@ -538,86 +551,146 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 		} catch (org.json.simple.parser.ParseException e) {
+			log.error(String.format("--error formaDetallesCommand :" + e.getMessage() + new Date()));
 			throw e;
 		}
 		return detallesFacturaCommand;
 	}
-	
-	
+
+	/**
+	 * Actualiza el caja del usuario
+	 * @param factura
+	 * @param usuarioCaja
+	 */
+	@Transactional
+	private void aplicarCajaDinero(Factura factura, UsuarioCaja usuarioCaja) {
+		try {
+			// Efectivo Banco Tarjeta
+			if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					// Se agrega solo si no existe en la caja de usuario, casos de reintentos
+					if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
+						UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
+						usuarioCajaFactura.setCreated_at(new Date());
+						usuarioCajaFactura.setUpdated_at(new Date());
+						usuarioCajaFactura.setFactura(factura);
+						usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
+						usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.error(String.format("--error aplicarCajaDinero :" + e.getMessage() + new Date()));
+			throw e;
+		}
+	}
+
+	/**
+	 * Aplica el Inventario
+	 * @param factura
+	 * @param usuario
+	 * @throws Exception
+	 */
+	@Transactional
+	private void aplicarInventario(Factura factura, Usuario usuario) throws Exception {
+		try {
+			// Actualiza articulo y inventario
+			if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					this.actualizaArticulosInventario(factura, usuario);
+				}
+			}
+
+		} catch (Exception e) {
+			log.error(String.format("--error aplicarInventario :" + e.getMessage() + new Date()));
+			throw e;
+		}
+	}
+
+	/**
+	 * Aplica cuentas por cobrar
+	 * @param factura
+	 */
+	@Transactional
+	private void aplicarCuentaPorCobrar(Factura factura) {
+		try {
+
+			if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						cuentaCobrarDao.crearCuentaXCobrar(factura);
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error(String.format("--error aplicarCuentaPorCobrar :" + e.getMessage() + new Date()));
+			throw e;
+		}
+	}
+
+	@Transactional
+	private Factura actualizaOrCrearFactura(Factura factura) {
+		try {
+			if (factura.getId() == null) {
+				factura.setCreated_at(new Date());
+				this.agregar(factura);
+			} else {
+				factura.setCreated_at(new Date());
+				this.modificar(factura);
+			}
+		} catch (Exception e) {
+			log.error(String.format("--error actualizaOrCrearFactura :" + e.getMessage() + new Date()));
+			throw e;
+		}
+
+		return factura;
+	}
 
 	/**
 	 * Crear la factura o el tiquete temporal
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
 	private final ReentrantLock lock = new ReentrantLock();
-
 	@Override
 	@Transactional
 	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) throws Exception {
 		Factura factura = null;
-		lock.lock();
+	//	lock.lock();
 		try {
 			long id = Thread.currentThread().getId();
 			log.info(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
+			if (lock.tryLock(10, TimeUnit.SECONDS)) {
+				// Se forman los detalles command de las factura
 
-			// Se forman los detalles command de las factura
+				// --------------------------------------------- Se trabaja con el objeto a
+				// registrar en bd -----------------------------------------------------
+				// Se forma el objeto factura
+				factura = this.formaFactura(facturaCommand, usuario);
 
-			// --------------------------------------------- Se trabaja con el objeto a
-			// registrar en bd -----------------------------------------------------
-			// Se forma el objeto factura
-			factura = this.formaFactura(facturaCommand, usuario);
-			
-			// Aplicar si es Nota de Credito
-			factura = this.getNotaCreditoOrDebito(factura, facturaCommand, usuario);
-      
-			// Obtener el consecutivo 
-			factura = this.getConsecutivoAndClave(factura, facturaCommand, usuario);
+				// Aplicar si es Nota de Credito
+				factura = this.getNotaCreditoOrDebito(factura, facturaCommand, usuario);
 
-	
-				if (factura.getId() == null) {
-					factura.setCreated_at(new Date());
-					this.agregar(factura);
-				} else {
-					factura.setCreated_at(new Date());
-					this.modificar(factura);
-				}
+				// Obtener el consecutivo
+				factura = this.getConsecutivoAndClave(factura, facturaCommand, usuario);
+
+				// Aplica actualizacion o creacion de la factura
+				factura = this.actualizaOrCrearFactura(factura);
 				// Se asociando los detalles a la factura
 				this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
-
-				// Efectivo Banco Tarjeta
-				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-						// Se agrega solo si no existe en la caja de usuario, casos de reintentos
-						if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
-							UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
-							usuarioCajaFactura.setCreated_at(new Date());
-							usuarioCajaFactura.setUpdated_at(new Date());
-							usuarioCajaFactura.setFactura(factura);
-							usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
-							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-						}
-					}
-				}
-
-				// Actualiza articulo y inventario
-				if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
-					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-						this.actualizaArticulosInventario(factura, usuario);
-					}
-				}
-
-				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-							cuentaCobrarDao.crearCuentaXCobrar(factura);
-						}
-					}
-				}
+				// Aplicar la Caja de Dinero
+				this.aplicarCajaDinero(factura, usuarioCaja);
+				// Aplicar inventario
+				this.aplicarInventario(factura, usuario);
+				// aplicar cuenta por cobrar
+				this.aplicarCuentaPorCobrar(factura);
+			}
 
 			log.info(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			log.error("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
+			e.printStackTrace();
 			throw e;
 		} finally {
 			lock.unlock();
@@ -626,6 +699,15 @@ public class FacturaBoImpl implements FacturaBo {
 		return factura;
 	}
 
+	/**
+	 * Asociar Los detalles de la factura
+	 * @param factura
+	 * @param facturaCommand
+	 * @param usuario
+	 * @param detallesFacturaCommand
+	 * @throws Exception
+	 */
+	@Transactional
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
@@ -745,10 +827,6 @@ public class FacturaBoImpl implements FacturaBo {
 			totalMercExonerada = totalMercExonerada + Utils.getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 
 			totalImpuesto = totalImpuesto + Utils.getTotalImpuesto(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getTipoDocumentoExoneracion(), detalle.getImpuestoNeto());
-//			if(totalImpuesto > 0d) {
-//				String valor = "uy";
-//				detalle.setObservacion(valor);
-//			}
 			totalMercanciasGravadas = totalMercanciasGravadas + Utils.getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 			totalMercanciasExentas = totalMercanciasExentas + Utils.getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
@@ -824,6 +902,13 @@ public class FacturaBoImpl implements FacturaBo {
 
 	}
 
+	/**
+	 * Actualiza inventari
+	 * @param factura
+	 * @param usuario
+	 * @throws Exception
+	 */
+	@Transactional
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
 
 		Collection<Detalle> detalles = detalleDao.findByFactura(factura);
@@ -859,6 +944,7 @@ public class FacturaBoImpl implements FacturaBo {
 	/**
 	 * Aplicar el inventario si estado de la venta es facturada Toda nota credito se devuelve al inventario los productos
 	 */
+	@Transactional
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
 			factura.setRebajaInventario(factura.getRebajaInventario() == null ? Constantes.ZEROS : factura.getRebajaInventario());
@@ -927,17 +1013,6 @@ public class FacturaBoImpl implements FacturaBo {
 
 	public List<Object[]> proformasByState(Integer estado, Integer idEmpresa) {
 		return facturaDao.proformasByState(estado, idEmpresa);
-	}
-
-	@Override
-	@Transactional
-	public void actualizarCantidadesNotaCredito(Factura factura, DetalleFacturaCommand detalleFacturaCommand) throws Exception {
-		try {
-
-		} catch (Exception e) {
-			log.info("** Error  actualizar contadores del detalle de la factura: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
 	}
 
 	@Override

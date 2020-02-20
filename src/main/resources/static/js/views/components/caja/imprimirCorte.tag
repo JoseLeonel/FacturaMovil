@@ -16,24 +16,19 @@
                         <form id = "formularioUsuarioCajaImprimir" name ="formularioUsuarioCajaImprimir"   class="advanced-search-form formularioUsuarioCajaImprimir">
                            <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
                         </form>   
-                  
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
-                        
-                       
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong><br></div>
+                        <div class="encabezado"><strong> </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")} :         </strong>{usuarioCaja.caja.descripcion}<br></div>
                         <div class="encabezado"><strong> Apertura de Caja:{usuarioCaja.created_atSTR}</strong></div>    
-                       
                         <div class="encabezado" ><div class= "tituloCierre"><strong> Fondo Inicial : {usuarioCaja.totalFondoInicialSTR}</strong></div></div>    
-                        
-
+                        <br show ={apertura }>
                         <table class = "forma-table" show ={apertura }>
                            <thead>
                                 <tr class = "forma-table">
-                                    <th class="titulo">Cant  </th>
-                                    <th class="titulo">Moneda/Billete</th>
-                                    <th class="titulo">Total </th>
+                                    <th class="cantidad">Cant  </th>
+                                    <th class="producto">Moneda/Billete</th>
+                                    <th class="precio">Total </th>
                                 </tr>
                             </thead>
                              <tbody>
@@ -45,6 +40,7 @@
                                 
                             </tbody>
                             </table> 
+                            <br show ={apertura }>
                              <div class="encabezado" show = {parametros.tipo == 2 }><div class= "tituloCierre"><strong> Cierre : {usuarioCaja.cierreCajaSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Conteo Cierre : {usuarioCaja.conteoManualSTR}</strong></div></div>    
                             <table class = "forma-table" show = {cierre}>
@@ -64,7 +60,7 @@
                                 
                             </tbody>
                             </table> 
-                        <br>
+                        <br show = {cierre}>
                         <table class = "forma-table" show = {parametros.tipo == 2 }>
                            <thead>
                                 <tr class = "forma-table">
@@ -132,6 +128,13 @@
                                     <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
                                 </tr>
                                 
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >      </td>
+                                    <td class="valorPro" ></td>
+                                </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >    *** *** ***   </td>
+                                </tr>
                             </tbody>
                             </table> 
 
@@ -337,8 +340,8 @@ function consultaCaja(){
                 self.usuarioCaja.aperturaCaja = self.usuarioCaja.aperturaCaja.sort(compare)
                 self.usuarioCaja.cierreCaja =getDesglose(self.usuarioCaja.conteoManualCajas,2)
                 self.usuarioCaja.cierreCaja = self.usuarioCaja.cierreCaja.sort(compare)
-                self.cierre =Object.keys(self.usuarioCaja.cierreCaja) > 0 ?true:false 
-                self.apertura =Object.keys(self.usuarioCaja.aperturaCaja) > 0?true:false 
+                self.cierre =self.usuarioCaja.cierreCaja.length > 0 ?true:false 
+                self.apertura =self.usuarioCaja.aperturaCaja.length > 0?true:false 
                 self.update()
                 
                 
@@ -359,7 +362,7 @@ function consultaCaja(){
 }
 
 function getDesglose(conteoManualCajas,tipo){
-    var desglose = [{}]
+    var desglose = []
 
     $.each(conteoManualCajas, function( index, modeloTabla ) {
         if(modeloTabla.tipo == tipo){

@@ -97,8 +97,6 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
 			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum() + usuarioCaja.getTotalConversionColones());
 
-			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
-
 			usuarioCaja.setCierreCaja(new Date());
 			modificar(usuarioCaja);
 
@@ -136,6 +134,10 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			throw e;
 		}
 		return usuarioCajaTemp;
+	}
+	
+	private void enviarCorreoCajaCerrada(UsuarioCaja usuarioCaja) {
+		
 	}
 
 	/**
@@ -194,6 +196,8 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setTotalConversionColones(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setNotaCredito(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setNotaDebito(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setConteoDolar(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setNotificacion(Constantes.ZEROS);
 
 			agregar(usuarioCaja);
 

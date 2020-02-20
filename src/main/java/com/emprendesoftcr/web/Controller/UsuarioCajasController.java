@@ -128,6 +128,7 @@ public class UsuarioCajasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -150,6 +151,7 @@ public class UsuarioCajasController {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasCerradasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String inicio, @RequestParam String fin, @RequestParam Integer idUsuario) {

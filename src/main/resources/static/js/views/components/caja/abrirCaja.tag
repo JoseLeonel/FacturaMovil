@@ -362,6 +362,20 @@ function eventoKeyPressConteo(){
         }).keydown(function( event ) {
                conteoDinero();
         });
+         $( "#conteoDolar" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+         $( "#tipoCambio" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
 
 }
 
@@ -396,10 +410,13 @@ function conteoDinero(){
     var moneda25 = __valorNumerico($(".moneda25").val()) * 25
     var moneda10 = __valorNumerico($(".moneda10").val()) * 10
     var moneda5 = __valorNumerico($(".moneda5").val()) * 5
+
+    var tipoCambio = __valorNumerico($(".tipoCambio").val())
+    var conteoDolar = __valorNumerico($(".conteoDolar").val())
     
     if(self.usuarioCaja.id != null){
         var conteoTarjeta = __valorNumerico($(".conteoTarjeta").val())
-        $(".totalConteoManual").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta)
+        $(".totalConteoManual").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta +(tipoCambio * conteoDolar ))
     }else{
         $(".totalFondoInicial").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 )
     }
