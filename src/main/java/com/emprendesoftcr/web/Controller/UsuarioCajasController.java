@@ -3,7 +3,10 @@ package com.emprendesoftcr.web.Controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CajaBo;
+import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -34,6 +38,7 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -76,6 +81,9 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private UsuarioBo																					usuarioBo;
+
+	@Autowired
+	CorreosBo																									correosBo;
 
 	@Autowired
 	private EmpresaPropertyEditor															empresaPropertyEditor;
@@ -293,6 +301,50 @@ public class UsuarioCajasController {
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
+
+	@RequestMapping(value = "/EnviarCorreoCierreCaja.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator enviarCorreoCierreCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCajaCommand usuarioCajaCommand, BindingResult result, SessionStatus status) throws Exception {
+		Map<String, Object> modelEmail = new HashMap<>();
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCajaCommand.getId());
+			UsuarioCajaCommand usuarioCajaCommand1 = new UsuarioCajaCommand(usuarioCajaBd);
+			modelEmail.put("usuarioResponsable", usuarioCajaCommand1.getUsuario().getNombre().trim() + " " + usuarioCajaCommand.getUsuario().getPrimerApellido().trim() + " " + usuarioCajaCommand.getUsuario().getSegundoApellido().trim());
+			modelEmail.put("fechaApertura", usuarioCajaCommand1.getCreated_atSTR());
+			modelEmail.put("fondoInicial", usuarioCajaCommand1.getTotalFondoInicialSTR());
+			modelEmail.put("fechaCierre", usuarioCajaCommand1.getCierreCajaSTR());
+			modelEmail.put("conteoCierre", usuarioCajaCommand1.getConteoManualSTR());
+			modelEmail.put("totalEfectivo", usuarioCajaCommand1.getTotalEfectivoSTR());
+			modelEmail.put("totalTarjeta", usuarioCajaCommand1.getTotalTarjetaSTR());
+			modelEmail.put("totalBanco", usuarioCajaCommand1.getTotalBancoSTR());
+			modelEmail.put("totalVentas", usuarioCajaCommand1.getTotalNetoSTR());
+			modelEmail.put("totalEntradas", usuarioCajaCommand1.getSumaEntradasSTR());
+			modelEmail.put("totalSalidas", usuarioCajaCommand1.getSumaSalidaSTR());
+			modelEmail.put("DolaresAColones", usuarioCajaCommand1.getConteoDolarConversionSTR());
+			modelEmail.put("total", 0);
+			modelEmail.put("totalDiferencia	", usuarioCajaCommand1.getDiferenciaTotalSTR());
+			modelEmail.put("totalGeneral", usuarioCajaCommand1.getTotalGeneralSTR());
+			modelEmail.put("totalDolares", usuarioCajaCommand1.getTotalDolaresSTR());
+			modelEmail.put("tipoCambio", usuarioCajaCommand1.getTipoCambioSTR());
+			modelEmail.put("totalServicio", usuarioCajaCommand1.getTotalServicioSTR());
+			Collection<Attachment> attachments = null;
+			String from = "CierreCaja@emprendesoftcr.com";
+			String subject = "Cierre Caja: " + usuarioCajaCommand.getCreated_atSTR() + " al " + usuarioCajaCommand.getCierreCajaSTR();
+
+			ArrayList<String> listaCorreos = new ArrayList<>();
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			
+			listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());
+			listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaCommand);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+
 	}
 
 	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

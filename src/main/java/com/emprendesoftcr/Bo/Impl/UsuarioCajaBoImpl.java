@@ -30,6 +30,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	@Autowired
 	UsuarioCajaDao	usuarioCajaDao;
 
+	
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -107,6 +108,8 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 		return usuarioCaja;
 	}
+	
+		
 
 	@Transactional
 	private UsuarioCaja agregarConteo(ArrayList<DenominacionCommand> listaCoteo, UsuarioCaja usuarioCaja, Usuario usuario, Integer tipo) {

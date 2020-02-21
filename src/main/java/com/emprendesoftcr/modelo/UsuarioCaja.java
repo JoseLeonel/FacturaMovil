@@ -346,6 +346,13 @@ public class UsuarioCaja implements Serializable {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
+	public String getCreated_atSTR() {
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
+		}
+		return Constantes.EMPTY;
+	}
+
 
 	public Date getUpdated_at() {
 		return updated_at;
@@ -470,6 +477,12 @@ public class UsuarioCaja implements Serializable {
 		return cierreCaja;
 	}
 	
+	public String getCierreCajaSTR() {
+		if (this.cierreCaja != null) {
+			return Utils.getFechaGeneraReporte(this.cierreCaja);
+		}
+		return Constantes.EMPTY;
+	}
 
 	public void setCierreCaja(Date cierreCaja) {
 		this.cierreCaja = cierreCaja;

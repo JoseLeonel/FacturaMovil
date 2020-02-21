@@ -339,7 +339,7 @@ a[x-apple-data-detectors=true] {
                   </tr>
                   <tr style="border: 1px solid black;">
                     <td style="padding: 8px; border: 1px solid black;">Dolar a Colones:</td>
-                    <td style="padding: 8px; border: 1px solid black;">$totalBanco</td>
+                    <td style="padding: 8px; border: 1px solid black;">$DolaresAColones</td>
                   </tr>
 
                   <tr style="border: 1px solid black;">
