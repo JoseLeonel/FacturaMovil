@@ -2776,6 +2776,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    __DeleteUltimoItemIngresado()
     __DeleteUltimoArticuloIngresado()
     self.facturaImpresa={
         cliente:{
@@ -3397,13 +3398,13 @@ function __sumarMasArticulo(codigo,precio,cant){
 }
 
 function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
-    var temArticulo = __getUltimoArticuloIngresado()
-    if(temArticulo == null){
+    var temItem = __getUltimoItemIngresado()
+    if(temItem == null){
         getPosicionInputCodigo()
         return
     }
    for (var count = 0; count < self.detail.length; count++) {
-        if (self.detail[count].codigo == temArticulo.codigo  && temArticulo.numeroLinea == self.detail[count].numeroLinea    ){
+        if (self.detail[count].codigo == temItem.codigo  && temItem.numeroLinea == self.detail[count].numeroLinea    ){
             self.item          = self.detail[count];
             var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
             self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
@@ -3817,6 +3818,7 @@ function  eliminarDetalle(){
     self.update()
      __calculate();
      __DeleteUltimoArticuloIngresado()
+     __DeleteUltimoItemIngresado()
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -3835,6 +3837,20 @@ function __nuevoArticuloAlDetalle(cantidad){
          mensajeAdvertencia(" Error El articulo no tiene la Tarifa IVA ")
         return false
     }
+    var itemNuevo = setItemNuevo(cantidad)
+    self.detail.push(itemNuevo);
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    self.cantidadEnterFacturar = 0
+    self.update()
+}
+
+function setItemNuevo(cantidad){
     //Determinar el precio a incluir
     var resultadoPrecio = getListaPrecio(self.articulo)
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
@@ -3851,7 +3867,8 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.cantArticulos  = self.cantArticulos + 1
     var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
-    self.detail.push({
+   
+   var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
@@ -3885,16 +3902,9 @@ function __nuevoArticuloAlDetalle(cantidad){
        nombreInstitucionExoneracion:"",
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
-    });
-    self.detail.sort(function(a,b) {
-    if ( a.pesoPrioridad > b.pesoPrioridad )
-        return -1;
-    if ( a.pesoPrioridad < b.pesoPrioridad )
-        return 1;
-    return 0;
-    } );
-    self.cantidadEnterFacturar = 0
-    self.update()
+    }
+    __SetUltimoItemIngresado(item);
+    return item;
 }
 
 function verificarTarifa(){

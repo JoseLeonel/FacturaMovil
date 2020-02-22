@@ -339,9 +339,9 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 
-			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
-			}
+//			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+//				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
+//			}
 
 		} catch (Exception e) {
 			log.error(String.format("--error formaFactura :" + e.getMessage() + new Date()));
@@ -552,6 +552,7 @@ public class FacturaBoImpl implements FacturaBo {
 		} catch (org.json.simple.parser.ParseException e) {
 			log.error(String.format("--error formaDetallesCommand :" + e.getMessage() + new Date()));
 			throw e;
+		
 		}
 		return detallesFacturaCommand;
 	}
@@ -568,7 +569,8 @@ public class FacturaBoImpl implements FacturaBo {
 			if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 					// Se agrega solo si no existe en la caja de usuario, casos de reintentos
-					if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
+					UsuarioCajaFactura UsuarioCajaBD = usuarioCajaFacturaDao.findByFacturaId(factura.getId());
+					if (UsuarioCajaBD == null) {
 						UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
 						usuarioCajaFactura.setCreated_at(new Date());
 						usuarioCajaFactura.setUpdated_at(new Date());

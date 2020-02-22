@@ -535,7 +535,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO														= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO																= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS														= 3;
-	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO					= 4;
+	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO1					= 4;
 	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR														= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";
