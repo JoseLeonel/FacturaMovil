@@ -102,8 +102,8 @@ public class UsuarioCajaCommand {
 		this.updated_at = usuarioCaja.getUpdated_at();
 		this.cierreCaja = usuarioCaja.getCierreCaja();
 		this.estado = usuarioCaja.getEstado();
-		this.totalAbono = usuarioCaja.getTotalAbono();
-		this.totalServicio = usuarioCaja.getTotalServicio();
+		this.totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalAbono();
+		this.totalServicio = usuarioCaja.getTotalServicio() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalServicio();
 		this.created_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getCreated_at());
 		this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
 		this.totalFondoInicialSTR = usuarioCaja.getTotalFondoInicialSTR();
@@ -116,12 +116,14 @@ public class UsuarioCajaCommand {
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
 		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
-		this.sumaEntradas = usuarioCaja.getSumaEntradas();
-		this.sumaSalida = usuarioCaja.getSumaSalida();
-		this.conteoManual = usuarioCaja.getConteoManual();
+		this.sumaEntradas = usuarioCaja.getSumaEntradas() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaEntradas();
+		this.sumaSalida = usuarioCaja.getSumaSalida() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaSalida();
+		this.conteoManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
 		this.tipoCambioSTR = Utils.formateadorMiles(usuarioCaja.getTipoCambio());
 		this.conteoDolarSTR = Utils.formateadorMiles(usuarioCaja.getConteoDolar());
-		this.conteoDolarConversionSTR = Utils.formateadorMiles(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio());
+		Double conteoDolar = usuarioCaja.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoDolar();
+		Double tipoCambio = usuarioCaja.getTipoCambio() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTipoCambio();
+		this.conteoDolarConversionSTR = Utils.formateadorMiles(conteoDolar * tipoCambio);
 	}
 
 	public String getConteoDolarConversionSTR() {

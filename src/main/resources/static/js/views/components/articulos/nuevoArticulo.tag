@@ -1473,9 +1473,11 @@ __agregar(){
                     }
                     inicializarCursorCodigo()
                 } else {
-                    __InicializarDatos()
+                    inicializarCursorCodigo()
                    	serverMessageJson(data);
                     mensajeToasExito(data.message)
+                    self.botonEntrada = true
+                    self.update()
                 }
             },
             error : function(xhr, status) {
@@ -1539,7 +1541,7 @@ function __aplicarModificacion(){
                     inicializarCursorCodigo()
                 }
             } else {
-                __InicializarDatos()
+               inicializarCursorCodigo()
                	serverMessageJson(data);
                 mensajeToasExito(data.message)
             }

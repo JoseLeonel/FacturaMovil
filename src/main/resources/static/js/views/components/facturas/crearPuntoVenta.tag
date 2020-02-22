@@ -1643,6 +1643,18 @@ function __DeleteUltimoArticuloIngresado(){
     localStorage.removeItem('ultimoArticulo');
 } 
 
+function __SetUltimoItemIngresado(item){
+   localStorage.setItem('ultimoItem', JSON.stringify(item));
+}    
+
+function __getUltimoItemIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoItem'));
+} 
+
+function __DeleteUltimoItemIngresado(){
+    localStorage.removeItem('ultimoItem');
+} 
+
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
@@ -3391,7 +3403,7 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
         return
     }
    for (var count = 0; count < self.detail.length; count++) {
-        if (self.detail[count].codigo == temArticulo.codigo ){
+        if (self.detail[count].codigo == temArticulo.codigo  && temArticulo.numeroLinea == self.detail[count].numeroLinea    ){
             self.item          = self.detail[count];
             var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
             self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
