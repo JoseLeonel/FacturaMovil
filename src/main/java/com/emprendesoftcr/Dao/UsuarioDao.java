@@ -28,6 +28,7 @@ public interface UsuarioDao {
 	Boolean isUsuario_Vendedor(Usuario usuario);
 	Boolean isUsuario_Mesero(Usuario usuario);
 	Boolean isUsuario_Cajero(Usuario usuario);	
+	 Boolean isUsuario_SuperDario(Usuario usuario);
 
 
 }

@@ -134,4 +134,12 @@ public class UsuarioBoImpl implements UsuarioBo {
 		return usuarioDao.isUsuario_Cajero(usuario);
 	}
 
+	@Override
+	public Boolean isUsuario_SuperDario(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.isUsuario_SuperDario(usuario);
+	}
+
+	
+
 }

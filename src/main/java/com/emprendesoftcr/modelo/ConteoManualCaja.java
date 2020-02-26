@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -27,10 +28,10 @@ public class ConteoManualCaja implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long							id;
-	
+
 	@Column(name = "denomina")
 	private String						denominacion;
-	
+
 	@Column(name = "moneda")
 	private Integer						moneda;
 
@@ -61,7 +62,6 @@ public class ConteoManualCaja implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuarioCierra;
 
-	
 	public ConteoManualCaja() {
 		super();
 	}
@@ -108,6 +108,10 @@ public class ConteoManualCaja implements Serializable {
 
 	public Double getTotal() {
 		return total;
+	}
+
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
 	}
 
 	public void setTotal(Double total) {

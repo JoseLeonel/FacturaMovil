@@ -88,7 +88,12 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "conteo_manual")
 	private Double										conteoManual;
 
-	
+	@Column(name = "total_cierre")
+	private Double										totalCierre;
+
+	@Column(name = "diferencia")
+	private Double										diferencia;
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario										usuario;
@@ -128,11 +133,7 @@ public class UsuarioCaja implements Serializable {
 	@JoinColumn(name = "caja_id")
 	private Caja											caja;
 
-
-
-	
-
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double totalCierre, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -151,6 +152,8 @@ public class UsuarioCaja implements Serializable {
 		this.notaCredito = notaCredito;
 		this.notaDebito = notaDebito;
 		this.conteoManual = conteoManual;
+		this.totalCierre = totalCierre;
+		this.diferencia = diferencia;
 		this.usuario = usuario;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
@@ -174,8 +177,29 @@ public class UsuarioCaja implements Serializable {
 		this.id = id;
 	}
 
-	
-	
+	public Double getDiferencia() {
+		return diferencia;
+	}
+
+	public String getDiferenciaSTR() {
+		return Utils.formateadorMiles(this.diferencia);
+	}
+
+	public void setDiferencia(Double diferencia) {
+		this.diferencia = diferencia;
+	}
+
+	public Double getTotalCierre() {
+		return totalCierre;
+	}
+
+	public String getTotalCierreSTR() {
+		return Utils.formateadorMiles(this.totalCierre);
+	}
+
+	public void setTotalCierre(Double totalCierre) {
+		this.totalCierre = totalCierre;
+	}
 
 	public void addConteoManual(ConteoManualCaja conteoManualCaja) {
 		if (conteoManualCaja != null) {
@@ -321,8 +345,6 @@ public class UsuarioCaja implements Serializable {
 		return Utils.formateadorMiles(this.totalNeto);
 	}
 
-	
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -346,13 +368,13 @@ public class UsuarioCaja implements Serializable {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
+
 	public String getCreated_atSTR() {
 		if (this.created_at != null) {
 			return Utils.getFechaGeneraReporte(this.created_at);
 		}
 		return Constantes.EMPTY;
 	}
-
 
 	public Date getUpdated_at() {
 		return updated_at;
@@ -402,6 +424,10 @@ public class UsuarioCaja implements Serializable {
 		this.conteoTarjeta = conteoTarjeta;
 	}
 
+	public String getDatafonoSTR() {
+		return Utils.formateadorMiles(this.conteoTarjeta);
+	}
+
 	public Double getConteoDolar() {
 		return conteoDolar;
 	}
@@ -445,9 +471,9 @@ public class UsuarioCaja implements Serializable {
 	public Double getConteoManual() {
 		return conteoManual;
 	}
-	
+
 	public String getConteoManualSTR() {
-		
+
 		return Utils.formateadorMiles(conteoManual);
 	}
 
@@ -463,8 +489,6 @@ public class UsuarioCaja implements Serializable {
 		this.totalConversionColones = totalConversionColones;
 	}
 
-	
-
 	public Set<ConteoManualCaja> getConteoManualCajas() {
 		return conteoManualCajas;
 	}
@@ -476,7 +500,7 @@ public class UsuarioCaja implements Serializable {
 	public Date getCierreCaja() {
 		return cierreCaja;
 	}
-	
+
 	public String getCierreCajaSTR() {
 		if (this.cierreCaja != null) {
 			return Utils.getFechaGeneraReporte(this.cierreCaja);

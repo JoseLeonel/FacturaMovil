@@ -82,6 +82,8 @@ public class EmpresaCommand {
 	private Integer	descargarInventario;
 	private String	codigoActividad;
 	private String	ipImprimirComanda;
+	private String	correoCaja1;
+	private String	correoCaja2;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -138,10 +140,32 @@ public class EmpresaCommand {
 		this.codigoActividad = empresa.getCodigoActividad();
 
 		this.ipImprimirComanda = empresa.getIpImprimirComanda() == null?Constantes.EMPTY:empresa.getIpImprimirComanda();
+		this.correoCaja1 = empresa.getCorreoCaja1();
+		this.correoCaja2 = empresa.getCorreoCaja2();
 	}
 
 	public EmpresaCommand() {
 		super();
+	}
+
+	
+	public String getCorreoCaja1() {
+		return correoCaja1;
+	}
+
+	
+	public void setCorreoCaja1(String correoCaja1) {
+		this.correoCaja1 = correoCaja1;
+	}
+
+	
+	public String getCorreoCaja2() {
+		return correoCaja2;
+	}
+
+	
+	public void setCorreoCaja2(String correoCaja2) {
+		this.correoCaja2 = correoCaja2;
 	}
 
 	public Integer getId() {

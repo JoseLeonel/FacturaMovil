@@ -41,8 +41,8 @@
                             </tbody>
                             </table> 
                             <br show ={apertura }>
-                             <div class="encabezado" show = {parametros.tipo == 2 }><div class= "tituloCierre"><strong> Cierre : {usuarioCaja.cierreCajaSTR}</strong></div></div>    
-                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Conteo Cierre : {usuarioCaja.conteoManualSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div class= "tituloCierre"><strong> Cierre : {usuarioCaja.cierreCajaSTR}</strong></div></div>    
+                            
                             <table class = "forma-table" show = {cierre}>
                            <thead>
                                 <tr class = "forma-table">
@@ -60,7 +60,14 @@
                                 
                             </tbody>
                             </table> 
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Tipo Cambio Recibido : {usuarioCaja.tipoCambioSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> billetes/Monedas : {usuarioCaja.conteoManualSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Dolares a Colones : {usuarioCaja.conteoDolarConversionSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Cierre Datafono : {usuarioCaja.datafonoSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Total del Cierre : {usuarioCaja.totalCierreSTR}</strong></div></div>    
+
                         <br show = {cierre}>
+                        <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Ventas realizadas - Conteo Manual</strong></div></div>    
                         <table class = "forma-table" show = {parametros.tipo == 2 }>
                            <thead>
                                 <tr class = "forma-table">
@@ -99,38 +106,35 @@
                                     <td class="valorPro" >{usuarioCaja.sumaSalidaSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > Dolares a Colones:   </td>
-                                    <td class="valorPro" >{usuarioCaja.conteoDolarConversionSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
                                     <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalNeto")}   </td>
                                     <td class="valorPro" >{usuarioCaja.totalGeneralSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
+                                    <td class="valorPro" > Total Cierre :</td>
+                                    <td class="valorPro" >{usuarioCaja.totalCierreSTR}</td>
+                                </tr>
+
+                                <tr class="detalleTables">
                                     <td class="valorPro" > Diferencia   </td>
-                                    <td class="valorPro" >{usuarioCaja.diferenciaTotalSTR}</td>
+                                    <td class="valorPro" >{usuarioCaja.diferenciaSTR}</td>
                                 </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > Venta Dolares    </td>
-                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > Conteo Dolares    </td>
-                                    <td class="valorPro" >{usuarioCaja.conteoDolarSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > Tipo Cambio Recibido    </td>
-                                    <td class="valorPro" >{usuarioCaja.tipoCambioSTR}</td>
-                                </tr>
+                                
 
                                 <tr class="detalleTables">
                                     <td class="valorPro" >  {$.i18n.prop("usuarioCaja.totalServicio")}     </td>
                                     <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
                                 </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > Venta Dolares    </td>
+                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
+                                </tr>
                                 
                                 <tr class="detalleTables">
                                     <td class="valorPro" >      </td>
                                     <td class="valorPro" ></td>
+                                </tr>
+                                 <tr class="detalleTables">
+                                    <td class="valorPro" > Firma:_______________  </td>
                                 </tr>
                                 <tr class="detalleTables">
                                     <td class="valorPro" >    *** *** ***   </td>

@@ -24,6 +24,7 @@ public interface UsuarioBo {
 	JqGridFilter filtroPorEmpresa(String nombreUsuario);
 	
 	Boolean isAdministrador_empresa(Usuario usuario);
+	 Boolean isUsuario_SuperDario(Usuario usuario);
 	Boolean isAdministrador_sistema(Usuario usuario);
 	Boolean isAdministrador_restaurante(Usuario usuario);
 	Boolean isAdministrador_cajero(Usuario usuario);

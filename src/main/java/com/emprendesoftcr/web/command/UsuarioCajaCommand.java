@@ -77,6 +77,11 @@ public class UsuarioCajaCommand {
 
 	private String								conteoDolarSTR;
 
+	private Double								totalCierre;
+
+	private String								diferenciaSTR;
+	private String								datafonoSTR;
+
 	private String								conteoDolarConversionSTR;
 
 	@JsonDeserialize(using = ClienteDeserializer.class)
@@ -124,6 +129,39 @@ public class UsuarioCajaCommand {
 		Double conteoDolar = usuarioCaja.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoDolar();
 		Double tipoCambio = usuarioCaja.getTipoCambio() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTipoCambio();
 		this.conteoDolarConversionSTR = Utils.formateadorMiles(conteoDolar * tipoCambio);
+		this.totalCierre = usuarioCaja.getTotalCierre();
+		this.diferenciaSTR = usuarioCaja.getDiferenciaSTR();
+		this.datafonoSTR = usuarioCaja.getDatafonoSTR();
+	}
+
+	public String getDiferenciaSTR() {
+		return diferenciaSTR;
+	}
+
+	public void setDiferenciaSTR(String diferenciaSTR) {
+		this.diferenciaSTR = diferenciaSTR;
+	}
+
+	
+	public String getDatafonoSTR() {
+		return datafonoSTR;
+	}
+
+	
+	public void setDatafonoSTR(String datafonoSTR) {
+		this.datafonoSTR = datafonoSTR;
+	}
+
+	public Double getTotalCierre() {
+		return totalCierre;
+	}
+
+	public void setTotalCierre(Double totalCierre) {
+		this.totalCierre = totalCierre;
+	}
+
+	public String getTotalCierreSTR() {
+		return Utils.formateadorMiles(totalCierre);
 	}
 
 	public String getConteoDolarConversionSTR() {
@@ -162,22 +200,6 @@ public class UsuarioCajaCommand {
 
 	public String getSumaSalidaSTR() {
 		return Utils.formateadorMiles(sumaSalida);
-	}
-
-	public String getDiferenciaTotalSTR() {
-		Double totalGeneral = this.totalNeto + this.sumaEntradas - this.sumaSalida;
-		Double conteManual = this.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : this.getConteoManual();
-
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		if (totalGeneral != null) {
-			if (conteManual.equals(Constantes.ZEROS_DOUBLE)) {
-				resultado = totalGeneral * -1;
-			} else {
-				resultado = conteManual - totalGeneral;
-			}
-
-		}
-		return Utils.formateadorMiles(resultado);
 	}
 
 	public String getConteoManualSTR() {

@@ -30,7 +30,6 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	@Autowired
 	UsuarioCajaDao	usuarioCajaDao;
 
-	
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -96,7 +95,22 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 			DoubleSummaryStatistics doubleSummaryStatistics = usuarioCaja.getConteoManualCajas().stream().filter(x -> x.getTipo().equals(Constantes.CONTEO_CIERRE_CAJA_TIPO)).collect(Collectors.summarizingDouble(ConteoManualCaja::getTotal));
 			usuarioCaja.setTotalConversionColones(Utils.roundFactura(usuarioCaja.getConteoDolar() * usuarioCaja.getTipoCambio(), 2));
-			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum() + usuarioCaja.getTotalConversionColones());
+			Double cierreDataFono = usuarioCaja.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoTarjeta();
+			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum());
+
+			usuarioCaja.setTotalCierre(doubleSummaryStatistics.getSum() + cierreDataFono + usuarioCaja.getTotalConversionColones());
+			Double totalGeneral = usuarioCaja.getTotalNeto() + usuarioCaja.getSumaEntradas() - usuarioCaja.getSumaSalida();
+			Double conteManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
+
+			if (totalGeneral != null) {
+				if (conteManual.equals(Constantes.ZEROS_DOUBLE)) {
+					usuarioCaja.setDiferencia(totalGeneral * -1);
+				} else {
+					Double totalConteoManual = conteManual + cierreDataFono + usuarioCaja.getTotalConversionColones();
+					usuarioCaja.setDiferencia(totalConteoManual  - totalGeneral);
+				}
+
+			}
 
 			usuarioCaja.setCierreCaja(new Date());
 			modificar(usuarioCaja);
@@ -108,8 +122,6 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 		return usuarioCaja;
 	}
-	
-		
 
 	@Transactional
 	private UsuarioCaja agregarConteo(ArrayList<DenominacionCommand> listaCoteo, UsuarioCaja usuarioCaja, Usuario usuario, Integer tipo) {
@@ -138,9 +150,9 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		}
 		return usuarioCajaTemp;
 	}
-	
+
 	private void enviarCorreoCajaCerrada(UsuarioCaja usuarioCaja) {
-		
+
 	}
 
 	/**

@@ -184,7 +184,7 @@ public class UsuarioController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario) || usuarioBo.isAdministrador_cajero(usuario)   ) {
+			if(usuarioBo.isUsuario_SuperDario(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario) || usuarioBo.isAdministrador_cajero(usuario)   ) {
 				rolAdministradorCommand.setRolAdministrador(1);
 			}else {
 				rolAdministradorCommand.setRolAdministrador(0);

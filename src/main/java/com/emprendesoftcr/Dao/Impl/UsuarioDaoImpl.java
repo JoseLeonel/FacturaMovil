@@ -160,5 +160,11 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_USUARIO_CAJERO.equals(p.getNombre())).count();
 		return count >= 1 ?true:false;
 	}
+	
+	@Override
+	public Boolean isUsuario_SuperDario(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_USUARIO_SUPERDARIO.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
+	}
 
 }

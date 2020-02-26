@@ -87,4 +87,9 @@ public class ConteoManualCajaBoImpl implements ConteoManualCajaBo {
 		return conteoManualCajaDao.buscar(id);
 	}
 
+	@Override
+	public Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja, Integer tipo) {
+		return conteoManualCajaDao.buscarPorUsuarioCaja(usuarioCaja, tipo);	
+		}
+
 }

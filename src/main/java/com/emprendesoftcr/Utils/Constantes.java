@@ -7,10 +7,9 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
 
-	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
-	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																		= 0;
+	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																= 1;
+	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																= 0;
 
-	
 	public static final Integer					ENTRADASALIDA_TIPO_ENTRADA																	= 1;
 	public static final Integer					ENTRADASALIDA_TIPO_SALIDA																		= 2;
 	public static final Integer					CONTEO_APERTURA_CAJA_TIPO																		= 1;
@@ -56,6 +55,7 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO														= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS													= "email/emailResumenCompras.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA									= "email/emailResumenFactura.vm";
+	public static final String					PLANTILLA_CORREO_CIERRE_CAJA																= "email/emailCaja.vm";
 	public static final String					PLANTILLA_CORREO_LISTAR_FACTURAS														= "email/emailResumenListarFactura.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA	= "email/emailResumenComprasSimplificadas.vm";
 
@@ -402,6 +402,7 @@ public class Constantes {
 	public static final String					ROL_ADMINISTRADOR_RESTAURANTE																= "Administrador_Restaurante";
 	public static final String					ROL_ADMINISTRADOR_EMPRESA																		= "Administrador_Empresa";
 	public static final String					ROL_USUARIO_CAJERO																					= "Usuario_Cajero";
+	public static final String					ROL_USUARIO_SUPERDARIO																			= "Usuario_SuperDario";
 	public static final String					ROL_USUARIO_MESERO																					= "Usuario_Mesero";
 
 	// Usuario

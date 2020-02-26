@@ -37,10 +37,12 @@
             <div class="box-tools ">
                 <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="Imprimir la Proforma"> <span class="label label-limpiar">F7=Proforma</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                 <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
+                <a class="pull-left" href="#" onclick = {__AbrirCajon} title="Entrada"> <span class="label label-limpiar">Entrada Dinero</span></a>
+                <a class="pull-left" href="#" onclick = {__AbrirCajon} title="Entrada"> <span class="label label-limpiar">Salida Dinero</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                    
             </div>
@@ -121,17 +123,17 @@
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"> Descripcion</td>
+                                        <td width="45%"> Descripcion</td>
                                         <td width="10%">Cant</td>
                                         <td width="10%">Precio.U</td>
-                                        <td width="10%">Desc</td>
+                                        <td width="5%">Desc</td>
                                         <td width="10%">IV</td>
                                         <td width="19%">Total</td>
                                         
                                         <td width="15%"></td>
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr style="" each={detail}>
                                         <td>
                                            <diV onclick ={__CambiarDescripcion}>
@@ -188,6 +190,39 @@
                     <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
                     
                 </div>
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
+                                
+                            
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Entrada de Dinero 
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Salida de Dinero
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Nuevo Cliente
+                                    </span> 
+                                </div>
+
+                            </div>
+                            <section   class="ventaEspera">
+                                <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                    <div show ="{consecutivoProforma.length>0?true:false}"  class="fondoVentaEspera" title="{nombreCompleto !=null?nombreCompleto:""}"><span class="tamanoVentaEspera">P: {consecutivoProforma} </span></div>  
+                                    <div show ="{consecutivoProforma.length == 0?true:false}" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}"><span class="tamanoVentaEspera">V: {id} </span></div>  
+                                </div>    
+                            </section >
+
                 <div  class="row  ">
                     <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
                         <div class="input-group">
@@ -196,13 +231,6 @@
                                 <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                             </span>
                             <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
-                        </div>
-                        <!--Vendedor o Nuevo Vendedor-->
-                        <div class="input-group">
-                            <span title="Vendedor" class="input-group-addon " > 
-                                <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
-                            </span>
-                            <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                         </div>
                         <a class="pull-right" href="#"   title="{factura.nombreFactura}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                     </div>
@@ -223,6 +251,7 @@
                         </section>
                     </div>    
                 </div> 
+                 
                 <div  class="row">
                     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
                         <section class="lista-facturas-espera">
@@ -800,6 +829,58 @@
 
 
 <style type="text/css">
+      div.labelBotones:hover{
+        color:#30ed17 !important;
+
+    }
+    .simbolodividir{
+        font-size:20px;
+    }
+    span.fontSumarRestar:hover{
+        background-color: black;
+    }
+    div.BotonesSumarRestar:hover {
+        background-color: black;
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
+
+    .fontSumarRestar{
+        font-size: 20px;
+    }
+    .input-group-botonessumarrestarnuevocliente {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #151517;
+        border-radius: 4px;
+    }
+    .BotonesSumarRestar{
+        position: relative;
+        border-collapse: separate;
+    }
+    .containerSumarRestar{
+        flex:1;
+    }
+    .containerIconosSumaRestaAgregarCliente{
+        flex:1;
+    }
     .tamanoClienteNuevo{
         font-size: 30px;
         font-weight: 600;

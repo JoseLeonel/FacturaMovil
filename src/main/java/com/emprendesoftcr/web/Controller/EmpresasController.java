@@ -50,11 +50,9 @@ public class EmpresasController {
 
 	@Autowired
 	private DataTableBo																		dataTableBo;
-	
-	@Autowired
-	private UsuarioBo																		usuarioBo;
 
-	
+	@Autowired
+	private UsuarioBo																			usuarioBo;
 
 	/**
 	 * Mostrar el html de la lista de empresa
@@ -67,14 +65,12 @@ public class EmpresasController {
 		return "views/empresa/ListarEmpresas";
 	}
 
-
 	@RequestMapping(value = "/FormEmpresa", method = RequestMethod.GET)
 	public String formempresa(ModelMap model) {
 
 		return "views/empresa/FormEmpresa";
 	}
 
-	
 	/**
 	 * Metodo json para ser llamado de un ajax
 	 * @param request
@@ -108,16 +104,17 @@ public class EmpresasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-/**
- * Agregar Empresa
- * @param request
- * @param model
- * @param empresa
- * @param result
- * @param status
- * @return
- * @throws Exception
- */
+
+	/**
+	 * Agregar Empresa
+	 * @param request
+	 * @param model
+	 * @param empresa
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/AgregarEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregarEmpresaAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -147,6 +144,30 @@ public class EmpresasController {
 
 			empresaBo.agregar(empresa);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresa);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@RequestMapping(value = "/ConfiguracionCorreoCierreCaja.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator configuracionCorreoCierreCaja(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("empresa.no.modificado", result.getAllErrors());
+			}
+			Empresa empresaBD = empresaBo.buscar(empresa.getId());
+
+			if (empresaBD == null) {
+				return RESPONSES.ERROR.EMPRESA.NO_EXISTE;
+			} else {
+
+				empresaBD.setCorreoCaja1(empresa.getCorreoCaja1() == null ? Constantes.EMPTY : empresa.getCorreoCaja1());
+				empresaBD.setCorreoCaja2(empresa.getCorreoCaja2() == null ? Constantes.EMPTY : empresa.getCorreoCaja2());
+				empresaBo.modificar(empresaBD);
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.correocaja.correctamente", empresaBD);
+			}
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -214,7 +235,7 @@ public class EmpresasController {
 				empresaBD.setBarrio(empresa.getBarrio());
 				empresaBD.setCanton(empresa.getCanton());
 				empresaBD.setCazaMatriz(empresa.getCazaMatriz());
-        empresaBD.setNumeroConsecutivo(empresa.getNumeroConsecutivo());
+				empresaBD.setNumeroConsecutivo(empresa.getNumeroConsecutivo());
 				empresaBD.setRepresentante(empresa.getRepresentante());
 				empresaBD.setTelefono(empresa.getTelefono());
 				empresaBD.setOtraSenas(empresa.getOtraSenas());
@@ -274,8 +295,7 @@ public class EmpresasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	
+
 	private static class RESPONSES {
 
 		private static class OK {

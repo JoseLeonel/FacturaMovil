@@ -828,11 +828,6 @@ public class ArticuloController {
 				}
 			}
 			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-//				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-//					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-//						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
-//					}
-//				}
 				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
 					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
 						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
@@ -875,6 +870,8 @@ public class ArticuloController {
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
+			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -885,7 +882,8 @@ public class ArticuloController {
 
 			}
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articulo);
+			Articulo articuloNuevo = articuloBo.buscar(articulo.getId());
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articuloNuevo);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -1198,11 +1196,11 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model,@ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscar(cambiarPrecioArticuloCommand.getId());
@@ -1214,7 +1212,7 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			articuloBD.setUpdated_at(new Date());
-			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(),cambiarPrecioArticuloCommand.getPrecioPublico(),articuloBD.getImpuesto()));
+			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(), cambiarPrecioArticuloCommand.getPrecioPublico(), articuloBD.getImpuesto()));
 			articuloBD.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
 			articuloBD.setUsuario(usuario);
 			articuloBo.modificar(articuloBD);

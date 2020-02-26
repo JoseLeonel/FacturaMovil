@@ -17,4 +17,5 @@ public interface ConteoManualCajaDao {
 	
 	ConteoManualCaja buscar(Long id);
 
+	Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja,Integer tipo);
 }

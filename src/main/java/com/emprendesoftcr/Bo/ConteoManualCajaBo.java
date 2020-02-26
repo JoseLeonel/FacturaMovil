@@ -17,6 +17,8 @@ public interface ConteoManualCajaBo {
 	void eliminar(ConteoManualCaja conteoManualCaja);
 
 	Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja);
+	
+	Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja,Integer tipo);
 
 	void agregarConteo(ArrayList<DenominacionCommand> listaCoteo, UsuarioCaja usuarioCaja,Usuario usuarioCierra);
 	

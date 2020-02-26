@@ -38,7 +38,7 @@
 </div>
 
 
-<div id='modalCerrarCaja' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalCerrarCaja' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=800px;>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
@@ -117,16 +117,16 @@
                     </div>
                     <div class="row" show = {usuarioCaja.id != null ? true:false}>    
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                            <label class="tituloClienteNuevo" >Cierre Datafono/Tarjeta</label>
+                            <label class="tituloClienteNuevo" >Cierre Datafono</label>
                             <input type="number" class="form-control conteoTarjeta tamanoClienteNuevo modalInputCambioPrecio"  id="conteoTarjeta" name="conteoTarjeta" autofocus="autofocus"   autocomplete="off">
                         </div>                            
 
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                            <label class="tituloClienteNuevo" >Tipo Cambio Dolar</label>
+                            <label class="tituloClienteNuevo" >Tipo Cambio Dolar Recibido</label>
                             <input type="number" class="form-control tipoCambio tamanoClienteNuevo modalInputCambioPrecio"  id="tipoCambio" name="tipoCambio" autofocus="autofocus"   autocomplete="off">
                         </div>                            
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                            <label class="tituloClienteNuevo" >Dolares</label>
+                            <label class="tituloClienteNuevo" >Cantidad Dolares</label>
                             <input type="number" class="form-control conteoDolar tamanoClienteNuevo modalInputCambioPrecio"  id="conteoDolar" name="conteoDolar" autofocus="autofocus"   autocomplete="off">
                         </div>                            
                     </div>
@@ -151,6 +151,20 @@
 
 
 <style type ="text/css">
+.modalBox {
+   background: #fff !important;
+   border-radius: 16px !important;
+   position: absolute !important;
+   top: 44% !important;
+   left: 50% !important;
+   transform: translate(-50%, -50%) !important;
+   max-height: 90% !important;
+   overflow-y: auto !important;
+   padding: 30px !important;
+   box-sizing: border-box !important;
+   max-width: 90% !important;
+}
+
     .tamanoClienteNuevo{
         font-size: 30px;
         font-weight: 600;
@@ -171,6 +185,7 @@
         font-size: 40px !important;
         color:blue !important;
         border-radius: 16px !important;
+        border-color: green;
     }
     .modalCambioPrecioBotones{
          border-radius: 16px !important;
@@ -732,18 +747,22 @@ function cerrarCajaAjax(){
                             }
                         } else {
                             mensajeToasExito(data.message)
+                            self.usuarioCaja = null
                              __listado()
                              hidemodal()
                              $.each(data.listaObjetos, function( index, modeloTabla ) {
                                 self.usuarioCaja = modeloTabla    
                                 self.update()
                             })
-                            var parametros  = {
-                                usuarioCaja:self.usuarioCaja,
-                                tipo:2
-                            }
-                            riot.mount('imprimir-caja',{parametros:parametros});
+                            if(self.usuarioCaja != null){
+                                var parametros  = {
+                                    usuarioCaja:self.usuarioCaja,
+                                    tipo:2
+                                }
+                                riot.mount('imprimir-caja',{parametros:parametros});
+                                                     
 
+                            }
 
                         }
                     },
@@ -755,6 +774,7 @@ function cerrarCajaAjax(){
             }
         });
 }
+
 
 /**
 * Tipo  2 = Conteo de Cierre  1 = Conteo de Apertura

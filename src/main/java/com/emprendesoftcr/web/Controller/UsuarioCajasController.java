@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CajaBo;
+import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -40,6 +41,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Caja;
+import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -72,6 +74,9 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
+
+	@Autowired
+	private ConteoManualCajaBo																				conteoManualCajaBo;
 
 	@Autowired
 	private CajaBo																						cajaBo;
@@ -118,6 +123,11 @@ public class UsuarioCajasController {
 	@RequestMapping(value = "/AbrirCajas", method = RequestMethod.GET)
 	public String abrirCajas(ModelMap model) {
 		return "views/caja/abrirCajas";
+	}
+	
+	@RequestMapping(value = "/Configuracion.do", method = RequestMethod.GET)
+	public String configuracion(ModelMap model) {
+		return "views/caja/configuracion";
 	}
 
 	@RequestMapping(value = "/CerrarCaja.do", method = RequestMethod.GET)
@@ -296,6 +306,7 @@ public class UsuarioCajasController {
 
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd);
 
+			enviarCorreoCierreCaja( usuarioCajaCommand,usuario);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaCommand);
 
 		} catch (Exception e) {
@@ -303,48 +314,64 @@ public class UsuarioCajasController {
 		}
 	}
 
-	@RequestMapping(value = "/EnviarCorreoCierreCaja.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoCierreCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCajaCommand usuarioCajaCommand, BindingResult result, SessionStatus status) throws Exception {
+	private void enviarCorreoCierreCaja( UsuarioCajaCommand usuarioCajaCommand,Usuario usuario) throws Exception {
 		Map<String, Object> modelEmail = new HashMap<>();
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		try {
-			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCajaCommand.getId());
+		ArrayList<String> listaCorreos = new ArrayList<>();
+		
+		if(usuario.getEmpresa().getCorreoCaja1() != null) {
+			listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());	
+		}
+		if(usuario.getEmpresa().getCorreoCaja2() != null) {
+			listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());	
+		}
+		
+		if(!listaCorreos.isEmpty()) {
+			
+		UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCajaCommand.getId());
 			UsuarioCajaCommand usuarioCajaCommand1 = new UsuarioCajaCommand(usuarioCajaBd);
 			modelEmail.put("usuarioResponsable", usuarioCajaCommand1.getUsuario().getNombre().trim() + " " + usuarioCajaCommand.getUsuario().getPrimerApellido().trim() + " " + usuarioCajaCommand.getUsuario().getSegundoApellido().trim());
 			modelEmail.put("fechaApertura", usuarioCajaCommand1.getCreated_atSTR());
+			modelEmail.put("nombreComercial", usuarioCajaBd.getCaja().getEmpresa().getNombreComercial());
+			modelEmail.put("nombreEmpresa", usuarioCajaBd.getCaja().getEmpresa().getNombre());
+			modelEmail.put("cedula", usuarioCajaBd.getCaja().getEmpresa().getCedula() );
 			modelEmail.put("fondoInicial", usuarioCajaCommand1.getTotalFondoInicialSTR());
 			modelEmail.put("fechaCierre", usuarioCajaCommand1.getCierreCajaSTR());
 			modelEmail.put("conteoCierre", usuarioCajaCommand1.getConteoManualSTR());
 			modelEmail.put("totalEfectivo", usuarioCajaCommand1.getTotalEfectivoSTR());
 			modelEmail.put("totalTarjeta", usuarioCajaCommand1.getTotalTarjetaSTR());
 			modelEmail.put("totalBanco", usuarioCajaCommand1.getTotalBancoSTR());
+			modelEmail.put("totalAbonos", usuarioCajaCommand1.getTotalAbonoSTR());
 			modelEmail.put("totalVentas", usuarioCajaCommand1.getTotalNetoSTR());
 			modelEmail.put("totalEntradas", usuarioCajaCommand1.getSumaEntradasSTR());
 			modelEmail.put("totalSalidas", usuarioCajaCommand1.getSumaSalidaSTR());
-			modelEmail.put("DolaresAColones", usuarioCajaCommand1.getConteoDolarConversionSTR());
-			modelEmail.put("total", 0);
-			modelEmail.put("totalDiferencia	", usuarioCajaCommand1.getDiferenciaTotalSTR());
-			modelEmail.put("totalGeneral", usuarioCajaCommand1.getTotalGeneralSTR());
-			modelEmail.put("totalDolares", usuarioCajaCommand1.getTotalDolaresSTR());
+			modelEmail.put("datafonoSTR", usuarioCajaBd.getDatafonoSTR());
+			modelEmail.put("conteoDolarConversionSTR", usuarioCajaCommand1.getConteoDolarConversionSTR());
+			
+			modelEmail.put("totalDolaresSTR", usuarioCajaCommand1.getTotalDolaresSTR());
+			modelEmail.put("totalGeneralSTR", usuarioCajaCommand1.getTotalGeneralSTR());
+			modelEmail.put("totalCierreSTR", usuarioCajaCommand1.getTotalCierreSTR());
+			modelEmail.put("conteoManualSTR", usuarioCajaCommand1.getConteoManualSTR());
+			modelEmail.put("diferenciaSTR", usuarioCajaCommand1.getDiferenciaSTR());
+			modelEmail.put("totalDolares", usuarioCajaCommand1.getConteoDolarSTR());
+			modelEmail.put("totalAbonoSTR", usuarioCajaCommand1.getTotalAbonoSTR());
 			modelEmail.put("tipoCambio", usuarioCajaCommand1.getTipoCambioSTR());
 			modelEmail.put("totalServicio", usuarioCajaCommand1.getTotalServicioSTR());
+			modelEmail.put("idCaja", usuarioCajaCommand1.getId());
+			Collection<ConteoManualCaja> conteoCierre = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_CIERRE_CAJA_TIPO);
+			modelEmail.put("conteoCierres", conteoCierre);
+			Collection<ConteoManualCaja> conteoApertura = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_APERTURA_CAJA_TIPO);
+			modelEmail.put("conteoAperturas", conteoApertura);
+	
 			Collection<Attachment> attachments = null;
 			String from = "CierreCaja@emprendesoftcr.com";
-			String subject = "Cierre Caja: " + usuarioCajaCommand.getCreated_atSTR() + " al " + usuarioCajaCommand.getCierreCajaSTR();
+			String subject = "Cierre Caja-" + usuarioCajaBd.getCaja().getEmpresa().getAbreviaturaEmpresa() +  " Apertura :" + usuarioCajaCommand.getCreated_atSTR() + " Cierre: " + usuarioCajaCommand.getCierreCajaSTR();
 
-			ArrayList<String> listaCorreos = new ArrayList<>();
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			
-			listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());
-			listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaCommand);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-
+			
+				correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);	
+			}
+			
+			
 	}
 
 	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

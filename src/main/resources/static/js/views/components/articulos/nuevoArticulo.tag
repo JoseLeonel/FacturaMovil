@@ -1473,11 +1473,15 @@ __agregar(){
                     }
                     inicializarCursorCodigo()
                 } else {
-                    inicializarCursorCodigo()
                    	serverMessageJson(data);
                     mensajeToasExito(data.message)
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                      self.articulo = modeloTabla
+                      self.update()        
+                    })
                     self.botonEntrada = true
                     self.update()
+                    inicializarCursorCodigo()
                 }
             },
             error : function(xhr, status) {
@@ -1542,8 +1546,14 @@ function __aplicarModificacion(){
                 }
             } else {
                inicializarCursorCodigo()
+                $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    self.articulo = modeloTabla
+                    self.update()        
+                })
+
                	serverMessageJson(data);
                 mensajeToasExito(data.message)
+                inicializarCursorCodigo()
             }
         },
         error : function(xhr, status) {
