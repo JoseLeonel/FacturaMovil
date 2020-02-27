@@ -713,13 +713,13 @@ public class HaciendasController {
 				fileName = "CompraSimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			}
 			String xmlFactura = Constantes.EMPTY;
-			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracion());
+//			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
+//				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracion());
+//
+//			}else {
+          xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
 
-			}else {
-				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
-
-			}
+//			}
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();

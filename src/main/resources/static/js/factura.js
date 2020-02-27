@@ -22,6 +22,10 @@ $(document)
 
 
 
+function minimizarMenu(){
+	$( "body" ).removeClass( "skin-blue  sidebar-mini sidebar-collapse" ).addClass( "skin-blue  sidebar-mini sidebar-collapse" );
+}
+
 
 /**
 * Tipo de Documento

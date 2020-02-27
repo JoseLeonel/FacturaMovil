@@ -4,6 +4,9 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
+    //factura.js
+	minimizarMenu()
+
 	consultaControlPago();
 	cargaMantenimiento();
 }

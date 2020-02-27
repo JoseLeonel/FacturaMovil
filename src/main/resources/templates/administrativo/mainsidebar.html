@@ -113,6 +113,7 @@
                 <li><a href="/ventasPorServicio" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
                 <li><a href="/postVenta" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Cajero','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Venta POS </a></li>
                 <li><a href="/postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
+                <li><a href="/Saloneros.do" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i> Salon </a></li>
                 <li><a href="/proformas.do" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Proformas </a></li>
             </a>
             </ul>

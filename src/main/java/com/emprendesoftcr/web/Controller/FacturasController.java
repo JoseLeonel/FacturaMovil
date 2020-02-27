@@ -383,6 +383,11 @@ public class FacturasController {
 	public String postpostRestaurante(ModelMap model) {
 		return "views/facturas/postRestaurante";
 	}
+	
+	@RequestMapping(value = "/Saloneros.do", method = RequestMethod.GET)
+	public String meseros(ModelMap model) {
+		return "views/facturas/saloneros";
+	}
 
 	@RequestMapping(value = "/ventaDolares", method = RequestMethod.GET)
 	public String crearVentaDolares(ModelMap model) {

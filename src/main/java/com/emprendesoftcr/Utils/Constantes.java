@@ -10,6 +10,12 @@ public class Constantes {
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																= 0;
 
+	public static final Integer					COCINA_ACTIVO																								= 1;
+	public static final Integer					COCINA_INACTIVO																							= 2;
+
+	public static final Integer					COMMANDA_COCINA_ACTIVO																								= 1;
+	public static final Integer					COMMANDA_COCINA_INACTIVO																							= 2;
+
 	public static final Integer					ENTRADASALIDA_TIPO_ENTRADA																	= 1;
 	public static final Integer					ENTRADASALIDA_TIPO_SALIDA																		= 2;
 	public static final Integer					CONTEO_APERTURA_CAJA_TIPO																		= 1;

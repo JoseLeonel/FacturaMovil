@@ -3793,12 +3793,22 @@ __removeProductFromDetail(e) {
         eliminarDetalle()
     }
 }
+function buscarItemEliminar(item){
+    for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == item.codigo && self.detail[count].numeroLinea == item.numeroLinea ){
+             self.detail.splice(count, 1);
+             self.update()
+           
+        }
+    }
+}
 /**
 *    Eliminar detalle
 **/
 function  eliminarDetalle(){
-    index = self.detail.indexOf(self.itemEliminar);
-    self.detail.splice(index, 1);
+   // index = self.detail.indexOf(self.itemEliminar);
+ //   self.detail.splice(index, 1);
+    buscarItemEliminar(self.itemEliminar)
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
     for (var count = 0; count < self.detail.length; count++) {

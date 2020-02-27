@@ -66,6 +66,9 @@
                 <a class="botones-funcionales" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="botones-funcionales" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="botones-funcionales" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="botones-funcionales" href="#" onclick = {__EntradaDinero} title="Entrada"> <span class="label label-limpiar">Entrada Dinero</span></a>
+                <a class="botones-funcionales" href="#" onclick = {__SalidaDinero} title="Entrada"> <span class="label label-limpiar">Salida Dinero</span></a>
+
                 <a class="botones-funcionales" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
                 <a class="botones-funcionales" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
 
@@ -256,7 +259,7 @@
                                         <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr each={detailPorSeparar}>
                                         <td>
                                            <div class="block_container_comanda">
@@ -534,7 +537,7 @@
                                         <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr each={detail}>
                                         <td>
                                           <div class="block_container_comanda" onclick ={__CambiarDescripcion}>
@@ -634,12 +637,19 @@
                 <div  class="row ">
                     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
                         <section class="contenedor-opciones">
-                           	<a show={factura.id > 0} href="#" class="opciones-menu" onclick = {__PantallaCambiarMesa} >
+                               <a show="{factura.id > 0}" href="#" class="opciones-menu" onclick = {__PantallaCambiarMesa} >
                                 <i class="fa fa-exchange">{$.i18n.prop("titulo.cambiar.mesa")}</i>
                           	</a>
                            	<a show={separarCuenta} href="#" class="opciones-menu" onclick = {__MostrarSeperarCuentas} >
                                 <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
                           	</a>
+                            <a show={separarCuenta} href="#" class="opciones-menu" onclick = {__SalidaDinero} >
+                                <i class="fa fa-minus">Salida Dinero</i>
+                          	</a>
+                            <a show={separarCuenta} href="#" class="opciones-menu" onclick = {__EntradaDinero} >
+                                <i class="fa fa-plus">Entrada Dinero</i>
+                          	</a>  
+
                         </section>
                     </div>    
                 </div>                 
@@ -2015,6 +2025,22 @@
 __AsignarActividad(e){
     BuscarActividadComercial()
 }
+
+
+__EntradaDinero(){
+  modalEntradaSalidaDinero(1)
+}   
+__SalidaDinero(){
+    modalEntradaSalidaDinero(2)
+}
+
+function modalEntradaSalidaDinero(tipo){
+ var parametros = {
+        tipo:tipo,
+    }
+    riot.mount('entrada-salida',{parametros:parametros});
+}
+
 
 function BuscarActividadComercial(){
     var codigo =$('.selectActividadComercial').val()
