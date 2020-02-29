@@ -743,6 +743,7 @@ function __InicializarDatos(){
    $('.descripcion').val(null)
    $('.serie').val(null)
    $('.costo').val(null)
+   $('.cantidad').val(null)
    $('.codigoTarifa1').val(null)
    $('.codigoTarifa').val(null)
    $('.tipoImpuesto').val(null)
@@ -1475,12 +1476,8 @@ __agregar(){
                 } else {
                    	serverMessageJson(data);
                     mensajeToasExito(data.message)
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                      self.articulo = modeloTabla
-                      self.update()        
-                    })
-                    self.botonEntrada = true
-                    self.update()
+                    __InicializarDatos()
+
                     inicializarCursorCodigo()
                 }
             },

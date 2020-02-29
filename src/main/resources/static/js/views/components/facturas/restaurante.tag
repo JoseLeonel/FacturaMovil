@@ -643,12 +643,7 @@
                            	<a show={separarCuenta} href="#" class="opciones-menu" onclick = {__MostrarSeperarCuentas} >
                                 <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
                           	</a>
-                            <a show={separarCuenta} href="#" class="opciones-menu" onclick = {__SalidaDinero} >
-                                <i class="fa fa-minus">Salida Dinero</i>
-                          	</a>
-                            <a show={separarCuenta} href="#" class="opciones-menu" onclick = {__EntradaDinero} >
-                                <i class="fa fa-plus">Entrada Dinero</i>
-                          	</a>  
+                          
 
                         </section>
                     </div>    
