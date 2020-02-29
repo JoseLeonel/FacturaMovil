@@ -88,6 +88,11 @@ public class ClientesController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+	
+	@RequestMapping(value = "/nuevoCliente.do", method = RequestMethod.GET)
+	public String nuevoCliente(ModelMap model) {
+		return "views/cliente/nuevoCliente";
+	}
 	/**
 	 * Mostrar el JSP de la Clientes
 	 * @param model
@@ -108,16 +113,17 @@ public class ClientesController {
 	@RequestMapping(value = "/ListarClientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
-
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Cliente");
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		if (usuarioBo.isAdministrador_sistema(usuario).equals(Boolean.FALSE) ) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
+		
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -158,10 +164,8 @@ public class ClientesController {
 				if (object.getEstado().equals(Constantes.ESTADO_ACTIVO)) {
 					solicitudList.add(new ClienteCommand(object));
 				}
-
 			}
 		}
-
 		respuestaService.setRecordsTotal(total);
 		respuestaService.setRecordsFiltered(total);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -545,7 +549,24 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			ClienteCommand clienteCommand = new ClienteCommand(clienteBo.buscar(cliente.getId()));
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+			Cliente clienteBD  = null;
+			if(cliente.getId() != null) {
+				 clienteBD  = clienteBo.buscar(cliente.getId());
+			}else {
+				if(clienteBD == null && !cliente.getCedula().isEmpty()) {
+					clienteBD  = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+				}
+				if(clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
+					clienteBD  = clienteBo.buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(),usuarioSesion.getEmpresa());
+				}
+				
+			}
+			
+			
+			  
+			ClienteCommand clienteCommand = new ClienteCommand(clienteBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", clienteCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

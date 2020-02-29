@@ -13,6 +13,7 @@ public interface CajaDao {
 
 	Caja buscar(Long id);
 
+	Caja buscarCajaActiva(Empresa empresa);
 	Caja findByDescripcionAndEmpresa(String descripcion, Empresa empresa);
 
 	Caja findByTerminalAndEmpresa(String terminal, Empresa empresa);

@@ -117,4 +117,29 @@ public class UsuarioBoImpl implements UsuarioBo {
 		return usuarioDao.isAdministrador_vendedor(usuario);
 	}
 
+	@Override
+	public Boolean isUsuario_Vendedor(Usuario usuario) {
+		return usuarioDao.isUsuario_Vendedor(usuario);
+	}
+
+	@Override
+	public Boolean isUsuario_Mesero(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.isUsuario_Mesero(usuario);
+	}
+
+	@Override
+	public Boolean isUsuario_Cajero(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.isUsuario_Cajero(usuario);
+	}
+
+	@Override
+	public Boolean isUsuario_SuperDario(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.isUsuario_SuperDario(usuario);
+	}
+
+	
+
 }

@@ -52,55 +52,8 @@
     </div>
 </div>
 
-<!--Modal Cambiar Cantidad-->
-<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label tituloDescuento" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!--Fin Cambiar Cantidad-->
-
-<!--Modal Cambiar Descripcion-->
-<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label tituloDescuento" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green  btn_big  btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
+    
 
 <!--Fin Cambiar descripcion-->
 <div id="pagina1" style="padding-bottom:15px" show={mostarParaCrearNuevaVentas}>
@@ -113,6 +66,9 @@
                 <a class="botones-funcionales" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="botones-funcionales" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="botones-funcionales" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="botones-funcionales" href="#" onclick = {__EntradaDinero} title="Entrada"> <span class="label label-limpiar">Entrada Dinero</span></a>
+                <a class="botones-funcionales" href="#" onclick = {__SalidaDinero} title="Entrada"> <span class="label label-limpiar">Salida Dinero</span></a>
+
                 <a class="botones-funcionales" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
                 <a class="botones-funcionales" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
 
@@ -303,7 +259,7 @@
                                         <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr each={detailPorSeparar}>
                                         <td>
                                            <div class="block_container_comanda">
@@ -581,7 +537,7 @@
                                         <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr each={detail}>
                                         <td>
                                           <div class="block_container_comanda" onclick ={__CambiarDescripcion}>
@@ -681,12 +637,14 @@
                 <div  class="row ">
                     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
                         <section class="contenedor-opciones">
-                           	<a show={factura.id > 0} href="#" class="opciones-menu" onclick = {__PantallaCambiarMesa} >
+                               <a show="{factura.id > 0}" href="#" class="opciones-menu" onclick = {__PantallaCambiarMesa} >
                                 <i class="fa fa-exchange">{$.i18n.prop("titulo.cambiar.mesa")}</i>
                           	</a>
                            	<a show={separarCuenta} href="#" class="opciones-menu" onclick = {__MostrarSeperarCuentas} >
                                 <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
                           	</a>
+                          
+
                         </section>
                     </div>    
                 </div>                 
@@ -801,66 +759,9 @@
 </div>
 <!--Modal mostrar  -->  
 
-<!-- Modal cambiar nombre del tiquete-->
-<div class="modal fade" id="ModalCambiarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
-            </div>
-            <div class="modal-body">
-                <form id = "formularioModalCambiarNombreTiquete" name ="formularioModalCambiarNombreTiquete "   class="advanced-search-form">
-                    <input type="hidden" id='idFactura'  name='idFactura'  value="{factura.id}" >
-                    <input type="hidden" id='nombreFactura'  name='nombreFactura'  value="{factura.nombreFactura}" >
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreTiquete"  id="cambioNombreTiquete" name="cambioNombreTiquete" autofocus="autofocus" >
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__ModificarNombreTiquete}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
-<!--fin Modal agregar el nombre de el tiquete temporal-->
 
-<!-- Modal correo alternativo-->
-<div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
-            </div>
-            <div class="modal-body">
-                <form id = "formularioAgregarNombreTiquete1" name ="formularioAgregarNombreTiquete1"   class="advanced-search-form">
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreFactura"  id="cambioNombreFactura" name="cambioNombreFactura" autofocus="autofocus" >
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
+
+
 <!--fin Modal agregar el nombre de el tiquete temporal-->
 
 <!-- Modal Tiquete - Nombre Dividir Cuenta-->
@@ -923,33 +824,7 @@
 <!--Fin Cambiar precio-->
 
 
-<!--Modal Cambiar Descuento-->
-<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioDescuento" name="formularioDescuento">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="tituloDescuento">%Descuento</label>
-                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-                </form>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green  btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Descuento-->
 
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -1239,12 +1114,183 @@
                 </div> 
             </div>       
         <!--Fin Ventana de los billetes--> 
+<!--Modal Cambiar Cantidad-->
+
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Cantidad </label>
+                        <input type="number" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalculacionDelDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Cantidad-->
+
+
+<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el Porcentaje % </label>
+                        <input type="number" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__actualizarDescuento}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id='ModalAgregarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Crear Proforma</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el nombre </label>
+                        <input type="text" class="form-control cambioNombreFactura tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreFactura" name="cambioNombreFactura"     autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                     <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='ModalCambiarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Modificar el Nombre Factura</h1>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id='idFactura'  name='idFactura'  value="{factura.id}" >
+                <input type="hidden" id='nombreFactura'  name='nombreFactura'  value="{factura.nombreFactura}" >
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el nombre </label>
+                        <input type="text" class="form-control cambioNombreTiquete tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreTiquete" name="cambioNombreTiquete"     autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                     <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__ModificarNombreTiquete}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Modal Cambiar Descripcion-->
+
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Modificar Descripcion del Articulo</h1>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id='idFactura'  name='idFactura'  value="{factura.id}" >
+                <input type="hidden" id='nombreFactura'  name='nombreFactura'  value="{factura.nombreFactura}" >
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite la descripcion nueva </label>
+                        <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"     autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                     <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarDescripcionDetalle}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <style type="text/css">
-.botones-funcionales {
-    float: left;
-    margin-left: 6px;
-    margin-top: 16px;
-}
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+         font-size: 60px !important;
+    }
+
+    .botones-funcionales {
+        float: left;
+        margin-left: 6px;
+        margin-top: 16px;
+    }
     .btn-PagarICON:before {
         font-family: FontAwesome;
         content: "\f09d ";
@@ -1438,195 +1484,195 @@
     -webkit-overflow-scrolling: touch;
     }
 
-.modal-body { height: 60%; }
+    .modal-body { height: 60%; }
 
-@media (max-width: 480px) 
-{
-    .modal.fade.in {
-        top: 10px;
-  }
-}
+    @media (max-width: 480px) 
+    {
+        .modal.fade.in {
+            top: 10px;
+    }
+    }
 
-td.col-1, th.col-1 {
-  width: 8.33333%; }
+    td.col-1, th.col-1 {
+    width: 8.33333%; }
 
-td.col-2, th.col-2 {
-  width: 16.66667%; }
+    td.col-2, th.col-2 {
+    width: 16.66667%; }
 
-td.col-3, th.col-3 {
-  width: 25%; }
+    td.col-3, th.col-3 {
+    width: 25%; }
 
-td.col-4, th.col-4 {
-  width: 33.33333%; }
+    td.col-4, th.col-4 {
+    width: 33.33333%; }
 
-td.col-5, th.col-5 {
-  width: 41.66667%; }
+    td.col-5, th.col-5 {
+    width: 41.66667%; }
 
-td.col-6, th.col-6 {
-  width: 50%; }
+    td.col-6, th.col-6 {
+    width: 50%; }
 
-td.col-7, th.col-7 {
-  width: 58.33333%; }
+    td.col-7, th.col-7 {
+    width: 58.33333%; }
 
-td.col-8, th.col-8 {
-  width: 66.66667%; }
+    td.col-8, th.col-8 {
+    width: 66.66667%; }
 
-td.col-9, th.col-9 {
-  width: 75%; }
+    td.col-9, th.col-9 {
+    width: 75%; }
 
-td.col-10, th.col-10 {
-  width: 83.33333%; }
+    td.col-10, th.col-10 {
+    width: 83.33333%; }
 
-td.col-11, th.col-11 {
-  width: 91.66667%; }
+    td.col-11, th.col-11 {
+    width: 91.66667%; }
 
-td.col-12, th.col-12 {
-  width: 100%; }
+    td.col-12, th.col-12 {
+    width: 100%; }
 
-td.col-sm-1, th.col-sm-1 {
-  width: 8.33333%; }
+    td.col-sm-1, th.col-sm-1 {
+    width: 8.33333%; }
 
-td.col-sm-2, th.col-sm-2 {
-  width: 16.66667%; }
+    td.col-sm-2, th.col-sm-2 {
+    width: 16.66667%; }
 
-td.col-sm-3, th.col-sm-3 {
-  width: 25%; }
+    td.col-sm-3, th.col-sm-3 {
+    width: 25%; }
 
-td.col-sm-4, th.col-sm-4 {
-  width: 33.33333%; }
+    td.col-sm-4, th.col-sm-4 {
+    width: 33.33333%; }
 
-td.col-sm-5, th.col-sm-5 {
-  width: 41.66667%; }
+    td.col-sm-5, th.col-sm-5 {
+    width: 41.66667%; }
 
-td.col-sm-6, th.col-sm-6 {
-  width: 50%; }
+    td.col-sm-6, th.col-sm-6 {
+    width: 50%; }
 
-td.col-sm-7, th.col-sm-7 {
-  width: 58.33333%; }
+    td.col-sm-7, th.col-sm-7 {
+    width: 58.33333%; }
 
-td.col-sm-8, th.col-sm-8 {
-  width: 66.66667%; }
+    td.col-sm-8, th.col-sm-8 {
+    width: 66.66667%; }
 
-td.col-sm-9, th.col-sm-9 {
-  width: 75%; }
+    td.col-sm-9, th.col-sm-9 {
+    width: 75%; }
 
-td.col-sm-10, th.col-sm-10 {
-  width: 83.33333%; }
+    td.col-sm-10, th.col-sm-10 {
+    width: 83.33333%; }
 
-td.col-sm-11, th.col-sm-11 {
-  width: 91.66667%; }
+    td.col-sm-11, th.col-sm-11 {
+    width: 91.66667%; }
 
-td.col-sm-12, th.col-sm-12 {
-  width: 100%; }
+    td.col-sm-12, th.col-sm-12 {
+    width: 100%; }
 
-td.col-md-1, th.col-md-1 {
-  width: 8.33333%; }
+    td.col-md-1, th.col-md-1 {
+    width: 8.33333%; }
 
-td.col-md-2, th.col-md-2 {
-  width: 16.66667%; }
+    td.col-md-2, th.col-md-2 {
+    width: 16.66667%; }
 
-td.col-md-3, th.col-md-3 {
-  width: 25%; }
+    td.col-md-3, th.col-md-3 {
+    width: 25%; }
 
-td.col-md-4, th.col-md-4 {
-  width: 33.33333%; }
+    td.col-md-4, th.col-md-4 {
+    width: 33.33333%; }
 
-td.col-md-5, th.col-md-5 {
-  width: 41.66667%; }
+    td.col-md-5, th.col-md-5 {
+    width: 41.66667%; }
 
-td.col-md-6, th.col-md-6 {
-  width: 50%; }
+    td.col-md-6, th.col-md-6 {
+    width: 50%; }
 
-td.col-md-7, th.col-md-7 {
-  width: 58.33333%; }
+    td.col-md-7, th.col-md-7 {
+    width: 58.33333%; }
 
-td.col-md-8, th.col-md-8 {
-  width: 66.66667%; }
+    td.col-md-8, th.col-md-8 {
+    width: 66.66667%; }
 
-td.col-md-9, th.col-md-9 {
-  width: 75%; }
+    td.col-md-9, th.col-md-9 {
+    width: 75%; }
 
-td.col-md-10, th.col-md-10 {
-  width: 83.33333%; }
+    td.col-md-10, th.col-md-10 {
+    width: 83.33333%; }
 
-td.col-md-11, th.col-md-11 {
-  width: 91.66667%; }
+    td.col-md-11, th.col-md-11 {
+    width: 91.66667%; }
 
-td.col-md-12, th.col-md-12 {
-  width: 100%; }
+    td.col-md-12, th.col-md-12 {
+    width: 100%; }
 
-td.col-lg-1, th.col-lg-1 {
-  width: 8.33333%; }
+    td.col-lg-1, th.col-lg-1 {
+    width: 8.33333%; }
 
-td.col-lg-2, th.col-lg-2 {
-  width: 16.66667%; }
+    td.col-lg-2, th.col-lg-2 {
+    width: 16.66667%; }
 
-td.col-lg-3, th.col-lg-3 {
-  width: 25%; }
+    td.col-lg-3, th.col-lg-3 {
+    width: 25%; }
 
-td.col-lg-4, th.col-lg-4 {
-  width: 33.33333%; }
+    td.col-lg-4, th.col-lg-4 {
+    width: 33.33333%; }
 
-td.col-lg-5, th.col-lg-5 {
-  width: 41.66667%; }
+    td.col-lg-5, th.col-lg-5 {
+    width: 41.66667%; }
 
-td.col-lg-6, th.col-lg-6 {
-  width: 50%; }
+    td.col-lg-6, th.col-lg-6 {
+    width: 50%; }
 
-td.col-lg-7, th.col-lg-7 {
-  width: 58.33333%; }
+    td.col-lg-7, th.col-lg-7 {
+    width: 58.33333%; }
 
-td.col-lg-8, th.col-lg-8 {
-  width: 66.66667%; }
+    td.col-lg-8, th.col-lg-8 {
+    width: 66.66667%; }
 
-td.col-lg-9, th.col-lg-9 {
-  width: 75%; }
+    td.col-lg-9, th.col-lg-9 {
+    width: 75%; }
 
-td.col-lg-10, th.col-lg-10 {
-  width: 83.33333%; }
+    td.col-lg-10, th.col-lg-10 {
+    width: 83.33333%; }
 
-td.col-lg-11, th.col-lg-11 {
-  width: 91.66667%; }
+    td.col-lg-11, th.col-lg-11 {
+    width: 91.66667%; }
 
-td.col-lg-12, th.col-lg-12 {
-  width: 100%; }
+    td.col-lg-12, th.col-lg-12 {
+    width: 100%; }
 
-td.col-xl-1, th.col-xl-1 {
-  width: 8.33333%; }
+    td.col-xl-1, th.col-xl-1 {
+    width: 8.33333%; }
 
-td.col-xl-2, th.col-xl-2 {
-  width: 16.66667%; }
+    td.col-xl-2, th.col-xl-2 {
+    width: 16.66667%; }
 
-td.col-xl-3, th.col-xl-3 {
-  width: 25%; }
+    td.col-xl-3, th.col-xl-3 {
+    width: 25%; }
 
-td.col-xl-4, th.col-xl-4 {
-  width: 33.33333%; }
+    td.col-xl-4, th.col-xl-4 {
+    width: 33.33333%; }
 
-td.col-xl-5, th.col-xl-5 {
-  width: 41.66667%; }
+    td.col-xl-5, th.col-xl-5 {
+    width: 41.66667%; }
 
-td.col-xl-6, th.col-xl-6 {
-  width: 50%; }
+    td.col-xl-6, th.col-xl-6 {
+    width: 50%; }
 
-td.col-xl-7, th.col-xl-7 {
-  width: 58.33333%; }
+    td.col-xl-7, th.col-xl-7 {
+    width: 58.33333%; }
 
-td.col-xl-8, th.col-xl-8 {
-  width: 66.66667%; }
+    td.col-xl-8, th.col-xl-8 {
+    width: 66.66667%; }
 
-td.col-xl-9, th.col-xl-9 {
-  width: 75%; }
+    td.col-xl-9, th.col-xl-9 {
+    width: 75%; }
 
-td.col-xl-10, th.col-xl-10 {
-  width: 83.33333%; }
+    td.col-xl-10, th.col-xl-10 {
+    width: 83.33333%; }
 
-td.col-xl-11, th.col-xl-11 {
-  width: 91.66667%; }
+    td.col-xl-11, th.col-xl-11 {
+    width: 91.66667%; }
 
-td.col-xl-12, th.col-xl-12 {
-  width: 100%; }
-  
+    td.col-xl-12, th.col-xl-12 {
+    width: 100%; }
+    
 </style> 
 
 <script>
@@ -1911,15 +1957,85 @@ td.col-xl-12, th.col-xl-12 {
     }
     self.on('mount',function(){
         __ListaActividadesComercales()
-         window.addEventListener( "keydown", function(evento){
+         var xTriggered = 0;
+           window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
+             __Teclas(evento.keyCode,event)
+            disableF5(evento);
         }, false );
-        function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               cambiarCantidadModal()
+           }
+        });
+
+        $( "#aplicarDescuento" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               aplicarModalDescuento()
+           }
+        });
+
+        $( "#cambioNombreFactura" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __AplicarCambioNombreModal()
+           }
+        });
+        $( "#cambioNombreTiquete" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambioNombreTiqueteModal()
+           }
+        });
+
+         $( "#cambiarDescripcionArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarDescripcionDetalleModal()
+           }
+        });
+        
     })
+
+    function disableF5(e) { 
+     //   alert(e.keyCode)
+        if ((e.which || e.keyCode) == 116) e.preventDefault(); 
+        if ((e.which || e.keyCode) == 114) e.preventDefault(); //f3
+        if ((e.which || e.keyCode) == 112) e.preventDefault(); //f1
+        if ((e.which || e.keyCode) == 117) e.preventDefault(); 
+    };
 
 __AsignarActividad(e){
     BuscarActividadComercial()
 }
+
+
+__EntradaDinero(){
+  modalEntradaSalidaDinero(1)
+}   
+__SalidaDinero(){
+    modalEntradaSalidaDinero(2)
+}
+
+function modalEntradaSalidaDinero(tipo){
+ var parametros = {
+        tipo:tipo,
+    }
+    riot.mount('entrada-salida',{parametros:parametros});
+}
+
 
 function BuscarActividadComercial(){
     var codigo =$('.selectActividadComercial').val()
@@ -1967,10 +2083,9 @@ function __ListaActividadesComercales(){
                 agregarInputsCombos_Articulo()
                 __comboCondicionPago()
                 __ComboTipoDocumentos(0)
-                __ListaDeClientes()
+           //     __ListaDeClientes()
                 __ListaDeVendedores()
-                __Teclas()
-                __TipoCambio()
+                 __TipoCambio()
                 __ListaMesas()
                 __RolAdministrador()   
                 cargaBilletes()
@@ -2571,10 +2686,15 @@ __CambiarDescuento(e){
     $("#aplicarDescuento").attr("maxlength", 7);
     $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item; 
-    $( "#aplicarDescuento" ).focus()
-    $( "#aplicarDescuento" ).val(null)
     $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-    $('#modalCambiarDescuento').modal('show')      
+    $('#modalCambiarDescuento').on('shown.bs.modal', function () {
+        $( "#aplicarDescuento" ).val(0)
+        $( "#aplicarDescuento" ).focus()
+        $( "#aplicarDescuento" ).select()
+        
+
+    })
+    
 }
 /**
 *Cambiar Cantidad del Articulo
@@ -2597,11 +2717,12 @@ __CambiarCantidad(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $("#cambiarCantidadArticulo" ).focus()
-        
-        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarCantidad').modal('show')      
-        $("#cambiarCantidadArticulo" ).val(self.item.cantidad)
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false}) 
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+          $("#cambiarCantidadArticulo" ).val(self.item.cantidad) 
+          $("#cambiarCantidadArticulo" ).focus()
+          $("#cambiarCantidadArticulo" ).select()
+        })
    }
 }
 /**
@@ -2621,11 +2742,13 @@ __CambiarDescripcion(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: false}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $("#cambiarDescripcionArticulo" ).focus()
-        $("#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-        $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-        $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true})   // initialized with no keyboard 
-        $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+        $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: false}) 
+        $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+            $("#cambiarDescripcionArticulo" ).val(self.item.descripcion)
+            $("#cambiarDescripcionArticulo" ).focus()
+            $("#cambiarDescripcionArticulo" ).select()
+        })
+        
    }
 }
 /**
@@ -2842,9 +2965,12 @@ __CambiarNombreTiquete(){
     if(self.factura.id ==null){
         return
     }
-    $('#ModalCambiarNombreTiquete').modal('show') 
-    $('.cambioNombreTiquete').focus()
-    $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+    $('#ModalCambiarNombreTiquete').modal({backdrop: 'static', keyboard: false}) 
+    $('#ModalCambiarNombreTiquete').on('shown.bs.modal', function () {
+        $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+        $('.cambioNombreTiquete').focus()
+        $('.cambioNombreTiquete').select()
+    })
     
 }
 /**
@@ -2862,8 +2988,11 @@ function __CrearFacturaTemporalFunc(){
     self.update()
  	if(self.factura.id == null){
         if(self.detail.length != 0 ){
-            $('#ModalAgregarNombreTiquete').modal('show') 
-            $('.cambioNombreFactura').focus()
+            $('#ModalAgregarNombreTiquete').modal({backdrop: 'static', keyboard: true}) 
+            $('#ModalAgregarNombreTiquete').on('shown.bs.modal', function () {
+                $('.cambioNombreFactura').focus()
+                $('.cambioNombreFactura').select()
+            })
             return
         }
     }else{
@@ -2878,17 +3007,28 @@ function __CrearFacturaTemporalFunc(){
 * cCambiar el nombre de la factura
 **/
 __ModificarNombreTiquete(){
-    if ($("#formularioModalCambiarNombreTiquete").valid()) {
+   
+    __cambioNombreTiqueteModal()
+}
+
+function __cambioNombreTiqueteModal(){
+  if(!$('#ModalCambiarNombreTiquete').is(':visible')){
+         return 
+     }
     self.factura.nombreFactura = $('.cambioNombreTiquete').val()
     self.update()
-   var formulario = $("#formularioModalCambiarNombreTiquete").serialize();
     if(self.factura.id == null){
         return
     }
+    var parametros = {
+        idFactura : self.factura.id,
+        nombreFactura : self.factura.nombreFactura
+    }
+
       $.ajax({
         url: "ModificarNombreTiquteAjax",
         datatype: "json",
-        data: formulario,
+        data: parametros,
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
@@ -2906,7 +3046,7 @@ __ModificarNombreTiquete(){
                     if(self.factura.id == null){
                          mensajeAdvertencia($.i18n.prop("error.factura.no.existe"));
                     }else{
-                        mensajeAdvertencia(data.message);
+                        mensajeToasExito(data.message);
                     }
                 }
                  $('#ModalCambiarNombreTiquete').modal('hide') 
@@ -2917,12 +3057,14 @@ __ModificarNombreTiquete(){
             
         }
     });
-    }
 }
 /**
 *  Agregar el nombre a la factura temporal
 **/
 __AgregarNombreFacturaTemporal(){
+    __AplicarCambioNombreModal()
+}
+function __AplicarCambioNombreModal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.mesa.id = self.factura.mesa.id
@@ -2941,6 +3083,7 @@ __AgregarNombreFacturaTemporal(){
     self.mostrarCambiarMesa = false;
 
     self.update()        
+
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -3206,7 +3349,6 @@ function __Init(){
             }
     );
     $(".nota").attr("maxlength", 80);
-    $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
     // Tipo de Pagos
      __comboCondicionPago()
@@ -3688,7 +3830,7 @@ __agregarArticuloBotonAgregar(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')  
+    __ListaDeClientes()
 }
 /**
 *  Muestra la lista de vendedores
@@ -3727,7 +3869,6 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3736,6 +3877,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                $('#modalClientes').modal('show')   
             }
         },
         error: function (xhr, status) {
@@ -4059,6 +4201,10 @@ function _calcularImpuesto(precio,iva){
  * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
+     cambiarCantidadModal()
+  }
+
+  function cambiarCantidadModal(){
     var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -4068,16 +4214,24 @@ function _calcularImpuesto(precio,iva){
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     //__actualizaArticuloComanda(cantidad, self.item.codigo, self.item.descripcion, self.item.cantidad);
     __ValidarCantidadArticulo(self.item.codigo,cantidad)		
+   // $('#modalCambiarCantidad').modal('hide')
+
+
   }
 /**
 * Cambiar el precio del detalle de la factura
 **/
 __cambiarDescripcionDetalle(e){
+    __cambiarDescripcionDetalleModal()
+}
+
+function __cambiarDescripcionDetalleModal(){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
+
 }
 /**
 * Cambiar el precio del detalle de la factura
@@ -4153,12 +4307,17 @@ function ActualizarLineaDEtalle(){
 * Agregar en la cantidad la Venta
 **/
 function agregarCantidadAlaVenta(cantidad){
-    self.item.cantidad = cantidad
+     self.item.cantidad = cantidad
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
+    self.item.ganancia = ganancia
+    self.item.montoGanancia    = self.item.ganancia
+   // self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
+
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
-    cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
+     
 }
 /**
 * Aplicar cambios linea Detalle
@@ -4173,15 +4332,16 @@ function aplicarCambioLineaDetalle(){
 /**
 * Actualizar el descuento del codigo
 **/
-__actualizarDescuento(e){
-    if ($("#formularioDescuento").valid()) {
-        _actualizarDesc(e)
-    }
+__actualizarDescuento(){
+        _actualizarDesc()
+}
+function aplicarModalDescuento(){
+  _actualizarDesc()
 }
 /**
 *Actualizar el descuento
 **/
-function _actualizarDesc(e){
+function _actualizarDesc(){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
     //Descuento se verifica si es null o espacios por defecto se deja en cero
@@ -4691,9 +4851,10 @@ function agregarInputsCombos_Vendedores(){
 /**
 *  teclas de la pantalla
 **/      
-function __Teclas(){
-    window.addEventListener( "keydown", function(evento){
-        var tecla = evento.keyCode; 
+function __Teclas(tecla,event){
+     if($('#modalCambiarCantidad').is(':visible')){
+        return 
+     }   
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
@@ -4731,7 +4892,7 @@ function __Teclas(){
       return 
     }
      
-    }, false );
+   
 }
 
 __MoverMontoTarjeta(){

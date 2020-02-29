@@ -16,6 +16,6 @@ public interface CajaBo {
 	Caja findByDescripcionAndEmpresa(String descripcion, Empresa empresa);
 
 	Caja findByTerminalAndEmpresa(String terminal, Empresa empresa);
-
+	Caja buscarCajaActiva(Empresa empresa); 
 
 }

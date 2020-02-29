@@ -31,18 +31,18 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
-	public void agregar(UsuarioCaja marca) {
-		entityManager.persist(marca);
+	public void agregar(UsuarioCaja usuarioCaja) {
+		entityManager.persist(usuarioCaja);
 	}
 
 	@Override
-	public void modificar(UsuarioCaja marca) {
-		entityManager.merge(marca);
+	public void modificar(UsuarioCaja usuarioCaja) {
+		entityManager.merge(usuarioCaja);
 	}
 
 	@Override
-	public void eliminar(UsuarioCaja marca) {
-		entityManager.remove(marca);
+	public void eliminar(UsuarioCaja usuarioCaja) {
+		entityManager.remove(usuarioCaja);
 	}
 
 	/**

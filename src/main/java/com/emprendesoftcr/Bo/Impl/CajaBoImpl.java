@@ -69,4 +69,10 @@ public class CajaBoImpl implements CajaBo {
 		return cajaDao.findByTerminalAndEmpresa(terminal, empresa);
 	}
 
+	@Override
+	public Caja buscarCajaActiva(Empresa empresa) {
+		
+		return cajaDao.buscarCajaActiva(empresa);
+	}
+
 }

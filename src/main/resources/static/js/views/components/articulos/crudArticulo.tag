@@ -3,15 +3,13 @@
 <div class="tituloBotones">
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {articulo.id > 0 ? $.i18n.prop("titulo.modificar.articulo")   :$.i18n.prop("titulo.agregar.articulo")}     </div>
     <div class="botones">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-
+        <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+            {$.i18n.prop("btn.volver")}
+        </button>
+        <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+        <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
     </div>
 </div>            
-
  <div class="row scrollerT"  >
     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
         <div id="divFormulario" >
@@ -63,35 +61,35 @@
                                     </div>
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoPrecioPublico} value="{articulo.precioPublico}"  >
                                     </div>
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.gananciaPrecioPublico")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaPublico}>
                                     </div>
 
                                 </div>    
                                 <div class="row">
                                      <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioMayorista")}  </label>
-                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
+                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoPrecioMayorista} >
                                     </div>  
 
                                      <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeypress ={__CalculoGananciaSinPrecioMayorista}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeypress ={__CalculoGananciaMayorista}>
                                     </div>
 
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
-                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
+                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoPrecioEspecial}>
                                     </div>                        
 
                                 </div>
                                 <div class="row">
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
-                                        <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
+                                        <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaEspecial}>
                                     </div>
 
                                     <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
@@ -955,6 +953,9 @@ MostrarBotonAgregarEntrada(e){
  self.mostrarBotonAgregarEntrada = cantidad > 0 ? true:false
  self.update()
 }
+
+
+
 /**
 * muestra el boton de agregar en una salida hasta que el valor de cantidad nueva sea mayor a cero o sea menor o igual cantidad inventario
 **/
@@ -964,143 +965,148 @@ MostrarBotonAgregarSalida(e){
  self.mostrarBotonAgregarSalida = cantidad ==0 ? false:self.mostrarBotonAgregarSalida
  self.update()
 }
-/** Fin  funciones de inventario ----------------------------------------------------------------------------**/
+
 /**
 *  Ganancia del precio mayorista
 **/
 __CalculoGananciaMayorista(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
     var impuesto  =  __valorNumerico($('#impuesto').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
-    self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,0,precioMayorista):0
-    self.articulo.gananciaPrecioMayorista  =__valorNumerico(self.articulo.gananciaPrecioMayorista)
-    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista
-    self.articulo.precioMayorista = precioMayorista >0?precioMayorista:self.articulo.precioMayorista
-    self.articulo.precioMayorista = __valorNumerico(self.articulo.precioMayorista)
-    self.articulo.precioMayorista  = self.articulo.precioMayorista
+    self.articulo.gananciaPrecioMayorista    = __valorNumerico($('#gananciaPrecioMayorista').val())
+    self.articulo.precioMayorista = _ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioMayorista)
     self.update()
+    $('#gananciaPrecioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioMayorista,aplicarRedondeo())))
+    $('#precioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.precioMayorista,aplicarRedondeo())))
+}
+
+__CalculoPrecioMayorista(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
+    self.articulo.gananciaPrecioMayorista    = __CalcularGanancia(impuesto,costo,precioMayorista);
+    self.articulo.precioMayorista = precioMayorista
+    self.update()
+    $('#gananciaPrecioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioMayorista,aplicarRedondeo())))
+    $('#precioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.precioMayorista,aplicarRedondeo())))
+}
+
+function getPrecioMayorista(){
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
+    self.articulo.gananciaPrecioMayorista    = __CalcularGanancia(impuesto,costo,precioMayorista);
+    self.articulo.precioMayorista = precioMayorista > 0 ?precioMayorista:_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioMayorista)
+    self.update()
+    $('#gananciaPrecioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioMayorista,aplicarRedondeo())))
+    $('#precioMayorista').val(__valorNumerico(redondeoDecimales(self.articulo.precioMayorista,aplicarRedondeo())))
+
 }
 /**
 * ganancia del precio especial
 **/
 __CalculoGananciaEspecial(e){
+     if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
     var impuesto  =  __valorNumerico($('#impuesto').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
-    self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,0,precioEspecial):0
-    self.articulo.gananciaPrecioEspecial = __valorNumerico(self.articulo.gananciaPrecioEspecial)
-    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial
-    self.articulo.precioEspecial = precioEspecial > 0?precioEspecial:self.articulo.precioEspecial
+    self.articulo.gananciaPrecioEspecial = __valorNumerico($('#gananciaPrecioEspecial').val());
+    self.articulo.precioEspecial = _ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioEspecial)
     self.update()
+    $('#gananciaPrecioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioEspecial,aplicarRedondeo())))
+    $('#precioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.precioEspecial,aplicarRedondeo())))
 }
-/**
-* Actualizar ganancias al digitar el impuesto
-**/
-__ActualizarPreciosImpuestos(e){
-   _CalculoPrecio()
+
+__CalculoPrecioEspecial(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioEspecial    =  __valorNumerico($('#precioEspecial').val())
+    self.articulo.gananciaPrecioEspecial    = __CalcularGanancia(impuesto,costo,precioEspecial);
+    self.articulo.precioEspecial = precioEspecial
+    self.update()
+    $('#gananciaPrecioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioEspecial,aplicarRedondeo())))
+    $('#precioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.precioEspecial,aplicarRedondeo())))
 }
-/**
-* Actualizar ganancias al digitar el impuesto
-**/
-__ActualizarPreciosImpuestos1(e){
-   _CalculoPrecio()
+function getPrecioEspecial(){
+    
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioEspecial = __valorNumerico($('#precioEspecial').val())
+    self.articulo.gananciaPrecioEspecial = __CalcularGanancia(impuesto,costo,precioEspecial);
+    self.articulo.precioEspecial = precioEspecial > 0 ?precioEspecial:_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioEspecial)
+    
+    self.update()
+    $('#gananciaPrecioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioEspecial,aplicarRedondeo())))
+    $('#precioEspecial').val(__valorNumerico(redondeoDecimales(self.articulo.precioEspecial,aplicarRedondeo())))
 }
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
 __CalculoGananciaPublico(e){
+     if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
     var impuesto  =  __valorNumerico($('#impuesto').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
-    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,0,precioPublico):0
-    self.articulo.gananciaPrecioPublico = __valorNumerico(self.articulo.gananciaPrecioPublico )
-    self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico
-    $('#gananciaPrecioPublico').val(self.articulo.gananciaPrecioPublico)
-    self.articulo.precioPublico = precioPublico
+    self.articulo.gananciaPrecioPublico    = __valorNumerico($('#gananciaPrecioPublico').val());
+    self.articulo.precioPublico =_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioPublico)
     self.update()
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+
 }
 
-__CalculoGananciaSinPrecioEspecial(e){
-    var ganancia = __valorNumerico($('#gananciaPrecioEspecial').val())
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioEspecial  = ganancia
-    self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto>0){
-        total = total * impuesto
+__CalculoPrecioPublico(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
     }
-    self.articulo.precioEspecial = total>0?total:self.articulo.precioEspecial
-    self.articulo.precioEspecial = __valorNumerico(self.articulo.precioEspecial)
-    self.articulo.precioEspecial = self.articulo.precioEspecial
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = __CalcularGanancia(impuesto,costo,precioPublico);
+    self.articulo.precioPublico = precioPublico
     self.update()
-    $('.precioEspecial').val(self.articulo.precioEspecial)
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+
 }
-/**
-* Porcentaje de ganancia de Precio mayorista
-**/
-__CalculoGananciaSinPrecioMayorista(e){
-    var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioMayorista  = ganancia
+
+function getPublico(){
+   
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = __CalcularGanancia(impuesto,costo,precioPublico);
+    self.articulo.precioPublico = precioPublico > 0 ?precioPublico:_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioPublico)
     self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto>0){
-        total = total * impuesto
-    }
-    self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
-    self.articulo.precioMayorista =  __valorNumerico(self.articulo.precioMayorista) 
-    self.articulo.precioMayorista = self.articulo.precioMayorista
-    self.update()
-    $('.precioMayorista').val(self.articulo.precioMayorista)
-}
-/**
-* Porcentaje de ganancia de Precio al Publico
-**/
-__CalculoGananciaSinPrecioPublico(e){
-  __ActualizarPreciosGananciaPrecioPublico()
-}
-function __ActualizarPreciosGananciaPrecioPublico(){
-    var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
-    var impuesto   = __valorNumerico($('#impuesto').val())/100
-    impuesto = impuesto > 0 ? 1+impuesto:0
-    var costo      = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioPublico  = ganancia
-    self.update()
-    //calcular el precio publico
-    var resultado = ganancia / 100
-    resultado = 1-resultado
-    //resultado costo + ganancia
-    var total = costo  / resultado
-    if(impuesto>0){
-        total = total * impuesto
-    }
-    self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
-    self.articulo.precioPublico = __valorNumerico(self.articulo.precioPublico)
-    self.articulo.precioPublico = self.articulo.precioPublico
-    self.update()
-    $('.precioPublico').val(self.articulo.precioPublico)
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+    
 
 }
 
 __AsignarTarifa(){
     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
     self.update()
-    actualizarPreciosImpuestosMayorista()
-    actualizarPreciosImpuestosPublico()
-    actualizarPreciosImpuestosEspecial()
+    $('#impuesto').val(self.articulo.impuesto)
+    getPublico()
+    getPrecioEspecial()
+    getPrecioMayorista()
 }
+
+
 
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
@@ -1115,13 +1121,15 @@ __asignarImpuesto(){
         self.articulo.impuesto = 0  
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         self.update()
+        $('#impuesto').val(self.articulo.impuesto)
     } 
      __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
-    actualizarPreciosImpuestosMayorista()
-    actualizarPreciosImpuestosPublico()
-    actualizarPreciosImpuestosEspecial()
     self.tarifas1  = {aaData:[]}
     self.update()
+    getPublico()
+    getPrecioEspecial()
+    getPrecioMayorista()
+
 }
 /**
 *  Mostrar listado datatable Categorias Actimpuestos

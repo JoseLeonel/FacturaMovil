@@ -717,7 +717,7 @@ public class HaciendasController {
 //				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracion());
 //
 //			}else {
-				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
+          xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
 
 //			}
 			response.setContentType("text/plain");

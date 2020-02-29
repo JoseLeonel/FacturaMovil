@@ -1112,7 +1112,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-//	@Scheduled(cron = "0 0/6 * * * ?")
+//	@Scheduled(cron = "0 0/4 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

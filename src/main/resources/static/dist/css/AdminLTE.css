@@ -2992,6 +2992,9 @@ table.text-center th {
 .modal-success .modal-footer {
   border-color: #00733e;
 }
+.treeview{
+	font-size:20px!important;
+}
 .modal-danger .modal-header,
 .modal-danger .modal-footer {
   border-color: #c23321;

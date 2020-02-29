@@ -426,6 +426,7 @@ function _init() {
       }
       //if this isn't a link, prevent the page from being redirected
       if (checkElement.is('.treeview-menu')) {
+    	  $( "body" ).removeClass( "skin-blue  sidebar-mini sidebar-collapse" ).addClass( "skin-blue  sidebar-mini " );
         e.preventDefault();
       }
     });

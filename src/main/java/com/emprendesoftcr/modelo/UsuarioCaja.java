@@ -2,7 +2,10 @@ package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,17 +13,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Modelo para abrir cajas a usuarios para facturar UsuarioCaja.
- * 
  * @author jose.
  * @since 10 jun. 2018
  */
@@ -28,64 +33,107 @@ import com.emprendesoftcr.Utils.Utils;
 @Table(name = "usuarios_cajas")
 public class UsuarioCaja implements Serializable {
 
-	private static final long serialVersionUID = 8895530294398977996L;
+	private static final long					serialVersionUID	= 8895530294398977996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private Long											id;
 
 	@Column(name = "total_fondo_inicial")
-	private Double totalFondoInicial;
+	private Double										totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private Double totalEfectivo;
+	private Double										totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double totalTarjeta;
+	private Double										totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double totalBanco;
+	private Double										totalBanco;
 
 	@Column(name = "total_credito")
-	private Double totalCredito;
+	private Double										totalCredito;
 
 	@Column(name = "total_abono")
-	private Double totalAbono;
+	private Double										totalAbono;
 
 	@Column(name = "total_neto")
-	private Double totalNeto;
+	private Double										totalNeto;
 
 	@Column(name = "impuesto_servicio")
-	private Double totalServicio;
+	private Double										totalServicio;
 
 	@Column(name = "total_dolares")
-	private Double totalDolares;
+	private Double										totalDolares;
+
+	@Column(name = "conte_tarj")
+	private Double										conteoTarjeta;
+
+	@Column(name = "conte_dolar")
+	private Double										conteoDolar;
+
+	@Column(name = "total_conver")
+	private Double										totalConversionColones;
+
+	@Column(name = "tipo_camb")
+	private Double										tipoCambio;
+
+	@Column(name = "nota_cred")
+	private Double										notaCredito;
+
+	@Column(name = "nota_deb")
+	private Double										notaDebito;
+
+	@Column(name = "conteo_manual")
+	private Double										conteoManual;
+
+	@Column(name = "total_cierre")
+	private Double										totalCierre;
+
+	@Column(name = "diferencia")
+	private Double										diferencia;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario usuario;
-
-	@ManyToOne
-	@JoinColumn(name = "caja_id")
-	private Caja caja;
+	private Usuario										usuario;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date created_at;
+	private Date											created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date updated_at;
+	private Date											updated_at;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "cierre")
+	private Date											cierreCaja;
 
 	@Column(name = "estado")
-	private String estado;
+	private String										estado;
 
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco,
-			Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at,
-			Date updated_at, String estado, Double totalServicio) {
+	@Column(name = "notificacion")
+	private Integer										notificacion;
+
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
+	@OrderBy("usua_caja_id DESC")
+	private Set<SalidaEntradaDinero>	salidaEntradaDineros;
+
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "usua_caja_id", referencedColumnName = "ID")
+	@OrderBy("usua_caja_id DESC")
+	private Set<ConteoManualCaja>			conteoManualCajas;
+
+	@ManyToOne
+	@JoinColumn(name = "caja_id")
+	private Caja											caja;
+
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Double totalServicio, Double totalDolares, Double conteoTarjeta, Double conteoDolar, Double totalConversionColones, Double tipoCambio, Double notaCredito, Double notaDebito, Double conteoManual, Double totalCierre, Double diferencia, Usuario usuario, Date created_at, Date updated_at, Date cierreCaja, String estado, Integer notificacion, Set<SalidaEntradaDinero> salidaEntradaDineros, Set<ConteoManualCaja> conteoManualCajas, Caja caja) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -95,12 +143,26 @@ public class UsuarioCaja implements Serializable {
 		this.totalCredito = totalCredito;
 		this.totalAbono = totalAbono;
 		this.totalNeto = totalNeto;
+		this.totalServicio = totalServicio;
+		this.totalDolares = totalDolares;
+		this.conteoTarjeta = conteoTarjeta;
+		this.conteoDolar = conteoDolar;
+		this.totalConversionColones = totalConversionColones;
+		this.tipoCambio = tipoCambio;
+		this.notaCredito = notaCredito;
+		this.notaDebito = notaDebito;
+		this.conteoManual = conteoManual;
+		this.totalCierre = totalCierre;
+		this.diferencia = diferencia;
 		this.usuario = usuario;
-		this.caja = caja;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.cierreCaja = cierreCaja;
 		this.estado = estado;
-		this.totalServicio = totalServicio;
+		this.notificacion = notificacion;
+		this.salidaEntradaDineros = salidaEntradaDineros;
+		this.conteoManualCajas = conteoManualCajas;
+		this.caja = caja;
 	}
 
 	public UsuarioCaja() {
@@ -113,6 +175,90 @@ public class UsuarioCaja implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Double getDiferencia() {
+		return diferencia;
+	}
+
+	public String getDiferenciaSTR() {
+		return Utils.formateadorMiles(this.diferencia);
+	}
+
+	public void setDiferencia(Double diferencia) {
+		this.diferencia = diferencia;
+	}
+
+	public Double getTotalCierre() {
+		return totalCierre;
+	}
+
+	public String getTotalCierreSTR() {
+		return Utils.formateadorMiles(this.totalCierre);
+	}
+
+	public void setTotalCierre(Double totalCierre) {
+		this.totalCierre = totalCierre;
+	}
+
+	public void addConteoManual(ConteoManualCaja conteoManualCaja) {
+		if (conteoManualCaja != null) {
+			if (conteoManualCajas == null) {
+				conteoManualCajas = new HashSet<ConteoManualCaja>();
+			}
+			conteoManualCaja.setUsuarioCaja(this);
+			conteoManualCajas.add(conteoManualCaja);
+		}
+	}
+
+	public void addSalidaEntradaDinero(SalidaEntradaDinero salidaEntradaDinero) {
+		if (salidaEntradaDinero != null) {
+			if (salidaEntradaDineros == null) {
+				salidaEntradaDineros = new HashSet<SalidaEntradaDinero>();
+			}
+			salidaEntradaDinero.setUsuariocaja(this);
+			salidaEntradaDineros.add(salidaEntradaDinero);
+		}
+	}
+
+	public String getSumaEntradasSTR() {
+		String resultado = "0.00";
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_ENTRADA).mapToDouble(x -> x.getTotal()).sum();
+			return Utils.formateadorMiles(sum);
+		}
+
+		return resultado;
+	}
+
+	public Double getSumaEntradas() {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_ENTRADA).mapToDouble(x -> x.getTotal()).sum();
+			return sum;
+		}
+
+		return resultado;
+	}
+
+	public String getSumaSalidaSTR() {
+		String resultado = "0.00";
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_SALIDA).mapToDouble(x -> x.getTotal()).sum();
+			return Utils.formateadorMiles(sum);
+		}
+
+		return resultado;
+	}
+
+	public Double getSumaSalida() {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (salidaEntradaDineros != null) {
+			Double sum = this.getSalidaEntradaDineros().stream().filter(x -> x.getTipo() == Constantes.ENTRADASALIDA_TIPO_SALIDA).mapToDouble(x -> x.getTotal()).sum();
+			return sum;
+		}
+
+		return resultado;
 	}
 
 	public Double getTotalFondoInicial() {
@@ -223,6 +369,13 @@ public class UsuarioCaja implements Serializable {
 		this.created_at = created_at;
 	}
 
+	public String getCreated_atSTR() {
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
+		}
+		return Constantes.EMPTY;
+	}
+
 	public Date getUpdated_at() {
 		return updated_at;
 	}
@@ -258,8 +411,113 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalDolares(Double totalDolares) {
 		this.totalDolares = totalDolares;
 	}
-	
+
 	public String getTotalDolaresSTR() {
 		return Utils.formateadorMiles(this.totalDolares);
 	}
+
+	public Double getConteoTarjeta() {
+		return conteoTarjeta;
+	}
+
+	public void setConteoTarjeta(Double conteoTarjeta) {
+		this.conteoTarjeta = conteoTarjeta;
+	}
+
+	public String getDatafonoSTR() {
+		return Utils.formateadorMiles(this.conteoTarjeta);
+	}
+
+	public Double getConteoDolar() {
+		return conteoDolar;
+	}
+
+	public void setConteoDolar(Double conteoDolar) {
+		this.conteoDolar = conteoDolar;
+	}
+
+	public Double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(Double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public Double getNotaCredito() {
+		return notaCredito;
+	}
+
+	public void setNotaCredito(Double notaCredito) {
+		this.notaCredito = notaCredito;
+	}
+
+	public Double getNotaDebito() {
+		return notaDebito;
+	}
+
+	public void setNotaDebito(Double notaDebito) {
+		this.notaDebito = notaDebito;
+	}
+
+	public Integer getNotificacion() {
+		return notificacion;
+	}
+
+	public void setNotificacion(Integer notificacion) {
+		this.notificacion = notificacion;
+	}
+
+	public Double getConteoManual() {
+		return conteoManual;
+	}
+
+	public String getConteoManualSTR() {
+
+		return Utils.formateadorMiles(conteoManual);
+	}
+
+	public void setConteoManual(Double conteoManual) {
+		this.conteoManual = conteoManual;
+	}
+
+	public Double getTotalConversionColones() {
+		return totalConversionColones;
+	}
+
+	public void setTotalConversionColones(Double totalConversionColones) {
+		this.totalConversionColones = totalConversionColones;
+	}
+
+	public Set<ConteoManualCaja> getConteoManualCajas() {
+		return conteoManualCajas;
+	}
+
+	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
+		this.conteoManualCajas = conteoManualCajas;
+	}
+
+	public Date getCierreCaja() {
+		return cierreCaja;
+	}
+
+	public String getCierreCajaSTR() {
+		if (this.cierreCaja != null) {
+			return Utils.getFechaGeneraReporte(this.cierreCaja);
+		}
+		return Constantes.EMPTY;
+	}
+
+	public void setCierreCaja(Date cierreCaja) {
+		this.cierreCaja = cierreCaja;
+	}
+
+	public Set<SalidaEntradaDinero> getSalidaEntradaDineros() {
+		return salidaEntradaDineros;
+	}
+
+	public void setSalidaEntradaDineros(Set<SalidaEntradaDinero> salidaEntradaDineros) {
+		this.salidaEntradaDineros = salidaEntradaDineros;
+	}
+
 }

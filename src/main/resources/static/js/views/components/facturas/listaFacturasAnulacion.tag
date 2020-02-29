@@ -177,7 +177,6 @@ function evaluarFactura(data){
    
         riot.mount('ptv-imprimir',{parametros:parametros}); 
         $('.imprimirModal').modal('show');   
-            __MostrarListado()
     }
 }
 /**

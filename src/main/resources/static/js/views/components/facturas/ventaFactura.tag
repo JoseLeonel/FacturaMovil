@@ -29,64 +29,20 @@
     </div>
   </div>
 <!--fin validar rol de usuario-->
-<!--Modal Cambiar Cantidad-->
-<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number"  class="campo tamanoLetraTotales cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Cantidad-->
-<!--Modal Cambiar Descripcion-->
-<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input  type="text" class="campo tamanoLetraTotales cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar descripcion-->
+
+
 <div id="pagina1">
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             <div class="box-tools ">
                 <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="Imprimir la Proforma"> <span class="label label-limpiar">F7=Proforma</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                 <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
+                <a class="pull-left" href="#" onclick = {__EntradaDinero} title="Entrada de Dinero"> <span class="label label-limpiar">Entrada Dinero</span></a>
+                <a class="pull-left" href="#" onclick = {__SalidaDinero} title="Salida de Dinero"> <span class="label label-limpiar">Salida Dinero</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                    
             </div>
@@ -167,17 +123,17 @@
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"> Descripcion</td>
+                                        <td width="45%"> Descripcion</td>
                                         <td width="10%">Cant</td>
                                         <td width="10%">Precio.U</td>
-                                        <td width="10%">Desc</td>
+                                        <td width="5%">Desc</td>
                                         <td width="10%">IV</td>
                                         <td width="19%">Total</td>
                                         
                                         <td width="15%"></td>
                                     </tr>
                                 </thead>
-                                <tbody height="70%" id="productos-detail">
+                                <tbody height="60%" id="productos-detail">
                                     <tr style="" each={detail}>
                                         <td>
                                            <diV onclick ={__CambiarDescripcion}>
@@ -234,6 +190,39 @@
                     <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
                     
                 </div>
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
+                                
+                            
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Entrada de Dinero 
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Salida de Dinero
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__ClienteNuevo}  title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Nuevo Cliente
+                                    </span> 
+                                </div>
+
+                            </div>
+                            <section   class="ventaEspera">
+                                <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                    <div show ="{consecutivoProforma.length>0?true:false}"  class="fondoVentaEspera" title="{nombreCompleto !=null?nombreCompleto:""}"><span class="tamanoVentaEspera">P: {consecutivoProforma} </span></div>  
+                                    <div show ="{consecutivoProforma.length == 0?true:false}" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}"><span class="tamanoVentaEspera">V: {id} </span></div>  
+                                </div>    
+                            </section >
+
                 <div  class="row  ">
                     <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
                         <div class="input-group">
@@ -242,13 +231,6 @@
                                 <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                             </span>
                             <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
-                        </div>
-                        <!--Vendedor o Nuevo Vendedor-->
-                        <div class="input-group">
-                            <span title="Vendedor" class="input-group-addon " > 
-                                <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
-                            </span>
-                            <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                         </div>
                         <a class="pull-right" href="#"   title="{factura.nombreFactura}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                     </div>
@@ -269,6 +251,7 @@
                         </section>
                     </div>    
                 </div> 
+                 
                 <div  class="row">
                     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
                         <section class="lista-facturas-espera">
@@ -421,92 +404,12 @@
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
 
-<!-- Modal correo alternativo-->
-<div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
-            </div>
-            <div class="modal-body">
-                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form"  autocomplete="off" >
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreFactura"  id="cambioNombreFactura" name="cambioNombreFactura" autofocus="autofocus"  > 
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
-<!--fin Modal agregar el nombre de el tiquete temporal-->
-<!--Modal Cambiar Cantidad-->
 
 
-<!--Modal Cambiar precio-->
-<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.precio")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label >Precio:</label>
-                            <input  type="number"  class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Fin Cambiar precio-->
 
 
-<!--Modal Cambiar Descuento-->
-<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioDescuento" name="formularioDescuento">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="campo tamanoLetraTotales aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-                </form>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Descuento-->
+
 
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -785,40 +688,315 @@
         </div>  
 </div>  
 
+<!--Modal Cambiar precio-->
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambio de Precio</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el nuevo Precio  </label>
+                        <input type="number" class="form-control cambiarprecioArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarprecioArticulo" name="cambiarprecioArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarElPrecio}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Fin Cambiar precio-->
+
+<!--Modal Cambiar Descuento-->
+<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el Porcentaje % </label>
+                        <input type="number" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__actualizarDescuento}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Descuento-->
+
+<!-- Modal correo alternativo-->
+
+<div id='ModalAgregarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp {$.i18n.prop("factura.digite.nombreFactura")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("factura.nombreFactura")} </label>
+                        <input type="text" class="form-control cambioNombreFactura tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreFactura" name="cambioNombreFactura"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal correo alternativo-->
+
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("articulo.descripcion")} </label>
+                        <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarDescripcionDetalle}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</label>
+                        <input type="number" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalculacionDelDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalAgregarClienteNuevo' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Cliente Nuevo </h4>
+            </div>
+            <div class="modal-body">
+                <form id="formularioAgregarCliente" name ="formularioAgregarCliente" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
+                            <input type="text" class="form-control tamanoClienteNuevo cedula" id="cedula" name="cedula"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
+                            <select  class="form-control tipoCedula  tamanoClienteNuevo" id="tipoCedula" name="tipoCedula" >
+                                <option  each={tipoCedulas.data}  value="{valor}"   >{descripcion}</option>
+                            </select>
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
+                            <input type="text" class="form-control nombreCompleto tamanoClienteNuevo"  id="nombreCompleto" name="nombreCompleto" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.correoElectronico")}</label>
+                            <input type="text" class="form-control correoElectronico tamanoClienteNuevo"  id="correoElectronico" name="correoElectronico"  >
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
+                            <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais"  >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.telefono")} </label>
+                            <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" >
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick ={__regresarClienteNuevo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" show="{mostrarBotonAgregarCliente == true?true:false}">
+                    <button  onclick={__AplicarAgregarCliente}   class=" btn-green pull-right" >  Agregar Cliente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <style type="text/css">
-.btn-PagarICON:before {
-    font-family: FontAwesome;
-    content: "\f09d ";
-}
-.btn-Pagar {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 24px;
-    padding-right: 20px;
-    font-size: 30px;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
-.containerBotonesPagar{
-    display:flex;
-    margin-top: 2%;
-}
-.elementoPagar{
+      div.labelBotones:hover{
+        color:#30ed17 !important;
 
-}
-.teclashift {
-    font-weight: 700;
-    font-size: 27px !important;
-    text-align: center;
-    color: red;
+    }
+    .simbolodividir{
+        font-size:20px;
+    }
+    span.fontSumarRestar:hover{
+        background-color: black;
+    }
+    div.BotonesSumarRestar:hover {
+        background-color: black;
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
 
-}
+    .fontSumarRestar{
+        font-size: 20px;
+    }
+    .input-group-botonessumarrestarnuevocliente {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #151517;
+        border-radius: 4px;
+    }
+    .BotonesSumarRestar{
+        position: relative;
+        border-collapse: separate;
+    }
+    .containerSumarRestar{
+        flex:1;
+    }
+    .containerIconosSumaRestaAgregarCliente{
+        flex:1;
+    }
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+         font-size: 60px !important;
+    }
+    .btn-PagarICON:before {
+        font-family: FontAwesome;
+        content: "\f09d ";
+    }
+    .btn-Pagar {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 24px;
+        padding-right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .containerBotonesPagar{
+        display:flex;
+        margin-top: 2%;
+    }
+    .elementoPagar{
+
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
+
+    }
  .imagenesBilletes{
       height: 75px;
       width: 170px;
@@ -838,350 +1016,350 @@
     margin-top: 2%;
 
    }
-.billetes1{
-    margin-left: 1%;
-    /* margin-bottom: 9px; */
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 25px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 25px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 30px; */
-    border-collapse: separate;
-    text-align: center;
-    /* cursor: pointer; */
-    /* padding: 10px; */
-    /* margin: 20px; */
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.elementoTotales{
-    display: flex;
-    justify-content: space-around;
-     font-weight: 600 !important;
+    .billetes1{
+        margin-left: 1%;
+        /* margin-bottom: 9px; */
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: flex-start;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
         font-size: 25px !important;
-        font-family: Roboto,sans-serif !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 30px; */
+        border-collapse: separate;
+        text-align: center;
+        /* cursor: pointer; */
+        /* padding: 10px; */
+        /* margin: 20px; */
+        border: none;
+        text-align: center !important;
+
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 25px !important;
+        font-family: Roboto, sans-serif !important;
         color: #30ed17 !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
-        align-items: center;
         text-align: left;
-   
-}
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
+        /* padding-left: 20px; */
+        /* line-height: 30px; */
+        border-collapse: separate;
+        text-align: center;
+        /* cursor: pointer; */
+        /* padding: 10px; */
+        /* margin: 20px; */
+        border: none;
+        text-align: center !important;
 
-@media only screen and (max-width: 1024px) and (min-width:768px)  {
-.sizeBilletes{
-    height:90px;
-    width:160px;
-}
-.tituloTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color:#d3ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.valorTotal{
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    font-family: Roboto, sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    border-collapse: separate;
-    text-align: center;
-    border: none;
-    text-align: center !important;
-
-}
-.containerTotales{
-    display:flex;
-    flex-direction: column;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-
-
-
-}
-.labelDetalleVenta {
-    display: inline;
-    padding: .2em .6em .3em;
-    font-weight: 700;
-    line-height: 1;
-    color: black;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;
-}
-    .clickable {
-        cursor: pointer;
     }
-    .modal {
-position: fixed;
-top: 3%;
-right: 3%;
-left: 3%;
-bottom: 3%;
-width: auto;
-margin: 0;
-}
-.modal-body {
-max-height: 350px;
-padding: 15px;
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-}
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .elementoTotales{
+        display: flex;
+        justify-content: space-around;
+        font-weight: 600 !important;
+            font-size: 25px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            align-items: center;
+            text-align: left;
+    
+    }
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
 
-.modal-body { height: 60%; }
+    @media only screen and (max-width: 1024px) and (min-width:768px)  {
+    .sizeBilletes{
+        height:90px;
+        width:160px;
+    }
+    .tituloTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color:#d3ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
 
-@media (max-width: 480px) 
-{
-    .modal.fade.in {
-        top: 10px;
-  }
-}
+    }
+    .valorTotal{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto, sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        border-collapse: separate;
+        text-align: center;
+        border: none;
+        text-align: center !important;
 
-td.col-1, th.col-1 {
-  width: 8.33333%; }
+    }
+    .containerTotales{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
 
-td.col-2, th.col-2 {
-  width: 16.66667%; }
 
-td.col-3, th.col-3 {
-  width: 25%; }
 
-td.col-4, th.col-4 {
-  width: 33.33333%; }
+    }
+    .labelDetalleVenta {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-weight: 700;
+        line-height: 1;
+        color: black;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+        .clickable {
+            cursor: pointer;
+        }
+        .modal {
+    position: fixed;
+    top: 3%;
+    right: 3%;
+    left: 3%;
+    bottom: 3%;
+    width: auto;
+    margin: 0;
+    }
+    .modal-body {
+    max-height: 350px;
+    padding: 15px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    }
 
-td.col-5, th.col-5 {
-  width: 41.66667%; }
+    .modal-body { height: 60%; }
 
-td.col-6, th.col-6 {
-  width: 50%; }
+    @media (max-width: 480px) 
+    {
+        .modal.fade.in {
+            top: 10px;
+    }
+    }
 
-td.col-7, th.col-7 {
-  width: 58.33333%; }
+    td.col-1, th.col-1 {
+    width: 8.33333%; }
 
-td.col-8, th.col-8 {
-  width: 66.66667%; }
+    td.col-2, th.col-2 {
+    width: 16.66667%; }
 
-td.col-9, th.col-9 {
-  width: 75%; }
+    td.col-3, th.col-3 {
+    width: 25%; }
 
-td.col-10, th.col-10 {
-  width: 83.33333%; }
+    td.col-4, th.col-4 {
+    width: 33.33333%; }
 
-td.col-11, th.col-11 {
-  width: 91.66667%; }
+    td.col-5, th.col-5 {
+    width: 41.66667%; }
 
-td.col-12, th.col-12 {
-  width: 100%; }
+    td.col-6, th.col-6 {
+    width: 50%; }
 
-td.col-sm-1, th.col-sm-1 {
-  width: 8.33333%; }
+    td.col-7, th.col-7 {
+    width: 58.33333%; }
 
-td.col-sm-2, th.col-sm-2 {
-  width: 16.66667%; }
+    td.col-8, th.col-8 {
+    width: 66.66667%; }
 
-td.col-sm-3, th.col-sm-3 {
-  width: 25%; }
+    td.col-9, th.col-9 {
+    width: 75%; }
 
-td.col-sm-4, th.col-sm-4 {
-  width: 33.33333%; }
+    td.col-10, th.col-10 {
+    width: 83.33333%; }
 
-td.col-sm-5, th.col-sm-5 {
-  width: 41.66667%; }
+    td.col-11, th.col-11 {
+    width: 91.66667%; }
 
-td.col-sm-6, th.col-sm-6 {
-  width: 50%; }
+    td.col-12, th.col-12 {
+    width: 100%; }
 
-td.col-sm-7, th.col-sm-7 {
-  width: 58.33333%; }
+    td.col-sm-1, th.col-sm-1 {
+    width: 8.33333%; }
 
-td.col-sm-8, th.col-sm-8 {
-  width: 66.66667%; }
+    td.col-sm-2, th.col-sm-2 {
+    width: 16.66667%; }
 
-td.col-sm-9, th.col-sm-9 {
-  width: 75%; }
+    td.col-sm-3, th.col-sm-3 {
+    width: 25%; }
 
-td.col-sm-10, th.col-sm-10 {
-  width: 83.33333%; }
+    td.col-sm-4, th.col-sm-4 {
+    width: 33.33333%; }
 
-td.col-sm-11, th.col-sm-11 {
-  width: 91.66667%; }
+    td.col-sm-5, th.col-sm-5 {
+    width: 41.66667%; }
 
-td.col-sm-12, th.col-sm-12 {
-  width: 100%; }
+    td.col-sm-6, th.col-sm-6 {
+    width: 50%; }
 
-td.col-md-1, th.col-md-1 {
-  width: 8.33333%; }
+    td.col-sm-7, th.col-sm-7 {
+    width: 58.33333%; }
 
-td.col-md-2, th.col-md-2 {
-  width: 16.66667%; }
+    td.col-sm-8, th.col-sm-8 {
+    width: 66.66667%; }
 
-td.col-md-3, th.col-md-3 {
-  width: 25%; }
+    td.col-sm-9, th.col-sm-9 {
+    width: 75%; }
 
-td.col-md-4, th.col-md-4 {
-  width: 33.33333%; }
+    td.col-sm-10, th.col-sm-10 {
+    width: 83.33333%; }
 
-td.col-md-5, th.col-md-5 {
-  width: 41.66667%; }
+    td.col-sm-11, th.col-sm-11 {
+    width: 91.66667%; }
 
-td.col-md-6, th.col-md-6 {
-  width: 50%; }
+    td.col-sm-12, th.col-sm-12 {
+    width: 100%; }
 
-td.col-md-7, th.col-md-7 {
-  width: 58.33333%; }
+    td.col-md-1, th.col-md-1 {
+    width: 8.33333%; }
 
-td.col-md-8, th.col-md-8 {
-  width: 66.66667%; }
+    td.col-md-2, th.col-md-2 {
+    width: 16.66667%; }
 
-td.col-md-9, th.col-md-9 {
-  width: 75%; }
+    td.col-md-3, th.col-md-3 {
+    width: 25%; }
 
-td.col-md-10, th.col-md-10 {
-  width: 83.33333%; }
+    td.col-md-4, th.col-md-4 {
+    width: 33.33333%; }
 
-td.col-md-11, th.col-md-11 {
-  width: 91.66667%; }
+    td.col-md-5, th.col-md-5 {
+    width: 41.66667%; }
 
-td.col-md-12, th.col-md-12 {
-  width: 100%; }
+    td.col-md-6, th.col-md-6 {
+    width: 50%; }
 
-td.col-lg-1, th.col-lg-1 {
-  width: 8.33333%; }
+    td.col-md-7, th.col-md-7 {
+    width: 58.33333%; }
 
-td.col-lg-2, th.col-lg-2 {
-  width: 16.66667%; }
+    td.col-md-8, th.col-md-8 {
+    width: 66.66667%; }
 
-td.col-lg-3, th.col-lg-3 {
-  width: 25%; }
+    td.col-md-9, th.col-md-9 {
+    width: 75%; }
 
-td.col-lg-4, th.col-lg-4 {
-  width: 33.33333%; }
+    td.col-md-10, th.col-md-10 {
+    width: 83.33333%; }
 
-td.col-lg-5, th.col-lg-5 {
-  width: 41.66667%; }
+    td.col-md-11, th.col-md-11 {
+    width: 91.66667%; }
 
-td.col-lg-6, th.col-lg-6 {
-  width: 50%; }
+    td.col-md-12, th.col-md-12 {
+    width: 100%; }
 
-td.col-lg-7, th.col-lg-7 {
-  width: 58.33333%; }
+    td.col-lg-1, th.col-lg-1 {
+    width: 8.33333%; }
 
-td.col-lg-8, th.col-lg-8 {
-  width: 66.66667%; }
+    td.col-lg-2, th.col-lg-2 {
+    width: 16.66667%; }
 
-td.col-lg-9, th.col-lg-9 {
-  width: 75%; }
+    td.col-lg-3, th.col-lg-3 {
+    width: 25%; }
 
-td.col-lg-10, th.col-lg-10 {
-  width: 83.33333%; }
+    td.col-lg-4, th.col-lg-4 {
+    width: 33.33333%; }
 
-td.col-lg-11, th.col-lg-11 {
-  width: 91.66667%; }
+    td.col-lg-5, th.col-lg-5 {
+    width: 41.66667%; }
 
-td.col-lg-12, th.col-lg-12 {
-  width: 100%; }
+    td.col-lg-6, th.col-lg-6 {
+    width: 50%; }
 
-td.col-xl-1, th.col-xl-1 {
-  width: 8.33333%; }
+    td.col-lg-7, th.col-lg-7 {
+    width: 58.33333%; }
 
-td.col-xl-2, th.col-xl-2 {
-  width: 16.66667%; }
+    td.col-lg-8, th.col-lg-8 {
+    width: 66.66667%; }
 
-td.col-xl-3, th.col-xl-3 {
-  width: 25%; }
+    td.col-lg-9, th.col-lg-9 {
+    width: 75%; }
 
-td.col-xl-4, th.col-xl-4 {
-  width: 33.33333%; }
+    td.col-lg-10, th.col-lg-10 {
+    width: 83.33333%; }
 
-td.col-xl-5, th.col-xl-5 {
-  width: 41.66667%; }
+    td.col-lg-11, th.col-lg-11 {
+    width: 91.66667%; }
 
-td.col-xl-6, th.col-xl-6 {
-  width: 50%; }
+    td.col-lg-12, th.col-lg-12 {
+    width: 100%; }
 
-td.col-xl-7, th.col-xl-7 {
-  width: 58.33333%; }
+    td.col-xl-1, th.col-xl-1 {
+    width: 8.33333%; }
 
-td.col-xl-8, th.col-xl-8 {
-  width: 66.66667%; }
+    td.col-xl-2, th.col-xl-2 {
+    width: 16.66667%; }
 
-td.col-xl-9, th.col-xl-9 {
-  width: 75%; }
+    td.col-xl-3, th.col-xl-3 {
+    width: 25%; }
 
-td.col-xl-10, th.col-xl-10 {
-  width: 83.33333%; }
+    td.col-xl-4, th.col-xl-4 {
+    width: 33.33333%; }
 
-td.col-xl-11, th.col-xl-11 {
-  width: 91.66667%; }
+    td.col-xl-5, th.col-xl-5 {
+    width: 41.66667%; }
 
-td.col-xl-12, th.col-xl-12 {
-  width: 100%; }
+    td.col-xl-6, th.col-xl-6 {
+    width: 50%; }
+
+    td.col-xl-7, th.col-xl-7 {
+    width: 58.33333%; }
+
+    td.col-xl-8, th.col-xl-8 {
+    width: 66.66667%; }
+
+    td.col-xl-9, th.col-xl-9 {
+    width: 75%; }
+
+    td.col-xl-10, th.col-xl-10 {
+    width: 83.33333%; }
+
+    td.col-xl-11, th.col-xl-11 {
+    width: 91.66667%; }
+
+    td.col-xl-12, th.col-xl-12 {
+    width: 100%; }
 </style> 
 
 <script>
@@ -1348,7 +1526,7 @@ td.col-xl-12, th.col-xl-12 {
         _Empresa()
         __comboCondicionPago()
         __RolAdministrador()
-        __ListaDeClientes()
+      //  __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
@@ -1363,7 +1541,51 @@ td.col-xl-12, th.col-xl-12 {
               todayHighlight:true,
             }
         );
-        __agregarArticulos()   
+        __agregarArticulos()  
+
+        $( "#cambiarprecioArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarElPrecioModal()
+           }
+        });
+        $( "#aplicarDescuento" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               _actualizarDesc()
+           }
+        });
+        $( "#cambioNombreFactura" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __AplicarCambioNombreModal()
+           }
+        });
+        $( "#cambiarDescripcionArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarDescripcionDetalleModal()
+           }
+        });
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __recalculacionDelDetalleModal()
+           }
+        });
+
+        
+
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1379,6 +1601,274 @@ td.col-xl-12, th.col-xl-12 {
         }, false );
      
     })
+
+/**
+*Consulta hacienda
+**/
+__ConsultarHaciendaBlur(){
+    getClienteHacienda()
+
+}
+__ConsultarHacienda(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    getClienteHacienda()
+}
+
+
+
+function getClienteHacienda(){
+    var cedula = $('#cedula').val()
+    if(cedula.length  == 0){
+        return
+    }
+    self.mostrarBotonAgregarCliente = false
+    self.clienteHacienda= {
+        nombre:"",
+        tipoIdentificacion:"",
+        regimen:{
+            codigo:"",
+            descripcion:""
+        },
+        actividades:[]
+    }
+    self.cliente               = {}
+    self.update()
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+            mensajeAdvertencia( "Cedula invalidad" )
+            __listadoTipoCedulas()
+        }
+    }
+    }).done(function (response) {
+        self.clienteHacienda = response
+        self.mostrarBotonAgregarCliente = true
+        self.update()
+        
+        __listadoTipoCedulas()
+         $('#nombreCompleto').val(self.clienteHacienda.nombre)
+    });
+}
+/**
+*  Mostrar listado datatable TipoCedulas
+**/
+function __listadoTipoCedulas(){
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.update()
+    if(self.clienteHacienda.tipoIdentificacion == "01") {
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "02") {
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "03" ){
+        self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+    }    
+    if(self.clienteHacienda.tipoIdentificacion == "04" ){
+     self.tipoCedulas.data.push({
+        valor:"04",
+        descripcion:$.i18n.prop("tipo.cedula.nite")
+    })
+    }
+    if(self.tipoCedulas.data.length == 0){
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+         self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+        self.tipoCedulas.data.push({
+          valor:"04",
+          descripcion:$.i18n.prop("tipo.cedula.nite")
+        })
+
+    }
+    self.update()
+}
+
+
+/**
+*  Regresar al listado
+**/
+__regresarClienteNuevo(){
+    $('#modalAgregarClienteNuevo').modal('hide')
+}
+
+/**
+*   Agregar 
+**/
+__AplicarAgregarCliente(){
+     if ($("#formularioAgregarCliente").valid()) {
+        aplicarCreacionClienteNuevo()
+    }else{
+        mensajeAdvertencia("Error Faltan datos requeridos")
+        return true
+    }
+}
+
+function aplicarCreacionClienteNuevo(){
+    var formulario = $("#formularioAgregarCliente").serialize();
+    swal({
+        title: '',
+        text: $.i18n.prop("cliente.mensaje.alert.agregar"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#00539B',
+        cancelButtonColor: '#d33',
+        confirmButtonText:$.i18n.prop("confirmacion.si"),
+        cancelButtonText: $.i18n.prop("confirmacion.no"),
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+    }).then(function (isConfirm) {
+       if(isConfirm){
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            data : formulario,
+            url : 'AgregarClienteAjax.do',
+            success : function(data) {
+                if (data.status != 200) {
+                   	serverMessageJson(data);
+                    if (data.message != null && data.message.length > 0) {
+                        mensajeAdvertencia(data.message)
+                    }
+                } else {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.cliente = modeloTabla
+                       self.update()
+                    });
+                   	serverMessageJson(data);
+                    mensajeToasExito(data.message)   
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+     }
+    })        
+
+}
+
+
+
+__EntradaDinero(){
+  modalEntradaSalidaDinero(1)
+}   
+__SalidaDinero(){
+    modalEntradaSalidaDinero(2)
+}
+
+function modalEntradaSalidaDinero(tipo){
+ var parametros = {
+        tipo:tipo,
+    }
+    riot.mount('entrada-salida',{parametros:parametros});
+}
+
+
+__ClienteNuevo(){
+    __nuevoCliente()
+}
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionClienteNuevo = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			cedula : {
+				required : true,
+                maxlength:12,
+                minlength:9,
+			},
+
+			nombreCompleto : {
+				required : true,
+                maxlength:80,
+                minlength:1,
+                lettersOnly : true
+			},
+			correoElectronico : {
+                required : true,
+                maxlength:60,
+                minlength:1,
+                email:true
+			},
+            codigoPais : {
+                required : true,
+                minlength:3,
+
+			}                          
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+function __nuevoCliente(){
+    $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
+    $("#nombreCompleto").attr("maxlength", 80);
+    $("#cedula").attr("maxlength", 20);
+    $("#correoElectronico").attr("maxlength", 80);
+    $("#telefono").attr("maxlength", 8);
+    $('#codigoPais').mask('000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+    $('#cedula').mask('000000000000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+    $('.telefono').mask('00000000', {
+            'translation' : {
+                0 : {
+                    pattern : /[0-9]/
+                }
+            }
+	})
+
+    $("#cedula").val(null)
+    $("#nombreCompleto").val(null)
+    $("#correoElectronico").val(null)
+    $("#codigoPais").val(506)
+    $("#telefono").val(null)
+   
+    $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true}) 
+
+    $('#modalAgregarClienteNuevo').on('shown.bs.modal', function () {
+        $('#cedula').select()
+        $("#cedula").focus()   
+     });
+
+}
+
 
 __AsignarActividad(e){
     BuscarActividadComercial()
@@ -2028,10 +2518,14 @@ __CambiarDescuento(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
     }else{
-         $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarDescuento').modal('show')      
+         $('#modalCambiarDescuento').on('shown.bs.modal', function () {
+            
+            $( "#aplicarDescuento" ).val(null)
+            $( "#aplicarDescuento" ).focus()
+            $( "#aplicarDescuento" ).select()
+
+         })
     }
 }
 /**
@@ -2053,11 +2547,12 @@ __CambiarCantidad(e){
         $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
         $('#modalRolUsuario').modal('show')     
    }else{
-        $( "#cambiarCantidadArticulo" ).focus()
-        $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-        $('#modalCambiarCantidad').modal()                      // initialized with defaults
-        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-        $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately   
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+                $( "#cambiarCantidadArticulo" ).focus()
+                $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+                $('.cambiarCantidadArticulo').select()
+        })
    }
 }
 /**
@@ -2070,11 +2565,13 @@ __CambiarDescripcion(e){
         return true
     } 
   
-   $( "#cambiarDescripcionArticulo" ).focus()
-   $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-   $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-   $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+    $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+        $( ".cambiarDescripcionArticulo" ).val(self.item.descripcion)      
+        $('.cambiarDescripcionArticulo').focus()
+        $('.cambiarDescripcionArticulo').select()
+    })
+
 
 
 }
@@ -2087,9 +2584,13 @@ __CambiarPrecio(e){
         return true
     } 
    self.update()
-   $( "#cambiarprecioArticulo" ).focus()
-   $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
-   $('#modalCambiarPrecio').modal('show')      
+   $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true}) 
+   $('#modalCambiarPrecio').on('shown.bs.modal', function () {
+       $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
+       $( "#cambiarprecioArticulo" ).focus()
+       $( "#cambiarprecioArticulo" ).select()
+   })
+
 }
 /**
 * Tipo Cambio de moneda
@@ -2302,8 +2803,11 @@ __CargarFacturaEspera(e){
       }  
     }else{
         if(self.detail.length != 0 ){
-            $('#ModalAgregarNombreTiquete').modal('show') 
-            $('.cambioNombreFactura').focus()
+            $('#ModalAgregarNombreTiquete').modal({backdrop: 'static', keyboard: true}) 
+            $('#ModalAgregarNombreTiquete').on('shown.bs.modal', function () {
+                $('.cambioNombreFactura').focus()
+                $('.cambioNombreFactura').select()
+            })
             return
          }
     }
@@ -2334,11 +2838,13 @@ __CrearFacturaTemporal(){
     if(self.factura.id == null){
         
         if(self.detail.length != 0 ){
-            $('.cambioNombreTiquete').val(self.factura.nombreFactura)
-            $('.cambioNombreFactura').focus()
-            $('#ModalAgregarNombreTiquete').modal() 
-         //   $('#ModalCambiarNombreTiquete').modal({ keyboard: false })     // initialized with no keyboard
-             $('#ModalAgregarNombreTiquete').modal('show') 
+            
+            $('#ModalAgregarNombreTiquete').modal({backdrop: 'static', keyboard: true}) 
+            $('#ModalAgregarNombreTiquete').on('shown.bs.modal', function () {
+                $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+                $('.cambioNombreFactura').focus()
+                $('.cambioNombreFactura').select()
+            })
             return
         }
 
@@ -2399,10 +2905,7 @@ __ModificarNombreTiquete(){
     });
     }
 }
-/**
-*  Agregar el nombre a la factura temporal
-**/
-__AgregarNombreFacturaTemporal(){
+function __AplicarCambioNombreModal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.update()
@@ -2412,6 +2915,13 @@ __AgregarNombreFacturaTemporal(){
     }
     self.factEspera =null
     self.update()
+
+}
+/**
+*  Agregar el nombre a la factura temporal
+**/
+__AgregarNombreFacturaTemporal(){
+    __AplicarCambioNombreModal()
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -2996,7 +3506,8 @@ __agregarArticuloBotonAgregar(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')   
+    __ListaDeClientes()
+    
 }
 /**
 *  Muestra la lista de vendedores
@@ -3044,6 +3555,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                $('#modalClientes').modal('show')   
             }
         },
         error: function (xhr, status) {
@@ -3320,11 +3832,8 @@ function __storege(){
     }   
     self.update()
 }
- /**
- * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Factura
- **/ 
- __recalculacionDelDetalle(e){
+
+function __recalculacionDelDetalleModal(){
       var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -3333,26 +3842,44 @@ function __storege(){
     }
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
+
+}
+ /**
+ * Cuando se aplica un cambio de cantidad en un detalle
+ * Se aplica una recalculacion de todo el detalle y Factura
+ **/ 
+ __recalculacionDelDetalle(e){
+     __recalculacionDelDetalleModal()
   }
-/**
-* Cambiar el precio del detalle de la factura
-**/
-__cambiarDescripcionDetalle(e){
+  function  __cambiarDescripcionDetalleModal(){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
+
+  }
+/**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarDescripcionDetalle(e){
+    __cambiarDescripcionDetalleModal()
 }
 /**
 * Cambiar el precio del detalle de la factura
 **/
 __cambiarElPrecio(){
+    __cambiarElPrecioModal()
+}
+
+function __cambiarElPrecioModal(){
     var precio = $(".cambiarprecioArticulo").val();
      self.item.precioUnitario = __valorNumerico(precio);
      self.update()
     agregarPrecioAlDetalle(precio)
+
 }
+
 /**
 * Cambiar el precio en el detalle
 **/
@@ -3442,14 +3969,12 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-     if ($("#formularioDescuento").valid()) {
-        _actualizarDesc(e)
-     }
+        _actualizarDesc()
 }
 /**
 *Actualizar el descuento
 **/
-function _actualizarDesc(e){
+function _actualizarDesc(){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
      if(descuento > 100){
@@ -3737,8 +4262,8 @@ function __seleccionarClientes() {
         }
         
         
-         $('#modalClientes').modal('hide') 
-         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+        $('#modalClientes').modal('hide') 
+        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
        $('#totalEfectivo').focus()

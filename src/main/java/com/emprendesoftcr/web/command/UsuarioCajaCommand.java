@@ -1,64 +1,91 @@
 package com.emprendesoftcr.web.command;
 
 import java.util.Date;
+import java.util.Set;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
+import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class UsuarioCajaCommand {
 
-	private Long id;
-	private Double totalFondoInicial;
+	private Long									id;
+	private Double								totalFondoInicial;
 
-	private Double totalEfectivo;
+	private Double								totalEfectivo;
 
-	private Double totalTarjeta;
+	private Double								totalTarjeta;
 
-	private Double totalBanco;
+	private Double								totalBanco;
 
-	private Double totalCredito;
+	private Double								totalCredito;
 
-	private Double totalNeto;
+	private Double								totalNeto;
 
-	private Double totalAbono;
+	private Double								totalAbono;
 
-	private Double totalServicio;
+	private Double								totalServicio;
 
-	private Double totalDolares;
+	private Double								totalDolares;
 
-	private String totalFondoInicialSTR;
+	private String								totalFondoInicialSTR;
 
-	private String totalEfectivoSTR;
+	private String								totalEfectivoSTR;
 
-	private String totalTarjetaSTR;
+	private String								totalTarjetaSTR;
 
-	private String totalBancoSTR;
+	private String								totalBancoSTR;
 
-	private String totalCreditoSTR;
+	private String								totalCreditoSTR;
 
-	private String totalNetoSTR;
+	private String								totalNetoSTR;
 
-	private String totalAbonoSTR;
+	private String								totalAbonoSTR;
 
-	private String totalServicioSTR;
+	private String								totalServicioSTR;
 
-	private String totalDolaresSTR;
+	private String								totalDolaresSTR;
 
-	private Usuario usuario;
+	private Usuario								usuario;
 
-	private Caja caja;
+	private Caja									caja;
 
-	private Date created_at;
+	private Date									created_at;
 
-	private Date updated_at;
+	private Date									updated_at;
 
-	private String created_atSTR;
+	private Date									cierreCaja;
 
-	private String updated_atSTR;
+	private String								created_atSTR;
 
-	private String estado;
+	private String								updated_atSTR;
+
+	private String								estado;
+
+	private Double								sumaEntradas;
+	private Double								sumaSalida;
+	private Double								conteoManual;
+	private String								sumaConteoManualCierreSTR;
+
+	private String								sumaConteoManualAperturaSTR;
+	private String								tipoCambioSTR;
+
+	private String								conteoDolarSTR;
+
+	private Double								totalCierre;
+
+	private String								diferenciaSTR;
+	private String								datafonoSTR;
+
+	private String								conteoDolarConversionSTR;
+
+	@JsonDeserialize(using = ClienteDeserializer.class)
+	private Set<ConteoManualCaja>	conteoManualCajas;
 
 	public UsuarioCajaCommand() {
 		super();
@@ -78,9 +105,10 @@ public class UsuarioCajaCommand {
 		this.caja = usuarioCaja.getCaja();
 		this.created_at = usuarioCaja.getCreated_at();
 		this.updated_at = usuarioCaja.getUpdated_at();
+		this.cierreCaja = usuarioCaja.getCierreCaja();
 		this.estado = usuarioCaja.getEstado();
-		this.totalAbono = usuarioCaja.getTotalAbono();
-		this.totalServicio = usuarioCaja.getTotalServicio();
+		this.totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalAbono();
+		this.totalServicio = usuarioCaja.getTotalServicio() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalServicio();
 		this.created_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getCreated_at());
 		this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
 		this.totalFondoInicialSTR = usuarioCaja.getTotalFondoInicialSTR();
@@ -92,6 +120,114 @@ public class UsuarioCajaCommand {
 		this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
+		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
+		this.sumaEntradas = usuarioCaja.getSumaEntradas() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaEntradas();
+		this.sumaSalida = usuarioCaja.getSumaSalida() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaSalida();
+		this.conteoManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
+		this.tipoCambioSTR = Utils.formateadorMiles(usuarioCaja.getTipoCambio());
+		this.conteoDolarSTR = Utils.formateadorMiles(usuarioCaja.getConteoDolar());
+		Double conteoDolar = usuarioCaja.getConteoDolar() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoDolar();
+		Double tipoCambio = usuarioCaja.getTipoCambio() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTipoCambio();
+		this.conteoDolarConversionSTR = Utils.formateadorMiles(conteoDolar * tipoCambio);
+		this.totalCierre = usuarioCaja.getTotalCierre();
+		this.diferenciaSTR = usuarioCaja.getDiferenciaSTR();
+		this.datafonoSTR = usuarioCaja.getDatafonoSTR();
+	}
+
+	public String getDiferenciaSTR() {
+		return diferenciaSTR;
+	}
+
+	public void setDiferenciaSTR(String diferenciaSTR) {
+		this.diferenciaSTR = diferenciaSTR;
+	}
+
+	
+	public String getDatafonoSTR() {
+		return datafonoSTR;
+	}
+
+	
+	public void setDatafonoSTR(String datafonoSTR) {
+		this.datafonoSTR = datafonoSTR;
+	}
+
+	public Double getTotalCierre() {
+		return totalCierre;
+	}
+
+	public void setTotalCierre(Double totalCierre) {
+		this.totalCierre = totalCierre;
+	}
+
+	public String getTotalCierreSTR() {
+		return Utils.formateadorMiles(totalCierre);
+	}
+
+	public String getConteoDolarConversionSTR() {
+		return conteoDolarConversionSTR;
+	}
+
+	public void setConteoDolarConversionSTR(String conteoDolarConversionSTR) {
+		this.conteoDolarConversionSTR = conteoDolarConversionSTR;
+	}
+
+	public String getConteoDolarSTR() {
+		return conteoDolarSTR;
+	}
+
+	public void setConteoDolarSTR(String conteoDolarSTR) {
+		this.conteoDolarSTR = conteoDolarSTR;
+	}
+
+	public String getTipoCambioSTR() {
+		return tipoCambioSTR;
+	}
+
+	public void setTipoCambioSTR(String tipoCambioSTR) {
+		this.tipoCambioSTR = tipoCambioSTR;
+	}
+
+	public String getTotalGeneralSTR() {
+		Double totalNeto = this.totalNeto == null ? Constantes.ZEROS_DOUBLE : this.totalNeto;
+		return Utils.formateadorMiles(totalNeto + this.getSumaEntradas() - this.getSumaSalida());
+
+	}
+
+	public String getSumaEntradasSTR() {
+		return Utils.formateadorMiles(sumaEntradas);
+	}
+
+	public String getSumaSalidaSTR() {
+		return Utils.formateadorMiles(sumaSalida);
+	}
+
+	public String getConteoManualSTR() {
+		return Utils.formateadorMiles(this.conteoManual);
+	}
+
+	public Double getSumaEntradas() {
+		return sumaEntradas;
+	}
+
+	public void setSumaEntradas(Double sumaEntradas) {
+		this.sumaEntradas = sumaEntradas;
+	}
+
+	public Double getSumaSalida() {
+		return sumaSalida;
+	}
+
+	public void setSumaSalida(Double sumaSalida) {
+		this.sumaSalida = sumaSalida;
+	}
+
+	public Double getConteoManual() {
+		return conteoManual;
+	}
+
+	public void setConteoManual(Double conteoManual) {
+		this.conteoManual = conteoManual;
 	}
 
 	public String getCreated_atSTR() {
@@ -300,6 +436,42 @@ public class UsuarioCajaCommand {
 
 	public void setTotalDolaresSTR(String totalDolaresSTR) {
 		this.totalDolaresSTR = totalDolaresSTR;
+	}
+
+	public Set<ConteoManualCaja> getConteoManualCajas() {
+		return conteoManualCajas;
+	}
+
+	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
+		this.conteoManualCajas = conteoManualCajas;
+	}
+
+	public Date getCierreCaja() {
+		return cierreCaja;
+	}
+
+	public String getCierreCajaSTR() {
+		return Utils.getFechaGeneraReporte(this.getCierreCaja());
+	}
+
+	public void setCierreCaja(Date cierreCaja) {
+		this.cierreCaja = cierreCaja;
+	}
+
+	public String getSumaConteoManualCierreSTR() {
+		return sumaConteoManualCierreSTR;
+	}
+
+	public void setSumaConteoManualCierreSTR(String sumaConteoManualCierreSTR) {
+		this.sumaConteoManualCierreSTR = sumaConteoManualCierreSTR;
+	}
+
+	public String getSumaConteoManualAperturaSTR() {
+		return sumaConteoManualAperturaSTR;
+	}
+
+	public void setSumaConteoManualAperturaSTR(String sumaConteoManualAperturaSTR) {
+		this.sumaConteoManualAperturaSTR = sumaConteoManualAperturaSTR;
 	}
 
 }

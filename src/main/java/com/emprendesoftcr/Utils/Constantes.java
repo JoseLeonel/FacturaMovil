@@ -6,14 +6,26 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
-	
+
+	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																= 1;
+	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																= 0;
+
+	public static final Integer					COCINA_ACTIVO																								= 1;
+	public static final Integer					COCINA_INACTIVO																							= 2;
+
+	public static final Integer					COMMANDA_COCINA_ACTIVO																								= 1;
+	public static final Integer					COMMANDA_COCINA_INACTIVO																							= 2;
+
+	public static final Integer					ENTRADASALIDA_TIPO_ENTRADA																	= 1;
+	public static final Integer					ENTRADASALIDA_TIPO_SALIDA																		= 2;
+	public static final Integer					CONTEO_APERTURA_CAJA_TIPO																		= 1;
+	public static final Integer					CONTEO_CIERRE_CAJA_TIPO																			= 2;
+
 	public static final Integer					MIGRADO_XMLS_A_DISCO_NO																			= 0;
 	public static final Integer					MIGRADO_XMLS_A_DISCO_SI																			= 1;
 	public static final Integer					SEMAFORO_ESTADO_GUARDADO_XML																= 7;
 
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_DISCO													= 400;
-
-
 
 	public static final Integer					APLICA_REBAJO_INVENTARIO_POR_NOTA														= 1;
 	public static final Integer					NO_APLICA_REBAJO_INVENTARIO_POR_NOTA												= 2;
@@ -49,6 +61,7 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO														= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS													= "email/emailResumenCompras.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA									= "email/emailResumenFactura.vm";
+	public static final String					PLANTILLA_CORREO_CIERRE_CAJA																= "email/emailCaja.vm";
 	public static final String					PLANTILLA_CORREO_LISTAR_FACTURAS														= "email/emailResumenListarFactura.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA	= "email/emailResumenComprasSimplificadas.vm";
 
@@ -394,6 +407,9 @@ public class Constantes {
 	public static final String					ROL_ADMINISTRADOR_CAJERO																		= "Administrador_Cajero";
 	public static final String					ROL_ADMINISTRADOR_RESTAURANTE																= "Administrador_Restaurante";
 	public static final String					ROL_ADMINISTRADOR_EMPRESA																		= "Administrador_Empresa";
+	public static final String					ROL_USUARIO_CAJERO																					= "Usuario_Cajero";
+	public static final String					ROL_USUARIO_SUPERDARIO																			= "Usuario_SuperDario";
+	public static final String					ROL_USUARIO_MESERO																					= "Usuario_Mesero";
 
 	// Usuario
 	public static final String					WEB_SESSION_USUARIO																					= "usuario";
@@ -526,7 +542,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO														= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO																= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS														= 3;
-	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO					= 4;
+	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO1					= 4;
 	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR														= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR																= "factura.estado.pendiente";

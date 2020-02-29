@@ -383,6 +383,11 @@ public class FacturasController {
 	public String postpostRestaurante(ModelMap model) {
 		return "views/facturas/postRestaurante";
 	}
+	
+	@RequestMapping(value = "/Saloneros.do", method = RequestMethod.GET)
+	public String meseros(ModelMap model) {
+		return "views/facturas/saloneros";
+	}
 
 	@RequestMapping(value = "/ventaDolares", method = RequestMethod.GET)
 	public String crearVentaDolares(ModelMap model) {
@@ -394,15 +399,15 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 		 //criptografica desde linux
-//		 certificadoBo.agregar(usuario.getEmpresa(),"","");
+certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		if (usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
@@ -481,6 +486,7 @@ public class FacturasController {
 	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
+
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1543,7 +1549,7 @@ public class FacturasController {
 			if (facturaBD == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.consecutivo.no.existe", result.getAllErrors());
 			}
-			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA)) {
+			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) || facturaBD.getAnuladaCompleta().equals(Constantes.FACTURA_ANULACION_COMPLETA_SI)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
 			}
 

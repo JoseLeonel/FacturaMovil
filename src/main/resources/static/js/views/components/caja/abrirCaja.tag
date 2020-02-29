@@ -19,9 +19,7 @@
                                 <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
                                 <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
                                 <th class="table-header"  style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th class="table-header" style="width:10%" >{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th class="table-header"  style="width:10%" >{$.i18n.prop("usuarioCaja.estado")}        </th>
-                                <th class="table-header" >{$.i18n.prop("listado.acciones")}          </th>
+                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
@@ -31,150 +29,171 @@
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th  style="width:10%">{$.i18n.prop("usuarioCaja.estado")}        </th>
-                                <th>                                    </th>
+                                <th  > </th>
                             </tr>
                         </tfoot>
                     </table>
             </div>
         </div>    
 </div>
-<!-- Fin del Listado -->
-<div >
-    <div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-sx-12 col-lg-4 col-sm-2"></div>
-        <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-header with-border">
-                    <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.agregar.usuarioCaja")}     </h1>
-                </div>
-                <div class="box-body">
-                    <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                        <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
-                        <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
-                                <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.caja")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="caja" name="caja" >
-                                    <option  each={cajas.aaData}  value="{id}"  >{descripcion}</option>
-                                </select>
-                            </div>
-                        </div>    
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.fondoIncial")}  <span class="requeridoDato">*</span></label>
-                                <input type="number" step="any" class="form-control totalFondoInicial" id="totalFondoInicial" name="totalFondoInicial" value="{usuarioCaja.totalFondoInicial}"  >
-                            </div>
-                        </div>
-                    </form>    
-                </div>
-                <div class="box-footer">
+
+
+<div id='modalCerrarCaja' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=800px;>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja y Conteo Manual de los billetes / monedas": "Apertura de la Caja"} </h1>
+            </div>
+            <div class="modal-body">
                     <div class="row">
-                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <button onclick ={__regresarAlListado} type="button" class="btn-dark-gray btn-back pull-left " >
-                                {$.i18n.prop("btn.volver")}
-                            </button>
-                       </div>
-                        <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                          <button onclick={__agregar} class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >FondoInicial</label>
+                            <input type="number" class="form-control totalFondoInicial tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  id="totalFondoInicial" name="totalFondoInicial">
                         </div>
-                        
-                    </div>   
-                  
-                </div>
-            </div>   
-        </div>
-        <div class=" col-lg-4 "></div>
-    </div>
-</div>
+                    </div>
+                    <div class="row" show = {usuarioCaja.id != null ? true:false}>
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >Total Conteo Manual</label>
+                            <input type="number" class="form-control totalConteoManual tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  id="totalConteoManual" name="totalConteoManual">
+                        </div>
+                    </div>
 
-<div >
-    <div class="row center " show ={mostrarVerDetalle} >
-    <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
-            <div class="box box-solid box-primary">
-                <div class="box-header with-border">
-                    <h1 class="box-title"><i class="fa fa-search"></i>&nbsp {$.i18n.prop("titulo.mostrar.usuarioCaja")}     </h1>
-                </div>
-                <div class="box-body">
-                    <form id = "formularioUsuarioCaja" name ="formularioUsuarioCaja"   class="advanced-search-form ">
-                        <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
-                        <input type="hidden" name="caja" id="caja" value="{usuarioCaja.caja.id}">
-                        
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.caja")}  </label>
-                                <input type="text"  class="form-control"  value="{usuarioCaja.caja.descripcion}" readonly >
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.usuario")}  </label>
-                                <input type="text"  class="form-control"  value="{usuarioCaja.usuario.nombre}"  readonly>
-                            </div>
+                    <div class="row">    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 50,000</label>
+                            <input type="number" class="form-control billete50000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete50000" name="billete50000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 20,000</label>
+                            <input type="number" class="form-control billete20000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete20000" name="billete20000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 10,000</label>
+                            <input type="number" class="form-control billete10000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete10000" name="billete10000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 5,000</label>
+                            <input type="number" class="form-control billete5000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete5000" name="billete5000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 2,000</label>
+                            <input type="number" class="form-control billete2000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete2000" name="billete2000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Billetes 1,000</label>
+                            <input type="number" class="form-control billete1000 tamanoClienteNuevo modalInputCambioPrecio"  id="billete1000" name="billete1000" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 500</label>
+                            <input type="number" class="form-control moneda500 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda500" name="moneda500" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 100</label>
+                            <input type="number" class="form-control moneda100 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda100" name="moneda100" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 50</label>
+                            <input type="number" class="form-control moneda50 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda50" name="moneda50" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 25</label>
+                            <input type="number" class="form-control moneda25 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda25" name="moneda25" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 10</label>
+                            <input type="number" class="form-control moneda10 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda10" name="moneda10" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Moneda 5</label>
+                            <input type="number" class="form-control moneda5 tamanoClienteNuevo modalInputCambioPrecio"  id="moneda5" name="moneda5" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
 
-                        </div>
+                    </div>
+                    <div class="row" show = {usuarioCaja.id != null ? true:false}>    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Cierre Datafono</label>
+                            <input type="number" class="form-control conteoTarjeta tamanoClienteNuevo modalInputCambioPrecio"  id="conteoTarjeta" name="conteoTarjeta" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
 
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.fondoIncial")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalFondoInicialSTR}" readonly >
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalEfectivo")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalEfectivoSTR}" readonly >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalTarjeta")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalTarjetaSTR}" readonly >
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalBanco")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalBancoSTR}" readonly >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalServicio")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalServicioSTR}" readonly >
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                               <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
-                               <input type="text" class="form-control "  value=" {usuarioCaja.totalAbonoSTR}" readonly >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4 ">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalNetoSTR}" readonly >
-                            </div>                           
-                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
-                               <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalDolares")}  </label>
-                               <input type="text" class="form-control "  value=" {usuarioCaja.totalDolaresSTR}" readonly >
-                            </div>
-                        </div>
-                    </form>    
-                </div>
-                <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Tipo Cambio Dolar Recibido</label>
+                            <input type="number" class="form-control tipoCambio tamanoClienteNuevo modalInputCambioPrecio"  id="tipoCambio" name="tipoCambio" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Cantidad Dolares</label>
+                            <input type="number" class="form-control conteoDolar tamanoClienteNuevo modalInputCambioPrecio"  id="conteoDolar" name="conteoDolar" autofocus="autofocus"   autocomplete="off">
+                        </div>                            
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__Regresar}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-                    <button show ={mostrarConsultaComanda} onclick ={__consultarTotalesArticulo}  type="button" class="btn-green btn-edit pull-right" id="btnTotalesArticulo" name = "btnTotalesArticulo">
-                        {$.i18n.prop("btn.totales.articulo")}
-                    </button>
                 </div>
-            </div>   
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  show = {usuarioCaja.id == null ? true:false}  onclick={__agregar}   class=" btn-green pull-right modalCambioPrecioBotones" > Agregar Apertura </button>
+                    <button  show = {usuarioCaja.id != null ? true:false}  onclick={__cierre}   class=" btn-green pull-right modalCambioPrecioBotones" > Cerrar Caja </button>
+                </div>
+            </div>
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 </div>
 
+
+
+
 <style type ="text/css">
+.modalBox {
+   background: #fff !important;
+   border-radius: 16px !important;
+   position: absolute !important;
+   top: 44% !important;
+   left: 50% !important;
+   transform: translate(-50%, -50%) !important;
+   max-height: 90% !important;
+   overflow-y: auto !important;
+   padding: 30px !important;
+   box-sizing: border-box !important;
+   max-width: 90% !important;
+}
+
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+       text-align: center !important;
+    
+    }
+    .modalInputCambioPrecio{
+        font-size: 40px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+        border-color: green;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
+
+    .fontSumarRestar{
+        font-size: 20px;
+    }
     .fondoEncabezado {
         background: #00539B;
         color: #f9fafc;
@@ -235,6 +254,10 @@
         descripcion:"",
         estado:""
     }
+    self.usuarioCaja = {
+            id:null,
+            totalFondoInicial:0
+        }
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
@@ -242,31 +265,178 @@ self.on('mount',function(){
     __listado()
     includeActions('.dataTables_wrapper','.dataTables_length')
     __MantenimientoAgregar()
-    __Eventos()
     __listadoCajasActivas()
-})
-/**
-* Camps requeridos
-**/
-var reglasDeValidacion = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-			descripcion : {
-				required : true,
-                maxlength:80,
-                minlength:1,
-			},                                   
-            terminal : {
-				required : true,
-                maxlength:3,
-                minlength:3,
-			}                             
-		},
-		ignore : []
+    eventoKeyPressConteo()
 
-	});
-	return validationOptions;
+})
+
+__Regresar(){
+    hidemodal()
 }
+
+function hidemodal(){
+    $('#modalCerrarCaja').modal('hide')
+}
+
+
+function eventoKeyPressConteo(){
+     var xTriggered = 0;
+     $( "#billete50000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+     $( "#billete20000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+     $( "#billete10000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+     $( "#billete5000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+     $( "#billete2000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+     $( "#billete1000" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+        $( "#moneda500" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+       $( "#moneda100" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+     $( "#moneda50" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+     $( "#moneda25" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+     $( "#moneda10" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+     $( "#moneda5" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+            conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+        $( "#conteoTarjeta" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+         $( "#conteoDolar" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+         $( "#tipoCambio" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+             conteoDinero();
+        }).keydown(function( event ) {
+               conteoDinero();
+        });
+
+}
+
+function __limpiar(){
+    $(".billete50000").val(null)
+    $(".billete20000").val(null)
+    $(".billete10000").val(null)
+    $(".billete5000").val(null)
+    $(".billete2000").val(null)
+    $(".billete1000").val(null)
+    $(".moneda500").val(null)
+    $(".moneda100").val(null)
+    $(".moneda50").val(null)
+    $(".moneda25").val(null)
+    $(".moneda10").val(null)
+    $(".moneda5").val(null)
+    $(".conteoTarjeta").val(null)
+    $(".tipoCambio").val(null)
+    $(".conteoDolar").val(null)
+}
+
+function conteoDinero(){
+    var billete50000 = __valorNumerico($(".billete50000").val()) * 50000
+    var billete20000 = __valorNumerico($(".billete20000").val()) * 20000
+    var billete10000 = __valorNumerico($(".billete10000").val()) * 10000
+    var billete5000 = __valorNumerico($(".billete5000").val()) * 5000
+    var billete2000 = __valorNumerico($(".billete2000").val()) * 2000
+    var billete1000 = __valorNumerico($(".billete1000").val()) * 1000
+    var moneda500 = __valorNumerico($(".moneda500").val()) * 500
+    var moneda100 = __valorNumerico($(".moneda100").val()) * 100
+    var moneda50 = __valorNumerico($(".moneda50").val()) * 50
+    var moneda25 = __valorNumerico($(".moneda25").val()) * 25
+    var moneda10 = __valorNumerico($(".moneda10").val()) * 10
+    var moneda5 = __valorNumerico($(".moneda5").val()) * 5
+
+    var tipoCambio = __valorNumerico($(".tipoCambio").val())
+    var conteoDolar = __valorNumerico($(".conteoDolar").val())
+    
+    if(self.usuarioCaja.id != null){
+        var conteoTarjeta = __valorNumerico($(".conteoTarjeta").val())
+        $(".totalConteoManual").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta +(tipoCambio * conteoDolar ))
+    }else{
+        $(".totalFondoInicial").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 )
+    }
+}
+
 /**
 *  Mostrar listado datatable Cajas Activas
 **/
@@ -289,29 +459,12 @@ function __listadoCajasActivas(){
     })
 }
 /**
-*  Activar Eventos
-**/
-function __Eventos(){
-    $("#formulario").validate(reglasDeValidacion());
-    $("#descripcion").attr("maxlength", 80);
-    $('#terminal').mask('000', {
-		'translation' : {
-			0 : {
-				pattern : /[0-9]/
-			}
-		}
-	});
-}
-/**
 *  Regresar al listado
 **/
 __regresarAlListado(){
     self.mostrarListado     = true;
     self.botonAgregar       = false;
-    self.botonModificar     = false;
     self.mostrarFormulario  = false 
-    self.mostrarVerDetalle  = false
-    self.mostrarConsultaComanda    = false
     self.update()
     __listado();
 }
@@ -324,18 +477,20 @@ function __MantenimientoAgregar(){
             id:null,
             totalFondoInicial:0
         }
-        //desahabilita  listado 
-        self.mostrarListado   = false;
-        self.mostrarFormulario  = true 
-        //desahabilita boton modificar
-        self.botonModificar   = false;
-        // habilita el formulario
-        self.botonAgregar     = true;
-        self.update();
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        self.update()
+        showModal()
     })
+}
+function showModal(){
+    $('#modalCerrarCaja').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCerrarCaja').on('shown.bs.modal', function () {
+        __limpiar()
+        $(".totalFondoInicial").val( self.usuarioCaja.totalFondoInicial)
+        $(".billete50000").val(0)
+        $(".billete50000").focus()
+        $(".billete50000").select()
+    })  
+
 }
 /**
 *  Consultar  especifico
@@ -351,7 +506,7 @@ function __consultar(){
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+                    mensajeAdvertencia( data.message);
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
@@ -378,55 +533,58 @@ function __consultar(){
 *   Agregar 
 **/
 __agregar(){
-    if ($("#formulario").valid()) {
-        var formulario = $("#formulario").serialize();
-        $.ajax({
-            type : "POST",
-            dataType : "json",
-            data : formulario,
-            url : 'AgregarUsuarioCajaAjax.do',
-        success : function(data) {
-            if (data.status != 200) {
-               	serverMessageJson(data);
-                if (data.message != null && data.message.length > 0) {
-                   	swal({
-                        title: '',
-                        text: data.message,
-                        type: 'error',
-                        showCancelButton: false,
-                        confirmButtonText: $.i18n.prop("btn.aceptar"),
-                    })
-                }
-            } else {
-               	serverMessageJson(data);
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: $.i18n.prop("btn.aceptar"),
-	            })
-	            $("#formulario").validate(reglasDeValidacion());
-                $(".errorServerSideJgrid").remove();
-                $("#descripcion").val(null);
-                $("#terminal").val(null);
-                __Eventos()
+        var formulario = {
+             denominacion :JSON.stringify(__CrearListaMonedas(1))
+         }
+        swal({
+           title: '',
+           text: "Desea abrir la caja con ese monto  digitado",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            //Ajax__inicializarTabla();
+            if(isConfirm){
+                $.ajax({
+                    type : "POST",
+                    dataType : "json",
+                    data : formulario,
+                    url : 'AgregarUsuarioCajaAjax.do',
+                    success : function(data) {
+                        if (data.status != 200) {
+                        	serverMessageJson(data);
+                            if (data.message != null && data.message.length > 0) {
+                                mensajeAdvertencia(data.message)
+                            }
+                        } else {
+                            mensajeToasExito(data.message)
+                             
+                              $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                self.usuarioCaja = modeloTabla    
+                                self.update()
+                            })
+                            var parametros  = {
+                                usuarioCaja:self.usuarioCaja,
+                                tipo:1
+                            }
+                            riot.mount('imprimir-caja',{parametros:parametros});
+                            __listado()
+                        }
+                    },
+                    error : function(xhr, status) {
+                        console.log(xhr);
+                        mensajeErrorServidor(xhr, status);
+                    }
+                });
             }
-        },
-        error : function(xhr, status) {
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-    }
-}
-/**
-** Modificar la Empresa
-**/
-__Modificar(){
-    self.error = false;
-    self.exito = false;
-    self.update();
-    __modificarRegistro("#formulario",$.i18n.prop("caja.mensaje.alert.modificar"),'ModificarCajaAjax.do','ListarcajasAjax.do','#tableListar')
+        });
+      
+  
 }
 /**
 *  Mostrar listado datatable
@@ -436,6 +594,7 @@ function __listado(){
     $.ajax({
         url: "ListarUsuariosCajasAjax.do",
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
@@ -446,12 +605,7 @@ function __listado(){
                 __MantenimientoAgregar()
                     //Activar filtros
                 ActivarEventoFiltro(".tableListar")
-                __VerDetalle()
-                __Eventos()
-                __Imprimir()
                 __cerrarCaja()
-             }else{
-                 __Eventos()
              } 
         },
         error: function (xhr, status) {
@@ -472,25 +626,32 @@ function __InformacionDataTable(){
                                 },
                                {'data' : 'created_atSTR'        ,"name":"created_atSTR"  ,"title" : $.i18n.prop("usuarioCaja.created_at")  ,"autoWidth" :false
                                 },
-                                {'data' : 'updated_atSTR'        ,"name":"updated_atSTR" ,"title" : $.i18n.prop("usuarioCaja.updated_at")  ,"autoWidth" :false
-                                },
+                                {'data' : 'updated_atSTR'        ,"name":"updated_atSTR" ,"title" : $.i18n.prop("usuarioCaja.updated_at")  ,"autoWidth" :false},
                                {'data' : 'usuario'       ,"name":"usuario"         ,"title" : $.i18n.prop("usuarioCaja.usuario")     ,"autoWidth" :false,
                                     "render":function(usuario,type, row){
                                         return usuario.nombreUsuario;
                                     }
                                },
                                {'data' : 'totalFondoInicialSTR'        ,"name":"totalFondoInicialSTR"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false},
-                               {'data' : 'totalNetoSTR'                ,"name":"totalNetoSTR"           ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false},
-                               
-                               {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("usuarioCaja.estado")      ,"autoWidth" :false},
-                               {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                               {'data' : 'id'           ,"name":"id"       ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
+                                      return __OpcionesFacturas(id,type,row);
+                                 }}
+
+	      		            ];
     self.update();
    
 }
+/**
+Opcions del menu
+**/
+function __OpcionesFacturas(id,type,row){
+   var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
+   cerrar = row.estado =="Activo"?cerrar:""
+  return  cerrar ;
+
+}
+
 /**
 Formato de montos
 **/
@@ -506,87 +667,6 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }                                    
-/**
-* Opciones listado de los clientes
-*/
-function __Opciones(id,type, row){
-  var verDetalle  = '<a href="#"  title="Ver Detalle" class="btn btn-success  btn-buscar btnVerDetalle" role="button"> </a>';
-  var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
-  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-imprimir  btnImprimir" role="button"> </a>';
-  cerrar = row.estado =="Activo"?cerrar:""
-  return  verDetalle +" "+ cerrar +" "+imprimir;
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __VerDetalle(){
-	$('#tableListar').on('click','.btnVerDetalle',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = data
-        self.update()
-        __consultar()
-	});
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __Imprimir(){
-	$('#tableListar').on('click','.btnImprimir',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = null
-        __ActualizarCajaAntesImprimir(data.id)
-	});
-}
-
-function __ActualizarCajaAntesImprimir(id){
-   // $("#tableListar").dataTable().fnClearTable(); 
-    $.ajax({
-        url: "ActualizarUsuarioCajaAjax.do",
-        datatype: "json",
-        data: {
-			"idUsuarioCaja":id,
-	    },
-
-        method:"GET",
-        success: function (result) {
-             if (result.status != 200) {
-                if (result.message != null && result.message.length > 0) {
-                   	swal({
-      	                title: '',
-      	                text: result.message,
-      	                type: 'error',
-      	                showCancelButton: false,
-      	                confirmButtonText: $.i18n.prop("btn.aceptar"),
-      	            })
-                }
-            } else {
-                $.each(result.listaObjetos, function( index, modeloTabla ) {
-                    self.usuarioCaja = modeloTabla    
-                    self.update()
-                })
-                riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
-
-            }
-                    
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-} 
 
 /**
  * Funcion para Modificar del Listar
@@ -602,76 +682,44 @@ function __cerrarCaja(){
 	    }
         self.usuarioCaja  = data
         self.update()
-        cerrarCajaAjax()
+        showModal()
 	});
 }
 /**
-*  Totales de Articulos
+*  Agregar los inpust  y select de las tablas
 **/
-__consultarTotalesArticulo(){
-	$.ajax({
-        type : "GET",
-        dataType : "json",
-        data: {
-			"idUsuarioCaja":$("#id").val(),
-	    },
-        url : 'AgrupaArticulosCategoriaAjax.do',
-        success : function(data) {
-            if (data.status != 200) {
-            	serverMessageJson(data);
-                if (data.message != null && data.message.length > 0) {
-                	swal({
-                         title: '',
-                         text: data.message,
-                         type: 'error',
-                         showCancelButton: false,
-                         confirmButtonText: $.i18n.prop("btn.aceptar"),
-                       })
-                }
-            } else {
-            	var informacion = {
-            		nombreImpresora:"factura",
-            		cantidadCaracteresLinea:"40",
-            		formatoTiquete:"",
-            		detalles:data.listaObjetos
-            	}
-        		var JSONData = JSON.stringify(informacion);		
-            	if (data.listaObjetos != null && data.listaObjetos.length > 0) {
-            		$.ajax({
-            	        contentType: 'application/json',
-            	        url: 'http://localhost:8033/service/AgrupaArticulosCategoriaComandaAjax',
-            	        datatype: "json",
-            	        data : JSONData,
-            	        method:"POST",
-            	        success: function (result) {
-                            swal({
-                           	 	title: '',
-                            	text: data.message,
-                            	type: 'success',
-                            	showCancelButton: false,
-                            	confirmButtonText: $.i18n.prop("btn.aceptar"),
-                          	})
-            	      	   self.update()
-            	        },
-            	        error: function (xhr, status) {
-            	            console.log(xhr);
-            	            mensajeErrorServidor(xhr, status);
-            	        }
-            	    });	
-            	}
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
+function agregarInputsCombos(){
+
+     // Agregar los input de busqueda 
+    $('.tableListar tfoot th').each( function (e) {
+        var title = $('.tableListar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+ 
+    })
+
 }
+
+__cierre(){
+    cerrarCajaAjax()
+}
+
+
+
 /**
 *Cerrar caja
 **/
 function cerrarCajaAjax(){
-         var formulario = $('#formularioUsuarioCaja').serialize();
+        var formulario = {
+             id:self.usuarioCaja.id,
+             caja:self.usuarioCaja.caja.id,
+             conteoTarjeta:$(".conteoTarjeta").val(),
+             tipoCambio:$(".tipoCambio").val(),
+             conteoDolar:$(".conteoDolar").val(),
+             denominacion :JSON.stringify(__CrearListaMonedas(2))
+         }
         swal({
            title: '',
            text: $.i18n.prop("usuarioCaja.mensaje.alert.cerrar"),
@@ -695,24 +743,27 @@ function cerrarCajaAjax(){
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-      	                         })
+                                mensajeAdvertencia(data.message)
                             }
                         } else {
-                        	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-	                         })
+                            mensajeToasExito(data.message)
+                            self.usuarioCaja = null
                              __listado()
+                             hidemodal()
+                             $.each(data.listaObjetos, function( index, modeloTabla ) {
+                                self.usuarioCaja = modeloTabla    
+                                self.update()
+                            })
+                            if(self.usuarioCaja != null){
+                                var parametros  = {
+                                    usuarioCaja:self.usuarioCaja,
+                                    tipo:2
+                                }
+                                riot.mount('imprimir-caja',{parametros:parametros});
+                                                     
+
+                            }
+
                         }
                     },
                     error : function(xhr, status) {
@@ -723,20 +774,98 @@ function cerrarCajaAjax(){
             }
         });
 }
-/**
-*  Agregar los inpust  y select de las tablas
-**/
-function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListar tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 7    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
- 
-    })
 
-}
+
+/**
+* Tipo  2 = Conteo de Cierre  1 = Conteo de Apertura
+**/
+function __CrearListaMonedas(tipo){
+    var lista = {data:[]};
+    lista.data.push({
+        tipo:tipo,
+        moneda:50000,
+        denominacion: "50,000",
+        cantidad: __valorNumerico($(".billete50000").val() ),
+        total:__valorNumerico($(".billete50000").val()) * 50000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:20000,
+        denominacion: "20,000",
+        cantidad: __valorNumerico($(".billete20000").val() ),
+        total:__valorNumerico($(".billete20000").val()) * 20000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:10000,
+        denominacion: "10,000",
+        cantidad: __valorNumerico($(".billete10000").val() ),
+        total:__valorNumerico($(".billete10000").val()) * 10000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:5000,
+        denominacion: "5,000",
+        cantidad: __valorNumerico($(".billete5000").val() ),
+        total:__valorNumerico($(".billete5000").val()) * 5000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:2000,
+        denominacion: "2,000",
+        cantidad: __valorNumerico($(".billete2000").val() ),
+        total:__valorNumerico($(".billete2000").val()) * 2000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:1000,
+        denominacion: "1,000",
+        cantidad: __valorNumerico($(".billete1000").val() ),
+        total:__valorNumerico($(".billete1000").val()) * 1000
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:500,
+        denominacion: "500",
+        cantidad: __valorNumerico($(".moneda500").val() ),
+        total:__valorNumerico($(".moneda500").val()) * 500
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:100,
+        denominacion: "100",
+        cantidad: __valorNumerico($(".moneda100").val() ),
+        total:__valorNumerico($(".moneda100").val()) * 100
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:50,
+        denominacion: "50",
+        cantidad: __valorNumerico($(".moneda50").val() ),
+        total:__valorNumerico($(".moneda50").val()) * 50
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:25,
+        denominacion: "25",
+        cantidad: __valorNumerico($(".moneda25").val() ),
+        total:__valorNumerico($(".moneda25").val()) * 25
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:10,
+        denominacion: "10",
+        cantidad: __valorNumerico($(".moneda10").val() ),
+        total:__valorNumerico($(".moneda10").val()) * 10
+    })
+    lista.data.push({
+        tipo:tipo,
+        moneda:5,
+        denominacion: "5",
+        cantidad: __valorNumerico($(".moneda5").val() ),
+        total:__valorNumerico($(".moneda5").val()) * 5
+    })
+    return lista;
+} 
 </script>
 </abrir-caja>

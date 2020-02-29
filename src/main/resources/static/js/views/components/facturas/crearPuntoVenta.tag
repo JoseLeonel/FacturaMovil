@@ -8,35 +8,7 @@
     </div>
 <!--validar rol de usuario-->
 
-<!-- The Modal -->
-  <div class="modal fade" id="modalRolUsuario">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Seguridad</h4>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-           <form id="formularioModalRolUsuario">
-                <div class="form-group ">
-                    <label>Usuario</label> 
-                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
-                </div>      
-                <div class="form-group ">
-                    <label>Clave</label> 
-                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
-                </div>      
-            </form>
-        </div>
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<!--fin validar rol de usuario-->
+
 
 <!--Modal abrirCajon sin comanda-->
 <div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
@@ -312,12 +284,7 @@
                 </div>
                 <section class="cabecera-derecha">
                     <div class="tituloCantidadArticulos" show={cantArticulos>0}><div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div></div>
-                    <section   class="lista-factura-espera">
-                        <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{nombreCompleto !=null?nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
-                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}">V: {id}</a>
-                        </div>    
-                     </section >
+                    
                      <aside class="left-sidebar">
                         <article class="clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  show={soloParaChinos == true}>
@@ -368,7 +335,63 @@
                                     <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
                                 </li>
                             </ul>
-                           
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
+                                <div class = 'containerSumarRestar'>
+                                </div>
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-plus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                          Sumar
+                                    </span> 
+                                </div>                     
+                            
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__RestarConMouse} title="Restar -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-minus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                          Restar
+                                    </span> 
+                                </div>                     
+                                
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__AplicarCambioPrecio} title="Cambio de Precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                       <strong class='simbolodividir'> /</strong> = cambio Precio
+                                    </span> 
+                                </div>                     
+
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Entrada de Dinero 
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Salida de Dinero
+                                    </span> 
+                                </div>                     
+                                <div class="BotonesSumarRestar">
+                                    <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        Nuevo Cliente
+                                    </span> 
+                                </div>
+
+                            </div>
+                            <section   class="ventaEspera">
+                                <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                    <div show ="{consecutivoProforma.length>0?true:false}"  class="fondoVentaEspera" title="{nombreCompleto !=null?nombreCompleto:""}"><span class="tamanoVentaEspera">P: {consecutivoProforma} </span></div>  
+                                    <div show ="{consecutivoProforma.length == 0?true:false}" class="fondoVentaEspera"  title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}"><span class="tamanoVentaEspera">V: {id} </span></div>  
+                                </div>    
+                            </section >
+                            
                         </article>
                     </aside>
                 </section>
@@ -553,57 +576,64 @@
     </div>
 </div>
 <!--fin del modal-->
- 
 
-<!--Modal Cambiar Cantidad-->
+
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >Cantidad:</label>
-                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
+                <form  >
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Cantidad </label>
+                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
                         </div>
                     </div>
-                </div> 
+ 
+                </form>    
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalculacionDelDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!--Fin Cambiar Cantidad-->
 
 
-<!--Modal Cambiar Descuento-->
+
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al producto</h1>
             </div>
             <div class="modal-body">
-                <form id="formularioDescuento" name="formularioDescuento">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
+                <form id='formularioDescuento' name ='formularioDescuento'  >
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descuento </label>
+                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"   autofocus="autofocus" min="0" autocomplete="off">
                         </div>
                     </div>
-                </div> 
-                </form>
-
+ 
+                </form>    
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__actualizarDescuento}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
             </div>
         </div>
     </div>
@@ -674,124 +704,283 @@
 
 
 
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
+            </div>
+            <div class="modal-body">
+                <form  >
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >Codigo</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
+                        </div>
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descripcion</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.descripcion}">
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Precio al Publico </label>
+                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--fin validar rol de usuario-->
+
+<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
+            </div>
+            <div class="modal-body">
+                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
+                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
+                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <style type="text/css"  >
-.campoDetalle {
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 8px 18px;
-    font-size: 10px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    font: 20px verdana, arial, helvetica, sans-serif;
-    /* margin: 2px 0; */
-    padding: 1px 2px;
-    overflow: visible;
+.tamanoVentaEspera{
+   font-size: 14px;
+    margin-left: 2%;
+    margin-right: 2%;
 }
-.campoLabel{
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
+div.fondoVentaEspera:hover{
+    color:#30ed17 !important;
+    cursor: pointer;
 }
-.teclashift {
-    font-weight: 700;
-    font-size: 27px !important;
-    text-align: center;
-    color: red;
-
-}
-.teclaFuncion{
-
-}
-.opcionPrecioPublico{
+.ventaEspera{
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-bottom: 3%;
 }
-.tituloTipoCambio{
-    color: #0c3f65 !important;
-    float: left !important;
-    font-size: 13px !important;
-    background-color: transparent !important;
-    font-weight: normal;
-    text-align: left;
-}
-.ssCambioCentral{
-    color: #0c3f65 !important;
-    display: block;
-    text-align: center;
-        font-weight: 900;
+    div.labelBotones:hover{
+        color:#30ed17 !important;
 
-}
-.ssCambio{
-    color: #0c3f65 !important;
-    display: block;
-    text-align: left;
-}
-@media (min-width: 992px){
-.modal-lg {
-    width: 1024px !important;
-}
-}
-.facturaDiaContainer{
-  display:flex;
-}
-  .tamanoClienteNuevo{
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-    height: 10%;
+    }
+    .simbolodividir{
+        font-size:20px;
+    }
+    span.fontSumarRestar:hover{
+        background-color: black;
+    }
+    div.BotonesSumarRestar:hover {
+        background-color: black;
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
 
-  }
-  .tituloClienteNuevo{
-    display: inline-block;
-    max-width: 100%;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-  }
-  .btn-dark-gray {
-    background-color: #3D3E42;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px!important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-   }
-   .btn-green {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 30px !important;
-    font-weight: bold;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
+    .fontSumarRestar{
+        font-size: 20px;
+    }
+    .input-group-botonessumarrestarnuevocliente {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #151517;
+        border-radius: 4px;
+    }
+    .BotonesSumarRestar{
+        position: relative;
+        border-collapse: separate;
+    }
+    .containerSumarRestar{
+        flex:1;
+    }
+    .containerIconosSumaRestaAgregarCliente{
+        flex:1;
+    }
+    .campoDetalle {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        /* margin: 2px 0; */
+        padding: 1px 2px;
+        overflow: visible;
+    }
+    .campoLabel{
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
+
+    }
+    .teclaFuncion{
+
+    }
+    .opcionPrecioPublico{
+        display: flex;
+        flex-direction: column;
+    }
+    .tituloTipoCambio{
+        color: #0c3f65 !important;
+        float: left !important;
+        font-size: 13px !important;
+        background-color: transparent !important;
+        font-weight: normal;
+        text-align: left;
+    }
+    .ssCambioCentral{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: center;
+            font-weight: 900;
+
+    }
+    .ssCambio{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: left;
+    }
+    @media (min-width: 992px){
+    .modal-lg {
+        width: 1024px !important;
+    }
+    }
+    .facturaDiaContainer{
+    display:flex;
+    }
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+
+    }
+    .tituloClienteNuevo{
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 600;
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+    }
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-green {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px !important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
     .botonesContainer{
        display:flex;
     }
@@ -817,11 +1006,11 @@
     margin-top: 2%;
 
    }
-.input-group {
-    position: relative;
-    display: flex;
-    border-collapse: separate;
-}
+    .input-group {
+        position: relative;
+        display: flex;
+        border-collapse: separate;
+    }
      .input-group-addon.btnClientes {
        color: #66b12f;
         cursor: pointer;
@@ -862,7 +1051,6 @@
         transition: background-color 100ms linear;
     }
     .contenedorExoneracion{
-
     }
     .label-totalesComprobanteChino {
         display: flex;
@@ -920,19 +1108,16 @@
         padding-bottom: 0.2%;
     }  
     .ventaEsperaSeleccionada .tituloVentaEspera{
-        color: yellow;
-        background: black;
         font-weight: 700;
+        font-size:20px;
+            color: brown;
     }                           
     .contenedorFactura{
         display: flex;
         flex: 1;
         border: 1px solid #3c8dbc;
         background: #ffffff;
-    
-
     }
-
     .precioTotalFacturaContainer{
         display:flex;
         flex:1;
@@ -995,18 +1180,14 @@
 
     }
     .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
-    display:flex;
+        display:flex;
     }
 
     .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
-    flex:1;
-    padding-right: 1%;
-    padding-bottom: 2%;
+        flex:1;
+        padding-right: 1%;
+        padding-bottom: 2%;
     }
-
-
-
-
     .gananciaContainer{
         display:flex;
         flex:1;
@@ -1021,7 +1202,7 @@
         display:flex;
     }
     .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
-    font-weight: 600 !important;
+        font-weight: 600 !important;
         font-size: 30px !important;
         font-family: Roboto,sans-serif !important;
         color: #edea17 !important;
@@ -1060,9 +1241,6 @@
     
     }
 
-
-
-
     .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
         flex: 0.15;
         font-weight: 600 !important;
@@ -1099,8 +1277,6 @@
         -ms-transition: background-color 100ms linear;
     }
 
-
-
 </style>    
 <script>
     var self = this;
@@ -1112,7 +1288,6 @@
     self.error                 = false
     self.rutaAutorizada        = ""    // llama al modal correspondiente
     self.autorizarBorrado      = 0    // 0 = no autoriza 1 = si autorisa 
-
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
@@ -1190,7 +1365,6 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
@@ -1234,6 +1408,10 @@
     self.soloParaChinos = false
     self.totalGananciaByProducto = 0
     self.totalPesoByFactura = 0
+    self.ultimoArticulo ={
+        descripcion:"",
+        precioPublico:0
+        }
     self.rol = {
       rolAdministrador:0
     }
@@ -1272,9 +1450,10 @@
     }
     self.transaccion = false
     self.on('mount',function(){
-
         $("#formularioFactura").validate(reglasDeValidacionFactura());
          self.informacion_tabla_clientes =__informacionData_formato_cliente()
+         self.tipoCambio.total = __getTipoCambioTotal()
+         self.tipoCambio.totalCompra = __getTipoCambioCompra()
          self.update()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -1285,20 +1464,14 @@
         __ListaFacturasEnEspera()
         __comboCondicionPago()
         __RolAdministrador()
-       __Teclas()
-      
        cargaBilletes()
        __InformacionDataTableDia()
-       __ListaDeClientes()
        __ListaActividadesComercales()
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
-       
-       
-        $('.codigo').select()
-        $(".codigo").focus()
+        getPosicionInputCodigo()   
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
             {
@@ -1307,7 +1480,6 @@
               todayHighlight:true,
             }
         );
-        
         var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -1316,9 +1488,65 @@
             if ( event.which == 13 ) {
                 lecturaCodigo($('.codigo').val())
            }
+           if(event.which == 107){
+            __SumarConTecla(event)
+            }
+             if(event.which == 109){
+            __RestarConTecla(event)
+            }
+            if(event.which == 111){
+                if(!$('#modalCambiarCantidad').is(':visible')){
+                    $(".codigo").val(null)
+                    seguridadCambiarPrecioLinea()
+                    return
+                }else{
+                    $(".codigo").val('')
+                    event.preventDefault()
+                    return 
+                }
+            }
         });
+
         
-            $.fn.delayPasteKeyUp = function(fn, ms)
+
+        $( "#claveSistema" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+           }
+        });
+
+
+
+        $( "#precioAcambiar" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __AplicarCambioPrecioBD()
+           }
+        });
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               cambiarCantidadModal()
+           }
+        });
+        $( "#aplicarDescuento" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               aplicarDescuentoEnter()
+           }
+        });
+
+        
+        $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
             $(this).on("propertychange input", function()
@@ -1327,10 +1555,7 @@
                 timer = setTimeout(fn, ms);
             });
         };
-       
-           getTipoCambioDolar()
-       
-
+        getTipoCambioDolar()
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1340,47 +1565,102 @@
             self.cliente = clienteObject
             self.update()
             __calculate()
-
         }
-        
-        
-        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             __Teclas(evento.keyCode)
-  
+             __Teclas(evento.keyCode,event)
             disableF5(evento);
         }, false );
 
       
     window.addEventListener( "mouseover", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "mouseout", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "mousedown", function(evento){
         actualizaElPlazoDiasCredito();
-      
     }, false );
     window.addEventListener( "click", function(evento){  
         actualizaElPlazoDiasCredito();
         teclamodal(evento);
-      
     }, false );
      
     })
+
+__EntradaDinero(){
+  modalEntradaSalidaDinero(1)
+}   
+__SalidaDinero(){
+    modalEntradaSalidaDinero(2)
+}
+
+function modalEntradaSalidaDinero(tipo){
+ var parametros = {
+        tipo:tipo,
+    }
+    riot.mount('entrada-salida',{parametros:parametros});
+}
+
+__AplicarCambioPrecioUltimoArticulo(){
+    __AplicarCambioPrecioBD()
+}    
+__RegresarInputCodigo(){
+    $(".codigo").val('')
+    $('#modalCambiarPrecio').modal('hide')
+    getPosicionInputCodigo()
+}
+__RegresarInputSeguridad(){
+    $(".codigo").val('')
+    $('#modalRolUsuario').modal('hide')
+    getPosicionInputCodigo()
+}
+
+function __ObtengoTipoCambio(){
+    var tempTipoCambio =__getTipoCambioCompra()
+    if(tempTipoCambio == null){
+       getTipoCambioDolar()  
+    }else{
+        self.tipoCambio.total = __getTipoCambioTotal()
+        self.tipoCambio.totalCompra = __getTipoCambioCompra()
+
+    }
+    self.update()
+    
+}
+
+function __SetUltimoArticuloIngresado(){
+   localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
+}    
+
+function __getUltimoArticuloIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoArticulo'));
+} 
+
+function __DeleteUltimoArticuloIngresado(){
+    localStorage.removeItem('ultimoArticulo');
+} 
+
+function __SetUltimoItemIngresado(item){
+   localStorage.setItem('ultimoItem', JSON.stringify(item));
+}    
+
+function __getUltimoItemIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoItem'));
+} 
+
+function __DeleteUltimoItemIngresado(){
+    localStorage.removeItem('ultimoItem');
+} 
 
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     } 
     if($('#modalFacturasDia').is(':visible')){
-        $('.codigo').select()
-        $('.codigo').focus()
+       getPosicionInputCodigo()   
     }
 }
 
@@ -1406,6 +1686,7 @@ function teclamodal(e){
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible') 
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible')
                     ) {
                         $('.codigo').focus() 
                      } 
@@ -1417,52 +1698,84 @@ function teclamodal(e){
          
         }
 
+/**
+*  Cambiar el precio  del producto 
+**/
+function __AplicarCambioPrecioBD(){
+    var parametros = __getUltimoArticuloIngresado();
+    if(parametros == null){
+        $('.codigo').val('')
+        getPosicionInputCodigo()
+        return 
+    }
+    parametros.precioPublico = $('.precioAcambiar').val()
 
+
+    $.ajax({
+        type : "POST",
+        dataType : "json",
+        data : {id:parametros.id,precioPublico:parametros.precioPublico},
+        url : 'CambiarPrecioArticulo.do',
+        success : function(data) {
+            if (data.status != 200) {
+              	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message)
+                }
+            } else {
+                mensajeToasExito(data.message)
+                self.articulo  = null
+                self.update()
+                if (data.message != null && data.message.length > 0) {
+                    self.articulo =null
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.articulo  = modeloTabla
+                        self.update()
+                        __SetUltimoArticuloIngresado()
+                        aplicarLineaFacturaCambioPrecio()
+                        $('#modalCambiarPrecio').modal('hide')
+                        getPosicionInputCodigo()
+                    });
+                }
+
+	        }
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+/**
+* volver  a posicionar el cursor en input de codigo
+**/
+function getPosicionInputCodigo(){
+    $('.precioVenta').val(null)
+    $('.codigo').val("")
+    $('.codigo').focus()
+}
 /**
 *Consulta hacienda
 **/
 __ConsultarHaciendaBlur(){
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
+    getClienteHacienda()
 
 }
 __ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     } 
+    getClienteHacienda()
+}
+
+
+
+function getClienteHacienda(){
     var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
-}
-/**
-*Tipo Cambio del Dolar 
-**/
-function getTipoCambioDolar(){
-    $.ajax({
-    "url": "https://api.hacienda.go.cr/indicadores/tc",
-     global: false,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            __TipoCambio()
-        }
+    if(cedula.length  == 0){
+        return
     }
-    }).done(function (response) {
-         self.tipoCambio.total = __valorNumerico(response.dolar.venta.valor)
-         self.tipoCambio.totalCompra = __valorNumerico(response.dolar.compra.valor)
-         self.update()
-         localStorage.setItem('tipoCambio', JSON.stringify(self.tipoCambio));
-    }).fail(function () {
-        __TipoCambio()
-//       self.tipoCambio = JSON.parse(localStorage.getItem('tipoCambio'));
-//       self.update()
-      console.log('fail')
-    });
-}
-
-
-
-function getClienteHacienda(cedula){
     self.mostrarBotonAgregarCliente = false
     self.clienteHacienda= {
         nombre:"",
@@ -1548,6 +1861,10 @@ function __listadoTipoCedulas(){
 
 
 __ClienteNuevo(){
+    __nuevoCliente()
+}
+
+function __nuevoCliente(){
     $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
     $("#nombreCompleto").attr("maxlength", 80);
     $("#cedula").attr("maxlength", 20);
@@ -1582,9 +1899,52 @@ __ClienteNuevo(){
     $("#telefono").val(null)
    
     $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true}) 
-    $('#modalAgregarClienteNuevo').modal('show')  
-    $('#cedula').select()
-    $("#cedula").focus()   
+
+    $('#modalAgregarClienteNuevo').on('shown.bs.modal', function () {
+        $('#cedula').select()
+        $("#cedula").focus()   
+     });
+
+}
+
+__AplicarCambioPrecio(){
+   seguridadCambiarPrecioLinea()
+}
+
+function seguridadCambiarPrecioLinea(){
+    self.autorizarBorrado = 3
+    self.update()
+    if(self.rol.rolAdministrador == 0){
+        self.rutaAutorizada = '';
+        self.update()
+        inputCursorUsuario()    
+    }else{
+         __AplicarPrecioLinea()
+    }
+}
+
+function __AplicarPrecioLinea(){
+    self.ultimoArticulo = __getUltimoArticuloIngresado()
+    self.update()
+    if(self.ultimoArticulo == null){
+        return 
+    }
+    if(self.ultimoArticulo.tipoCodigo == '04' ){
+        return 
+        
+    }
+
+    $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarPrecio').on('shown.bs.modal', function () {
+        $(".precioAcambiar").val( self.ultimoArticulo.precioPublico)
+        $(".precioAcambiar").focus()
+        $(".precioAcambiar").select()
+    })  
+
+}
+
+function modalCambiarPrecioVista(){
+    
 }
 
 /**
@@ -1627,7 +1987,7 @@ var reglasDeValidacionClienteNuevo = function() {
 **/
 __regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
-    seleccionarEfectivo()
+    getPosicionInputCodigo()
 }
 
 /**
@@ -1763,10 +2123,7 @@ function __RolAdministrador(){
 * Validar seguridad de ruta autorizada
 **/ 
 __SeguridadVentas(){
-    if(self.rol.rolAdministrador == 0){
-        return true
-    }
-   __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+     __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
     
 }
 
@@ -1801,8 +2158,7 @@ function __validarRolAdministrador(formulario,url){
                	    $('#modalRolUsuario').modal('hide') 
                     $('.modal-backdrop').remove();
                     if(self.autorizarBorrado == 0){
-                        $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
-                        $(self.rutaAutorizada).modal('show')    	
+                        permitirModal()
                     }
                     if(self.autorizarBorrado == 1){
                         self.autorizarBorrado = 0
@@ -1813,6 +2169,12 @@ function __validarRolAdministrador(formulario,url){
                         self.autorizarBorrado = 0
                         self.update()
                         refrescarPagina()
+                    }
+                    //cambiar el precio
+                    if(self.autorizarBorrado == 3){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        __AplicarPrecioLinea()
                     }
 
                     return true;
@@ -1833,6 +2195,15 @@ function __validarRolAdministrador(formulario,url){
     }
     
 }
+function permitirModal(){
+    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true})     
+        $(self.rutaAutorizada).on('shown.bs.modal', function () {
+        $(self.inputCursorModal).val()
+        $(self.inputCursorModal ).focus()
+        $(self.inputCursorModal).select()
+    })
+}
+
 _clickEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
@@ -1868,8 +2239,7 @@ function reimprimirFacturaEnMomento(){
       return
   }
   consultaFactura(self.facturaReimprimir,0)
-  $('.codigo').select()
-  $(".codigo").focus() 
+  getPosicionInputCodigo()
 }
 /**
 * Consultar la empresa
@@ -1929,10 +2299,7 @@ function __SeguridadLimpiar(){
         if(self.detail.length > 0){
             self.rutaAutorizada = '';
             self.update()
-            $("#usuarioSistema").val("")
-            $("#claveSistema").val("")
-            $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-            $('#modalRolUsuario').modal('show')     
+            inputCursorUsuario()
         }else{
            refrescarPagina()
         }
@@ -1940,6 +2307,17 @@ function __SeguridadLimpiar(){
     }else{
         refrescarPagina()
     }
+
+}
+
+function inputCursorUsuario(){
+    $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalRolUsuario').on('shown.bs.modal', function () {
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $(".usuarioSistema").focus()
+        $(".usuarioSistema").select()
+    })  
 
 }
 
@@ -2092,39 +2470,9 @@ function consultaFactura(data,tipoImpresion){
         facturaDia:tipoImpresion
     }
     riot.mount('ptv-imprimir',{parametros:parametros});
-                   
     return 
 }
-/**
-* Tipo de Documento
-**/
-function __TipoDocumentos(numeroConsecutivo,row){
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-    case "88":
-        return  "Proforma:"+row.id
-        break;
-    case "87":
-        return  "TiqueteInterno:"+row.id
-        break;
-    case "86":
-        return  "NC.Interno:"+row.numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-}
-}
+
 
 
 /**
@@ -2153,16 +2501,15 @@ __CambiarDescuento(e){
     self.update()
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarDescuento';
+        self.inputCursorModal = "#aplicarDescuento"
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()
    }else{
-        $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarDescuento').modal('show')      
+        $('#modalCambiarDescuento').on('shown.bs.modal', function () {
+            $( "#aplicarDescuento" ).focus()
+            $( "#aplicarDescuento" ).val(null)
+        }) 
     }
 }
 /**
@@ -2175,54 +2522,19 @@ __CambiarCantidad(e){
    self.update()
    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarCantidad';
+        self.inputCursorModal = "#cambiarCantidadArticulo"
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()
    }else{
-        $( "#cambiarCantidadArticulo" ).focus()
-        $( "#cambiarCantidadArticulo" ).val(cantidad)
         $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarCantidad').modal('show')      
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+            $( "#cambiarCantidadArticulo" ).val(cantidad)
+            $( "#cambiarCantidadArticulo" ).focus()
+            $( "#cambiarCantidadArticulo" ).select()
+        })   
    }
  }
-/**
-* Tipo Cambio de moneda
-**/
-function __TipoCambio(){
-    self.tipoCambio = {
-        total:0,
-        totalCompra:0,
-        id:null
-    }
-    self.update()
-    $.ajax({
-        url: "MostrarTipoCambioActivoAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.tipoCambio = modeloTabla
-                       self.tipoCambio.totalCompra = self.tipoCambio.total
-                       self.update()
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -2367,9 +2679,13 @@ Lista de articulos
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    $('#descArticulo').select()
-    $('#descArticulo').focus()
-    $('#modalInventario').modal('show')    
+     $('#modalInventario').modal('show') 
+    $('#modalInventario').on('shown.bs.modal', function () {
+        $('#descArticulo').select()
+        $('#descArticulo').focus()
+    
+    })
+    
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -2401,13 +2717,8 @@ function aplicarFactura(estado){
         return
     }
     if(self.detail.length == 0 ){
-         $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
         mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        getPosicionInputCodigo()
         return
     }
     if($('#condicionVenta').val() == "02"  ){
@@ -2465,6 +2776,8 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    __DeleteUltimoItemIngresado()
+    __DeleteUltimoArticuloIngresado()
     self.facturaImpresa={
         cliente:{
             cedula:""
@@ -2616,13 +2929,8 @@ function __Init(){
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.cliente));
-
-    $(".codigo").focus()
-    $('.codigo').select()
-
+    getPosicionInputCodigo()
 }
-
-
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -2764,7 +3072,11 @@ function crearFactura(estado){
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.factura.codigoMoneda = self.parametros.codigoMoneda
-    self.factura.tipoCambio = self.tipoCambio.total
+    self.factura.tipoCambio = self.tipoCambio.total ==null?__getTipoCambioCompra():self.tipoCambio.total
+    if(self.factura.tipoCambio ==null){
+        self.factura.tipoCambio =575
+        
+    }
     self.update();
     var formulario = $("#formularioFactura").serialize();
     $.ajax({
@@ -2787,6 +3099,7 @@ function crearFactura(estado){
                 evaluarFactura(data)
                 self.transaccion = false
                 self.update()
+                __DeleteUltimoArticuloIngresado()
             }
         },
         error : function(xhr, status) {
@@ -2916,9 +3229,7 @@ _AtrasFacturaFinal(){
    self.primeraVezBilleteClick = false
    self.error = false
    self.update()
-   $('.codigo').val("")
-   $('.codigo').select()
-   $('.codigo').focus()
+   getPosicionInputCodigo()
 }
 /**
 *    Muesta el campo de la fecha de credito
@@ -2955,9 +3266,7 @@ __MostrarFormularioDePago(){
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        getPosicionInputCodigo()
         swal({
             type: 'error',
             title:$.i18n.prop("factura.alert.sin.detalles"),
@@ -2986,10 +3295,7 @@ Lectura de Codigos
 **/
 function lecturaCodigo(leerCodigo){
     var valor = $('.codigo').val()
-    if (valor.length == 0){
-        if(self.empresa.enterFacturar == 0){
-            return
-        }
+    if (valor == ""){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
             self.update() 
@@ -3000,39 +3306,22 @@ function lecturaCodigo(leerCodigo){
             self.update()
         }
     }
-    var codigo = leerCodigo
-    var codigoActual = ""
-    var cantidadAct =""
-    var existe = false
-     var existeMas = false
-    for(i=0; i<codigo.length; i++){
-         existeMas = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          existe = codigo.charAt(i) == "*"?true : false  
-          if(codigo.charAt(i) !="*"){
-              codigoActual = codigoActual + codigo.charAt(i)  
-          }
-       }else{
-           cantidadAct = cantidadAct + codigo.charAt(i)
-       }
-    }
+    var objetos = getCantidadAdnCodigo_PV(leerCodigo);
+    var codigoActual = objetos.codigo
+    var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    if(existeMas == true){
-       __sumarMasArticulo(codigo,0)
-       $('.precioVenta').val(null)
-       $('.codigo').val("")
-       $('.codigo').focus()
+    if(leerCodigo.indexOf("+") != -1){
+        
+       __sumarMasArticulo(objetos.codigo,0,codigoActual)
+       getPosicionInputCodigo()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-    if(self.articulo !=null){
-        if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
-            $('.precioVenta').val(null)
-            $('.codigo').val("")
-            $('.codigo').select()
-            $('.codigo').focus()
-        }
-    }
+//    if(temArticulo !=null){
+//        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
+//           getPosicionInputCodigo()
+//        }
+//    }
 }
 /**
 *  cambiar el precio
@@ -3041,63 +3330,85 @@ __addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
+    if(verificaSiSuma()){
+        return 
+    }
     var codigo = $('#codigo').val()
-    if(codigo == " "){
+    if(codigo.length == 0){
        __EnviarFacturar()
     }
-    var codigoActual = ""
-    var cantidadAct =""
-    var existe = false
-    var existeMas = false
-    for(i=0; i<codigo.length; i++){
-         existeMas = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          existe = codigo.charAt(i) == "*"?true : false  
-          if(codigo.charAt(i) !="*"){
-            codigoActual = codigoActual + codigo.charAt(i)  
-          }
-       }else{
-           cantidadAct = cantidadAct + codigo.charAt(i)
-       }
-    }
+    var objetos = getCantidadAdnCodigo_PV(codigo);
+    var codigoActual = objetos.codigo
+    var cantidadAct =objetos.cantidad
+
     var valor = __valorNumerico(cantidadAct)
     var precio = e.currentTarget.value
     // esto es para cuando un cliente quiere sumar varios productos
-    if(existeMas == true){
-       __sumarMasArticulo(codigo,0)
-       $('.precioVenta').val(null)
-        $('.codigo').val(null)
-        $('.codigo').focus()
+    if(codigo.indexOf("+") != -1){
+       __sumarMasArticulo(codigoActual,precio,cantidadAct)
+       getPosicionInputCodigo()
        return  
     }
-    __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
-    $('.precioVenta').val(null)
-    $('.codigo').val("")
-    $('.codigo').focus()
+    __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
+    getPosicionInputCodigo()
+}
+/**
+Busca el canidad digitado sin el mas o por
+**/
+function getCantidadAdnCodigo_PV(valor){
+    var objeto ={
+        codigo:'',
+        cantidad:0
+    }
+     var valor = $('.codigo').val()
+    var existe = false
+    var existeMas = false
+    for(i=0; i<valor.length; i++){
+         existeMas = valor.charAt(i) == "+"?true : false
+       if(existe == false && existeMas  == false ){
+          existe = valor.charAt(i) == "*"?true : false  
+         if(valor.charAt(i) !="*"){
+              objeto.codigo = objeto.codigo + valor.charAt(i)  
+          }
+       }else{
+           if(valor.charAt(i) != "+" && objeto.codigo.charAt(i) != "*"){
+              objeto.cantidad = objeto.cantidad + valor.charAt(i)  
+           }
+           
+       }
+    }
+    return objeto;
+  
 }
 /**
 *sumar mas cantidad al ultimor articulo ingresado
 **/
-function __sumarMasArticulo(codigo,precio){
-    if(self.articulo == null){
+function __sumarMasArticulo(codigo,precio,cant){
+    var temArticulo = __getUltimoArticuloIngresado()
+    if(temArticulo == null){
         return;
     }
-    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+    if(temArticulo.tipoCodigo == "04" || self.empresa.tieneLector !="Activo"){
        return
     }
     var valorPrecio =  parseFloat(precio)
-    var cantidadAct =""
-    var existe = false
-    for(i=0; i<codigo.length; i++){
-       existe = codigo.charAt(i) == "+"?true : false
-       if(existe == false){
-          cantidadAct = cantidadAct + codigo.charAt(i)
-        }
+    var cantidadAct =cant
+    aplicarSumaAlCodigo(valorPrecio,cantidadAct,true);
+     
+}
+
+function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
+    var temItem = __getUltimoItemIngresado()
+    if(temItem == null){
+        getPosicionInputCodigo()
+        return
     }
    for (var count = 0; count < self.detail.length; count++) {
-        if (self.detail[count].codigo == self.articulo.codigo ){
+        if (self.detail[count].codigo == temItem.codigo  && temItem.numeroLinea == self.detail[count].numeroLinea    ){
             self.item          = self.detail[count];
-            self.item.cantidad = self.item.cantidad + __valorNumerico(cantidadAct)
+            var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
+            self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
+
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
@@ -3106,7 +3417,7 @@ function __sumarMasArticulo(codigo,precio){
             self.update();
         }
     }
-    __calculate(); 
+    __calculate();
 }
 /**
 * Buscar codigo
@@ -3169,7 +3480,7 @@ function __ListaDeArticulosPorDescripcion(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')  
+    __ListaDeClientes()
  }
 /**
 *  Muestra la lista de vendedores
@@ -3209,7 +3520,6 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3229,6 +3539,7 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+                 $('#modalClientes').modal('show')  
             }
         },
         error: function (xhr, status) {
@@ -3308,7 +3619,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                 if (data.message != null && data.message.length > 0) {
                     self.articulo =null
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                             if(modeloTabla.estado  == "Inactivo"){
+                        if(modeloTabla.estado  == "Inactivo"){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
@@ -3360,7 +3671,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia("Error Articulo");
+                    mensajeAdvertencia(data.message);
               
                 }
             }else{
@@ -3396,18 +3707,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
     });
    return 
 }
-/**
-*  Busca el codigo de uso interno
-* */
-function buscarCodigoUsoInterno(codigo){
-    self.articulo = null;
-    for (var count = 0; count < self.articulos_uso_interno.length; count++) {
-        if (self.articulos_uso_interno[count].codigo == codigo ){
-            self.articulo          = self.articulos_uso_interno[count];
-            self.update();
-        }
-    }    
-}
+
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -3426,7 +3726,7 @@ function __agregarArticulo(cantidad){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
-  
+    __SetUltimoArticuloIngresado() 
     if( encontrado ==false){
         if(self.detail[0] == null){ // first element
             __nuevoArticuloAlDetalle(cantidad);
@@ -3443,6 +3743,7 @@ function __agregarArticulo(cantidad){
                 self.detail[count] = self.item;
                 encontrado = true;
                 self.update();
+                
                 }
             }
         }
@@ -3455,6 +3756,28 @@ function __agregarArticulo(cantidad){
     __calculate(); 
     return encontrado
 }
+
+function aplicarLineaFacturaCambioPrecio(){
+    for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == self.articulo.codigo ){
+            self.item          = self.detail[count];
+            self.cantidadEnterFacturar = 0
+            self.cantArticulos = self.cantArticulos 
+            //Determinar el precio a incluir
+            var resultadoPrecio = getListaPrecio(self.articulo)
+            var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
+            var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
+            self.item.precioUnitario = precioUnitario
+            self.update();
+            ActualizarLineaDEtalle()
+            
+            self.detail[count] = self.item;
+            self.update();
+         }
+    }
+    __calculate(); 
+
+}
 /**
 * eliminar un detalle factura
 **/
@@ -3465,20 +3788,27 @@ __removeProductFromDetail(e) {
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        inputCursorUsuario()  
     }else{
         eliminarDetalle()
+    }
+}
+function buscarItemEliminar(item){
+    for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == item.codigo && self.detail[count].numeroLinea == item.numeroLinea ){
+             self.detail.splice(count, 1);
+             self.update()
+           
+        }
     }
 }
 /**
 *    Eliminar detalle
 **/
 function  eliminarDetalle(){
-    index = self.detail.indexOf(self.itemEliminar);
-    self.detail.splice(index, 1);
+   // index = self.detail.indexOf(self.itemEliminar);
+ //   self.detail.splice(index, 1);
+    buscarItemEliminar(self.itemEliminar)
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
     for (var count = 0; count < self.detail.length; count++) {
@@ -3497,6 +3827,8 @@ function  eliminarDetalle(){
     }
     self.update()
      __calculate();
+     __DeleteUltimoArticuloIngresado()
+     __DeleteUltimoItemIngresado()
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -3515,6 +3847,20 @@ function __nuevoArticuloAlDetalle(cantidad){
          mensajeAdvertencia(" Error El articulo no tiene la Tarifa IVA ")
         return false
     }
+    var itemNuevo = setItemNuevo(cantidad)
+    self.detail.push(itemNuevo);
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    self.cantidadEnterFacturar = 0
+    self.update()
+}
+
+function setItemNuevo(cantidad){
     //Determinar el precio a incluir
     var resultadoPrecio = getListaPrecio(self.articulo)
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
@@ -3531,7 +3877,8 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.cantArticulos  = self.cantArticulos + 1
     var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
-    self.detail.push({
+   
+   var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
@@ -3565,16 +3912,9 @@ function __nuevoArticuloAlDetalle(cantidad){
        nombreInstitucionExoneracion:"",
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
-    });
-    self.detail.sort(function(a,b) {
-    if ( a.pesoPrioridad > b.pesoPrioridad )
-        return -1;
-    if ( a.pesoPrioridad < b.pesoPrioridad )
-        return 1;
-    return 0;
-    } );
-    self.cantidadEnterFacturar = 0
-    self.update()
+    }
+    __SetUltimoItemIngresado(item);
+    return item;
 }
 
 function verificarTarifa(){
@@ -3678,6 +4018,10 @@ function __storege(){
  * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
+    cambiarCantidadModal()
+  }
+
+ function cambiarCantidadModal(){
       var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -3686,7 +4030,9 @@ function __storege(){
     }
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
-  }
+    
+
+ } 
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -3777,6 +4123,7 @@ function agregarCantidadAlaVenta(cantidad){
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
+    getPosicionInputCodigo()
 }
 /**
 * Aplicar el cambio de linea Detalle
@@ -3791,14 +4138,17 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
+   aplicarDescuentoEnter()
+}
+function aplicarDescuentoEnter(){
     if ($("#formularioDescuento").valid()) {
-        _actualizarDesc(e)
+        _actualizarDesc()
     }
 }
 /**
 * Actualizar el descuento
 **/
-function _actualizarDesc(e){
+function _actualizarDesc(){
     var descuento = $(".aplicarDescuento").val();
     descuento = __valorNumerico(descuento)
     if(descuento > 100){
@@ -3819,8 +4169,10 @@ function _actualizarDesc(e){
     self.update()
     ActualizarLineaDEtalle()  
     aplicarCambioLineaDetalle()
+     $(".aplicarDescuento").val(null);
     $('#modalCambiarDescuento').modal('hide') 
-   $(".aplicarDescuento").val(null);
+  
+   getPosicionInputCodigo()
 }
 /**
 * calculacion de los detalle de la factura 
@@ -3871,10 +4223,7 @@ function __calculate() {
     self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
     self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
     self.update(); 
-    $('.precioVenta').val(null)
-    $('.codigo').val(null)
-    $('.codigo').select()
-    $('.codigo').focus()
+    getPosicionInputCodigo()
     getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
@@ -4319,13 +4668,27 @@ function __EnviarFacturar(){
 /**
 *  teclas de la pantalla
 **/      
-function __Teclas(tecla){
+function __Teclas(tecla,event){
    
     if(tecla ==119){
         __EnviarFacturar()
         return 
         
+    }
+    /**cambiar el precio**/
+    if(tecla ==111){
+        if( self.rol.rolAdministrador == 0){
+            return 
+        }
+        if(!$('#modalCambiarCantidad').is(':visible')){
+           seguridadCambiarPrecioLinea()      
+        }else{
+            $(".codigo").val('')
+            event.preventDefault()
+        }
+        return 
     } 
+
     //alert(tecla)   
     //F4
     if(tecla ==115){
@@ -4429,9 +4792,7 @@ function __Teclas(tecla){
     //Limpiar F2
     if(tecla ==113){
       __SeguridadLimpiar()
-      $('.codigo').val("")
-      $('.codigo').select()
-      $(".codigo").focus()
+      getPosicionInputCodigo()
       return 
     }
      //Insert = abrir Cajon
@@ -4439,11 +4800,53 @@ function __Teclas(tecla){
        __OpcionAbrirCajon()
     }
    if(tecla ==27){
-      $('.codigo').select()
-      $(".codigo").focus()
+      getPosicionInputCodigo()
       return 
     }
+
     
+  
+}
+__SumarConMouse(){
+    aplicarSumaAlCodigo(0,1,true)
+    getPosicionInputCodigo()
+}
+
+__RestarConMouse(){
+    aplicarSumaAlCodigo(0,1,false)
+    getPosicionInputCodigo()
+}
+
+function __SumarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,true)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return 
+    }
+
+}
+
+function __RestarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,false)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return 
+    }
+
+}
+
+function verificaSiSuma(){
+    var objetos =  getCantidadAdnCodigo_PV(codigo);
+   var codigo = objetos.codigo; 
+   
+    for(i=0; i<codigo.length; i++){
+        if(isNumber(codigo)){
+          return false        }
+    }
+    return true
+   
 }
 /**
 * refrescar una pagina
@@ -4580,5 +4983,35 @@ function abrirCajonDineroConComanda(){
 	        }
 	    });		
 }
+
+/**        Listado de proformas      **/
+/**
+*  Lista de Proformas Activas
+**/
+function __ListaProformas(){
+    $.ajax({
+        url: 'ListarVendedoresActivosAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __informacionData_vendedores()
+                loadListar(".tableListaVendedor",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
+                agregarInputsCombos_Vendedores()
+                ActivarEventoFiltro(".tableListaVendedor")
+                __seleccionarVendedor()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+
+
 </script>
 </punto-venta>
