@@ -95,7 +95,7 @@ public class CocinaBoImpl implements CocinaBo {
 		JSONObject json = null;
 		ArrayList<ComandaCocinaCommand> comandaCocinaCommands = new ArrayList<>();
 		try {
-			json = (JSONObject) new JSONParser().parse(comandaNuevaCommand.getNuevaComanda());
+			json = (JSONObject) new JSONParser().parse(comandaNuevaCommand.getDetalles());
 			// Agregar Lineas de Detalle
 			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
 			Gson gson = new Gson();

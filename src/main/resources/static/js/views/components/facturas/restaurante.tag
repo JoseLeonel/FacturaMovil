@@ -5475,8 +5475,11 @@ function __EnviarCocina(){
 		    detalles:detalles_cocina_1
 		}    
 
+        
+
 		var JSONData = JSON.stringify(informacion);		
         enviarImpresoraCocina(url,JSONData);
+        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_1,selt.facturaImpresa,self.mesa)
 	}
     if(detalles_cocina_2.length > 0){
 		//Se forman los datos genales para la comanda
@@ -5491,9 +5494,38 @@ function __EnviarCocina(){
 
 		var JSONData = JSON.stringify(informacion);		
         enviarImpresoraCocina(url,JSONData);
+        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_2,selt.facturaImpresa,self.mesa)
 	}
 } 
+/**
+*  Registrar la comanda
+**/
+function registrarComanda(impresora,detalles,factura,mesa){
+    var parametros = {
+        impresora:impresora,
+        detalles:detalles,
+        idFactura:factura.id,
+        idMesa:mesa.id,
+        descMesa:mesa.descripcion
+    }
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'AgregarComandaCocina.do',
+	        datatype: "json",
+            global: false,
+	        data : parametros,
+	        method:"POST",
+	        success: function (result) {
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+                console.log(status);
+	            //mensajeErrorServidor(xhr, status);
+	        }
+	    });		
 
+}
 /**
 *Enviar a las impresoras de cocina
 **/

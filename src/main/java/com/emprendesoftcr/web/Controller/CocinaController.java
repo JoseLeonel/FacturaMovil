@@ -39,7 +39,7 @@ public class CocinaController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarComandaCocina.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("idCuentaCobrar") Long idCuentaCobrar, @ModelAttribute ComandaNuevaCommand comandaNuevaCommand, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model,  @ModelAttribute ComandaNuevaCommand comandaNuevaCommand, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());

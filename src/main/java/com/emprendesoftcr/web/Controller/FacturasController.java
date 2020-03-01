@@ -1924,6 +1924,10 @@ public class FacturasController {
 				for (Detalle detalle : objetos) {
 					solicitudList.add(new DetalleFacturaCommand(detalle));
 				}
+				
+				
+					
+				
 
 			}
 
