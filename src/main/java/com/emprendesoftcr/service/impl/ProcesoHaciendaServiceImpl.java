@@ -476,7 +476,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -603,8 +603,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-//	@Scheduled(cron = "0 0/30 01 * * ?")
+	
 //	@Scheduled(cron = "0 0/30 07 * * ?")
+	@Scheduled(cron = "0 0/30 02 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -705,7 +706,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-//	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1112,7 +1113,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-//	@Scheduled(cron = "0 0/4 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1424,13 +1425,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/02 * * * ?")
+	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
 			Semaforo semaforoFirmado = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIO);
 			if (semaforoFirmado != null) {
-				Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(8, 8);
+				Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA,Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
 
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
@@ -1519,9 +1520,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
 															hacienda.setTotalReceptor(factura.getTotalComprobante());
 															hacienda.setNotificacion(siEnviarCorreo(factura) ? Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE : Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-															hacienda.setPathMigracion(Constantes.EMPTY);
-															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
-															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+//															hacienda.setPathMigracion(Constantes.EMPTY);
+//															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+//															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
 															haciendaBo.agregar(hacienda);
 
 														}

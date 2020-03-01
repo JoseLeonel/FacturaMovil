@@ -29,25 +29,42 @@
     </div>
   </div>
 <!--fin validar rol de usuario-->
-
-
-<div id="pagina1">
-   <div class="row">
-        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-            <div class="box-tools ">
-                <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="Imprimir la Proforma"> <span class="label label-limpiar">F7=Proforma</span></a>
-                <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-                <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
-                <a class="pull-left" href="#" onclick = {__EntradaDinero} title="Entrada de Dinero"> <span class="label label-limpiar">Entrada Dinero</span></a>
-                <a class="pull-left" href="#" onclick = {__SalidaDinero} title="Salida de Dinero"> <span class="label label-limpiar">Salida Dinero</span></a>
-                <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
-                   
+      <div class="botonesFuncionalContainer">
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones" onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f5")}</div>
+            </div> 
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones" onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> {$.i18n.prop("factura.f10")}</div>
             </div>
-        </div>      
-    </div>    
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones" onclick = {__ImprimirTiquete} title="Imprmir la Proforma"> F7=Proforma</div>
+            </div> 
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones" onclick = {__MostrarFormularioDePago} title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
+            </div> 
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones" onclick = {__CrearFacturaTemporal} title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
+            </div> 
+             <div class="botonesFuncional ">
+                <div   class= "labelBotones"  onclick = {__EntradaDinero} title="Entrada de dinero"> Entrada de Dinero</div>
+            </div> 
+            <div class="botonesFuncional ">
+                <div   class= "labelBotones"  onclick = {__SalidaDinero} title="Salida de dinero"> Salida de Dinero</div>
+            </div> 
+             <div class="botonesFuncional ">
+                <div   class= "labelBotones" show={mostarAbrirCajon == true} onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("abrir.cajon")}</div>
+            </div> 
+            <div class="botonesFuncional ">
+                <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+            </div> 
+ 
+       </div>
+    </div>   
+ 
+ <div class="cabecera-izquierda">
+  
+<div id="pagina1">
+ 
            
     <div>
         <form id="FormPaginacion">
@@ -194,20 +211,6 @@
                                 
                             
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
-                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
-                                        Entrada de Dinero 
-                                    </span> 
-                                </div>                     
-                                <div class="BotonesSumarRestar">
-                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
-                                        <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
-                                        Salida de Dinero
-                                    </span> 
-                                </div>                     
-                                <div class="BotonesSumarRestar">
                                     <span onclick = {__ClienteNuevo}  title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
@@ -252,15 +255,6 @@
                     </div>    
                 </div> 
                  
-                <div  class="row">
-                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
-                        <section class="lista-facturas-espera">
-                            <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                                <span class="label-titulos-espera"> {nombreFactura ==null || nombreFactura == '' ?"T#"+id:""}  {nombreFactura}</span>
-                            </div>         
-                        </section>
-                    </div>
-                </div>    
             </div>
             </div>  
             <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12" style="padding: 0px 10px">
@@ -890,10 +884,100 @@
 
 
 <style type="text/css">
-      div.labelBotones:hover{
+
+.botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+.botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+  .botonesFuncionalContainer{
+        display:flex;
+    }
+
+  .botonesFuncional{
+        flex:1;
+        padding-right: 1%;
+        padding-bottom: 2%;
+    }
+    .gananciaContainer{
+        display:flex;
+        flex:1;
+    }
+.tamanoVentaEspera{
+   font-size: 14px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+div.fondoVentaEspera:hover{
+    color:#30ed17 !important;
+    cursor: pointer;
+}
+.ventaEspera{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+ .fondoVentaEspera{
+        background: black;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
+        font-style: italic;
+        color: #e2f312 !important;
+        font-weight: 600;
+        font-size: 14px;
+            margin-right: 2px;
+        
+    }
+    .ventaEsperaSeleccionada{
+        display: flex;
+        padding-bottom: 0.2%;
+    }  
+    .ventaEsperaSeleccionada .tituloVentaEspera{
+        font-weight: 700;
+        font-size:20px;
+            color: brown;
+    }                           
+    .contenedorFactura{
+        display: flex;
+        flex: 1;
+        border: 1px solid #3c8dbc;
+        background: #ffffff;
+    }
+    div.labelBotones:hover{
         color:#30ed17 !important;
 
     }
+       .labelBotones {
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+     
     .simbolodividir{
         font-size:20px;
     }
@@ -1360,6 +1444,128 @@
 
     td.col-xl-12, th.col-xl-12 {
     width: 100%; }
+
+ @media screen and (max-width: 1024px) {
+    .labelBotones {
+        font-size: 11px !important;
+    }
+    .label-totalesComprobante{
+        font-size: 16px !important;
+    }
+    .cantidadArticulosTitulo{
+        font-size: 10px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        font-size: 12px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        font-size: 12px !important;
+    }
+    }
+
+    .botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+     .botonesFuncionalContainer{
+        display:flex;
+    }
+
+    .botonesFuncionalContainer .botonesFuncional{
+        flex:1;
+        padding-right: 1%;
+        padding-bottom: 2%;
+    }
+    .gananciaContainer{
+        display:flex;
+        flex:1;
+    }
+    .gananciaContainer .formatoTituloGanancia{
+        flex:1;
+        color: black;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+    .tituloCantidadArticulos{
+        display:flex;
+    }
+     .cantidadArticulosTitulo{
+        font-weight: 600 !important;
+        font-size: 25px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #edea17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        /* padding: 5px; */
+        /* margin: 5px; */
+        /* border: none; */
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+
+    }
+
+    .tituloProductoIngresadoContainer{
+        display:flex;
+        flex:1;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
+        flex: 1;
+        display: flex;
+        padding-left: 2%;
+        padding-right: 2%;
+    
+    }
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        flex: 0.15;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: yellow !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+    }
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+    }
+}
 </style> 
 
 <script>

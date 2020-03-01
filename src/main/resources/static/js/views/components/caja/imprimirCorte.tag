@@ -64,6 +64,8 @@
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> billetes/Monedas : {usuarioCaja.conteoManualSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Dolares a Colones : {usuarioCaja.conteoDolarConversionSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Cierre Datafono : {usuarioCaja.datafonoSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Entradas : {usuarioCaja.sumaEntradasSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> - Salidas : {usuarioCaja.sumaSalidaSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Total del Cierre : {usuarioCaja.totalCierreSTR}</strong></div></div>    
 
                         <br show = {cierre}>
@@ -93,20 +95,9 @@
                                     <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} : </td>
                                     <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
                                 </tr>
+                               
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > Ventas:   </td>
-                                    <td class="valorPro" >{usuarioCaja.totalNetoSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > + Entradas:   </td>
-                                    <td class="valorPro" >{usuarioCaja.sumaEntradasSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > - Salidas:   </td>
-                                    <td class="valorPro" >{usuarioCaja.sumaSalidaSTR}</td>
-                                </tr>
-                                <tr class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalNeto")}   </td>
+                                    <td class="valorPro" > Ventas   </td>
                                     <td class="valorPro" >{usuarioCaja.totalGeneralSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">

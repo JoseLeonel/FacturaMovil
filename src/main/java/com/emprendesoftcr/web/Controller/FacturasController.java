@@ -407,7 +407,7 @@ public class FacturasController {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 		 //criptografica desde linux
-certificadoBo.agregar(usuario.getEmpresa(),"","");
+    certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		if (usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);

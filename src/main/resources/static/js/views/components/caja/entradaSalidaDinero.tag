@@ -180,8 +180,8 @@ function showModal(motivo){
     $('#modalEntradaSalidaDinero').on('shown.bs.modal', function () {
         $(".descripEntradaSalidaDinero").val(motivo)
         $(".montoEntradaSalidaDinero").val(0)
-        $(".descripEntradaSalidaDinero").focus()
-        $(".descripEntradaSalidaDinero").select()
+        $(".montoEntradaSalidaDinero").focus()
+        $(".montoEntradaSalidaDinero").select()
     })  
 
 }
