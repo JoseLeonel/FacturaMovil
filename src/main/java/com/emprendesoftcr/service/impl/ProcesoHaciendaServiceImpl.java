@@ -476,7 +476,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -605,7 +605,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 //	@Scheduled(cron = "0 0/30 07 * * ?")
-	@Scheduled(cron = "0 0/30 02 * * ?")
+	@Scheduled(cron = "0 0/30 11 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -706,7 +706,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1113,7 +1113,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1425,13 +1425,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/08 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
 			Semaforo semaforoFirmado = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIO);
 			if (semaforoFirmado != null) {
-				Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA,Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
+				Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
@@ -1511,7 +1511,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCreated_at(new Date());
 															hacienda.setUpdated_at(new Date());
 															hacienda.setStatus(Constantes.ZEROS);
-															hacienda.setEstado(12);
+															hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
 															hacienda.setConsecutivo(factura.getNumeroConsecutivo());
 															hacienda.setReintentos(Constantes.ZEROS);
 															hacienda.setReintentosAceptacion(Constantes.ZEROS);
@@ -1688,7 +1688,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	@Scheduled(cron = "0 0/05 * * * ?")
+	@Scheduled(cron = "0 0/05 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
