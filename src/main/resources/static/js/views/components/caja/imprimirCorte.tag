@@ -65,7 +65,7 @@
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Dolares a Colones : {usuarioCaja.conteoDolarConversionSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Cierre Datafono : {usuarioCaja.datafonoSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Entradas : {usuarioCaja.sumaEntradasSTR}</strong></div></div>    
-                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> - Salidas : {usuarioCaja.sumaSalidaSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Salidas : {usuarioCaja.sumaSalidaSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Total del Cierre : {usuarioCaja.totalCierreSTR}</strong></div></div>    
 
                         <br show = {cierre}>
@@ -146,6 +146,10 @@
 
 
 <style type="text/css">
+.modal-body{
+    height: 370px;
+    overflow-y: auto;
+}
   .tituloCierre{
       font-size:16px!important;
   }

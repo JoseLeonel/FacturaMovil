@@ -45,6 +45,8 @@
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja y Conteo Manual de los billetes / monedas": "Apertura de la Caja"} </h1>
             </div>
             <div class="modal-body">
+                
+
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
                             <label class="tituloClienteNuevo" >FondoInicial</label>
@@ -132,7 +134,7 @@
                     </div>
 
             </div>
-            <div class="modal-footer">
+                    <div class="modal-footer">
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                     <button onclick={__Regresar}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
@@ -151,6 +153,16 @@
 
 
 <style type ="text/css">
+
+
+/* Important part */
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 370px;
+    overflow-y: auto;
+}
 .modalBox {
    background: #fff !important;
    border-radius: 16px !important;
@@ -166,7 +178,7 @@
 }
 
     .tamanoClienteNuevo{
-        font-size: 30px;
+        font-size: 26px;
         font-weight: 600;
         color: black;
         height: 10%;
@@ -177,12 +189,12 @@
     }
     .modalInputCambioPrecioCodigoDescripcion{
        border-radius: 10px !important;
-       font-size: 40px !important;
+       font-size: 26px !important;
        text-align: center !important;
     
     }
     .modalInputCambioPrecio{
-        font-size: 40px !important;
+        font-size: 26px !important;
         color:blue !important;
         border-radius: 16px !important;
         border-color: green;
@@ -572,6 +584,7 @@ __agregar(){
                                 usuarioCaja:self.usuarioCaja,
                                 tipo:1
                             }
+                            hidemodal()
                             riot.mount('imprimir-caja',{parametros:parametros});
                             __listado()
                         }
@@ -760,6 +773,7 @@ function cerrarCajaAjax(){
                                     tipo:2
                                 }
                                 riot.mount('imprimir-caja',{parametros:parametros});
+                                hidemodal()
                                                      
 
                             }

@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 
+import org.springframework.web.client.RestTemplate;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -17,7 +19,22 @@ public class vivi {
 
 	public static void main(String[] args) throws ParseException, FileNotFoundException, DocumentException {
 
-	// Se crea el documento
+	
+	// request url
+		String url = "https://api.hacienda.go.cr/fe/ae?identificacion=109360677";
+
+		// create an instance of RestTemplate
+		RestTemplate restTemplate = new RestTemplate();
+
+		// make an HTTP GET request
+		String json = restTemplate.getForObject(url, String.class);
+
+		// print json
+		System.out.println(json);
+		
+		
+		
+		// Se crea el documento
 		Document documento = new Document(PageSize.A4, 50, 50, 50, 50);
 		
 

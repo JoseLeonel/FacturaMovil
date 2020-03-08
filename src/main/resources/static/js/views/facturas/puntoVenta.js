@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	_Init();
-	minimizarMenu()
+//	minimizarMenu()
 		//__MensajesToasControlPago()
 	consultaControlPago();
 	

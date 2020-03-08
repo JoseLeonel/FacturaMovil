@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CajaBo;
-import com.emprendesoftcr.Bo.CocinaBo;
 import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -75,12 +74,7 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
-	
-	
 
-
-
-	
 	@Autowired
 	private ConteoManualCajaBo																conteoManualCajaBo;
 
@@ -297,7 +291,7 @@ public class UsuarioCajasController {
 			listaCoteo = denominacionCommand(conteoManualCommand);
 
 			// Se acutalizan los registros
-			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+			 usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
 			usuarioCajaBd.setConteoTarjeta(conteoManualCommand.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoTarjeta());
 
@@ -335,7 +329,10 @@ public class UsuarioCajasController {
 
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCajaCommand.getId());
 			UsuarioCajaCommand usuarioCajaCommand1 = new UsuarioCajaCommand(usuarioCajaBd);
-			modelEmail.put("usuarioResponsable", usuarioCajaCommand1.getUsuario().getNombre().trim() + " " + usuarioCajaCommand.getUsuario().getPrimerApellido().trim() + " " + usuarioCajaCommand.getUsuario().getSegundoApellido().trim());
+			String nombreUsuario = usuarioCajaCommand1.getUsuario().getNombre() == null ? Constantes.EMPTY : usuarioCajaCommand1.getUsuario().getNombre().trim();
+			String apellido1 = usuarioCajaCommand.getUsuario().getPrimerApellido() == null ? Constantes.EMPTY : usuarioCajaCommand.getUsuario().getPrimerApellido().trim();
+			String apellido2 = usuarioCajaCommand.getUsuario().getSegundoApellido() == null ? Constantes.EMPTY : usuarioCajaCommand.getUsuario().getSegundoApellido().trim();
+			modelEmail.put("usuarioResponsable", nombreUsuario + " " + apellido1 + " " + apellido2);
 			modelEmail.put("fechaApertura", usuarioCajaCommand1.getCreated_atSTR());
 			modelEmail.put("nombreComercial", usuarioCajaBd.getCaja().getEmpresa().getNombreComercial());
 			modelEmail.put("nombreEmpresa", usuarioCajaBd.getCaja().getEmpresa().getNombre());

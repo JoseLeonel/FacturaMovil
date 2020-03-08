@@ -469,13 +469,25 @@ __ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     } 
-    var cedula = $('#cedula').val()
-    getClienteHacienda(cedula)
+    
+    getClienteHacienda()
 }
+
+
+
 function getClienteHacienda(cedula){
+    var cedula = $('#cedula').val()
     if(stringVacio($(".cedula").val()) == false){
        return    
     }
+    $('.correoElectronico').val('')
+    $('.correoElectronico1').val('')
+    $('.correoElectronico2').val('')
+    $('.correoElectronico3').val('')
+    $('.numeroDocumentoExoneracion').val('')
+    $('.nombreInstitucionExoneracion').val('')
+    $('.nombreComercial').val('')
+    $('.porcentajeExoneracion').val(0)
     self.clienteHacienda= {
         nombre:"",
         tipoIdentificacion:"",
@@ -486,21 +498,35 @@ function getClienteHacienda(cedula){
         actividades:[]
     }
     self.update()
+
     $.ajax({
-    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
-            __listadoTipoCedulas()
+        url: "clienteHacienda.do",
+        datatype: "json",
+        data: {cedula:cedula},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
+                    __listadoTipoCedulas()
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.clienteHacienda = modeloTabla
+                        self.update()
+                        __listadoTipoCedulas()
+                         $('#nombreCompleto').val(self.clienteHacienda.nombre)
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
         }
-    }
-    }).done(function (response) {
-        self.clienteHacienda = response
-        self.update()
-        __listadoTipoCedulas()
-         $('#nombreCompleto').val(self.clienteHacienda.nombre)
     });
 }
 
@@ -892,6 +918,9 @@ function aplicarCreacion(){
         })        
 
 }
+
+
+
 
 /**
 *  Consultar  especifico

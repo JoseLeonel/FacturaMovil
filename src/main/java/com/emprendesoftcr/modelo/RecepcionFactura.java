@@ -375,6 +375,11 @@ public class RecepcionFactura implements Serializable {
 	public Integer getEstado() {
 		return estado;
 	}
+	
+	public String getEstadoSTR() {
+		return MapEnums.ENUM_ESTADO_FACTURA.get(estado.toString());
+	}
+
 
 	public void setEstado(Integer estado) {
 		this.estado = estado;
@@ -406,6 +411,10 @@ public class RecepcionFactura implements Serializable {
 
 	public String getMensaje() {
 		return mensaje;
+	}
+	
+	public String getMensajeSTR() {
+		return MapEnums.ENUM_TIPOS_MENSAJES.get(mensaje);
 	}
 
 	public void setMensaje(String mensaje) {

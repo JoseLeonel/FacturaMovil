@@ -1008,6 +1008,7 @@ function __imprimirPTV(){
                 facturaDia:1
             }
         riot.mount('ptv-imprimir',{parametros:parametros}); 
+        
 	});
 }
 

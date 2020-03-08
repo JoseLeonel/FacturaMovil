@@ -190,7 +190,7 @@ public class UsuarioCajaCommand {
 
 	public String getTotalGeneralSTR() {
 		Double totalNeto = this.totalNeto == null ? Constantes.ZEROS_DOUBLE : this.totalNeto;
-		return Utils.formateadorMiles(totalNeto + this.getSumaEntradas() - this.getSumaSalida());
+		return Utils.formateadorMiles(totalNeto );
 
 	}
 
