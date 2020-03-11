@@ -66,10 +66,10 @@
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Cierre Datafono : {usuarioCaja.datafonoSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Entradas : {usuarioCaja.sumaEntradasSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Salidas : {usuarioCaja.sumaSalidaSTR}</strong></div></div>    
-                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Total del Cierre : {usuarioCaja.totalCierreSTR}</strong></div></div>    
+                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Conteo Caja: {usuarioCaja.totalCierreSTR}</strong></div></div>    
 
                         <br show = {cierre}>
-                        <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Ventas realizadas - Conteo Manual</strong></div></div>    
+                        <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Ventas Sistema - Conteo Caja</strong></div></div>    
                         <table class = "forma-table" show = {parametros.tipo == 2 }>
                            <thead>
                                 <tr class = "forma-table">
@@ -80,19 +80,19 @@
                             </thead>
                              <tbody>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" >{$.i18n.prop("imprimir.caja.totalEfectivo")}:</td>
+                                    <td class="valorPro" >{$.i18n.prop("imprimir.caja.totalEfectivo")} Sistema:</td>
                                     <td class="valorPro" >{usuarioCaja.totalEfectivoSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalTarjeta")} :</td>
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalTarjeta")} Sistema:</td>
                                     <td class="valorPro" >{usuarioCaja.totalTarjetaSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")}    : </td>
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")} Sistema: </td>
                                     <td class="valorPro" >{usuarioCaja.totalBancoSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} : </td>
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} Sistema: </td>
                                     <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
                                 </tr>
                                
@@ -101,7 +101,7 @@
                                     <td class="valorPro" >{usuarioCaja.totalGeneralSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > Total Cierre :</td>
+                                    <td class="valorPro" > Conteo Caja:</td>
                                     <td class="valorPro" >{usuarioCaja.totalCierreSTR}</td>
                                 </tr>
 
@@ -112,13 +112,63 @@
                                 
 
                                 <tr class="detalleTables">
-                                    <td class="valorPro" >  {$.i18n.prop("usuarioCaja.totalServicio")}     </td>
+                                    <td class="valorPro" >  I.V 10%:     </td>
                                     <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > Venta Dolares    </td>
+                                    <td class="valorPro" > Cant.Dolares    </td>
                                     <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
                                 </tr>
+                                
+                                <tr class="detalleTables">
+                                    <td class="valorPro" >      </td>
+                                    <td class="valorPro" ></td>
+                                </tr>
+                               
+                                
+                            </tbody>
+                            </table> 
+                           <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Resumen de Salidas</strong></div></div>       
+                           <table class = "forma-table" >
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="cantidad">Descripcion  </th>
+                                    <th class="precio"> Total </th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr  each={salidas} class="detalleTables">
+                                    <td class="valorPro" >{descripcion}</td>
+                                    <td class="valorPro" >{totalSTR}</td>
+                                </tr>
+                                
+                            </tbody>
+                            </table> 
+                           <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Resumen de Entradas</strong></div></div>       
+                           <table class = "forma-table" >
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="cantidad">Descripcion  </th>
+                                    <th class="precio"> Total </th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr  each={entradas} class="detalleTables">
+                                    <td class="valorPro" >{descripcion}</td>
+                                    <td class="valorPro" >{totalSTR}</td>
+                                </tr>
+                                
+                            </tbody>
+                            </table> 
+                        <table class = "forma-table" show = {parametros.tipo == 2 }>
+                           <thead>
+                                <tr class = "forma-table">
+                                    <th class="titulo">  </th>
+                                    <th class="titulo"></th>
+                                    <th class="titulo"> </th>
+                                </tr>
+                            </thead>
+                             <tbody>
                                 
                                 <tr class="detalleTables">
                                     <td class="valorPro" >      </td>
@@ -130,6 +180,7 @@
                                 <tr class="detalleTables">
                                     <td class="valorPro" >    *** *** ***   </td>
                                 </tr>
+                                
                             </tbody>
                             </table> 
 
@@ -146,8 +197,8 @@
 
 
 <style type="text/css">
-.modal-body{
-    height: 370px;
+.forma-impresion{
+    height: 450px;
     overflow-y: auto;
 }
   .tituloCierre{
@@ -339,6 +390,8 @@ function consultaCaja(){
                 self.usuarioCaja.aperturaCaja = self.usuarioCaja.aperturaCaja.sort(compare)
                 self.usuarioCaja.cierreCaja =getDesglose(self.usuarioCaja.conteoManualCajas,2)
                 self.usuarioCaja.cierreCaja = self.usuarioCaja.cierreCaja.sort(compare)
+                self.salidas = getSalidaEntradas(modeloTabla.salidaEntradaDineros,2)
+                self.entradas = getSalidaEntradas(modeloTabla.salidaEntradaDineros,1)
                 self.cierre =self.usuarioCaja.cierreCaja.length > 0 ?true:false 
                 self.apertura =self.usuarioCaja.aperturaCaja.length > 0?true:false 
                 self.update()
@@ -358,6 +411,22 @@ function consultaCaja(){
     });
      
 
+}
+
+function getSalidaEntradas(salidasEntradas,tipo){
+    var arreglo = []
+
+    $.each(salidasEntradas, function( index, modeloTabla ) {
+        if(modeloTabla.tipo == tipo){
+            arreglo.push({
+                id:modeloTabla.id,
+                descripcion:modeloTabla.descripcion,
+                totalSTR : modeloTabla.totalSTR,
+            })
+        }
+
+    })
+    return arreglo;
 }
 
 function getDesglose(conteoManualCajas,tipo){

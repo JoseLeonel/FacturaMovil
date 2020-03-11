@@ -815,18 +815,18 @@ div.fondoVentaEspera:hover{
 }
     div.labelBotones:hover{
         color:#30ed17 !important;
-        font-size: 45px
+        font-size: 22px
     }
     .simbolodividir{
         font-size:20px;
     }
     span.fontSumarRestar:hover{
         background-color: black;
-        font-size: 45px
+        font-size: 22px
     }
     div.BotonesSumarRestar:hover {
         background-color: black;
-        font-size: 45px
+        font-size: 22px
     }
     .modalTitleCambioPrecio{
         color: white;

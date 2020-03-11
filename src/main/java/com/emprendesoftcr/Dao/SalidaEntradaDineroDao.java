@@ -16,5 +16,7 @@ public interface SalidaEntradaDineroDao {
 
 	
 	Collection<SalidaEntradaDinero> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja);
+	
+	Collection<SalidaEntradaDinero> buscarPorUsuarioCajaAndTipo(UsuarioCaja usuarioCaja,Integer tipo);
 
 }

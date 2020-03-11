@@ -439,27 +439,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 						}
 					}
+				
 					// Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
-					// Nota de Credito Anulacion Documento
-					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-							if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-								if (facturaReferencia != null) {
-									cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferencia);
-								}
-							}
-						}
-					}
-					// Si es nota de debito se crea un abono por nota de debito
-					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-							if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-								if (facturaReferencia != null) {
-									cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura, facturaReferencia);
-								}
-							}
-						}
-					}
+					factura = aplicarModificarCuentaPorCobrar(factura, facturaReferencia);
 
 				}
 
@@ -475,6 +457,47 @@ public class FacturaBoImpl implements FacturaBo {
 
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
+			throw e;
+		}
+
+		return factura;
+	}
+
+	
+
+	/**
+	 * @param factura
+	 * @param facturaReferencia
+	 * @return
+	 */
+	@Transactional
+	private Factura aplicarModificarCuentaPorCobrar(Factura factura, Factura facturaReferencia) {
+		try {
+
+			// Nota de Credito por ajuste montos se crea abono a la cuenta cobrar.
+			// Nota de Credito Anulacion Documento
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						if (facturaReferencia != null) {
+							cuentaCobrarBo.modificarCuentaXCobrarPorNotaCredito(factura, facturaReferencia);
+						}
+					}
+				}
+			}
+			// Si es nota de debito se crea un abono por nota de debito
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						if (facturaReferencia != null) {
+							cuentaCobrarBo.modificarCuentaXCobrarPorNotaDebito(factura, facturaReferencia);
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.error(String.format("--error aplicarCuentaPorCobrar :" + e.getMessage() + new Date()));
 			throw e;
 		}
 
@@ -552,7 +575,7 @@ public class FacturaBoImpl implements FacturaBo {
 		} catch (org.json.simple.parser.ParseException e) {
 			log.error(String.format("--error formaDetallesCommand :" + e.getMessage() + new Date()));
 			throw e;
-		
+
 		}
 		return detallesFacturaCommand;
 	}
@@ -653,11 +676,12 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
 	private final ReentrantLock lock = new ReentrantLock();
+
 	@Override
 	@Transactional
 	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) throws Exception {
 		Factura factura = null;
-	//	lock.lock();
+		// lock.lock();
 		try {
 			long id = Thread.currentThread().getId();
 			log.info(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));

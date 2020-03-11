@@ -1,7 +1,10 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
@@ -23,5 +26,7 @@ public interface UsuarioCajaDao {
 	void actualizarCaja(UsuarioCaja usuarioCaja)throws Exception;
 	
 	ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId);
+	
+	Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa,String estado);
 
 }

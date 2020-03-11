@@ -279,7 +279,7 @@ function mensajeAdvertencia(mensaje){
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
-	    hideAfter: 3000,   // in milli seconds
+	    hideAfter: 1500,   // in milli seconds
 	    position: 'top-right',
 	    bgColor: 'red',
 	    textColor: 'white'
@@ -299,7 +299,7 @@ function mensajeToasExito(mensaje){
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
-	    hideAfter: 3000,   // in milli seconds
+	    hideAfter: 1500,   // in milli seconds
 	    position: 'top-right',
 	    bgColor: '#4cae4c',
 	    textColor: 'white'

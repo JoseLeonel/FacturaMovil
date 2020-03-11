@@ -19,6 +19,7 @@
                                 <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
                                 <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
                                 <th class="table-header"  style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                <th class="table-header"  style="width:10%">Ventas   </th>
                                 <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                             </tr>
                         </thead>
@@ -29,6 +30,7 @@
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
                                 <th style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                <th style="width:10%">Ventas   </th>
                                 <th  > </th>
                             </tr>
                         </tfoot>
@@ -154,28 +156,11 @@
 
 <style type ="text/css">
 
-
-/* Important part */
-.modal-dialog{
-    overflow-y: initial !important
-}
 .modal-body{
-    height: 370px;
+    height: 400px;
     overflow-y: auto;
 }
-.modalBox {
-   background: #fff !important;
-   border-radius: 16px !important;
-   position: absolute !important;
-   top: 44% !important;
-   left: 50% !important;
-   transform: translate(-50%, -50%) !important;
-   max-height: 90% !important;
-   overflow-y: auto !important;
-   padding: 30px !important;
-   box-sizing: border-box !important;
-   max-width: 90% !important;
-}
+
 
     .tamanoClienteNuevo{
         font-size: 26px;
@@ -619,6 +604,7 @@ function __listado(){
                     //Activar filtros
                 ActivarEventoFiltro(".tableListar")
                 __cerrarCaja()
+                $('.btn-agregar').hide()
              } 
         },
         error: function (xhr, status) {
@@ -646,6 +632,7 @@ function __InformacionDataTable(){
                                     }
                                },
                                {'data' : 'totalFondoInicialSTR'        ,"name":"totalFondoInicialSTR"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false},
+                               {'data' : 'totalNetoSTR'        ,"name":"totalNetoSTR"  ,"title" : "Ventas"  ,"autoWidth" :false},
                                {'data' : 'id'           ,"name":"id"       ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __OpcionesFacturas(id,type,row);
@@ -707,7 +694,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() !=6    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
  
@@ -763,6 +750,7 @@ function cerrarCajaAjax(){
                             self.usuarioCaja = null
                              __listado()
                              hidemodal()
+                             $('.btn-agregar').show()
                              $.each(data.listaObjetos, function( index, modeloTabla ) {
                                 self.usuarioCaja = modeloTabla    
                                 self.update()

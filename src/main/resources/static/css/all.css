@@ -1,3 +1,31 @@
+/* Important part */
+.modal-dialog{
+    overflow-y: initial !important
+}
+
+.modal-header {
+    border-radius: 10px!important;
+    border-bottom-color: #f4f4f4;
+}
+.modal-content {
+    border-radius: 25px!important;
+}
+
+.modalBox {
+   background: #fff !important;
+   border-radius: 16px !important;
+   position: absolute !important;
+   top: 44% !important;
+   left: 50% !important;
+   transform: translate(-50%, -50%) !important;
+   max-height: 90% !important;
+   overflow-y: auto !important;
+   padding: 30px !important;
+   box-sizing: border-box !important;
+   max-width: 90% !important;
+}
+
+
 /* ============================================================
   COMMON
 ============================================================ */

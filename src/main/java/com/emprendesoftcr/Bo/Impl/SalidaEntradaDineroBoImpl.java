@@ -30,4 +30,10 @@ public class SalidaEntradaDineroBoImpl implements SalidaEntradaDineroBo {
 		return salidaEntradaDineroDao.buscarPorUsuarioCaja(usuarioCaja);
 	}
 
+	@Override
+	public Collection<SalidaEntradaDinero> buscarPorUsuarioCajaAndTipo(UsuarioCaja usuarioCaja, Integer tipo) {
+		
+		return salidaEntradaDineroDao.buscarPorUsuarioCajaAndTipo(usuarioCaja, tipo);
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.DoubleSummaryStatistics;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
@@ -224,6 +226,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			throw e;
 		}
 		return usuarioCaja;
+	}
+
+	@Override
+	public Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado) {
+
+		return usuarioCajaDao.usuarioCajaBy(empresa, estado);
 	}
 
 }

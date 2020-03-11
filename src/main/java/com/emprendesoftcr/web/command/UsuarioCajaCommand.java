@@ -7,6 +7,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
+import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
@@ -86,6 +87,9 @@ public class UsuarioCajaCommand {
 
 	@JsonDeserialize(using = ClienteDeserializer.class)
 	private Set<ConteoManualCaja>	conteoManualCajas;
+	
+	@JsonDeserialize(using = ClienteDeserializer.class)
+	private Set<SalidaEntradaDinero>	salidaEntradaDineros;
 
 	public UsuarioCajaCommand() {
 		super();
@@ -121,6 +125,7 @@ public class UsuarioCajaCommand {
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
 		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
+		this.salidaEntradaDineros = usuarioCaja.getSalidaEntradaDineros();
 		this.sumaEntradas = usuarioCaja.getSumaEntradas() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaEntradas();
 		this.sumaSalida = usuarioCaja.getSumaSalida() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaSalida();
 		this.conteoManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
@@ -133,6 +138,8 @@ public class UsuarioCajaCommand {
 		this.diferenciaSTR = usuarioCaja.getDiferenciaSTR();
 		this.datafonoSTR = usuarioCaja.getDatafonoSTR();
 	}
+	
+
 
 	public String getDiferenciaSTR() {
 		return diferenciaSTR;
@@ -472,6 +479,16 @@ public class UsuarioCajaCommand {
 
 	public void setSumaConteoManualAperturaSTR(String sumaConteoManualAperturaSTR) {
 		this.sumaConteoManualAperturaSTR = sumaConteoManualAperturaSTR;
+	}
+
+	
+	public Set<SalidaEntradaDinero> getSalidaEntradaDineros() {
+		return salidaEntradaDineros;
+	}
+
+	
+	public void setSalidaEntradaDineros(Set<SalidaEntradaDinero> salidaEntradaDineros) {
+		this.salidaEntradaDineros = salidaEntradaDineros;
 	}
 
 }

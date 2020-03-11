@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import com.emprendesoftcr.Bo.CajaBo;
 import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.SalidaEntradaDineroBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -43,6 +45,7 @@ import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.ConteoManualCommand;
@@ -77,6 +80,9 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private ConteoManualCajaBo																conteoManualCajaBo;
+
+	@Autowired
+	private SalidaEntradaDineroBo															salidaEntradaDineroBo;
 
 	@Autowired
 	private CajaBo																						cajaBo;
@@ -146,7 +152,7 @@ public class UsuarioCajasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarUsuariosCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -165,7 +171,28 @@ public class UsuarioCajasController {
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<UsuarioCaja> objetos = usuarioCajaBo.usuarioCajaBy(usuario.getEmpresa(), Constantes.ESTADO_ACTIVO);
+		if (objetos != null) {
+			for (UsuarioCaja usuarioCaja : objetos) {
+				if (usuarioCaja.getId().longValue() > 0L) {
+					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+						solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+					}
+
+				}
+			}
+
+		}
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+
+		respuestaService.setRecordsTotal((long) solicitudList.size());
+		respuestaService.setRecordsFiltered((long) solicitudList.size());
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 
 	}
 
@@ -291,7 +318,7 @@ public class UsuarioCajasController {
 			listaCoteo = denominacionCommand(conteoManualCommand);
 
 			// Se acutalizan los registros
-			 usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
 			usuarioCajaBd.setConteoTarjeta(conteoManualCommand.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : conteoManualCommand.getConteoTarjeta());
 
@@ -363,7 +390,14 @@ public class UsuarioCajasController {
 			Collection<ConteoManualCaja> conteoCierre = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_CIERRE_CAJA_TIPO);
 			modelEmail.put("conteoCierres", conteoCierre);
 			Collection<ConteoManualCaja> conteoApertura = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_APERTURA_CAJA_TIPO);
+
 			modelEmail.put("conteoAperturas", conteoApertura);
+
+			Collection<SalidaEntradaDinero> salidas = salidaEntradaDineroBo.buscarPorUsuarioCajaAndTipo(usuarioCajaBd, Constantes.ENTRADASALIDA_TIPO_SALIDA);
+			Collection<SalidaEntradaDinero> entradas = salidaEntradaDineroBo.buscarPorUsuarioCajaAndTipo(usuarioCajaBd, Constantes.ENTRADASALIDA_TIPO_ENTRADA);
+
+			modelEmail.put("entradas", entradas);
+			modelEmail.put("salidas", salidas);
 
 			Collection<Attachment> attachments = null;
 			String from = "CierreCaja@emprendesoftcr.com";
