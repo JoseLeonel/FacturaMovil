@@ -1262,6 +1262,33 @@
 
 
 <style type="text/css">
+  div.labelBotones:hover{
+        color:#30ed17 !important;
+
+    }
+       .labelBotones {
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+     
     .tamanoClienteNuevo{
         font-size: 30px;
         font-weight: 600;
@@ -1416,6 +1443,33 @@
     }
 
     @media only screen and (max-width: 1024px) and (min-width:768px)  {
+         div.labelBotones:hover{
+        color:#30ed17 !important;
+
+    }
+       .labelBotones {
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+     
     .sizeBilletes{
         height:90px;
         width:160px;
@@ -2136,9 +2190,9 @@ function __RolAdministrador(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.rol = modeloTabla
-                       if(self.rol.rolAdministrador == 0){
-                         self.separarCuenta = false;
-                       }
+                      // if(self.rol.rolAdministrador == 0){
+                      //   self.separarCuenta = false;
+                      // }
                        self.update()
                     });
                 }

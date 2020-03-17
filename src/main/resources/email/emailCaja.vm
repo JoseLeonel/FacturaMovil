@@ -324,8 +324,10 @@ a[x-apple-data-detectors=true] {
                   </tbody>
                 </table>
               <br>
-              <br>
-              <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
+             <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
+                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 16px;">Conteo Manual Caja</span></p></div>              
+              </div>    
+             <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
                   <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 16px;">Fecha Cierre:$fechaCierre</span></p></div>              
               </div>
 
@@ -350,8 +352,8 @@ a[x-apple-data-detectors=true] {
                  #end
                   </tbody>
                 </table>
-
-<div style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: left;">
+            </br>
+            <div style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: left;">
                 <table style="font-size: 16px; margin: 1%; text-align: left; border-collapse: collapse; ">
                   <thead style="border: 1px solid black; background: #1f497d; color: #ffffff; text-align: center;">
                     <tr style="text-align: center;">
@@ -387,7 +389,7 @@ a[x-apple-data-detectors=true] {
                   </tr>
 
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Total del Cierre:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Cierre Caja:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalCierreSTR</td>
                   </tr>
                   
@@ -400,7 +402,7 @@ a[x-apple-data-detectors=true] {
               <br>
 
               <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
-                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 16px;">Ventas Realizadas - Conteo Manual</span></p></div>              
+                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 16px;">Ventas Sistema - Conteo Caja</span></p></div>              
               </div>
   
               <div style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: left;">
@@ -414,33 +416,30 @@ a[x-apple-data-detectors=true] {
                   <tbody style="border: 1px solid black; ">
 
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Efectivo:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Efectivo Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalEfectivo</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Tarjeta:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Tarjeta Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalTarjeta</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Banco:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Banco Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalBanco</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Abonos:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Abonos Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalAbonoSTR</td>
                   </tr>
                   
               
+                
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Ventas:</td>
-                    <td style="padding: 8px; border: 1px solid black;">$totalVentas</td>
-                  </tr>
-                  <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;"> Total:</td>
+                    <td style="padding: 8px; border: 1px solid black;"> Total Ventas Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalGeneralSTR</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;"> Total Cierre:</td>
+                    <td style="padding: 8px; border: 1px solid black;"> Cierre Caja :</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalCierreSTR</td>
                   </tr>
 
@@ -455,7 +454,7 @@ a[x-apple-data-detectors=true] {
                     <td style="padding: 8px; border: 1px solid black;">$totalServicio</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Venta Dolares :</td>
+                    <td style="padding: 8px; border: 1px solid black;">Cant.Dolares :</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalDolaresSTR</td>
                   </tr>
 
@@ -463,7 +462,54 @@ a[x-apple-data-detectors=true] {
                 </table>
               <br>
             </div> <!--Conteo de apertura --> 
-                        
+              <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
+                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 16px;">Resumen Entradas</span></p></div>              
+              </div>
+  
+              <div style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: left;">
+                <table style="font-size: 16px; margin: 1%; text-align: left; border-collapse: collapse; ">
+                  <thead style="border: 1px solid black; background: #1f497d; color: #ffffff; text-align: center;">
+                    <tr style="text-align: center;">
+                    <th style="width: 13%; padding: 6px; border: 1px solid black;">Motivo</th>
+                    <th style="width: 13%; padding: 6px; border: 1px solid black;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody style="border: 1px solid black; ">
+                    #foreach ($entrada in $entradas)
+                      <tr style="border: 1px solid black; ">
+                        <td style="padding: 8px; border: 1px solid black;">$entrada.descripcion</td>
+                        <td style="padding: 8px; border: 1px solid black;">$entrada.totalSTR</td>
+                      </tr>
+                    #end
+                 
+                  </tbody>
+                </table>
+              <br>
+            </div> <!--Conteo de apertura -->                         
+              <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px;">
+                  <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px">&#160;<br></p><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="color: red; font-size: 16px; line-height: 16px;">Resumen Salidas</span></p></div>              
+              </div>
+  
+              <div style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: left;">
+                <table style="font-size: 16px; margin: 1%; text-align: left; border-collapse: collapse; ">
+                  <thead style="border: 1px solid black; background: #1f497d; color: #ffffff; text-align: center;">
+                    <tr style="text-align: center;">
+                    <th style="width: 13%; padding: 6px; border: 1px solid black;">Motivo</th>
+                    <th style="width: 13%; padding: 6px; border: 1px solid black;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody style="border: 1px solid black; ">
+                    #foreach ($salida in $salidas)
+                      <tr style="border: 1px solid black; ">
+                        <td style="padding: 8px; border: 1px solid black;">$salida.descripcion</td>
+                        <td style="padding: 8px; border: 1px solid black;">$salida.totalSTR</td>
+                      </tr>
+                    #end
+
+                  </tbody>
+                </table>
+              <br>
+            </div> <!--Conteo de apertura -->                         
       
                   
       <!--  ******************************************  NUMEROS  ******************************************  -->   

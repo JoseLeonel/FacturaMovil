@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +29,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CajaBo;
-import com.emprendesoftcr.Bo.CocinaBo;
 import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.SalidaEntradaDineroBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -44,6 +45,7 @@ import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.ConteoManualCommand;
@@ -75,14 +77,12 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
-	
-	
 
-
-
-	
 	@Autowired
 	private ConteoManualCajaBo																conteoManualCajaBo;
+
+	@Autowired
+	private SalidaEntradaDineroBo															salidaEntradaDineroBo;
 
 	@Autowired
 	private CajaBo																						cajaBo;
@@ -152,7 +152,7 @@ public class UsuarioCajasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarUsuariosCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -171,7 +171,32 @@ public class UsuarioCajasController {
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<UsuarioCaja> objetos = usuarioCajaBo.usuarioCajaBy(usuario.getEmpresa(), Constantes.ESTADO_ACTIVO);
+		if (objetos != null) {
+			for (UsuarioCaja usuarioCaja : objetos) {
+				if (usuarioCaja.getId().longValue() > 0L) {
+					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+						solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+					}else {
+						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+						}
+					}
+
+				}
+			}
+
+		}
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+
+		respuestaService.setRecordsTotal((long) solicitudList.size());
+		respuestaService.setRecordsFiltered((long) solicitudList.size());
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 
 	}
 
@@ -235,7 +260,7 @@ public class UsuarioCajasController {
 			}
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
-			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa());
+			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa(),usuario);
 			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario, caja);
 			UsuarioCaja usuarioCajaBd1 = usuarioCajaBo.buscar(usuarioCaja.getId());
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd1);
@@ -335,7 +360,10 @@ public class UsuarioCajasController {
 
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCajaCommand.getId());
 			UsuarioCajaCommand usuarioCajaCommand1 = new UsuarioCajaCommand(usuarioCajaBd);
-			modelEmail.put("usuarioResponsable", usuarioCajaCommand1.getUsuario().getNombre().trim() + " " + usuarioCajaCommand.getUsuario().getPrimerApellido().trim() + " " + usuarioCajaCommand.getUsuario().getSegundoApellido().trim());
+			String nombreUsuario = usuarioCajaCommand1.getUsuario().getNombre() == null ? Constantes.EMPTY : usuarioCajaCommand1.getUsuario().getNombre().trim();
+			String apellido1 = usuarioCajaCommand.getUsuario().getPrimerApellido() == null ? Constantes.EMPTY : usuarioCajaCommand.getUsuario().getPrimerApellido().trim();
+			String apellido2 = usuarioCajaCommand.getUsuario().getSegundoApellido() == null ? Constantes.EMPTY : usuarioCajaCommand.getUsuario().getSegundoApellido().trim();
+			modelEmail.put("usuarioResponsable", nombreUsuario + " " + apellido1 + " " + apellido2);
 			modelEmail.put("fechaApertura", usuarioCajaCommand1.getCreated_atSTR());
 			modelEmail.put("nombreComercial", usuarioCajaBd.getCaja().getEmpresa().getNombreComercial());
 			modelEmail.put("nombreEmpresa", usuarioCajaBd.getCaja().getEmpresa().getNombre());
@@ -366,7 +394,14 @@ public class UsuarioCajasController {
 			Collection<ConteoManualCaja> conteoCierre = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_CIERRE_CAJA_TIPO);
 			modelEmail.put("conteoCierres", conteoCierre);
 			Collection<ConteoManualCaja> conteoApertura = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_APERTURA_CAJA_TIPO);
+
 			modelEmail.put("conteoAperturas", conteoApertura);
+
+			Collection<SalidaEntradaDinero> salidas = salidaEntradaDineroBo.buscarPorUsuarioCajaAndTipo(usuarioCajaBd, Constantes.ENTRADASALIDA_TIPO_SALIDA);
+			Collection<SalidaEntradaDinero> entradas = salidaEntradaDineroBo.buscarPorUsuarioCajaAndTipo(usuarioCajaBd, Constantes.ENTRADASALIDA_TIPO_ENTRADA);
+
+			modelEmail.put("entradas", entradas);
+			modelEmail.put("salidas", salidas);
 
 			Collection<Attachment> attachments = null;
 			String from = "CierreCaja@emprendesoftcr.com";

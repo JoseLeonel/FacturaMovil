@@ -316,12 +316,16 @@ function __Imprimir(){
 			//cuando el datatable esta en modo responsive
 	       var data = table.row(this).data();
 	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
+           var data = table.row($(this).parents("tr")).data();
+           
+
         }
-        riot.compile(function() {
-			 // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('imprimir-caja',{usuarioCaja:data});
-		});  
+        var parametros  = {
+            usuarioCaja:data,
+            tipo:2
+        }
+        riot.mount('imprimir-caja',{parametros:parametros});
+
         
         
 	});

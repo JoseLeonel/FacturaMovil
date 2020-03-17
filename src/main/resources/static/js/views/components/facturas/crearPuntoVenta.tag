@@ -257,7 +257,7 @@
                             <tbody>
                             <tr each={detail}>
                                 <td>
-                                   <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
+                                   <button id="{numeroLinea}" name="{numeroLinea}"  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                                 </td>
                                 <td style="width:5%;"  class="campoLabel"><label >{numeroLinea}</label> </td>
                                 <td  style="width:4%" class="campoLabel"> <label >{codigo}</label></td>
@@ -357,8 +357,8 @@
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__AplicarCambioPrecio} title="Cambio de Precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="fa fa-calc" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
-                                       <strong class='simbolodividir'> /</strong> = cambio Precio
+                                        <span class="fa fa-calculator" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                      / = cambio Precio
                                     </span> 
                                 </div>                     
 
@@ -379,7 +379,7 @@
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                        <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                        <span class="fa fa-user-o" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Nuevo Cliente
                                     </span> 
                                 </div>
@@ -804,6 +804,7 @@
 div.fondoVentaEspera:hover{
     color:#30ed17 !important;
     cursor: pointer;
+    
 }
 .ventaEspera{
     display: flex;
@@ -814,16 +815,18 @@ div.fondoVentaEspera:hover{
 }
     div.labelBotones:hover{
         color:#30ed17 !important;
-
+        font-size: 22px
     }
     .simbolodividir{
         font-size:20px;
     }
     span.fontSumarRestar:hover{
         background-color: black;
+        font-size: 22px
     }
     div.BotonesSumarRestar:hover {
         background-color: black;
+        font-size: 22px
     }
     .modalTitleCambioPrecio{
         color: white;
@@ -1500,7 +1503,7 @@ div.fondoVentaEspera:hover{
                     seguridadCambiarPrecioLinea()
                     return
                 }else{
-                    $(".codigo").val('')
+                    $(".codigo").val(null)
                     event.preventDefault()
                     return 
                 }
@@ -1608,12 +1611,12 @@ __AplicarCambioPrecioUltimoArticulo(){
     __AplicarCambioPrecioBD()
 }    
 __RegresarInputCodigo(){
-    $(".codigo").val('')
+    $(".codigo").val(null)
     $('#modalCambiarPrecio').modal('hide')
     getPosicionInputCodigo()
 }
 __RegresarInputSeguridad(){
-    $(".codigo").val('')
+    $(".codigo").val(null)
     $('#modalRolUsuario').modal('hide')
     getPosicionInputCodigo()
 }
@@ -1688,7 +1691,7 @@ function teclamodal(e){
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
                         &&  !$('#modalCambiarPrecio').is(':visible')
                     ) {
-                        $('.codigo').focus() 
+                        getPosicionInputCodigo()
                      } 
                    
                 } 
@@ -1704,7 +1707,7 @@ function teclamodal(e){
 function __AplicarCambioPrecioBD(){
     var parametros = __getUltimoArticuloIngresado();
     if(parametros == null){
-        $('.codigo').val('')
+        $('.codigo').val(null)
         getPosicionInputCodigo()
         return 
     }
@@ -1752,7 +1755,7 @@ function __AplicarCambioPrecioBD(){
 **/
 function getPosicionInputCodigo(){
     $('.precioVenta').val(null)
-    $('.codigo').val("")
+    $('.codigo').val(null)
     $('.codigo').focus()
 }
 /**
@@ -1772,11 +1775,11 @@ __ConsultarHacienda(e){
 
 
 function getClienteHacienda(){
-    var cedula = $('#cedula').val()
-    if(cedula.length  == 0){
-        return
+     var cedula = $('#cedula').val()
+    if(stringVacio($(".cedula").val()) == false){
+       return    
     }
-    self.mostrarBotonAgregarCliente = false
+    $('.correoElectronico').val('')
     self.clienteHacienda= {
         nombre:"",
         tipoIdentificacion:"",
@@ -1786,26 +1789,38 @@ function getClienteHacienda(){
         },
         actividades:[]
     }
-    self.cliente               = {}
     self.update()
     $.ajax({
-    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            mensajeAdvertencia( "Cedula invalidad" )
-            __listadoTipoCedulas()
+        url: "clienteHacienda.do",
+        datatype: "json",
+        data: {cedula:cedula},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
+                    __listadoTipoCedulas()
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.clienteHacienda = modeloTabla
+                        self.mostrarBotonAgregarCliente = true
+                        self.update()
+                        __listadoTipoCedulas()
+                        $('#nombreCompleto').val(self.clienteHacienda.nombre)
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
         }
-    }
-    }).done(function (response) {
-        self.clienteHacienda = response
-        self.mostrarBotonAgregarCliente = true
-        self.update()
-        
-        __listadoTipoCedulas()
-         $('#nombreCompleto').val(self.clienteHacienda.nombre)
     });
+    
 }
 /**
 *  Mostrar listado datatable TipoCedulas
@@ -1943,9 +1958,6 @@ function __AplicarPrecioLinea(){
 
 }
 
-function modalCambiarPrecioVista(){
-    
-}
 
 /**
 * Camps requeridos
@@ -3031,8 +3043,10 @@ function cargarDetallesFacturaEnEspera(data){
 }
 
 function seleccionarEfectivo(){
-    $('#totalEfectivo').select()
+    
     $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
+    return
 
 }
 /** 
@@ -3267,15 +3281,8 @@ function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
         getPosicionInputCodigo()
-        swal({
-            type: 'error',
-            title:$.i18n.prop("factura.alert.sin.detalles"),
-            showConfirmButton: false,
-            timer: 1500
-        })
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
+        getPosicionInputCodigo()
         return
     }
     $('#totalTarjeta').val(null)
@@ -3293,7 +3300,7 @@ function mostrarPAgo(){
 /**
 Lectura de Codigos
 **/
-function lecturaCodigo(leerCodigo){
+function lecturaCodigo(){
     var valor = $('.codigo').val()
     if (valor == ""){
         if(self.cantidadEnterFacturar >= 1){
@@ -3306,22 +3313,17 @@ function lecturaCodigo(leerCodigo){
             self.update()
         }
     }
-    var objetos = getCantidadAdnCodigo_PV(leerCodigo);
+    var objetos = getCantidadAdnCodigo_PV();
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    if(leerCodigo.indexOf("+") != -1){
+    if(objetos.codigo.indexOf("+") != -1){
         
        __sumarMasArticulo(objetos.codigo,0,codigoActual)
        getPosicionInputCodigo()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-//    if(temArticulo !=null){
-//        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
-//           getPosicionInputCodigo()
-//        }
-//    }
 }
 /**
 *  cambiar el precio
@@ -3330,14 +3332,11 @@ __addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    if(verificaSiSuma()){
-        return 
-    }
     var codigo = $('#codigo').val()
     if(codigo.length == 0){
        __EnviarFacturar()
     }
-    var objetos = getCantidadAdnCodigo_PV(codigo);
+    var objetos = getCantidadAdnCodigo_PV();
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 
@@ -3355,7 +3354,7 @@ __addPrecioDetail(e){
 /**
 Busca el canidad digitado sin el mas o por
 **/
-function getCantidadAdnCodigo_PV(valor){
+function getCantidadAdnCodigo_PV(){
     var objeto ={
         codigo:'',
         cantidad:0
@@ -3442,7 +3441,7 @@ __ConsultarProductosCod(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+    __ListaDeArticulosPorDescripcion()   
 }
 /**
 * mostrar la lista de articulos de la empresa
@@ -3806,8 +3805,6 @@ function buscarItemEliminar(item){
 *    Eliminar detalle
 **/
 function  eliminarDetalle(){
-   // index = self.detail.indexOf(self.itemEliminar);
- //   self.detail.splice(index, 1);
     buscarItemEliminar(self.itemEliminar)
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
@@ -4368,12 +4365,8 @@ function __seleccionarClientes() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-    //    if(self.cliente.cedula != data.cedula){
-            self.cliente = data
-            self.update();
-         
-
-      //  }
+        self.cliente = data
+        self.update();
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
@@ -4683,7 +4676,7 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()      
         }else{
-            $(".codigo").val('')
+            $(".codigo").val(null)
             event.preventDefault()
         }
         return 
@@ -4761,8 +4754,6 @@ function __Teclas(tecla,event){
             return
         }    
 
-       
-
       }
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
         self.factura.totalBanco = 0
@@ -4838,15 +4829,12 @@ function __RestarConTecla(e){
 }
 
 function verificaSiSuma(){
-    var objetos =  getCantidadAdnCodigo_PV(codigo);
-   var codigo = objetos.codigo; 
-   
-    for(i=0; i<codigo.length; i++){
-        if(isNumber(codigo)){
+   var objetos =  getCantidadAdnCodigo_PV();
+    for(i=0; i<objetos.codigo.length; i++){
+        if(isNumber(objetos.codigo)){
           return false        }
     }
     return true
-   
 }
 /**
 * refrescar una pagina
@@ -5010,8 +4998,6 @@ function __ListaProformas(){
     });
     return
 }
-
-
 
 </script>
 </punto-venta>

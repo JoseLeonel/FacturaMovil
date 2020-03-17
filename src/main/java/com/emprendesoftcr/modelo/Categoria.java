@@ -1,14 +1,18 @@
 package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -50,6 +54,13 @@ public class Categoria implements Serializable {
 	@Column(name = "updated_at")
 	private Date updated_at;
 
+
+	@Column(name = "imagen")
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private Blob							imagen;
+
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
@@ -65,15 +76,21 @@ public class Categoria implements Serializable {
 
 	}
 
-	public Categoria(Long id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa) {
+
+
+	public Categoria(Long id, String descripcion, String estado, Date created_at, Date updated_at, Blob imagen, Empresa empresa, Integer prioridad) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
 		this.estado = estado;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.imagen = imagen;
 		this.empresa = empresa;
+		this.prioridad = prioridad;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -131,4 +148,20 @@ public class Categoria implements Serializable {
 		this.prioridad = prioridad;
 	}
 
+
+
+	
+	public Blob getImagen() {
+		return imagen;
+	}
+
+
+
+	
+	public void setImagen(Blob imagen) {
+		this.imagen = imagen;
+	}
+
+	
+	
 }

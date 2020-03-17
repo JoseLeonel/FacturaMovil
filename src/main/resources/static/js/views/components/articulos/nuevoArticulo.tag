@@ -3,6 +3,7 @@
 <div class="tituloBotones">
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {articulo.id > 0 ? $.i18n.prop("titulo.modificar.articulo")   :$.i18n.prop("titulo.agregar.articulo")}     </div>
     <div class="botones">
+            <button  title = "Limpiar Pantalla" onclick={__LimpiarPantalla}   class="btn-salida btn-edit pull-right" > &nbsp Limpiar</button>
             <button  title = "Salida del inventario" onclick={__AplicarSalida} show={articulo.cantidad > 0}  class="btn-salida btn-edit pull-right" > &nbsp Salida</button>
             <button  title = "Entrada al inventario" onclick={__AplicarEntrada} show={botonEntrada}  class="btn-entrada btn-edit pull-right" > &nbsp Entrada</button>
             <button  title = "Modificar el Articulo" onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
@@ -218,8 +219,7 @@
 <!-- Formulario de crear una Entrada-->
 <div  >
     <div class="row center " show={mostrarFormularioEntrada}>
-        <div class="col-md-2 col-sx-12 col-sm-2 col-lg-2"></div>
-        <div class="col-md-8 col-sx-12 col-sm-8 col-lg-8">
+        <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-search"></i>&nbsp{$.i18n.prop("kardex.agregar.entrada")}  </h1>
@@ -234,38 +234,38 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" >{$.i18n.prop("articulo.codigo")}</label>
-                                <input type="text" class="form-control"   value="{articulo.codigo}"   readonly>
+                                <label class="labelstyle" >{$.i18n.prop("articulo.codigo")}</label>
+                                <input type="text" class="form-control inputStyle"   value="{articulo.codigo}"   readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" >{$.i18n.prop("articulo.descripcion")}</label>
-                                <input type="textArea" class="form-control" value="{articulo.descripcion}" readonly>
+                                <label class="labelstyle" >{$.i18n.prop("articulo.descripcion")}</label>
+                                <input type="textArea" class="form-control inputStyle" value="{articulo.descripcion}" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
-                                <select  class="form-control selectEntrada" id="motivo" name="motivo" data-live-search="true">
+                                <label class="labelstyle">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
+                                <select  class="form-control selectEntrada inputStyle" id="motivo" name="motivo" data-live-search="true">
                                     <option data-tokens="{descripcion}" each={motivoEntradas.data}  value="{descripcion}"  >{descripcion}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="form-control" >{$.i18n.prop("kardex.cantidadActual")}</label>
-                                <input type="number" step="any" class="form-control"  value="{articulo.cantidad}"  readonly >
+                                <label class="labelstyle" >{$.i18n.prop("kardex.cantidadActual")}</label>
+                                <input type="number" step="any" class="form-control inputStyle"  value="{articulo.cantidad}"  readonly >
                             </div>
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="form-control" >{$.i18n.prop("kardex.cantidadNueva")}<span class="requeridoDato">*</span> </label>
-                                <input onkeyup= {MostrarBotonAgregarEntrada} type="number" step="any"  class="form-control cantidadNueva_entrada" id="cantidadNueva" name="cantidadNueva"   >
+                                <label class="labelstyle" >{$.i18n.prop("kardex.cantidadNueva")}<span class="requeridoDato">*</span> </label>
+                                <input onkeyup= {MostrarBotonAgregarEntrada} type="number" step="any"  class=" inputStyle form-control cantidadNueva_entrada" id="cantidadNueva" name="cantidadNueva"   >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" > {$.i18n.prop("kardex.observacion")}<span class="requeridoDato">*</span></label>
-                                <textarea class="form-control observacion_entrada " rows="5" id="observacion" name="observacion"></textarea>
+                                <label class="labelstyle" > {$.i18n.prop("kardex.observacion")}<span class="requeridoDato">*</span></label>
+                                <textarea class="form-control observacion_entrada inputStyle" rows="5" id="observacion" name="observacion"></textarea>
                             </div>
                         </div>
                     </form>    
@@ -285,8 +285,7 @@
 <!-- Formulario de crear una Salida-->
 <div>
     <div class="row center " show={mostrarFormularioSalida}>
-        <div class="col-md-2 col-sx-12 col-sm-2 col-lg-2"></div>
-        <div class="col-md-8 col-sx-12 col-sm-8 col-lg-8">
+        <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
             <div class="box box-solid box-danger">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-search"></i>&nbsp {$.i18n.prop("kardex.agregar.salida")}   </h1>
@@ -301,19 +300,19 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" >{$.i18n.prop("articulo.codigo")}  </label>
+                                <label class="labelstyle" >{$.i18n.prop("articulo.codigo")}  </label>
                                 <input type="text" class="form-control"  value="{articulo.codigo}"  readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" >{$.i18n.prop("articulo.descripcion")}</label>
+                                <label class="labelstyle" >{$.i18n.prop("articulo.descripcion")}</label>
                                 <input type="text" class="form-control " value="{articulo.descripcion}"  readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
+                                <label class="labelstyle">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
                                 <select  class="form-control selectMotivoSalida" id="motivo" name="motivo" data-live-search="true">
                                     <option data-tokens="{descripcion}"  each={motivoSalidas.data}  value="{descripcion}"  >{descripcion}</option>
                                 </select>
@@ -321,18 +320,18 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="form-control" >{$.i18n.prop("kardex.cantidadActual")} </label>
-                                <input type="number" step="any" class="form-control" id="cantidadActual" name="cantidadActual" value="{articulo.cantidad}" disabled readonly >
+                                <label class="labelstyle" >{$.i18n.prop("kardex.cantidadActual")} </label>
+                                <input type="number" step="any" class="form-control inputStyle" id="cantidadActual" name="cantidadActual" value="{articulo.cantidad}" disabled readonly >
                             </div>
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="form-control" >{$.i18n.prop("kardex.cantidadDismunuir")}<span class="requeridoDato">*</span> </label>
-                                <input onkeyup= {MostrarBotonAgregarSalida} type="number" step="any"  class="form-control cantidadNueva_salida cantidadNueva" id="cantidadNueva" name="cantidadNueva"   >
+                                <label class="labelstyle" >{$.i18n.prop("kardex.cantidadDismunuir")}<span class="requeridoDato">*</span> </label>
+                                <input onkeyup= {MostrarBotonAgregarSalida} type="number" step="any"  class="inputStyle form-control cantidadNueva_salida cantidadNueva" id="cantidadNueva" name="cantidadNueva"   >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="form-control" >{$.i18n.prop("kardex.observacion")} <span class="requeridoDato">*</span></label>
-                                <textarea class="form-control observacion_salida" rows="5" id="observacion" name="observacion"></textarea>
+                                <label class="labelstyle" >{$.i18n.prop("kardex.observacion")} <span class="requeridoDato">*</span></label>
+                                <textarea class="form-control observacion_salida inputStyle" rows="5" id="observacion" name="observacion"></textarea>
                             </div>
                         </div>
                     </form>    
@@ -351,9 +350,41 @@
 <!-- Fin Formulario -->   
 
 <style type ="text/css">
+
+.inputStyle{
+    display: block;
+    width: 100%;
+    height: 45px;
+    padding: 8px 18px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color:white;
+    border: 1px solid #7f9294;
+    font: 20px verdana, arial, helvetica, sans-serif;
+    margin: 2px 0;
+    padding: 1px 2px;
+    overflow: visible;
+
+}
+
+.labelstyle{
+    font-size: 20px;
+    font-family: sans-serif;
+
+}
+
 .scrollerT {
     width: 100% !important;
-    height: 650px;
+    height: 750px;
     overflow-y: scroll;
 }
 .botones{
@@ -547,6 +578,8 @@ self.on('mount',function(){
     __ComboBaseImponibles()
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
+   _ListaMotivoEntradasActivas()
+   _ListaMotivoSalidasActivas() 
     self.impuestos = __ComboImpuestos()
     self.tipoCodigos =__CombotipoCodigo()
     self.update()
@@ -564,6 +597,9 @@ self.on('mount',function(){
         }, false );
 })
 
+__LimpiarPantalla(){
+   __InicializarDatos()
+}
 
 __AplicarSalida(){
     // variables para modulo de inventario 
@@ -678,7 +714,6 @@ function findByCodigo(){
                         self.botonAgregar  = false;            
                         self.botonSalida = true
                         self.botonEntrada = true
-
                         self.update()
                         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
                         $("#formulario").validate(reglasDeValidacion());   
@@ -1445,6 +1480,8 @@ __agregar(){
     if(validarPrecios()){
          return
      }
+    var costoProducto =  __valorNumerico($('#costo').val())
+    var precioPublico = __valorNumerico($('#precioPublico').val())
 
         if ($("#formulario").valid()) {
              var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
@@ -1455,7 +1492,7 @@ __agregar(){
                    return 
                 }
             }
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
              mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo") 
             return 
         }
@@ -1498,6 +1535,9 @@ __Modificar(){
      if(validarPrecios()){
          return
      }
+    var costoProducto =  __valorNumerico($('#costo').val())
+    var precioPublico = __valorNumerico($('#precioPublico').val())
+ 
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
@@ -1507,7 +1547,7 @@ __Modificar(){
                return 
             }
         }
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
             mensajeAdvertencia("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 
         }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -37,7 +39,9 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
 import com.emprendesoftcr.web.command.ClienteCommand;
+import com.emprendesoftcr.web.command.CuentaCobrarCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -533,6 +537,57 @@ public class ClientesController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request, HttpServletResponse response, @RequestParam String cedula) {
+		try {
+		
+			// request url
+			String url = "https://api.hacienda.go.cr/fe/ae?identificacion="+cedula;
+
+			// create an instance of RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
+
+			// make an HTTP GET request
+			JSONObject json = restTemplate.getForObject(url, JSONObject.class);
+
+			// print json
+			System.out.println(json);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", json);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/tipoCambioBancoCentral.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator tipoCambioBancoCentral(HttpServletRequest request, HttpServletResponse response) {
+		try {
+		
+			// request url
+			String url = "https://api.hacienda.go.cr/indicadores/tc";
+
+			// create an instance of RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
+
+			// make an HTTP GET request
+			JSONObject json = restTemplate.getForObject(url, JSONObject.class);
+
+			// print json
+			System.out.println(json);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", json);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
 
 	/**
 	 * Buscar por id el cliente para mostrar

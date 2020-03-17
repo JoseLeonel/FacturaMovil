@@ -36,4 +36,14 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 		return query.getResultList();
 	}
 
+
+
+	@Override
+	public Collection<SalidaEntradaDinero> buscarPorUsuarioCajaAndTipo(UsuarioCaja usuarioCaja, Integer tipo) {
+		Query query = entityManager.createQuery("select obj from SalidaEntradaDinero obj where obj.usuariocaja.id = :idUsuarioCaja and obj.tipo = :tipo ");
+		query.setParameter("idUsuarioCaja", usuarioCaja.getId());
+		query.setParameter("tipo", tipo);
+		return query.getResultList();
+	}
+
 }

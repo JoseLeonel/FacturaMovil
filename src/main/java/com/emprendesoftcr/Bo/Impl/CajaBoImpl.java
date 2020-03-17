@@ -9,6 +9,7 @@ import com.emprendesoftcr.Bo.CajaBo;
 import com.emprendesoftcr.Dao.CajaDao;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 
 /**
  * Caja es las diferentes cajas de una empresa lo importante es la terminal 00001 son 5 digitos
@@ -70,9 +71,9 @@ public class CajaBoImpl implements CajaBo {
 	}
 
 	@Override
-	public Caja buscarCajaActiva(Empresa empresa) {
+	public Caja buscarCajaActiva(Empresa empresa,Usuario usuario) {
 		
-		return cajaDao.buscarCajaActiva(empresa);
+		return cajaDao.buscarCajaActiva(empresa,usuario);
 	}
 
 }

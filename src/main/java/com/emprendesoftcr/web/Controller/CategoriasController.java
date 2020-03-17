@@ -99,6 +99,11 @@ public class CategoriasController {
 	public String listar(ModelMap model) {
 		return "views/categoria/ListarCategorias";
 	}
+	
+	@RequestMapping(value = "/ListarCategoriasRestaurante.do", method = RequestMethod.GET)
+	public String listarRestaurante(ModelMap model) {
+		return "views/categoria/ListarCategoriasRestaurante";
+	}
 
 	/**
 	 * Listar Ajax de las categorias

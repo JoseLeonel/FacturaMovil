@@ -980,8 +980,11 @@ __agregar(){
 
              }
         }
+        var costoProducto =  __valorNumerico($('#costo').val())
+        var precioPublico = __valorNumerico($('#precioPublico').val())
+ 
         
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
             mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo")   
             _volverCampoCodigo()
             return 

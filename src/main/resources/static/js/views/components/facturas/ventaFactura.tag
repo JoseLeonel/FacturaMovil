@@ -43,7 +43,7 @@
                 <div   class= "labelBotones" onclick = {__MostrarFormularioDePago} title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
             </div> 
             <div class="botonesFuncional ">
-                <div   class= "labelBotones" onclick = {__CrearFacturaTemporal} title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
+                <div   class= "labelBotones" onclick = {__CrearFacturaTemporal} title="{$.i18n.prop("crear.ventas")}"> F9=En Espera</div>
             </div> 
              <div class="botonesFuncional ">
                 <div   class= "labelBotones"  onclick = {__EntradaDinero} title="Entrada de dinero"> Entrada de Dinero</div>
@@ -1449,6 +1449,10 @@ div.fondoVentaEspera:hover{
     .labelBotones {
         font-size: 11px !important;
     }
+    div.labelBotones:hover{
+        color:#30ed17 !important;
+
+    }
     .label-totalesComprobante{
         font-size: 16px !important;
     }
@@ -1826,10 +1830,10 @@ __ConsultarHacienda(e){
 
 function getClienteHacienda(){
     var cedula = $('#cedula').val()
-    if(cedula.length  == 0){
-        return
+    if(stringVacio($(".cedula").val()) == false){
+       return    
     }
-    self.mostrarBotonAgregarCliente = false
+    $('.correoElectronico').val('')
     self.clienteHacienda= {
         nombre:"",
         tipoIdentificacion:"",
@@ -1839,25 +1843,36 @@ function getClienteHacienda(){
         },
         actividades:[]
     }
-    self.cliente               = {}
     self.update()
     $.ajax({
-    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            mensajeAdvertencia( "Cedula invalidad" )
-            __listadoTipoCedulas()
+        url: "clienteHacienda.do",
+        datatype: "json",
+        data: {cedula:cedula},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
+                    __listadoTipoCedulas()
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.clienteHacienda = modeloTabla
+                        self.mostrarBotonAgregarCliente = true
+                        self.update()
+                        __listadoTipoCedulas()
+                        $('#nombreCompleto').val(self.clienteHacienda.nombre)
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
         }
-    }
-    }).done(function (response) {
-        self.clienteHacienda = response
-        self.mostrarBotonAgregarCliente = true
-        self.update()
-        
-        __listadoTipoCedulas()
-         $('#nombreCompleto').val(self.clienteHacienda.nombre)
     });
 }
 /**

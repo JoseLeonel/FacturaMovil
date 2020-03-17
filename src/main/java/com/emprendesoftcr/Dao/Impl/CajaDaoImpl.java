@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.CajaDao;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 
 @Repository("cajaDao")
 public class CajaDaoImpl implements CajaDao {
@@ -84,9 +85,10 @@ public class CajaDaoImpl implements CajaDao {
 	}
 
 	@Override
-	public Caja buscarCajaActiva(Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Caja obj where obj.empresa = :empresa and obj.estado = 'Activo'");
+	public Caja buscarCajaActiva(Empresa empresa,Usuario usuario) {
+		Query query = entityManager.createQuery("select obj from Caja obj where obj.empresa = :empresa and obj.estado = 'Activo' and obj.usuario.id = :idUsuario");
 		query.setParameter("empresa", empresa);
+		query.setParameter("idUsuario", usuario.getId());
 		List<Caja> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Caja) results.get(0);

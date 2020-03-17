@@ -21,6 +21,51 @@ $(document)
 
 
 
+/**
+ * Carga imagen
+ * @param Data64
+ * @returns
+ */
+function cargarImagen(data64,id){
+    var imagenTemporal = data64;
+
+    $(id).attr("width", "200").attr("height", "200")
+    $(id).attr("src",imagenTemporal != null ? decodeBase64(imagenTemporal):'');
+
+    
+}
+
+function cargarImagenBusca(data64,id){
+    var imagenTemporal = data64;
+
+    $(id).attr("width", "200").attr("height", "200")
+    $(id).attr("src",imagenTemporal != null ? imagenTemporal:'');
+
+    
+}
+
+/**
+ * Convertir  a base 64
+ * @param element
+ * @returns
+ */
+function encodeImagetoBase64(element) {
+    var file = element[0].files;
+    var reader = new FileReader();
+    reader.onloadend = function() {
+        $(".fileB64").val(reader.result);
+    }
+    reader.readAsDataURL(file[0]);
+}
+//Permite realizar Decode de un Encode en Base64
+function decodeBase64(encode64) {
+    var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+    return Base64.decode(encode64);
+}
+
+
+
+
 
 function minimizarMenu(){
 	$( "body" ).removeClass( "skin-blue  sidebar-mini sidebar-collapse" ).addClass( "skin-blue  sidebar-mini sidebar-collapse" );
@@ -65,21 +110,30 @@ var inicializarTipoCambio = function (){
 *Tipo Cambio del Dolar 
 **/
 function getTipoCambioDolar(){
-    $.ajax({
-    "url": "https://api.hacienda.go.cr/indicadores/tc",
-     global: false,
-    "method": "GET",
-    statusCode: {
-        404: function() {
-            __TipoCambio()
-        }
-    }
-    }).done(function (response) {
-         localStorage.setItem('tipoCambioTotal', __valorNumerico(response.dolar.venta.valor));
-         localStorage.setItem('tipoCambioCompra', __valorNumerico(response.dolar.compra.valor));
-    }).fail(function () {
-        __TipoCambio()
-    });
+	  $.ajax({
+	        url: "tipoCambioBancoCentral.do",
+	        datatype: "json",
+	        method:"GET",
+	        success: function (data) {
+	            if (data.status != 200) {
+	                if (data.message != null && data.message.length > 0) {
+	                	__TipoCambio()
+	                }
+	            }else{
+	                if (data.message != null && data.message.length > 0) {
+	                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+	                        localStorage.setItem('tipoCambioTotal', __valorNumerico(modeloTabla.dolar.venta.valor));
+	                        localStorage.setItem('tipoCambioCompra', __valorNumerico(modeloTabla.dolar.compra.valor));
+	                    });
+	                }
+	            }
+	        },
+	        error: function (xhr, status) {
+	            mensajeErrorServidor(xhr, status);
+	            
+	        }
+	    });
+   
 }
 /**
 * Tipo Cambio de moneda
@@ -224,7 +278,7 @@ function mensajeAdvertencia(mensaje){
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
-	    hideAfter: 5000,   // in milli seconds
+	    hideAfter: 1500,   // in milli seconds
 	    position: 'top-right',
 	    bgColor: 'red',
 	    textColor: 'white'
@@ -244,7 +298,7 @@ function mensajeToasExito(mensaje){
 	    loader: true,        // Change it to false to disable loader
 	    showHideTransition: 'slide',
 	    loaderBg: '#9EC600',  // To change the background
-	    hideAfter: 5000,   // in milli seconds
+	    hideAfter: 1500,   // in milli seconds
 	    position: 'top-right',
 	    bgColor: '#4cae4c',
 	    textColor: 'white'

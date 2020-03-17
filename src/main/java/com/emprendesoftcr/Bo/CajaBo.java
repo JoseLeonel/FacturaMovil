@@ -2,6 +2,7 @@ package com.emprendesoftcr.Bo;
 
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 
 public interface CajaBo {
 
@@ -16,6 +17,6 @@ public interface CajaBo {
 	Caja findByDescripcionAndEmpresa(String descripcion, Empresa empresa);
 
 	Caja findByTerminalAndEmpresa(String terminal, Empresa empresa);
-	Caja buscarCajaActiva(Empresa empresa); 
+	Caja buscarCajaActiva(Empresa empresa,Usuario usuario); 
 
 }

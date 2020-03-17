@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.DoubleSummaryStatistics;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
@@ -98,7 +100,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			Double cierreDataFono = usuarioCaja.getConteoTarjeta() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoTarjeta();
 			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum());
 
-			usuarioCaja.setTotalCierre(doubleSummaryStatistics.getSum() + cierreDataFono + usuarioCaja.getTotalConversionColones() + usuarioCaja.getSumaEntradas() - usuarioCaja.getSumaSalida());
+			usuarioCaja.setTotalCierre(doubleSummaryStatistics.getSum() + cierreDataFono + usuarioCaja.getTotalConversionColones() + usuarioCaja.getSumaEntradas() + usuarioCaja.getSumaSalida());
 			Double totalGeneral = usuarioCaja.getTotalNeto();
 			Double conteManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
 
@@ -107,7 +109,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 					usuarioCaja.setDiferencia(totalGeneral * -1);
 				} else {
 					Double totalConteoManual = conteManual + cierreDataFono + usuarioCaja.getTotalConversionColones() + usuarioCaja.getSumaEntradas();
-					totalConteoManual = totalConteoManual - usuarioCaja.getSumaSalida();
+					totalConteoManual = totalConteoManual + usuarioCaja.getSumaSalida();
 					usuarioCaja.setDiferencia(totalConteoManual - totalGeneral);
 				}
 
@@ -224,6 +226,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			throw e;
 		}
 		return usuarioCaja;
+	}
+
+	@Override
+	public Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado) {
+
+		return usuarioCajaDao.usuarioCajaBy(empresa, estado);
 	}
 
 }

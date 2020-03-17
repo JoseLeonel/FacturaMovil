@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
@@ -164,6 +166,14 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
+	}
+
+	@Override
+	public Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado) {
+		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where  obj.usuario.empresa.id = :idEmpresa and obj.estado = :estado");
+		query.setParameter("idEmpresa", empresa.getId());
+		query.setParameter("estado", estado);
+		return query.getResultList();
 	}
 
 }
