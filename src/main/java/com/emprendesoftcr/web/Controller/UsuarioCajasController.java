@@ -178,6 +178,10 @@ public class UsuarioCajasController {
 				if (usuarioCaja.getId().longValue() > 0L) {
 					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 						solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+					}else {
+						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+						}
 					}
 
 				}
@@ -256,7 +260,7 @@ public class UsuarioCajasController {
 			}
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
-			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa());
+			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa(),usuario);
 			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario, caja);
 			UsuarioCaja usuarioCajaBd1 = usuarioCajaBo.buscar(usuarioCaja.getId());
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd1);

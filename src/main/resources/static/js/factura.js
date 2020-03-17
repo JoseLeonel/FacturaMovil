@@ -113,7 +113,6 @@ function getTipoCambioDolar(){
 	  $.ajax({
 	        url: "tipoCambioBancoCentral.do",
 	        datatype: "json",
-	        global: false,
 	        method:"GET",
 	        success: function (data) {
 	            if (data.status != 200) {

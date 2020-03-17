@@ -604,7 +604,7 @@ function __listado(){
                     //Activar filtros
                 ActivarEventoFiltro(".tableListar")
                 __cerrarCaja()
-                $('.btn-agregar').hide()
+               // $('.btn-agregar').hide()
              } 
         },
         error: function (xhr, status) {

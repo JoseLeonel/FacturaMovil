@@ -1691,7 +1691,7 @@ function teclamodal(e){
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
                         &&  !$('#modalCambiarPrecio').is(':visible')
                     ) {
-                        $('.codigo').focus() 
+                        getPosicionInputCodigo()
                      } 
                    
                 } 
@@ -1958,9 +1958,6 @@ function __AplicarPrecioLinea(){
 
 }
 
-function modalCambiarPrecioVista(){
-    
-}
 
 /**
 * Camps requeridos
@@ -3284,15 +3281,8 @@ function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
         getPosicionInputCodigo()
-        swal({
-            type: 'error',
-            title:$.i18n.prop("factura.alert.sin.detalles"),
-            showConfirmButton: false,
-            timer: 1500
-        })
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
+        getPosicionInputCodigo()
         return
     }
     $('#totalTarjeta').val(null)
@@ -3310,7 +3300,7 @@ function mostrarPAgo(){
 /**
 Lectura de Codigos
 **/
-function lecturaCodigo(leerCodigo){
+function lecturaCodigo(){
     var valor = $('.codigo').val()
     if (valor == ""){
         if(self.cantidadEnterFacturar >= 1){
@@ -3323,22 +3313,17 @@ function lecturaCodigo(leerCodigo){
             self.update()
         }
     }
-    var objetos = getCantidadAdnCodigo_PV(leerCodigo);
+    var objetos = getCantidadAdnCodigo_PV();
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    if(leerCodigo.indexOf("+") != -1){
+    if(objetos.codigo.indexOf("+") != -1){
         
        __sumarMasArticulo(objetos.codigo,0,codigoActual)
        getPosicionInputCodigo()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-//    if(temArticulo !=null){
-//        if(temArticulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
-//           getPosicionInputCodigo()
-//        }
-//    }
 }
 /**
 *  cambiar el precio
@@ -3347,14 +3332,11 @@ __addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-   // if(verificaSiSuma()){
-   //     return 
-   // }
     var codigo = $('#codigo').val()
     if(codigo.length == 0){
        __EnviarFacturar()
     }
-    var objetos = getCantidadAdnCodigo_PV(codigo);
+    var objetos = getCantidadAdnCodigo_PV();
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 
@@ -3372,7 +3354,7 @@ __addPrecioDetail(e){
 /**
 Busca el canidad digitado sin el mas o por
 **/
-function getCantidadAdnCodigo_PV(valor){
+function getCantidadAdnCodigo_PV(){
     var objeto ={
         codigo:'',
         cantidad:0
@@ -3459,7 +3441,7 @@ __ConsultarProductosCod(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+    __ListaDeArticulosPorDescripcion()   
 }
 /**
 * mostrar la lista de articulos de la empresa
@@ -3823,8 +3805,6 @@ function buscarItemEliminar(item){
 *    Eliminar detalle
 **/
 function  eliminarDetalle(){
-   // index = self.detail.indexOf(self.itemEliminar);
- //   self.detail.splice(index, 1);
     buscarItemEliminar(self.itemEliminar)
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
@@ -4385,12 +4365,8 @@ function __seleccionarClientes() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-    //    if(self.cliente.cedula != data.cedula){
-            self.cliente = data
-            self.update();
-         
-
-      //  }
+        self.cliente = data
+        self.update();
         $('#modalClientes').modal('hide') 
         //factura.js
         if(!verificarSiClienteFrecuente(self.cliente)){
@@ -4700,7 +4676,7 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()      
         }else{
-            $(".codigo").val('')
+            $(".codigo").val(null)
             event.preventDefault()
         }
         return 
@@ -4778,8 +4754,6 @@ function __Teclas(tecla,event){
             return
         }    
 
-       
-
       }
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
         self.factura.totalBanco = 0
@@ -4855,15 +4829,12 @@ function __RestarConTecla(e){
 }
 
 function verificaSiSuma(){
-    var objetos =  getCantidadAdnCodigo_PV(codigo);
-   var codigo = objetos.codigo; 
-   
-    for(i=0; i<codigo.length; i++){
-        if(isNumber(codigo)){
+   var objetos =  getCantidadAdnCodigo_PV();
+    for(i=0; i<objetos.codigo.length; i++){
+        if(isNumber(objetos.codigo)){
           return false        }
     }
     return true
-   
 }
 /**
 * refrescar una pagina
@@ -5027,8 +4998,6 @@ function __ListaProformas(){
     });
     return
 }
-
-
 
 </script>
 </punto-venta>

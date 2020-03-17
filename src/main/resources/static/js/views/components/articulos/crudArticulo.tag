@@ -1530,8 +1530,10 @@ __agregar(){
                 
             }
             
-        
-        if(self.articulo.costo > self.articulo.precioPublico){
+        var costoProducto =  __valorNumerico($('#costo').val())
+        var precioPublico = __valorNumerico($('#precioPublico').val())
+ 
+        if(costoProducto > precioPublico){
              mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo") 
             return 
         }
@@ -1594,9 +1596,11 @@ __Modificar(){
                return 
             }
         }
+        var costoProducto =  __valorNumerico($('#costo').val())
+        var precioPublico = __valorNumerico($('#precioPublico').val())
 
 
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
             mensajeAdvertencia("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 
         }

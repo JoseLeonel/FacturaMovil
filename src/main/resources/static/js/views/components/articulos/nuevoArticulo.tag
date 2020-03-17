@@ -3,6 +3,7 @@
 <div class="tituloBotones">
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {articulo.id > 0 ? $.i18n.prop("titulo.modificar.articulo")   :$.i18n.prop("titulo.agregar.articulo")}     </div>
     <div class="botones">
+            <button  title = "Limpiar Pantalla" onclick={__LimpiarPantalla}   class="btn-salida btn-edit pull-right" > &nbsp Limpiar</button>
             <button  title = "Salida del inventario" onclick={__AplicarSalida} show={articulo.cantidad > 0}  class="btn-salida btn-edit pull-right" > &nbsp Salida</button>
             <button  title = "Entrada al inventario" onclick={__AplicarEntrada} show={botonEntrada}  class="btn-entrada btn-edit pull-right" > &nbsp Entrada</button>
             <button  title = "Modificar el Articulo" onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
@@ -383,7 +384,7 @@
 
 .scrollerT {
     width: 100% !important;
-    height: 650px;
+    height: 750px;
     overflow-y: scroll;
 }
 .botones{
@@ -596,6 +597,9 @@ self.on('mount',function(){
         }, false );
 })
 
+__LimpiarPantalla(){
+   __InicializarDatos()
+}
 
 __AplicarSalida(){
     // variables para modulo de inventario 
@@ -710,7 +714,6 @@ function findByCodigo(){
                         self.botonAgregar  = false;            
                         self.botonSalida = true
                         self.botonEntrada = true
-
                         self.update()
                         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
                         $("#formulario").validate(reglasDeValidacion());   
@@ -1477,6 +1480,8 @@ __agregar(){
     if(validarPrecios()){
          return
      }
+    var costoProducto =  __valorNumerico($('#costo').val())
+    var precioPublico = __valorNumerico($('#precioPublico').val())
 
         if ($("#formulario").valid()) {
              var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
@@ -1487,7 +1492,7 @@ __agregar(){
                    return 
                 }
             }
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
              mensajeAdvertencia("No se puede agregar el precio Publico es menor al costo") 
             return 
         }
@@ -1530,6 +1535,9 @@ __Modificar(){
      if(validarPrecios()){
          return
      }
+    var costoProducto =  __valorNumerico($('#costo').val())
+    var precioPublico = __valorNumerico($('#precioPublico').val())
+ 
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
@@ -1539,7 +1547,7 @@ __Modificar(){
                return 
             }
         }
-        if(self.articulo.costo > self.articulo.precioPublico){
+        if(costoProducto > precioPublico){
             mensajeAdvertencia("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 
         }

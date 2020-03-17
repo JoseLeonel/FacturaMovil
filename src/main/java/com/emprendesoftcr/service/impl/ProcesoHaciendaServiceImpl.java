@@ -604,7 +604,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	
-	@Scheduled(cron = "0 0/25 11 * * ?")
+	@Scheduled(cron = "0 0/25 07 * * ?")
 	//@Scheduled(cron = "0 0/30 11 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
@@ -1113,7 +1113,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-	@Scheduled(cron = "0 0/4 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1425,7 +1425,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/03 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1520,9 +1520,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
 															hacienda.setTotalReceptor(factura.getTotalComprobante());
 															hacienda.setNotificacion(siEnviarCorreo(factura) ? Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE : Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-//															hacienda.setPathMigracion(Constantes.EMPTY);
-//															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
-//															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+															hacienda.setPathMigracion(Constantes.EMPTY);
+															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
 															haciendaBo.agregar(hacienda);
 
 														}
