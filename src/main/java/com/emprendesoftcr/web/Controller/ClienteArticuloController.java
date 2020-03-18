@@ -1,0 +1,122 @@
+package com.emprendesoftcr.web.Controller;
+
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
+
+import com.emprendesoftcr.Bo.AbonoBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
+import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Bo.UsuarioCajaBo;
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.DataTableDelimitador;
+import com.emprendesoftcr.Utils.JqGridFilter;
+import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Abono;
+import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.command.AbonoCommand;
+import com.emprendesoftcr.web.command.GrupalCuentasCommand;
+import com.emprendesoftcr.web.propertyEditor.AbonoPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.CuentaCobrarPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.google.common.base.Function;
+import com.google.gson.Gson;
+
+/**
+ * Manejo de las cuentas por cobrar por los clientes , se controla las cuentas por cobrar manuales y automaticas CuentaCobrarController.
+ * @author jose.
+ * @since 25 mar. 2018
+ */
+@Controller
+public class ClienteArticuloController {
+
+	private static final Function<Object, AbonoCommand>	TO_COMMAND	= new Function<Object, AbonoCommand>() {
+
+																																		@Override
+																																		public AbonoCommand apply(Object f) {
+																																			return new AbonoCommand((Abono) f);
+																																		};
+																																	};
+
+	@Autowired
+	private DataTableBo																	dataTableBo;
+
+	@Autowired
+	private CuentaCobrarBo															cuentaCobrarBo;
+
+	@Autowired
+	private UsuarioBo																		usuarioBo;
+
+	@Autowired
+	private UsuarioCajaBo																usuarioCajaBo;
+
+	@Autowired
+	private AbonoBo																			abonoBo;
+
+	@Autowired
+	private CuentaCobrarPropertyEditor									cuentaCobrarPropertyEditor;
+	@Autowired
+	private AbonoPropertyEditor													abonoPropertyEditor;
+	@Autowired
+	private StringPropertyEditor												stringPropertyEditor;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+
+		binder.registerCustomEditor(CuentaCobrar.class, cuentaCobrarPropertyEditor);
+		binder.registerCustomEditor(Abono.class, abonoPropertyEditor);
+		binder.registerCustomEditor(String.class, stringPropertyEditor);
+	}
+	
+	@RequestMapping(value = "/listarAritucloCliente.do", method = RequestMethod.GET)
+	public String listar(ModelMap model) {
+		return "views/clienteArticulo/clienteArticulo";
+	}
+
+	
+
+	@SuppressWarnings("all")
+	private static class RESPONSES {
+
+		private static class OK {
+
+			private static class ABONO {
+
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("vendedor.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.modificado.correctamente");
+			}
+		}
+
+		private static class ERROR {
+
+			private static class ABONO {
+
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.vendedor.noExiste");
+			}
+		}
+	}
+
+}
