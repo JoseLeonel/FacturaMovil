@@ -25,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "cliente_articulo")
-public class Ciente_Articulo  implements Serializable {
+public class ClienteArticulo  implements Serializable {
 
 
 	private static final long serialVersionUID = -835908792495374741L;
@@ -69,7 +69,7 @@ public class Ciente_Articulo  implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Ciente_Articulo(Long id, String codigo, String descripcion, Double cantidad, Double precio, Articulo articulo, Cliente cliente, Date created_at, Date updated_at) {
+	public ClienteArticulo(Long id, String codigo, String descripcion, Double cantidad, Double precio, Articulo articulo, Cliente cliente, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -82,7 +82,7 @@ public class Ciente_Articulo  implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	public Ciente_Articulo() {
+	public ClienteArticulo() {
 		super();
 	}
 
