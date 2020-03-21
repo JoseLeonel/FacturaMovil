@@ -29,7 +29,10 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.ClienteArticulo;
+import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.AgregarClienteArticuloCommand;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 
 @Controller
 public class ClienteArticuloController {
@@ -81,6 +84,33 @@ public class ClienteArticuloController {
 		return respuestaService;
 		
 	}
+	
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetlleByClienteArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idCliente) {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idCliente);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<ClienteArticulo> objetos = clienteArticuloBo.findAll(cliente);
+		for (ClienteArticulo clienteArticulo : objetos) {
+			solicitudList.add(clienteArticulo);
+		}
+		respuestaService.setRecordsTotal((long) objetos.size());
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+	
+	
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarClienteArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody

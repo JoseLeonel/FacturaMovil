@@ -55,7 +55,7 @@
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
+                                                <select  onchange= {__formaPago} class="form-control condicionVenta campo" id="condicionVenta" name="condicionVenta">
                                                     <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
@@ -63,35 +63,29 @@
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                                <select class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                <select class="form-control tipoDoc campo" id="tipoDoc" name="tipoDoc"   >
                                                     <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div  class="form-group ">
-                                        <label >Fecha Emision</label> 
-                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input  type="text" class="form-control fechaEmisionSTR selectFechaEmision" name="fechaEmisionSTR" id="fechaEmisionSTR" data-date-end-date="-30d" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
-
+                                     <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="{factura.correoAlternativo}" >
+                                    </div>
                                     <div class="form-group ">
-                                        <label >Digite el #Factura que viene en el papel impreso</label> 
-                                        <input type="text" class="form-control referenciaNumero" id="referenciaNumero" name="referenciaNumero" value="{factura.referenciaNumero}">
+                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
                                     </div>
          
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
+                                        <input type="text" class="form-control nota campo" id="nota" name="nota" value="{factura.nota}">
                                     </div>
                                     <div show = "{mostrarCamposIngresoContado ==false }" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input  onclick={__ActualizarPlazoCredito} type="text" class="form-control fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
+                                            <input  onkeyup={__ActualizarPlazoCredito} onBlur={__ActualizarPlazoCredito} onclick={__ActualizarPlazoCredito} type="text" class="form-control fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -99,22 +93,22 @@
                                     </div>    
                                     <div class="form-group " show = "{mostrarCamposIngresoContado == false}">
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL campo" value="{factura.plazoCredito}" >
                                     </div>
 
                                 </div>
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                     <div class="form-group ">
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
+                                        <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalEfectivo campo" id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
                                     </div>
                                     <div  class="form-group ">
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
+                                        <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalTarjeta campo" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div> 
                                     <div  class="form-group " >
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
+                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco campo"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
                                     </div> 
 
                                 </div>
@@ -193,20 +187,14 @@
                 </div>  
                   <br>                
                     <div class="row">
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                             <div class="form-group ">
                                 <label>Clientes</label> 
-                                <input onclick = {_EscogerClientes}  type="text" class="campo nombreProveedor form-control"  value="{cliente.nombreCompleto}">
+                                <input onclick = {_EscogerClientes}  type="text" class="campo campodetalle form-control"  value="{cliente.nombreCompleto}">
                             </div>
                         </div>
                     </div>            
-                    <div class="row">
-                        <div class="col-sx-2 col-sm-2 col-md-2 col-lg-2">
-                            <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar1" id="btn-facturar" >
-                                <i class="glyphicon glyphicon-plus"></i>Agregar Linea Detalle
-                            </button>
-                        </div>
-                    </div>
+                
                     
                 </div>
                 <section class="cabecera-derecha">
@@ -216,16 +204,8 @@
                         <article class=" clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  >
                                 <div class="totalesContainer" >
-                                    <div class="tituloTotales">SubTotal  :</div> 
-                                    <div class="valorTotal"> <p>{subTotalGeneral}</p></div>
-                                </div>    
-                                <div class="totalesContainer" >
-                                  <div class="tituloTotales">Descuento:</div>
-                                  <div class="valorTotal">{totalDescuentos}</div>
-                                </div>  
-                                <div class="totalesContainer" >
                                    <div class="tituloTotales">Total   :</div> 
-                                   <div class="valorTotal"><p> {totalComprobante}</p></div>
+                                   <div class="tituloTotales"><p> {totalComprobante}</p></div>
                                 </div>   
                             </div>
                         </article>
@@ -234,10 +214,8 @@
 
                 </section>
             
-        </div><!-- fin box-body-->
-	</div><!-- fin box -->
-                      
-            </div><!-- fin contenedor-compra-->
+        </div>
+  
 
                     <div class="encabezadoContainer" style="overflow-x: scroll;overflow-y: scroll; height:100%;">
                         <table class="table table-striped">
@@ -249,34 +227,25 @@
                             <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
                             <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
-                            <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
-                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr each={detail}>
                             <td style="width:5%;">
-                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
+                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block campoEliminar">X</button>
                             </td>
                             <td style="width:2%;"><div class="formatDetalle">{numeroLinea}</div></td>
                             <td style="width:8%;"><div class="formatDetalle">{codigo}</div></td>
-                            <td style="width:16%;"><div class="formatDetalle">{descripcion}</div></td>
+                            <td class="text-right" style="width:14%;">
+                                <input  onkeyup={__actualizarDescripcion} onBlur={__actualizarDescripcion} class="campodetalle" type="text" step="any"  value = "{descripcion}" />
+                            </td>
+
                             <td class="text-right" style="width:17%;">
-                                <div class="formatDetalle">{cantidad}</div>
+                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <div class="formatDetalle">{precioUnitario.toFixed(2)}</div>
-                            </td>
-                            <td class="text-right" style="width:8%;">
-                                <div class="formatDetalle">{porcentajeDesc * 100}</div>
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <div class="formatDetalle">{montoDescuento.toFixed(2)} </div>
-                            </td>
-                           <td class="text-right" style="width:14%;">
-                                <div class="formatDetalle">{subTotal.toFixed(2)} </div>
+                                <input  onkeyup={__actualizarPrecio} onBlur={__actualizarPrecio} class="campodetalle" type="number" step="any"  value = "{precioUnitario}" min="0" pattern="^[0-9]+"/>
                             </td>
  
                             <td class="text-right" style="width:14%;">
@@ -287,79 +256,23 @@
                     </table>     
                     </div>     
     
-<!--Modal mostrar Articulos de la empresa -->
-<div id='modalAgregarLineaEnCompra' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Linea de Detalle a la Compra Simplificada </h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioLineaDetalle" name ="formularioLineaDetalle" >
-                    <div class="row">
-                       
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control tamanonumeros" id="codigoArt" name="codigoArt"  onkeyup = {__CalculaMontoLinea} >
-                        </div>
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control tamanonumeros"   id="descArticulo" name="descArticulo" onkeyup = {__CalculaMontoLinea}>
-                        </div>
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoCodigo")}</label>
-                            <select  class="form-control tipoCodigo " id="tipoCodigo" name="tipoCodigo"  >
-                                <option  each={tipoCodigos}  value="{codigo}"   >{descripcion}</option>
-                            </select>
-                        </div>
 
-                    </div> 
-                    <div class="row">
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Cantidad  </label>
-                            <input type="number" step="any" class="form-control cantidad tamanonumeros" id="cantidad" name="cantidad" onkeyup = {__CalculaMontoLinea}>
-                        </div>
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Precio Unitario </label>
-                            <input type="number" step="any" class="form-control precioUnitario  tamanonumeros" id="precioUnitario" name="precioUnitario" onkeyup = {__CalculaMontoLinea} >
-                        </div>
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >% Descuento </label>
-                            <input type="number" step="any" class="form-control porcentajeDescuento  tamanonumeros" id="porcentajeDescuento" name="porcentajeDescuento"  onkeyup = {__CalculaMontoLinea}>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Descuento </label>
-                            <input type="number" step="any" class="form-control montoDescuento tamanonumeros " id="montoDescuento" name="montoDescuento"  readonly>
-                        </div>
-
-                    
-                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Total Linea </label>
-                            <input type="number" step="any" class="form-control montoTotalLinea tamanonumeros " id="montoTotalLinea" name="montoTotalLinea" readonly >
-                        </div>
-
-                    </div>
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button onclick ={__regresar}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                </div>
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button  onclick={__AplicarAgregarLineaDetalle}   class=" btn-green pull-right" >  Agregar Linea</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
 
 <style type="text/css">
+    .campoEliminar{
+        font-size: 30px;
+        height: 50px;
+        border-radius: 16px !important;
+        font-weight: 900;
+    }
+    .campodetalle{
+        font-size: 27px !important;
+        color: blue !important;
+        border-radius: 16px !important;
+        width: 100% !important;
+        height: 50px!important;
+        text-align: center;
+    }
     .elementoTotales{
         font-weight: 600 !important;
         font-size: 25px !important;
@@ -455,12 +368,14 @@
         justify-content: space-around;
     }
     .tituloTotales{
-        text-align: left;
-        margin-right: 3%;
-        color: #30ed17 ;
-        margin-top: 2%;
-        flex: 0.5;
-    }
+       text-align: left;
+    margin-right: 3%;
+    color: #30ed17;
+    margin-top: 2%;
+    flex: 0.5;
+    height: 50px;
+    font-size: 26px;
+}
     .valorTotal{
         margin-top: 2%;
     }
@@ -979,15 +894,13 @@
      }
     self.detalleFactura        = {data:[]}   
     self.on('mount',function(){
-        $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
-           __informacionData()
+             __informacionData()
         __InicializarTabla('.tableListaCliente')
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeClientes()
         __tipoCodigo()
-        __Eventos()
         $('.selectFechaEmision').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -995,15 +908,7 @@
               todayHighlight:true,
             }
          );
-    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasSimplificadaNueva'));
-    self.detail = retrievedObject == null?self.detail = []:retrievedObject
-    var compraObject = JSON.parse(localStorage.getItem('compraSimplificadaNueva'));
-    self.compra = compraObject ==null?self.compra:compraObject
-    var proveedorObject = JSON.parse(localStorage.getItem('proveedorSimplificada'));
-    self.proveedor = proveedorObject == null? self.proveedor:proveedorObject
-    self.update()
-    __calculate()
-    //__Init()
+   
 })
 
 /**
@@ -1141,10 +1046,10 @@ function __comboCondicionPago(){
         estado:"01",
         descripcion:$.i18n.prop("factura.codicion.venta.contado")
     })
-   // self.comboCondicionPagos.push({
-   //     estado:"02",
-   //     descripcion:$.i18n.prop("factura.codicion.venta.credito")
-  //  })
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
+    })
     self.update()
 }
 /**
@@ -1154,65 +1059,13 @@ function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
     self.comboTipoDocumentos.push({
-        estado:"08",
-        descripcion:$.i18n.prop("factura.tipo.documento.compras.simplificada")
+        estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
     self.update()
 }
 
-__CalculaMontoLinea(){
-  aplicarMontos()
-}
 
-function aplicarMontos(){
- 
-    var porcentajeDescuento = __valorFloat(__valorNumerico($(".porcentajeDescuento").val()));
-    porcentajeDescuento = porcentajeDescuento / 100
-    var cantidad = __valorFloat(__valorNumerico($(".cantidad").val()));
-    var precioUnitario = __valorFloat(__valorNumerico($(".precioUnitario").val()));
-    var subTotal = precioUnitario *  cantidad
-    var montoDescuento = subTotal *  porcentajeDescuento
-    subTotal = subTotal - montoDescuento
-    var montoTotalLinea = subTotal
-    $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
-    $("#montoTotalLinea").val(redondeoDecimales(montoTotalLinea,2))
-    self.detalle.porcentajeDescuento = porcentajeDescuento
-    self.detalle.descripcion = $("#descArticulo").val()
-    self.detalle.codigo = $("#codigoArt").val()
-    self.detalle.tipoCodigo = $(".tipoCodigo").val()
-    self.detalle.codigoTarifa = $(".selectCodigoTarifa").val()
-    self.detalle.montoDescuento = montoDescuento
-    self.detalle.precioUnitario = precioUnitario
-    self.detalle.subTotal = subTotal
-    self.detalle.cantidad = cantidad
-    self.detalle.montoDescuento = montoDescuento
-    self.detalle.montoTotalLinea = montoTotalLinea
-    self.update()
-}
-/**
-*  Actimpuestor validaciones del formulario
-**/
-function __Eventos(){
-    $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
-    $("#descArticulo").attr("maxlength", 160);
-    $("#codigoArt").attr("maxlength", 20);
-    $("#referenciaNumero").attr("maxlength", 20);
-    
- 
-}
-__AplicarAgregarLineaDetalle(){
-    $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
-    if ($("#formularioLineaDetalle").valid()) {
-      
-         __nuevoArticuloAlDetalle()
-    }
-}
-/**
-*  Regresar al listado
-**/
-__regresar(){
-    $('#modalAgregarLineaEnCompra').modal('hide')
-}
 
 
 /**
@@ -1803,11 +1656,189 @@ function __seleccionarProveedores() {
 	     }
 	    self.cliente = data
         self.update();
-        $('#modalCliente').modal('hide') 
+        agregarDetallesPorCliente()
+        $('#modalClientes').modal('hide') 
 
     });
 }
 
+function agregarDetallesPorCliente(){
+    __Init()
+    $('.nota').val(null);
+    $('.correoAlternativo').val(null);
+    $('.nombreFactura').val(null);
+    self.detail = [];
+    self.numeroLinea =  0
+    self.cantArticulos =  0
+    self.pesoPrioridad = 0
+    self.update()
+    $.ajax({
+        url: "ListarDetlleByClienteArticuloAjax.do", 
+        datatype: "json",
+        data: {idCliente:self.cliente.id},
+        method:"POST",
+        success: function (data) {
+            if(data.aaData.length > 0){
+                $.each(data.aaData, function( index, modeloTabla ) {
+                   cargarDetallesEnEspera(modeloTabla)   
+                })
+                __calculate()
+               
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+function cargarDetallesEnEspera(data){
+    
+    var itemNuevo = setItemNuevo(data)
+    self.detail.push(itemNuevo);
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    self.cantidadEnterFacturar = 0
+    self.update()
+    
+
+    
+}
+
+function setItemNuevo(data){
+    //Determinar el precio a incluir
+    var resultadoPrecio = (data.precio)
+    var resultaMontoImpuesto = __valorNumerico(data.articulo.impuesto)
+    var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
+    var montoTotal      = getMontoTotal(precioUnitario,1)
+    var montoDescuento  = 0
+    var naturalezaDescuento = ""
+    var subTotal        = montoTotal
+    var montoImpuesto1  = 0
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(data.articulo.impuesto) ==null?0:__valorNumerico(data.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
+    self.pesoPrioridad  =  self.pesoPrioridad + 1
+    self.numeroLinea    = self.numeroLinea + 1
+    self.cantArticulos  = self.cantArticulos + 1
+    var costoTotal      = __valorNumerico(data.costo) > precioUnitario ?0:__valorNumerico(data.costo); 
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,data.costo ==null?0:__valorNumerico(data.costo),1)
+   
+   var item = {
+       numeroLinea     : __valorNumerico(self.numeroLinea),
+       pesoPrioridad   : self.pesoPrioridad,  
+       tipoImpuesto    : data.tipoImpuesto ==null?" ":data.articulo.tipoImpuesto,
+       tipoImpuesto1   : data.tipoImpuesto1 ==null?" ":data.articulo.tipoImpuesto1,
+       iva             : __valorNumerico(data.articulo.impuesto),
+       iva1            : __valorNumerico(data.articulo.impuesto1),
+       codigo          : data.codigo,
+       descripcion     : data.descripcion,
+       cantidad        : __valorNumerico(1),
+       precioUnitario  : __valorNumerico(precioUnitario),
+       impuesto        : __valorNumerico(data.articulo.impuesto),
+       impuesto1        : __valorNumerico(data.articulo.impuesto1),
+       montoImpuesto   : __valorNumerico(montoImpuesto),
+       montoImpuesto1  : __valorNumerico(montoImpuesto1),
+       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
+       montoDescuento  : 0,
+       porcentajeDesc  : 0,
+       ganancia        : __valorNumerico(ganancia),
+       montoGanancia   : __valorNumerico(ganancia),
+       subTotal        : __valorNumerico(subTotal),
+       montoTotalLinea : __valorNumerico(montoTotalLinea),
+       montoTotal      : __valorNumerico(montoTotal),
+       costo           : costoTotal,
+       porcentajeGanancia :  data.articulo.gananciaPrecioPublico ==null?0:__valorNumerico(data.articulo.gananciaPrecioPublico),
+       pesoTransporte :  0,
+       pesoTransporteTotal :0,
+       montoExoneracion:0,
+       montoExoneracion1:0,
+       porcentajeExoneracion:0,
+       fechaEmisionExoneracion:null,
+       nombreInstitucionExoneracion:"",
+       numeroDocumentoExoneracion:"",
+       tipoDocumentoExoneracion:""
+    }
+   // __SetUltimoItemIngresado(item);
+    return item;
+}
+
+__actualizarDescripcion(e){
+    self.item = e.item; 
+    self.item.descripcion = e.currentTarget.value
+    self.update()
+    aplicarCambios() 
+}
+
+/**
+ * Cuando se aplica un cambio de cantidad en un detalle
+ * Se aplica una recalculacion de todo el detalle y Factura
+ **/
+ __actualizarPrecio(e){
+     self.item = e.item; 
+     self.item.precioUnitario = __valorNumerico(e.currentTarget.value)
+    self.update()
+    aplicarCambios()
+
+ } 
+ __recalculacionDelDetalle(e){
+     self.item = e.item; 
+     self.item.cantidad = __valorNumerico(e.currentTarget.value);
+    self.update()
+    aplicarCambios()
+  }
+
+  function aplicarCambios(){
+    ActualizarLineaDEtalle()
+    aplicarCambioLineaDetalle() 
+
+  }
+
+function agregarCantidadAlaVenta(cantidad){
+    self.item.cantidad = cantidad
+    self.update()
+    ActualizarLineaDEtalle()
+    aplicarCambioLineaDetalle() 
+ 
+}
+/**
+* Aplicar el cambio de linea Detalle
+**/
+function aplicarCambioLineaDetalle(){
+    var index    = self.detail.indexOf(self.item);
+    self.detail[index] = self.item;
+    self.update()
+    __calculate()
+}
+/**
+* Actualiza la linea del detalle de la factura
+**/
+function ActualizarLineaDEtalle(){
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoDescuento         = 0
+    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
+    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
+    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
+    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
+    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
+    self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
+   
+    self.item.montoTotal       = montoTotal
+    self.item.montoDescuento   = montoDescuento
+    self.item.subTotal         = subTotal
+    self.item.montoImpuesto    = montoImpuesto
+    self.item.montoImpuesto1   = montoImpuesto1
+    
+    self.item.montoTotalLinea  = montoTotalLinea
+    self.item.ganancia         = 0
+    self.item.montoGanancia    = 0 
+    self.update()
+}
 /**
 *  Agregar los inpust  y select de las tablas
 **/

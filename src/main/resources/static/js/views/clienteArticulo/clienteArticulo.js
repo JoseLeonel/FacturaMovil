@@ -7,11 +7,12 @@ var _Init = function () {
 	cargarComboArticulos();
     $("#clientes").change(function() {
         if($("#clientes").val() !=null){
-            if($("#clientes").val() !='0'){
-                ListarArticulos($("#clientes").val())
-            }else{
-                ListarArticulos(null)
-            }
+            ListarArticulos($("#clientes").val());
+            includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
+            agregarInputsCombos();
+            EventoFiltro();
+            __MantenimientoAgregar();
+            __EliminarRegistro_Listar();
         }
         
     });
