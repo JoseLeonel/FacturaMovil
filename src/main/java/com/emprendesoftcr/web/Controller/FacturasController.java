@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
@@ -75,6 +76,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
@@ -922,6 +924,52 @@ public class FacturasController {
 			solicitudList.add(new ConsultaFacturaGananciasNativeCommand(consultaGananciaNative));
 		}
 		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+	
+/**
+ * Utilidad de ventas
+ * @param request
+ * @param response
+ * @param fechaInicioParam
+ * @param fechaFinParam
+ * @param estado
+ * @param actividadEconomica
+ * @param cliente
+ * @param idCategoria
+ * @param codigo
+ * @return
+ */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/ListaUtilidadAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo,tipoDoc);
+	 	
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
+			solicitudList.add(consultaUtilidadNative);
+		}
+		respuestaService.setRecordsTotal((long) facturas.size());
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));

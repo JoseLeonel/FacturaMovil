@@ -103,9 +103,7 @@ function __TipoDocumentos(numeroConsecutivo,row){
 }
 }
 
-var inicializarTipoCambio = function (){
-	getTipoCambioDolar();
-}
+
 /**
 *Tipo Cambio del Dolar 
 **/
@@ -113,6 +111,7 @@ function getTipoCambioDolar(){
 	  $.ajax({
 	        url: "tipoCambioBancoCentral.do",
 	        datatype: "json",
+	        global: false,
 	        method:"GET",
 	        success: function (data) {
 	            if (data.status != 200) {

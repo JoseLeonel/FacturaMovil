@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -11,6 +12,7 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
@@ -85,4 +87,5 @@ public interface ConsultasNativeBo {
 	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
 	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa);
+	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc );
 }

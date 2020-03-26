@@ -69,14 +69,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="{factura.correoAlternativo}" >
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
-                                    </div>
+                                     <div class="row">
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label >{$.i18n.prop("factura.tipo.moneda")}</label> 
+                                                <select class="form-control has-success codigoMoneda campo" id="codigoMoneda" name="codigoMoneda" >
+                                                    <option each={monedas}  value="{estado}" selected="{factura.codigoMoneda ==estado?true:false}" >{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                                <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
+                                            </div>
+                                        </div>
+                                    </div>        
          
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
@@ -104,11 +112,11 @@
                                     </div>
                                     <div  class="form-group ">
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalTarjeta campo" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
+                                        <input  onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalTarjeta campo" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div> 
                                     <div  class="form-group " >
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco campo"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
+                                        <input  onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco campo"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
                                     </div> 
 
                                 </div>
@@ -119,7 +127,6 @@
                             <input type="hidden" id='referenciaCodigo'        name='referenciaCodigo'       value="{factura.referenciaCodigo}" >
                             <input type="hidden" id='referenciaRazon'         name='referenciaRazon'        value="Compra a proveedores Simplificados" >
                             
-                            <input type="hidden" id='codigoMoneda'            name='codigoMoneda'           value="{factura.codigoMoneda}" >
                             <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'    value="{totalPesoByFactura}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
@@ -139,8 +146,8 @@
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-
-                                
+                            <input type="hidden" id='tipoCambioMoneda'        name='tipoCambioMoneda'        value="{tipoCambio.total}" >
+                            
                             
                         </form>   
                     </div>                    
@@ -157,7 +164,6 @@
                             <h1><span id="lblSCS">Resumen </span></h1>
                             <div class="TotalesContainer" >
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
-                                <div class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.total")}     <span id="lblTotal">{totalComprobante}         </span> </div> 
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")}    <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                             </div>
@@ -178,23 +184,35 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                     <div class="box-tools ">
+                            <a class="pull-left" href="#"   onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                             <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">F8=Facturar</span></a>
+                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago} title="Aplicar la compra"> <span class="label label-limpiar">F8=Facturar</span></a>
+                            <a class="pull-left" href="#"   onclick = {_ReimprimirFactura}       title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
+
+                            
                             
                             <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+
                         </div>
                     </div>
                 </div>  
                   <br>                
                     <div class="row">
-                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <div class="form-group ">
                                 <label>Clientes</label> 
                                 <input onclick = {_EscogerClientes}  type="text" class="campo campodetalle form-control"  value="{cliente.nombreCompleto}">
                             </div>
                         </div>
-                    </div>            
-                
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="form-group ">
+                                <label class="titleListaPrecio">Actividades Economicas </label>  
+                                <select onchange= {__AsignarActividad} class="form-control selectActividadComercial campodetalle"  name="selectActividadComercial" id="selectActividadComercial" >
+                                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
+                                </select>                    
+                            </div>
+                        </div>
+                    </div>   
                     
                 </div>
                 <section class="cabecera-derecha">
@@ -210,8 +228,19 @@
                             </div>
                         </article>
                     </aside>
-                 
-
+                    <div id="tituloMostrarTipoCambio">
+                        <span >Tipo Cambio del Banco Central</span>
+                    </div>    
+                    <div id="mostrarTipoCambio">
+                        <div>
+                           <span>Compra USD $</span>
+                           <span>{tipoCambio.totalCompra}</span>
+                        </div>   
+                        <div>
+                           <span>Venta USD $</span>
+                           <span>{tipoCambio.total}</span>
+                        </div>   
+                    </div>
                 </section>
             
         </div>
@@ -256,9 +285,65 @@
                     </table>     
                     </div>     
     
-
+<!--Modal mostrar Facturas del Dias -->
+<div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
+            </div>
+            <div class="modal-body facturaDiaContainer">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.condicion.pago")}      
+                                
+                                <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
+                                
+                            </tr>
+                            </thead>
+                                <tfoot style="display: table-header-group;">
+                                    <tr>
+                                        <th>                                                  </th>
+                                        <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                        <th>{$.i18n.prop("factura.documento")}                </th>
+                                        <th>{$.i18n.prop("factura.condicion.pago")}           </th>
+                                        
+                                        <th>{$.i18n.prop("factura.cliente")}                  </th>
+                                        <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                        <th>{$.i18n.prop("factura.total")}                    </th>
+                                        
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style type="text/css">
+    #tituloMostrarTipoCambio{
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+    }
+    #mostrarTipoCambio{
+        display: flex;
+        justify-content: space-around;
+    }
+
     .campoEliminar{
         font-size: 30px;
         height: 50px;
@@ -266,8 +351,8 @@
         font-weight: 900;
     }
     .campodetalle{
-        font-size: 27px !important;
-        color: blue !important;
+       font-size: 18px !important;
+        color: #808084 !important;
         border-radius: 16px !important;
         width: 100% !important;
         height: 50px!important;
@@ -368,14 +453,14 @@
         justify-content: space-around;
     }
     .tituloTotales{
-       text-align: left;
-    margin-right: 3%;
-    color: #30ed17;
-    margin-top: 2%;
-    flex: 0.5;
-    height: 50px;
-    font-size: 26px;
-}
+        text-align: left;
+        margin-right: 3%;
+        color: #30ed17;
+        margin-top: 2%;
+        flex: 0.5;
+        height: 50px;
+        font-size: 26px;
+    }
     .valorTotal{
         margin-top: 2%;
     }
@@ -466,27 +551,21 @@
         flex:1;
         margin-right: 1%;
 
-        }
-
-        .cabecera-derecha {
+    }
+    .cabecera-derecha {
             width:25%;
-        }
-
-        .elemento{
+    }
+    .elemento{
         background: #E67E22;
         color:#fff;
         margin:5px;
         flex-basis:150px; 
-        
         height:50px;
+    }
 
-        
-        }
-
-        .item {
-        
-        width: 50%;
-        }
+    .item {
+       width: 50%;
+     }
 
     .boton-consultar1 {
        display: block;
@@ -542,7 +621,6 @@
         -o-transition: background-color 100ms linear;
         -ms-transition: background-color 100ms linear;
         transition: background-color 100ms linear;
-        
     }
     .cabecera-derecha .lista-compras-espera .compras-espera{
         display:block;
@@ -731,27 +809,12 @@
     /*1024x768*/
     @media only screen and (max-width: 1024px) and (min-width:768px)  {
         .campodetalle {
-            width: 145px;
-            height: 30px;
-            /* padding: 6px 16px; */
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #333;
-            font-weight: bold;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            /* border-radius: 2px; */
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            background-color: #fcfcfc;
-            /* border: 1px solid #ccc; */
-            margin: 2px 0;
-            padding: 1px 2px;
-            /* overflow: visible; */
+           font-size: 18px !important;
+           color: #808084 !important;
+           border-radius: 16px !important;
+           width: 100% !important;
+           height: 50px!important;
+            text-align: center;
         }
 
         .detalle1{
@@ -765,39 +828,37 @@
             flex:0;
             margin-left: 0.5%;
         }
-    .tituloDetalle1 {
-        color: black;
-        font-size: 14px;
-        font-weight: 600;
-        flex: 1.3;
-        text-align: left;
-    }
-    .campodetalleDescuento {
-        width: 188%;
-        height: 30px;
-        padding: 6px 16px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #333;
-        font-weight: bold;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        margin: 2px 0;
-        padding: 1px 2px;
-        overflow: visible;
-    }
-
-
-}
+        .tituloDetalle1 {
+            color: black;
+            font-size: 14px;
+            font-weight: 600;
+            flex: 1.3;
+            text-align: left;
+        }
+        .campodetalleDescuento {
+            width: 188%;
+            height: 30px;
+            padding: 6px 16px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333;
+            font-weight: bold;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            background-color: #fcfcfc;
+            border: 1px solid #ccc;
+            margin: 2px 0;
+            padding: 1px 2px;
+            overflow: visible;
+        }
+        }
 </style>
 
 <script>
@@ -811,21 +872,7 @@
     self.totalComprobante  = 0
     self.comboTipoDocumentos   = []
     self.tarifas1    = {aaData:[]}
-    self.compra                = {
-        consecutivo:"",
-        fechaCredito    : null,
-        fechaCompra     : null,
-        id : null,
-        totalCompra:0,
-        estado:0,
-        tipoDocumento:0,
-        formaPago:0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        nota:""
-    }    
-     self.factura                = {
+    self.factura                = {
         id:null,
 	   fechaCredito:null,
 	   fechaEmision:null,
@@ -866,12 +913,17 @@
 
     }                            
     self.item                  = null;
+    self.tipoCambio = {
+        total:0,
+        totalCompra:0,
+        id:null
+    }
     self.tipoCodigos =[]
     self.proveedores           = {data:[]}
     self.detalleCompra         ={data:[]}
     self.proveedor             = null;
     self.informacion_tabla             = []
-    self.informacion_tabla_proveedores = []
+    self.informacion_tabla_clientes = []
     self.idiomaDataTable       = {}
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
@@ -892,8 +944,18 @@
          montoTotalLinea:0
 
      }
+     self.actividadComercial = {
+        codigo:"",
+        descripcion:""
+    }
     self.detalleFactura        = {data:[]}   
     self.on('mount',function(){
+        __ListaActividadesComercales()
+        __comboMonedas()
+        __ObtengoTipoCambio()
+         self.tipoCambio.total = __getTipoCambioTotal()
+         self.tipoCambio.totalCompra = __getTipoCambioCompra()
+         self.update()
              __informacionData()
         __InicializarTabla('.tableListaCliente')
         __comboCondicionPago()
@@ -910,6 +972,277 @@
          );
    
 })
+/**
+*  Obtiene el valor de lo digitado en el campo de efectivo
+**/
+__TotalDeEfectivoAPagar(e){
+    self.totalCambioPagarSTR = 0
+    self.factura.totalEfectivo = __valorNumerico(e.target.value) 
+    self.update()
+    _calculoEnterPago()
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Tarjeta
+**/
+__TotalDeTarjetaAPagar(e){
+    self.factura.totalTarjeta = __valorNumerico(e.target.value) 
+    self.update()
+    _calculoEnterPago()
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Banco
+**/
+__TotalDeBancoAPagar(e){
+    self.factura.totalBanco = __valorNumerico(e.target.value) 
+    self.update()
+    _calculoEnterPago()
+}
+/**
+* cargar los codigos de monedas
+**/
+function __comboMonedas(){
+    self.monedas = []
+    self.update()
+    self.monedas.push({
+        estado:"CRC",
+        descripcion:$.i18n.prop("factura.moneda.cr")
+    })
+    self.monedas.push({
+        estado:"USD",
+        descripcion:$.i18n.prop("factura.moneda.dollar")
+    })    
+    self.update()
+}
+
+_ReimprimirFactura(){
+    reimprimirFacturaEnMomento()
+}
+
+function reimprimirFacturaEnMomento(){
+
+  if(self.facturaReimprimir ==null){
+    var retrievedObject = JSON.parse(localStorage.getItem('facturaReimprimir'));
+    if(retrievedObject != null){
+       self.facturaReimprimir = retrievedObject
+       var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+       self.cliente = clienteObject
+       self.update()
+    }    
+  }
+  if(self.facturaReimprimir ==null){
+      return
+  }
+  consultaFactura(self.facturaReimprimir,0)
+ 
+}
+
+function __ClienteNombreFactura(row){
+    var nombreFactura  = row.nombreFactura == null?"":row.nombreFactura
+    var nombreCliente  = row.cliente  == null?"":row.cliente
+    if(nombreCliente == null){
+        return ""
+    }
+    if(row.cedula != "999999999999"){
+       return nombreCliente.length > 50 ?nombreCliente.substring(0,35) + "..." :nombreCliente;
+    }else {
+        return nombreFactura.length > 50 ?nombreFactura.substring(0,35) + "..." :nombreFactura;
+    }
+
+
+}
+/**
+* listado por Dia
+**/
+_ListaFacturasDia(){
+   ListadoFacturasDelDia()
+}
+/**
+*  Facturas del Dia
+**/
+function ListadoFacturasDelDia(){
+      $(".tableListarFacturasDia").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListarFacturasDia')  
+        $.ajax({
+            url: "ListarFacturasDelDiaAjax.do",
+            datatype: "json",
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTableDia();
+                    loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
+                    agregarInputsCombos_Facturas_Dias();
+                    ActivarEventoFiltro(".tableListarFacturasDia")
+                    $('#modalFacturasDia').modal('show')    
+                     __reimprimir()
+                }else{
+                    __InformacionDataTableDia();
+                     agregarInputsCombos_Facturas_Dias();
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
+            }
+        });
+}
+
+/**
+*imprimir
+**/
+function __reimprimir(){
+	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
+		var table = $('#tableListarFacturasDia').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        consultaFactura(data,1)
+	});
+}
+
+/**
+* Consultar la factura
+**/
+function consultaFactura(data,tipoImpresion){
+    var parametros = {
+        factura:data,
+        facturaDia:tipoImpresion
+    }
+    riot.mount('ptv-imprimir',{parametros:parametros});
+    return 
+}
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Facturas_Dias(){
+     // Agregar los input de busqueda 
+    $('.tableListarFacturasDia tfoot th').each( function (e) {
+        var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 0    ){
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
+
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'flrtip',
+        "order": [1, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+/**
+* formato del listado de facturas del dia
+**/
+function __InformacionDataTableDia(){
+    self.formato_tabla_dias = [ 
+                               {'data' : 'id' ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(id,type, row){
+                                      return __Opciones_facturaDia(id,type,row);
+                                 }
+                               },
+
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
+                               },
+                               {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                                   "render":function(numeroConsecutivo,type, row){
+									    return __TipoDocumentos(numeroConsecutivo,row)
+	 							    }
+                               },
+                             
+                               {'data' :'condicionVentaSTR' ,"name":"condicionVentaSTR","title" : "Pago"   ,"autoWidth" :true },
+                                {'data' :'cliente'  ,"name":"cliente"  ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                   "render":function(cliente,type, row){
+									    return __ClienteNombreFactura(row);
+	 							    }
+                               },
+                               {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR" ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR" ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
+	      		            ];
+    self.update();
+   
+}
+/**
+*Opciones del listado de las facturas por dia
+**/
+function __Opciones_facturaDia(){
+  var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
+  return  agregar;
+}
+
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+                BuscarActividadComercial()
+           }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('#selectActividadComercial').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+            self.actividadComercial.codigo =  codigo
+            self.factura.codigoActividad = codigo
+            self.update()
+        }
+
+    })
+}
+
+
+function __ObtengoTipoCambio(){
+    var tempTipoCambio =__getTipoCambioCompra()
+    if(tempTipoCambio == null){
+       getTipoCambioDolar()  
+    }else{
+        self.tipoCambio.total = __getTipoCambioTotal()
+        self.tipoCambio.totalCompra = __getTipoCambioCompra()
+
+    }
+    self.update()
+    
+}
 
 /**
 *   Calculo del cambio entregar en el evento onblur
@@ -952,8 +1285,8 @@ function __Calcular(){
 }
 function _calculoEnterPago(){
         var sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
-        sumaMontosEntregadosParaCambios += __valorNumerico($('#totalBanco').val()) 
-        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())   
+        sumaMontosEntregadosParaCambios = __valorNumerico($('#totalBanco').val()) + sumaMontosEntregadosParaCambios
+        sumaMontosEntregadosParaCambios = __valorNumerico($('.totalEfectivo').val()) + sumaMontosEntregadosParaCambios   
         if(sumaMontosEntregadosParaCambios == 0){
             self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
@@ -1068,36 +1401,6 @@ function __ComboTipoDocumentos(){
 
 
 
-/**
-* Tipo codigo del producto/servicio del articulo
-**/
-function __tipoCodigo(){
-    self.tipoCodigos =[]
-    self.update()
-    self.tipoCodigos.push({
-        codigo: '01',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.vendedor")
-     });
-
-    self.tipoCodigos.push({
-        codigo: '02',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.comprador")
-     });
-    self.tipoCodigos.push({
-        codigo: '03',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.asignado.por.industria")
-     });
-    self.tipoCodigos.push({
-        codigo: '04',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.uso.interno")
-     });
-    self.tipoCodigos.push({
-        codigo: '99',
-        descripcion:$.i18n.prop("articulo.tipo.codigo.otros")
-     });
-   
-     self.update();
-}
 
 var reglasDeValidacionDetalleCompra = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
@@ -1149,18 +1452,11 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
- /**
- * Listar codigos  llamado del modal para presentar los articulos
- **/   
- __ListaDecodigos(){
-  __tipoCodigo()
-  $('#modalAgregarLineaEnCompra').modal('show')      
- }
 
 
 
 /**
-** Se aplica o se crea una compra cargada en la pantalla
+** Se aplica o se crea una Factura
 **/
 __AplicarYCrearCompra(){
    
@@ -1194,32 +1490,21 @@ __Limpiar(){
 
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
-        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Compra Simplificada"))
+        mensajeAdvertencia($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 para Facturar"))
         return
 
     }
     if(self.detail.length == 0 ){
-         $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
-         swal({
-                type: 'error',
-                title:$.i18n.prop("compraSimplificada.alert.sin.detalles"),
-                showConfirmButton: false,
-                timer: 1500
-                })
-        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        $('.codigo').focus()
+        mensajeAdvertencia($.i18n.prop("compraSimplificada.alert.sin.detalles"))
         return
     }
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
-           mensajeError($.i18n.prop("compraSimplificada.alert.fechaCredito"))
+           mensajeAdvertencia($.i18n.prop("compraSimplificada.alert.fechaCredito"))
             return
         }
         if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
-           mensajeError($.i18n.prop("compraSimplificada.alert.plazoCredito"))
+           mensajeAdvertencia($.i18n.prop("compraSimplificada.alert.plazoCredito"))
             return
         }
     }else{
@@ -1227,18 +1512,18 @@ function aplicarFactura(estado){
         if($("#tipoDoc").val() !="88"){
             if(estado == 2){
                 if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
-                    mensajeError($.i18n.prop("error.compraSimplificada.monto.ingresado"))
+                    mensajeAdvertencia($.i18n.prop("error.compraSimplificada.monto.ingresado"))
                     return
                 }
                 var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
                 montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
                 if(montoEntregado > 20000000){
-                    mensajeError("Monto entregado es muy alto")
+                    mensajeAdvertencia("Monto entregado es muy alto")
                     return
                 }
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
-                    mensajeError($.i18n.prop("error.compraSimplificada.monto.ingresado.es.menor.ala.venta"))
+                    mensajeAdvertencia($.i18n.prop("error.compraSimplificada.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
                 //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
@@ -1246,7 +1531,7 @@ function aplicarFactura(estado){
                 var banco = __valorNumerico(self.factura.totalBanco)
                 if(tarjeta != 0 || banco !=0){
                     if(resultado != montoEntregado  ){
-                        mensajeError($.i18n.prop("error.compraSimplificada.monto.tarjeta.banco.igual.venta"))
+                        mensajeAdvertencia($.i18n.prop("error.compraSimplificada.monto.tarjeta.banco.igual.venta"))
                     return
                         
                     }
@@ -1262,12 +1547,10 @@ function aplicarFactura(estado){
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
-
-    
-    
     if (self.transaccion == true ){
         return false
     }
+    __ObtengoTipoCambio()
     self.transaccion = true 
     self.update()
     
@@ -1278,6 +1561,7 @@ function crearFactura(estado){
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.condicionVenta = $('#condicionVenta').val()
+    self.factura.codigoMoneda = $('#codigoMoneda').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
     self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
@@ -1286,18 +1570,23 @@ function crearFactura(estado){
     self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
-    self.factura.codigoMoneda = "CRC"
+    //self.factura.codigoMoneda = "CRC"
+//    self.factura.codigoMoneda = self.parametros.codigoMoneda
+    self.factura.tipoCambio = self.tipoCambio.total ==null?__getTipoCambioCompra():self.tipoCambio.total
+    if(self.factura.tipoCambio ==null){
+        self.factura.tipoCambio =575
+        
+    }
     self.update();
     var dataTemporal = null
 
     var formulario = $("#formularioCompra").serialize();
     $.ajax({
-        type : "POST",
+         type : "POST",
         dataType : "json",
         async: false,
-        
         data : formulario,
-        url : "CrearCompraSimplificadaAjax.do",
+        url : "CrearFacturaAjax",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);
@@ -1390,6 +1679,7 @@ function evaluarFactura(data){
         __Init()
         //Envia a la pantalla de impresion
         self.facturaReimprimir = self.facturaImprimir
+        localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
         self.update()
         var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
         swal({
@@ -1404,6 +1694,7 @@ function evaluarFactura(data){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    __comboMonedas()
     $('.fechaCompra').val(null);
     $('.fechaCredito').val(null)
      $('.selectFechaEmision').datepicker(
@@ -1438,6 +1729,7 @@ function __Init(){
     self.totalSubTotalGeneral  = 0;
     self.detalleFactura        = {data:[]}
     self.update();
+    localStorage.setItem('cliente', JSON.stringify(self.cliente));
 }
 
 /** 
@@ -1505,7 +1797,7 @@ function __ListaDeClientes(){
         success: function (result) {
             if(result.aaData.length > 0){
                 __informacionData()
-                loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_proveedores,result.aaData)
+                loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Proveedores()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarProveedores()
@@ -1613,6 +1905,7 @@ function __calculate() {
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
 }
 /**
 *  Sub Total Generar
@@ -1627,7 +1920,7 @@ function getSubTotalGeneral(){
 * formato de la tabla de proveedores
 **/
 function __informacionData(){
-    self.informacion_tabla_proveedores = [	{'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : $.i18n.prop("cliente.nombreCompleto") ,"autoWidth":false},
+    self.informacion_tabla_clientes = [	{'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : $.i18n.prop("cliente.nombreCompleto") ,"autoWidth":false},
                                             {'data' : 'correoElectronico'           ,"name":"correoElectronico"          ,"title" : $.i18n.prop("cliente.email")          ,"autoWidth":false},                                
                                             {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){

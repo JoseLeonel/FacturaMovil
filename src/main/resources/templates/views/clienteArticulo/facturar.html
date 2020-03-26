@@ -24,11 +24,14 @@
 	<!-- MANTENIMIENTO DE COMPRAS simplificado-->
 	<script type="text/javascript" src="/js/views/clienteArticulo/crearFacturaCondominio.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/clienteArticulo/crearFacturaCondominio.tag" ></script>
+	<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag}" ></script>
+	<script type="text/javascript"  th:src="@{/js/print.min.js}"></script>
     
 </head>
 <body>
 <div layout:fragment="content">
  	<factura-condominio></factura-condominio>
+ 	<ptv-imprimir></ptv-imprimir>
 </div>
 
 </body>

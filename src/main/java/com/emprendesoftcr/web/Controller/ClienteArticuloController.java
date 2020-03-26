@@ -157,12 +157,14 @@ public class ClienteArticuloController {
 	public RespuestaServiceValidator eliminarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteArticulo clienteArticulo, BindingResult result, SessionStatus status, @RequestParam Long idClienteArticulo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			ClienteArticulo clienteArticuloBd = null;
-			clienteArticuloBd = clienteArticuloBo.buscar(idClienteArticulo);
+			 ClienteArticulo clienteArticuloBd = clienteArticuloBo.buscar(idClienteArticulo);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			clienteArticuloBo.eliminar(clienteArticuloBd);
+			if(clienteArticuloBd != null) {
+				clienteArticuloBo.eliminar(clienteArticuloBd);	
+			}
+			
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("clienteArticulo.eliminado.correctamente",clienteArticuloBd);
 		} catch (Exception e) {

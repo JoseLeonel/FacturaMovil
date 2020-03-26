@@ -193,16 +193,6 @@ var informacion_tabla = [
                                {'data' :'articulo.categoria.descripcion'   ,"name":"articulo.categoria.descripcion"  ,"title" : "Categoria" ,"autoWidth" :true},
                                {'data' :'codigo'                           ,"name":"codigo"                          ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'articulo.descripcion'             ,"name":"articulo.descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
-                                {'data' :'articulo.cantidad'    ,"name":"articulo.cantidad"           ,"title" : "Existencias"         ,"autoWidth" :true,
-                                "render":function(cantidad,type, row){
-                                      return cantidad ==null?0:cantidad.toFixed(2);
-                                 }
-                               },
-                                {'data' :'costo' ,"name":"costo" ,"title" : "CostoXProveedor " ,"autoWidth" :true ,
-                                    "render":function(costo,type, row){
-                                        return costo ==null?0:costo.toFixed(2);
-                                    },
-                                },
                                 {'data' :'articulo.precioPublico'   ,"name":"articulo.precioPublico" ,"title" : "Precio"  ,"autoWidth" :true ,
                                     "render":function(precioPublico,type, row){
                                      return precioPublico ==null?0:precioPublico.toFixed(2);

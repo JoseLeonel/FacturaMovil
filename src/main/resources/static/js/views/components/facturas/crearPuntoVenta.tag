@@ -1453,6 +1453,7 @@ div.fondoVentaEspera:hover{
     }
     self.transaccion = false
     self.on('mount',function(){
+        __ObtengoTipoCambio()
         $("#formularioFactura").validate(reglasDeValidacionFactura());
          self.informacion_tabla_clientes =__informacionData_formato_cliente()
          self.tipoCambio.total = __getTipoCambioTotal()

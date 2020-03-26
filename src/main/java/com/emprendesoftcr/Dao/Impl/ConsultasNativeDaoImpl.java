@@ -22,6 +22,7 @@ import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturaIDNativa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
@@ -573,6 +574,50 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturaMesaNative.class);
 		return (Collection<ListarFacturaMesaNative>) query.getResultList();
+	}
+
+	@Override
+	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc) {
+		String queryStr = getQueryBase(ConsultaUtilidadNative.class);
+		codigo = codigo == null ? Constantes.EMPTY : codigo;
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+		if(!actividadComercial.equals(Constantes.COMBO_TODOS)) {
+		   queryStr = queryStr.replaceAll("and fact.act_comercial", " and fact.act_comercial in ('" + actividadComercial + "') ");
+		}else {
+			queryStr = queryStr.replaceAll("and fact.act_comercial", " ");
+		}
+		if (cliente != null) {
+			queryStr = queryStr.replaceAll("and fact.cliente_id", " and fact.cliente_id ='" + cliente.getId().toString() + "' ");
+		} else {
+			queryStr = queryStr.replaceAll("and fact.cliente_id", " ");
+		}
+		if(!tipoDoc.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and fact.tipo_doc", " and fact.tipo_doc ='" + tipoDoc.toString() + "' ");
+		}else {
+			queryStr = queryStr.replaceAll("and fact.tipo_doc", " ");
+		}
+		if (idCategoria > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and categorias.id =", " and categorias.id ='" + idCategoria.toString() + "' ");
+			;
+		} else {
+			queryStr = queryStr.replaceAll("and categorias.id =", "");
+		}
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + estado + ") ");
+		} else {
+			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + "2,6,7,5" + ") ");
+		}
+
+		if (codigo.length() > 0) {
+			queryStr = queryStr.replaceAll("and det.codigo", " and det.codigo ='" + codigo.toString()+ "' " );
+		} else {
+			queryStr = queryStr.replaceAll("and det.codigo", Constantes.EMPTY);
+		}
+
+		Query query = entityManager.createNativeQuery(queryStr, ConsultaUtilidadNative.class);
+		return (Collection<ConsultaUtilidadNative>) query.getResultList();
 	}
 
 }

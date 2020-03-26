@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -122,6 +121,11 @@ public class DetalleController {
 	@RequestMapping(value = "/ListaDetallesGanancia", method = RequestMethod.GET)
 	public String listaFacturaGanancia(ModelMap model) {
 		return "views/detalle/ListaGanancia";
+	}
+	
+	@RequestMapping(value = "/UtilidadXArticulo.do", method = RequestMethod.GET)
+	public String listaUtilidadArticulo(ModelMap model) {
+		return "views/detalle/ListaUtilidad";
 	}
 
 	/**
