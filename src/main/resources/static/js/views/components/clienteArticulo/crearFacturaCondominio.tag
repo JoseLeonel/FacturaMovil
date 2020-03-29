@@ -162,10 +162,10 @@
                         <!--Booking details-->
                         <article class="booking-details clearfix">
                             <h1><span id="lblSCS">Resumen </span></h1>
-                            <div class="TotalesContainer" >
-                                <div class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
-                                <div class="elementoTotales">{$.i18n.prop("factura.resumen.total")}     <span id="lblTotal">{totalComprobante}         </span> </div> 
-                                <div class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")}    <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
+                            <div id="totalesCierreContainer" >
+                                <div >{$.i18n.prop("factura.resumen.subTotal")}  <span > {subTotalGeneral}   </span> </div> 
+                                <div >{$.i18n.prop("factura.resumen.total")}     <span >{totalComprobante}         </span> </div> 
+                                <div >{$.i18n.prop("factura.resumen.cambio")}    <span >{totalCambioPagarSTR}</span> </div> 
                             </div>
                         </article>
                     </aside>     
@@ -358,21 +358,11 @@
         height: 50px!important;
         text-align: center;
     }
-    .elementoTotales{
-        font-weight: 600 !important;
-        font-size: 25px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        margin-left: 4%;
-        margin-bottom: 2%;
-        margin-top: 2%;
-        margin-right: 2%;
-    }
+    
     .TotalesContainer{
         display:flex;
         flex-direction: column;
+        flex: 1;
         background-color: black !important;
         box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
         border-radius: 5px;
@@ -381,77 +371,38 @@
         -o-transition: background-color 100ms linear;
         -ms-transition: background-color 100ms linear;
         transition: background-color 100ms linear;
+        justify-content: space-around;
+    }
+    #totalesCierreContainer {
+        display:flex;
+        flex-direction: column;
+        flex: 1;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        justify-content: space-around;
+    }
+    #totalesCierreContainer > div {
+      color: #30ed17;
+      font-size: 22px;
+      font-weight: 800;
+      margin-left: 5px;
     }
     .formatDetalle{
         font-size: 25px;
         color: black;
         text-align: center;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
     }
-    .tamanonumeros{
-       font-size: 25px;
-       font-weight: 600;
-       color: black;
-    }
-    .tamanoLetraSimplificadaDetalle {
-        font-weight: 600 !important;
-        font-size: 30px !important;
-    }
-    .detalle1{
-        flex: 0.5;
-    
-        margin-left: 2%;
-        margin-right: 2%;
-        margin-bottom: 1%;
-    }
-    .detalleDescripcion{
-     flex: 1.5;
-        text-align: center;
-        color: black;
-        font-weight: 600;
-        font-size: 14px;
-    
-    }
-    .detalleDescripcion1{
-      flex: 1.5;
-        text-align: center;
-        color: black;
-        font-size: 14px;
-    
-    }
-    .detalleCodigo{
-        flex: 0.8;
-        text-align: center;
-    }
-    .detalleLinea{
-        flex: 0.1;
-        text-align: center;
-    }
-    .detallesProductos{
-        display:flex;
-
-        justify-content: space-around;
-
-    }
-    .detalleEliminar{
-        flex:0.3;
-    }
-    .containerUno{
-        display: flex;
-    justify-content: space-between;
-    }
-    .tituloDetalle1{
-        color: black;
-        font-size: 14px;
-        font-weight: 600;
-            flex: 1;
-        
-        text-align: center;
-    }
-    .totalesContainer{
-        display: flex;
-        flex: 1;
-        justify-content: space-around;
-    }
+  
+ 
     .tituloTotales{
         text-align: left;
         margin-right: 3%;
@@ -459,31 +410,10 @@
         margin-top: 2%;
         flex: 0.5;
         height: 50px;
-        font-size: 26px;
+        font-size: 25px;
+        margin-left: 5px;
     }
-    .valorTotal{
-        margin-top: 2%;
-    }
-    .label-totalesComprobanteChino {
-        font-weight: 600 !important;
-        font-size: 18px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        border-collapse: separate;
-        cursor: pointer;
-        margin: 1%!important;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 25px !important;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
+  
     .precioTotalFacturaContainer{
         display:flex;
         flex:1;
@@ -527,26 +457,7 @@
         margin-top: 18%;
         text-align: center;
     }
-    .totalLabelImpuesto {
-        color: #333;
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 31%;
-        text-align: center;
-    }
-    #contenedor {
-        width:500px;
-        height:200px;
-        background: #fff;
-        padding:10px;￼    color: blue;
-        ￼    font-size: 18px;
-        border:10px solid #2c3e50;
-        margin:20px;
-        display:flex;
-        display:-webkit-flex;
-        display:-ms-flexbox;
-        justify-content:space-between;
-    }
+   
     .cabecera-izquierda {
         flex:1;
         margin-right: 1%;
@@ -555,45 +466,13 @@
     .cabecera-derecha {
             width:25%;
     }
-    .elemento{
-        background: #E67E22;
-        color:#fff;
-        margin:5px;
-        flex-basis:150px; 
-        height:50px;
-    }
-
+  
     .item {
        width: 50%;
      }
 
-    .boton-consultar1 {
-       display: block;
-        display: inline-block;
-        margin-bottom: 0;
-        
-        border-radius: 3px;
-        height: 30px;
-        /* padding: 6px 12px; */
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #fff;
-        background-color: #3c8dbc;
-        border-color: #367fa9;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .
-    }
-    /* Lista de facturas en espera*/
-    .cabecera-derecha .lista-compras-espera{
-        width:100%;
-        display:flex;
-        flex-wrap:wrap;
-    }
+  
+   
     .box-body{
         padding: 0px !important;
     }
@@ -622,69 +501,7 @@
         -ms-transition: background-color 100ms linear;
         transition: background-color 100ms linear;
     }
-    .cabecera-derecha .lista-compras-espera .compras-espera{
-        display:block;
-        width:90%;
-        margin-bottom:4px;
-        margin-right:5px;
-        background:red;
-        text-align:center;
-        text-decoration:none;
-        color:#ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-    }
-    #pagarTitulo{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-    }
-    #pagarTable,#pagarTableInfo{
-        border-collapse: separate;
-    }
-    #pagarTableInfo{
-        background-color: #f2f2f2;
-        color: #000;
-        text-align: center;
-    }
-    #total-show {
-        padding: 0px;
-        font-weight: 400;
-        background: none!important;
-        font-size: 30px;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        padding-top: 0px;
-        line-height: 40px;
-    }
-    #btnGrandePagar,#btnGrandePagar2{
-        cursor: pointer;
-        padding: 0px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: yellow !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    } 
-    #pagarInfo,#iva-total,#subtotal,#sigPeso{
-        font-weight: 100 !important;
-        font-size: 14px !important;
-    }
-    #pagarInfo{
-        font-size: 12px !important;
-    }
+   
     *{
        margin:0;
        padding:0;
@@ -699,19 +516,12 @@
         margin:auto;
     }
   
-   
-    .contenedor-detalle   {
-        display:flex;
-        width:100%;
-        margin :auto;
-    }
-
     .booking-details h1 {
         font-size: 1.5em;
         color: #666;
         text-shadow: none;
     }
-    .booking-details .booking-info {
+    .booking-details  {
         border-top: 1px solid #DFDCD1;
         padding: 15px 0 0;
         margin: 15px 0 0;
@@ -722,15 +532,7 @@
         font-weight:bold;
         font-size:23px;
     }
-    .precioTotalFactura{
-        font-weight:bold;
-        font-size:23px;
-        color:black;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-    }
+    
     label {
         display: inline-block;
         max-width: 100%;
@@ -782,29 +584,7 @@
         padding: 1px 2px;
         /* overflow: visible; */
     }
-    .campodetalleDescuento {
-        width: 100%;
-        height: 30px;
-        padding: 6px 16px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        color:#333;
-        font-weight: bold;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        margin: 2px 0;
-        padding: 1px 2px;
-        overflow: visible;
-    }
+   
 
     /*1024x768*/
     @media only screen and (max-width: 1024px) and (min-width:768px)  {
@@ -817,47 +597,6 @@
             text-align: center;
         }
 
-        .detalle1{
-            flex: 0.80 !important;
-            margin-left: 2% !important;
-            margin-right: 2% !important;
-            text-align: center;
-            margin-bottom: 1%;
-        }
-        .detalleEliminar{
-            flex:0;
-            margin-left: 0.5%;
-        }
-        .tituloDetalle1 {
-            color: black;
-            font-size: 14px;
-            font-weight: 600;
-            flex: 1.3;
-            text-align: left;
-        }
-        .campodetalleDescuento {
-            width: 188%;
-            height: 30px;
-            padding: 6px 16px;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #333;
-            font-weight: bold;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 2px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-            background-color: #fcfcfc;
-            border: 1px solid #ccc;
-            margin: 2px 0;
-            padding: 1px 2px;
-            overflow: visible;
-        }
         }
 </style>
 
@@ -1312,7 +1051,6 @@ function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
         return
     }
-   
     swal({
            title: '',
            text: $.i18n.prop("compraSimplificada.mensaje.alert.enter"),
@@ -1397,10 +1135,6 @@ function __ComboTipoDocumentos(){
     })
     self.update()
 }
-
-
-
-
 
 var reglasDeValidacionDetalleCompra = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
@@ -1695,6 +1429,8 @@ function evaluarFactura(data){
 **/
 function __Init(){
     __comboMonedas()
+    __ListaActividadesComercales()
+
     $('.fechaCompra').val(null);
     $('.fechaCredito').val(null)
      $('.selectFechaEmision').datepicker(
@@ -1809,48 +1545,7 @@ function __ListaDeClientes(){
         }
     });
 }
-/**
-*   agregar Articulos nuevos en el detalle de la Compra
-**/
-function __nuevoArticuloAlDetalle(){
-    if(self.detalle.descripcion == null){
-        return;
-    }
-    if(self.detalle.descripcion == ""){
-        return;
-    }
-    var cont = 0
-    self.detail.forEach(function(elemen){
-        cont =  cont + 1
-    })  
-    
-    self.numeroLinea = cont > 0?cont+1:1
-    self.pesoPrioridad =  cont > 0? cont+1:1
-    self.update()
-    self.detail.push({
-       numeroLinea     : self.numeroLinea,
-       pesoPrioridad   :self.pesoPrioridad,  
-       codigo          :self.detalle.codigo,
-       descripcion     : self.detalle.descripcion,
-       tipoCodigo      : self.detalle.tipoCodigo,
-       cantidad        : self.detalle.cantidad,
-       costo           :0,
-       precioUnitario  : self.detalle.precioUnitario,
-       montoDescuento  : self.detalle.montoDescuento,
-       porcentajeDesc  : self.detalle.porcentajeDescuento,
-       subTotal        : parseFloat(self.detalle.subTotal),
-       montoTotalLinea : self.detalle.montoTotalLinea
-    }); 
-    self.detail.sort(function(a,b) {
-    if ( a.pesoPrioridad > b.pesoPrioridad )
-        return -1;
-    if ( a.pesoPrioridad < b.pesoPrioridad )
-        return 1;
-    return 0;
-    } );
-    self.update()
-    __calculate();
-}
+
 /**
 * eliminar un detalle Compra
 **/
@@ -2025,19 +1720,19 @@ function setItemNuevo(data){
    var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
-       tipoImpuesto    : data.tipoImpuesto ==null?" ":data.articulo.tipoImpuesto,
-       tipoImpuesto1   : data.tipoImpuesto1 ==null?" ":data.articulo.tipoImpuesto1,
+       tipoImpuesto    : data.articulo.tipoImpuesto,
+       tipoImpuesto1   : "",
        iva             : __valorNumerico(data.articulo.impuesto),
-       iva1            : __valorNumerico(data.articulo.impuesto1),
+       iva1            : 0,
        codigo          : data.codigo,
        descripcion     : data.descripcion,
        cantidad        : __valorNumerico(1),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(data.articulo.impuesto),
-       impuesto1        : __valorNumerico(data.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
-       montoImpuesto1  : __valorNumerico(montoImpuesto1),
-       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
+       montoImpuesto1  : 0,
+       impuestoNeto    : __valorNumerico(montoImpuesto)  ,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),

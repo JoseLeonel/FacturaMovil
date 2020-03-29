@@ -3948,8 +3948,8 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
-       tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
+       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
        iva             : parseFloat(self.articulo.impuesto),
        iva1            : parseFloat(self.articulo.impuesto1),
        codigo          : self.articulo.codigo,

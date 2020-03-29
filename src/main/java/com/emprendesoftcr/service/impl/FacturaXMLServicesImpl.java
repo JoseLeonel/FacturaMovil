@@ -451,9 +451,11 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   	String nodoTarifa = Constantes.EMPTY;
   	tipoImpuesto = tipoImpuesto == null?Constantes.EMPTY:tipoImpuesto;
   	try {
+  		
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
   			return resultado;
-  		}
+  			}
+  		
   		if (codigoTarifa !=null) {
   			if(!codigoTarifa.equals(Constantes.EMPTY)) {
   				nodoCodigoTarifa ="<CodigoTarifa>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(codigoTarifa, 2)) + "</CodigoTarifa>";

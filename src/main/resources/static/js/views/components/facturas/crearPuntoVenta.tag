@@ -1070,7 +1070,7 @@ div.fondoVentaEspera:hover{
         text-align: center !important;
         background-color: black !important;
         box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 25px !important;
+        border-radius: 7px !important;
         -webkit-transition: background-color 100ms linear;
         -moz-transition: background-color 100ms linear;
         -o-transition: background-color 100ms linear;
@@ -3879,8 +3879,8 @@ function setItemNuevo(cantidad){
    var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
-       tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
+       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
        iva             : __valorNumerico(self.articulo.impuesto),
        iva1            : __valorNumerico(self.articulo.impuesto1),
        codigo          : self.articulo.codigo,
