@@ -141,9 +141,7 @@ public class CuentaPagarController {
 		static DataTableDelimitador get(HttpServletRequest request,  Proveedor proveedor, Empresa empresa,String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaPagar");
-			Date fechaInicio = new Date();
-			Date fechaFinal = new Date();
-
+	
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (proveedor != null) {

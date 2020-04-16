@@ -255,6 +255,10 @@ public class Factura implements Serializable {
 	@Column(name = "anul_compl", columnDefinition = "INT default '0'")
 	private Integer						anuladaCompleta;
 
+	
+	@Column(name = "notifi_noelec")
+	private Integer						notificacionNoElectronicio;
+
 
 	public Factura() {
 		super();
@@ -265,8 +269,13 @@ public class Factura implements Serializable {
 	}
 
 		
+	
+
+
+
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa, String codigoActividad, Integer rebajaInventario, Integer noAplicarEnCaja, Integer anuladaCompleta) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa, String codigoActividad, Integer rebajaInventario, Integer noAplicarEnCaja, Integer anuladaCompleta,
+			Integer notificacionNoElectronicio) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -337,7 +346,10 @@ public class Factura implements Serializable {
 		this.rebajaInventario = rebajaInventario;
 		this.noAplicarEnCaja = noAplicarEnCaja;
 		this.anuladaCompleta = anuladaCompleta;
+		this.notificacionNoElectronicio = notificacionNoElectronicio;
 	}
+
+
 
 
 
@@ -1240,6 +1252,26 @@ public class Factura implements Serializable {
 
 	public void setNoAplicarEnCaja(Integer noAplicarEnCaja) {
 		this.noAplicarEnCaja = noAplicarEnCaja;
+	}
+
+
+
+
+
+
+	
+	public Integer getNotificacionNoElectronicio() {
+		return notificacionNoElectronicio;
+	}
+
+
+
+
+
+
+	
+	public void setNotificacionNoElectronicio(Integer notificacionNoElectronicio) {
+		this.notificacionNoElectronicio = notificacionNoElectronicio;
 	}
 
 }

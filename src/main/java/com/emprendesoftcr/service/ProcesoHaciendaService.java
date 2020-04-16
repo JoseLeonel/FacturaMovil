@@ -50,5 +50,7 @@ public interface ProcesoHaciendaService {
 	void graficoVenta() throws Exception;
 	
 	void guardarXMLPeridoConsecutivo() throws Exception;
+	void taskEnvioCorreosNoElectronico() throws Exception;
+	void enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception;
 	
 }

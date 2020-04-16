@@ -32,4 +32,6 @@ public interface UsuarioCajaBo {
 
 	ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId);
 	Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado);
+	
+	void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo)throws Exception;
 }

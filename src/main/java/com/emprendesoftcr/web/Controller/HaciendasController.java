@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.emprendesoftcr.Bo.ArchivoXMLBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -49,6 +50,7 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
+import com.emprendesoftcr.modelo.ArchivoXML;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -176,11 +178,11 @@ public class HaciendasController {
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
-																																																			if(facturaElectronica.getClienteCedula() != null) {
-																																																				if(facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
+																																																			if (facturaElectronica.getClienteCedula() != null) {
+																																																				if (facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
 																																																					facturaElectronica.setClienteCedula(d.getCliente().getIdentificacionExtranjero());
 																																																				}
-																																																				
+
 																																																			}
 																																																			if (d.getCliente().getTelefono() != null) {
 																																																				if (d.getCliente().getTelefono() != Constantes.ZEROS) {
@@ -253,6 +255,9 @@ public class HaciendasController {
 
 	@Autowired
 	private FacturaBo																									facturaBo;
+
+	@Autowired
+	private ArchivoXMLBo																							archivoXMLBo;
 
 	@Autowired
 	private DetalleBo																									detalleBo;
@@ -397,9 +402,9 @@ public class HaciendasController {
 					log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
 
 					if (xmlFirmado != null) {
-						if (xmlFirmado.length() > 0 ) {
+						if (xmlFirmado.length() > 0) {
 							log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
-							haciendaBo.findByClaveSP(hacienda.getId(),hacienda.getNumeroFactura() == null?Constantes.ZEROS_LONG:hacienda.getNumeroFactura(),  respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
+							haciendaBo.findByClaveSP(hacienda.getId(), hacienda.getNumeroFactura() == null ? Constantes.ZEROS_LONG : hacienda.getNumeroFactura(), respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {
 							log.info("No llamado procedimiento callback: {}", estadoHacienda);
 						}
@@ -599,7 +604,7 @@ public class HaciendasController {
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
-			
+
 			if (listaCorreos != null) {
 				if (listaCorreos.size() == 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");
@@ -713,17 +718,19 @@ public class HaciendasController {
 				fileName = "CompraSimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			}
 			String xmlFactura = Constantes.EMPTY;
-//			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-//				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracion());
-//
-//			}else {
-          xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
+			ArchivoXML archivoXMLCorreos = archivoXMLBo.findByClave(haciendaBD.getEmpresa(), haciendaBD.getClave());
 
-//			}
+			if (archivoXMLCorreos != null) {
+				xmlFactura = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracion());
+
+			} else {
+				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML());
+
+			}
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();
-			//out.println(FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML()));
+			// out.println(FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getComprobanteXML()));
 			out.println(xmlFactura);
 			out.flush();
 			out.close();
@@ -765,15 +772,16 @@ public class HaciendasController {
 			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)) {
 				fileName = "RespuestaXML_Compra_SimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			}
+
 			String xmlFactura = Constantes.EMPTY;
-			
-//			if(haciendaBD.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-//				xmlFactura = Utils.leerXMLServidor(haciendaBD.getPathMigracionRespuesta());
-//
-//			}else {
+			ArchivoXML archivoXMLCorreos = archivoXMLBo.findByClave(haciendaBD.getEmpresa(), haciendaBD.getClave());
+
+			if (archivoXMLCorreos != null) {
+				xmlFactura = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracionRespuesta());
+			} else {
 				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaBD.getMensajeHacienda());
 
-//			}
+			}
 
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");

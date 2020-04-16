@@ -484,7 +484,7 @@ function __Opciones(id,type,row){
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    if(row.noFacturaElectronica == 0){
+    if(row.noFacturaElectronica == 0 ||  row.noFacturaElectronica == 2){
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Correo al Cliente</a></li>'
         menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Correo Alternativo</a></li>'
     }

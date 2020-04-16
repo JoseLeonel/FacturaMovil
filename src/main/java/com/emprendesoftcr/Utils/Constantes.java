@@ -5,7 +5,10 @@ import java.util.ResourceBundle;
 
 public class Constantes {
 
+	public static final String					CONDOMINIO_MONTANA_SANTA_ANA																= "3109177612";
+	public static final String					CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD											= "3102767133";
 	public static final ResourceBundle	RESOURCE_BUNDLE																							= ResourceBundle.getBundle("factura");
+	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR												= "/home/jose/dev/archivosXMLs";
 
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																= 0;
@@ -13,8 +16,8 @@ public class Constantes {
 	public static final Integer					COCINA_ACTIVO																								= 1;
 	public static final Integer					COCINA_INACTIVO																							= 2;
 
-	public static final Integer					COMMANDA_COCINA_ACTIVO																								= 1;
-	public static final Integer					COMMANDA_COCINA_INACTIVO																							= 2;
+	public static final Integer					COMMANDA_COCINA_ACTIVO																			= 1;
+	public static final Integer					COMMANDA_COCINA_INACTIVO																		= 2;
 
 	public static final Integer					ENTRADASALIDA_TIPO_ENTRADA																	= 1;
 	public static final Integer					ENTRADASALIDA_TIPO_SALIDA																		= 2;
@@ -22,7 +25,7 @@ public class Constantes {
 	public static final Integer					CONTEO_CIERRE_CAJA_TIPO																			= 2;
 
 	public static final Integer					MIGRADO_XMLS_A_DISCO_NO																			= 0;
-	public static final Integer					MIGRADO_XMLS_A_DISCO_SI																			= 1;
+	public static final Integer					MIGRADO_XMLS_A_DISCO_SI																			= 88;
 	public static final Integer					SEMAFORO_ESTADO_GUARDADO_XML																= 7;
 
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_DISCO													= 400;
@@ -71,6 +74,7 @@ public class Constantes {
 	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2												= "Nota Credito Electrónica ver 4.2";
 	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2													= "Nota Debito Electrónica ver 4.2";
 	public static final String					REGIMEN_SIMPLIFICADO																				= "Régimen Simplificado";
+	public static final String					RECIBO_POR_REINTEGRO_GASTOS																	= "Recibo por reintegro de Gastos";
 
 	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3															= "Tiquete Electrónico ver 4.3";
 	public static final String					FACTURA_ELECTRONICO_VERSION_4_3															= "Factura Electrónica ver 4.3";
@@ -89,6 +93,7 @@ public class Constantes {
 	public static final String					COMBO_TODOS																									= "0";
 	public static final String					COMBO_TODOS_T																								= "Todos";
 	// Empresa aplica factura Electronica
+	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS							= 2;
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA																= 1;
 	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA																= 0;
 	public static final Integer					SI_ENVIAR_CORREO_CLIENTE_FRECUENTE													= 1;
@@ -165,6 +170,7 @@ public class Constantes {
 	public static final Integer					SEMAFORO_ESTADO_ENVIO																				= 2;
 	public static final Integer					SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS												= 3;
 	public static final Integer					SEMAFORO_ESTADO_ENVIAR_CORREOS															= 4;
+	public static final Integer					SEMAFORO_ESTADO_ENVIAR_CORREOS_NO_ELECTRONICOS							= 8;
 	public static final Integer					SEMAFORO_ESTADO_CALLBACK																		= 5;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO_COMPRAS															= 6;
 
@@ -410,6 +416,7 @@ public class Constantes {
 	public static final String					ROL_USUARIO_CAJERO																					= "Usuario_Cajero";
 	public static final String					ROL_USUARIO_SUPERDARIO																			= "Usuario_SuperDario";
 	public static final String					ROL_USUARIO_MESERO																					= "Usuario_Mesero";
+	public static final String					ROL_USUARIO_CONDOMINIO																			= "Administrador_Condominios";
 
 	// Usuario
 	public static final String					WEB_SESSION_USUARIO																					= "usuario";
@@ -672,5 +679,8 @@ public class Constantes {
 
 	// Procecimiento para actualizar la caja
 	public static final String					SP_ACTUALIZA_CAJA																						= "sp_actua_caja";
+	public static final String					SP_ELIMINAR_CONTEO																					= "sp_elimi_conteo";
 	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO														= "ID_CAJA_USUARIO";
+	public static final String					SP_ELIMINA_CAJA_ID_CAJA_USUARIO															= "usua_caja_id";
+	public static final String					SP_ELIMINA_CONTEO_TIPO																			= "tipo";
 }

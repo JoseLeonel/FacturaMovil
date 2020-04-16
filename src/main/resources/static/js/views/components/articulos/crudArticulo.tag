@@ -766,13 +766,13 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:80,
                 minlength:1,
-                lettersOnly : true
+                
 			},
             codigo : {
 				required : true,
                 maxlength:20,
                 minlength:1,
-                lettersOnly : true
+                
 			},                                                
             marca : {
 				required : true,
@@ -1622,9 +1622,9 @@ function validarPrecios(){
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
     var precioEspecial    =  __valorNumerico($('#precioEspecial').val())
     var resultadoImpuesto =  impuesto 
-    resultadoImpuesto =resultadoImpuesto /100
-    resultadoImpuesto = resultadoImpuesto + 1
-    var total = precioPublico / resultadoImpuesto
+    resultadoImpuesto =resultadoImpuesto > 0 ? resultadoImpuesto /100 : 0
+    resultadoImpuesto = resultadoImpuesto > 0 ? resultadoImpuesto + 1 : 0
+    var total = resultadoImpuesto >  0  ? precioPublico / resultadoImpuesto : precioPublico
     if(precioPublico > 0 && resultadoImpuesto > 0){
         if(total < costo ){
             mensajeAdvertencia('El Precio Publico es menor al Costo')
@@ -1632,7 +1632,7 @@ function validarPrecios(){
         }
 
     }
-    total = precioMayorista / resultadoImpuesto
+    total = resultadoImpuesto > 0 ? precioMayorista / resultadoImpuesto : precioMayorista
     if(precioMayorista > 0 && resultadoImpuesto > 0){
         if(total < costo ){
             mensajeAdvertencia('El Precio Mayorista es menor al Costo')
@@ -1640,7 +1640,7 @@ function validarPrecios(){
         }
 
     }
-    total = precioEspecial / resultadoImpuesto
+    total = resultadoImpuesto > 0 ? precioEspecial / resultadoImpuesto: precioEspecial
     if(precioEspecial > 0 && resultadoImpuesto > 0){
         if(total < costo ){
             mensajeAdvertencia('El Precio Especial es menor al Costo')

@@ -83,6 +83,9 @@ public final class Utils {
 	public static String generateXml(String path, String datosXml, String name, Date fecha) throws Exception {
 		// String resultado = Utils.getDirectorioPorFechaMes(fecha);
 		String resultado = Constantes.EMPTY;
+		if(datosXml != null && datosXml.length() == 0) {
+			return resultado;
+		}
 		try {
 			File archivo = new File(path + "/" + name + "_" + claveMigradoXML() + ".xml");
 			BufferedWriter bw;
@@ -160,35 +163,39 @@ public final class Utils {
 	 * @return
 	 */
 	public static File crearDirectorioServidor(String servidor, String cedulaEmpresa, Date fecha) {
-		String dir = System.getProperty("user.dir");
+//		String dir = System.getProperty("user.dir");
+//		String dir = Constantes.EMPTY;
+//		dir = Constantes.DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR;
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
-		String direccion = dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		
+		String direccion = servidor + cedulaEmpresa + "/" + anno + "/" + mes;
 		// log.info("directorio: {}",direccion);
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
 			return directorio;
 		}
 		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
-		File directorio_servicio80 = new File(dir + "/" + servidor);
+		File directorio_servicio80 = new File( servidor);
 		if (!directorio_servicio80.exists()) {
-			directorio_servicio80.mkdir();
+			directorio_servicio80.mkdirs();
 		}
 
-		File directorio_empresa = new File(dir + "/" + servidor + cedulaEmpresa);
+		File directorio_empresa = new File( servidor + cedulaEmpresa);
 		if (!directorio_empresa.exists()) {
 
-			directorio_empresa.mkdir();
+			directorio_empresa.mkdirs();
 		}
-		File directorio_anno = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno);
+		File directorio_anno = new File(servidor + cedulaEmpresa + "/" + anno);
 		if (!directorio_anno.exists()) {
-			directorio_anno.mkdir();
+			directorio_anno.mkdirs();
 		}
-		File directorio_mes = new File(dir + "/" + servidor + cedulaEmpresa + "/" + anno + "/" + mes);
+		File directorio_mes = new File( servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 		if (!directorio_mes.exists()) {
-			directorio_mes.mkdir();
+			directorio_mes.mkdirs();
 		}
-
+		
+		
 		File directorio1 = new File(direccion);
 		if (!directorio1.exists()) {
 			return null;
@@ -232,6 +239,18 @@ public final class Utils {
 
 	}
 
+	public static String getDirectorioDia(Date date) {
+		String resultado = Constantes.EMPTY;
+		LocalDate localDate = getFechaLocalDate(date);
+
+		int dia = localDate.getDayOfMonth();
+
+		resultado = resultado + dia;
+
+		return resultado.trim();
+
+	}
+
 	public static String getDirectorioAnnoAndMes(Date date) {
 		String resultado = Constantes.EMPTY;
 		LocalDate localDate = getFechaLocalDate(date);
@@ -248,6 +267,9 @@ public final class Utils {
 	public static String agregarXMLServidor(String servidor, String datosXML, String name, String cedulaEmpresa, Date fecha) throws Exception {
 
 		String path = Constantes.EMPTY;
+		if(datosXML != null && datosXML.length() == 0) {
+			return path;
+		}
 		try {
 			File directorio = Utils.crearDirectorioServidor(servidor, cedulaEmpresa, fecha);
 			if (directorio != null) {

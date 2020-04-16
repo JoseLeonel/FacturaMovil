@@ -13,7 +13,8 @@ import com.emprendesoftcr.Utils.Constantes;
 		+ "facturas.consecutivo_proforma,"
 		+ "facturas.nombre_factura,"
 		+ "facturas.numero_consecutivo, \n" 
-		+ "clientes.nombre_completo \n" + 
+		+ "clientes.nombre_completo \n"  
+		+ ",clientes.cedula \n" +
 		"       FROM facturas \n" +
 		"       inner join clientes on clientes.id = facturas.cliente_id \n" + 
 		"       WHERE facturas.empresa_id = :ID_EMPRESA  and facturas.estado in ('04','01','87')")
@@ -39,6 +40,9 @@ public class FacturasEsperaNativa implements Serializable {
 
 	@Column(name = "nombre_factura")
 	private String						nombreFactura;
+	
+	@Column(name = "cedula")
+	private String						cedula;
 
 	
 	public Long getId() {
@@ -74,7 +78,15 @@ public class FacturasEsperaNativa implements Serializable {
 
 	
 	public String getNombreCompleto() {
-		return nombreCompleto == null?Constantes.EMPTY:nombreCompleto;
+		String nombre  = Constantes.EMPTY;
+		if(this.nombreCompleto != null) {
+			if(nombreCompleto.length() > 22) {
+				nombre = this.nombreCompleto.substring(0,22);
+			}else {
+				nombre = this.nombreCompleto;
+			}
+		}
+		return nombre;
 	}
 
 
@@ -98,10 +110,23 @@ public class FacturasEsperaNativa implements Serializable {
 	}
 
 
+	
+	public String getCedula() {
+		return cedula;
+	}
+
+
+	
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((cedula == null) ? 0 : cedula.hashCode());
 		result = prime * result + ((consecutivoProforma == null) ? 0 : consecutivoProforma.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nombreCompleto == null) ? 0 : nombreCompleto.hashCode());
@@ -120,6 +145,11 @@ public class FacturasEsperaNativa implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		FacturasEsperaNativa other = (FacturasEsperaNativa) obj;
+		if (cedula == null) {
+			if (other.cedula != null)
+				return false;
+		} else if (!cedula.equals(other.cedula))
+			return false;
 		if (consecutivoProforma == null) {
 			if (other.consecutivoProforma != null)
 				return false;

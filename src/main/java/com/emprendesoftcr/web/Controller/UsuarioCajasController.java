@@ -320,7 +320,8 @@ public class UsuarioCajasController {
 
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
-
+			
+			usuarioCajaBo.eliminarConteo(usuarioCajaBd,2);
 			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
@@ -350,10 +351,16 @@ public class UsuarioCajasController {
 		ArrayList<String> listaCorreos = new ArrayList<>();
 
 		if (usuario.getEmpresa().getCorreoCaja1() != null) {
-			listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());
+			if(!usuario.getEmpresa().getCorreoCaja1().isEmpty()) {
+				listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());	
+			}
+			
 		}
 		if (usuario.getEmpresa().getCorreoCaja2() != null) {
-			listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());
+			if(!usuario.getEmpresa().getCorreoCaja2().isEmpty()) {
+				listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());	
+			}
+			
 		}
 
 		if (!listaCorreos.isEmpty()) {

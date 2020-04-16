@@ -166,5 +166,12 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_USUARIO_SUPERDARIO.equals(p.getNombre())).count();
 		return count >= 1 ?true:false;
 	}
+	
+	@Override
+	public Boolean isUsuario_Condominio(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_USUARIO_CONDOMINIO.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
+	}
 
+	
 }

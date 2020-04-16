@@ -37,6 +37,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
+import com.emprendesoftcr.Bo.ClienteArticuloBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -235,9 +236,6 @@ public class ArticuloController {
 		if (fechaF != null && fechaF != null) {
 			fechaF = Utils.sumarDiasFecha(fechaF, 1);
 		}
-//		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-//		String inicio1 = dateFormat1.format(fechaI);
-//		String fin1 = dateFormat1.format(fechaF);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		return articuloBo.sumarInventarios(usuario.getEmpresa().getId(), fechaI, fechaF);
 	}
@@ -731,11 +729,14 @@ public class ArticuloController {
 			}
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-
 			Articulo articuloBd = null;
-			articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
-			if (articuloBd != null) {
-				result.rejectValue("descripcion", "error.articulo.descripcion.existe");
+			
+			if(!usuarioSesion.getEmpresa().getCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA)) {
+				articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
+				if (articuloBd != null) {
+					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
+				}
+				
 			}
 
 			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
@@ -926,10 +927,14 @@ public class ArticuloController {
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
 			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion().trim())) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
-				if (articuloValidar != null) {
-					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
+				if(!usuarioSesion.getEmpresa().getCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA)) {
+					articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
+					if (articuloValidar != null) {
+						result.rejectValue("descripcion", "error.articulo.descripcion.existe");
+					}
+					
 				}
+
 			}
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());

@@ -37,4 +37,6 @@ public interface FacturaDao {
 	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa,String actividadEconomica);
 		
 	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
+	
+	Collection<Factura> findBySinNotificarCorreo();
 }

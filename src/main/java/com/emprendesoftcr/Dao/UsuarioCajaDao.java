@@ -25,6 +25,8 @@ public interface UsuarioCajaDao {
 
 	void actualizarCaja(UsuarioCaja usuarioCaja)throws Exception;
 	
+	void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo)throws Exception;
+	
 	ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId);
 	
 	Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa,String estado);

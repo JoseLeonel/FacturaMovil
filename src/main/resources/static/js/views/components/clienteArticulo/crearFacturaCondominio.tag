@@ -1,12 +1,104 @@
 <factura-condominio>
 <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-calculator"></i>&nbsp Facturas a Condominios  </h1>
+    <div  id="titulo" >
+        <div >
+            <span ><i class="fa fa-calculator"></i>&nbsp Facturas a Condominios  </span>
         </div>
-        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
+        <div id="botonera">
+            <a href="#"   onclick = {__MostrarFormularioDePago} title="Aplicar la compra"> <span >F8=Facturar</span></a>
+            <a href="#"   onclick = {__AplicarYcrearFacturaTemporal}       title="{$.i18n.prop("btn.tiquete")}"> <span >{$.i18n.prop("factura.f9")}</span></a>
+            <a href="#"   onclick = {_ReimprimirFactura}       title="{$.i18n.prop("btn.tiquete")}"> <span >{$.i18n.prop("factura.f6")}</span></a>
+            <a href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span >{$.i18n.prop("factura.f10")}</span></a>
+            <a href="#"   onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span >{$.i18n.prop("factura.f5")}</span></a>
+        </div>
     </div>
-    <br>
+
+<div id="contener-principal" show={mostarParaCrearNuevaCompra}>
+    <!--Lado izquierdo -->
+    <div>
+        <div>
+            <div class="encabezado">
+                <label >Seleccione el Clientes</label> 
+                <input onclick = {_EscogerClientes}  type="text"   value="{cliente.nombreCompleto}">
+            </div>
+            <div class="encabezado">
+                <label >Actividades Economicas </label>  
+                <select onchange= {__AsignarActividad} class="selectActividadComercial  "  name="selectActividadComercial" id="selectActividadComercial" >
+                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
+                </select>
+            </div>
+        </div>
+        <div>
+           <table class="table table-striped">
+                <thead>
+                        <tr>
+                            <th style="width:5%;">                                                      </div></th>
+                            <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
+                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
+                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr each={detail}>
+                            <td style="width:5%;">
+                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block botonEliminar">X</button>
+                            </td>
+                            <td style="width:2%;"><div class="formatDetalle">{numeroLinea}</div></td>
+                            <td style="width:8%;"><div class="formatDetalle">{codigo}</div></td>
+                            <td class="text-right" style="width:14%;">
+                                <input  onkeyup={__actualizarDescripcion} onBlur={__actualizarDescripcion} class="campodetalle" type="text" step="any"  value = "{descripcion}" />
+                            </td>
+
+                            <td class="text-right" style="width:17%;">
+                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <input  onkeyup={__actualizarPrecio} onBlur={__actualizarPrecio} class="campodetalle" type="number" step="any"  value = "{precioUnitario}" min="0" pattern="^[0-9]+"/>
+                            </td>
+ 
+                            <td class="text-right" style="width:14%;">
+                                <div class="formatDetalle">{montoTotalLinea.toFixed(2)} </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>             
+        </div>
+    </div>
+    <!--Fin del lado izquierdo -->
+    <!--Lado derecho -->
+    <div id="lado-derecho">
+	    <!--right sidebar-->
+            <div onclick = {__MostrarFormularioDePago}  class="TotalesFacturaContainer"  >
+                    <span> Total   : {totalComprobante}</span>
+            </div>
+            <div id="tituloMostrarTipoCambio">
+                <span >Tipo Cambio del Banco Central</span>
+            </div>    
+            <div id="mostrarTipoCambio">
+                <div>
+                    <span>Compra USD $</span>
+                    <span>{tipoCambio.totalCompra}</span>
+                </div>   
+                <div>
+                    <span>Venta USD $</span>
+                    <span>{tipoCambio.total}</span>
+                </div>   
+            </div>
+            <div   class="facturasEspera">
+                <div each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                    <span show ="{consecutivoProforma.length>0?true:false}"   title="{nombreCompleto !=null?nombreCompleto:""}" >P: {consecutivoProforma} -{ cedula} - {nombreCompleto} </span>  
+                    <span show ="{consecutivoProforma.length == 0?true:false}" title="{nombreCompleto !=null?nombreCompleto:"Venta en espera"}" >V: {id}-{ cedula} - {nombreCompleto} </span>  
+                </div>    
+            </div>    
+    </div>
+            
+</div>
+
+
+
 <!--Modal mostrar Proveedores de una sucursal -->
 <div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -94,7 +186,7 @@
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input  onkeyup={__ActualizarPlazoCredito} onBlur={__ActualizarPlazoCredito} onclick={__ActualizarPlazoCredito} type="text" class="form-control fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
-                                            <div class="input-group-addon">
+                                            <div class="input-group-addon fechacredito">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
                                         </div>
@@ -174,116 +266,9 @@
         </div><!--fin del cabecera-derecha-->
     </div><!--fin del contenedor-compra-->
 
-<div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
-        <div class="box-body">
-             <div class="box-header with-border">
-                
 
-            <div  class="contenedor-compra " >
-                <div class="cabecera-izquierda" >
-                <div class="row">
-                  <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
-                    <div class="box-tools ">
-                            <a class="pull-left" href="#"   onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago} title="Aplicar la compra"> <span class="label label-limpiar">F8=Facturar</span></a>
-                            <a class="pull-left" href="#"   onclick = {_ReimprimirFactura}       title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
-
-                            
-                            
-                            <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
-
-                        </div>
-                    </div>
-                </div>  
-                  <br>                
-                    <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <div class="form-group ">
-                                <label>Clientes</label> 
-                                <input onclick = {_EscogerClientes}  type="text" class="campo campodetalle form-control"  value="{cliente.nombreCompleto}">
-                            </div>
-                        </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <div class="form-group ">
-                                <label class="titleListaPrecio">Actividades Economicas </label>  
-                                <select onchange= {__AsignarActividad} class="form-control selectActividadComercial campodetalle"  name="selectActividadComercial" id="selectActividadComercial" >
-                                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
-                                </select>                    
-                            </div>
-                        </div>
-                    </div>   
-                    
-                </div>
-                <section class="cabecera-derecha">
-				    <!--right sidebar-->
-                    <aside class="left-sidebar">
-                            <!--Booking details-->
-                        <article class=" clearfix">
-                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  >
-                                <div class="totalesContainer" >
-                                   <div class="tituloTotales">Total   :</div> 
-                                   <div class="tituloTotales"><p> {totalComprobante}</p></div>
-                                </div>   
-                            </div>
-                        </article>
-                    </aside>
-                    <div id="tituloMostrarTipoCambio">
-                        <span >Tipo Cambio del Banco Central</span>
-                    </div>    
-                    <div id="mostrarTipoCambio">
-                        <div>
-                           <span>Compra USD $</span>
-                           <span>{tipoCambio.totalCompra}</span>
-                        </div>   
-                        <div>
-                           <span>Venta USD $</span>
-                           <span>{tipoCambio.total}</span>
-                        </div>   
-                    </div>
-                </section>
-            
-        </div>
   
 
-                    <div class="encabezadoContainer" style="overflow-x: scroll;overflow-y: scroll; height:100%;">
-                        <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th style="width:5%;">                                                      </div></th>
-                            <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
-                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
-                            <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
-                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr each={detail}>
-                            <td style="width:5%;">
-                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block campoEliminar">X</button>
-                            </td>
-                            <td style="width:2%;"><div class="formatDetalle">{numeroLinea}</div></td>
-                            <td style="width:8%;"><div class="formatDetalle">{codigo}</div></td>
-                            <td class="text-right" style="width:14%;">
-                                <input  onkeyup={__actualizarDescripcion} onBlur={__actualizarDescripcion} class="campodetalle" type="text" step="any"  value = "{descripcion}" />
-                            </td>
-
-                            <td class="text-right" style="width:17%;">
-                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <input  onkeyup={__actualizarPrecio} onBlur={__actualizarPrecio} class="campodetalle" type="number" step="any"  value = "{precioUnitario}" min="0" pattern="^[0-9]+"/>
-                            </td>
- 
-                            <td class="text-right" style="width:14%;">
-                                <div class="formatDetalle">{montoTotalLinea.toFixed(2)} </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>     
-                    </div>     
     
 <!--Modal mostrar Facturas del Dias -->
 <div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -304,7 +289,6 @@
                                 <th class = "table-header" >{$.i18n.prop("factura.condicion.pago")}      
                                 
                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
                                 
                             </tr>
@@ -317,7 +301,6 @@
                                         <th>{$.i18n.prop("factura.condicion.pago")}           </th>
                                         
                                         <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                        <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                         <th>{$.i18n.prop("factura.total")}                    </th>
                                         
                                     </tr>
@@ -334,45 +317,35 @@
 </div>
 
 <style type="text/css">
-    #tituloMostrarTipoCambio{
-        font-size: 16px;
-        font-weight: 700;
-        text-align: center;
+    .fechacredito{
+      position: absolute;
+      height: 34px;
+       width: 44px;
+        left: 612px;
     }
-    #mostrarTipoCambio{
+    .tamanoVentaEspera{
+    font-size: 14px;
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+    div.fondoVentaEspera:hover{
+        color:#30ed17 !important;
+        cursor: pointer;
+        
+    }
+    .ventaEspera{
         display: flex;
-        justify-content: space-around;
+        flex-wrap: wrap;
+        flex-direction: row;
+        margin-top: 3%;
+        margin-bottom: 3%;
+    }
+    div.labelBotones:hover{
+        color:#30ed17 !important;
+        font-size: 22px
     }
 
-    .campoEliminar{
-        font-size: 30px;
-        height: 50px;
-        border-radius: 16px !important;
-        font-weight: 900;
-    }
-    .campodetalle{
-       font-size: 18px !important;
-        color: #808084 !important;
-        border-radius: 16px !important;
-        width: 100% !important;
-        height: 50px!important;
-        text-align: center;
-    }
-    
-    .TotalesContainer{
-        display:flex;
-        flex-direction: column;
-        flex: 1;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        justify-content: space-around;
-    }
+   
     #totalesCierreContainer {
         display:flex;
         flex-direction: column;
@@ -394,7 +367,7 @@
       margin-left: 5px;
     }
     .formatDetalle{
-        font-size: 25px;
+        font-size: 18px;
         color: black;
         text-align: center;
         text-shadow: 0px 0px 1px #ffffff;
@@ -402,40 +375,6 @@
         border-collapse: separate;
     }
   
- 
-    .tituloTotales{
-        text-align: left;
-        margin-right: 3%;
-        color: #30ed17;
-        margin-top: 2%;
-        flex: 0.5;
-        height: 50px;
-        font-size: 25px;
-        margin-left: 5px;
-    }
-  
-    .precioTotalFacturaContainer{
-        display:flex;
-        flex:1;
-        flex-direction: column;
-        font-weight: 600 !important;
-        font-size: 14px !important;
-        color:#30ed17  !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        border-collapse: separate;
-        cursor: pointer;
-        margin: 2%!important;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 25px !important;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
     .tituloFormat{
         color: black;
         font-size: 14px;
@@ -447,74 +386,15 @@
         display:flex;
         flex-wrap: nowrap;
     }
-    .cabecera-derecha{
-        flex:0.25;
-    }
-    .totalLabel {
-        color: #333;
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 18%;
-        text-align: center;
-    }
+    
    
-    .cabecera-izquierda {
-        flex:1;
-        margin-right: 1%;
-
-    }
-    .cabecera-derecha {
-            width:25%;
-    }
-  
-    .item {
-       width: 50%;
-     }
-
-  
-   
-    .box-body{
-        padding: 0px !important;
-    }
-    .label-limpiar{
-        font-weight: 600 !important;
-        font-size: 16px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        line-height: 30px;
-        border-collapse: separate;
-        background-color: #f2f2f2;
-        color: #000;
-        text-align: center;
-        cursor: pointer;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
    
     *{
        margin:0;
        padding:0;
        box-sizing:border-box;
     }
-    body{
-        background:white;
-    }
-    .wrap{
-        max-width:1100px;
-        width:100%;
-        margin:auto;
-    }
+  
   
     .booking-details h1 {
         font-size: 1.5em;
@@ -528,17 +408,7 @@
         display: inline-block;
         width: 100%;
     }
-    .total{
-        font-weight:bold;
-        font-size:23px;
-    }
-    
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-    }
+ 
     .campo {
         display: block;
         width: 100%;
@@ -561,42 +431,10 @@
         padding: 1px 2px;
         overflow: visible;
     }
-    .campodetalle {
-        width: 170px;
-        height: 30px;
-        /* padding: 6px 16px; */
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #333;
-        font-weight: bold;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        /* border-radius: 2px; */
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        /* border: 1px solid #ccc; */
-        margin: 2px 0;
-        padding: 1px 2px;
-        /* overflow: visible; */
-    }
    
 
     /*1024x768*/
     @media only screen and (max-width: 1024px) and (min-width:768px)  {
-        .campodetalle {
-           font-size: 18px !important;
-           color: #808084 !important;
-           border-radius: 16px !important;
-           width: 100% !important;
-           height: 50px!important;
-            text-align: center;
-        }
-
         }
 </style>
 
@@ -697,11 +535,11 @@
          self.update()
              __informacionData()
         __InicializarTabla('.tableListaCliente')
+        __ListaFacturasEnEspera()
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeClientes()
-        __tipoCodigo()
         $('.selectFechaEmision').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -711,6 +549,117 @@
          );
    
 })
+
+/**
+*  Buscar la Factura Pendiente en espera
+**/
+__CargarFacturaEspera(e){
+   __FacturaEnEspera(e.item)
+}
+/**
+*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
+**/
+function __FacturaEnEspera(factura){
+     __Init()
+    $.ajax({
+        url: "ListarDetlleByFacturaAjax.do", 
+        datatype: "json",
+        data: {idFactura:factura.id},
+        method:"POST",
+        success: function (data) {
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+/**
+*  Cargar detalles Factura en espera
+**/
+function cargarDetallesFacturaEnEspera(data){
+    $('.nota').val(null);
+    $('.correoAlternativo').val(null);
+    $('.nombreFactura').val(null);
+    self.detail = [];
+    self.numeroLinea =  0
+    self.cantArticulos =  0
+    self.pesoPrioridad = 0
+    self.update()
+    $.each(data, function( index, modeloTabla ) {
+        self.factura = modeloTabla.factura
+        $('.nota').val(self.factura.nota);
+        $('.correoAlternativo').val(self.factura.correoAlternativo);
+        $('.nombreFactura').val(self.factura.nombreFactura);
+        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+        self.cliente              = modeloTabla.factura.cliente
+        self.vendedor             = modeloTabla.factura.vendedor
+        self.update()
+        self.descripcionArticulo = modeloTabla.descripcion
+        self.detail.push({
+            numeroLinea     : modeloTabla.numeroLinea,
+            pesoPrioridad    :modeloTabla.numeroLinea,
+            codigo          : modeloTabla.codigo,
+            tipoImpuesto    : modeloTabla.tipoImpuesto,
+            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : __valorNumerico(modeloTabla.cantidad),
+            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+            impuesto        : __valorNumerico(modeloTabla.impuesto),
+            impuesto1       : __valorNumerico(modeloTabla.impuesto1),
+            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+            subTotal        : __valorNumerico(modeloTabla.subTotal),
+            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+            costo           : __valorNumerico(modeloTabla.costo),
+            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
+            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
+            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
+            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
+        });
+        self.update()
+        self.numeroLinea   = self.numeroLinea + 1
+        self.cantArticulos = self.cantArticulos + 1
+        self.pesoPrioridad = self.numeroLinea
+    })
+    self.factura.totalCambioPagar = self.factura.totalComprobante;
+    self.totalCambioPagar         = self.factura.totalComprobante
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    self.update()
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    $('#totalBanco').val(null)
+    __ComboTipoDocumentos(0)
+    __calculate()
+}
+/**
+* Aplicando factura temporal
+**/
+__AplicarYcrearFacturaTemporal(e){
+    
+ 
+ aplicarFactura(1)
+}
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -813,6 +762,8 @@ function ListadoFacturasDelDia(){
                     ActivarEventoFiltro(".tableListarFacturasDia")
                     $('#modalFacturasDia').modal('show')    
                      __reimprimir()
+                     __bajarPDF()
+                     
                 }else{
                     __InformacionDataTableDia();
                      agregarInputsCombos_Facturas_Dias();
@@ -840,6 +791,27 @@ function __reimprimir(){
         consultaFactura(data,1)
 	});
 }
+
+/**
+*imprimir
+**/
+function __bajarPDF(){
+	$('#tableListarFacturasDia').on('click','.btnBajarPdf',function(e){
+		var table = $('#tableListarFacturasDia').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+       location.href = "generaFacturaPDF?idFactura=" + data.id
+	});
+}
+
+
+
+
+
 
 /**
 * Consultar la factura
@@ -909,7 +881,7 @@ function __InformacionDataTableDia(){
 									    return __ClienteNombreFactura(row);
 	 							    }
                                },
-                               {'data' :'totalDescuentosSTR'  ,"name":"totalDescuentosSTR" ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               
                                {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR" ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
 	      		            ];
     self.update();
@@ -919,21 +891,35 @@ function __InformacionDataTableDia(){
 *Opciones del listado de las facturas por dia
 **/
 function __Opciones_facturaDia(){
-  var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
-  return  agregar;
+    let menu = '<div class="dropdown">' 
+	menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
+	menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
+	menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+    menu += '<li><a href="#"  title="Imprimir" class="  btnReimprimir" >Imprimir</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPdf" >Bajar PDF</a></li>'
+  
+  return  menu ;
 }
 
 /**
 *  Lista de los clientes
 **/
 function __ListaActividadesComercales(){
+    self.empresaActividadComercial =[]
+    self.update()
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
         datatype: "json",
          method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-                self.empresaActividadComercial   = result.aaData
+                $.each(result.aaData, function( index, modeloTabla ) {
+                    var descrp = modeloTabla.descripcion.length > 25?modeloTabla.descripcion.substring(0,35)+"...":modeloTabla.descripcion
+                    self.empresaActividadComercial.push({
+                        codigo: modeloTabla.codigo,
+                        descripcion:modeloTabla.codigo +"-" + descrp
+                    })    
+                })
                 self.update()
                 BuscarActividadComercial()
            }
@@ -960,7 +946,7 @@ function BuscarActividadComercial(){
     }
     $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
         if(modeloTabla.codigo == codigo  ){
-           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion.length > 30?modeloTabla.descripcion.substring(0,35)+"...":modeloTabla.descripcion
             self.actividadComercial.codigo =  codigo
             self.factura.codigoActividad = codigo
             self.update()
@@ -1053,7 +1039,7 @@ function __EnterFacturar(){
     }
     swal({
            title: '',
-           text: $.i18n.prop("compraSimplificada.mensaje.alert.enter"),
+           text: $.i18n.prop("condominio.mensaje.alert.cambio.clave"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -1133,6 +1119,14 @@ function __ComboTipoDocumentos(){
         estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
+    self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
+    self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+    })
     self.update()
 }
 
@@ -1197,7 +1191,7 @@ __AplicarYCrearCompra(){
     if ($("#formularioCompra").valid()) {
         swal({
            title: '',
-           text: $.i18n.prop("compraSimplificada.alert.crear"),
+           text: $.i18n.prop("condominio.mensaje.alert.cambio.clave"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -1425,11 +1419,35 @@ function evaluarFactura(data){
     }
 }
 /**
+*  Lista de las facturas pendientes por el usuario
+**/
+function __ListaFacturasEnEspera(){
+     self.facturas_espera       = {data:[]}  
+     self.update()
+    $.ajax({
+        url: 'ListarFacturasEsperaActivasAjax',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.facturas_espera.data =  result.aaData;  
+               self.update(); 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            window.location.href = "login";
+        }
+    });    
+}
+/**
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
     __comboMonedas()
     __ListaActividadesComercales()
+    __ListaFacturasEnEspera()
 
     $('.fechaCompra').val(null);
     $('.fechaCredito').val(null)
@@ -1714,8 +1732,8 @@ function setItemNuevo(data){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
-    var costoTotal      = __valorNumerico(data.costo) > precioUnitario ?0:__valorNumerico(data.costo); 
-    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,data.costo ==null?0:__valorNumerico(data.costo),1)
+    var costoTotal      = __valorNumerico(data.articulo.costo) > precioUnitario ?0:__valorNumerico(data.articulo.costo); 
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,data.articulo.costo ==null?0:__valorNumerico(data.articulo.costo),1)
    
    var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
@@ -1724,8 +1742,8 @@ function setItemNuevo(data){
        tipoImpuesto1   : "",
        iva             : __valorNumerico(data.articulo.impuesto),
        iva1            : 0,
-       codigo          : data.codigo,
-       descripcion     : data.descripcion,
+       codigo          : data.articulo.codigo,
+       descripcion     : data.articulo.descripcion,
        cantidad        : __valorNumerico(1),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(data.articulo.impuesto),

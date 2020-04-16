@@ -9,7 +9,18 @@ import javax.persistence.Id;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
-@BaseNativeQuery(name = "cons_vent_gana", query = "SELECT det.id,det.cantidad,fact.tipo_doc,articulos.tipo_codigo,fact.numero_consecutivo, DATE_FORMAT(fact.fecha_emision, \"%d-%c-%Y\") as fecha,categorias.descripcion as nomb_categ ,det.codigo,det.descripcion as nomb_product,IFNULL(det.monto_total_linea,0) as venta, IFNULL(det.costo,0) as costo" + " FROM detalles det" + " inner join facturas fact on fact.id =det.factura_id " + " inner join clientes on clientes.id =fact.cliente_id " + " left join articulos on articulos.codigo =det.codigo " + " inner join categorias on categorias.id = articulos.categoria_id " + " where fact.empresa_id = :ID_EMPRESA fact.estado in and fact.tipo_doc !='88'  " + "and fact.fecha_emision >= :fechaInicial and fact.fecha_emision <= :fechaFinal "
+@BaseNativeQuery(name = "cons_vent_gana", query = "SELECT det.id,det.cantidad,fact.tipo_doc,articulos.tipo_codigo,fact.numero_consecutivo,"
+		+ " DATE_FORMAT(fact.fecha_emision, \"%d-%c-%Y\") as fecha,"
+		+ "categorias.descripcion as nomb_categ ,"
+		+ "det.codigo,det.descripcion as nomb_product,"
+		+ "IFNULL(det.monto_total_linea,0) as venta,"
+		+ " IFNULL(det.costo,0) as costo"
+		+ " FROM detalles det" + " inner join facturas fact on fact.id =det.factura_id " 
+		+ " inner join clientes on clientes.id =fact.cliente_id " 
+		+ " left join articulos on articulos.codigo =det.codigo " 
+		+ " inner join categorias on categorias.id = articulos.categoria_id " 
+		+ " where fact.empresa_id = :ID_EMPRESA fact.estado in and fact.tipo_doc !='88'  " 
+		+ "and fact.fecha_emision >= :fechaInicial and fact.fecha_emision <= :fechaFinal "
 		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo ")
 @Entity
 public class ConsultaUtilidadNative implements Serializable {
@@ -248,6 +259,8 @@ public class ConsultaUtilidadNative implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 
 
 }

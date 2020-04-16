@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -384,7 +384,7 @@ public class FacturasController {
 	public String postpostRestaurante(ModelMap model) {
 		return "views/facturas/postRestaurante";
 	}
-	
+
 	@RequestMapping(value = "/Saloneros.do", method = RequestMethod.GET)
 	public String meseros(ModelMap model) {
 		return "views/facturas/saloneros";
@@ -400,17 +400,17 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		 //criptografica desde linux
-//    certificadoBo.agregar(usuario.getEmpresa(),"","");
+		// criptografica desde linux
+    certificadoBo.agregar(usuario.getEmpresa(),"","");
 
-		if (usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
 			model.addAttribute("rolAdminitrador", 0);
@@ -607,7 +607,7 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision","Cedula", "Cliente", "A nombre","Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito",  "# Documento", "#Proforma",  "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito",  "Nota");
+		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
 		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaCliente, nombreCliente,nombreFactura,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR, numeroConsecutivo,consecutivoProforma, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,nota", baos);
 		return baos;
 	}
@@ -931,20 +931,20 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
-	
-/**
- * Utilidad de ventas
- * @param request
- * @param response
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param estado
- * @param actividadEconomica
- * @param cliente
- * @param idCategoria
- * @param codigo
- * @return
- */
+
+	/**
+	 * Utilidad de ventas
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param estado
+	 * @param actividadEconomica
+	 * @param cliente
+	 * @param idCategoria
+	 * @param codigo
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaUtilidadAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -963,8 +963,8 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo,tipoDoc);
-	 	
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
 			solicitudList.add(consultaUtilidadNative);
@@ -976,6 +976,49 @@ public class FacturasController {
 		}
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
+	}
+	
+	// Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarUtilidadAjax.do", method = RequestMethod.GET)
+	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc) throws IOException, Exception {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+
+		String nombreArchivo = "Utilidad_"+fechaInicioParam +"_al_"+fechaFinParam+ ".xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelUtilidad(facturas);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelUtilidad(Collection<ConsultaUtilidadNative> facturas) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Fecha Emision", "Categoria", "Codigo", "Descripcion", "Costo", "Venta", "Utilidad");
+		new SimpleExporter().gridExport(headers, facturas, "fechaEmision,nombreCategoria, codigo,nombreArticulo,totalCosto,venta,totalUtilidad", baos);
+		return baos;
 	}
 
 	/**
@@ -1221,7 +1264,7 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelListar(Collection<ListarFacturasNativa> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision","Cedula", "Cliente", "A nombre","Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta",  "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito",  "Nota");
+		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
 		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma,totalExonerado, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
 		return baos;
 	}
@@ -1407,7 +1450,7 @@ public class FacturasController {
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
 		Integer idUsuario = Constantes.ZEROS;
-		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+		if (usuarioBo.isUsuario_Condominio(usuarioSesion) || usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 			idUsuario = Constantes.ZEROS;
 		} else {
 			idUsuario = usuarioSesion.getId();
@@ -1783,7 +1826,7 @@ public class FacturasController {
 				}
 
 			}
-			
+
 			if (facturaCommand.getCondicionVenta().equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.vacia", result.getAllErrors());
 			}
@@ -1873,15 +1916,14 @@ public class FacturasController {
 
 			}
 			if (facturaCommand.getCliente() != null) {
-				if(facturaCommand.getCliente().getIdentificacionExtranjero() != null) {
-					if(!facturaCommand.getCliente().getIdentificacionExtranjero().equals(Constantes.EMPTY) ) {
-						if(facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA))
-						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.cedula.extrajera.only.tiquete", result.getAllErrors());
+				if (facturaCommand.getCliente().getIdentificacionExtranjero() != null) {
+					if (!facturaCommand.getCliente().getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
+						if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA))
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.cedula.extrajera.only.tiquete", result.getAllErrors());
 					}
 				}
-				
-			}
 
+			}
 
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 				if (facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE) || facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_CREDITO)) {
@@ -1971,10 +2013,6 @@ public class FacturasController {
 				for (Detalle detalle : objetos) {
 					solicitudList.add(new DetalleFacturaCommand(detalle));
 				}
-				
-				
-					
-				
 
 			}
 
@@ -2232,7 +2270,11 @@ public class FacturasController {
 
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
 			//
-
+			if (facturaBD.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emaiNoElectronico.vm", modelEmail);
+			} else {
+				correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
+			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 
@@ -2269,8 +2311,12 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
 			Hacienda haciendaBD = haciendaBo.findByClave(factura.getClave());
-			if (haciendaBD == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+			if (!factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				
+				if (haciendaBD == null) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+				}
+				
 			}
 
 			ArrayList<String> listaCorreos = new ArrayList<String>();
@@ -2284,13 +2330,18 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.vacio.enviar");
 				}
 			}
-			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
+			}else {
+				if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+				}
+				if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
+				}
+				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+				
 			}
-			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
-			}
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2318,8 +2369,11 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
 			Hacienda haciendaBD = haciendaBo.findByClave(factura.getClave());
-			if (haciendaBD == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+			if (!factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				if (haciendaBD == null) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+				}
+				
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			if (correo != null) {
@@ -2372,17 +2426,21 @@ public class FacturasController {
 				}
 
 			}
+			if (!factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
 
-			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+				}
+				if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
 
+				}
+
+				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+				
+			}else {
+				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
 			}
-			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
-
-			}
-
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 			//
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());

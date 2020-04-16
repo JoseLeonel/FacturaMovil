@@ -288,6 +288,22 @@ public class FacturaDaoImpl implements FacturaDao {
 		sqlNative += " and facturas.estado = '" + estado + "' ";
 		return entityManager.createNativeQuery(sqlNative).getResultList();
 	}
+//
+//	@Override
+//	public Collection<Factura> findBySinNotificar(Empresa empresa) {
+//		Query query = entityManager.createQuery("select obj from Factura obj where  obj.empresa = :empresa and obj.cliente =  :cliente");
+//		query.setParameter("cliente", cliente);
+//		query.setParameter("empresa", empresa);
+//
+//		return query.getResultList();
+//
+//	}
+
+	@Override
+	public Collection<Factura> findBySinNotificarCorreo() {
+		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estado in(2,6) and obj.notificacionNoElectronicio != 2 and obj.empresa.noFacturaElectronica = 2");
+	return query.getResultList();
+	}
 
 
 }

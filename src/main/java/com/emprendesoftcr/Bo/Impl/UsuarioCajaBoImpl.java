@@ -234,4 +234,10 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		return usuarioCajaDao.usuarioCajaBy(empresa, estado);
 	}
 
+	@Override
+	public void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo) throws Exception {
+		usuarioCajaDao.eliminarConteo(usuarioCaja,tipo);
+		
+	}
+
 }

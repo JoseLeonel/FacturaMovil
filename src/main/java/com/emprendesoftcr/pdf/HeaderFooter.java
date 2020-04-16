@@ -48,8 +48,11 @@ public class HeaderFooter extends PdfPageEventHelper {
 
 	private String tipoDocVersion() {
 		String resultado = Constantes.EMPTY;
-		if(this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-			 return Constantes.REGIMEN_SIMPLIFICADO;
+		if (this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+			return Constantes.REGIMEN_SIMPLIFICADO;
+		}
+		if (this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+			return Constantes.RECIBO_POR_REINTEGRO_GASTOS;
 		}
 		if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.TIQUETE_ELECTRONICO_VERSION_4_2 : Constantes.TIQUETE_ELECTRONICO_VERSION_4_3;
@@ -114,7 +117,14 @@ public class HeaderFooter extends PdfPageEventHelper {
 			PdfPTable izquierda = new PdfPTable(1);
 			if (img_logo != null) {
 				img_logo.setAlignment(Image.ALIGN_LEFT);
-				img_logo.scaleAbsolute(200, 110);
+				if(facturaElectronica.getEmisorCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA) ||  facturaElectronica.getEmisorCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD) ) {
+					img_logo.scaleAbsolute(280, 80);
+					
+				}else {
+					img_logo.scaleAbsolute(200, 110);
+				}
+				
+				//img_logo.scaleAbsolute(200, 110);
 				img_logo.setAbsolutePosition(20, PageSize.TABLOID.rotate().getHeight() - 100);
 				img_logo.setAlignment(Image.ALIGN_RIGHT);
 				PdfPCell cell_logo = img_logo == null ? new PdfPCell() : new PdfPCell(img_logo, false);
@@ -124,22 +134,28 @@ public class HeaderFooter extends PdfPageEventHelper {
 				izquierda.addCell(cell_logo);
 
 			}
-			if (!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+			if (!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) && !this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
 				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			}
-			
+
 			tabla_cabezera.addCell(izquierda);
 
 			PdfPTable derecha = new PdfPTable(1);
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? UtilsPdf.bigFont16 : UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-			derecha.addCell(utils_pdf.obtenerCeldaNormal("Actividad Comercial:" + this.facturaElectronica.get_codigoActividadComercial(), this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? UtilsPdf.bigFont16 : UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			if (!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)  && !this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+				derecha.addCell(utils_pdf.obtenerCeldaNormal("Actividad Comercial:" + this.facturaElectronica.get_codigoActividadComercial(), this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? UtilsPdf.bigFont16 : UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			}
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombreComercial(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombre(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			if(facturaElectronica.getEmisorCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA)) {
+				derecha.addCell(utils_pdf.obtenerCeldaNormal("Cedula jurídica: 3-109-177612" , UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			}else {
+				derecha.addCell(utils_pdf.obtenerCeldaNormal("Ced:" + this.facturaElectronica.getEmisorCedula(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			}
+			
 
-			derecha.addCell(utils_pdf.obtenerCeldaNormal("Ced:" + this.facturaElectronica.getEmisorCedula(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-
-			derecha.addCell(utils_pdf.obtenerCeldaNormal("Telf:" + this.facturaElectronica.getEmisorTelefono(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			derecha.addCell(utils_pdf.obtenerCeldaNormal("Telefono:" + this.facturaElectronica.getEmisorTelefono(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorCorreo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorDireccion(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
@@ -207,15 +223,24 @@ public class HeaderFooter extends PdfPageEventHelper {
 			tabla_segunda_tabla.setSpacingAfter(0);
 			tabla_segunda_tabla.setSpacingBefore(0);
 
-			String nombreCliente = facturaElectronica.getClienteNombreComercial() != null ? facturaElectronica.getClienteNombre() : Constantes.EMPTY;
-			PdfPCell cell_recep = new PdfPCell(new Paragraph("\nNombre del Receptor:" + nombreCliente, UtilsPdf.font_cabezera_tabla));
+			String nombreCliente = facturaElectronica.getClienteNombre() != null ? facturaElectronica.getClienteNombre() : Constantes.EMPTY;
+			String nombreComercial = facturaElectronica.getClienteNombreComercial() != null ? facturaElectronica.getClienteNombreComercial() : Constantes.EMPTY;
+			String nombres = Constantes.EMPTY;
+			if(nombreComercial.length()>0) {
+				nombres = "\nNombre del Receptor:" + nombreCliente + "\n \n" + nombreComercial + "\n ";
+			}else {
+				nombres = "\nNombre del Receptor:" + nombreCliente ;
+			}
+			PdfPCell cell_recep = new PdfPCell(new Paragraph(nombres , UtilsPdf.font_cabezera_tabla));
 			cell_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 			cell_recep.setColspan(1);
 			// cell_recep.setCellEvent(new RoundRectangle_tabla_sup_izq());
 			cell_recep.setBorder(Rectangle.BOTTOM | Rectangle.RIGHT);
 
 			tabla_segunda_tabla.addCell(cell_recep);
+			
 
+			
 			String cedulaCliente = Constantes.EMPTY;
 			String telefonoCliente = Constantes.EMPTY;
 			String correoCliente = Constantes.EMPTY;
@@ -223,8 +248,8 @@ public class HeaderFooter extends PdfPageEventHelper {
 			if (facturaElectronica.getClienteCedula() != null) {
 				if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
 					if (!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-						cedulaCliente = "\nIdentificación Receptor:" + this.facturaElectronica.getClienteCedula();
-						telefonoCliente = "Telefono:" + this.facturaElectronica.getClienteTelefono() == null ? Constantes.EMPTY : this.facturaElectronica.getClienteTelefono();
+						cedulaCliente = this.facturaElectronica.getEmisorCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA) ?Constantes.EMPTY :   "\nIdentificación Receptor:" + this.facturaElectronica.getClienteCedula();
+						telefonoCliente =  this.facturaElectronica.getClienteTelefono() == null ? Constantes.EMPTY : " Telefono: " +this.facturaElectronica.getClienteTelefono();
 						correoCliente = this.facturaElectronica.getClienteCorreo();
 					}
 				}
@@ -246,9 +271,9 @@ public class HeaderFooter extends PdfPageEventHelper {
 				if (item.getMontoExoneracion() != null) {
 					if (item.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
 						fechaExoneracion = item.getFechaEmisionExoneracion();
-						numeroDocumentoExoneracion = item.getNumeroDocumentoExoneracion() != null?item.getNumeroDocumentoExoneracion():Constantes.EMPTY;
+						numeroDocumentoExoneracion = item.getNumeroDocumentoExoneracion() != null ? item.getNumeroDocumentoExoneracion() : Constantes.EMPTY;
 						tieneExoneracion = Boolean.TRUE;
-						if(numeroDocumentoExoneracion.equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
+						if (numeroDocumentoExoneracion.equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
 							tieneExoneracion = Boolean.FALSE;
 						}
 					}

@@ -89,7 +89,14 @@
        flex: 1;
     }
    
-    
+    .totales{
+    	background-color: #cadcdb !important;
+    	border-radius: 5px 5px 5px 5px;
+    	width: 300px;
+        height: 50px;
+        font-size:30px;
+        font-weight: 900;
+    }
     
     
     </style> 
@@ -219,6 +226,26 @@
                                 </div>  
                             </div>    
                         </div> 
+                        <div class="row">
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Total Venta </label>  
+                                    <input type="text" class="form-control totalVenta totales" id="totalVenta"  name= "totalVenta" readonly >
+                                </div>  
+                            </div>
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Total Costo </label>  
+                                     <input type="text" class="form-control totalCosto totales" id="totalCosto"  name= "totalCosto" readonly >
+                                </div>  
+                            </div>    
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Utilidad Bruta </label>  
+                                     <input type="text" class="form-control utilidadBruta totales" id="utilidadBruta"  name= "utilidadBruta" readonly >
+                                </div>  
+                            </div>    
+                        </div> 
                     </form>  
            </div>
        </div>
@@ -242,7 +269,6 @@
                                 <th class="table-header" >Venta Neta</th>
                                 <th class="table-header" >Costo </th>
                                 <th class="table-header" >Util.Bruta</th>
-                                <th class="table-header" > Acciones </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
@@ -254,7 +280,6 @@
                                 <th>Venta Neta   </th>
                                 <th>Costo        </th>
                                 <th>Util.Bruta   </th>
-                                <th></th>
                             </tr>
                         </tfoot>
                  </table>

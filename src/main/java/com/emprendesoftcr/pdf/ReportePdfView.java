@@ -266,7 +266,9 @@ public class ReportePdfView {
 		}else {
 			text = "Autorizada mediante resolucion No.1197 del 12 de agosto de 1997 de la Direccion General de Tributación de San Jose ";	
 		}
-		
+		if (fac_electro.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
+			text = Constantes.EMPTY;
+		}
 		Integer contador = 1;
 	//	if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 

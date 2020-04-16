@@ -28,9 +28,9 @@ import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
 public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 	@PersistenceContext
-	EntityManager entityManager;
+	EntityManager		entityManager;
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void agregar(UsuarioCaja usuarioCaja) {
@@ -49,7 +49,6 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 	/**
 	 * Buscar una UsuarioCaja
-	 * 
 	 * @see com.emprendesoftcr.Dao.UsuarioCajaDao#buscar(java.lang.Long)
 	 */
 	@Override
@@ -66,15 +65,12 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 	/**
 	 * Buscar por usuario y estado
-	 * 
-	 * @see com.emprendesoftcr.Dao.UsuarioCajaDao#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario,
-	 *      java.lang.String)
+	 * @see com.emprendesoftcr.Dao.UsuarioCajaDao#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario, java.lang.String)
 	 */
 	@Override
 	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
 
-		Query query = entityManager
-				.createQuery("select obj from UsuarioCaja obj where obj.usuario = :usuario and obj.estado = :estado");
+		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where obj.usuario = :usuario and obj.estado = :estado");
 		query.setParameter("usuario", usuario);
 		query.setParameter("estado", estado);
 		List<UsuarioCaja> results = query.getResultList();
@@ -95,43 +91,15 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	 * @param totalAbono
 	 */
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco,
-			Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
 		try {
-			// Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
-			// resultadoTotalBanco = usuarioCaja.getTotalBanco() == null ?
-			// Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
-			// resultadoTotalBanco = totalBanco + resultadoTotalBanco;
-
-			// Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
-			// resultadoTotalEfectivo = usuarioCaja.getTotalEfectivo() != null ?
-			// usuarioCaja.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
-			// resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
 
 			Double resultadoAbono = Constantes.ZEROS_DOUBLE;
-			resultadoAbono = usuarioCaja.getTotalAbono() != null ? usuarioCaja.getTotalAbono()
-					: Constantes.ZEROS_DOUBLE;
+			resultadoAbono = usuarioCaja.getTotalAbono() != null ? usuarioCaja.getTotalAbono() : Constantes.ZEROS_DOUBLE;
 			resultadoAbono = totalAbono + resultadoAbono;
 
-			// Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
-			// resultadoTarjeta = usuarioCaja.getTotalTarjeta() != null ?
-			// usuarioCaja.getTotalTarjeta() : Constantes.ZEROS_DOUBLE;
-			// resultadoTarjeta = totalTarjeta + resultadoTarjeta;
-
-			// Double resultadoServicio = Constantes.ZEROS_DOUBLE;
-			// resultadoServicio = usuarioCaja.getTotalServicio() != null ?
-			// usuarioCaja.getTotalServicio() : Constantes.ZEROS_DOUBLE;
-			// resultadoServicio = totalServicio + resultadoServicio ;
-
-			// Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta +
-			// resultadoTotalBanco + resultadoAbono + resultadoServicio;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			// usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco, 5));
-			// usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo, 5));
-			// usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta, 5));
 			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono, 5));
-			// usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto, 5));
-			// usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio, 5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {
@@ -146,8 +114,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ACTUALIZA_CAJA);
 
 		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, Long.class,
-				ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, Long.class, ParameterMode.IN);
 
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, usuarioCaja.getId());
@@ -163,7 +130,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		Query query = entityManager.createNativeQuery(queryStr, UsuarioCajaCategoriaArticulo.class);
 		return (ArrayList<UsuarioCajaCategoriaArticulo>) query.getResultList();
 	}
-	
+
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
@@ -174,6 +141,20 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		query.setParameter("idEmpresa", empresa.getId());
 		query.setParameter("estado", estado);
 		return query.getResultList();
+	}
+
+	@Override
+	public void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo) throws Exception {
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_CONTEO);
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINA_CAJA_ID_CAJA_USUARIO, Long.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINA_CONTEO_TIPO, Integer.class, ParameterMode.IN);
+
+		// Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_ELIMINA_CAJA_ID_CAJA_USUARIO, usuarioCaja.getId());
+		storedProcedure.setParameter(Constantes.SP_ELIMINA_CONTEO_TIPO, tipo);
+		storedProcedure.execute();
+		
 	}
 
 }

@@ -24,6 +24,41 @@ var _Init = function () {
     
 }
 
+/**
+*  Mostrar listado datatable
+**/
+function ListarArticulos(filtro){
+    if(filtro ==null){
+        return
+    }
+    var parametros  = {
+        idCliente:filtro   
+    }
+    $("#tableListar").dataTable().fnClearTable(); 
+    $.ajax({
+        url: "ListarClienteArticuloActivos.do",
+        datatype: "json",
+        data : parametros,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                loadListar(".tableListar",idioma_espanol,informacion_tabla,result.aaData)
+                includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
+                agregarInputsCombos();
+                EventoFiltro();
+                __MantenimientoAgregar();
+                __EliminarRegistro_Listar();
+                 }else{
+                	 EventoFiltro();
+             } 
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
+}
+
 function agregarArticulo(){
 	var parametros = {
 			idArticulo : $('#articulo').val(),
@@ -63,7 +98,7 @@ function cargarComboArticulos(){
        success: function (result) {
             if(result.aaData.length > 0){
                 $.each(result.aaData, function( index, modeloTabla ) {
-                   var linea =  '<option value="' + modeloTabla.id +'"'+"data-tokens='" + modeloTabla.descripcion + "' >"+modeloTabla.descripcion+'</option>';
+                   var linea =  '<option value="' + modeloTabla.id +'"'+"data-tokens='" + modeloTabla.codigo + "' >"+modeloTabla.codigo+'</option>';
                    $('#articulo').append(linea);  
                 })
                 $('.articulo').selectpicker();
@@ -105,41 +140,7 @@ function cargarClientes(){
     });
 
 }
-//datatable
-//estandar
-var ListarArticulos = function(filtro){
-    if(filtro ==null){
-        return
-    }
-     var table  =  $('#tableListar').DataTable( {
-     "responsive": true,
-      "bAutoWidth" : true,
-     "destroy":true,
-     "order": [ 0, 'asc' ],
-             "bInfo": true,
-             "bPaginate": true,
-             "bFilter" : true,
-             "bDeferRender": true ,
-             "sDom": 'lrtip',
-             "searching":true,
-            
-      
-     "processing": false,
-     "serverSide": true,
-     "sort" : "position",
-     "lengthChange": true,
-     "ajax" : {
-             "url":"ListarClienteArticuloActivos.do?idCliente=" + filtro,
-             "deferRender": true,
-             "type":"GET",
-                     "dataType": 'json',
-                     
-               },
-     "columns" : informacion_tabla,
-     "language" : idioma_espanol,
- } );//fin del table
-  
-} // fin variable listarSolicitudUsuarioQAM
+
 
 // Cuando se presiona el keypress para los inputs en los filtros y select
 //estandar
@@ -191,7 +192,7 @@ function EventoFiltro(){
 **/
 var informacion_tabla = [ 
                                {'data' :'articulo.categoria.descripcion'   ,"name":"articulo.categoria.descripcion"  ,"title" : "Categoria" ,"autoWidth" :true},
-                               {'data' :'codigo'                           ,"name":"codigo"                          ,"title" : "Codigo"           ,"autoWidth" :true },
+                               {'data' :'articulo.codigo'                           ,"name":"articulo.codigo"                          ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'articulo.descripcion'             ,"name":"articulo.descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
                                 {'data' :'articulo.precioPublico'   ,"name":"articulo.precioPublico" ,"title" : "Precio"  ,"autoWidth" :true ,
                                     "render":function(precioPublico,type, row){

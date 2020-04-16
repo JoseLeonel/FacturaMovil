@@ -213,7 +213,7 @@
                            <div  class= "labelBotones"  onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f4")}</div>
                         </div>
                         <div class="botonesFuncional ">
-                           <div class= "labelBotones"     onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f6")}</div>
+                           <div class= "labelBotones"     onclick = {_ReimprimirFactura} title="Reemprimir la factura/tiquete"> {$.i18n.prop("factura.f6")}</div>
                         </div>
                         <div class="botonesFuncional ">
                            <div  class= "labelBotones"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
@@ -3520,6 +3520,7 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
+         global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3557,6 +3558,7 @@ function __ListaActividadesComercales(){
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
         datatype: "json",
+         global: false,
          method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){

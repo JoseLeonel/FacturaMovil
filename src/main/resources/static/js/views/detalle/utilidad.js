@@ -57,6 +57,7 @@ function _consulta(){
 		fechaInicioParam:fechaInicio,
 		fechaFinParam:fechaFin,
 		estado :$('#estado').val(),
+		tipoDoc :$('#tipoDocumento').val(),
 		idCliente:cedulaReceptor,
 		tipoDocumento:tipoDocumento,
 		actividadEconomica:$('#actividadEconomica').val(),
@@ -74,6 +75,7 @@ function _consulta(){
 		   if(result.aaData.length > 0){
 			   loadListar(".tableListar",idioma_espanol,informacion_tabla,result.aaData)
 			   haciendas.data = result.aaData
+			   sumarTotales(result.aaData);
 			   agregarInputsCombos();
 			   ActivarEventoFiltro(".tableListar")
 			   __CorreoAlternativo()
@@ -93,6 +95,22 @@ function _consulta(){
 		   console.log(xhr);
 	   }
 	});
+}
+
+function sumarTotales(data){
+	var utilidadBruta = 0;
+	var totalCosto = 0;
+	var totalVenta = 0;
+	$.each(data, function( index, modeloTabla ) {
+		utilidadBruta = utilidadBruta + modeloTabla.totalUtilidad;
+		totalCosto = totalCosto + modeloTabla.totalCosto;
+		totalVenta = totalVenta + modeloTabla.venta;
+	});
+	
+	
+	$('#totalVenta').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalVenta)),2));
+	$('#totalCosto').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalCosto)),2));
+	$('#utilidadBruta').val(formatoDecimales(__valorNumerico(redondeoDecimales(utilidadBruta)),2));
 }
 /**
 * Reglas aplicadas
@@ -337,6 +355,18 @@ function __Opciones(id,type,row){
 	
 	menu += "</ul></div>"  
 	 return menu;          
+}
+
+function __bajarExcel(){
+	var fechaInicioParam=$('.fechaInicial').val();
+	var	fechaFinParam=$('.fechaFinal').val();
+	var	estado =$('#estado').val();
+	var	tipoDoc =$('#tipoDocumento').val();
+	var	idCliente:$('#cliente').val();
+	var	actividadEconomica:$('#actividadEconomica').val();
+	var	idCategoria: $('#idCategoria').val();
+	var	codigo: $('#idArticulo').val();
+    location.href = "DescargarUtilidadAjax?fechaInicioParam="+fechaInicio} +"&" +"fechaFinParam="+ fechaFin + ""&" + idCliente="+cedulaReceptor+"&estado="+estado+"&tipoDoc="+tipoDoc+"&actividadEconomica="+actividadEconomica+"&idCategoria="+idCategoria+"&codigo="+codigo;
 }
 /**
  * Fecha de emision

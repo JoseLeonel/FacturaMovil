@@ -140,6 +140,14 @@ public class UsuarioBoImpl implements UsuarioBo {
 		return usuarioDao.isUsuario_SuperDario(usuario);
 	}
 
+
+	@Override
+	public Boolean isUsuario_Condominio(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.isUsuario_Condominio(usuario);
+	}
+	
+	
 	
 
 }

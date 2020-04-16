@@ -656,7 +656,9 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	private Factura actualizaOrCrearFactura(Factura factura) {
 		try {
+			factura.setNotificacionNoElectronicio(Constantes.ZEROS);
 			if (factura.getId() == null) {
+				
 				factura.setCreated_at(new Date());
 				this.agregar(factura);
 			} else {
@@ -685,7 +687,7 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			long id = Thread.currentThread().getId();
 			log.info(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
-			if (lock.tryLock(10, TimeUnit.SECONDS)) {
+			if (lock.tryLock(1000000, TimeUnit.HOURS)) {
 				// Se forman los detalles command de las factura
 
 				// --------------------------------------------- Se trabaja con el objeto a
@@ -768,6 +770,14 @@ public class FacturaBoImpl implements FacturaBo {
 		ArrayList<Detalle> listaDetalles = new ArrayList<Detalle>();
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
+			
+			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
+			if (articulo != null) {
+				detalleFacturaCommand.setTipoCodigo(articulo.getTipoCodigo() == null?Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO:articulo.getTipoCodigo());
+				detalleFacturaCommand.setUnidadMedida(articulo.getUnidadMedida());
+				articulo.setUpdated_at(new Date());
+				articuloDao.modificar(articulo);
+			}
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
 			if (detalleFacturaCommand.getUnidadMedida() != null) {
 				if (detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
@@ -776,13 +786,6 @@ public class FacturaBoImpl implements FacturaBo {
 			} else {
 				detalleFacturaCommand.setUnidadMedida(unidadMedida);
 			}
-			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
-			if (articulo != null) {
-
-				articulo.setUpdated_at(new Date());
-				articuloDao.modificar(articulo);
-			}
-
 			gananciaProducto = Constantes.ZEROS_DOUBLE;
 			precioUnitario = Constantes.ZEROS_DOUBLE;
 			costo = Constantes.ZEROS_DOUBLE;
@@ -817,8 +820,8 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() != null ? detalleFacturaCommand.getImpuesto1() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
-			detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
-			detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
+			detalle.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto()  );
+			detalle.setTipoImpuesto1(Constantes.EMPTY);
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
@@ -837,7 +840,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuestoNeto(Utils.Maximo5Decimales(Utils.getImpuestoNetoTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion() + detalle.getMontoExoneracion1())));
 			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
 			detalle.setBaseImponible(Utils.Maximo5Decimales(Utils.getBaseImponibleTotal(articulo.getTipoImpuesto(), detalle.getSubTotal(), baseImponible)));
-
+      if(detalle.getMontoDescuento() == null) {
+      	detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
+      } 
 			detalle.setNaturalezaDescuento(detalle.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
 			detalle.setNumeroLinea(numeroLinea);
 			detalle.setCreated_at(new Date());
@@ -1094,5 +1099,11 @@ public class FacturaBoImpl implements FacturaBo {
 
 		return listaCorreos;
 
+	}
+
+	@Override
+	public Collection<Factura> findBySinNotificarCorreo() {
+		
+		return facturaDao.findBySinNotificarCorreo();
 	}
 }

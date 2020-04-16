@@ -32,6 +32,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.emprendesoftcr.Bo.ArchivoXMLBo;
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
@@ -55,6 +56,7 @@ import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
+import com.emprendesoftcr.modelo.ArchivoXML;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.CuentaCobrar;
@@ -254,6 +256,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
+	private ArchivoXMLBo																							archivoXMLBo;
+	@Autowired
 	HaciendaBo																												haciendaBo;
 
 	@Autowired
@@ -323,7 +327,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
-
 
 //	 @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
@@ -476,7 +479,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -603,8 +606,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	
-	@Scheduled(cron = "0 0/25 03 * * ?")
+	@Scheduled(cron = "0 0/25 04 * * ?")
 //	@Scheduled(cron = "0 0/30 11 * * ?")
 	@Override
 	public synchronized void graficoVenta() throws Exception {
@@ -661,22 +663,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 					// San Ana
-				//	 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
-			//		 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-				//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1071,7 +1073,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
 
-	//@Scheduled(cron = "0 0/40 * * * ?")
+	// @Scheduled(cron = "0 0/40 * * * ?")
 	@Override
 	public synchronized void taskEnvioDeCorreosSimplificado() throws Exception {
 		try {
@@ -1111,15 +1113,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	
-
 	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
 			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS);
 			if (semaforoEnvioCorreo != null) {
-					// Listado de los documentos Pendientes de aceptar por hacienda
+				// Listado de los documentos Pendientes de aceptar por hacienda
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
@@ -1149,7 +1149,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								} else {
 									Factura factura = haciendaBD.getNumeroFactura() != null ? facturaBo.findById(haciendaBD.getNumeroFactura()) : null;
 									if (factura == null) {
-										factura =facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+										factura = facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 									}
 
 									if (factura != null) {
@@ -1193,6 +1193,90 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
+	@Scheduled(cron = "0 0/15 * * * ?")
+	@Override
+	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
+		try {
+			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS_NO_ELECTRONICOS);
+			if (semaforoEnvioCorreo != null) {
+				// Listado de los documentos Pendientes de aceptar por hacienda
+				Collection<Factura> listaHacienda = facturaBo.findBySinNotificarCorreo();
+				if (listaHacienda != null) {
+					if (!listaHacienda.isEmpty()) {
+						for (Factura factura : listaHacienda) {
+							try {
+								log.info("Inicio Envios de correos - {}", formatter.format(LocalDateTime.now()));
+								Factura facturaBD = facturaBo.findById(factura.getId());
+								ArrayList<String> listaCorreos = new ArrayList<String>();
+								if (factura != null) {
+									listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
+								}
+								if (listaCorreos != null) {
+									if (!listaCorreos.isEmpty()) {
+										enviarCorreosNoElectronicos(factura, listaCorreos);
+									}
+								}
+
+								facturaBD.setNotificacionNoElectronicio(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+								facturaBo.modificar(facturaBD);
+
+							} catch (Exception e) {
+
+								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
+							}
+						}
+						log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
+
+					}
+				}
+
+			} else {
+				log.info("Semaforo envio de correos INACTIVO  {}", new Date());
+			}
+		} catch (Exception e) {
+			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	}
+	@Override
+	public void enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception {
+		try {
+			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
+			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("consecutivo", clave);
+			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
+			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
+			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
+			String from = "document_No_Reply@emprendesoftcr.com";
+			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+
+			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
+			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
+			String plantillaEmail = "email/emaiNoElectronico.vm";
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				subject = "Documento Nota Credito Electrónico N°: " + factura.getNumeroConsecutivo() + " del Emisor: " + nombre;
+				modelEmail.put("facturaReferencia", factura.getReferenciaNumero());
+				modelEmail.put("tituloDocumento", "Nota de credito Electronico:");
+				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
+			}
+			log.info("Documento enviado al correo: " + factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+		} catch (Exception e) {
+			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + factura.getEmpresa().getNombre() + " Consecutivo" + factura.getNumeroConsecutivo());
+			throw e;
+		}
+	}
+
 	private void soporteProblemaEnvioCorreos(Empresa empresa, String consecutivo, Exception error) throws Exception {
 		try {
 			String subject = "EmpredesoftSoporte  Empresa :" + empresa.getNombre() + " Problemas de conexion del correo";
@@ -1206,8 +1290,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	
-
 	/**
 	 * Envios de correos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
@@ -1217,15 +1299,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			String xmlFactura = Constantes.EMPTY;
 			String xmlRespuesta = Constantes.EMPTY;
-//			if(haciendaTemp.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-//				xmlFactura = Utils.leerXMLServidor(haciendaTemp.getPathMigracion());
-//				xmlRespuesta = Utils.leerXMLServidor(haciendaTemp.getPathMigracionRespuesta());
-//
-//			}else {
+			ArchivoXML archivoXMLCorreos = archivoXMLBo.findByIdFactura(factura.getEmpresa(), factura.getId());
+
+			if (archivoXMLCorreos != null) {
+				xmlFactura = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracion());
+				xmlRespuesta = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracionRespuesta());
+
+			} else {
 				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaTemp.getComprobanteXML());
 				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(haciendaTemp.getMensajeHacienda());
 
-//			}
+			}
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
@@ -1278,11 +1362,20 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //				xmlRespuesta = Utils.leerXMLServidor(hacienda.getPathMigracionRespuesta());
 //
 //			}else {
-				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+			xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+			xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
 
 //			}
-			
+//			ArchivoXML archivoXMLCorreos = archivoXMLBo.findByIdFactura(factura.getEmpresa(), factura.getId());
+//			if (archivoXMLCorreos != null) {
+//				xmlFactura = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracion());
+//				xmlRespuesta = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracionRespuesta());
+//
+//			} else {
+//				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+//				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+//
+//			}
 			String tipoDoc = "compra";
 			if (hacienda != null) {
 				if (!hacienda.getTipoDoc().equals(Constantes.EMPTY)) {
@@ -1425,7 +1518,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/01 * * * ?")
+	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1769,39 +1862,68 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			throw e;
 		}
 	}
-	
-//	@Scheduled(cron = "0 0/1 * * * ?")
+
+//	@Scheduled(cron = "0 0/0 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);
 		String pathXMLDocumento = Constantes.EMPTY;
 		String pathMigracionRespuesta = Constantes.EMPTY;
 		try {
+			log.info("Iniciando la migracion de archivos {}", new Date());
 			Integer contador = 0;
 			String xmlFactura = Constantes.EMPTY;
 			String xmlRespuesta = Constantes.EMPTY;
 			String nombreDocumento = Constantes.EMPTY;
 			if (semaforoMigracion != null) {
-				log.info("Iniciando la migracion de archivos {}", new Date());
+				log.info("Semaforo Activo la migracion de archivos {}", new Date());
 				Date fechaInicial = semaforoMigracion.getFechaInicial();
 				Date FechaFinal = semaforoMigracion.getFechaFinal();
-				Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndMigracionAndFechas(Constantes.MIGRADO_XMLS_A_DISCO_NO, fechaInicial, FechaFinal,semaforoMigracion.getCantidadMigracion());
+				Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndMigracionAndFechas(Constantes.MIGRADO_XMLS_A_DISCO_NO, fechaInicial, FechaFinal, semaforoMigracion.getCantidadMigracion());
 				log.info("Cantidad de xml a migrar:{} ", listaHacienda.size());
 				for (Hacienda haciendaMigrada : listaHacienda) {
-					Factura facturaMigrada = facturaBo.findByConsecutivoAndEmpresa(haciendaMigrada.getConsecutivo(), haciendaMigrada.getEmpresa());
-					if (facturaMigrada != null) {
-						nombreDocumento = getTipoDocMigrado(haciendaMigrada.getTipoDoc());
-						xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getComprobanteXML());
-						xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getMensajeHacienda());
-						pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
-						pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + facturaMigrada.getNumeroConsecutivo() , facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
-//						haciendaMigrada.setPathMigracion(pathXMLDocumento);
-						log.info("Direccion: "+pathXMLDocumento);
-						contador ++;
-						log.info("Cantidad Leida: "+contador);
-//						haciendaMigrada.setPathMigracionRespuesta(pathMigracionRespuesta);
-//						haciendaMigrada.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_SI);
-//						haciendaBo.modificar(haciendaMigrada);
+					xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getComprobanteXML());
+					xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getMensajeHacienda());
+					if (xmlFactura.length() > 0) {
+						Factura facturaMigrada = facturaBo.findByConsecutivoAndEmpresa(haciendaMigrada.getConsecutivo(), haciendaMigrada.getEmpresa());
+						if (facturaMigrada != null) {
+							nombreDocumento = getTipoDocMigrado(haciendaMigrada.getTipoDoc());
+							pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo(), facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+							pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + facturaMigrada.getNumeroConsecutivo(), facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+//  						haciendaMigrada.setPathMigracion(pathXMLDocumento);
+							log.info("Direccion: " + pathXMLDocumento);
+							contador++;
+							log.info("Cantidad Leida: " + contador);
+//  						haciendaMigrada.setPathMigracionRespuesta(pathMigracionRespuesta);
+							haciendaMigrada.setStatus(Constantes.MIGRADO_XMLS_A_DISCO_SI);
+							haciendaBo.modificar(haciendaMigrada);
+							ArchivoXML archivoXMLBD = archivoXMLBo.findByIdFactura(facturaMigrada.getEmpresa(), facturaMigrada.getId());
+							if (archivoXMLBD == null) {
+								ArchivoXML archivoXML = new ArchivoXML();
+								archivoXML.setFechaEmisor(facturaMigrada.getFechaEmision());
+								archivoXML.setCedulaEmisor(facturaMigrada.getEmpresa().getCedula());
+								archivoXML.setNombreEmisor(facturaMigrada.getEmpresa().getNombre());
+								archivoXML.setCedulaReceptor(facturaMigrada.getCedulaCliente());
+								archivoXML.setNombreReceptor(facturaMigrada.getNombreCliente());
+								archivoXML.setClave(facturaMigrada.getClave());
+								archivoXML.setNumeroFactura(facturaMigrada.getId());
+								archivoXML.setConsecutivo(facturaMigrada.getNumeroConsecutivo());
+								archivoXML.setCreated_at(new Date());
+								archivoXML.setUpdated_at(new Date());
+								archivoXML.setEstado(haciendaMigrada.getEstado());
+								archivoXML.setNotificacion(haciendaMigrada.getNotificacion());
+								archivoXML.setPathMigracion(pathXMLDocumento);
+								archivoXML.setPathMigracionRespuesta(pathMigracionRespuesta);
+								archivoXML.setTipoDoc(haciendaMigrada.getTipoDoc());
+								archivoXML.setNumeroEmpresa(facturaMigrada.getEmpresa().getId());
+								archivoXMLBo.agregar(archivoXML);
+
+							}else {
+								log.info("Documento no contenplando:"+ haciendaMigrada.getFechaEmisor() +" Doc:"+ haciendaMigrada.getConsecutivo() + " ced: " + haciendaMigrada.getCedulaEmisor() );
+							}
+
+						}
+
 					}
 				}
 				log.info("Finalizando la migracion de archivos {}", new Date());
@@ -1831,7 +1953,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO:
 				resultado = "notaCred_";
 				break;
+			case Constantes.FACTURA_TIPO_DOC_COMPRAS:
+				resultado = "compra_";
+				break;
 
+				
 			default:
 				resultado = "fact";
 				break;

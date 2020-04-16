@@ -76,7 +76,7 @@ public class GraficosController {
 		
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
-		if (usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 		//	total = dataTableBo.contar(delimitadores);
 			Collection<Object> objetos = dataTableBo.listar(delimitadores);
 			Year anno = Year.now(); 
@@ -112,7 +112,7 @@ public class GraficosController {
 		Collection<GraficoCuentasPorCobrarNative> objetos = consultasNativeBo.findByGraficoCuentasXCobrar(usuarioSesion.getEmpresa());
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
-			if (usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			if (usuarioBo.isUsuario_Condominio(usuarioSesion) || usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 				for (GraficoCuentasPorCobrarNative graficoCuentasPorCobrarNative : objetos) {
 					if (graficoCuentasPorCobrarNative.getId().longValue() > 0L) {
 						solicitudList.add(new CuentaCobrarCommand(graficoCuentasPorCobrarNative));
@@ -141,7 +141,7 @@ public class GraficosController {
 		Collection<GraficoCuentasPorPagarNative> objetos = consultasNativeBo.findByGraficoCuentasXPagar(usuarioSesion.getEmpresa());
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
-			if (usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			if (usuarioBo.isUsuario_Condominio(usuarioSesion) || usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 				for (GraficoCuentasPorPagarNative graficoCuentasPorPagarNative : objetos) {
 					if (graficoCuentasPorPagarNative.getId().longValue() > 0L) {
 						solicitudList.add(new CuentaPagarCommand(graficoCuentasPorPagarNative));
@@ -170,7 +170,7 @@ public class GraficosController {
 		Collection<GraficoArticuloMasVendidoNative> objetos = consultasNativeBo.findByGraficoArticuloMasVendido(usuarioSesion.getEmpresa());
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
-			if (usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			if (usuarioBo.isUsuario_Condominio(usuarioSesion) || usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 				for (GraficoArticuloMasVendidoNative graficoArticuloMasVendidoNative : objetos) {
 					solicitudList.add(new GraficoArticuloMasVendidoCommand(graficoArticuloMasVendidoNative));
 				}
@@ -197,7 +197,7 @@ public class GraficosController {
 		Collection<ArticuloMinimoNative> objetos = consultasNativeBo.findByAllArticulosMinimo(usuarioSesion.getEmpresa());
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
-			if (usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			if (usuarioBo.isUsuario_Condominio(usuarioSesion) || usuarioBo.isAdministrador_sistema(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 				for (ArticuloMinimoNative articuloMinimoNative : objetos) {
 					if (articuloMinimoNative.getId().longValue() > 0L) {
 						solicitudList.add(new ArticuloCommand(articuloMinimoNative));
