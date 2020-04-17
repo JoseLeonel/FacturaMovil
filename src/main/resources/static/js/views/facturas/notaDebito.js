@@ -250,6 +250,7 @@ var idioma_espanol =
 **/
 function __ComboTipoDocumentosPara(){
 	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("factura.tipo.documento.nota.credito")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"86"+'">'+$.i18n.prop("factura.tipo.documento.nota.credito.interna")+ '</option>');
 	
 	
 }

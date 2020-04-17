@@ -657,6 +657,25 @@ public class FacturaBoImpl implements FacturaBo {
 	private Factura actualizaOrCrearFactura(Factura factura) {
 		try {
 			factura.setNotificacionNoElectronicio(Constantes.ZEROS);
+			if(factura.getAnuladaCompleta() == null) {
+				factura.setAnuladaCompleta(Constantes.ZEROS);
+			}
+			if(factura.getConsecutivoProforma() == null) {
+				factura.setConsecutivoProforma(Constantes.EMPTY);
+			}
+			if(factura.getCorreoAlternativo() == null) {
+				factura.setCorreoAlternativo(Constantes.EMPTY);
+			}
+			if(factura.getCambioMoneda() == null) {
+				factura.setCambioMoneda(Constantes.ZEROS_DOUBLE);
+			}
+			if(factura.getEmpresa().getNoFacturaElectronica() !=null) {
+				if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+					factura.setNoAplicarEnCaja(Constantes.ZEROS);
+				}
+				
+			}
 			if (factura.getId() == null) {
 				
 				factura.setCreated_at(new Date());
@@ -1105,5 +1124,11 @@ public class FacturaBoImpl implements FacturaBo {
 	public Collection<Factura> findBySinNotificarCorreo() {
 		
 		return facturaDao.findBySinNotificarCorreo();
+	}
+
+	@Override
+	public TotalFacturaCommand sumarFacturasNoElectronica(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconomica) {
+		// TODO Auto-generated method stub
+		return facturaDao.sumarFacturasNoElectronica(fechaInicio, fechaFinal, idEmpresa, estado, actividadEconomica);
 	}
 }

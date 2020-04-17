@@ -400,15 +400,15 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
-	@Autowired
-	private CertificadoBo																							certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 		// criptografica desde linux
-    certificadoBo.agregar(usuario.getEmpresa(),"","");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
@@ -491,7 +491,7 @@ public class FacturasController {
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
+		return usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) ? facturaBo.sumarFacturasNoElectronica(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica) : facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
 	}
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -977,7 +977,7 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
-	
+
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarUtilidadAjax.do", method = RequestMethod.GET)
 	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc) throws IOException, Exception {
@@ -997,7 +997,7 @@ public class FacturasController {
 		String fin1 = dateFormat1.format(fechaFinalP);
 		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
 
-		String nombreArchivo = "Utilidad_"+fechaInicioParam +"_al_"+fechaFinParam+ ".xls";
+		String nombreArchivo = "Utilidad_" + fechaInicioParam + "_al_" + fechaFinParam + ".xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
@@ -1737,7 +1737,7 @@ public class FacturasController {
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			facturaAplicarCommand.setReferenciaFechaEmision(dateFormat.format(facturaBD.getFechaEmision()));
 			facturaAplicarCommand.setReferenciaNumero(facturaBD.getNumeroConsecutivo());
-
+			facturaAplicarCommand.setTotalComprobante(facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante());
 			facturaAplicarCommand.setReferenciaRazon(facturaCommand.getNota());
 			facturaAplicarCommand.setPlazoCredito(Constantes.ZEROS);
 			facturaAplicarCommand.setReferenciaTipoDoc(facturaBD.getTipoDoc());
@@ -1815,6 +1815,11 @@ public class FacturasController {
 
 					}
 				}
+			}
+			if (facturaCommand.getNota() != null) {
+         if(facturaCommand.getNota().length() > 250) {
+        	 return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.nota.lenght", result.getAllErrors());
+         }
 			}
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				if (facturaCommand.getCorreoAlternativo() != null) {
@@ -2312,11 +2317,11 @@ public class FacturasController {
 			}
 			Hacienda haciendaBD = haciendaBo.findByClave(factura.getClave());
 			if (!factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
-				
+
 				if (haciendaBD == null) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
 				}
-				
+
 			}
 
 			ArrayList<String> listaCorreos = new ArrayList<String>();
@@ -2332,7 +2337,7 @@ public class FacturasController {
 			}
 			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
 				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
-			}else {
+			} else {
 				if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
 				}
@@ -2340,7 +2345,7 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
 				}
 				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
-				
+
 			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
@@ -2373,7 +2378,7 @@ public class FacturasController {
 				if (haciendaBD == null) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
 				}
-				
+
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			if (correo != null) {
@@ -2437,8 +2442,8 @@ public class FacturasController {
 				}
 
 				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
-				
-			}else {
+
+			} else {
 				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
 			}
 			//

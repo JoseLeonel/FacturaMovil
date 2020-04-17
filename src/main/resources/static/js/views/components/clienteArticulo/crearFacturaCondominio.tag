@@ -24,9 +24,17 @@
             <div class="encabezado">
                 <label >Actividades Economicas </label>  
                 <select onchange= {__AsignarActividad} class="selectActividadComercial  "  name="selectActividadComercial" id="selectActividadComercial" >
-                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
+                    <option  each={empresaActividadComercial}  data-tokens ={descripcion} value="{codigo}"   >{descripcion}</option>
                 </select>
             </div>
+            <div class="encabezado">
+                <label >Categorias </label>  
+                <select  onchange= {__AgregarArticulos} class="selectCategoria  "  name="selectCategoria" id="selectCategoria" >
+                    <option  data-tokens="Todos"   value="0"  >Todos</option>
+                    <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
+                </select>
+            </div>
+
         </div>
         <div>
            <table class="table table-striped">
@@ -35,10 +43,10 @@
                             <th style="width:5%;">                                                      </div></th>
                             <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
-                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
-                            <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
-                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
+                            <th style="width:42%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
+                            <th style="width:12%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
+                            <th style="width:12%;"><div class="tituloFormat">Precio Unitario                        </div></th>
+                            <th  style="width:12%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -48,18 +56,18 @@
                             </td>
                             <td style="width:2%;"><div class="formatDetalle">{numeroLinea}</div></td>
                             <td style="width:8%;"><div class="formatDetalle">{codigo}</div></td>
-                            <td class="text-right" style="width:14%;">
+                            <td class="text-right" style="width:46%;">
                                 <input  onkeyup={__actualizarDescripcion} onBlur={__actualizarDescripcion} class="campodetalle" type="text" step="any"  value = "{descripcion}" />
                             </td>
 
-                            <td class="text-right" style="width:17%;">
+                            <td class="text-right" style="width:8%;">
                                 <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right" style="width:14%;">
+                            <td class="text-right" style="width:12%;">
                                 <input  onkeyup={__actualizarPrecio} onBlur={__actualizarPrecio} class="campodetalle" type="number" step="any"  value = "{precioUnitario}" min="0" pattern="^[0-9]+"/>
                             </td>
  
-                            <td class="text-right" style="width:14%;">
+                            <td class="text-right" style="width:12%;">
                                 <div class="formatDetalle">{montoTotalLinea.toFixed(2)} </div>
                             </td>
                         </tr>
@@ -179,8 +187,9 @@
                                     </div>        
          
                                     <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control nota campo" id="nota" name="nota" value="{factura.nota}">
+                                        <label >{$.i18n.prop("factura.nota")} <span class="requerido">(*Maximo 250 caracteres)</span></label> 
+                                        <textarea onkeyup={__contarLetras} class="form-control nota campo" id="nota" name="nota" value="{factura.nota}"  cols="40" rows="10"></textarea>
+                                        <span>cantidad letras : { notaConta}</span>
                                     </div>
                                     <div show = "{mostrarCamposIngresoContado ==false }" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
@@ -367,7 +376,7 @@
       margin-left: 5px;
     }
     .formatDetalle{
-        font-size: 18px;
+        font-size: 16px;
         color: black;
         text-align: center;
         text-shadow: 0px 0px 1px #ffffff;
@@ -448,6 +457,7 @@
     self.comboFormaPagos        = []
     self.totalComprobante  = 0
     self.comboTipoDocumentos   = []
+    self.categorias                = {aaData:[]}
     self.tarifas1    = {aaData:[]}
     self.factura                = {
         id:null,
@@ -510,6 +520,7 @@
     self.totalGeneralCompra    = 0; 
     self.numeroLinea =0
     self.pesoPrioridad =  0
+     self.notaConta = 0
     self.detalle ={
          numeroLinea : 0,
          codigoTarifa:'',
@@ -528,6 +539,7 @@
     self.detalleFactura        = {data:[]}   
     self.on('mount',function(){
         __ListaActividadesComercales()
+        __listadoCategoriasActivas()
         __comboMonedas()
         __ObtengoTipoCambio()
          self.tipoCambio.total = __getTipoCambioTotal()
@@ -549,6 +561,42 @@
          );
    
 })
+
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategoriasActivas(){
+     self.categorias                = {aaData:[]}
+     self.update()
+    $.ajax({
+         url: "ListarCategoriasActivasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.categorias.aaData =  result.aaData
+                self.update();
+                $('.selectCategoria').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:30,
+                        liveSearch: true
+                    }
+                );
+                $('.selectCategoria').selectpicker('refresh');
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+
+__contarLetras(){
+    var tamano = $('.nota').val()
+    self.notaConta = tamano.length
+}
 
 /**
 *  Buscar la Factura Pendiente en espera
@@ -921,6 +969,14 @@ function __ListaActividadesComercales(){
                     })    
                 })
                 self.update()
+                 $('.selectActividadComercial').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:30,
+                        liveSearch: true
+                    }
+                );
+                $('.selectActividadComercial').selectpicker('refresh');
                 BuscarActividadComercial()
            }
         },
@@ -1668,11 +1724,16 @@ function __seleccionarProveedores() {
     });
 }
 
+__AgregarArticulos(){
+    agregarDetallesPorCliente()
+}
+
 function agregarDetallesPorCliente(){
     __Init()
     $('.nota').val(null);
     $('.correoAlternativo').val(null);
     $('.nombreFactura').val(null);
+    var idCategoria  = $("#selectCategoria").val()
     self.detail = [];
     self.numeroLinea =  0
     self.cantArticulos =  0
@@ -1686,7 +1747,12 @@ function agregarDetallesPorCliente(){
         success: function (data) {
             if(data.aaData.length > 0){
                 $.each(data.aaData, function( index, modeloTabla ) {
-                   cargarDetallesEnEspera(modeloTabla)   
+                   if(idCategoria == 0){
+                      cargarDetallesEnEspera(modeloTabla)   
+                   } else if(idCategoria == modeloTabla.articulo.categoria.id  ){
+                       cargarDetallesEnEspera(modeloTabla)   
+                   }
+                   
                 })
                 __calculate()
                

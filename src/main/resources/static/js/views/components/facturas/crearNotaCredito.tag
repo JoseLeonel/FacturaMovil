@@ -1527,7 +1527,6 @@ function __calculate() {
     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
     getSubTotalGeneral()
-    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))

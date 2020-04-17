@@ -31,6 +31,8 @@ public interface FacturaDao {
 	
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconomica);
 	
+	TotalFacturaCommand sumarFacturasNoElectronica(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconomica);
+	
 	List<Object[]> proformasByState(Integer estado, Integer idEmpresa);
 	
 	

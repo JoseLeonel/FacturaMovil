@@ -49,7 +49,7 @@
 		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
 		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
 		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
-		                <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
+		                <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
 			            <a href="#">
 			                <i class="fa  fa-circle-o"></i>
 			                <span>Articulos</span>
@@ -148,7 +148,7 @@
             </ul>
         </li>
 
-         <li class="treeview"  sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_notas','administrador_Cocodrillos','Administrador_Cajero','Usuario_Cajero')">
+         <li class="treeview"  sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_notas','administrador_Cocodrillos','Administrador_Cajero','Usuario_Cajero','Administrador_Empresa')">
             <a href="#">
                 <i class="fa fa-unlock"></i>
                 <span>Notas</span>
@@ -170,11 +170,11 @@
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="/Configuracion.do" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios','Usuario_Cajero')"><i class="fa fa-circle-o"></i> Configuracion</a></li>
+                <li><a href="/Configuracion.do" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Configuracion</a></li>
                 <li><a href="/AbrirCajas" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero','Usuario_Cajero')"><i class="fa fa-circle-o"></i> Abrir/Cerrar Caja</a></li>
                 <li><a href="/CerrarCaja.do" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Caja Activas</a></li>
                 <li><a href="/ListarTipoCambios"><i class="fa fa-circle-o"></i>Tipo Cambio</a></li>
-                <li><a href="/ListarCajasInactivas" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios','Usuario_Cajero')"><i class="fa fa-circle-o"></i> Cajas Cerradas</a></li>
+                <li><a href="/ListarCajasInactivas" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Cajas Cerradas</a></li>
                 
             </ul>
             
@@ -242,14 +242,14 @@
 			        </li>
             </ul>
         </li>
-         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')">
+         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero','Usuario_Cajero')">
             <a href="#">
                 <i class="fa fa-share"></i>
                 <span>Tributacion</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="/ListarHacienda" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Envios Hacienda</a></li>
+                <li><a href="/ListarHacienda" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios','Usuario_Mesero','Usuario_Cajero')"><i class="fa fa-circle-o"></i>Envios Hacienda</a></li>
                 <li><a href="/recepcionFactura" sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i  class="fa fa-circle-o"></i>Aceptar Compras</a></li>
             </ul>
         </li>           
