@@ -1881,6 +1881,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Date FechaFinal = semaforoMigracion.getFechaFinal();
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndMigracionAndFechas(Constantes.MIGRADO_XMLS_A_DISCO_NO, fechaInicial, FechaFinal, semaforoMigracion.getCantidadMigracion());
 				log.info("Cantidad de xml a migrar:{} ", listaHacienda.size());
+				Integer contador1 = 0;
 				for (Hacienda haciendaMigrada : listaHacienda) {
 					xmlFactura = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getComprobanteXML());
 					xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(haciendaMigrada.getMensajeHacienda());
@@ -1891,9 +1892,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + facturaMigrada.getNumeroConsecutivo(), facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
 							pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + facturaMigrada.getNumeroConsecutivo(), facturaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
 //  						haciendaMigrada.setPathMigracion(pathXMLDocumento);
-							log.info("Direccion: " + pathXMLDocumento);
+							
 							contador++;
-							log.info("Cantidad Leida: " + contador);
+							contador1++;
+							if(contador1 >= 1000) {
+								log.info("Direccion: " + pathXMLDocumento);
+								log.info("Cantidad Leida: " + contador);
+								contador1 = 0;
+							}
+							
 //  						haciendaMigrada.setPathMigracionRespuesta(pathMigracionRespuesta);
 							haciendaMigrada.setStatus(Constantes.MIGRADO_XMLS_A_DISCO_SI);
 							haciendaBo.modificar(haciendaMigrada);
