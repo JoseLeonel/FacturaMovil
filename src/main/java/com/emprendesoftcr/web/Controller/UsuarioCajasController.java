@@ -180,6 +180,8 @@ public class UsuarioCajasController {
 						solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
 					}else {
 						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+							usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
+						//	usuarioCaja.settotal
 							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
 						}
 					}
