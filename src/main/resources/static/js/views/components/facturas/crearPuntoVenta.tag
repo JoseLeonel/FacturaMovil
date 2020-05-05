@@ -1081,6 +1081,12 @@ div.fondoVentaEspera:hover{
         color:#0c3f65;
        
     }
+    .btn-block{
+          display: block;
+        width: 100%;
+        margin-top: 12% !important;
+        margin-left: 24% !important; 
+    }
     .tituloDetalle{
         text-align: center;
         text-decoration: none;
@@ -1089,12 +1095,7 @@ div.fondoVentaEspera:hover{
         font-weight: 600;
         font-size: 20px;
     }
-    .btn-block {
-        display: block;
-        width: 100%;
-        margin-top: 30%;
-        }    
-
+    
     .fondoVentaEspera{
         background: black;
         text-align: center;

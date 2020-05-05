@@ -702,11 +702,11 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) throws Exception {
 		Factura factura = null;
-		// lock.lock();
+		 lock.lock();
 		try {
 			long id = Thread.currentThread().getId();
 			log.info(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
-			if (lock.tryLock(1000000, TimeUnit.HOURS)) {
+//			if (lock.tryLock(1000000, TimeUnit.HOURS)) {
 				// Se forman los detalles command de las factura
 
 				// --------------------------------------------- Se trabaja con el objeto a
@@ -730,7 +730,7 @@ public class FacturaBoImpl implements FacturaBo {
 				this.aplicarInventario(factura, usuario);
 				// aplicar cuenta por cobrar
 				this.aplicarCuentaPorCobrar(factura);
-			}
+//			}
 
 			log.info(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 

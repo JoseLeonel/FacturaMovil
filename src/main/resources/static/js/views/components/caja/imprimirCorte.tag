@@ -64,7 +64,6 @@
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> billetes/Monedas : {usuarioCaja.conteoManualSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Dolares a Colones : {usuarioCaja.conteoDolarConversionSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Cierre Datafono : {usuarioCaja.datafonoSTR}</strong></div></div>    
-                            <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Entradas : {usuarioCaja.sumaEntradasSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> + Salidas : {usuarioCaja.sumaSalidaSTR}</strong></div></div>    
                             <div class="encabezado" show = {parametros.tipo == 2 }><div  class= "tituloCierre"><strong> Conteo Caja: {usuarioCaja.totalCierreSTR}</strong></div></div>    
 
