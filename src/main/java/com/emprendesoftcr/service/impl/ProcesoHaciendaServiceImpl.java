@@ -444,7 +444,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/50 20 * * ?")
+	@Scheduled(cron = "0 0/50 06 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -1113,7 +1113,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/25 * * * ?")
+	@Scheduled(cron = "0 0/05 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

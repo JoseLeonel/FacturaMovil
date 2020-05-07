@@ -457,8 +457,8 @@ public class ClientesController {
 
 				}
 			}
-			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
-				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
+				if (!clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
 					if (clienteCommand.getNombreInstitucionExoneracion() == null) {
 						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
 					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
@@ -482,15 +482,20 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
-				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
+				if (!clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
 					Date fechaInicio = Utils.parseDate(clienteCommand.getFechaEmisionExoneracionSTR());
 					clienteBD.setFechaEmisionExoneracion(fechaInicio);
 					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
 					clienteBD.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
 					clienteBD.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
-
+				}else {
+					clienteBD.setFechaEmisionExoneracion(null);
+					clienteBD.setNombreInstitucionExoneracion(Constantes.EMPTY);
+					clienteBD.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+					clienteBD.setTipoDocumentoExoneracion(Constantes.EMPTY);
+					clienteBD.setPorcentajeExoneracion(Constantes.ZEROS);
 				}
 			} else {
 				clienteBD.setFechaEmisionExoneracion(null);
