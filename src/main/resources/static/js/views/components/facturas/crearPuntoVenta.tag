@@ -3320,9 +3320,9 @@ function lecturaCodigo(){
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
 // esto es para cuando un cliente quiere sumar varios productos
-    if(objetos.codigo.indexOf("+") != -1){
+    if(valor.indexOf("+") != -1){
         
-       __sumarMasArticulo(objetos.codigo,0,codigoActual)
+       __sumarMasArticulo(objetos.codigo,0,cantidadAct)
        getPosicionInputCodigo()
        return  
     }
@@ -3362,18 +3362,20 @@ function getCantidadAdnCodigo_PV(){
         codigo:'',
         cantidad:0
     }
-     var valor = $('.codigo').val()
+    
+    var valor = $('.codigo').val()
+    //var esSuma  = valor.indexOf("+"); 
     var existe = false
     var existeMas = false
     for(i=0; i<valor.length; i++){
-         existeMas = valor.charAt(i) == "+"?true : false
+        existeMas = valor.indexOf("+") !=-1?true : false
        if(existe == false && existeMas  == false ){
           existe = valor.charAt(i) == "*"?true : false  
-         if(valor.charAt(i) !="*"){
+         if(valor.charAt(i) !="*" && valor.charAt(i) != "+"){
               objeto.codigo = objeto.codigo + valor.charAt(i)  
           }
        }else{
-           if(valor.charAt(i) != "+" && objeto.codigo.charAt(i) != "*"){
+           if(valor.charAt(i) != "+" && valor.charAt(i) != "*"){
               objeto.cantidad = objeto.cantidad + valor.charAt(i)  
            }
            
@@ -3390,9 +3392,9 @@ function __sumarMasArticulo(codigo,precio,cant){
     if(temArticulo == null){
         return;
     }
-    if(temArticulo.tipoCodigo == "04" || self.empresa.tieneLector !="Activo"){
-       return
-    }
+ //   if(temArticulo.tipoCodigo == "04" || self.empresa.tieneLector !="Activo"){
+ //      return
+ //   }
     var valorPrecio =  parseFloat(precio)
     var cantidadAct =cant
     aplicarSumaAlCodigo(valorPrecio,cantidadAct,true);
@@ -3726,10 +3728,13 @@ function __agregarArticulo(cantidad){
         cantidad = 1
     }
     var encontrado = false;
-    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+    var valor = $('.codigo').val()
+    var multiplicaPeso = valor.indexOf("*") !=-1?true : false;
+    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo" || multiplicaPeso == true){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
+
     __SetUltimoArticuloIngresado() 
     if( encontrado ==false){
         if(self.detail[0] == null){ // first element

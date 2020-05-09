@@ -6,7 +6,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
-        <div class="modal-header"><
+        <div class="modal-header">
           <h4 class="modal-title">Seguridad</h4>
         </div>
         <!-- Modal body -->

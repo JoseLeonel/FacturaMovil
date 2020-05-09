@@ -816,28 +816,8 @@ __Modificar(){
 }
 
 function validaExoneracion(){
-   if($("#numeroDocumentoExoneracion").val() == null && $('#fechaEmisionExoneracionSTR').val() == null){
-       return false
-   }
-    if($("#numeroDocumentoExoneracion").val() == "" && $('#fechaEmisionExoneracionSTR').val() == ""){
-       return false
-   }
-        var valor  = $("#numeroDocumentoExoneracion").val()
-        if(valor.length ==0){
-            sweetAlert("", "Campo requerido Indique el numero autorizacion de Exonet", "error");
-            return true
-        }
-
+ 
    
-   if($('#fechaEmisionExoneracionSTR').val() == null){
-       sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
-       return true
-   }
-   valor  = $('#fechaEmisionExoneracionSTR').val()
-   if(valor.length ==0){
-        sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
-       return true
-   }
    valor  = __valorNumerico($('#porcentajeExoneracion').val())
    if(valor ==0){
         sweetAlert("", "El porcentaje debe ser mayor a cero", "error");

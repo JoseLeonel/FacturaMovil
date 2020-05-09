@@ -3694,14 +3694,14 @@ function evaluarFactura(data, separarFactura){
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
+            self.facturaImpresa    =modeloTabla
+           	self.factura.id = self.facturaImprimir !=null?self.facturaImprimir.id:null;
             self.update()
             if(self.facturaImprimir.estado == 2){
             	if(!separarFactura){
                     __Init()                	
                 }
                 //Envia a la pantalla de impresion
-                self.facturaImprimir   = modeloTabla
-                self.update()
                 var parametros = {
                           factura:modeloTabla,
                           facturaDia:0
@@ -3715,8 +3715,6 @@ function evaluarFactura(data, separarFactura){
                 }
                 if(!separarFactura){
                     __Init()                	
-                }else{
-                	self.factura.id = self.facturaImprimir.id;
                 }
             }
         });
@@ -5533,7 +5531,7 @@ function __EnviarCocina(){
 
 		var JSONData = JSON.stringify(informacion);		
         enviarImpresoraCocina(url,JSONData);
-        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_1,selt.facturaImpresa,self.mesa)
+        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_1,self.facturaImpresa,self.mesa)
 	}
     if(detalles_cocina_2.length > 0){
 		//Se forman los datos genales para la comanda
@@ -5548,7 +5546,7 @@ function __EnviarCocina(){
 
 		var JSONData = JSON.stringify(informacion);		
         enviarImpresoraCocina(url,JSONData);
-        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_2,selt.facturaImpresa,self.mesa)
+        registrarComanda(self.empresa.impresoraFactura,detalles_cocina_2,self.facturaImpresa,self.mesa)
 	}
 } 
 /**
