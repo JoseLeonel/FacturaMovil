@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.json.simple.JSONArray;
@@ -451,7 +450,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaNumero(Constantes.EMPTY);
 				factura.setReferenciaCodigo(Constantes.EMPTY);
 				factura.setReferenciaRazon(Constantes.EMPTY);
-				factura.setAnuladaCompleta(Constantes.FACTURA_ANULACION_COMPLETA_NO);
+				factura.setAnuladaCompleta(Constantes.ZEROS);
 				factura.setReferenciaFechaEmision(null);
 			}
 
@@ -672,9 +671,12 @@ public class FacturaBoImpl implements FacturaBo {
 			if(factura.getEmpresa().getNoFacturaElectronica() !=null) {
 				if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-					factura.setNoAplicarEnCaja(Constantes.ZEROS);
+					factura.setNoAplicarEnCaja(Constantes.SI_APLICA_EN_CAJA);
 				}
 				
+			}
+			if(factura.getNoAplicarEnCaja() == null) {
+				factura.setNoAplicarEnCaja(Constantes.SI_APLICA_EN_CAJA);
 			}
 			if (factura.getId() == null) {
 				

@@ -819,10 +819,10 @@ function validaExoneracion(){
  
    
    valor  = __valorNumerico($('#porcentajeExoneracion').val())
-   if(valor ==0){
-        sweetAlert("", "El porcentaje debe ser mayor a cero", "error");
-       return true
-   }
+   //if(valor ==0){
+   //     sweetAlert("", "El 1 porcentaje debe ser mayor a cero", "error");
+   //    return true
+   //}
    if(valor > 100){
         sweetAlert("", "El porcentaje debe ser menor o igual al 100%", "error");
        return true

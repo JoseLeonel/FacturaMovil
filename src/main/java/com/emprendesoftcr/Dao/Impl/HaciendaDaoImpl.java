@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
+import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
@@ -46,6 +47,9 @@ public class HaciendaDaoImpl implements HaciendaDao {
 
 	}
 
+	public void eliminar(Hacienda hacienda) {
+		entityManager.remove(hacienda);
+	}
 	@Override
 	public Hacienda findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.id = :id");
@@ -187,7 +191,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	
 	@Override
 	public Collection<Hacienda> findByEmpresaAndMigracionAndFechas(Integer migradoADisco, Date fechaInicial, Date FechaFinal,Integer cantidadMigrar) {
-		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.status = 0  and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.estado in (7,6) and obj.tipoDoc !=''");
+		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.status in (0,99)  and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.estado in (7,6) ");
 		
 		query.setParameter("fechaInicio", fechaInicial);
 		query.setParameter("fechaFin", FechaFinal);

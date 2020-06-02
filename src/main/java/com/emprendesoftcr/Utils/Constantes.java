@@ -67,6 +67,7 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_CIERRE_CAJA																	= "email/emailCaja.vm";
 	public static final String					PLANTILLA_CORREO_LISTAR_FACTURAS															= "email/emailResumenListarFactura.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA		= "email/emailResumenComprasSimplificadas.vm";
+	public static final String          PLANTILLA_CORREO_UTILIDAD                                     = "email/emailUtilidad.vm";
 
 // Version de los tipos de documentos 
 	public static final String					TIQUETE_ELECTRONICO_VERSION_4_2																= "Tiquete Electrónico ver 4.2";
@@ -155,7 +156,7 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																			= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 300;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 700;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 300;
 
 	// 48 horas cada 5 minutos

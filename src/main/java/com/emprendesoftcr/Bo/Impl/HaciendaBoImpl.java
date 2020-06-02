@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Dao.HaciendaDao;
-
-
+import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
@@ -35,7 +34,11 @@ public class HaciendaBoImpl implements HaciendaBo {
 		haciendaDao.modificar(hacienda);
 
 	}
-	
+	@Transactional
+	@Override
+	public void eliminar(Hacienda hacienda) {
+		haciendaDao.eliminar(hacienda);
+	}
 
 	@Transactional
 	@Override

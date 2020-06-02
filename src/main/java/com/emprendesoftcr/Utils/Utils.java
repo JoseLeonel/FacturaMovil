@@ -406,7 +406,7 @@ public final class Utils {
 			resultado = montoImpuesto + montoImpuesto1;
 		}
 
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 
 	}
 
@@ -430,7 +430,7 @@ public final class Utils {
 		}
 		Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
 		Double resultado = montoImpuesto * porcentaje;
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	/**
@@ -457,7 +457,7 @@ public final class Utils {
 			resultado = resultado * tarifa;
 			resultado = resultado / 100d;
 		}
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	/**
@@ -470,7 +470,7 @@ public final class Utils {
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		montoDescuento = montoDescuento == null ? Constantes.ZEROS_DOUBLE : montoDescuento;
 		Double resultado = montoTotal - montoDescuento;
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	/**
@@ -489,7 +489,7 @@ public final class Utils {
 		BigDecimal divisor = new BigDecimal(100d);
 		BigDecimal resultado = bd1.divide(divisor);
 		Double valor = resultado.doubleValue();
-		return Utils.aplicarRedondeo(valor) ? Utils.roundFactura(valor, 5) : valor;
+		return Utils.aplicarRedondeo(valor) ? Utils.roundFactura(valor, 5) : Utils.Maximo5Decimales(valor);
 	}
 
 	/**
@@ -503,7 +503,7 @@ public final class Utils {
 		precioUnitario = precioUnitario == null ? Constantes.ZEROS_DOUBLE : precioUnitario;
 		Double resultado = precioUnitario * cantidad;
 
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	public static Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {
@@ -645,7 +645,7 @@ public final class Utils {
 		}
 
 		resultado = subTotalB.doubleValue();
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	/**

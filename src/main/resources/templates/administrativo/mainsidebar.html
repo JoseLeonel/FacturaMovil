@@ -199,7 +199,7 @@
 			                <li><a href="/ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
 			                <li><a href="/ListaNostas.do"><i class="fa fa-circle-o"></i>Listado de Notas NC/NB</a></li>
 			                <li><a href="/TotalImpuestoVentasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
- 			                <li><a href="/UtilidadXArticulo.do"  sec:authorize="hasAnyAuthority('Administrador_Condominios')"><i class="fa fa-circle-o"></i>Utilidad</a></li> 
+ 			                <li><a href="/UtilidadXArticulo.do"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Empresa')"><i class="fa fa-circle-o"></i>Utilidad</a></li> 
 		                
 <!-- 			                <li><a href="/ListaDetallesGanancia"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Restaurante','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>Utilidad en ventas</a></li> -->
 			            </ul>

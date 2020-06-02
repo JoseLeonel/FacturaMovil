@@ -19,7 +19,7 @@ public interface HaciendaDao {
 	Hacienda findByClave(String clave);
 	
 	void findByClaveSP(Long idHacienda, Long numeroFactura,String clave, Integer estado, String xml, String mensajeHacienda) throws Exception;
-	
+	void eliminar(Hacienda hacienda);
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa,Integer estado);
 	
 	Collection<Hacienda> findByEstado(Integer estado,Integer estadoError);

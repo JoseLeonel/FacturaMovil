@@ -370,6 +370,83 @@ self.on('mount',function(){
         }, false );
 })
 
+/**
+**/
+/**
+* Actualizar el precio costo
+**/
+__ActualizarPreciosCosto(e){
+    var impuesto  =  __valorNumerico($('#impuesto').val())/100
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico =  __valorNumerico($('#precioPublico').val())
+    var gananciaPublica = _porcentajeGanancia(costo,impuesto,0,precioPublico)
+
+
+   
+    self.articulo.costo = costo
+    self.articulo.precioPublico = precioPublico > 0 ? precioPublico : _ObtenerPrecio(costo,impuesto,0,gananciaPublica)
+    self.articulo.gananciaPublica = gananciaPublica
+
+
+    self.update()     
+    $('#precioPublico').val(self.articulo.precioPublico)
+    $('#gananciaPrecioPublico').val(self.articulo.gananciaPublica)
+
+    
+
+}
+
+
+
+/**
+* Porcentaje de ganancia de Precio al Publico
+**/
+__CalculoGananciaPublico(e){
+     if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = __valorNumerico($('#gananciaPrecioPublico').val());
+    self.articulo.precioPublico =_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioPublico)
+    self.update()
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+
+}
+
+__CalculoPrecioPublico(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = __CalcularGanancia(impuesto,costo,precioPublico);
+    self.articulo.precioPublico = precioPublico
+    self.update()
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+
+}
+
+function getPublico(){
+   
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = __CalcularGanancia(impuesto,costo,precioPublico);
+    self.articulo.precioPublico = precioPublico > 0 ?precioPublico:_ObtenerPrecio(self.articulo.costo,self.articulo.impuesto,0,self.articulo.gananciaPrecioPublico)
+    self.update()
+    $('#gananciaPrecioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.gananciaPrecioPublico,aplicarRedondeo())))
+    $('#precioPublico').val(__valorNumerico(redondeoDecimales(self.articulo.precioPublico,aplicarRedondeo())))
+    
+
+}
+
+
+
 function teclas(tecla){
     if(tecla.keyCode ==27){
       _volverCampoCodigo()
@@ -394,13 +471,15 @@ function __ComboBaseImponibles(){
    
      self.update();
 }
+
 __AsignarTarifa(){
     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
     self.update()
-    actualizarPreciosImpuestosMayorista()
-    actualizarPreciosImpuestosPublico()
-    actualizarPreciosImpuestosEspecial()
+    $('#impuesto').val(self.articulo.impuesto)
+    getPublico()
+  
 }
+
 
 precioPantallaClick(){
     self.precioPantalla = true
@@ -791,15 +870,10 @@ function getPublico(){
 
 }
 
-__AsignarTarifa(){
-    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
-    self.update()
-    $('#impuesto').val(self.articulo.impuesto)
-    getPublico()
-}
 
-
-
+/**
+* Asigna el impuesto 13 cuando es valor igual 01
+**/
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
@@ -819,7 +893,7 @@ __asignarImpuesto(){
     self.tarifas1  = {aaData:[]}
     self.update()
     getPublico()
-
+ 
 }
 /**
 *  Actimpuestor validaciones del formulario

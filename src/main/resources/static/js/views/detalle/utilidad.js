@@ -28,22 +28,162 @@ var _Init = function () {
 
     $('#bontonBusqueda').click(function () {
 		if ($("#filtros").valid()) {
-			__Inicializar_Table('.tableListar')  
-		    _consulta()
+			__Inicializar_Table('.tableListar');  
+		    _consulta();
+		}
+	});
+	
+	$('.descargarExcel').click(function () {
+		if ($("#filtros").valid()) {
+			
+		    __bajarExcel();
 		}
     });
+	
+	$('.btn-correo').click(function () {
+		__EnviarCorreoAlternativo();
+		
+    });
+   
+	$('.enviarCorreo').click(function () {
+		__correoAlternativo();
+    });
+	
+	$('.btn-back').click(function () {
+		volverListado();
+    });
+   
+	
+	
+	
     $('.btnLimpiarFiltros').click(function () {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
     });
     $("#filtros").validate(reglasDeValidacion());
     listaCategorias();
-
+    
+    $("#formularioEnviarCorreoUtilidad").validate(reglasDeValidacionCorreo());	
+     $('.btnLimpiarFiltros').click(function () {
+        $("#fechaInicial").val(null);
+        $("#fechaFinal").val(null);
+        $("#idArticulo").val(null);
+        $("#totalVenta").val(null);
+        $("#totalCosto").val(null);
+        $("#utilidadBruta").val(null);
+	});
+     ocultarDescargaEnvioCorreo();
 }
 
 var haciendas = {data:[]};
 
+function volverListado(){
+	
+	$('#ModalCorreoAlternativoFactura').modal('hide')
+	
+}
+
+
+
+
+/**
+*  inicializar el listado
+**/
+function __Inicializar_Table(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "sDom": 'lrtip',
+        "order": [1, 'desc'],
+        "bPaginate": true,
+        "paging":         false,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        
+    });    
+}
+
+var reglasDeValidacionCorreo = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			correoAlternativoUtilidad : {
+				required : true,
+                email:true,
+                maxlength:240,
+                minlength:1,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
+function ocultarDescargaEnvioCorreo(){
+	
+	$('.descargarExcel').hide();
+	$('.enviarCorreo').hide();
+}
+
+function mostrarDescargaEnvioCorreo(){
+	
+	$('.descargarExcel').show();
+	$('.enviarCorreo').show();
+}
+/**
+ *Enviar el correo  con la informacion de la utilidad
+ * @returns
+ */
+function __EnviarCorreoAlternativo(){
+	var fechaInicio=$('.fechaInicial').val();
+	var fechaFin = $('.fechaFinal').val();
+	var cedulaReceptor = $('#cliente').val();
+	var tipoDocumento = $('.tipoDocumento').val();
+	var parametros = {
+		fechaInicioParam:fechaInicio,
+		fechaFinParam:fechaFin,
+		estado :$('#estado').val(),
+		tipoDoc :$('#tipoDocumento').val(),
+		idCliente:cedulaReceptor,
+		tipoDocumento:tipoDocumento,
+		actividadEconomica:$('#actividadEconomica').val(),
+		idCategoria: $('#idCategoria').val(),
+		codigo: $('#idArticulo').val(),
+		correoAlternativo: $('#correoAlternativoUtilidad').val(),
+		totalVenta:$('#totalVenta').val(),
+		totalCosto:	$('#totalCosto').val(),
+		totalUtilidad:$('#utilidadBruta').val(),
+		
+	}
+	if ($("#formularioEnviarCorreoUtilidad").valid()) {
+		$.ajax({
+		   url: "EnvioUtilidadXCCorreoAjax.do",
+		   datatype: "json",
+		   data:parametros ,
+		   method:"GET",
+		   success: function (result) {
+			   if (result.status != 200) {
+	                if (result.message != null && result.message.length > 0) {
+	                	mensajeAdvertencia(result.message);
+	                }
+	            }else{
+	            	mensajeToasExito(result.message);
+	            }
+		   },
+		   error: function (xhr, status) {
+			   mensajeErrorServidor(xhr, status);
+			   console.log(xhr);
+		   }
+		});
+	}
+}
+
 function _consulta(){
+	ocultarDescargaEnvioCorreo();
 	var table = $('.tableListar').DataTable();
  	table
     .clear()
@@ -78,12 +218,6 @@ function _consulta(){
 			   sumarTotales(result.aaData);
 			   agregarInputsCombos();
 			   ActivarEventoFiltro(".tableListar")
-			   __CorreoAlternativo()
-				__BajarDocumentoXML()
-				__EnviarCorreos()
-				__EnviarAceptarHacienda()
-				__EnviarHacienda()
-				__RespuestaHacienda()
 				__BajarPDFHacienda()
 				EventoFiltro();
 		   }else{
@@ -97,6 +231,24 @@ function _consulta(){
 	});
 }
 
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+
 function sumarTotales(data){
 	var utilidadBruta = 0;
 	var totalCosto = 0;
@@ -106,7 +258,9 @@ function sumarTotales(data){
 		totalCosto = totalCosto + modeloTabla.totalCosto;
 		totalVenta = totalVenta + modeloTabla.venta;
 	});
-	
+	if(totalVenta > 0){
+		mostrarDescargaEnvioCorreo();
+	}
 	
 	$('#totalVenta').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalVenta)),2));
 	$('#totalCosto').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalCosto)),2));
@@ -242,19 +396,35 @@ function agregarInputsCombos(){
 		if ( $(this).index() != 9    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 		}
-		if ($(this).index() == 1 ){
-			var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
-			// se cargan los valores por defecto que existen en el combo
-			select.append( '<option value="'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+'">'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+'</option>' );       
-			select.append( '<option value="'+$.i18n.prop("factura.tipo.documento.factura.electronica")+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+'</option>' );       
-
-			select.append( '<option value="'+$.i18n.prop("referencia.tipo.documento.nota.credito")+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+'</option>' );       
-
-			select.append( '<option value="'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'</option>' );       
-			$(this).html(select);
-		}
+		   if ($(this).index() == 1 ){
+		         var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
+		         // se cargan los valores por defecto que existen en el combo
+		         select = __listadoCategoriasActivas(select);
+		         $(this).html(select);
+		     }
 	})
 } 
+
+function __listadoCategoriasActivas(select){
+	  $.ajax({
+	       url: "ListarCategoriasActivasAjax.do",
+	      datatype: "json",
+	      method:"GET",
+	      success: function (result) {
+	           if(result.aaData.length > 0){
+	            $.each(result.aaData, function( index, modeloTabla ) {
+	               select.append( '<option value="'+modeloTabla.descripcion+'">'+modeloTabla.descripcion+'</option>' );       
+	            })
+	         }
+	      },
+	      error: function (xhr, status) {
+	          console.log(xhr);
+	           mensajeErrorServidor(xhr, status);
+	      }
+	  })
+	  return select;
+}
+
 
 /**
  * Eventos del filtro
@@ -327,31 +497,8 @@ function __Opciones(id,type,row){
 	menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
 	menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
 	
-	if(row.estado == 'Firmado XML'){
-	  menu += '<li><a href="#"  title="Envio Manual a Tributacion" class="  btnEnvioManual" >Envio Manual</a></li>'
-	}
 	
-	if(row.estado == "Aceptada"){
-		if(row.tipoDoc !='Simplificada'  && row.tipoDoc !='Compras' ){
-		  menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
-		}
-		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
-		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
-		 if(row.tipoDoc !='Simplificada'  && row.tipoDoc !='Compras' ){
-		 menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
-		 }	
-	}
-	if(row.estado == "Rechazada"){
-		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
-		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
-	}
-	if(row.estado == "Enviada"){
-		 menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
-	}
-	if(row.tipoDoc !='Simplificada'  && row.tipoDoc !='Compras' ){
-			menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'   
-		
-	}
+		menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'   
 	
 	menu += "</ul></div>"  
 	 return menu;          
@@ -362,11 +509,11 @@ function __bajarExcel(){
 	var	fechaFinParam=$('.fechaFinal').val();
 	var	estado =$('#estado').val();
 	var	tipoDoc =$('#tipoDocumento').val();
-	var	idCliente:$('#cliente').val();
-	var	actividadEconomica:$('#actividadEconomica').val();
-	var	idCategoria: $('#idCategoria').val();
-	var	codigo: $('#idArticulo').val();
-    location.href = "DescargarUtilidadAjax?fechaInicioParam="+fechaInicio} +"&" +"fechaFinParam="+ fechaFin + ""&" + idCliente="+cedulaReceptor+"&estado="+estado+"&tipoDoc="+tipoDoc+"&actividadEconomica="+actividadEconomica+"&idCategoria="+idCategoria+"&codigo="+codigo;
+	var	idCliente=$('#cliente').val();
+	var	actividadEconomica=$('#actividadEconomica').val();
+	var	idCategoria= $('#idCategoria').val();
+	var	codigo= $('#idArticulo').val();
+    location.href = "DescargarUtilidadAjax.do?fechaInicioParam="+fechaInicioParam +"&" +"fechaFinParam="+ fechaFinParam + "&" + "idCliente="+idCliente+"&estado="+estado+"&tipoDoc="+tipoDoc+"&actividadEconomica="+actividadEconomica+"&idCategoria="+idCategoria+"&codigo="+codigo;
 }
 /**
  * Fecha de emision
@@ -375,28 +522,20 @@ function __bajarExcel(){
 function formatoFechaHacienda(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
+
+
 /**
-*  Enviar a correo alternativo
+* Enviar el correo alternativo
 **/
-function __CorreoAlternativo(){
-  $('.tableListar').on('click','.btnEnvioCorreoAlternativo',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		riot.compile(function() {
-			var parametros = {
-				tipoEjecucion:1,
-				hacienda:data
-			};
-			 // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('resultado-hacienda',{parametros:parametros});
-		});  
-  });
+function __correoAlternativo(){
+    $('.correoAlternativoFactura').val(null);
+    $('#ModalCorreoAlternativoFactura').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#ModalCorreoAlternativoFactura').modal('show');      
 }
+
 /**
 * Bajar PDF
 */
@@ -412,81 +551,7 @@ function __BajarPDFHacienda(){
 		 BajarArchivos("bajarPDFComprobanteAjax",data)
   });
 }
-/**
-* Respuesta de Hacienda
-*/
-function __RespuestaHacienda(){
-  $('.tableListar').on('click','.btnRespuestaHacienda',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		 BajarArchivos("bajarXMLRespuestaAjax",data)
-  });
-}
-/**
-* Envio Manual hacia Hacienda
-*/
-function __EnviarHacienda(){
-  $('.tableListar').on('click','.btnEnvioManual',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		 __consultar("EnviarAceptarHaciendaAjax",data)
-  });
-}
-/**
-* Envio Manual para revisar la aceptacion del documento por Hacienda
-*/
-function __EnviarAceptarHacienda(){
-  $('.tableListar').on('click','.btnAceptacionManual',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		 __consultar("AceptarHaciendaAjax",data)
-  });
-}
-/**
-* Envio del correo al emisor y receptor
-*/
-function __EnviarCorreos(){
-  $('.tableListar').on('click','.btnEnvioCorreoCliente',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		 __consultar("EnviarCorreoClienteAndEmisorAjax",data)
-  });
-}
-/**
-* bajar el xml del documento
-*/
-function __BajarDocumentoXML(){
-  $('.tableListar').on('click','.btnBajarXML',function(e){
-	  var table = $('#tableListar').DataTable();
-	  if(table.row(this).child.isShown()){
-		  //cuando el datatable esta en modo responsive
-			var data = table.row(this).data();
-		}else{	
-			var data = table.row($(this).parents("tr")).data();
-		}
-		 BajarArchivos("bajarXMLComprobanteAjax",data)
-  });
-}
+
 /**
 *  Enviar 
 **/

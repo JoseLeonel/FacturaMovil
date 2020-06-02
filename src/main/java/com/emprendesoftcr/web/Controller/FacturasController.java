@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -1020,6 +1019,65 @@ public class FacturasController {
 		new SimpleExporter().gridExport(headers, facturas, "fechaEmision,nombreCategoria, codigo,nombreArticulo,totalCosto,venta,totalUtilidad", baos);
 		return baos;
 	}
+	
+
+	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad) throws IOException, Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		
+		try {
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
+			Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+			Date fechaFinalP = Utils.parseDate(fechaFinParam);
+			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+				if (fechaFinalP != null) {
+					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+				}
+			}
+			
+			Cliente cliente = clienteBo.buscar(idCliente);
+			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+			String inicio1 = dateFormat1.format(fechaInicioP);
+			String fin1 = dateFormat1.format(fechaFinalP);
+			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+
+			// Se prepara el excell
+			ByteArrayOutputStream baos = createExcelUtilidad(facturas);
+			Collection<Attachment> attachments = createAttachments(attachment("utilidad", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+			// Se prepara el correo
+			String from = "UtilidadProductos@emprendesoftcr.com";
+			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			
+			String subject = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + " Utilidad del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			ArrayList<String> listaCorreos = new ArrayList<>();
+			listaCorreos.add(correoAlternativo);
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("fechaInicial", fechaInicioParam);
+			modelEmail.put("fechaFinal", fechaFinParam);
+			modelEmail.put("totalVenta", totalVenta);
+			modelEmail.put("totalCosto", totalCosto);
+			modelEmail.put("totalUtilidad", totalUtilidad);
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_UTILIDAD, modelEmail);
+			
+			
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+		return respuestaServiceValidator;
+	}
+
+
 
 	/**
 	 * Lista de las Proformas activas

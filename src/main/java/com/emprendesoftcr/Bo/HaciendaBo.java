@@ -11,6 +11,8 @@ public interface HaciendaBo {
 	void agregar(Hacienda hacienda);
 
 	void modificar(Hacienda hacienda);
+	
+	void eliminar(Hacienda hacienda);
 
 	Hacienda findById(Long id);
 	Hacienda findByEmpresaAndClave(Empresa empresa,String clave);
