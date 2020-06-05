@@ -5,6 +5,7 @@ public class CambiarPrecioArticuloCommand {
 	
 	private Long id ;
 	private Double precioPublico;
+	private String descripcion;
 	public CambiarPrecioArticuloCommand() {
 		super();
 	}
@@ -23,6 +24,16 @@ public class CambiarPrecioArticuloCommand {
 	
 	public void setPrecioPublico(Double precioPublico) {
 		this.precioPublico = precioPublico;
+	}
+
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	
 	

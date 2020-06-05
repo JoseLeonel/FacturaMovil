@@ -1216,7 +1216,9 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null? Constantes.EMPTY:cambiarPrecioArticuloCommand.getDescripcion();
 			articuloBD.setUpdated_at(new Date());
+			articuloBD.setDescripcion(descripcion.length() > 0 ? descripcion : articuloBD.getDescripcion());
 			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(), cambiarPrecioArticuloCommand.getPrecioPublico(), articuloBD.getImpuesto()));
 			articuloBD.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
 			articuloBD.setUsuario(usuario);

@@ -1867,7 +1867,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-//	@Scheduled(cron = "0 0/02 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);

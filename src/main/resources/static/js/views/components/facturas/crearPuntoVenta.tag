@@ -721,7 +721,7 @@
                     <div class="row">    
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Descripcion</label>
-                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.descripcion}">
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  id="descripcionArticuloAcambiar" name="descripcionArticuloAcambiar"  value ="{ultimoArticulo.descripcion}">
 
                         </div>                            
                     </div>
@@ -1719,7 +1719,7 @@ function __AplicarCambioPrecioBD(){
     $.ajax({
         type : "POST",
         dataType : "json",
-        data : {id:parametros.id,precioPublico:parametros.precioPublico},
+        data : {id:parametros.id,precioPublico:parametros.precioPublico,descripcion:$('#descripcionArticuloAcambiar').val()},
         url : 'CambiarPrecioArticulo.do',
         success : function(data) {
             if (data.status != 200) {
@@ -3777,6 +3777,7 @@ function aplicarLineaFacturaCambioPrecio(){
             var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
             var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
             self.item.precioUnitario = precioUnitario
+            self.item.descripcion = self.articulo.descripcion
             self.update();
             ActualizarLineaDEtalle()
             

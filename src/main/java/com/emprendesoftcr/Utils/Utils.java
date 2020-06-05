@@ -176,32 +176,32 @@ public final class Utils {
 			return directorio;
 		}
 		// Ejemplo respaldos/servicio8080/11001/2018/Dedcember
-		File directorio_servicio80 = new File( servidor);
-		if (!directorio_servicio80.exists()) {
-			directorio_servicio80.mkdirs();
-		}
+		@SuppressWarnings("unused")
+		File directorio_servicio80 = crearDirectorio( servidor);
+	
 
-		File directorio_empresa = new File( servidor + cedulaEmpresa);
-		if (!directorio_empresa.exists()) {
-
-			directorio_empresa.mkdirs();
-		}
-		File directorio_anno = new File(servidor + cedulaEmpresa + "/" + anno);
-		if (!directorio_anno.exists()) {
-			directorio_anno.mkdirs();
-		}
-		File directorio_mes = new File( servidor + cedulaEmpresa + "/" + anno + "/" + mes);
-		if (!directorio_mes.exists()) {
-			directorio_mes.mkdirs();
-		}
+		@SuppressWarnings("unused")
+		File directorio_empresa = crearDirectorio( servidor + cedulaEmpresa);
+		File directorio_anno = crearDirectorio(servidor + cedulaEmpresa + "/" + anno);
+		File directorio_mes = crearDirectorio( servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 		
-		
-		File directorio1 = new File(direccion);
+		File directorio1 = crearDirectorio(direccion);
 		if (!directorio1.exists()) {
 			return null;
 		}
 
 		return directorio1;
+	}
+	
+	public static File crearDirectorio(String directorio) {
+		File carpeta = new File( directorio);
+		carpeta.setReadable(true, false);
+		carpeta.setWritable(true, false);
+		carpeta.setExecutable(true, false);
+		if (!carpeta.exists()) {
+			carpeta.mkdirs();
+		}
+		return carpeta;
 	}
 
 	public static LocalDate getFechaLocalDate(Date date) {

@@ -120,7 +120,9 @@ var informacion_tabla = [
                                      return precioPublico ==null?0:precioPublico >0?precioPublico:0;
                                 },
                             },
-                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true,
+                            {'data' :'minimo'                ,"name":"minimo"               ,"title" : "Min"         ,"autoWidth" :true },
+                            {'data' :'maximo'                ,"name":"maximo"               ,"title" : "Max"         ,"autoWidth" :true },
+                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cant"         ,"autoWidth" :true,
                                "render":function(cantidad,type, row){
                                      return cantidad ==null?0:cantidad;
                                 },
@@ -309,18 +311,18 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 11  &&  $(this).index() != 3 && $(this).index() != 4 && $(this).index() != 5 && $(this).index() != 6 && $(this).index() != 7 && $(this).index() != 8  ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
            // Select
-    	if ($(this).index() == 8 ){
+    	if ($(this).index() == 10 ){
     	    var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
             select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
     	   	$(this).html(select);
        }
-       if ($(this).index() == 7 ){
+       if ($(this).index() == 9 ){
          var select = $('<select id="combo2" class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
            select.append( '<option value="'+$.i18n.prop("boolean.si")+'">'+$.i18n.prop("boolean.si")+'</option>' );
