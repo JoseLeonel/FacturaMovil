@@ -87,5 +87,5 @@ public interface ConsultasNativeBo {
 	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
 	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa);
-	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc );
+	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc ,String numeroFactura);
 }

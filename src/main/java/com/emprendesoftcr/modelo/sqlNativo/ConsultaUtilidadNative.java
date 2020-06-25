@@ -21,7 +21,7 @@ import com.emprendesoftcr.Utils.Utils;
 		+ " inner join categorias on categorias.id = articulos.categoria_id " 
 		+ " where fact.empresa_id = :ID_EMPRESA fact.estado in and fact.tipo_doc !='88'  " 
 		+ "and fact.fecha_emision >= :fechaInicial and fact.fecha_emision <= :fechaFinal "
-		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo ")
+		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo and fact.numero_consecutivo ")
 @Entity
 public class ConsultaUtilidadNative implements Serializable {
 
@@ -78,7 +78,7 @@ public class ConsultaUtilidadNative implements Serializable {
 	}
 
 	public String getNombreArticulo() {
-		return nombreArticulo;
+		return nombreArticulo =nombreArticulo.length()>=25?nombreArticulo.substring(0, 25)+"...":nombreArticulo;
 	}
 
 	public void setNombreArticulo(String nombreArticulo) {
@@ -86,7 +86,7 @@ public class ConsultaUtilidadNative implements Serializable {
 	}
 
 	public String getNombreCategoria() {
-		return nombreCategoria;
+		return nombreCategoria.length() >= 25?nombreCategoria.substring(0, 25)+"...":nombreCategoria;
 	}
 
 	public void setNombreCategoria(String nombreCategoria) {

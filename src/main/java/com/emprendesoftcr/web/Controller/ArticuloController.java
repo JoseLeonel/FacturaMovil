@@ -37,7 +37,6 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
-import com.emprendesoftcr.Bo.ClienteArticuloBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -152,6 +151,11 @@ public class ArticuloController {
 	@RequestMapping(value = "/ListarArticulos", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
 		return "views/articulos/ListarArticulos";
+	}
+	
+	@RequestMapping(value = "/ListarArticulosMinimos", method = RequestMethod.GET)
+	public String listarArticulosMinimos(ModelMap model) {
+		return "views/articulos/ListarArticulosMinimos";
 	}
 
 	/**
@@ -467,6 +471,52 @@ public class ArticuloController {
 			}
 		}
 
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Articulo object = (Articulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ArticuloCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticuloMinimosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarMinimosAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter = null;
+		if (codigoArt != null) {
+			if (!codigoArt.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+		categoriaFilter = new JqGridFilter("obj.cantidad <= obj.minimo ");
+		delimitadores.addFiltro(categoriaFilter);
+	  categoriaFilter = new JqGridFilter("obj.contable = 'Si' ");
+		delimitadores.addFiltro(categoriaFilter);
+		
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();

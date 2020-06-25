@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 var _Init = function () {
 	var advanced_search_section = $('#filtrosAvanzados');
-        advanced_search_section.slideToggle(750);
+    advanced_search_section.slideToggle(750);
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
 	__ComboTipoDocumentosPara()
@@ -68,6 +68,7 @@ var _Init = function () {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
         $("#idArticulo").val(null);
+        $("#numeroFactura").val(null);
         $("#totalVenta").val(null);
         $("#totalCosto").val(null);
         $("#utilidadBruta").val(null);
@@ -157,6 +158,7 @@ function __EnviarCorreoAlternativo(){
 		totalVenta:$('#totalVenta').val(),
 		totalCosto:	$('#totalCosto').val(),
 		totalUtilidad:$('#utilidadBruta').val(),
+		numeroFactura:$('#numeroFactura').val(),
 		
 	}
 	if ($("#formularioEnviarCorreoUtilidad").valid()) {
@@ -203,6 +205,7 @@ function _consulta(){
 		actividadEconomica:$('#actividadEconomica').val(),
 		idCategoria: $('#idCategoria').val(),
 		codigo: $('#idArticulo').val(),
+		numeroFactura:$('#numeroFactura').val(),
 		
 	}
 	__Inicializar_Table('.tableListar')  
@@ -513,7 +516,8 @@ function __bajarExcel(){
 	var	actividadEconomica=$('#actividadEconomica').val();
 	var	idCategoria= $('#idCategoria').val();
 	var	codigo= $('#idArticulo').val();
-    location.href = "DescargarUtilidadAjax.do?fechaInicioParam="+fechaInicioParam +"&" +"fechaFinParam="+ fechaFinParam + "&" + "idCliente="+idCliente+"&estado="+estado+"&tipoDoc="+tipoDoc+"&actividadEconomica="+actividadEconomica+"&idCategoria="+idCategoria+"&codigo="+codigo;
+	var numeroFactura =$('#numeroFactura').val();
+    location.href = "DescargarUtilidadAjax.do?fechaInicioParam="+fechaInicioParam +"&" +"fechaFinParam="+ fechaFinParam + "&" + "idCliente="+idCliente+"&estado="+estado+"&tipoDoc="+tipoDoc+"&actividadEconomica="+actividadEconomica+"&idCategoria="+idCategoria+"&codigo="+codigo +"&numeroFactura="+numeroFactura;
 }
 /**
  * Fecha de emision
@@ -548,7 +552,7 @@ function __BajarPDFHacienda(){
 		}else{	
 			var data = table.row($(this).parents("tr")).data();
 		}
-		 BajarArchivos("bajarPDFComprobanteAjax",data)
+		 BajarArchivos("generaFacturaPDF",data)
   });
 }
 
@@ -581,6 +585,6 @@ function __consultar(url,objeto){
 *  BajarDocumentos 
 **/
 function BajarArchivos(url,objeto){
-	location.href = url + "?idHacienda=" + objeto.id
+	location.href = url + "?consecutivo=" + objeto.numeroConsecutivo
 	
 }

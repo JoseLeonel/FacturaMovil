@@ -1285,16 +1285,16 @@ div.fondoVentaEspera:hover{
 <script>
     var self = this;
     self.colorVentaEspera = 'green'
-    self.parametros   = opts.parametros; 
-    // Detalle de la factura es una coleccion de articulos
+    self.parametros   = opts.parametros;
+
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.rutaAutorizada        = ""    // llama al modal correspondiente
-    self.autorizarBorrado      = 0    // 0 = no autoriza 1 = si autorisa 
+    self.rutaAutorizada        = ""
+    self.autorizarBorrado      = 0
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
-    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.tipoCedulas               = {data:[]}
     self.comboTipoDocumentoExonerados   = []
     self.subTotalGeneral       = 0
     self.codigoBarraFueraPantalla = ""
@@ -1364,8 +1364,8 @@ div.fondoVentaEspera:hover{
             nombreCompleto:""
         }
 
-    }         
-    self.cantidadEnterFacturar =0          
+    }
+    self.cantidadEnterFacturar =0
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
@@ -1376,7 +1376,7 @@ div.fondoVentaEspera:hover{
         nombreCompleto:""
     };
     self.facturas_espera       = {data:[]}
-    self.articulos_uso_interno      = {data:[]}  
+    self.articulos_uso_interno      = {data:[]}
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -1384,7 +1384,7 @@ div.fondoVentaEspera:hover{
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true
-    self.mostrarReferencias            = false 
+    self.mostrarReferencias            = false
     self.subTotalGeneral               = 0
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
@@ -1422,7 +1422,7 @@ div.fondoVentaEspera:hover{
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
-    self.mostrarBotonAgregarCliente = false  
+    self.mostrarBotonAgregarCliente = false
     self.actividadComercial = {
         codigo:"",
         descripcion:""
@@ -1476,7 +1476,7 @@ div.fondoVentaEspera:hover{
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
-        getPosicionInputCodigo()   
+        getPosicionInputCodigo()
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
             {
@@ -1507,12 +1507,10 @@ div.fondoVentaEspera:hover{
                 }else{
                     $(".codigo").val(null)
                     event.preventDefault()
-                    return 
+                    return
                 }
             }
         });
-
-        
 
         $( "#claveSistema" ).keyup(function( event ) {
             xTriggered++;
@@ -1522,8 +1520,6 @@ div.fondoVentaEspera:hover{
                __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
            }
         });
-
-
 
         $( "#precioAcambiar" ).keyup(function( event ) {
             xTriggered++;
@@ -1550,7 +1546,6 @@ div.fondoVentaEspera:hover{
            }
         });
 
-        
         $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
@@ -1578,7 +1573,6 @@ div.fondoVentaEspera:hover{
             disableF5(evento);
         }, false );
 
-      
     window.addEventListener( "mouseover", function(evento){
         actualizaElPlazoDiasCredito();
     }, false );
@@ -1588,19 +1582,19 @@ div.fondoVentaEspera:hover{
     window.addEventListener( "mousedown", function(evento){
         actualizaElPlazoDiasCredito();
     }, false );
-    window.addEventListener( "click", function(evento){  
+    window.addEventListener( "click", function(evento){
         actualizaElPlazoDiasCredito();
         teclamodal(evento);
     }, false );
-     
+
     })
 
-__EntradaDinero(){
+this.__EntradaDinero = function(){
   modalEntradaSalidaDinero(1)
-}   
-__SalidaDinero(){
+}.bind(this)
+this.__SalidaDinero = function(){
     modalEntradaSalidaDinero(2)
-}
+}.bind(this)
 
 function modalEntradaSalidaDinero(tipo){
  var parametros = {
@@ -1609,73 +1603,59 @@ function modalEntradaSalidaDinero(tipo){
     riot.mount('entrada-salida',{parametros:parametros});
 }
 
-__AplicarCambioPrecioUltimoArticulo(){
+this.__AplicarCambioPrecioUltimoArticulo = function(){
     __AplicarCambioPrecioBD()
-}    
-__RegresarInputCodigo(){
-    $(".codigo").val(null)
-    $('#modalCambiarPrecio').modal('hide')
-    getPosicionInputCodigo()
-}
-__RegresarInputSeguridad(){
-    $(".codigo").val(null)
-    $('#modalRolUsuario').modal('hide')
-    getPosicionInputCodigo()
-}
-
-function __ObtengoTipoCambio(){
-    var tempTipoCambio =__getTipoCambioCompra()
+}.bind(this)
     if(tempTipoCambio == null){
-       getTipoCambioDolar()  
+       getTipoCambioDolar()
     }else{
         self.tipoCambio.total = __getTipoCambioTotal()
         self.tipoCambio.totalCompra = __getTipoCambioCompra()
 
     }
     self.update()
-    
+
 }
 
 function __SetUltimoArticuloIngresado(){
    localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
-}    
+}
 
 function __getUltimoArticuloIngresado(){
     return JSON.parse(localStorage.getItem('ultimoArticulo'));
-} 
+}
 
 function __DeleteUltimoArticuloIngresado(){
     localStorage.removeItem('ultimoArticulo');
-} 
+}
 
 function __SetUltimoItemIngresado(item){
    localStorage.setItem('ultimoItem', JSON.stringify(item));
-}    
+}
 
 function __getUltimoItemIngresado(){
     return JSON.parse(localStorage.getItem('ultimoItem'));
-} 
+}
 
 function __DeleteUltimoItemIngresado(){
     localStorage.removeItem('ultimoItem');
-} 
+}
 
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
-    } 
+    }
     if($('#modalFacturasDia').is(':visible')){
-       getPosicionInputCodigo()   
+       getPosicionInputCodigo()
     }
 }
 
-    
-    function disableF5(e) { 
-     //   alert(e.keyCode)
-        if ((e.which || e.keyCode) == 116) e.preventDefault(); 
-        if ((e.which || e.keyCode) == 114) e.preventDefault(); //f3
-        if ((e.which || e.keyCode) == 112) e.preventDefault(); //f1
-        if ((e.which || e.keyCode) == 117) e.preventDefault(); 
+    function disableF5(e) {
+
+        if ((e.which || e.keyCode) == 116) e.preventDefault();
+        if ((e.which || e.keyCode) == 114) e.preventDefault();
+        if ((e.which || e.keyCode) == 112) e.preventDefault();
+        if ((e.which || e.keyCode) == 117) e.preventDefault();
         if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
@@ -1688,38 +1668,34 @@ function teclamodal(e){
             if (self.mostrarFormularioPago == false ){
                if ((e.which || e.keyCode) == 13) {
                     if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
-                        &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible') 
+                        &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
                         &&  !$('#modalCambiarPrecio').is(':visible')
                     ) {
                         getPosicionInputCodigo()
-                     } 
-                   
-                } 
+                     }
 
-            }   
-        }
-         
+                }
+
+            }
         }
 
-/**
-*  Cambiar el precio  del producto 
-**/
+        }
+
 function __AplicarCambioPrecioBD(){
     var parametros = __getUltimoArticuloIngresado();
     if(parametros == null){
         $('.codigo').val(null)
         getPosicionInputCodigo()
-        return 
+        return
     }
     parametros.precioPublico = $('.precioAcambiar').val()
-
 
     $.ajax({
         type : "POST",
         dataType : "json",
-        data : {id:parametros.id,precioPublico:parametros.precioPublico,descripcion:$('#descripcionArticuloAcambiar').val()},
+        data : {id:parametros.id,precioPublico:parametros.precioPublico},
         url : 'CambiarPrecioArticulo.do',
         success : function(data) {
             if (data.status != 200) {
@@ -1752,34 +1728,27 @@ function __AplicarCambioPrecioBD(){
     });
 }
 
-/**
-* volver  a posicionar el cursor en input de codigo
-**/
 function getPosicionInputCodigo(){
     $('.precioVenta').val(null)
     $('.codigo').val(null)
     $('.codigo').focus()
 }
-/**
-*Consulta hacienda
-**/
-__ConsultarHaciendaBlur(){
+
+this.__ConsultarHaciendaBlur = function(){
     getClienteHacienda()
 
-}
-__ConsultarHacienda(e){
+}.bind(this)
+this.__ConsultarHacienda = function(e){
      if (e.keyCode != 13) {
         return;
-    } 
+    }
     getClienteHacienda()
-}
-
-
+}.bind(this)
 
 function getClienteHacienda(){
      var cedula = $('#cedula').val()
     if(stringVacio($(".cedula").val()) == false){
-       return    
+       return
     }
     $('.correoElectronico').val('')
     self.clienteHacienda= {
@@ -1811,24 +1780,22 @@ function getClienteHacienda(){
                         self.update()
                         __listadoTipoCedulas()
                         $('#nombreCompleto').val(self.clienteHacienda.nombre)
-                        
+
                     });
                 }
             }
-            
+
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
             console.log(xhr);
         }
     });
-    
+
 }
-/**
-*  Mostrar listado datatable TipoCedulas
-**/
+
 function __listadoTipoCedulas(){
-    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.tipoCedulas               = {data:[]}
     self.update()
     if(self.clienteHacienda.tipoIdentificacion == "01") {
         self.tipoCedulas.data.push({
@@ -1847,7 +1814,7 @@ function __listadoTipoCedulas(){
             valor:"03",
             descripcion:$.i18n.prop("tipo.cedula.dimex")
         })
-    }    
+    }
     if(self.clienteHacienda.tipoIdentificacion == "04" ){
      self.tipoCedulas.data.push({
         valor:"04",
@@ -1876,10 +1843,9 @@ function __listadoTipoCedulas(){
     self.update()
 }
 
-
-__ClienteNuevo(){
+this.__ClienteNuevo = function(){
     __nuevoCliente()
-}
+}.bind(this)
 
 function __nuevoCliente(){
     $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
@@ -1914,19 +1880,19 @@ function __nuevoCliente(){
     $("#correoElectronico").val(null)
     $("#codigoPais").val(506)
     $("#telefono").val(null)
-   
-    $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true}) 
+
+    $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true})
 
     $('#modalAgregarClienteNuevo').on('shown.bs.modal', function () {
         $('#cedula').select()
-        $("#cedula").focus()   
+        $("#cedula").focus()
      });
 
 }
 
-__AplicarCambioPrecio(){
+this.__AplicarCambioPrecio = function(){
    seguridadCambiarPrecioLinea()
-}
+}.bind(this)
 
 function seguridadCambiarPrecioLinea(){
     self.autorizarBorrado = 3
@@ -1934,7 +1900,7 @@ function seguridadCambiarPrecioLinea(){
     if(self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
-        inputCursorUsuario()    
+        inputCursorUsuario()
     }else{
          __AplicarPrecioLinea()
     }
@@ -1944,26 +1910,22 @@ function __AplicarPrecioLinea(){
     self.ultimoArticulo = __getUltimoArticuloIngresado()
     self.update()
     if(self.ultimoArticulo == null){
-        return 
+        return
     }
     if(self.ultimoArticulo.tipoCodigo == '04' ){
-        return 
-        
+        return
+
     }
 
-    $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true})
     $('#modalCambiarPrecio').on('shown.bs.modal', function () {
         $(".precioAcambiar").val( self.ultimoArticulo.precioPublico)
         $(".precioAcambiar").focus()
         $(".precioAcambiar").select()
-    })  
+    })
 
 }
 
-
-/**
-* Camps requeridos
-**/
 var reglasDeValidacionClienteNuevo = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
@@ -1989,32 +1951,27 @@ var reglasDeValidacionClienteNuevo = function() {
                 required : true,
                 minlength:3,
 
-			}                          
+			}
 		},
 		ignore : []
 
 	});
 	return validationOptions;
 };
-/**
-*  Regresar al listado
-**/
-__regresarClienteNuevo(){
+
+this.__regresarClienteNuevo = function(){
     $('#modalAgregarClienteNuevo').modal('hide')
     getPosicionInputCodigo()
-}
+}.bind(this)
 
-/**
-*   Agregar 
-**/
-__AplicarAgregarCliente(){
+this.__AplicarAgregarCliente = function(){
      if ($("#formularioAgregarCliente").valid()) {
         aplicarCreacionClienteNuevo()
     }else{
         mensajeAdvertencia("Error Faltan datos requeridos")
         return true
     }
-}
+}.bind(this)
 
 function aplicarCreacionClienteNuevo(){
     var formulario = $("#formularioAgregarCliente").serialize();
@@ -2048,7 +2005,7 @@ function aplicarCreacionClienteNuevo(){
                        self.update()
                     });
                    	serverMessageJson(data);
-                    mensajeToasExito(data.message)   
+                    mensajeToasExito(data.message)
                     seleccionarEfectivo()
                 }
             },
@@ -2058,24 +2015,24 @@ function aplicarCreacionClienteNuevo(){
             }
         });
      }
-    })        
+    })
 
 }
-__ActualizarPlazoCredito(){
+this.__ActualizarPlazoCredito = function(){
     actualizaElPlazoDiasCredito();
-}
+}.bind(this)
 
-__AsignarActividad(e){
+this.__AsignarActividad = function(e){
     BuscarActividadComercial()
-}
+}.bind(this)
 
 function BuscarActividadComercial(){
     var codigo =$('#selectActividadComercial').val()
     if(self.empresaActividadComercial == null){
-       return    
+       return
     }
     if(self.empresaActividadComercial.length == 0){
-       return    
+       return
     }
     $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
         if(modeloTabla.codigo == codigo  ){
@@ -2087,7 +2044,6 @@ function BuscarActividadComercial(){
 
     })
 }
-
 
 function actualizaElPlazoDiasCredito(){
     var valor = $('.selectFechaCredito').val()
@@ -2103,9 +2059,6 @@ function actualizaElPlazoDiasCredito(){
 
 }
 
-/**
-* Verificar el Rol Admnistrador
-**/
 function __RolAdministrador(){
     $.ajax({
         url: "RolUsuarioAjax.do",
@@ -2128,21 +2081,19 @@ function __RolAdministrador(){
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
-            
+
         }
     });
 
 }
-/**
-* Validar seguridad de ruta autorizada
-**/ 
-__SeguridadVentas(){
+
+this.__SeguridadVentas = function(){
      __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
-    
-}
+
+}.bind(this)
 
 function __validarRolAdministrador(formulario,url){
-    var resultado = false;	
+    var resultado = false;
     if ($(formulario).valid()) {
         var formulario = $(formulario).serialize();
         $.ajax({
@@ -2167,9 +2118,9 @@ function __validarRolAdministrador(formulario,url){
                     self.validarRolCommand = {
                         usuarioSistema : "",
                         claveSistema:""
-                    }   
+                    }
                     self.update()
-               	    $('#modalRolUsuario').modal('hide') 
+               	    $('#modalRolUsuario').modal('hide')
                     $('.modal-backdrop').remove();
                     if(self.autorizarBorrado == 0){
                         permitirModal()
@@ -2184,7 +2135,7 @@ function __validarRolAdministrador(formulario,url){
                         self.update()
                         refrescarPagina()
                     }
-                    //cambiar el precio
+
                     if(self.autorizarBorrado == 3){
                         self.autorizarBorrado = 0
                         self.update()
@@ -2198,7 +2149,7 @@ function __validarRolAdministrador(formulario,url){
                     mensajeAdvertencia("No autorizado");
                     return true;
                 }
-          
+
              }
           },
           error : function(xhr, status) {
@@ -2207,10 +2158,10 @@ function __validarRolAdministrador(formulario,url){
           }
         });
     }
-    
+
 }
 function permitirModal(){
-    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true})     
+    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true})
         $(self.rutaAutorizada).on('shown.bs.modal', function () {
         $(self.inputCursorModal).val()
         $(self.inputCursorModal ).focus()
@@ -2218,26 +2169,24 @@ function permitirModal(){
     })
 }
 
-_clickEfectivo(){
+this._clickEfectivo = function(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
-}    
+}.bind(this)
 
-_SeleccionarTarjeta(){
+this._SeleccionarTarjeta = function(){
     $('.totalTarjeta').select()
     $(".totalTarjeta").focus()
-}   
-_SeleccionarBanco(){
+}.bind(this)
+this._SeleccionarBanco = function(){
     $('.totalBanco').select()
     $(".totalBanco").focus()
-}    
-/**
- * Reimprime la factura
- **/
-_ReimprimirFactura(){
+}.bind(this)
+
+this._ReimprimirFactura = function(){
     reimprimirFacturaEnMomento()
 
-}
+}.bind(this)
 function reimprimirFacturaEnMomento(){
 
   if(self.facturaReimprimir ==null){
@@ -2247,7 +2196,7 @@ function reimprimirFacturaEnMomento(){
        var clienteObject = JSON.parse(localStorage.getItem('cliente'));
        self.cliente = clienteObject
        self.update()
-    }    
+    }
   }
   if(self.facturaReimprimir ==null){
       return
@@ -2255,9 +2204,7 @@ function reimprimirFacturaEnMomento(){
   consultaFactura(self.facturaReimprimir,0)
   getPosicionInputCodigo()
 }
-/**
-* Consultar la empresa
-**/
+
 function _Empresa(){
      $.ajax({
         url: "ParametrosEmpresaAjax.do",
@@ -2291,7 +2238,7 @@ function _Empresa(){
                     });
                 }
             }
-            
+
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -2300,12 +2247,10 @@ function _Empresa(){
     });
 
 }
-/**
-* LLimpiar Formulario
-**/
-__LimpiarFormulario(){
+
+this.__LimpiarFormulario = function(){
     __SeguridadLimpiar()
-}
+}.bind(this)
 function __SeguridadLimpiar(){
     self.autorizarBorrado = 2
     self.update()
@@ -2325,47 +2270,40 @@ function __SeguridadLimpiar(){
 }
 
 function inputCursorUsuario(){
-    $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true})
     $('#modalRolUsuario').on('shown.bs.modal', function () {
         $("#usuarioSistema").val("")
         $("#claveSistema").val("")
         $(".usuarioSistema").focus()
         $(".usuarioSistema").select()
-    })  
+    })
 
 }
 
-/**
-* Camps requeridos
-**/
 var reglasDeValidacionFactura = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			
+
              nota:{
                  maxlength:255,
              },
              direccion:{
                  maxlength:255,
-             }         
+             }
 		},
 		ignore : []
 
 	});
 	return validationOptions;
 };
-/**
-* listado por Dia
-**/
-_ListaFacturasDia(){
+
+this._ListaFacturasDia = function(){
    ListadoFacturasDelDia()
-}
-/**
-*  Facturas del Dia
-**/
+}.bind(this)
+
 function ListadoFacturasDelDia(){
-      $(".tableListarFacturasDia").dataTable().fnClearTable(); 
-        __InicializarTabla('.tableListarFacturasDia')  
+      $(".tableListarFacturasDia").dataTable().fnClearTable();
+        __InicializarTabla('.tableListarFacturasDia')
         $.ajax({
             url: "ListarFacturasDelDiaAjax.do",
             datatype: "json",
@@ -2377,12 +2315,12 @@ function ListadoFacturasDelDia(){
                     loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
                     agregarInputsCombos_Facturas_Dias();
                     ActivarEventoFiltro(".tableListarFacturasDia")
-                    $('#modalFacturasDia').modal('show')    
+                    $('#modalFacturasDia').modal('show')
                      __reimprimir()
                 }else{
                     __InformacionDataTableDia();
                      agregarInputsCombos_Facturas_Dias();
-                }           
+                }
             },
             error: function (xhr, status) {
                 mensajeErrorServidor(xhr, status);
@@ -2402,17 +2340,15 @@ function loadListar(table,idioma,formatoTabla,data){
         'responsive': true,
         "bAutoWidth": true,
         "lengthChange": true,
-       
+
         "columns": formatoTabla,
-    });  
+    });
     $(table).dataTable().fnClearTable();
-    $(table).dataTable().fnAddData(data);        
+    $(table).dataTable().fnAddData(data);
 }
-/**
-* formato del listado de facturas del dia
-**/
+
 function __InformacionDataTableDia(){
-    self.formato_tabla_dias = [ 
+    self.formato_tabla_dias = [
                                {'data' : 'id' ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -2426,7 +2362,7 @@ function __InformacionDataTableDia(){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                             
+
                                {'data' :'condicionVentaSTR' ,"name":"condicionVentaSTR","title" : "Pago"   ,"autoWidth" :true },
                                 {'data' :'cliente'  ,"name":"cliente"  ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
@@ -2437,7 +2373,7 @@ function __InformacionDataTableDia(){
                                {'data' :'totalComprobanteSTR' ,"name":"totalComprobanteSTR" ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
 	      		            ];
     self.update();
-   
+
 }
 
 function __ClienteNombreFactura(row){
@@ -2452,66 +2388,52 @@ function __ClienteNombreFactura(row){
         return nombreFactura.length > 50 ?nombreFactura.substring(0,35) + "..." :nombreFactura;
     }
 
-
 }
-/**
-*Opciones del listado de las facturas por dia
-**/
+
 function __Opciones(){
   var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
   return  agregar;
 }
-/**
-*imprimir
-**/
+
 function __reimprimir(){
 	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
 		var table = $('#tableListarFacturasDia').DataTable();
 		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
+
 	       var data = table.row(this).data();
-	    }else{	
+	    }else{
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         consultaFactura(data,1)
 	});
 }
-/**
-* Consultar la factura
-**/
+
 function consultaFactura(data,tipoImpresion){
     var parametros = {
         factura:data,
         facturaDia:tipoImpresion
     }
     riot.mount('ptv-imprimir',{parametros:parametros});
-    return 
+    return
 }
 
-
-
-/**
-* Camps requeridos
-**/
 var reglasDescuentoAplicar = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			aplicarDescuento : {
 			    numeroMayorIgualCero:true,
-			}           
+			}
 		},
 		ignore : []
 
 	});
 	return validationOptions;
 };
-/**
-* Aplicar el descuento
-**/
-__CambiarDescuento(e){
+
+this.__CambiarDescuento = function(e){
     $("#aplicarDescuento").attr("maxlength", 7);
      $("#formularioDescuento").validate(reglasDescuentoAplicar());
-    self.item = e.item; 
+    self.item = e.item;
     self.rutaAutorizada = '';
     self.update()
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
@@ -2520,19 +2442,17 @@ __CambiarDescuento(e){
         self.update()
         inputCursorUsuario()
    }else{
-        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true})
         $('#modalCambiarDescuento').on('shown.bs.modal', function () {
             $( "#aplicarDescuento" ).focus()
             $( "#aplicarDescuento" ).val(null)
-        }) 
+        })
     }
-}
-/**
-*Cambiar Cantidad del Articulo
-**/
-__CambiarCantidad(e){
+}.bind(this)
+
+this.__CambiarCantidad = function(e){
    var cantidad = e.currentTarget.value;
-   self.item = e.item; 
+   self.item = e.item;
    self.rutaAutorizada = '';
    self.update()
    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
@@ -2541,63 +2461,52 @@ __CambiarCantidad(e){
         self.update()
         inputCursorUsuario()
    }else{
-        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true})
         $('#modalCambiarCantidad').on('shown.bs.modal', function () {
             $( "#cambiarCantidadArticulo" ).val(cantidad)
             $( "#cambiarCantidadArticulo" ).focus()
             $( "#cambiarCantidadArticulo" ).select()
-        })   
+        })
    }
- }
+ }.bind(this)
 
-/**
-*  Obtiene el valor de lo digitado en el campo de efectivo
-**/
-__TotalDeEfectivoAPagar(e){
+this.__TotalDeEfectivoAPagar = function(e){
     self.totalCambioPagarSTR = 0
-    self.factura.totalEfectivo = __valorNumerico(e.target.value) 
+    self.factura.totalEfectivo = __valorNumerico(e.target.value)
     if(self.factura.totalEfectivo ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}
-/**
-*  Obtiene el valor de lo digitado en el campo de Tarjeta
-**/
-__TotalDeTarjetaAPagar(e){
-    self.factura.totalTarjeta = __valorNumerico(e.target.value) 
+}.bind(this)
+
+this.__TotalDeTarjetaAPagar = function(e){
+    self.factura.totalTarjeta = __valorNumerico(e.target.value)
     if(self.factura.totalTarjeta ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}
-/**
-*  Obtiene el valor de lo digitado en el campo de Banco
-**/
-__TotalDeBancoAPagar(e){
-    self.factura.totalBanco = __valorNumerico(e.target.value) 
+}.bind(this)
+
+this.__TotalDeBancoAPagar = function(e){
+    self.factura.totalBanco = __valorNumerico(e.target.value)
     if(self.factura.totalBanco ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}
-/**
-*   Calculo del cambio entregar en el evento onblur
-**/
-__CalculaCambioAEntregarOnblur(e){
+}.bind(this)
+
+this.__CalculaCambioAEntregarOnblur = function(e){
     _calculoEnterPago()
-}
-/**
-*   Calculo del cambio entregar en el evento keyPress
-**/
-__CalculaCambioAEntregarKeyPress(e){
+}.bind(this)
+
+this.__CalculaCambioAEntregarKeyPress = function(e){
     if (e.keyCode == 13) {
         __Calcular()
     }
-}
+}.bind(this)
 
 function __Calcular(){
        _calculoEnterPago()
@@ -2626,12 +2535,12 @@ function __Calcular(){
 }
 function _calculoEnterPago(){
         var sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
-        sumaMontosEntregadosParaCambios += __valorNumerico($('#totalBanco').val()) 
-        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())   
+        sumaMontosEntregadosParaCambios += __valorNumerico($('#totalBanco').val())
+        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())
         if(sumaMontosEntregadosParaCambios == 0){
             self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
-            self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)    
+            self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
             self.update()
             return
         }
@@ -2639,24 +2548,22 @@ function _calculoEnterPago(){
         var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
         var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
         totalEntregado     = __valorNumerico(totalEntregado)
-        totalFactura       = __valorNumerico(totalFactura)  
+        totalFactura       = __valorNumerico(totalFactura)
         self.factura.totalCambioPagar = totalEntregado - totalFactura
-        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
         self.update()
 }
-/**
-* Enter es para verificar si el cliente presiono dos veces enter y mandalo a facturar
-**/
+
 function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
         return
     }
     if(self.empresa.abrirSinComanda == 1 || self.empresa.abrirConComanda == 1 ){
-      //Abrir cajon sin comanda
+
       __OpcionAbrirCajon()
-    }  
+    }
     swal({
            title: '',
            text: $.i18n.prop("factura.mensaje.alert.enter"),
@@ -2668,25 +2575,21 @@ function __EnterFacturar(){
             cancelButtonText: $.i18n.prop("confirmacion.no"),
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
-           
+
     }).then(function (isConfirm) {
             if(isConfirm){
                  aplicarFactura(2)
             }
-    } 
-        );   
+    }
+        );
         self.cantidadEnterFacturar = 0
         self.update()
 }
-/**
- * Listar codigos  llamado del modal para presentar los articulos
- **/   
- __ListaDecodigos(){
+
+ this.__ListaDecodigos = function(){
      ListarCodigosArticulos()
- }
-/**
-Lista de articulos
-**/
+ }.bind(this)
+
  function ListarCodigosArticulos(){
     self.mostrarListadoArticulos = true
     self.update()
@@ -2694,38 +2597,30 @@ Lista de articulos
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-     $('#modalInventario').modal('show') 
+     $('#modalInventario').modal('show')
     $('#modalInventario').on('shown.bs.modal', function () {
         $('#descArticulo').select()
         $('#descArticulo').focus()
-    
+
     })
-    
+
  }
-/**
-*  Buscar la Factura Pendiente en espera
-**/
-__CargarFacturaEspera(e){
+
+this.__CargarFacturaEspera = function(e){
    __FacturaEnEspera(e.item)
-}
-/**
-** Se aplica o se crea una Factura cargada en la pantalla
-**/
-__AplicarYcrearFactura(e){
-   
+}.bind(this)
+
+this.__AplicarYcrearFactura = function(e){
+
  aplicarFactura(2)
-}
-/**
-* Aplicando factura temporal
-**/
-__AplicarYcrearFacturaTemporal(e){
-    
+}.bind(this)
+
+this.__AplicarYcrearFacturaTemporal = function(e){
+
  __OpcionAbrirCajon()
  aplicarFactura(1)
-}
-/**
-* Aplicar la factura
-**/
+}.bind(this)
+
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
         mensajeAdvertencia($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
@@ -2745,7 +2640,7 @@ function aplicarFactura(estado){
            return
         }
     }else{
-        // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
+
         if($("#tipoDoc").val() !="88"){
             if(estado == 2){
                 if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
@@ -2754,42 +2649,34 @@ function aplicarFactura(estado){
                 }
                 var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
                 montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
-               // if(montoEntregado > 20000000){
-               //     mensajeError("Monto entregado es muy alto")
-               //     return
-               // }
+
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
                     mensajeAdvertencia($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
-                //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
+
                 var tarjeta = __valorNumerico($('#totalTarjeta').val())
                 var banco = __valorNumerico($('#totalBanco').val())
                 if(tarjeta != 0 || banco !=0){
                     if(resultado != montoEntregado  ){
                         mensajeAdvertencia($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                     return
-                        
+
                     }
                 }
-                
 
             }
        }
-            
-    } 
-    crearFactura(estado)  
+
+    }
+    crearFactura(estado)
 }
-/**
-* Limpiar Pantalla
-**/
-__Limpiar(){
+
+this.__Limpiar = function(){
     __Init()
-}
-/**
-*  Inicializar las variables de trabajos
-**/
+}.bind(this)
+
 function __Init(){
     __DeleteUltimoItemIngresado()
     __DeleteUltimoArticuloIngresado()
@@ -2867,7 +2754,7 @@ function __Init(){
             nombreCompleto:""
         }
 
-    } 
+    }
     self.totalPesoByFacturaSTR = ''
     self.totalPesoByFactura  =0
     self.totalGananciaByProducto =0
@@ -2882,7 +2769,7 @@ function __Init(){
     self.error                 = false
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
-    self.facturas_espera       = {data:[]}  
+    self.facturas_espera       = {data:[]}
     self.item                  = null;
     self.articulo              = null;
     self.descripcionArticulo   = ""
@@ -2910,18 +2797,18 @@ function __Init(){
     self.totalCambioPagar              = 0
     self.totalCambioPagarSTR           = 0
     self.update();
-    $(".tableListarFacturasDia").dataTable().fnClearTable(); 
+    $(".tableListarFacturasDia").dataTable().fnClearTable();
     __InicializarTabla('.tableListarFacturasDia')
     $('#condicionVenta').prop("selectedIndex", 0);
      $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $('.selectListaPrecios').prop("selectedIndex", 0);
     $(".nota").attr("maxlength", 80);
-    $("#totalBanco").val(null)   
-    $(".totalTarjeta").val(null)   
+    $("#totalBanco").val(null)
+    $(".totalTarjeta").val(null)
     $(".nombreFactura").val(null)
     $(".correoAlternativo").val(null)
-    $(".totalEfectivo").val(null)   
+    $(".totalEfectivo").val(null)
     $('.precioVenta').val(null)
     $("#plazoCreditoL").val(null)
     $("#nota").val(null)
@@ -2936,9 +2823,9 @@ function __Init(){
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
     $('.selectActividadComercial').prop("selectedIndex", 0);
-    // Tipo de Pagos
+
      __comboCondicionPago()
-     //Tipos de Documentos
+
       __ComboTipoDocumentos(0)
     __ListaFacturasEnEspera()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
@@ -2946,13 +2833,11 @@ function __Init(){
     localStorage.setItem('cliente', JSON.stringify(self.cliente));
     getPosicionInputCodigo()
 }
-/**
-*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
-**/
+
 function __FacturaEnEspera(factura){
      __Init()
     $.ajax({
-        url: "ListarDetlleByFacturaAjax.do", 
+        url: "ListarDetlleByFacturaAjax.do",
         datatype: "json",
         data: {idFactura:factura.id},
         method:"POST",
@@ -2963,13 +2848,11 @@ function __FacturaEnEspera(factura){
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
-            
+
         }
     });
 }
-/**
-*  Cargar detalles Factura en espera
-**/
+
 function cargarDetallesFacturaEnEspera(data){
     $('.nota').val(null);
     $('.correoAlternativo').val(null);
@@ -3046,22 +2929,18 @@ function cargarDetallesFacturaEnEspera(data){
 }
 
 function seleccionarEfectivo(){
-    
+
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
     return
 
 }
-/** 
-*Formato de la fecha con hora
-**/
+
 function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
-/**
-*  Crear Factura nueva
-**/
+
 function crearFactura(estado){
     BuscarActividadComercial()
     if( self.factura.codigoActividad.length == 0 ){
@@ -3071,19 +2950,19 @@ function crearFactura(estado){
       if (self.transaccion == true ){
         return false
     }
-    self.transaccion = true 
+    self.transaccion = true
     self.update()
     self.detalleFactura.data =self.detail
-    self.update() 
-    var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
-    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
+    self.update()
+    var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date()
+    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date()
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
     self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
-    self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
+    self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val())
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
     self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
@@ -3092,7 +2971,7 @@ function crearFactura(estado){
     self.factura.tipoCambio = self.tipoCambio.total ==null?__getTipoCambioCompra():self.tipoCambio.total
     if(self.factura.tipoCambio ==null){
         self.factura.tipoCambio =575
-        
+
     }
     self.update();
     var formulario = $("#formularioFactura").serialize();
@@ -3106,7 +2985,7 @@ function crearFactura(estado){
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                     mensajeAdvertencia(data.message);    	
+                     mensajeAdvertencia(data.message);
                 }
                 self.transaccion = false
                 self.update()
@@ -3127,9 +3006,7 @@ function crearFactura(estado){
         }
     });
 }
-/**
-*Si fue facturada o tiquete
-**/
+
 function evaluarFactura(data){
     self.facturaImprimir =null
      self.factura                = {
@@ -3176,7 +3053,7 @@ function evaluarFactura(data){
             id:null,
             nombreCompleto:""
         }
-    }     
+    }
     self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
@@ -3188,7 +3065,7 @@ function evaluarFactura(data){
         });
         if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
             __Init()
-            //Envia a la pantalla de impresion
+
             localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
             if(self.empresa.imprimirSiempre == 0){
                 mensajeToasExito(mostrarMensajeCreacionConsecutivo(self.facturaImprimir))
@@ -3205,11 +3082,9 @@ function evaluarFactura(data){
         }
     }
 }
-/**
-*  Lista de las facturas pendientes por el usuario
-**/
+
 function __ListaFacturasEnEspera(){
-     self.facturas_espera       = {data:[]}  
+     self.facturas_espera       = {data:[]}
      self.update()
     $.ajax({
         url: 'ListarFacturasEsperaActivasAjax',
@@ -3218,28 +3093,24 @@ function __ListaFacturasEnEspera(){
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-               self.facturas_espera.data =  result.aaData;  
-               self.update(); 
+               self.facturas_espera.data =  result.aaData;
+               self.update();
             }
         },
         error: function (xhr, status) {
             console.log(xhr);
             window.location.href = "login";
         }
-    });    
+    });
 }
-/**
-*  Obtiene el valor de lo digitado en el campo de Descuento
-**/
-__TotalDeDescuento(e){
-    self.factura.porcentajeDesc = __valorNumerico(e.target.value) 
+
+this.__TotalDeDescuento = function(e){
+    self.factura.porcentajeDesc = __valorNumerico(e.target.value)
     self.update()
     __calculate()
-}
-/**
-*   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
-**/
-_AtrasFacturaFinal(){
+}.bind(this)
+
+this._AtrasFacturaFinal = function(){
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaFactura = true
    self.cantidadEnterFacturar = 0
@@ -3247,16 +3118,14 @@ _AtrasFacturaFinal(){
    self.error = false
    self.update()
    getPosicionInputCodigo()
-}
-/**
-*    Muesta el campo de la fecha de credito
-**/
-__formaPago(e){
-    //Contado /sin cobro
+}.bind(this)
+
+this.__formaPago = function(e){
+
     if(e.currentTarget.value == 1 || e.currentTarget.value == 3){
         self.mostrarCamposIngresoContado = true
     }
-    //Credito
+
     if(e.currentTarget.value == 2){
         self.mostrarCamposIngresoContado = false
     }
@@ -3268,20 +3137,16 @@ __formaPago(e){
               startDate: '-0d',
               todayHighlight:true,
             }
-    );  
-    $('.plazoCreditoL').val(0)  
-}
-/**
-*   funcion para grabar la Factura en el back end
-**/
-__MostrarFormularioDePago(){
+    );
+    $('.plazoCreditoL').val(0)
+}.bind(this)
+
+this.__MostrarFormularioDePago = function(){
     mostrarPAgo()
-}
-/**
-*Mostrar Pago
-**/
+}.bind(this)
+
 function mostrarPAgo(){
-     //No hay detalles registrados en la Factura
+
     if(self.detail.length == 0 ){
         getPosicionInputCodigo()
         mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
@@ -3300,17 +3165,15 @@ function mostrarPAgo(){
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     seleccionarEfectivo()
 }
-/**
-Lectura de Codigos
-**/
+
 function lecturaCodigo(){
     var valor = $('.codigo').val()
     if (valor == ""){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
-            self.update() 
-             __EnviarFacturar()  
-             return 
+            self.update()
+             __EnviarFacturar()
+             return
         }else{
             self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
             self.update()
@@ -3319,22 +3182,20 @@ function lecturaCodigo(){
     var objetos = getCantidadAdnCodigo_PV();
     var codigoActual = objetos.codigo
     var cantidadAct =objetos.cantidad
-// esto es para cuando un cliente quiere sumar varios productos
+
     if(valor.indexOf("+") != -1){
-        
+
        __sumarMasArticulo(objetos.codigo,0,cantidadAct)
        getPosicionInputCodigo()
-       return  
+       return
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
 }
-/**
-*  cambiar el precio
-**/
-__addPrecioDetail(e){
+
+this.__addPrecioDetail = function(e){
     if (e.keyCode != 13) {
         return;
-    } 
+    }
     var codigo = $('#codigo').val()
     if(codigo.length == 0){
        __EnviarFacturar()
@@ -3345,60 +3206,54 @@ __addPrecioDetail(e){
 
     var valor = __valorNumerico(cantidadAct)
     var precio = e.currentTarget.value
-    // esto es para cuando un cliente quiere sumar varios productos
+
     if(codigo.indexOf("+") != -1){
        __sumarMasArticulo(codigoActual,precio,cantidadAct)
        getPosicionInputCodigo()
-       return  
+       return
     }
     __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
     getPosicionInputCodigo()
-}
-/**
-Busca el canidad digitado sin el mas o por
-**/
+}.bind(this)
+
 function getCantidadAdnCodigo_PV(){
     var objeto ={
         codigo:'',
         cantidad:0
     }
-    
+
     var valor = $('.codigo').val()
-    //var esSuma  = valor.indexOf("+"); 
+
     var existe = false
     var existeMas = false
     for(i=0; i<valor.length; i++){
         existeMas = valor.indexOf("+") !=-1?true : false
        if(existe == false && existeMas  == false ){
-          existe = valor.charAt(i) == "*"?true : false  
+          existe = valor.charAt(i) == "*"?true : false
          if(valor.charAt(i) !="*" && valor.charAt(i) != "+"){
-              objeto.codigo = objeto.codigo + valor.charAt(i)  
+              objeto.codigo = objeto.codigo + valor.charAt(i)
           }
        }else{
            if(valor.charAt(i) != "+" && valor.charAt(i) != "*"){
-              objeto.cantidad = objeto.cantidad + valor.charAt(i)  
+              objeto.cantidad = objeto.cantidad + valor.charAt(i)
            }
-           
+
        }
     }
     return objeto;
-  
+
 }
-/**
-*sumar mas cantidad al ultimor articulo ingresado
-**/
+
 function __sumarMasArticulo(codigo,precio,cant){
     var temArticulo = __getUltimoArticuloIngresado()
     if(temArticulo == null){
         return;
     }
- //   if(temArticulo.tipoCodigo == "04" || self.empresa.tieneLector !="Activo"){
- //      return
- //   }
+
     var valorPrecio =  parseFloat(precio)
     var cantidadAct =cant
     aplicarSumaAlCodigo(valorPrecio,cantidadAct,true);
-     
+
 }
 
 function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
@@ -3423,34 +3278,26 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
     }
     __calculate();
 }
-/**
-* Buscar codigo
-**/
-__agregarArticuloBotonAgregar(){
+
+this.__agregarArticuloBotonAgregar = function(){
    __buscarcodigo($( "#codigo" ).val(),1,0);
    return
-}
-/**
-* consultando por descripcion
-**/
-__ConsultarProductosDesc(e){
+}.bind(this)
+
+this.__ConsultarProductosDesc = function(e){
     if (e.keyCode != 13) {
         return;
-    } 
-    __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
-}
-/**
-*Consultando por codigo
-**/
-__ConsultarProductosCod(e){
+    }
+    __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)
+}.bind(this)
+
+this.__ConsultarProductosCod = function(e){
     if (e.keyCode != 13) {
         return;
-    } 
-    __ListaDeArticulosPorDescripcion()   
-}
-/**
-* mostrar la lista de articulos de la empresa
-**/
+    }
+    __ListaDeArticulosPorDescripcion()
+}.bind(this)
+
 function __ListaDeArticulosPorDescripcion(){
     if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
         return
@@ -3471,7 +3318,7 @@ function __ListaDeArticulosPorDescripcion(){
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
                 ActivarEventoFiltro(".tableListarArticulos")
-                 
+
             }
         },
         error: function (xhr, status) {
@@ -3480,21 +3327,15 @@ function __ListaDeArticulosPorDescripcion(){
         }
     });
 }
-/**
-*  Muestra la lista de clientes
-**/
-_EscogerClientes(){
+
+this._EscogerClientes = function(){
     __ListaDeClientes()
- }
-/**
-*  Muestra la lista de vendedores
-**/
-_EscogerVendedores(){
-    $('#modalVendedor').modal('show')  
- }
-/**
-*  Lista de los vendedores
-**/
+ }.bind(this)
+
+this._EscogerVendedores = function(){
+    $('#modalVendedor').modal('show')
+ }.bind(this)
+
 function __ListaDeVendedores(){
     $.ajax({
         url: 'ListarVendedoresActivosAjax.do',
@@ -3517,9 +3358,7 @@ function __ListaDeVendedores(){
     });
     return
 }
-/**
-*  Lista de los clientes
-**/
+
 function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
@@ -3537,14 +3376,14 @@ function __ListaDeClientes(){
                         liveSearch: true
                     }
                 );
-                
+
                  self.informacion_tabla_clientes =__informacionData_formato_cliente()
                  self.update()
                 loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
-                 $('#modalClientes').modal('show')  
+                 $('#modalClientes').modal('show')
             }
         },
         error: function (xhr, status) {
@@ -3555,9 +3394,6 @@ function __ListaDeClientes(){
     return
 }
 
-/**
-*  Lista de los clientes
-**/
 function __ListaActividadesComercales(){
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
@@ -3578,9 +3414,7 @@ function __ListaActividadesComercales(){
     });
     return
 }
-/**
-*  Lista de los codigos de uso interno
-**/
+
 function __ListaArticulosUsoInterno(){
     $.ajax({
         url: 'ListarArticulosActivosUsoInternoAjax.do',
@@ -3599,9 +3433,7 @@ function __ListaArticulosUsoInterno(){
     });
     return
 }
-/**
-* Buscar el codigo del codigo si esta input de precio aplica esto cuando es codigo de uso interno
-**/
+
 function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     if(idArticulo ==null){
         return
@@ -3633,7 +3465,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                         self.update()
                         if(self.articulo !=null){
                             actualizarArticuloPrecio(precio,cantidad)
-    
+
                         }
                     });
                 }
@@ -3644,11 +3476,9 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
           mensajeErrorServidor(xhr, status);
         }
     });
-   return 
+   return
 }
-/**
-*Actualiza el Precio del articulo
-**/
+
 function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
@@ -3657,9 +3487,7 @@ function actualizarArticuloPrecio(precio,cantidad){
     self.update()
     __agregarArticulo(cantidad)
 }
-/**
-* Buscar el codigo del codigo  en la base de datos
-**/
+
 function __buscarcodigo(idArticulo,cantidad,precio){
     self.articulo = null
     self.update()
@@ -3678,7 +3506,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
                     mensajeAdvertencia(data.message);
-              
+
                 }
             }else{
                 self.articulo  = null
@@ -3711,12 +3539,9 @@ function __buscarcodigo(idArticulo,cantidad,precio){
           mensajeErrorServidor(xhr, status);
         }
     });
-   return 
+   return
 }
 
-/**
-*  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
-**/
 function __agregarArticulo(cantidad){
     if(self.articulo == null){
         return;
@@ -3735,12 +3560,12 @@ function __agregarArticulo(cantidad){
         encontrado = true;
     }
 
-    __SetUltimoArticuloIngresado() 
+    __SetUltimoArticuloIngresado()
     if( encontrado ==false){
-        if(self.detail[0] == null){ // first element
+        if(self.detail[0] == null){
             __nuevoArticuloAlDetalle(cantidad);
             encontrado = true;
-        }else{//Se busca el articulo si existe se incrementa la cantidad
+        }else{
             for (var count = 0; count < self.detail.length; count++) {
                 if (self.detail[count].codigo == self.articulo.codigo ){
                 self.item          = self.detail[count];
@@ -3752,17 +3577,17 @@ function __agregarArticulo(cantidad){
                 self.detail[count] = self.item;
                 encontrado = true;
                 self.update();
-                
+
                 }
             }
         }
-        // si no existe se agrega como un codigo nuevo
-        if(encontrado == false){ // add elemen
+
+        if(encontrado == false){
         __nuevoArticuloAlDetalle(cantidad);
         }
 
     }
-    __calculate(); 
+    __calculate();
     return encontrado
 }
 
@@ -3771,76 +3596,69 @@ function aplicarLineaFacturaCambioPrecio(){
         if (self.detail[count].codigo == self.articulo.codigo ){
             self.item          = self.detail[count];
             self.cantidadEnterFacturar = 0
-            self.cantArticulos = self.cantArticulos 
-            //Determinar el precio a incluir
+            self.cantArticulos = self.cantArticulos
+
             var resultadoPrecio = getListaPrecio(self.articulo)
             var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
             var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
             self.item.precioUnitario = precioUnitario
-            self.item.descripcion = self.articulo.descripcion
             self.update();
             ActualizarLineaDEtalle()
-            
+
             self.detail[count] = self.item;
             self.update();
          }
     }
-    __calculate(); 
+    __calculate();
 
 }
-/**
-* eliminar un detalle factura
-**/
-__removeProductFromDetail(e) {
+
+this.__removeProductFromDetail = function(e) {
     self.autorizarBorrado = 1
     self.itemEliminar = e.item;
     self.update()
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
-        inputCursorUsuario()  
+        inputCursorUsuario()
     }else{
         eliminarDetalle()
     }
-}
+}.bind(this)
 function buscarItemEliminar(item){
     for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == item.codigo && self.detail[count].numeroLinea == item.numeroLinea ){
              self.detail.splice(count, 1);
              self.update()
-           
+
         }
     }
 }
-/**
-*    Eliminar detalle
-**/
+
 function  eliminarDetalle(){
     buscarItemEliminar(self.itemEliminar)
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
     for (var count = 0; count < self.detail.length; count++) {
-         num = num + 1 
+         num = num + 1
     }
     if(num > 0){
         var cont  = 0
        self.detail.forEach(function(elemen){
-            elemen.numeroLinea = num 
+            elemen.numeroLinea = num
             num = num > 0?num -1:1
             cont =  cont + 1
-        })  
+        })
         self.numeroLinea =  cont
     }else{
-      self.numeroLinea =  0  
+      self.numeroLinea =  0
     }
     self.update()
      __calculate();
      __DeleteUltimoArticuloIngresado()
      __DeleteUltimoItemIngresado()
  }
-/**
-*   agregar Articulos nuevos en el detalle de la factura
-**/
+
 function __nuevoArticuloAlDetalle(cantidad){
     if(self.articulo.descripcion == null){
         return;
@@ -3869,7 +3687,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 }
 
 function setItemNuevo(cantidad){
-    //Determinar el precio a incluir
+
     var resultadoPrecio = getListaPrecio(self.articulo)
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
@@ -3879,16 +3697,16 @@ function setItemNuevo(cantidad){
     var subTotal        = montoTotal
     var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
-    var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
+    var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo);
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
-   
+
    var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
-       pesoPrioridad   : self.pesoPrioridad,  
+       pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
        tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
        iva             : __valorNumerico(self.articulo.impuesto),
@@ -3929,43 +3747,43 @@ function verificarTarifa(){
     if(__valorNumerico(self.articulo.impuesto) > 0 ||  __valorNumerico(self.articulo.impuesto1) > 0){
        if (self.articulo.tipoImpuesto =='01' ||  self.articulo.tipoImpuesto =='07'){
             if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
-                return true 
+                return true
             }
-    
+
        }
     }
     return false
 }
 
 function getListaPrecio(articulo){
-    //Precio Publico
+
     if($('.selectListaPrecios').val()==1){
         resultado=  __valorNumerico(articulo.precioPublico )
     }
-    //Precio Mayorista
+
     if($('.selectListaPrecios').val()==2){
         resultado=  __valorNumerico(articulo.precioMayorista )
     }
-    //Precio Especial
+
     if($('.selectListaPrecios').val()==3){
-        resultado=  __valorNumerico(articulo.precioEspecial) 
+        resultado=  __valorNumerico(articulo.precioEspecial)
     }
     return resultado > 0 ?resultado:__valorNumerico(articulo.precioPublico )
 
 }
 
 function getListaPrecioGanancia(articulo){
-    //Precio Publico
+
     if($('.selectListaPrecios').val()==1){
         resultado=  __valorNumerico(articulo.gananciaPrecioPublico )
     }
-    //Precio Mayorista
+
     if($('.selectListaPrecios').val()==2){
         resultado=  __valorNumerico(articulo.gananciaPrecioMayorista )
     }
-    //Precio Especial
+
     if($('.selectListaPrecios').val()==3){
-        resultado=  __valorNumerico(articulo.gananciaPrecioEspecial) 
+        resultado=  __valorNumerico(articulo.gananciaPrecioEspecial)
     }
     return resultado > 0 ?resultado:__valorNumerico(articulo.gananciaPrecioEspecial )
 
@@ -4018,32 +3836,26 @@ function __storege(){
             nombreCompleto:""
         }
 
-    }   
+    }
     self.update()
 }
- /**
- * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Factura
- **/ 
- __recalculacionDelDetalle(e){
+
+ this.__recalculacionDelDetalle = function(e){
     cambiarCantidadModal()
-  }
+  }.bind(this)
 
  function cambiarCantidadModal(){
       var cantidad = $(".cambiarCantidadArticulo").val();
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
+
     cantidad =__valorNumerico(cantidad);
     if(cantidad == 0){
        cantidad = 1;
     }
     cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
-    
 
- } 
-/**
-* Buscar el codigo del codigo  en la base de datos
-**/
+ }
+
 function __ValidarCantidadArticulo(idArticulo,cantidad){
     $.ajax({
         type: 'GET',
@@ -4069,9 +3881,7 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
         }
     });
 }
-/**
-* Monto de descuento sobre la ganancia
-*/
+
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
 	    if(porcentajeDesc == 0){
 	        return 0
@@ -4093,9 +3903,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 	    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
 	    return resultado
 }
-/**
-* Actualiza la linea del detalle de la factura
-**/
+
 function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
@@ -4103,59 +3911,51 @@ function ActualizarLineaDEtalle(){
     montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
+    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1
     self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
-   
+
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
     self.item.montoImpuesto    = montoImpuesto
     self.item.montoImpuesto1   = montoImpuesto1
-    
+
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
-    self.item.montoGanancia    = self.item.ganancia 
+    self.item.montoGanancia    = self.item.ganancia
     self.update()
 }
-/**
-* Agregar la cantidad de Venta
-**/
+
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
     self.item.ganancia = ganancia
     self.item.montoGanancia    = self.item.ganancia
-   // self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
+
     self.update()
     ActualizarLineaDEtalle()
-    aplicarCambioLineaDetalle() 
+    aplicarCambioLineaDetalle()
     cambiarCantidadArticulo.value = 0
-    $('#modalCambiarCantidad').modal('hide') 
+    $('#modalCambiarCantidad').modal('hide')
     getPosicionInputCodigo()
 }
-/**
-* Aplicar el cambio de linea Detalle
-**/
+
 function aplicarCambioLineaDetalle(){
     var index    = self.detail.indexOf(self.item);
     self.detail[index] = self.item;
     self.update()
     __calculate()
 }
-/**
-* Actualizar el descuento del codigo
-**/
-__actualizarDescuento(e){
+
+this.__actualizarDescuento = function(e){
    aplicarDescuentoEnter()
-}
+}.bind(this)
 function aplicarDescuentoEnter(){
     if ($("#formularioDescuento").valid()) {
         _actualizarDesc()
     }
 }
-/**
-* Actualizar el descuento
-**/
+
 function _actualizarDesc(){
     var descuento = $(".aplicarDescuento").val();
     descuento = __valorNumerico(descuento)
@@ -4168,23 +3968,21 @@ function _actualizarDesc(){
             mensajeAdvertencia("No se puede aplicar un descuento mayor a la ganancia");
             descuento  = __valorNumerico(self.item.porcentajeGanancia)
         }
-    } 
+    }
     var index     = self.detail.indexOf(self.item);
-      //Descuento
+
     if(self.item.porcentajeDesc != descuento){
-       self.item.porcentajeDesc =  __valorNumerico(descuento);  
-    }    
+       self.item.porcentajeDesc =  __valorNumerico(descuento);
+    }
     self.update()
-    ActualizarLineaDEtalle()  
+    ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle()
      $(".aplicarDescuento").val(null);
-    $('#modalCambiarDescuento').modal('hide') 
-  
+    $('#modalCambiarDescuento').modal('hide')
+
    getPosicionInputCodigo()
 }
-/**
-* calculacion de los detalle de la factura 
-**/
+
 function __calculate() {
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
@@ -4210,15 +4008,15 @@ function __calculate() {
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         totalGanancia           +=__valorNumerico(e.ganancia)
-        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
+        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1
         totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad)
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion) 
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion1) 
+        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion)
+        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion1)
     });
     self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
     self.totalPesoByFactura = __valorNumerico(totalPesoByFactura)
     self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
-    //cuando se aplica descuentos
+
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
     self.factura.subTotal                = __valorNumerico(subTotal)
@@ -4230,7 +4028,7 @@ function __calculate() {
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
     self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
     self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
-    self.update(); 
+    self.update();
     getPosicionInputCodigo()
     getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
@@ -4242,11 +4040,9 @@ function __calculate() {
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     seleccionarEfectivo()
-    
+
 }
-/**
-*  Sub Total Generar
-**/
+
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = formatoDecimales(resultado,2)
@@ -4255,15 +4051,13 @@ function getSubTotalGeneral(){
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
     self.update()
 }
-/**
-* Definicion de la tabla articulos 
-**/
+
 function _informacionData_Articulo(){
-   self.informacion_tabla_articulo = [	
+   self.informacion_tabla_articulo = [
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
                                             "render":function(id,type, row){
                                                     return __OpcionesArticulos(id,type,row);
-                                                }	 
+                                                }
                                         },
                                        {'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
                                         {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
@@ -4275,88 +4069,78 @@ function _informacionData_Articulo(){
                                             }
                                         },
                               ];
-    
- self.update()        
+
+ self.update()
 }
-/**
-* Opciones del modal de articulos
-*/
+
 function __OpcionesArticulos(){
   var agregar  = '<a href="#"  class="btn btnAgregar btn-success form-control" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
 
 }
-/**
-* Agregar codigos a la Factura desde modal de articulos
-**/
+
 function __agregarArticulos() {
      $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
          var table = $('#tableListarArticulos').DataTable();
 		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
+
 	       var data = table.row(this).data();
-	    }else{	
+	    }else{
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.articulo = data;
-        self.update(); 
+        self.update();
         if(self.articulo !=null){
             if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
                 $('#codigo').val(self.articulo.codigo)
                 $('.precioVenta').val(getListaPrecio(self.articulo))
-                 $('#modalInventario').modal('hide') 
+                 $('#modalInventario').modal('hide')
                 $('.precioVenta').focus()
                 $('.precioVenta').select()
                 return
             }
-        } 
+        }
         if(self.articulo.contable == "si"){
            __buscarcodigo(self.articulo.codigo,1,0)
         }else{
             __agregarArticulo(1)
         }
-        $('#modalInventario').modal('hide') 
-        
+        $('#modalInventario').modal('hide')
+
         return
-	    
+
     });
 }
-/**
-* formato de la tabla de clientes
-**/
+
 function __informacionData_vendedores(){
-    self.informacion_tabla_vendedores = [	
+    self.informacion_tabla_vendedores = [
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
-                                        
+
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},                                
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},
+                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __OpcionesVendedores(id,type,row);
-	 							                }	 
+	 							                }
 								            },
-                                        ];                              
-  
+                                        ];
+
 }
-/**
-* Opciones del modal de clientes
-*/
+
 function __OpcionesVendedores(){
   var agregar  = '<a href="#"  title="Seleccionar Vendedor" class="btn btnVendedor btn-success form-control" title="Seleccione el vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
 }
-/**
-* Seleccionar el vendedor de la factura
-**/
+
 function __seleccionarVendedor() {
      $('#tableListaVendedor').on('click', '.btnVendedor', function (e) {
          var table = $('#tableListaVendedor').DataTable();
 		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
+
 	       var data = table.row(this).data();
-	    }else{	
+	    }else{
 	       var data = table.row($(this).parents("tr")).data();
          }
         self.vendedor = data
@@ -4364,22 +4148,19 @@ function __seleccionarVendedor() {
     });
 }
 
-/**
-* Agregar codigos a la factura desde modal de articulos
-**/
 function __seleccionarClientes() {
      $('#tableListaCliente').on('click', '.btnAgregar', function (e) {
          var table = $('#tableListaCliente').DataTable();
 		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
+
 	       var data = table.row(this).data();
-	    }else{	
+	    }else{
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.cliente = data
         self.update();
-        $('#modalClientes').modal('hide') 
-        //factura.js
+        $('#modalClientes').modal('hide')
+
         if(!verificarSiClienteFrecuente(self.cliente)){
             __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
@@ -4388,7 +4169,7 @@ function __seleccionarClientes() {
                if(self.item != null){
                 if(self.item.tipoDocumentoExoneracion !=null){
                     if(self.item.tipoDocumentoExoneracion =='02'){
-                        self.factura.tipoDoc ='04'  
+                        self.factura.tipoDoc ='04'
                         self.update()
                         }
                 }
@@ -4397,7 +4178,7 @@ function __seleccionarClientes() {
                self.factura.tipoDoc ='04'
                self.update()
             }
-               
+
            __ComboTipoDocumentos(1)
         }else{
             self.factura.tipoDoc ='04'
@@ -4411,9 +4192,6 @@ function __seleccionarClientes() {
     });
 }
 
-/**
-* Aplicar la exoneracion de detalles
-**/
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
     var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
@@ -4431,19 +4209,19 @@ function __aplicarExoneracionPorCliente(){
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
+                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)
                     self.item.montoExoneracion1 = valorTotal
-                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
+                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)
                     self.item.montoExoneracion = valorTotal
                     self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
                     self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion  
+                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.update();
                     aplicaExo= true
                 }else{
-                    //Cliente no tiene exoneracion
+
                     self.item.porcentajeExoneracion = 0
                     self.item.fechaEmisionExoneracion = null
                     self.item.nombreInstitucionExoneracion = ""
@@ -4451,7 +4229,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1)
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0
@@ -4461,10 +4239,10 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                 
+
                     aplicaExo = true
                 }
-               
+
             }else{
                 self.item.porcentajeExoneracion = 0
                 self.item.fechaEmisionExoneracion = null
@@ -4487,9 +4265,7 @@ function __aplicarExoneracionPorCliente(){
        self.update();
     }
 }
-/**
-* cargar los estados de la factura
-**/
+
 function __comboCondicionPago(){
     self.comboCondicionPagos = []
     self.update()
@@ -4503,9 +4279,7 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-/**
-* cargar los tipos de Documento de la factura
-**/
+
 function __ComboTipoDocumentoExonerados(){
     self.comboTipoDocumentoExonerados = []
     self.update()
@@ -4544,9 +4318,7 @@ function __ComboTipoDocumentoExonerados(){
     })
    self.update()
 }
-/**
-* cargar los tipos de Documento de la factura
-**/
+
 function __ComboTipoDocumentos(valor){
     if($('.tipoDoc').val() =="88"){
         return
@@ -4567,7 +4339,7 @@ function __ComboTipoDocumentos(valor){
             descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
         })
         self.update()
-        return 
+        return
     }
    if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
@@ -4600,106 +4372,92 @@ function __ComboTipoDocumentos(valor){
     }
     self.update()
 }
-/**
-*  Agregar los inpust  y select de las tablas
-**/
+
 function agregarInputsCombos_Articulo(){
     $('.tableListarArticulos tfoot th').each( function (e) {
-        var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
+        var title = $('.tableListarArticulos thead th').eq($(this).index()).text();
+
         if ( $(this).index() != 0    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-/**
-*  Agregar los inpust  y select de las tablas
-**/
+}
+
 function agregarInputsCombos_Clientes(){
-     // Agregar los input de busqueda 
+
     $('.tableListaCliente tfoot th').each( function (e) {
-        var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
+        var title = $('.tableListaCliente thead th').eq($(this).index()).text();
+
         if ( $(this).index() != 0    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-/**
-*  Agregar los inpust  y select de las tablas
-**/
+}
+
 function agregarInputsCombos_Facturas_Dias(){
-     // Agregar los input de busqueda 
+
     $('.tableListarFacturasDia tfoot th').each( function (e) {
-        var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
+        var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();
+
         if ( $(this).index() != 0    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-/**
-*  Agregar los inpust  y select de las tablas
-**/
+}
+
 function agregarInputsCombos_Vendedores(){
-     // Agregar los input de busqueda 
+
     $('.tableListaVendedor tfoot th').each( function (e) {
-        var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
+        var title = $('.tableListaVendedor thead th').eq($(this).index()).text();
+
         if ( $(this).index() != 5    ){
 	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 }
-/**
-* Mostrar el pago con F8 o en blanco
-**/
+
 function __EnviarFacturar(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
-            self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
+            self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)
             self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
             self.primeraVezBilleteClick == false
             self.update()
             $(".totalEfectivo").val(self.totalCambioPagar)
-         mostrarPAgo()     
+         mostrarPAgo()
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
           self.primeraVezBilleteClick == false
           self.update()
            __OpcionAbrirCajon()
-            aplicarFactura(2)   
-        } 
+            aplicarFactura(2)
+        }
 }
-/**
-*  teclas de la pantalla
-**/      
+
 function __Teclas(tecla,event){
-   
+
     if(tecla ==119){
         __EnviarFacturar()
-        return 
-        
+        return
+
     }
-    /**cambiar el precio**/
+
     if(tecla ==111){
         if( self.rol.rolAdministrador == 0){
-            return 
+            return
         }
         if(!$('#modalCambiarCantidad').is(':visible')){
-           seguridadCambiarPrecioLinea()      
+           seguridadCambiarPrecioLinea()
         }else{
             $(".codigo").val(null)
             event.preventDefault()
         }
-        return 
-    } 
+        return
+    }
 
-    //alert(tecla)   
-    //F4
     if(tecla ==115){
      ListarCodigosArticulos()
       $('.descArticulo').select()
       $('.descArticulo').focus()
-      return 
+      return
     }
     if(tecla ==16){
         if($('#modalAgregarClienteNuevo').is(':visible')){
@@ -4710,121 +4468,114 @@ function __Teclas(tecla,event){
         self.factura.totalTarjeta = resultado
         self.factura.totalEfectivo = 0
         self.factura.totalBanco = 0
-        self.update()  
+        self.update()
         $(".totalEfectivo").val(null)
-        $(".totalTarjeta").val(self.factura.totalTarjeta) 
+        $(".totalTarjeta").val(self.factura.totalTarjeta)
         $('.totalTarjeta').select()
         $('.totalTarjeta').focus()
         return
-      } 
+      }
       resultado = __valorNumerico($(".totalTarjeta").val())
       if(resultado > 0){
         self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
         self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
         self.factura.totalTarjeta = 0
-        self.update()  
+        self.update()
         if(self.empresa.pantChino == 0){
             $(".totalEfectivo").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalBanco").val(self.factura.totalBanco) 
+            $(".totalBanco").val(self.factura.totalBanco)
             $('.totalBanco').select()
             $('.totalBanco').focus()
 
         }else{
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
             seleccionarEfectivo()
         }
         return
-      } 
+      }
       if(self.empresa.pantChino == 0){
         resultado = __valorNumerico($(".totalBanco").val())
         if(resultado > 0){
             self.factura.totalEfectivo = resultado
             self.factura.totalBanco = 0
             self.factura.totalTarjeta = 0
-            self.update()  
+            self.update()
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
             seleccionarEfectivo()
             return
-        }    
+        }
       }else{
         resultado = __valorNumerico($(".totalEfectivo").val())
         if(resultado > 0){
             self.factura.totalEfectivo = resultado
             self.factura.totalBanco = 0
             self.factura.totalTarjeta = 0
-            self.update()  
+            self.update()
             $(".totalBanco").val(null)
             $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
             seleccionarEfectivo()
             return
-        }    
+        }
 
       }
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
         self.factura.totalBanco = 0
         self.factura.totalTarjeta = 0
-        self.update()  
+        self.update()
         $(".totalBanco").val(null)
         $(".totalTarjeta").val(null)
-        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
         seleccionarEfectivo()
-      return 
-    }
-    //Factura en espera
-    if(tecla ==120){
-      aplicarFactura(1) 
-      return   
-    }
-     //Reimprimir Factura f6
-    //if(tecla ==117){
-    // reimprimirFacturaEnMomento()
-    //}
-     //Reimprimir Factura End
-    if(tecla ==35){
-     reimprimirFacturaEnMomento()
-     return 
+      return
     }
 
-    //Limpiar F2
+    if(tecla ==120){
+      aplicarFactura(1)
+      return
+    }
+
+    if(tecla ==35){
+     reimprimirFacturaEnMomento()
+     return
+    }
+
     if(tecla ==113){
       __SeguridadLimpiar()
       getPosicionInputCodigo()
-      return 
+      return
     }
-     //Insert = abrir Cajon
+
     if(tecla ==45){
        __OpcionAbrirCajon()
     }
    if(tecla ==27){
       getPosicionInputCodigo()
-      return 
+      return
     }
 
-    
-  
 }
-__SumarConMouse(){
+this.__SumarConMouse = function(){
     aplicarSumaAlCodigo(0,1,true)
     getPosicionInputCodigo()
-}
+}.bind(this)
 
-__RestarConMouse(){
+this.__RestarConMouse = function(){
     aplicarSumaAlCodigo(0,1,false)
     getPosicionInputCodigo()
-}
+}.bind(this)
 
 function __SumarConTecla(e){
     if(verificaSiSuma()){
         aplicarSumaAlCodigo(0,1,true)
         getPosicionInputCodigo()
         e.preventDefault()
-         return 
+         return
     }
 
 }
@@ -4834,7 +4585,7 @@ function __RestarConTecla(e){
         aplicarSumaAlCodigo(0,1,false)
         getPosicionInputCodigo()
         e.preventDefault()
-         return 
+         return
     }
 
 }
@@ -4847,17 +4598,13 @@ function verificaSiSuma(){
     }
     return true
 }
-/**
-* refrescar una pagina
-**/
+
 function refrescarPagina(){
      __Init()
-     
+
 }
-/**
-* Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
-*/
-_sumarBilletes(e){
+
+this._sumarBilletes = function(e){
      if(self.primeraVezBilleteClick == false){
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
@@ -4873,24 +4620,22 @@ _sumarBilletes(e){
        self.claseCambioDinero     = "entregarCambioPositivo"
        self.totalCambioPagarSTR =0
     }else{
-       self.factura.totalEfectivo += __valorNumerico(item.valor) 
+       self.factura.totalEfectivo += __valorNumerico(item.valor)
        $('.efectivo').val(self.factura.totalEfectivo.toFixed(2))
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco)
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo)
         self.factura.totalCambioPagar = 0
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
         self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2)) 
+        $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
     }
     self.update()
-}
-/**
-*Cargar los billetes
-**/
+}.bind(this)
+
 function cargaBilletes(){
     self.billetes = []
     self.update()
@@ -4902,9 +4647,7 @@ function cargaBilletes(){
     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
 }
-/**
-*    Incluir a los billetes
-**/
+
 function _incluirBilletes(modena,descripcion,valor,imagen){
    self.billetes.push(
         {
@@ -4916,29 +4659,23 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     )
     self.update()
 }
-/**
-*abrir el cajon
-**/
-__AbrirCajon(){
+
+this.__AbrirCajon = function(){
     __OpcionAbrirCajon()
-}
-/**
-*  Opcion para abrir la comanda
-**/
+}.bind(this)
+
 function __OpcionAbrirCajon(){
     self.informacionAbrirCajon = "."
     self.update()
     if(self.empresa.abrirSinComanda == 1){
-        abrirCajonDineroSinComanda()  
+        abrirCajonDineroSinComanda()
     }
     if(self.empresa.abrirConComanda == 1){
       abrirCajonDineroConComanda()
     }
 
 }
-/**
-*Abrir el cajon de dinero sin comanda
-**/
+
 function abrirCajonDineroSinComanda(){
   var div = document.querySelector("#imprAbriCajon");
   var ventana = window.open('', 'PRINT', 'height=20,width=20');
@@ -4952,21 +4689,19 @@ function abrirCajonDineroSinComanda(){
   ventana.close();
   return true;
 }
-/**
-* Abrir con con comanda
-**/
+
 function abrirCajonDineroConComanda(){
-//Se forman los detalles a enviar a la comanda
+
 		var informacion = {
-			mesa: "Abrir Cajon",        	
-			mesero: "abrirCajon",        	
+			mesa: "Abrir Cajon",
+			mesero: "abrirCajon",
 		    nombreImpresora:self.empresa.impresoraFactura,
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:""
-		}    
-		var JSONData = JSON.stringify(informacion);		
-		//Envia a imprimir a la comanda
+		}
+		var JSONData = JSON.stringify(informacion);
+
 	    $.ajax({
 	        contentType: 'application/json',
 	        url: 'http://localhost:8033/service/abrirCajonDinero',
@@ -4974,19 +4709,15 @@ function abrirCajonDineroConComanda(){
 	        data : JSONData,
 	        method:"POST",
 	        success: function (result) {
-	      	  
+
 	        },
 	        error: function (xhr, status) {
 	            console.log(xhr);
 	            mensajeErrorServidor(xhr, status);
 	        }
-	    });		
+	    });
 }
 
-/**        Listado de proformas      **/
-/**
-*  Lista de Proformas Activas
-**/
 function __ListaProformas(){
     $.ajax({
         url: 'ListarVendedoresActivosAjax.do',

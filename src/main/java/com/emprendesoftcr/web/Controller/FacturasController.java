@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -406,7 +407,7 @@ public class FacturasController {
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		// criptografica desde linux
+//		 criptografica desde linux
 //		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
@@ -947,7 +948,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaUtilidadAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc) {
+	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
@@ -962,7 +963,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
 
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
@@ -979,8 +980,12 @@ public class FacturasController {
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarUtilidadAjax.do", method = RequestMethod.GET)
-	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc) throws IOException, Exception {
+	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura) throws IOException, Exception {
 
+		fechaInicioParam = fechaInicioParam == null?Constantes.EMPTY:fechaInicioParam;
+		fechaFinParam = fechaFinParam == null?Constantes.EMPTY:fechaFinParam;
+		numeroFactura = numeroFactura == null?Constantes.EMPTY:numeroFactura;		
+		
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
@@ -994,7 +999,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
 
 		String nombreArchivo = "Utilidad_" + fechaInicioParam + "_al_" + fechaFinParam + ".xls";
 		response.setContentType("application/octet-stream");
@@ -1023,7 +1028,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad) throws IOException, Exception {
+	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		
 		try {
@@ -1043,7 +1048,7 @@ public class FacturasController {
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicioP);
 			String fin1 = dateFormat1.format(fechaFinalP);
-			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc);
+			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
 
 			// Se prepara el excell
 			ByteArrayOutputStream baos = createExcelUtilidad(facturas);
@@ -1077,6 +1082,8 @@ public class FacturasController {
 		return respuestaServiceValidator;
 	}
 
+	
+	
 
 
 	/**

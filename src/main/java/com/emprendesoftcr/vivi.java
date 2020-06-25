@@ -24,9 +24,14 @@ public class vivi {
 			}
 		  System.out.print(numeroMenor + " ");
 		}
+		 int x,y,z;
+		 x = 9;
+		 y = 10;
+		 
+		 z = ++x+y++;
 		 
 		
-		//		System.out.println("Longest: "+cantidadVeces);
+		System.out.println("x:"+x + " y:"+ y+ "total:"+ z);
 		//	  System.out.println("Number: "+numeroRepetido);				
 	}
 	

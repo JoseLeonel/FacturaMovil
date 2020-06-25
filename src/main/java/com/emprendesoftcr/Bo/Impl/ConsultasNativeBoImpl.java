@@ -203,9 +203,9 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc) {
+	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc,String numeroFactura) {
 
-		return consultasNativeDao.findByUtilidad(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria, codigo,tipoDoc);
+		return consultasNativeDao.findByUtilidad(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria, codigo,tipoDoc,numeroFactura);
 	}
 
 }
