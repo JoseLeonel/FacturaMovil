@@ -47,6 +47,9 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "costo")
 	private Double						costo;
 
+	@Column(name = "ganancia")
+	private Double						ganancia;
+	
 	@Column(name = "precio")
 	private Double						precio;
 
@@ -102,6 +105,7 @@ public class DetalleCompra implements Serializable {
 		this.numeroLinea = detalleCompraCommand.getNumeroLinea();
 		this.costo = Utils.roundFactura(detalleCompraCommand.getCosto() !=null?detalleCompraCommand.getCosto():Constantes.ZEROS_DOUBLE,5);
 		this.cantidad = detalleCompraCommand.getCantidad();
+		this.ganancia = detalleCompraCommand.getGanancia() != null ? detalleCompraCommand.getGanancia() : Constantes.ZEROS_DOUBLE;
 		this.impuesto = Utils.roundFactura(detalleCompraCommand.getImpuesto() !=null?detalleCompraCommand.getImpuesto():Constantes.ZEROS_DOUBLE,5);
 		this.descuento = Utils.roundFactura(detalleCompraCommand.getDescuento() !=null?detalleCompraCommand.getDescuento():Constantes.ZEROS_DOUBLE,5);
 		this.totalDescuento = Utils.roundFactura(detalleCompraCommand.getTotalDescuento() !=null?detalleCompraCommand.getTotalDescuento():Constantes.ZEROS_DOUBLE,5);
@@ -112,11 +116,13 @@ public class DetalleCompra implements Serializable {
 		this.precio = detalleCompraCommand.getPrecio();
 	}
 
-	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double precio, Double cantidad, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
+	
+	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double ganancia, Double precio, Double cantidad, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
 		this.costo = costo;
+		this.ganancia = ganancia;
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.totalImpuesto = totalImpuesto;
@@ -269,5 +275,17 @@ public class DetalleCompra implements Serializable {
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
+
+	
+	public Double getGanancia() {
+		return ganancia;
+	}
+
+	
+	public void setGanancia(Double ganancia) {
+		this.ganancia = ganancia;
+	}
+	
+	
 
 }

@@ -163,6 +163,7 @@ public class Detalle implements Serializable {
 
 	@Column(name = "cant_notaC", precision = 18, scale = 5)
 	private Double						cantidadAplicadaNotaCredito;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -415,6 +416,7 @@ public class Detalle implements Serializable {
 
 	
 	public Double getTotalServicioGravados() {
+		
 		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
@@ -450,7 +452,10 @@ public class Detalle implements Serializable {
 	}
 	
 	public Double getTotalMercanciaExenta() {
-		Double resultado = Utils.getTotalMercanciasExentas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal);
+		
+		Double resultado = Constantes.ZEROS_DOUBLE; 
+		resultado = Utils.getTotalMercanciasExentas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal);
+				
 		
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
@@ -805,5 +810,8 @@ public class Detalle implements Serializable {
 	public void setCantidadAplicadaNotaCredito(Double cantidadAplicadaNotaCredito) {
 		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
 	}
+
+	
+	
 
 }

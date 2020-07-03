@@ -1606,6 +1606,19 @@ function modalEntradaSalidaDinero(tipo){
 this.__AplicarCambioPrecioUltimoArticulo = function(){
     __AplicarCambioPrecioBD()
 }.bind(this)
+this.__RegresarInputCodigo = function(){
+    $(".codigo").val(null)
+    $('#modalCambiarPrecio').modal('hide')
+    getPosicionInputCodigo()
+}.bind(this)
+this.__RegresarInputSeguridad = function(){
+    $(".codigo").val(null)
+    $('#modalRolUsuario').modal('hide')
+    getPosicionInputCodigo()
+}.bind(this)
+
+function __ObtengoTipoCambio(){
+    var tempTipoCambio =__getTipoCambioCompra()
     if(tempTipoCambio == null){
        getTipoCambioDolar()
     }else{
@@ -3882,33 +3895,12 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
     });
 }
 
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-	    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    self.item.porcentajeDesc = porcentajeDesc
-	    self.update()
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc != porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-	    porcentaje = porcentaje/ 100;
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    var totalDescuento =  precioUnitario * cantidad
-	    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
-	    return resultado
-}
 
 function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
+    montoImpuesto1             = 0
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1
@@ -3924,6 +3916,29 @@ function ActualizarLineaDEtalle(){
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
     self.item.montoGanancia    = self.item.ganancia
     self.update()
+}
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+	    if(porcentajeDesc == 0){
+	        return 0
+	    }
+	     if(porcentajeDesc > 100){
+	        porcentajeDesc = 100
+	    }
+	    var porcentaje =  porcentajeGanancia;
+	    if(porcentajeDesc > porcentajeGanancia){
+	       porcentaje =  porcentajeDesc;
+	    }
+	    if(porcentajeDesc ==100){
+	        porcentaje = 0
+	    }
+	    self.item.porcentajeDesc = porcentaje
+	    self.update()
+
+	    var totalDescuento =  precioUnitario * cantidad
+        totalDescuento = totalDescuento * porcentaje
+        totalDescuento = totalDescuento /100
+	    var resultado = totalDescuento;
+	    return resultado
 }
 
 function agregarCantidadAlaVenta(cantidad){
@@ -3971,9 +3986,7 @@ function _actualizarDesc(){
     }
     var index     = self.detail.indexOf(self.item);
 
-    if(self.item.porcentajeDesc != descuento){
-       self.item.porcentajeDesc =  __valorNumerico(descuento);
-    }
+    self.item.porcentajeDesc =  __valorNumerico(descuento);
     self.update()
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle()
@@ -4194,7 +4207,7 @@ function __seleccionarClientes() {
 
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
-    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
+    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion )
     if(porcentaje == 0){
         return
     }
@@ -4209,13 +4222,11 @@ function __aplicarExoneracionPorCliente(){
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)
-                    self.item.montoExoneracion1 = valorTotal
-                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)
-                    self.item.montoExoneracion = valorTotal
-                    self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion
+                    valorTotal = 0
+                    self.item.montoExoneracion1 = 0
+                     valorTotal = __valorNumerico(self.item.subTotal) * __valorNumerico(porcentaje)
+                    self.item.montoExoneracion = valorTotal / 100
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.update();
@@ -4229,7 +4240,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1)
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0

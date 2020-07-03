@@ -21,7 +21,6 @@ import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleBo;
-import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -52,8 +51,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
 	
-	@Autowired
-	private FacturaBo							facturaBo;
+	
 
 	@Autowired
 	private DetalleBo							detalleBo;

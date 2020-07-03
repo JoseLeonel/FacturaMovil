@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
@@ -28,4 +30,6 @@ public interface CuentaCobrarBo {
 	Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado);
 	void modificarCuentaXCobrarPorNotaCredito(Factura notaCredito,Factura facturaAplicar);
 	void modificarCuentaXCobrarPorNotaDebito(Factura notaCredito, Factura facturaAplicar);
+	
+	ByteArrayInputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar,Empresa empresa, String fechaInicio,String fechaFinal,String estado, Cliente cliente)throws IOException;
 }

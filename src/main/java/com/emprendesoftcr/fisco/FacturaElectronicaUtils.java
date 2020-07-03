@@ -365,8 +365,8 @@ public final class FacturaElectronicaUtils {
 
 	public static String rfc3339(Date fechaEmision) {
 		SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		
-		return rfc3339.format(fechaEmision).replaceAll("(\\d\\d)(\\d\\d)$", "$1:$2");
+		String formato  = rfc3339.format(fechaEmision).replaceAll("(\\d\\d)(\\d\\d)$", "$1:$2");
+		return formato;
 		
 	}
 	

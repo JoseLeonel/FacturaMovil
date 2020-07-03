@@ -617,7 +617,7 @@ public class ListarFacturasNativa implements Serializable {
 
 	
 	public Double getTotalExonerado() {
-		return totalExonerado;
+		return totalExonerado == null ?Constantes.ZEROS_DOUBLE:totalExonerado;
 	}
 
 	

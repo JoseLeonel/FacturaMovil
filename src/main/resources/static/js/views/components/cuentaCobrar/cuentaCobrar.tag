@@ -2,13 +2,36 @@
 
 
     <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("cuentaCobrar.titulo")}  </h1>
-        </div>
-        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
-    </div>
-    
+    <div  id="titulo-encabezado"  >
+	        <div>
+	           <h1><i class="fa fa-university"></i>&nbsp {$.i18n.prop("cuentaCobrar.titulo")} </h1>
+	        </div>
+	        <div id="totalsGenerales" show ="{noMostrarTotales == true  }">
+	        
+	             <div>
+	             	 <div >
+	                    <span>Facturacion </span>  
+	                    <input type="text"  class = "totalGeneral" value ="{total}" readonly >
+	                 </div>
+	             </div>
+	             <div>
+	                <div >
+	                   <span>Abonos </span>  
+	                   <input type="text" class = "totalAbonoGeneral" value ="{totalAbono}" readonly >
+	                </div>  
+	             </div>
+	             <div>
+	              	<div >
+	                    <span>Saldos </span>  
+	                    <input type="text" class = "totalSaldoGeneral" value ="{totalSaldo}" readonly >
+	                 </div>  
+	             </div>
+                
+	        
+	        
+	        </div>
+            
+	    </div>
 
  <!-- Modal correo alternativo-->
 	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -153,8 +176,8 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title" show="{abono.id == null && abonoGlobal == false}" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
-                    <h1 class="box-title" show="{abono.id != null abonoGlobal == false}"><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+                    <h1 class="box-title" show="{abono.id == null && abonoGlobal == false}" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {"Facturacion"}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
+                    <h1 class="box-title" show="{abono.id != null abonoGlobal == false}"><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {"Facturacion"}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
                     <h1 class="box-title" show="{abonoGlobal == true}"><i class="fa fa-calculator"></i>&nbsp  Total abonar:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
                 </div>
                 <div class="box-body">
@@ -254,25 +277,7 @@
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
         <div class= "row">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
-                </div>  
-            </div>      
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
+                <div show = "{totalAplicarAbono > 0 }"  class="form-group">
                     <label  >Total Abonar</label>
                     <input type="text" class="form-control   " value="{totalAplicarAbonoFormato}" readonly>
                    
@@ -293,7 +298,7 @@
                                 <th class="table-header"  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th class="table-header" style="width:2%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
                                 <th class="table-header" style="width:6%">{$.i18n.prop("cuentaCobrar.codigoMoneda")}      </th>
-                                <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th class="table-header" style="width:8%">Facturacion      </th>
                                 <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
                                 <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
@@ -308,7 +313,7 @@
                                 <th  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th style="width:8%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
                                 <th style="width:6%">{$.i18n.prop("cuentaCobrar.codigoMoneda")} </th>
-                                <th style="width:8%">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th style="width:8%">Facturacion      </th>
                                 <th style="width:8%">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
                                 <th style="width:8%">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th>                                         </th>
@@ -386,6 +391,35 @@
     </div>
 <imprimir-abono></imprimir-abono>
 <style type ="text/css">
+    #titulo-encabezado{
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    #totalsGenerales{
+    display: flex;
+    flex-wrap: nowrap;
+    }   
+    #totalsGenerales > div {
+    margin-right: 2px;
+
+    }
+    #totalsGenerales > div > div {
+    display: flex;
+    flex-direction: column;
+    }
+    #totalsGenerales > div > div >input{
+    width: 200px;
+    background-color: #ecf0f5 !important;
+    height: 30px;
+    border-radius: 5px 5px 5px 5px;
+    font-size:16px;
+    /*   font-weight: 900; */
+    }
+    #totalsGenerales > div > div >span{
+    font-size: 18px;
+    font-weight: 600;
+    }
         .fondoEncabezado {
             background: #00539B;
             color: #f9fafc;
@@ -447,6 +481,7 @@
     self.mostrarListadoAbonos      = false
     self.mostrarCrearAbono         = false
     self.abonoGlobal               = false 
+    self.noMostrarTotales          = true
     self.total                     = 0
     self.totalAbono                = 0
     self.totalSaldo                = 0
@@ -544,12 +579,14 @@ __RegresarListadoAbonoGlobal(){
     self.mostrarListadoAbonos      = false
     self.mostrarCrearAbono         = false
     self.abonoGlobal               = false 
+    self.noMostrarTotales          = false
     self.update()
 }
 /**
 *Crear el abono general
 **/
 __CrearAbono(){
+    self.noMostrarTotales  = false
     self.mostrarCrearAbono = true;
     self.mostrarListado            = false
     self.botonModificar            = false
@@ -822,7 +859,8 @@ __Busqueda(){
 * Lista de consulta
 **/
 function listadoConsulta(){
-      self.totalAplicarAbono         = 0
+    self.noMostrarTotales          = true
+    self.totalAplicarAbono         = 0
     self.totalAplicarAbonoFormato = 0
     self.total = 0
     self.totalAbono = 0
@@ -867,11 +905,13 @@ function listadoConsulta(){
                     __EnviarCorreos()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
+                    self.noMostrarTotales          = true
                     self.update()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
                     self.hay_datos  = false
+                    self.noMostrarTotales          = true
                     self.update()
                 }           
         },
@@ -953,6 +993,7 @@ __regresarAlListado(){
     self.mostrarFormulario    = false 
     self.mostrarListadoAbonos = false
     self.mostrarCrearAbono    = false
+    self.noMostrarTotales     = true
     self.update()
     listadoConsulta();
 }
@@ -975,8 +1016,9 @@ function __regresar(){
     self.mostrarFormulario    = false 
     self.mostrarListadoAbonos = true
     self.mostrarCrearAbono    = false
+    self.noMostrarTotales     = false
     self.update()
-    listadoConsulta();
+   // listadoConsulta();
 }
 /**
 * Calculo del monto de la cuota con base al total a pagar
@@ -1166,7 +1208,7 @@ function __InformacionDataTable(){
                                  }
                             },
                             {'data' : 'codigoMoneda'              ,"name":"codigoMoneda"              ,"title" : $.i18n.prop("cuentaCobrar.codigoMoneda")        ,"autoWidth" :true},
-                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :true},
+                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : "Facturacion"        ,"autoWidth" :true},
                             {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :true },
                             {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :true},
                             {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
@@ -1460,6 +1502,7 @@ function __mostrarAbonos(){
            includeActionsAbono('.dataTables_wrapper','.dataTables_length') 
         }
         __LimpiarCuentasPorCobrar() 
+        self.noMostrarTotales          = false
         self.cuentaCobrar = data    
         self.error                     = false
         self.errors                    = [];
@@ -1502,6 +1545,7 @@ function __mostrarCuentaPorCobrar(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         __LimpiarCuentasPorCobrar() 
+        self.noMostrarTotales          = false
         self.cuentaCobrar = data
         self.update()
         __consultar()
@@ -1530,6 +1574,7 @@ function __consultar(){
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         self.botonModificar   = true;
+                        self.noMostrarTotales  = true
                         self.botonAgregar = false;
                         self.cuentaCobrar  =  modeloTabla
                         self.cuentaCobrar.fechaPlazo = __displayDate_detail(self.cuentaCobrar.fechaPlazo)
@@ -1607,8 +1652,11 @@ function listaAbonosPorCuentaPorCobrar(){
                __Anular()
             }
             __verAbono()
+
             
             __imprimirAbono()
+            self.noMostrarTotales = false
+            self.update()
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1699,6 +1747,7 @@ function __verAbono(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         self.abono = data
+        self.noMostrarTotales  = false
         self.update()
         consultaAbono()
 	});
@@ -1729,6 +1778,7 @@ function consultaAbono(){
                         self.botonAgregar              = false
                         self.mostrarListadoAbonos      = false
                         self.mostrarCrearAbono         = true
+                        self.noMostrarTotales          = false
                         __LimpiarAbonos()
                         self.abono  =  modeloTabla
                         self.abono.fechaPago = __displayDate_detail(self.abono.fechaPago)

@@ -3,6 +3,7 @@ package com.emprendesoftcr.Utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -28,9 +29,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -50,6 +53,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
@@ -69,6 +80,16 @@ public final class Utils {
 
 		return resultado;
 	}
+	
+	public static  ByteArrayOutputStream convertirOutStream(ByteArrayInputStream inputStream) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] data = new byte[4096];
+    int count;
+    while ((count = inputStream.read(data)) != -1) {
+    	baos.write(data, 0, count);
+    }
+		return baos; 
+	} 
 
 	public static String claveMigradoXML() {
 		Random rnd = new Random();
@@ -79,6 +100,82 @@ public final class Utils {
 		return valor3.toString() + valor5.toString();
 
 	}
+	
+	/**
+   * Create a library of cell styles
+   */
+  public static Map<String, CellStyle> createStyles(Workbook wb){
+      Map<String, CellStyle> styles = new HashMap<>();
+      CellStyle style;
+      Font titleFont = wb.createFont();
+      titleFont.setFontHeightInPoints((short)14);
+      titleFont.setBold(true);
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setVerticalAlignment(VerticalAlignment.CENTER);
+      style.setFont(titleFont);
+      styles.put("title", style);
+      Font titleFont1 = wb.createFont();
+      titleFont.setFontHeightInPoints((short)16);
+      titleFont.setBold(true);
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setVerticalAlignment(VerticalAlignment.CENTER);
+      style.setFont(titleFont);
+      styles.put("title1", style);
+
+
+      Font monthFont = wb.createFont();
+      monthFont.setFontHeightInPoints((short)14);
+      monthFont.setColor(IndexedColors.WHITE.getIndex());
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setVerticalAlignment(VerticalAlignment.CENTER);
+      
+      style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setFont(monthFont);
+      style.setWrapText(true);
+      styles.put("header", style);
+
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setWrapText(true);
+      style.setBorderRight(BorderStyle.THIN);
+      style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderLeft(BorderStyle.THIN);
+      style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderTop(BorderStyle.THIN);
+      style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderBottom(BorderStyle.THIN);
+      style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      
+      styles.put("cell", style);
+
+      style = wb.createCellStyle();
+      titleFont = wb.createFont();
+      titleFont.setFontHeightInPoints((short)12);
+    //  titleFont.setBold(true);
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setVerticalAlignment(VerticalAlignment.CENTER);
+      style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      style.setFont(titleFont);
+      styles.put("formula", style);
+
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setVerticalAlignment(VerticalAlignment.CENTER);
+      style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      styles.put("formula_2", style);
+
+      return styles;
+  }
+
 
 	public static String generateXml(String path, String datosXml, String name, Date fecha) throws Exception {
 		// String resultado = Utils.getDirectorioPorFechaMes(fecha);
@@ -381,6 +478,26 @@ public final class Utils {
 		}
 		return resultado;
 	}
+	
+	public static Double getTotalServicioGravadosSubTotal(String tipoImpuesto, String unidadMedida, Double montoTotal, Double impuesto,Integer porcentajeExoneracion) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
+		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
+		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
+		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
+		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			if (!tipoImpuesto.equals(Constantes.EMPTY)) {
+				if(porcentajeExoneracion > Constantes.ZEROS_DOUBLE) {
+					resultado = (1-( porcentajeExoneracion /impuesto )) * montoTotal ;	
+				}else {
+					resultado = montoTotal ;
+				}
+				
+			}
+		}
+		return resultado;
+	}
 
 	/**
 	 * @param tipoDocumentoExonerado
@@ -390,22 +507,11 @@ public final class Utils {
 	 * @param montoExonerado
 	 * @return
 	 */
-	public static Double getImpuestoNetoTotal(String tipoDocumentoExonerado, Integer porcentajeExonerado, Double montoImpuesto, Double montoImpuesto1, Double montoExonerado) {
+	public static Double getImpuestoNetoTotal( Double montoImpuesto, Double montoExonerado) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
-		montoImpuesto1 = montoImpuesto1 == null ? Constantes.ZEROS_DOUBLE : montoImpuesto1;
 		montoExonerado = montoExonerado == null ? Constantes.ZEROS_DOUBLE : montoExonerado;
-		tipoDocumentoExonerado = tipoDocumentoExonerado == null ? Constantes.EMPTY : tipoDocumentoExonerado;
-		if (!tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
-			if (porcentajeExonerado <= 100) {
-				resultado = montoImpuesto + montoImpuesto1;
-				resultado = resultado - montoExonerado;
-			}
-
-		} else {
-			resultado = montoImpuesto + montoImpuesto1;
-		}
-
+		resultado = montoImpuesto - montoExonerado;
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 
 	}
@@ -428,11 +534,44 @@ public final class Utils {
 		if (porcentajeExoneracion == 100) {
 			return montoImpuesto;
 		}
-		Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
-		Double resultado = montoImpuesto * porcentaje;
+		//Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
+		Double resultado = montoImpuesto * porcentajeExoneracion;
+		resultado = resultado /100d;
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
+	
+	public static Double getMontoExoneracionSubTotal(String tipoDocumentoExonerado, Integer porcentajeExoneracion, Double subTotal) {
+		subTotal = subTotal == null ? Constantes.ZEROS_DOUBLE : subTotal;
+		tipoDocumentoExonerado = tipoDocumentoExonerado == null ? Constantes.EMPTY : tipoDocumentoExonerado;
+		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
 
+		if (tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		if (porcentajeExoneracion == 100) {
+			return subTotal;
+		}
+		//Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
+		Double resultado = subTotal * porcentajeExoneracion;
+		resultado = resultado / 100d;
+		
+		return resultado;
+	}
+
+	public static Boolean aplicarExoneracionSubTotal4_3() throws ParseException {
+		String fechaF2 = "2020-07-01";
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date fecha1 = new Date();
+		Date antesCambioFormulaExoneracion = formato.parse(fechaF2);
+
+		if(fecha1.before(antesCambioFormulaExoneracion)){
+			 return Boolean.FALSE;
+		}
+		
+		return Boolean.TRUE;
+	}
+	
 	/**
 	 * Es la suma del subtotal + primer impuesto por la tarifa sacamos el impuesto 13
 	 * @param subTotal
@@ -529,9 +668,12 @@ public final class Utils {
 		if (costo > precioUnitario) {
 			return 100d;
 		}
-
-		Double resultado = costo / precioUnitario;
-		resultado = 1 - resultado;
+		Double resultado = Constantes.ZEROS_DOUBLE;
+    if (costo > Constantes.ZEROS_DOUBLE) {
+  		resultado = costo / precioUnitario;
+  		resultado = 1 - resultado;
+    	
+    }
 
 		return Utils.roundFactura(resultado * 100, 5);
 	}
@@ -570,6 +712,29 @@ public final class Utils {
 		}
 		return resultado;
 	}
+	
+	
+	public static Double getTotalMercExoneradaSubTotal(String tipoImpuesto, String unidadMedida,Integer porcentajeExonerado,Double impuesto,Double montoTotal) {
+		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
+		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
+		porcentajeExonerado = porcentajeExonerado == null ? Constantes.ZEROS : porcentajeExonerado;
+		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
+		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
+		if (tipoImpuesto.equals(Constantes.EMPTY) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia && porcentajeExonerado > Constantes.ZEROS_DOUBLE ) {
+			
+				Double totalIVA = 	porcentajeExonerado / impuesto ; 
+			 
+				resultado = montoTotal * totalIVA;
+
+		}
+		return resultado;
+	}
+	
 
 	/**
 	 * @param tipoImpuesto
@@ -590,6 +755,26 @@ public final class Utils {
 		return resultado;
 	}
 
+	public static Double getTotalServExoneradoSubTotal(String tipoImpuesto, String unidadMedida,Integer porcentajeExonerado,Double impuesto,Double montoTotal) {
+		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
+		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
+		porcentajeExonerado = porcentajeExonerado == null ? Constantes.ZEROS : porcentajeExonerado;
+		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
+		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
+		Double resultado = Constantes.ZEROS_DOUBLE;
+
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			
+			if(porcentajeExonerado > Constantes.ZEROS_DOUBLE) {
+				Double totalIVA = 	porcentajeExonerado / impuesto ; 
+			 
+				resultado = montoTotal * totalIVA;
+			}
+		}
+		return resultado;
+	}
+
+	
 	/**
 	 * Total de impuesto
 	 * @param montoImpuesto
@@ -625,24 +810,13 @@ public final class Utils {
 	 * @param tipoDocumentoExoneracion
 	 * @return
 	 */
-	public static Double getMontoTotalLinea(Double subTotal, Double montoImpuesto, Double montoImpuesto1, Double montoImpuestoNeto, String tipoDocumentoExoneracion) {
+	public static Double getMontoTotalLinea(Double subTotal,  Double montoImpuestoNeto) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		montoImpuestoNeto = montoImpuestoNeto == null ? Constantes.ZEROS_DOUBLE : montoImpuestoNeto;
-		montoImpuesto1 = montoImpuesto1 == null ? Constantes.ZEROS_DOUBLE : montoImpuesto1;
-		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
-		tipoDocumentoExoneracion = tipoDocumentoExoneracion == null ? Constantes.EMPTY : tipoDocumentoExoneracion;
 		subTotal = subTotal == null ? Constantes.ZEROS_DOUBLE : subTotal;
 		BigDecimal subTotalB = new BigDecimal(subTotal);
 		BigDecimal montoImpuestoNetoB = new BigDecimal(montoImpuestoNeto);
-		BigDecimal montoImpuestoB = new BigDecimal(montoImpuesto);
-		BigDecimal montoImpuesto1B = new BigDecimal(montoImpuesto1);
-		if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
-			subTotalB = subTotalB.add(montoImpuestoNetoB);
-		} else {
-			subTotalB = subTotalB.add(montoImpuestoB);
-			subTotalB = subTotalB.add(montoImpuesto1B);
-			// resultado = subTotal + montoImpuesto + montoImpuesto1;
-		}
+		subTotalB = subTotalB.add(montoImpuestoNetoB);
 
 		resultado = subTotalB.doubleValue();
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
@@ -746,6 +920,30 @@ public final class Utils {
 				}
 			}
 
+		}
+		return resultado;
+	}
+	
+	public static Double getTotalMercanciasGravadasSubTotal(String tipoImpuesto, String unidadMedida, Double montoTotal, Double impuesto,Integer porcentajeExoneracion) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
+		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
+		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
+		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
+		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
+		Boolean esMercancia = Boolean.TRUE;
+		if (tipoImpuesto.equals(Constantes.EMPTY) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if(esMercancia) {
+			if (!tipoImpuesto.equals(Constantes.EMPTY)) {
+				if(porcentajeExoneracion > 0) {
+					resultado = (1-( porcentajeExoneracion /impuesto )) * montoTotal ;	
+				}else {
+					resultado =  montoTotal ;
+				}
+				
+			}
 		}
 		return resultado;
 	}

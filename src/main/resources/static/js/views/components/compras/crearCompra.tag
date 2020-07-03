@@ -227,6 +227,7 @@
                             <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
                             <th style="width:25%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">%Ganancia                        </div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
                             <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
@@ -251,26 +252,30 @@
                                 <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:14%;">
+                                <input  onkeyup={__actualizarGananciaKeyPress} onBlur={__actualizarGananciaBlur} class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
+                            </td>
+
+                            <td class="text-right" style="width:14%;">
                                 <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:8%;">
                                 <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalDescuento.toFixed(2)} </h2>
+                                <span class="totalLabel">{totalDescuento.toFixed(2)} </span>
                             </td>
                             <td class="text-right" style="width:8%;">
-                                <h2 class="totalLabelImpuesto">{impuesto*100} </h2>
+                                <span class="totalLabelImpuesto">{impuesto*100} </span>
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
+                                <span class="totalLabel">{totalImpuesto.toFixed(2)} </span>
                             </td>
                            <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </h2>
+                                <span class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </span>
                             </td>
  
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
+                                <span class="totalLabel">{montoTotalLinea.toFixed(2)} </span>
                             </td>
                         </tr>
                         </tbody>
@@ -1086,6 +1091,7 @@ function cargarDetallesCompraEnEspera(data){
             costo           : parseFloat(modeloTabla.costo),
             precio          : parseFloat(modeloTabla.precio),
             impuesto        : modeloTabla.impuesto,
+            ganancia        : modeloTabla.ganancia,
             descuento       : modeloTabla.descuento,
             totalDescuento  : modeloTabla.totalDescuento,
             totalImpuesto   : modeloTabla.totalImpuesto,
@@ -1434,6 +1440,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        costo           : __valorNumerico(self.articulo.costo),
+       ganancia          : __valorNumerico(self.articulo.gananciaPrecioPublico),
        precio          : __valorNumerico(self.articulo.precioPublico),
        totalImpuesto   : __valorNumerico(totalImpuesto),
        totalDescuento  :0,
@@ -1457,14 +1464,22 @@ __actualizarCostoKeyPress(e){
    
     var costo = e.currentTarget.value;
     self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,self.item.precio);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.update()
+
     __ActualizarCosto(costo)
 }
 
 __actualizarCostoBlur(e){
     var costo = e.currentTarget.value;
     self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,self.item.precio);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.update()
+
     __ActualizarCosto(costo)
 }
 
@@ -1581,10 +1596,53 @@ __removeProductFromDetail(e) {
 /**
 *   Actualizar el costo del codigo y recalcular la compra
 **/
+__actualizarGananciaKeyPress(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var ganancia = e.currentTarget.value;
+    self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    var costo     =  __valorNumerico(self.item.costo)
+    var precioPublico    =  __valorNumerico(self.item.precio)
+    self.item.ganancia = __valorNumerico(ganancia);
+    self.item.precio =_ObtenerPrecio(self.item.costo,self.item.impuesto * 100,0,self.item.ganancia)
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio =  __valorNumerico(redondeoDecimales(self.item.precio,aplicarRedondeo()))
+    self.update()
+}
+
+__actualizarGananciaBlur(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var ganancia = e.currentTarget.value;
+    self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    var costo     =  __valorNumerico(self.item.costo)
+    var precioPublico    =  __valorNumerico(self.item.precio)
+    self.item.ganancia = __valorNumerico(ganancia);
+    self.item.precio =_ObtenerPrecio(self.item.costo,self.item.impuesto * 100,0,self.item.ganancia)
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio =  __valorNumerico(redondeoDecimales(self.item.precio,aplicarRedondeo()))
+    self.update()
+
+}
+
+
+/**
+*   Actualizar el costo del codigo y recalcular la compra
+**/
 __actualizarPrecioKeyPress(e){
     
     var precio = e.currentTarget.value;
     self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    var costo     =  __valorNumerico(self.item.costo)
+    var precioPublico    =  __valorNumerico(precio)
+    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio = precio
     self.update()
     __ActualizarPrecioDetalle(precio)
 }
@@ -1592,6 +1650,12 @@ __actualizarPrecioKeyPress(e){
 __actualizarPrecioBlur(e){
     var precio = e.currentTarget.value;
     self.item = e.item; 
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    var costo     =  __valorNumerico(self.item.costo)
+    var precioPublico    =  __valorNumerico(precio)
+    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio = precio
     self.update()
     __ActualizarPrecioDetalle(precio)
 }

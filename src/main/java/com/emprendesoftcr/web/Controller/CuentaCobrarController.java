@@ -144,8 +144,9 @@ public class CuentaCobrarController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		//ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		ByteArrayInputStream inputStream = cuentaCobrarBo.createExcelCuentaCobrar(cuentaCobras, usuario.getEmpresa(),fechaInicioParam,fechaFinParam,estadoParam,cliente);
+		//ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -170,8 +171,9 @@ public class CuentaCobrarController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		//ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		 
+		ByteArrayInputStream inputStream = cuentaCobrarBo.createExcelCuentaCobrar(cuentaCobras, usuario.getEmpresa(),Constantes.EMPTY,Constantes.EMPTY,estadoParam,cliente);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -193,7 +195,8 @@ public class CuentaCobrarController {
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, usuario.getEmpresa(), cliente, estadoParam);
 //Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+	//	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		ByteArrayOutputStream baos = Utils.convertirOutStream(cuentaCobrarBo.createExcelCuentaCobrar(cuentaCobras, usuario.getEmpresa(),fechaInicioParam,fechaFinParam,estadoParam,cliente));
 
 		Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
@@ -230,7 +233,9 @@ public class CuentaCobrarController {
 
 		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(usuario.getEmpresa(), cliente, estadoParam);
 //Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		//ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		
+		ByteArrayOutputStream baos = Utils.convertirOutStream(cuentaCobrarBo.createExcelCuentaCobrar(cuentaCobras, usuario.getEmpresa(),Constantes.EMPTY,Constantes.EMPTY,estadoParam,cliente));
 
 		Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
@@ -267,7 +272,7 @@ public class CuentaCobrarController {
 	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Moneda", "Total", "Saldo", "Abono");
+		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Moneda", "Facturacion", "Saldo", "Abono");
 		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR,codigoMoneda, total,totalSaldo,totalAbono", baos);
 		return baos;
 	}

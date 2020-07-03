@@ -10,6 +10,9 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																								= ResourceBundle.getBundle("factura");
 	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR													= "/home/jose/dev/archivosXMLs";
 
+	public static final Integer					VERSION_EXONERACION_SUBTOTAL_SI																= 1;
+	public static final Integer					VERSION_EXONERACION_SUBTOTAL_NO																	= 0;
+
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																	= 0;
 

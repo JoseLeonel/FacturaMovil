@@ -153,12 +153,19 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompraDao.agregar(detalleCompra);
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
 					articulo.setFechaUltimaCompra(compra.getFechaCompra());
+					articulo.setGananciaPrecioPublico(detalleCompra.getGanancia());
 					articulo.setUpdated_at(new Date());
+					
 					articuloDao.modificar(articulo);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 							aplicarInventario(compra, detalleCompra, articulo);
+						}else {
+							articulo.setCosto(detalleCompra.getCosto());
+							articulo.setPrecioPublico(detalleCompra.getPrecio());
+							articuloDao.modificar(articulo);
+							
 						}
 
 						actualizarProveedor(detalleCompra, compra.getProveedor());

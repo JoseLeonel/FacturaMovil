@@ -1339,10 +1339,13 @@ function __seleccionarClientes() {
 function __aplicarExoneracionPorCliente(){
     
     var aplicaExo = false
-    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
+    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion )
+    if(porcentaje == 0){
+        return
+    }
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
-        self.item = self.detail[count];
+        self.item          = self.detail[count];
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0  ){
@@ -1351,19 +1354,17 @@ function __aplicarExoneracionPorCliente(){
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
-                    self.item.montoExoneracion1 = valorTotal
-                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
-                    self.item.montoExoneracion = valorTotal
-                    self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion  
+                    valorTotal = 0
+                    self.item.montoExoneracion1 = 0
+                     valorTotal = __valorNumerico(self.item.subTotal) * __valorNumerico(porcentaje)
+                    self.item.montoExoneracion = valorTotal / 100
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.update();
                     aplicaExo= true
                 }else{
-                    //Cliente no tiene exoneracion
+
                     self.item.porcentajeExoneracion = 0
                     self.item.fechaEmisionExoneracion = null
                     self.item.nombreInstitucionExoneracion = ""
@@ -1371,7 +1372,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0
@@ -1381,9 +1382,10 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
+
                     aplicaExo = true
                 }
-               
+
             }else{
                 self.item.porcentajeExoneracion = 0
                 self.item.fechaEmisionExoneracion = null
@@ -1392,7 +1394,7 @@ function __aplicarExoneracionPorCliente(){
                 self.item.tipoDocumentoExoneracion = ""
                 self.item.montoExoneracion = 0
                 self.item.montoExoneracion1 = 0
-                  
+
             }
     }
     __calculate()
@@ -1404,7 +1406,6 @@ function __aplicarExoneracionPorCliente(){
        self.totalCambioPagar = 0
        self.totalCambioPagarSTR = 0
        self.update();
-
     }
     $('#totalEfectivo').val(__valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)))
     $('#totalTarjeta').val(null)

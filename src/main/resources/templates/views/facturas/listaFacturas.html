@@ -50,12 +50,58 @@
 	html {
          scroll-behavior: smooth;
     }
+	#titulo-encabezado{
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+#totalsGenerales{
+  display: flex;
+  flex-wrap: nowrap;
+}   
+#totalsGenerales > div {
+  margin-right: 2px;
+
+}
+#totalsGenerales > div > div {
+  display: flex;
+  flex-direction: column;
+}
+#totalsGenerales > div > div >input{
+  width: 200px;
+  background-color: #ecf0f5 !important;
+  height: 30px;
+  border-radius: 5px 5px 5px 5px;
+  font-size:16px;
+/*   font-weight: 900; */
+}
+#totalsGenerales > div > div >span{
+  font-size: 18px;
+  font-weight: 600;
+}
 	
 	</style>
     
 </head>
 <body>
 <div layout:fragment="content">
+	 <div  id="titulo-encabezado"  >
+	        <div>
+	           <h1><i class="fa fa-calculator"></i>&nbsp Facturas por Fecha  </h1>
+	        </div>
+	        <div id="totalsGenerales">
+	        
+	             <div>
+	             	 <div >
+	                    <span>Total Venta </span>  
+	                    <input type="text" class="total " id="total"  name= "total" readonly >
+	                 </div>
+	             </div>
+	             
+	        
+	        </div>
+            
+	    </div>
 
  <!-- Modal correo alternativo-->
 	<div class="modal fade" id="correoAlternativoListar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -91,14 +137,7 @@
 	</div>
 
 
-    <!-- Titulos -->
-    <div  class="row "  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-             <i class="fa fa-calculator tituloFacturas" th:text="#{facturas.facturas}"></i >
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
-        </div>
-    </div>
+  
     
     <!-- Inicio Filtros-->
 <div class="mostrarListadoDeFacturas "  id="mostrarListadoDeFacturas">
@@ -181,12 +220,7 @@
                                     </select>
                                 </div>  
                             </div>
-                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label>Total </label>  
-                                     <input type="text" class="form-control total" id="total"  name= "total" readonly>
-                                </div>  
-                            </div>    
+                             
                         </div> 
                     </form>  
                 </div>

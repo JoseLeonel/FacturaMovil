@@ -496,7 +496,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) {
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
@@ -508,7 +508,7 @@ public class FacturasController {
 		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinal, usuario.getEmpresa().getId(), actividadEconomica);
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelFacturas(facturas);
+		ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturasTotalMensual(facturas, usuario.getEmpresa(), fechaInicioParam, fechaFinParam, estado, actividadEconomica));
 		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 		// Se prepara el correo
@@ -593,8 +593,7 @@ public class FacturasController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelFacturas(facturas);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ByteArrayInputStream inputStream = facturaBo.createExcelFacturasTotalMensual(facturas, usuario.getEmpresa(), fechaInicioParam, fechaFinParam, estado, actividadEconomica);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -604,13 +603,13 @@ public class FacturasController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaCliente, nombreCliente,nombreFactura,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR, numeroConsecutivo,consecutivoProforma, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,nota", baos);
-		return baos;
-	}
+//	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
+//		// Se prepara el excell
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
+//		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaCliente, nombreCliente,nombreFactura,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR, numeroConsecutivo,consecutivoProforma, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,nota", baos);
+//		return baos;
+//	}
 
 	@RequestMapping(value = "/DescargarPorDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
 	public void descargarPorDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException, Exception {
@@ -627,7 +626,7 @@ public class FacturasController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelFacturas(facturas);
+		ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturasTotalMensual(facturas, usuario.getEmpresa(), fechaInicioParam, fechaFinParam, estado, actividadEconomica));
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
@@ -1006,8 +1005,9 @@ public class FacturasController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelUtilidad(facturas);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+	//	ByteArrayOutputStream baos = createExcelUtilidad(facturas);
+//		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ByteArrayInputStream inputStream = detalleBo.createExcelUtilidad(facturas,usuarioSesion.getEmpresa(),fechaInicioParam,fechaFinParam);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -1017,13 +1017,7 @@ public class FacturasController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelUtilidad(Collection<ConsultaUtilidadNative> facturas) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision", "Categoria", "Codigo", "Descripcion", "Costo", "Venta", "Utilidad");
-		new SimpleExporter().gridExport(headers, facturas, "fechaEmision,nombreCategoria, codigo,nombreArticulo,totalCosto,venta,totalUtilidad", baos);
-		return baos;
-	}
+	
 	
 
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -1051,8 +1045,11 @@ public class FacturasController {
 			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
 
 			// Se prepara el excell
-			ByteArrayOutputStream baos = createExcelUtilidad(facturas);
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelUtilidad(facturas,usuarioSesion.getEmpresa(),fechaInicioParam,fechaFinParam));
+
 			Collection<Attachment> attachments = createAttachments(attachment("utilidad", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+			
+			
 			// Se prepara el correo
 			String from = "UtilidadProductos@emprendesoftcr.com";
 			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
@@ -1315,8 +1312,8 @@ public class FacturasController {
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelListar(objetos);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		//ByteArrayOutputStream baos = createExcelListar(objetos);
+		ByteArrayInputStream inputStream = facturaBo.createExcelFacturas(objetos,usuarioSesion.getEmpresa(), fechaInicio, fechaFin, estado, cliente);
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
 		int bytesRead = -1;
@@ -1326,17 +1323,18 @@ public class FacturasController {
 
 	}
 
-	private ByteArrayOutputStream createExcelListar(Collection<ListarFacturasNativa> facturas) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
-		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma,totalExonerado, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
-		return baos;
-	}
+//	private ByteArrayOutputStream createExcelListar(Collection<ListarFacturasNativa> facturas) {
+//		// Se prepara el excell
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
+	  //  List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
+//		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma,totalExonerado, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
+//		return baos;
+//	}
 
 	@RequestMapping(value = "/envioCorreoListarFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioCorreoListarFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String correoAlternativo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) {
+	public void envioCorreoListarFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String correoAlternativo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) throws IOException {
 		Cliente cliente = clienteBo.buscar(idCliente);
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
@@ -1352,7 +1350,8 @@ public class FacturasController {
 		String fin1 = dateFormat1.format(fechaFinalP);
 		Collection<ListarFacturasNativa> objetos = consultasNativeBo.findByFacturasAndFechaAndTipoDocAndUsuario(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelListar(objetos);
+		ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturas(objetos,usuarioSesion.getEmpresa(),fechaInicio,fechaFin,estado,cliente));
+		 
 		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 		// Se prepara el correo

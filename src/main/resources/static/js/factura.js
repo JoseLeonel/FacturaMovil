@@ -1698,7 +1698,7 @@ function _ObtenerPrecio(costo,impuesto,impuesto1,ganancia){
 	  } 
 	  
 	  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
-	  if(ganancia > 0){
+	  if(porcentajeGanancia < 1  ){
 	    porcentajeGanancia = 1 - porcentajeGanancia
 	  }
 	  
@@ -1722,8 +1722,8 @@ function _ObtenerPrecio(costo,impuesto,impuesto1,ganancia){
 	    }
 	  }
 	  
-	  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
-	  precio = totalImpuesto >0? costo * totalImpuesto:precio;
+	  precio = totalImpuesto1 >0? precio * totalImpuesto1:precio;
+	  precio = totalImpuesto >0? precio	 * totalImpuesto:precio;
 	  return __valorNumerico(redondeoDecimales(precio,0));
 	}
 /**

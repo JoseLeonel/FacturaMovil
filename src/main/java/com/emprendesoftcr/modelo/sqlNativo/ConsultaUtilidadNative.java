@@ -132,11 +132,13 @@ public class ConsultaUtilidadNative implements Serializable {
 	}
 
 	public String getVentaSTR() {
-		return Utils.formateadorMiles(this.venta);
+		return Utils.formateadorMiles(getVenta());
 	}
+	
 
 	public Double getVenta() {
-		return venta;
+		Double valor = this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? -1d : 1d;
+		return this.venta  * valor;
 	}
 
 	public void setVenta(Double venta) {

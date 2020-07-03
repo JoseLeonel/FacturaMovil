@@ -223,6 +223,10 @@ public class Factura implements Serializable {
 	@Column(name = "version_esquema", columnDefinition = "INT default '0'")
 	private Integer						versionEsquemaXML;
 
+//	@Column(name = "ver_porc_exo", columnDefinition = "INT default '0'")
+//	private Integer					versionPorcentajeExoneracion;
+
+	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente						cliente;
@@ -1253,25 +1257,25 @@ public class Factura implements Serializable {
 	public void setNoAplicarEnCaja(Integer noAplicarEnCaja) {
 		this.noAplicarEnCaja = noAplicarEnCaja;
 	}
-
-
-
-
-
-
-	
 	public Integer getNotificacionNoElectronicio() {
 		return notificacionNoElectronicio;
 	}
 
 
-
-
-
-
-	
 	public void setNotificacionNoElectronicio(Integer notificacionNoElectronicio) {
 		this.notificacionNoElectronicio = notificacionNoElectronicio;
 	}
+
+
+//	public Integer getVersionPorcentajeExoneracion() {
+//		return versionPorcentajeExoneracion;
+//	}
+//
+//
+//	public void setVersionPorcentajeExoneracion(Integer versionPorcentajeExoneracion) {
+//		this.versionPorcentajeExoneracion = versionPorcentajeExoneracion;
+//	}
+	
+	
 
 }

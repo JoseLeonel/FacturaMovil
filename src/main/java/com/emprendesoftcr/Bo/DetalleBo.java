@@ -1,11 +1,14 @@
 package com.emprendesoftcr.Bo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 import java.util.Date;
 
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 public interface DetalleBo {
@@ -35,5 +38,7 @@ public interface DetalleBo {
 	Collection<Detalle>  findbyConsecutivoAndEmpresa (String consecutivo,Empresa empresa);
 	
 	
+	
+	ByteArrayInputStream createExcelUtilidad(Collection<ConsultaUtilidadNative> facturas,Empresa empresa,String fechaInicio,String fechaFin) throws Exception ;
 
 }

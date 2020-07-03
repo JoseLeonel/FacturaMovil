@@ -1,15 +1,19 @@
 package com.emprendesoftcr.Bo;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
+import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
@@ -53,4 +57,9 @@ public interface FacturaBo {
 	ArrayList<String> listaCorreosAsociadosFactura(Factura factura);
 	
 	Collection<Factura> findBySinNotificarCorreo();
+	
+	
+	ByteArrayInputStream createExcelFacturas(Collection<ListarFacturasNativa> facturas,Empresa empresa, String fechaInicio,String fechaFinal,Integer estado, Cliente cliente)throws IOException;
+	
+	ByteArrayInputStream createExcelFacturasTotalMensual(Collection<Factura> facturas,Empresa empresa, String fechaInicio,String fechaFinal,Integer estado, String actividadEconomica)throws IOException;
 }

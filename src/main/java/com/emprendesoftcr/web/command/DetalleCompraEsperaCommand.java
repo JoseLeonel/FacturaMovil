@@ -14,6 +14,7 @@ public class DetalleCompraEsperaCommand {
 	private Integer		numeroLinea;
 
 	private Double		costo;
+	private Double		ganancia;
 
 	private Double		precio;
 
@@ -53,6 +54,7 @@ public class DetalleCompraEsperaCommand {
 		this.updated_at = detalleCompra.getUpdated_at();
 		this.compra = detalleCompra.getCompra();
 		this.articulo = detalleCompra.getArticulo();
+		this.ganancia = detalleCompra.getGanancia();
 	}
 
 	public Long getId() {
@@ -194,5 +196,17 @@ public class DetalleCompraEsperaCommand {
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
 	}
+
+	
+	public Double getGanancia() {
+		return ganancia;
+	}
+
+	
+	public void setGanancia(Double ganancia) {
+		this.ganancia = ganancia;
+	}
+	
+	
 
 }

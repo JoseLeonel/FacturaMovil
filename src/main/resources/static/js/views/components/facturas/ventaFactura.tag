@@ -4122,25 +4122,26 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 **/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
     if(porcentajeDesc == 0){
-        return 0
-    }
-    if(porcentajeDesc > 100){
-        porcentajeDesc = 100
-    }
-    self.item.porcentajeDesc = porcentajeDesc
-    self.update()
+	        return 0
+	    }
+	     if(porcentajeDesc > 100){
+	        porcentajeDesc = 100
+	    }
+	    var porcentaje =  porcentajeGanancia;
+	    if(porcentajeDesc > porcentajeGanancia){
+	       porcentaje =  porcentajeDesc;
+	    }
+	    if(porcentajeDesc ==100){
+	        porcentaje = 0
+	    }
+	    self.item.porcentajeDesc = porcentaje
+	    self.update()
 
-    var porcentaje =  porcentajeGanancia;
-    if(porcentajeDesc != porcentajeGanancia){
-       porcentaje =  porcentajeDesc;
-    }
-    porcentaje = porcentaje/ 100;
-    if(porcentajeDesc ==100){
-        porcentaje = 0
-    }
-    var totalDescuento =  precioUnitario * cantidad
-    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
-    return resultado
+	    var totalDescuento =  precioUnitario * cantidad
+        totalDescuento = totalDescuento * porcentaje
+        totalDescuento = totalDescuento /100
+	    var resultado = totalDescuento;
+	    return resultado
 }
 /**
 *Actualizar linea en el detalle
@@ -4500,11 +4501,14 @@ function __seleccionarClientes() {
 function __aplicarExoneracionPorCliente(){
    
 
-    var aplicaExo = false
-    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion / 100)
+     var aplicaExo = false
+    var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion )
+    if(porcentaje == 0){
+        return
+    }
     var valorTotal = 0
-    for (var count = 0;count < self.detail.length; count++) {
-        self.item = self.detail[count];
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0  ){
@@ -4513,19 +4517,17 @@ function __aplicarExoneracionPorCliente(){
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = __valorNumerico(self.item.montoImpuesto1) * __valorNumerico(porcentaje)  
-                    self.item.montoExoneracion1 = valorTotal
-                     valorTotal = __valorNumerico(self.item.montoImpuesto) * __valorNumerico(porcentaje)  
-                    self.item.montoExoneracion = valorTotal
-                    self.item.ImpuestoNeto = self.item.montoImpuesto + self.item.montoImpuesto1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion1
-                    self.item.ImpuestoNeto = self.item.ImpuestoNeto - self.item.montoExoneracion  
+                    valorTotal = 0
+                    self.item.montoExoneracion1 = 0
+                     valorTotal = __valorNumerico(self.item.subTotal) * __valorNumerico(porcentaje)
+                    self.item.montoExoneracion = valorTotal / 100
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.update();
                     aplicaExo= true
                 }else{
-                    //Cliente no tiene exoneracion
+
                     self.item.porcentajeExoneracion = 0
                     self.item.fechaEmisionExoneracion = null
                     self.item.nombreInstitucionExoneracion = ""
@@ -4533,7 +4535,7 @@ function __aplicarExoneracionPorCliente(){
                     self.item.tipoDocumentoExoneracion = ""
                     self.item.montoExoneracion = 0
                     self.item.montoExoneracion1 = 0
-                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) + __valorNumerico(self.item.montoImpuesto1) 
+                    self.item.ImpuestoNeto = __valorNumerico(self.item.montoImpuesto) 
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.totalCambioPagar = 0
@@ -4543,10 +4545,10 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                    
+
                     aplicaExo = true
                 }
-               
+
             }else{
                 self.item.porcentajeExoneracion = 0
                 self.item.fechaEmisionExoneracion = null
@@ -4560,7 +4562,6 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-     
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
@@ -4568,7 +4569,6 @@ function __aplicarExoneracionPorCliente(){
        self.totalCambioPagar = 0
        self.totalCambioPagarSTR = 0
        self.update();
-
     }
     //factura.js
     if(verificarClienteFrecuente(self.cliente)){

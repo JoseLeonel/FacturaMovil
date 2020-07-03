@@ -2,37 +2,28 @@ package com.emprendesoftcr;
 
 import java.io.FileNotFoundException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import com.google.common.collect.Multiset.Entry;
-import com.ibm.icu.util.BytesTrie.Iterator;
 import com.itextpdf.text.DocumentException;
 
 
 public class vivi {
 
 	public static void main(String[] args) throws ParseException, FileNotFoundException, DocumentException {
-		 int[] myArray = {1,2,9,2,5,3,5,1,5}; 
-		 int n=3;
-     int numeroMenor = myArray[0];
-	   for (int i = 0; i < 3; i++) {
-		  for (int j = 0; j < myArray.length; j++) {
-			    if(numeroMenor < myArray[j] && numeroMenor != myArray[j] ) {
-			    	numeroMenor = myArray[0];  
-			    }
-			}
-		  System.out.print(numeroMenor + " ");
-		}
-		 int x,y,z;
-		 x = 9;
-		 y = 10;
-		 
-		 z = ++x+y++;
-		 
 		
-		System.out.println("x:"+x + " y:"+ y+ "total:"+ z);
-		//	  System.out.println("Number: "+numeroRepetido);				
+		String fechaF2 = "2020-07-01";
+
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date fecha1 = new Date();
+		Date fecha2 = formato.parse(fechaF2);
+
+		if(fecha1.before(fecha2)){
+		   System.out.println( "Fecha 1 es mayor o igual a fecha2" );
+		}else{
+		   System.out.println( "Fecha2 es menor que fecha1");
+		}			
 	}
 	
 	
