@@ -3925,7 +3925,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 	        porcentajeDesc = 100
 	    }
 	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc > porcentajeGanancia){
+	    if(porcentajeDesc <= porcentajeGanancia){
 	       porcentaje =  porcentajeDesc;
 	    }
 	    if(porcentajeDesc ==100){

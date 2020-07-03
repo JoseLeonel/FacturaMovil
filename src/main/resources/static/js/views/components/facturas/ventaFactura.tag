@@ -4117,32 +4117,7 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
     agregarCantidadAlaVenta(cantidad)
     return
 }
-/**
-*Monto en el descuento
-**/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc > porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    self.item.porcentajeDesc = porcentaje
-	    self.update()
 
-	    var totalDescuento =  precioUnitario * cantidad
-        totalDescuento = totalDescuento * porcentaje
-        totalDescuento = totalDescuento /100
-	    var resultado = totalDescuento;
-	    return resultado
-}
 /**
 *Actualizar linea en el detalle
 **/
@@ -4163,6 +4138,32 @@ function ActualizarLineaDEtalle(){
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
     self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
     self.update()
+}
+/**
+*Monto en el descuento
+**/
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+    if(porcentajeDesc == 0){
+	        return 0
+	    }
+	     if(porcentajeDesc > 100){
+	        porcentajeDesc = 100
+	    }
+	    var porcentaje =  porcentajeGanancia;
+	    if(porcentajeDesc <= porcentajeGanancia){
+	       porcentaje =  porcentajeDesc;
+	    }
+	    if(porcentajeDesc ==100){
+	        porcentaje = 0
+	    }
+	    self.item.porcentajeDesc = porcentaje
+	    self.update()
+
+	    var totalDescuento =  precioUnitario * cantidad
+        totalDescuento = totalDescuento * porcentaje
+        totalDescuento = totalDescuento /100
+	    var resultado = totalDescuento;
+	    return resultado
 }
 /**
 * Agregar en la cantidad la Venta
