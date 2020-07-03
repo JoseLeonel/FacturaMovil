@@ -12,7 +12,7 @@
 </div>            
  <div class="row scrollerT"  >
     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-        <div id="divFormulario" >
+        <div id="divFormulario" > 
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
