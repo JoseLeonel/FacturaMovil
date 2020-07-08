@@ -379,10 +379,7 @@ a[x-apple-data-detectors=true] {
                     <td style="padding: 8px; border: 1px solid black;">+ Cierre DataFono:</td>
                     <td style="padding: 8px; border: 1px solid black;">$datafonoSTR</td>
                   </tr>
-                  <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">+ Entradas:</td>
-                    <td style="padding: 8px; border: 1px solid black;">$totalEntradas</td>
-                  </tr>
+                
                   <tr style="border: 1px solid black;">
                     <td style="padding: 8px; border: 1px solid black;color:red;">+ Salidas:</td>
                     <td style="padding: 8px; border: 1px solid black;color:red;">$totalSalidas</td>
@@ -431,11 +428,14 @@ a[x-apple-data-detectors=true] {
                     <td style="padding: 8px; border: 1px solid black;">Abonos Sistema:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalAbonoSTR</td>
                   </tr>
-                  
+                  <tr style="border: 1px solid black;">
+                    <td style="padding: 8px; border: 1px solid black;">+ Entradas:</td>
+                    <td style="padding: 8px; border: 1px solid black;">$totalEntradas</td>
+                  </tr>
               
                 
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;"> Total Ventas Sistema:</td>
+                    <td style="padding: 8px; border: 1px solid black;"> Total(Ventas + Entradas Dinero):</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalGeneralSTR</td>
                   </tr>
                   <tr style="border: 1px solid black;">
@@ -446,6 +446,10 @@ a[x-apple-data-detectors=true] {
                   <tr style="border: 1px solid black;">
                     <td style="padding: 8px; border: 1px solid black;">Diferencia:</td>
                     <td style="padding: 8px; border: 1px solid black;">$diferenciaSTR</td>
+                  </tr>
+                  <tr style="border: 1px solid black;">
+                    <td style="padding: 8px; border: 1px solid black; color:red;">Diferencia Final(Diferencia- Fondo Inicial):</td>
+                    <td style="padding: 8px; border: 1px solid black;color:red;">$diferenciaFinalSTR</td>
                   </tr>
                   
 

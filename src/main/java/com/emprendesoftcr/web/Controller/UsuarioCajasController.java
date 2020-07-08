@@ -395,6 +395,7 @@ public class UsuarioCajasController {
 			modelEmail.put("totalCierreSTR", usuarioCajaCommand1.getTotalCierreSTR());
 			modelEmail.put("conteoManualSTR", usuarioCajaCommand1.getConteoManualSTR());
 			modelEmail.put("diferenciaSTR", usuarioCajaCommand1.getDiferenciaSTR());
+			modelEmail.put("diferenciaFinalSTR", usuarioCajaCommand1.getDiferenciaFinalSTR());
 			modelEmail.put("totalDolares", usuarioCajaCommand1.getConteoDolarSTR());
 			modelEmail.put("totalAbonoSTR", usuarioCajaCommand1.getTotalAbonoSTR());
 			modelEmail.put("tipoCambio", usuarioCajaCommand1.getTipoCambioSTR());

@@ -94,9 +94,13 @@
                                     <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalAbono")} Sistema: </td>
                                     <td class="valorPro" >{usuarioCaja.totalAbonoSTR}</td>
                                 </tr>
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > + Entradas   </td>
+                                    <td class="valorPro" >{usuarioCaja.sumaEntradasSTR}</td>
+                                </tr>
                                
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > Ventas   </td>
+                                    <td class="valorPro" > Ventas(Vent+Entrad):   </td>
                                     <td class="valorPro" >{usuarioCaja.totalGeneralSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
@@ -109,7 +113,11 @@
                                     <td class="valorPro" >{usuarioCaja.diferenciaSTR}</td>
                                 </tr>
                                 
-
+                                <tr class="detalleTables">
+                                    <td class="valorPro" > D.Final(diferen -Fond.Inic):   </td>
+                                    <td class="valorPro" >{usuarioCaja.diferenciaFinalSTR}</td>
+                                </tr>
+                                
                                 <tr class="detalleTables">
                                     <td class="valorPro" >  I.V 10%:     </td>
                                     <td class="valorPro" >{usuarioCaja.totalServicioSTR}</td>

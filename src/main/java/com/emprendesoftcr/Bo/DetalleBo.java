@@ -40,5 +40,7 @@ public interface DetalleBo {
 	
 	
 	ByteArrayInputStream createExcelUtilidad(Collection<ConsultaUtilidadNative> facturas,Empresa empresa,String fechaInicio,String fechaFin) throws Exception ;
+	
+	ByteArrayInputStream createExcelVentasXCodigo(Collection<Detalle> detalles,String fechaInicio, String fechaFinal, Empresa empresa, String actividadEconomica) throws Exception ;
 
 }

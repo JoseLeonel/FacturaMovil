@@ -3928,6 +3928,9 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 	    if(porcentajeDesc <= porcentajeGanancia){
 	       porcentaje =  porcentajeDesc;
 	    }
+        if(porcentajeGanancia <=0){
+            porcentaje =  porcentajeDesc;
+        }
 	    if(porcentajeDesc ==100){
 	        porcentaje = 0
 	    }

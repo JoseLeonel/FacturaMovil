@@ -1206,108 +1206,82 @@ public class FacturaBoImpl implements FacturaBo {
 		for (ListarFacturasNativa listarFacturasNativa : facturas) {
 			row = sheet.createRow(rownum);
 			Cell cell = row.createCell(0);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getFechaEmisionSTR());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getFechaEmisionSTR());
 
 			cell = row.createCell(1);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getCedulaPrin());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCedulaPrin());
 
 			cell = row.createCell(2);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getNombreCompleto());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreCompleto());
 
 			cell = row.createCell(3);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getNombreFactura());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreFactura());
 
 			cell = row.createCell(4);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getNombreUsuario());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreUsuario());
 
 			cell = row.createCell(5);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getCodigoActividad());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCodigoActividad());
 
 			cell = row.createCell(6);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTipoDocSTR());
-
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getTipoDocSTR());
+			
 			cell = row.createCell(7);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getCondicionVentaSTR());
-
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCondicionVentaSTR());
+			
 			cell = row.createCell(8);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getNumeroConsecutivo());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNumeroConsecutivo());
 
 			cell = row.createCell(9);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getConsecutivoProforma());
-
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getConsecutivoProforma());
+			
 			cell = row.createCell(10);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalExonerado());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalExonerado());
 
 			cell = row.createCell(11);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalGravado());
-
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalGravado());
+			
 			cell = row.createCell(12);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalExento());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalExento());
 
 			cell = row.createCell(13);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalVentaNeta());
-
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalVentaNeta());
+			
 			cell = row.createCell(14);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalImpuesto());
-
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalImpuesto());
+			
 			cell = row.createCell(15);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalDescuentos());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalDescuentos());
 
 			cell = row.createCell(16);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalOtrosCargos());
-
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalOtrosCargos());
+			
 			cell = row.createCell(17);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalComprobante());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalComprobante());
 
 			cell = row.createCell(18);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getCodigoMoneda());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCodigoMoneda());
 
 			cell = row.createCell(19);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTipoCambioSTR());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTipoCambio());
 
 			cell = row.createCell(20);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalColonesNC());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalColonesNC());
 
 			cell = row.createCell(21);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalEfectivo());
-
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalEfectivoNC());
+			
 			cell = row.createCell(22);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalTarjeta());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalTarjetaNC());
 
 			cell = row.createCell(23);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalTarjeta());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalBancoNC());
 
 			cell = row.createCell(24);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getTotalCredito());
+			Utils.getCel(cell,styles,listarFacturasNativa.getTotalCreditoNC());
 
 			cell = row.createCell(25);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(listarFacturasNativa.getNota());
+			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNota());
 
 			rownum++;
 		}
@@ -1484,108 +1458,78 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Factura factura : facturas) {
 			row = sheet.createRow(rownum);
 			Cell cell = row.createCell(0);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getFechaEmisionSTR());
-
+			Utils.getCelSTR(cell,styles,factura.getFechaEmisionSTR());
+			
 			cell = row.createCell(1);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getCedulaCliente());
+			Utils.getCelSTR(cell,styles,factura.getCedulaCliente());
 
 			cell = row.createCell(2);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getNombreCliente());
+			Utils.getCelSTR(cell,styles,factura.getNombreCliente());
 
 			cell = row.createCell(3);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getNombreFactura());
-
+			Utils.getCelSTR(cell,styles,factura.getNombreFactura());
 
 			cell = row.createCell(4);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getCodigoActividad());
+			Utils.getCelSTR(cell,styles,factura.getCodigoActividad());
 
 			cell = row.createCell(5);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTipoDocSTR());
+			Utils.getCelSTR(cell,styles,factura.getTipoDocSTR());
 
 			cell = row.createCell(6);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getCondicionVentaSTR());
+			Utils.getCelSTR(cell,styles,factura.getCondicionVentaSTR());
 			
 			cell = row.createCell(7);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getFechaCreditoSTR());
-
+			Utils.getCelSTR(cell,styles,factura.getFechaCreditoSTR());
 			cell = row.createCell(8);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getNumeroConsecutivo());
+			Utils.getCelSTR(cell,styles,factura.getNumeroConsecutivo());
 
 			cell = row.createCell(9);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getConsecutivoProforma());
-
+			Utils.getCelSTR(cell,styles,factura.getConsecutivoProforma());
 
 			cell = row.createCell(10);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalGravadoNC());
+			Utils.getCel(cell,styles,factura.getTotalGravadoNC());
 
 			cell = row.createCell(11);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalExentoNC());
+			Utils.getCel(cell,styles,factura.getTotalExentoNC());
 
 			cell = row.createCell(12);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalVentaNetaNC());
+			Utils.getCel(cell,styles,factura.getTotalVentaNetaNC());
 
 			cell = row.createCell(13);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalImpuestoNC());
+			Utils.getCel(cell,styles,factura.getTotalImpuestoNC());
 
 			cell = row.createCell(14);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalDescuentosNC());
+			Utils.getCel(cell,styles,factura.getTotalDescuentosNC());
 
 			cell = row.createCell(15);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalOtrosCargosNC());
+			Utils.getCel(cell,styles,factura.getTotalOtrosCargosNC());
 
 			cell = row.createCell(16);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalComprobanteNC());
+			Utils.getCel(cell,styles,factura.getTotalComprobanteNC());
 
 			cell = row.createCell(17);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getCodigoMoneda());
+			Utils.getCelSTR(cell,styles,factura.getCodigoMoneda());
 
 			cell = row.createCell(18);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTipoCambioSTR());
-
-		
+			Utils.getCel(cell,styles,factura.getTipoCambio());
 
 			cell = row.createCell(19);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalColonesNC());
+			Utils.getCel(cell,styles,factura.getTotalColonesNC());
 
 			cell = row.createCell(20);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalEfectivoNC());
+			Utils.getCel(cell,styles,factura.getTotalEfectivoNC());			
 
 			cell = row.createCell(21);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalTarjetaNC());
+			Utils.getCel(cell,styles,factura.getTotalTarjetaNC());
 
 			cell = row.createCell(22);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalBancoNC());
+			Utils.getCel(cell,styles,factura.getTotalBancoNC());
 
 			cell = row.createCell(23);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getTotalCreditoNC());
+			Utils.getCel(cell,styles,factura.getTotalCreditoNC());
 
 			cell = row.createCell(24);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(factura.getNota());
+			Utils.getCelSTR(cell,styles,factura.getNota());
 
 			rownum++;
 		}

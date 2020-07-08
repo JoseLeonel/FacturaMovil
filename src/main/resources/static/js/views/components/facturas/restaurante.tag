@@ -4324,6 +4324,9 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 	    if(porcentajeDesc <= porcentajeGanancia){
 	       porcentaje =  porcentajeDesc;
 	    }
+        if(porcentaje <= 0){
+           porcentaje =  porcentajeDesc;
+        }
 	    if(porcentajeDesc ==100){
 	        porcentaje = 0
 	    }
@@ -4712,9 +4715,9 @@ function __seleccionarClientes() {
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
     var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion )
-    if(porcentaje == 0){
-        return
-    }
+ //   if(porcentaje == 0){
+ //       return
+ //   }
     var valorTotal = 0
     for (var count = 0; count < self.detail.length; count++) {
         self.item          = self.detail[count];

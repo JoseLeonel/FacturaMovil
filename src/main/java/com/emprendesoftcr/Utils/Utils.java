@@ -54,6 +54,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
@@ -101,6 +102,23 @@ public final class Utils {
 
 	}
 	
+public static Cell getCel(Cell cell,Map<String, CellStyle> styles, Double value) {
+		
+		cell.setCellStyle(styles.get("cell"));
+		cell.setCellValue(value);
+		
+		return cell;
+		
+	}
+public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String value) {
+		
+		cell.setCellStyle(styles.get("cellTEX"));
+		cell.setCellValue(value);
+		
+		return cell;
+		
+	}
+	
 	/**
    * Create a library of cell styles
    */
@@ -115,7 +133,6 @@ public final class Utils {
       style.setVerticalAlignment(VerticalAlignment.CENTER);
       style.setFont(titleFont);
       styles.put("title", style);
-      Font titleFont1 = wb.createFont();
       titleFont.setFontHeightInPoints((short)16);
       titleFont.setBold(true);
       style = wb.createCellStyle();
@@ -149,9 +166,24 @@ public final class Utils {
       style.setTopBorderColor(IndexedColors.BLACK.getIndex());
       style.setBorderBottom(BorderStyle.THIN);
       style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      style.setDataFormat(wb.createDataFormat().getFormat("#,###.00;[RED]-#,###.00"));
       
       styles.put("cell", style);
+
+      style = wb.createCellStyle();
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setWrapText(true);
+      style.setBorderRight(BorderStyle.THIN);
+      style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderLeft(BorderStyle.THIN);
+      style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderTop(BorderStyle.THIN);
+      style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+      style.setBorderBottom(BorderStyle.THIN);
+      style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+      style.setDataFormat(wb.createDataFormat().getFormat("@"));
+      
+      styles.put("cellTEX", style);
 
       style = wb.createCellStyle();
       titleFont = wb.createFont();
@@ -161,7 +193,7 @@ public final class Utils {
       style.setVerticalAlignment(VerticalAlignment.CENTER);
       style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
       style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      style.setDataFormat(wb.createDataFormat().getFormat("#,###.00;[RED]-#,###.00"));
       style.setFont(titleFont);
       styles.put("formula", style);
 
@@ -170,7 +202,7 @@ public final class Utils {
       style.setVerticalAlignment(VerticalAlignment.CENTER);
       style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
       style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-      style.setDataFormat(wb.createDataFormat().getFormat("0.00"));
+      style.setDataFormat(wb.createDataFormat().getFormat("#,###.00;[RED]-#,###.00"));
       styles.put("formula_2", style);
 
       return styles;
@@ -219,6 +251,7 @@ public final class Utils {
 			resultado += sCadena;
 
 		}
+		bf.close();
 		System.out.println("Archivo:" + resultado);
 		return resultado;
 	}
@@ -277,7 +310,6 @@ public final class Utils {
 		File directorio_servicio80 = crearDirectorio( servidor);
 	
 
-		@SuppressWarnings("unused")
 		File directorio_empresa = crearDirectorio( servidor + cedulaEmpresa);
 		File directorio_anno = crearDirectorio(servidor + cedulaEmpresa + "/" + anno);
 		File directorio_mes = crearDirectorio( servidor + cedulaEmpresa + "/" + anno + "/" + mes);

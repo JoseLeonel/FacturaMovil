@@ -101,12 +101,13 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setConteoManual(doubleSummaryStatistics.getSum());
 
 			usuarioCaja.setTotalCierre(doubleSummaryStatistics.getSum() + cierreDataFono + usuarioCaja.getTotalConversionColones()  + usuarioCaja.getSumaSalida());
-			Double totalGeneral = usuarioCaja.getTotalNeto();
+			Double totalGeneral = usuarioCaja.getTotalNeto() + usuarioCaja.getSumaEntradas();
 			Double conteManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
 
 			if (totalGeneral != null) {
 				if (conteManual.equals(Constantes.ZEROS_DOUBLE)) {
-					Double totalConteoManual = cierreDataFono + usuarioCaja.getTotalConversionColones()  + usuarioCaja.getSumaSalida();;
+					Double totalConteoManual = cierreDataFono + usuarioCaja.getTotalConversionColones()  + usuarioCaja.getSumaSalida();
+					
 					usuarioCaja.setDiferencia(totalConteoManual - totalGeneral);
 				} else {
 					Double totalConteoManual = conteManual + cierreDataFono + usuarioCaja.getTotalConversionColones() ;

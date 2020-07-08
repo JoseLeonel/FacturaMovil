@@ -81,6 +81,7 @@ public class UsuarioCajaCommand {
 	private Double								totalCierre;
 
 	private String								diferenciaSTR;
+	private String								diferenciaFinalSTR;
 	private String								datafonoSTR;
 
 	private String								conteoDolarConversionSTR;
@@ -137,9 +138,22 @@ public class UsuarioCajaCommand {
 		this.totalCierre = usuarioCaja.getTotalCierre();
 		this.diferenciaSTR = usuarioCaja.getDiferenciaSTR();
 		this.datafonoSTR = usuarioCaja.getDatafonoSTR();
+		Double diferencia = usuarioCaja.getDiferencia() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getDiferencia();
+		
+		this.diferenciaFinalSTR = Utils.formateadorMiles(diferencia.equals(Constantes.ZEROS_DOUBLE) ? Constantes.ZEROS_DOUBLE : diferencia - usuarioCaja.getTotalFondoInicial() );
 	}
 	
 
+
+	
+	public String getDiferenciaFinalSTR() {
+		return diferenciaFinalSTR;
+	}
+
+	
+	public void setDiferenciaFinalSTR(String diferenciaFinalSTR) {
+		this.diferenciaFinalSTR = diferenciaFinalSTR;
+	}
 
 	public String getDiferenciaSTR() {
 		return diferenciaSTR;
@@ -196,7 +210,7 @@ public class UsuarioCajaCommand {
 	}
 
 	public String getTotalGeneralSTR() {
-		Double totalNeto = this.totalNeto == null ? Constantes.ZEROS_DOUBLE : this.totalNeto;
+		Double totalNeto = this.totalNeto == null ? Constantes.ZEROS_DOUBLE : this.totalNeto + this.sumaEntradas;
 		return Utils.formateadorMiles(totalNeto );
 
 	}

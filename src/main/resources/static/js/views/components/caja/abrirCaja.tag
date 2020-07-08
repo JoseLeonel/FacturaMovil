@@ -58,7 +58,7 @@
                     <div class="row" show = {usuarioCaja.id != null ? true:false}>
                         <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
                             <label class="tituloClienteNuevo" >Total Conteo Manual</label>
-                            <input type="number" class="form-control totalConteoManual tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  id="totalConteoManual" name="totalConteoManual">
+                            <input type="number" class="form-control totalConteoManual tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  readonly id="totalConteoManual" name="totalConteoManual">
                         </div>
                     </div>
 
@@ -143,8 +143,8 @@
                     </button>
                 </div>
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  show = {usuarioCaja.id == null ? true:false}  onclick={__agregar}   class=" btn-green pull-right modalCambioPrecioBotones" > Agregar Apertura </button>
-                    <button  show = {usuarioCaja.id != null ? true:false}  onclick={__cierre}   class=" btn-green pull-right modalCambioPrecioBotones" > Cerrar Caja </button>
+                    <button  show = "{usuarioCaja.id == null ? true:false}"  onclick={__agregar}   class=" btn-green pull-right modalCambioPrecioBotones" > Agregar Apertura </button>
+                    <button  show = "{usuarioCaja.id != null ? true:false}"  onclick={__cierre}   class=" btn-green pull-right modalCambioPrecioBotones" > Cerrar Caja </button>
                 </div>
             </div>
         </div>
@@ -407,6 +407,8 @@ function __limpiar(){
     $(".conteoTarjeta").val(null)
     $(".tipoCambio").val(null)
     $(".conteoDolar").val(null)
+    $(".totalConteoManual").val(null)
+    
 }
 
 function conteoDinero(){
@@ -425,8 +427,9 @@ function conteoDinero(){
 
     var tipoCambio = __valorNumerico($(".tipoCambio").val())
     var conteoDolar = __valorNumerico($(".conteoDolar").val())
+   
     
-    if(self.usuarioCaja.id != null){
+    if(self.usuarioCaja.id != null ){
         var conteoTarjeta = __valorNumerico($(".conteoTarjeta").val())
         $(".totalConteoManual").val(billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta +(tipoCambio * conteoDolar ))
     }else{

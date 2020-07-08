@@ -174,33 +174,25 @@ public class DetalleBoImpl implements DetalleBo {
 			cell.setCellStyle(styles.get("cell"));
 			cell.setCellValue(consultaUtilidadNative.getFechaEmision());
 	//		row.createCell(0).setCellStyle(styles.get("cell"));
-			cell = row.createCell(1);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(consultaUtilidadNative.getNumeroConsecutivo());
+			 cell = row.createCell(1);
+			 Utils.getCelSTR(cell,styles,consultaUtilidadNative.getNumeroConsecutivo());
 			cell = row.createCell(2);
-			cell.setCellStyle(styles.get("cell"));
-			cell.setCellValue(consultaUtilidadNative.getNombreCategoria());
+			Utils.getCelSTR(cell,styles,consultaUtilidadNative.getNombreCategoria());
 			cell = row.createCell(3);
-			cell.setCellStyle(styles.get("cell"));
-
-			cell.setCellValue(consultaUtilidadNative.getCodigo());
-			cell = row.createCell(4);
-			cell.setCellStyle(styles.get("cell"));
-
-			cell.setCellValue(consultaUtilidadNative.getNombreArticulo());
-			cell = row.createCell(5);
-			cell.setCellStyle(styles.get("cell"));
-
-			cell.setCellValue(consultaUtilidadNative.getCosto());
-			cell = row.createCell(6);
-			cell.setCellStyle(styles.get("cell"));
-
-			cell.setCellValue(consultaUtilidadNative.getVenta());
-			cell = row.createCell(7);
-			cell.setCellStyle(styles.get("cell"));
-
-			cell.setCellValue(consultaUtilidadNative.getTotalUtilidad());
+			Utils.getCelSTR(cell,styles,consultaUtilidadNative.getCodigo());
 			
+			cell = row.createCell(4);
+			Utils.getCelSTR(cell,styles,consultaUtilidadNative.getNombreArticulo());
+			
+			
+			cell = row.createCell(5);
+			Utils.getCel(cell,styles,consultaUtilidadNative.getCosto());
+		
+			cell = row.createCell(6);
+			Utils.getCel(cell,styles,consultaUtilidadNative.getVenta());
+			
+			cell = row.createCell(7);
+			Utils.getCel(cell,styles,consultaUtilidadNative.getTotalUtilidad());  
       
 			rownum++;
 		}
@@ -247,6 +239,246 @@ public class DetalleBoImpl implements DetalleBo {
 		return new ByteArrayInputStream(stream.toByteArray());
 	}
 
+	@Override
+	public ByteArrayInputStream createExcelVentasXCodigo(Collection<Detalle> detalles,String fechaInicio, String fechaFinal, Empresa empresa, String actividadEconomica) throws Exception {
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA","Total IVA Neto","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
+			Workbook workbook = new HSSFWorkbook();
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			 Map<String, CellStyle> styles = Utils.createStyles(workbook);
+			Sheet sheet  = workbook.createSheet("Venta por detalle de codigo");
+			
+			
+		//title row
+			 Row title = sheet.createRow(0);
+			 title.setHeightInPoints(25);
+		    Cell titleCell = title.createCell(0);
+		    titleCell.setCellValue("Ventas por articulo del "+fechaInicio+" al "+ fechaFinal);
+		    titleCell.setCellStyle(styles.get("title1"));
+		    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$AC$1"));
+			
+	    Row titleEmpresa = sheet.createRow(1);
+	    titleEmpresa.setHeightInPoints(25);
+	    Cell titleCell1 = titleEmpresa.createCell(0);
+	    titleCell1.setCellValue(empresa.getNombre());
+	    titleCell1.setCellStyle(styles.get("title1"));
+	    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$AC$2"));
+	    
+
+	    Row titleCedula = sheet.createRow(2);
+	    titleCedula.setHeightInPoints(25);
+	    Cell titleCell2 = titleCedula.createCell(0);
+	    titleCell2.setCellValue("Cedula:"+ empresa.getCedula());
+	    titleCell2.setCellStyle(styles.get("title1"));
+	    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$AC$3"));
+	    
+	    
+		  Row row = sheet.createRow(3);
+	    row.setHeightInPoints(25);
+	    Cell headerCell;
+			for (int i = 0; i < headers.size(); i++) {
+				 headerCell = row.createCell(i);
+	       headerCell.setCellValue(headers.get(i));
+	       headerCell.setCellStyle(styles.get("header"));
+	       
+			}
+			
+		//
+			int rownum = 4 ;
+		
+			for(Detalle detalle : detalles) {
+				row = sheet.createRow(rownum);
+				// Usuario
+				Cell cell = row.createCell(0);
+				Utils.getCelSTR(cell,styles,detalle.getFactura().getUsuarioCreacion().getNombreUsuario());
+				// Fecha Emision
+			 cell = row.createCell(1);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getFechaEmisionSTR());
+  		 // Tipo de Documento
+			 cell = row.createCell(2);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getTipoDocSTR());
+  		 // Codigo
+			 cell = row.createCell(3);
+			 Utils.getCelSTR(cell,styles,detalle.getCodigo());
+  		 // Descripcion
+			 cell = row.createCell(4);
+			 Utils.getCelSTR(cell,styles,detalle.getDescripcion());
+  		 // clave
+			 cell = row.createCell(5);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getClave());
+  		 // Documento
+			 cell = row.createCell(6);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getNumeroConsecutivo());
+  		 // Proforma
+			 cell = row.createCell(7);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getConsecutivoProforma());
+  		 // Cedula
+			 cell = row.createCell(8);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getCedulaCliente());
+  		 // Cliente
+			 cell = row.createCell(9);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getNombreCliente());
+				
+  		 // Nombre de la Factura
+			 cell = row.createCell(10);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getNombreFactura());
+  		 // Cantidad
+			 cell = row.createCell(11);
+			 Utils.getCelSTR(cell,styles,detalle.getCantidad().toString());
+  		 // Precio Unitario
+			 cell = row.createCell(12);
+			 Utils.getCel(cell,styles,detalle.getPrecioUnitario());
+
+  		 // Monto Total
+			 cell = row.createCell(13);
+			 Utils.getCel(cell,styles,detalle.getMontoTotalNC());
+			 
+  		 // Monto Descuentos
+			 cell = row.createCell(14);
+			 Utils.getCel(cell,styles,detalle.getMontoDescuentoNC());
+
+  		 // IVA
+			 cell = row.createCell(15);
+			 Utils.getCelSTR(cell,styles,detalle.getTipoImpuestoSTR());
+
+  		 // Tarifa
+			 cell = row.createCell(16);
+			 Utils.getCelSTR(cell,styles,detalle.getCodigoTarifaSTR());
+  		 // impuesto
+			 cell = row.createCell(17);
+			 Utils.getCel(cell,styles,detalle.getImpuesto());
+  		 // Monto del Impuesto
+			 cell = row.createCell(18);
+			 Utils.getCel(cell,styles,detalle.getMontoImpuestoNC());
+  		 // Monto del Impuesto  Neto
+			 cell = row.createCell(19);
+			 Utils.getCel(cell,styles,detalle.getImpuestoNeto());
+  		 // Total mercancia grabada
+			 cell = row.createCell(20);
+			 Utils.getCel(cell,styles,detalle.getTotalMercanciaGravada());
+
+  		 // Total mercancia exenta
+			 cell = row.createCell(21);
+			 Utils.getCel(cell,styles,detalle.getTotalMercanciaExenta());
+  		 // Total mercancia exonerada
+			 cell = row.createCell(22);
+			 Utils.getCel(cell,styles,detalle.getTotalMercanciaExonerada());
+
+  		 // Total servicios gravados
+			 cell = row.createCell(23);
+			 Utils.getCel(cell,styles,detalle.getTotalServicioGravados());
+
+  		 // Total servicios exentos
+			 cell = row.createCell(24);
+			 Utils.getCel(cell,styles,detalle.getTotalServicioExentos());
+
+			 // Total servicios exonerados
+			 cell = row.createCell(25);
+			 Utils.getCel(cell,styles,detalle.getTotalServicioExonerados());
+
+			 // Total linea
+			 cell = row.createCell(26);
+			 Utils.getCel(cell,styles,detalle.getMontoTotalLineaNC());
+			 
+			 // Codigo moneda
+			 cell = row.createCell(27);
+			 Utils.getCelSTR(cell,styles,detalle.getFactura().getCodigoMoneda());
+			 
+			 // Tipo cambio 
+			 cell = row.createCell(28);
+			 Utils.getCel(cell,styles,detalle.getFactura().getTipoCambio());
+
+			 rownum++;
+			}
+	    int contnum = rownum;
+			Row sumRow = sheet.createRow(rownum++);
+
+			for (int j = 0; j <29 ; j++) {
+	      Cell cell = sumRow.createCell(j);
+	      if(j == 12 ) {
+	        cell.setCellValue("Totales  :");
+	        cell.setCellStyle(styles.get("formula"));
+	        
+	      }
+	      if(j <= 12 || j == 27 || j == 28 || j == 15 || j == 16 || j == 17 ) {
+	      	cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 13 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "N" +4+ ":N" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 14 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "O" +4+ ":O" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	     
+	      
+	      
+	      if(j == 18 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "S" +4+ ":S" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 19 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "T" +4+ ":T" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 20 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "U" +4+ ":U" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 21 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "V" +4+ ":V" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 22 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "W" +4+ ":W" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 23 ) {
+	        String ref = "X" +4+ ":X" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 24 ) {
+	        String ref = "Y" +4+ ":Y" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 25 ) {
+	        String ref = "Z" +4+ ":Z" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 26 ) {
+	        String ref = "AA" +4+ ":AA" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+
+	      sheet.setColumnWidth(j,8000);
+			}
+
+	    
+			
+			workbook.write(stream);
+			workbook.close();
+			return new ByteArrayInputStream(stream.toByteArray());
+	}
+
+	
 	 
 
 }

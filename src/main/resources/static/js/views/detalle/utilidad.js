@@ -413,10 +413,10 @@ function agregarInputsCombos() {
     $('.tableListar tfoot th').each(function(e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ($(this).index() != 8) {
+        if ($(this).index() != 8 && $(this).index() != 2) {
             $(this).html('<input id = "filtroCampos" type="text" class="form-control"  placeholder="' + title + '" />');
         }
-        if ($(this).index() == 1) {
+        if ($(this).index() == 2) {
             var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
             // se cargan los valores por defecto que existen en el combo
             select = __listadoCategoriasActivas(select);

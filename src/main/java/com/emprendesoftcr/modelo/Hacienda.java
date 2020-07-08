@@ -160,10 +160,10 @@ public class Hacienda implements Serializable {
 //	public void setMigradoADisco(Integer migradoADisco) {
 //		this.migradoADisco = migradoADisco;
 //	}
-
-
-
-	
+//
+//
+//
+//	
 //	public String getPathMigracion() {
 //		return pathMigracion;
 //	}

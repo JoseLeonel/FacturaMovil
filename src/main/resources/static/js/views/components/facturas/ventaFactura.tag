@@ -1723,6 +1723,7 @@ div.fondoVentaEspera:hover{
     self.montoExoneracion     = 0
     self.montoExoneracion1     = 0
     self.on('mount',function(){
+        var xTriggered = 0;
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
         $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
@@ -4153,6 +4154,10 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 	    if(porcentajeDesc <= porcentajeGanancia){
 	       porcentaje =  porcentajeDesc;
 	    }
+        if(porcentajeGanancia <= 0){
+            porcentaje =  porcentajeDesc;
+        }
+
 	    if(porcentajeDesc ==100){
 	        porcentaje = 0
 	    }
@@ -4199,7 +4204,7 @@ __actualizarDescuento(e){
 **/
 function _actualizarDesc(){
     var index     = self.detail.indexOf(self.item);
-    var descuento = $(".aplicarDescuento").val();
+    var descuento = __valorNumerico($(".aplicarDescuento").val());
      if(descuento > 100){
          mensajeAdvertencia("Error el descuento no puede ser mayor al 100%");
          return false

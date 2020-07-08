@@ -228,11 +228,7 @@ public class DetalleController {
 
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
 	public void envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
-		Boolean isVededor = false;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			isVededor = true;
-		}
 //		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idClienteParam, usuario.getEmpresa());
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicialParam);
@@ -280,15 +276,11 @@ public class DetalleController {
 	 * @param codigoParam
 	 * @param tipoDocumentoParam
 	 * @param idClienteParam
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/DescargarDetallexCodigoAjax.do", method = RequestMethod.GET)
-	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException {
-		Boolean isVededor = false;
+	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws Exception {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			isVededor = true;
-		}
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicialParam);
 		Date fechaFinal = Utils.parseDate(fechaFinalParam);
@@ -304,8 +296,7 @@ public class DetalleController {
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ByteArrayInputStream inputStream = detalleBo.createExcelVentasXCodigo(detalles, fechaInicialParam, fechaFinalParam, usuario.getEmpresa(), actividadEconomica);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -319,7 +310,7 @@ public class DetalleController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA","Total IVA Neto","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuestoSTR, codigoTarifaSTR,impuesto, montoImpuestoNC,montoImpuestoNeto(Excluye IVA Exoneracion),totalMercanciaGravada,totalMercanciaExenta,totalMercanciaExonerada,totalServicioGravados,totalServicioExentos,totalServicioExonerados, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuestoSTR, codigoTarifaSTR,impuesto, montoImpuestoNC,montoImpuestoNeto,totalMercanciaGravada,totalMercanciaExenta,totalMercanciaExonerada,totalServicioGravados,totalServicioExentos,totalServicioExonerados, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 
