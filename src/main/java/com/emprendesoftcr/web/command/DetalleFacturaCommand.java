@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 
@@ -86,51 +85,10 @@ public class DetalleFacturaCommand {
 	private Double	montoExoneracion1;
 
 	private Double	cantidadAplicadaNotaCredito;
+	private String						codigoTarifa;
 
-	public DetalleFacturaCommand(Long id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String descripcion, String tipoCodigo, String codigo, String unidadMedida, String tipoImpuesto, String fechaEmisionSTR, String consecutivo, String consecutivoProforma, String tipoDoc, String nombreUsuario, Double montoGanancia, Factura factura, Double porcentajeGanancia, Double costo, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Double pesoTransporte, Double pesoTransporteTotal, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
-			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1, Double cantidadAplicadaNotaCredito) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.precioUnitario = precioUnitario;
-		this.cantidad = cantidad;
-		this.montoTotal = montoTotal;
-		this.montoDescuento = montoDescuento;
-		this.naturalezaDescuento = naturalezaDescuento;
-		this.subTotal = subTotal;
-		this.impuesto = impuesto;
-		this.montoImpuesto = montoImpuesto;
-		this.montoTotalLinea = montoTotalLinea;
-		this.ganancia = ganancia;
-		this.porcentajeDesc = porcentajeDesc;
-		this.descripcion = descripcion;
-		this.tipoCodigo = tipoCodigo;
-		this.codigo = codigo;
-		this.unidadMedida = unidadMedida;
-		this.tipoImpuesto = tipoImpuesto;
-		this.fechaEmisionSTR = fechaEmisionSTR;
-		this.consecutivo = consecutivo;
-		this.consecutivoProforma = consecutivoProforma;
-		this.tipoDoc = tipoDoc;
-		this.nombreUsuario = nombreUsuario;
-		this.montoGanancia = montoGanancia;
-		this.factura = factura;
-		this.porcentajeGanancia = porcentajeGanancia;
-		this.costo = costo;
-		this.tipoImpuesto1 = tipoImpuesto1;
-		this.impuesto1 = impuesto1;
-		this.montoImpuesto1 = montoImpuesto1;
-		this.pesoTransporte = pesoTransporte;
-		this.pesoTransporteTotal = pesoTransporteTotal;
-		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
-		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
-		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
-		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
-		this.porcentajeExoneracion = porcentajeExoneracion;
-		this.montoExoneracion = montoExoneracion;
-		this.montoExoneracion1 = montoExoneracion1;
-		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
-	}
+
+	
 
 	public DetalleFacturaCommand() {
 		super();
@@ -178,6 +136,7 @@ public class DetalleFacturaCommand {
 		this.porcentajeExoneracion = detalle.getPorcentajeExoneracion();
 		this.montoExoneracion1 = detalle.getMontoExoneracion1();
 		this.cantidadAplicadaNotaCredito = detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito();
+		this.codigoTarifa = detalle.getCodigoTarifa();
 
 	}
 
@@ -187,6 +146,18 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+
+	
+	public String getCodigoTarifa() {
+		return codigoTarifa;
+	}
+
+	
+	public void setCodigoTarifa(String codigoTarifa) {
+		this.codigoTarifa = codigoTarifa;
 	}
 
 	public Double getCantidadAplicadaNotaCredito() {

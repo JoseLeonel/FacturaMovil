@@ -38,6 +38,71 @@
             </div>
         </div>    
 </div>
+<br>
+<br>
+<br>
+<!-- Listado  -->
+<!-- <div classs="contenedor-listar container" id="container"   >
+            
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                    <span>Entradas de Dineros</span>  
+                    <table id="tableListarSalida" class="display table responsive table-hover nowrap table-condensed tableListarSalida"   cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="table-headerEntrada" style="width:2%" >#Id </th>
+                                <th class="table-headerEntrada" style="width:10%">Descripcion   </th>
+                                <th class="table-headerEntrada" style="width:10%">Monto   </th>
+                                <th class="table-headerEntrada" style="width:10%">Total  </th>
+                                <th class="table-headerEntrada"  style="width:10%">Opciones   </th>
+                            </tr>
+                        </thead>
+                        <tfoot style="display: table-header-group;">
+                            <tr>
+                                <th style="width:2%" >#Id </th>
+                                <th style="width:10%">Descripcion   </th>
+                                <th style="width:10%">Monto   </th>
+                                <th style="width:10%">Total  </th>
+                                <th style="width:10%"> </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+            </div>
+        </div>    
+</div>
+
+<br>
+<br>
+<br>-->
+<!-- Listado  
+<div classs="contenedor-listar container" id="container"   >
+            
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                    <span>Salidas de Dineros</span>  
+                    <table id="tableListarSalida" class="display table responsive table-hover nowrap table-condensed tableListarSalida"   cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="table-headerEntrada" style="width:2%" >#Id </th>
+                                <th class="table-headerEntrada" style="width:10%">Descripcion   </th>
+                                <th class="table-headerEntrada" style="width:10%">Monto   </th>
+                                <th class="table-headerEntrada" style="width:10%">Total  </th>
+                                <th class="table-headerEntrada"  style="width:10%">Opciones   </th>
+                            </tr>
+                        </thead>
+                        <tfoot style="display: table-header-group;">
+                            <tr>
+                                <th style="width:2%" >#Id </th>
+                                <th style="width:10%">Descripcion   </th>
+                                <th style="width:10%">Monto   </th>
+                                <th style="width:10%">Total  </th>
+                                <th style="width:10%"> </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+            </div>
+        </div>    
+</div>-->
 
 
 <div id='modalCerrarCaja' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=800px;>
@@ -155,6 +220,10 @@
 
 
 <style type ="text/css">
+.table-headerEntrada {
+    background: #399c58;
+    color: #ffffff;
+}
 
 .modal-body{
     height: 400px;

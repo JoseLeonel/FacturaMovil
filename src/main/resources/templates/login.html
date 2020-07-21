@@ -48,9 +48,9 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Acceso al Sistema</div>
                     <div class="panel-body">
-                        <img src="/dist/img/logo-lgoin.jpg" style = "width:200px;" alt="" class="img-responsive centerImage"  >
+                        <img th:src="@{/dist/img/logo-lgoin.jpg}" style = "width:200px;" alt="" class="img-responsive centerImage"  >
                         <hr>
-                        <form action="/login" method="post">
+                        <form th:action="@{/login}" method="post">
                         <div th:if="${param.error}">
                         <div class="alert alert-danger">
                             Invalido el usuario y contrase&ntilde;a.

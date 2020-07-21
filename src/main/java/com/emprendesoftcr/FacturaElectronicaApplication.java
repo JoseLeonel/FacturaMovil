@@ -1,6 +1,8 @@
 
 package com.emprendesoftcr;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.ibm.icu.util.TimeZone;
+
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
@@ -18,6 +22,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
 	
 
+	@PostConstruct
+	public void init() {
+		TimeZone.setDefault(TimeZone.getTimeZone("America/Costa_Rica"));
+	}	
+	
 	public static void main(String[] args) {
 		System.out.println("----------------- Inciando la Factura Electronica de EmprendeSoftCR 2018-09-01  ---------------------------");
 		System.out.println("----------------- Desarrollador Leonel Hernandez Chaverri  ---------------------------");

@@ -62,7 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll().antMatchers("https://api.hacienda.go.cr/")
 		.permitAll().antMatchers("https://api.hacienda.go.cr/indicadores/tc")
 		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
-		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
+		
+		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password")
+		
 		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")
 		.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);

@@ -444,7 +444,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/50 03 * * ?")
+	@Scheduled(cron = "0 0/50 23 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -479,7 +479,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -607,7 +607,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/50 04 * * ?")
+	@Scheduled(cron = "0 0/30 03 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -663,10 +663,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 					// San Ana
-				//	 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-				//	recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					//recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
 					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -675,7 +675,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-				//	recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
 					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -708,7 +708,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/25 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1113,6 +1113,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
+
 	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
@@ -1193,7 +1194,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/20 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
 		try {
@@ -1519,7 +1520,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1785,7 +1786,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/40 * * * ?")
+	@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -1867,7 +1868,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-//	@Scheduled(cron = "0 0/02 * * * ?")
+//	@Scheduled(cron = "0 0/01 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);
@@ -1900,6 +1901,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 							contador++;
 							contador1++;
+							
 							if (contador1 >= 1000) {
 								log.info("Direccion: " + pathXMLDocumento);
 								log.info("Cantidad Leida: " + contador);
@@ -1961,7 +1963,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		archivoXML.setTipoDoc(haciendamigrar.getTipoDoc());
 		archivoXML.setNumeroEmpresa(haciendamigrar.getEmpresa().getId());
 		archivoXMLBo.agregar(archivoXML);
-		log.info("grabadoa " + haciendamigrar.getConsecutivo());
+	///	log.info("grabadoa " + haciendamigrar.getConsecutivo());
 		haciendamigrar.setStatus(Constantes.MIGRADO_XMLS_A_DISCO_SI);
 		haciendaBo.modificar(haciendamigrar);
 

@@ -252,7 +252,6 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setDetalleOtroCargo(Constantes.EMPTY);
 
 			factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-//			factura.setVersionPorcentajeExoneracion(Utils.aplicarExoneracionSubTotal4_3().equals(Boolean.TRUE)?Constantes.VERSION_EXONERACION_SUBTOTAL_SI:Constantes.VERSION_EXONERACION_SUBTOTAL_NO);
 
 			factura.setCorreoAlternativo(facturaCommand.getCorreoAlternativo());
 
@@ -351,10 +350,6 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-
-//			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-//				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
-//			}
 
 		} catch (Exception e) {
 			log.error(String.format("--error formaFactura :" + e.getMessage() + new Date()));
@@ -833,12 +828,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
-//			if(detalle.getCodigo().equals("57")) {
-//				String valor = "uy";
-//				detalle.setObservacion(valor);
-//			}
 			detalle.setId(null);
-			// detalle.setPrecioUnitario(precioUnitario);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
 			detalle.setCosto(Utils.Maximo5Decimales(costo));
@@ -867,16 +857,12 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Utils.getMontoImpuesto(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion1(), detalle.getImpuesto()));
-			
-//			if(factura.getVersionPorcentajeExoneracion().equals(Constantes.VERSION_EXONERACION_SUBTOTAL_SI)) {
-				detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal()));
-//			}else {
-//				detalle.setMontoExoneracion(Utils.getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto()));	
-//			}
+
+			detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal()));
 
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 
-			detalle.setImpuestoNeto(Utils.Maximo5Decimales(Utils.getImpuestoNetoTotal( detalle.getMontoImpuesto(), detalle.getMontoExoneracion() )));
+			detalle.setImpuestoNeto(Utils.getImpuestoNetoTotal(detalle.getMontoImpuesto(), detalle.getMontoExoneracion()));
 			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
 			detalle.setBaseImponible(Utils.Maximo5Decimales(Utils.getBaseImponibleTotal(articulo.getTipoImpuesto(), detalle.getSubTotal(), baseImponible)));
 			if (detalle.getMontoDescuento() == null) {
@@ -888,24 +874,15 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setUpdated_at(new Date());
 			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
 			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
+			montoTotalLinea = Utils.getMontoTotalLinea(detalle.getSubTotal(), detalle.getImpuestoNeto());
 
 			// cambios de doble impuesto
 
-//			if(factura.getVersionPorcentajeExoneracion().equals(Constantes.VERSION_EXONERACION_SUBTOTAL_SI)) {
-				totalServGravados = totalServGravados + Utils.getTotalServicioGravadosSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(),detalle.getImpuesto(),detalle.getPorcentajeExoneracion() );
-				totalMercanciasGravadas = totalMercanciasGravadas + Utils.getTotalMercanciasGravadasSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(),detalle.getImpuesto(),detalle.getPorcentajeExoneracion() );
-				totalServExonerado = totalServExonerado + Utils.getTotalServExoneradoSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(),detalle.getPorcentajeExoneracion(),detalle.getImpuesto(),detalle.getMontoTotal());
-				totalMercExonerada = totalMercExonerada + Utils.getTotalMercExoneradaSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(),detalle.getPorcentajeExoneracion(),detalle.getImpuesto(),detalle.getMontoTotal());
-				
-				
-//			}else {
-//				totalServGravados = totalServGravados + Utils.getTotalServicioGravados(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1());
-//				totalServExonerado = totalServExonerado + Utils.getTotalServExonerado(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoExoneracion());
-//				totalMercanciasGravadas = totalMercanciasGravadas + Utils.getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
-//				totalMercExonerada = totalMercExonerada + Utils.getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());	
-//			}
-//			
-			totalImpuesto = totalImpuesto + Utils.getTotalImpuesto(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getTipoDocumentoExoneracion(), detalle.getImpuestoNeto());
+			totalServGravados = totalServGravados + Utils.getTotalServicioGravadosSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getImpuesto(), detalle.getPorcentajeExoneracion());
+			totalMercanciasGravadas = totalMercanciasGravadas + Utils.getTotalMercanciasGravadasSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getImpuesto(), detalle.getPorcentajeExoneracion());
+			totalServExonerado = totalServExonerado + Utils.getTotalServExoneradoSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getPorcentajeExoneracion(), detalle.getImpuesto(), detalle.getMontoTotal());
+			totalMercExonerada = totalMercExonerada + Utils.getTotalMercExoneradaSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getPorcentajeExoneracion(), detalle.getImpuesto(), detalle.getMontoTotal());
+			totalImpuesto = totalImpuesto + Utils.getTotalImpuesto(detalle.getImpuestoNeto());
 			totalMercanciasExentas = totalMercanciasExentas + Utils.getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
 			totalServExentos = totalServExentos + Utils.getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
@@ -913,10 +890,9 @@ public class FacturaBoImpl implements FacturaBo {
 			totalExento = totalExento + Utils.getTotalExentos(detalle.getTipoImpuesto(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
 			totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalle.getMontoDescuento());
-			montoTotalLinea = Utils.getMontoTotalLinea(detalle.getSubTotal(),  detalle.getImpuestoNeto());
+
 			totalComprobante = totalComprobante + montoTotalLinea;
 
-			detalle.setMontoTotalLinea(Utils.Maximo5Decimales(montoTotalLinea));
 			descuentoTotal = descuentoTotal + detalle.getMontoDescuento();
 			subTotal = subTotal + detalle.getSubTotal();
 			detalle.setNumeroLinea(numeroLinea);
@@ -925,7 +901,6 @@ public class FacturaBoImpl implements FacturaBo {
 			detalleDao.agregar(detalle);
 			listaDetalles.add(detalle);
 		}
-		// totalDescuentos = listaDetalles.stream().mapToDouble(d->d.getMontoDescuento()).sum();
 		totalExonerado = totalExonerado + Utils.getTotalExonerado(totalServExonerado, totalMercExonerada);
 		totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
 		totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
@@ -1206,86 +1181,86 @@ public class FacturaBoImpl implements FacturaBo {
 		for (ListarFacturasNativa listarFacturasNativa : facturas) {
 			row = sheet.createRow(rownum);
 			Cell cell = row.createCell(0);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getFechaEmisionSTR());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getFechaEmisionSTR());
 
 			cell = row.createCell(1);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCedulaPrin());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getCedulaPrin());
 
 			cell = row.createCell(2);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreCompleto());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getNombreCompleto());
 
 			cell = row.createCell(3);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreFactura());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getNombreFactura());
 
 			cell = row.createCell(4);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNombreUsuario());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getNombreUsuario());
 
 			cell = row.createCell(5);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCodigoActividad());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getCodigoActividad());
 
 			cell = row.createCell(6);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getTipoDocSTR());
-			
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getTipoDocSTR());
+
 			cell = row.createCell(7);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCondicionVentaSTR());
-			
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getCondicionVentaSTR());
+
 			cell = row.createCell(8);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNumeroConsecutivo());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getNumeroConsecutivo());
 
 			cell = row.createCell(9);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getConsecutivoProforma());
-			
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getConsecutivoProforma());
+
 			cell = row.createCell(10);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalExonerado());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalExonerado());
 
 			cell = row.createCell(11);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalGravado());
-			
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalGravado());
+
 			cell = row.createCell(12);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalExento());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalExento());
 
 			cell = row.createCell(13);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalVentaNeta());
-			
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalVentaNeta());
+
 			cell = row.createCell(14);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalImpuesto());
-			
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalImpuesto());
+
 			cell = row.createCell(15);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalDescuentos());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalDescuentos());
 
 			cell = row.createCell(16);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalOtrosCargos());
-			
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalOtrosCargos());
+
 			cell = row.createCell(17);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalComprobante());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalComprobante());
 
 			cell = row.createCell(18);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getCodigoMoneda());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getCodigoMoneda());
 
 			cell = row.createCell(19);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTipoCambio());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTipoCambio());
 
 			cell = row.createCell(20);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalColonesNC());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalColonesNC());
 
 			cell = row.createCell(21);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalEfectivoNC());
-			
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalEfectivoNC());
+
 			cell = row.createCell(22);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalTarjetaNC());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalTarjetaNC());
 
 			cell = row.createCell(23);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalBancoNC());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalBancoNC());
 
 			cell = row.createCell(24);
-			Utils.getCel(cell,styles,listarFacturasNativa.getTotalCreditoNC());
+			Utils.getCel(cell, styles, listarFacturasNativa.getTotalCreditoNC());
 
 			cell = row.createCell(25);
-			Utils.getCelSTR(cell,styles,listarFacturasNativa.getNota());
+			Utils.getCelSTR(cell, styles, listarFacturasNativa.getNota());
 
 			rownum++;
 		}
-		
+
 		int contnum = rownum;
 		Row sumRow = sheet.createRow(rownum++);
 		for (int j = 0; j <= 25; j++) {
@@ -1295,11 +1270,11 @@ public class FacturaBoImpl implements FacturaBo {
 				cell.setCellStyle(styles.get("formula"));
 
 			}
-			if (j <= 9 || j == 18 || j == 19  || j == 20 || j == 25  ) {
+			if (j <= 9 || j == 18 || j == 19 || j == 20 || j == 25) {
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 8000);
 			}
-			
+
 			if (j == 10) {
 				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
 				String ref = "K" + 4 + ":K" + contnum;
@@ -1391,11 +1366,9 @@ public class FacturaBoImpl implements FacturaBo {
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 5000);
 			}
-	
-			
+
 		}
-	
-		
+
 		workbook.write(stream);
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());
@@ -1410,10 +1383,10 @@ public class FacturaBoImpl implements FacturaBo {
 		Map<String, CellStyle> styles = Utils.createStyles(workbook);
 		Sheet sheet = workbook.createSheet("Utilidad");
 
-		String  tituloActividad = "Todas";
-		if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+		String tituloActividad = "Todas";
+		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
 			tituloActividad = actividadEconomica;
-			
+
 		}
 		Row titleActividad = sheet.createRow(0);
 		titleActividad.setHeightInPoints(25);
@@ -1458,82 +1431,82 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Factura factura : facturas) {
 			row = sheet.createRow(rownum);
 			Cell cell = row.createCell(0);
-			Utils.getCelSTR(cell,styles,factura.getFechaEmisionSTR());
-			
+			Utils.getCelSTR(cell, styles, factura.getFechaEmisionSTR());
+
 			cell = row.createCell(1);
-			Utils.getCelSTR(cell,styles,factura.getCedulaCliente());
+			Utils.getCelSTR(cell, styles, factura.getCedulaCliente());
 
 			cell = row.createCell(2);
-			Utils.getCelSTR(cell,styles,factura.getNombreCliente());
+			Utils.getCelSTR(cell, styles, factura.getNombreCliente());
 
 			cell = row.createCell(3);
-			Utils.getCelSTR(cell,styles,factura.getNombreFactura());
+			Utils.getCelSTR(cell, styles, factura.getNombreFactura());
 
 			cell = row.createCell(4);
-			Utils.getCelSTR(cell,styles,factura.getCodigoActividad());
+			Utils.getCelSTR(cell, styles, factura.getCodigoActividad());
 
 			cell = row.createCell(5);
-			Utils.getCelSTR(cell,styles,factura.getTipoDocSTR());
+			Utils.getCelSTR(cell, styles, factura.getTipoDocSTR());
 
 			cell = row.createCell(6);
-			Utils.getCelSTR(cell,styles,factura.getCondicionVentaSTR());
-			
+			Utils.getCelSTR(cell, styles, factura.getCondicionVentaSTR());
+
 			cell = row.createCell(7);
-			Utils.getCelSTR(cell,styles,factura.getFechaCreditoSTR());
+			Utils.getCelSTR(cell, styles, factura.getFechaCreditoSTR());
 			cell = row.createCell(8);
-			Utils.getCelSTR(cell,styles,factura.getNumeroConsecutivo());
+			Utils.getCelSTR(cell, styles, factura.getNumeroConsecutivo());
 
 			cell = row.createCell(9);
-			Utils.getCelSTR(cell,styles,factura.getConsecutivoProforma());
+			Utils.getCelSTR(cell, styles, factura.getConsecutivoProforma());
 
 			cell = row.createCell(10);
-			Utils.getCel(cell,styles,factura.getTotalGravadoNC());
+			Utils.getCel(cell, styles, factura.getTotalGravadoNC());
 
 			cell = row.createCell(11);
-			Utils.getCel(cell,styles,factura.getTotalExentoNC());
+			Utils.getCel(cell, styles, factura.getTotalExentoNC());
 
 			cell = row.createCell(12);
-			Utils.getCel(cell,styles,factura.getTotalVentaNetaNC());
+			Utils.getCel(cell, styles, factura.getTotalVentaNetaNC());
 
 			cell = row.createCell(13);
-			Utils.getCel(cell,styles,factura.getTotalImpuestoNC());
+			Utils.getCel(cell, styles, factura.getTotalImpuestoNC());
 
 			cell = row.createCell(14);
-			Utils.getCel(cell,styles,factura.getTotalDescuentosNC());
+			Utils.getCel(cell, styles, factura.getTotalDescuentosNC());
 
 			cell = row.createCell(15);
-			Utils.getCel(cell,styles,factura.getTotalOtrosCargosNC());
+			Utils.getCel(cell, styles, factura.getTotalOtrosCargosNC());
 
 			cell = row.createCell(16);
-			Utils.getCel(cell,styles,factura.getTotalComprobanteNC());
+			Utils.getCel(cell, styles, factura.getTotalComprobanteNC());
 
 			cell = row.createCell(17);
-			Utils.getCelSTR(cell,styles,factura.getCodigoMoneda());
+			Utils.getCelSTR(cell, styles, factura.getCodigoMoneda());
 
 			cell = row.createCell(18);
-			Utils.getCel(cell,styles,factura.getTipoCambio());
+			Utils.getCel(cell, styles, factura.getTipoCambio());
 
 			cell = row.createCell(19);
-			Utils.getCel(cell,styles,factura.getTotalColonesNC());
+			Utils.getCel(cell, styles, factura.getTotalColonesNC());
 
 			cell = row.createCell(20);
-			Utils.getCel(cell,styles,factura.getTotalEfectivoNC());			
+			Utils.getCel(cell, styles, factura.getTotalEfectivoNC());
 
 			cell = row.createCell(21);
-			Utils.getCel(cell,styles,factura.getTotalTarjetaNC());
+			Utils.getCel(cell, styles, factura.getTotalTarjetaNC());
 
 			cell = row.createCell(22);
-			Utils.getCel(cell,styles,factura.getTotalBancoNC());
+			Utils.getCel(cell, styles, factura.getTotalBancoNC());
 
 			cell = row.createCell(23);
-			Utils.getCel(cell,styles,factura.getTotalCreditoNC());
+			Utils.getCel(cell, styles, factura.getTotalCreditoNC());
 
 			cell = row.createCell(24);
-			Utils.getCelSTR(cell,styles,factura.getNota());
+			Utils.getCelSTR(cell, styles, factura.getNota());
 
 			rownum++;
 		}
-		
+
 		int contnum = rownum;
 		Row sumRow = sheet.createRow(rownum++);
 		for (int j = 0; j <= 25; j++) {
@@ -1543,7 +1516,7 @@ public class FacturaBoImpl implements FacturaBo {
 				cell.setCellStyle(styles.get("formula"));
 
 			}
-			if (j <= 9 || j == 18 || j == 19  || j == 17  || j == 20   ) {
+			if (j <= 9 || j == 18 || j == 19 || j == 17 || j == 20) {
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 8000);
 			}
@@ -1604,14 +1577,14 @@ public class FacturaBoImpl implements FacturaBo {
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 5000);
 			}
-			
+
 			if (j == 19) {
 				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
 				String ref = "T" + 5 + ":T" + contnum;
 				cell.setCellFormula("SUM(" + ref + ")");
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 5000);
-			}			
+			}
 			if (j == 20) {
 				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
 				String ref = "U" + 5 + ":U" + contnum;
@@ -1640,11 +1613,9 @@ public class FacturaBoImpl implements FacturaBo {
 				cell.setCellStyle(styles.get("formula"));
 				sheet.setColumnWidth(j, 5000);
 			}
-	
-			
+
 		}
-	
-		
+
 		workbook.write(stream);
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());

@@ -3,7 +3,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="treeview">
-            <a href="/">
+            <a th:href="@{/}">
                 <i class="fa fa-dashboard"></i> <span>Inicio</span>
             </a>
         </li>
@@ -15,11 +15,11 @@
 		            </a>
 		            <ul class="treeview-menu">
 		            
-			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" > <a href="/ListarTarifas"><i class="fa fa-circle-o"></i> Tarifas </a></li>
-			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" > <a href="/ListarControlPago"><i class="fa fa-circle-o"></i> Control Pago  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" > <a th:href="@{/ListarTarifas}"><i class="fa fa-circle-o"></i> Tarifas </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" > <a th:href="@{/ListarControlPago}"><i class="fa fa-circle-o"></i> Control Pago  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')" > <a href="ListarActividadComercialPorEmpresa">    <i class="fa fa-circle-o"></i> Act.Comerciales	  </a></li>
-			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" ><a href="/ListarUsuario"><i class="fa fa-circle-o"></i> Usuarios  </a></li>
-			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a href="/ListarEmpresas"><i class="fa fa-circle-o"></i> Empresas  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" ><a th:href="@{/ListarUsuario}"><i class="fa fa-circle-o"></i> Usuarios  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a th:href="@{/ListarEmpresas}"><i class="fa fa-circle-o"></i> Empresas  </a></li>
 			          <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
 			            <a href="#">
 			                <i class="fa  fa-circle-o"></i>
@@ -31,7 +31,7 @@
 			                 <li><a href="/ListarClientes" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i  class="fa fa-circle-o"></i>Listar Clientes</a></li>
 			            </ul>
 			        </li>
-			          <li sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><a href="/ListarMesas"><i class="fa fa-circle-o"></i> Mesas</a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><a th:href="@{/ListarMesas}"><i class="fa fa-circle-o"></i> Mesas</a></li>
 	  		          <li ><a href="/CambioClave">   <i class="fa fa-circle-o"></i> Cambio Clave  </a></li>
 		            </ul>
 		        </li>

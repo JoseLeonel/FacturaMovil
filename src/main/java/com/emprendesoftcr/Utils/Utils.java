@@ -587,7 +587,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 		Double resultado = subTotal * porcentajeExoneracion;
 		resultado = resultado / 100d;
 		
-		return resultado;
+		return  Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 	}
 
 	public static Boolean aplicarExoneracionSubTotal4_3() throws ParseException {
@@ -813,17 +813,9 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 	 * @param montoImpuesto1
 	 * @return
 	 */
-	public static Double getTotalImpuesto(Double montoImpuesto, Double montoImpuesto1, String tipoDocumentoExoneracion, Double montoImpuestoNeto) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		tipoDocumentoExoneracion = tipoDocumentoExoneracion == null ? Constantes.EMPTY : tipoDocumentoExoneracion;
+	public static Double getTotalImpuesto(Double montoImpuestoNeto) {
 		montoImpuestoNeto = montoImpuestoNeto == null ? Constantes.ZEROS_DOUBLE : montoImpuestoNeto;
-		if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
-			resultado = Utils.Maximo5Decimales(montoImpuestoNeto);
-		} else {
-			resultado = Utils.Maximo5Decimales(montoImpuesto) + Utils.Maximo5Decimales(montoImpuesto1);
-		}
-
-		return resultado;
+		return Utils.Maximo5Decimales(montoImpuestoNeto);
 	}
 
 	public static Double getMontoDescuento(Double monto, Double total) {
@@ -955,7 +947,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 		}
 		return resultado;
 	}
-	
+//	Mercancías Gravadas= (1 - (Tarifa Exonerada IVA * 100%) / Tarifa IVA) * Monto Total de la línea
 	public static Double getTotalMercanciasGravadasSubTotal(String tipoImpuesto, String unidadMedida, Double montoTotal, Double impuesto,Integer porcentajeExoneracion) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;

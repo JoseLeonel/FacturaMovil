@@ -103,11 +103,13 @@
                                     <td ><strong>{facturaImpresa.totalDescuentoSTR}</strong></td>
                                                                    
                                     </tr>
-                                    <tr>
-                                    <td></td>
-                                    <td ><strong>{$.i18n.prop("tikect.total.impuesto")}</strong></td>
-                                    <td ><strong>{montoImpuestoSTR}</strong></td>
+                                    
+                                     <tr each={totalesIVAI.data}>
+                                        <td></td>
+                                        <td ><strong>{descripcion}</strong></td>
+                                        <td ><strong>{totalSTR}</strong></td>
                                     </tr>
+
                                     <tr show={montoExoneracion > 0}>
                                     <td></td>
                                     <td ><strong>{$.i18n.prop("factura.resumen.exoneracion")}</strong></td>
@@ -429,6 +431,16 @@ self.facturaImpresa = {
     referenciaNumero:""
 
 }
+self.impuesto13 = 0
+self.impuestoReducida0 = 0
+self.impuestoReducida1 = 0
+self.impuestoReducida2 = 0
+self.impuestoReducida4 = 0
+self.impuestoTransitorio0 = 0
+self.impuestoTransitorio4 = 0
+self.impuestoTransitorio8 = 0
+self.totalesIVAI               = {data:[]}
+
 self.on('mount',function(){
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
@@ -527,16 +539,17 @@ function qr(){
 * Consulta detalles
 **/
 function consultaDetalles(data){
-            if(data.length > 0){
-                    self.detalles = []
-                    self.detalles =data
-                    self.detalles.sort(function(a,b) {
-                        if ( a.numeroLinea < b.numeroLinea )
-                            return -1;
-                        if ( a.numeroLinea > b.numeroLinea )
-                            return 1;
-                        return 0;
-                    } );
+    if(data.length > 0){
+       self.detalles = []
+       self.detalles =data
+       self.detalles.sort(function(a,b) {
+          if ( a.numeroLinea < b.numeroLinea )
+               return -1;
+            if ( a.numeroLinea > b.numeroLinea )
+                return 1;
+            return 0;
+        }   );
+                    
                     self.detalles.forEach(function(elemen){
                         if(elemen.codigo == "8888"){
                             self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
@@ -544,6 +557,7 @@ function consultaDetalles(data){
                         }
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                         self.update()
+                        sumarImpuesto(elemen)
                     })
                    self.montoExoneracion = 0
                    self.montoImpuesto = 0
@@ -601,6 +615,34 @@ function consultaDetalles(data){
             }
 
 }
+
+
+function sumarImpuesto(detalle){
+     if(self.totalesIVAI[0] == null){
+        __nuevoImpuesto(detalle)
+     }else{ // buscar y sumar si ya existe en el array
+        for (var count = 0; count < self.totalesIVAI.length; count++) {
+            if (self.totalesIVAI[count].impuesto == self.detalle.impuesto ){
+                var itemIVA = self.totalesIVAI[count];
+                itemIVA.montoImpuesto = itemIVA.montoImpuesto + __valorNumerico(detalle).montoImpuesto
+                itemIVA.totalSTR = formatoDecimales(itemIVA.montoImpuesto,2)
+                self.totalesIVAI[count] = itemIVA;
+                self.update()
+            }    
+        }
+
+     }
+}
+function __nuevoImpuesto(detalle){
+
+    self.totalesIVAI.data.push({
+        impuesto:detalle.impuesto,
+        descripcion:"Imp " + detalle.impuesto + "%",
+        total : detalle.montoImpuesto,
+        totalSTR: formatoDecimales(detalle.montoImpuesto,2)
+    })
+
+}
 /**
 *consultar Facturas
 **/
@@ -630,6 +672,7 @@ function consultaFactura(idFactura){
                         }
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                         self.update()
+                        sumarImpuesto(elemen)
                     })
                    self.montoExoneracion = 0
                    self.montoImpuesto = 0

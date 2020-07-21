@@ -261,14 +261,7 @@
 		</div>
 	</div>				
 </div>
-  	<!-- Detalle  --> 
-	
-
-
- <div class="row" >  
-    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default" >
+  	<!-- Detalle  --> locate.href>
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
                     <div class="panel-heading" style="background: #3c8dbc; color: white;">
                         <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Resumen Ventas detalles de Dineros</h4>

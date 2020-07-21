@@ -189,10 +189,10 @@ public class HaciendaDaoImpl implements HaciendaDao {
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Hacienda> findByEmpresaAndMigracionAndFechas(Integer migradoADisco, Date fechaInicial, Date FechaFinal,Integer cantidadMigrar) {
-		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.status in (0,99)  and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.estado in (7,6) ");
-		
+		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.status in (0,99)  and obj.fechaEmisor >= :fechaInicio and obj.fechaEmisor <= :fechaFin and obj.estado in (7,6) ");
 		query.setParameter("fechaInicio", fechaInicial);
 		query.setParameter("fechaFin", FechaFinal);
 		query.setMaxResults(cantidadMigrar);
