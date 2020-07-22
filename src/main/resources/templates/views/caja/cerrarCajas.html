@@ -8,25 +8,21 @@
     <title>Abrir Cajas</title>
     
      <script th:src="@{/js/jquery-1.11.2.js}"></script>
- 
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
 	
 	<!-- MANTENIMIENTO DE CAJAS -->
-	<script type="text/javascript" src="/js/views/caja/cerrarCaja.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/caja/cerrarCaja.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/caja/imprimirCorte.tag" ></script>
+	<script type="text/javascript" th:src="@{/js/views/caja/cerrarCaja.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/caja/cerrarCaja.tag}" ></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/caja/imprimirCorte.tag}" ></script>
     
 </head>
 <body>
 <section layout:fragment="header">
 
 <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
+    <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Inicio</a></li>
     <li class="active">Cerrar Cajas</li>
 </ol>
 </section>

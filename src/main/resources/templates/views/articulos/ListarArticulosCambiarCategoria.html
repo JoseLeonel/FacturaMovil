@@ -6,22 +6,12 @@
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
     <title>Cambio de categoria</title>
-    <!-- ./wrapper -->
-	<!-- jQuery 2.2.0 -->
 	<script th:src="@{/js/jquery-1.11.2.js}"></script>
-	<script src="/js/jquery-ui.min.js"></script>
-
+	<script th:src="@{/js/jquery-ui.min.js}"></script>
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
-	<!-- MANTENIMIENTO DE ARTICULOS -->
-	<script type="text/javascript" src="/js/views/articulos/articuloCambioCategoria.js"></script>
-	
-	
-	
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/views/articulos/articuloCambioCategoria.js}"></script>
     <style type ="text/css">
     .fondoEncabezado {
         background: #00539B;

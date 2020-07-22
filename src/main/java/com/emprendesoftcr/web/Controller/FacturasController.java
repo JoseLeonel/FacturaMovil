@@ -2073,7 +2073,7 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+			if (usuarioCajaBd !=null) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
 			List<Object> solicitudList = new ArrayList<Object>();

@@ -11,15 +11,11 @@
       <script th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
       
      <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
-	
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
 	<!-- MANTENIMIENTO DE CLIENTES -->
-	<script type="text/javascript" src="/js/views/cliente/cliente.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/clientes/crudCliente.tag" ></script>
+	<script type="text/javascript" th:src="@{/js/views/cliente/cliente.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/clientes/crudCliente.tag}" ></script>
 	
 	
     

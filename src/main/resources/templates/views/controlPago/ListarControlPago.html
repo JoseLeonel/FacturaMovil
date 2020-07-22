@@ -5,28 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Control de Pagos a los clientes</title>
-  <!-- ./wrapper -->
-	<!-- jQuery 2.2.0 -->
-	<script th:src="@{/js/jquery-1.11.2.js}"></script>
-	 <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    
-      <meta http-equiv="Expires" content="0">
+   <meta http-equiv="Expires" content="0">
    <meta http-equiv="Last-Modified" content="0">
    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
    <meta http-equiv="Pragma" content="no-cache">
- 	
-  
+
+    <title>Control de Pagos a los clientes</title>
+	<script th:src="@{/js/jquery-1.11.2.js}"></script>
      <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-	<script src="/riot/riot.csp.js"></script>
-	<!-- include riot.js and the compiler -->
-	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
-	<!-- MANTENIMIENTO DE ARTICULOS -->
-	<script type="text/javascript" src="/js/views/controlPago/controlPago.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/controlPago/controlPago.tag" ></script>
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script th:src="@{/riot/riot.csp.js}"></script>
+	<script th:src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/views/controlPago/controlPago.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/controlPago/controlPago.tag}" ></script>
 	<style type ="text/css">
     .fondoEncabezado {
         background: #00539B;

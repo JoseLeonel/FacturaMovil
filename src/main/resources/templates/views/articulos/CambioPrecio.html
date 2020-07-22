@@ -9,19 +9,16 @@
     <title>Mantenimiento de Articulos</title>
    <!-- jQuery 2.2.0 -->
 	<script th:src="@{/js/jquery-1.11.2.js}"></script>
-	<script src="/js/jquery-ui.min.js"></script>
+	<script th:src="@{/js/jquery-ui.min.js}"></script>
   
-    <link rel="stylesheet" type="text/css" th:href="@{css/ventaPost.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ventaPost.css}"/>
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
 	<!-- MANTENIMIENTO DE ARTICULOS -->
-	<script type="text/javascript" src="/js/views/articulos/cambioPrecio.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/articulos/cambiarPrecio.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/articulos/imprimirCodgio.tag" ></script>
+	<script type="text/javascript" th:src="@{/js/views/articulos/cambioPrecio.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/articulos/cambiarPrecio.tag}" ></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/articulos/imprimirCodgio.tag}" ></script>
     <style type ="text/css">
     .fondoEncabezado {
         background: #00539B;

@@ -13,23 +13,22 @@
 
 	
  
-    <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-	<script src="/riot/riot.csp.js"></script>
+    <!-- RIO -->
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script th:src="@{/riot/riot.csp.js}"></script>
 	<!-- include riot.js and the compiler -->
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
-	<!-- MANTENIMIENTO DE USUARIOS -->
-	<script type="text/javascript" src="/js/views/actividadComercial/actividadComercialPorEmpresa.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/actividadComercial/crudActividadComercialPorEmpresa.tag" ></script>
+	<script type="text/javascript" th:src="@{/js/views/actividadComercial/actividadComercialPorEmpresa.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/actividadComercial/crudActividadComercialPorEmpresa.tag}" ></script>
     
 </head>
 <body>
 <section layout:fragment="header">
 
 <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
+    <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Inicio</a></li>
     <li class="active">Actividad Comercial por Empresa</li>
 </ol>
 </section>

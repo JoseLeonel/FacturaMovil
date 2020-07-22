@@ -7,6 +7,8 @@ $.i18n.properties({
     language: 'es',
 });
 
+var pathWebFactura  = 'factura';
+
 // Se configura un bloqueo para todo el ajax que se utiliza en la aplicacion
 $(document)
 

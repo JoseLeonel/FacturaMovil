@@ -12,13 +12,13 @@
 	<!-- jQuery UI 1.11.4 -->
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.i18n.js}"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.blockUI.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
 	 
 	 <!-- MASK -->
-	 <script type="text/javascript" src="js/jquery.mask.js"></script>
+	 <script type="text/javascript" th:src="@{/js/jquery.mask.js}"></script>
 	 
 	 
    <!-- SWEERT ALERT -->
@@ -26,15 +26,15 @@
 
  
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-	<script src="/riot/riot.csp.js"></script>
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script th:src="@{/riot/riot.csp.js}"></script>
 	<!-- include riot.js and the compiler -->
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
 	<!-- MANTENIMIENTO DE MOTIVO DE SALIDA -->
-	<script type="text/javascript" src="/js/views/motivoSalidas/motivoSalida.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/motivoSalidas/crudMotivoSalida.tag" ></script>
+	<script type="text/javascript" th:src="@{/js/views/motivoSalidas/motivoSalida.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/motivoSalidas/crudMotivoSalida.tag}" ></script>
     
 </head>
 <body>

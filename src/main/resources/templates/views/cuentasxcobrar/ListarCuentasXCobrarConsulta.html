@@ -6,24 +6,13 @@
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
     <title>Consulta de Cuentas por cobrar</title>
-    
-<!-- ./wrapper -->
-	<!-- jQuery 2.2.0 -->
 	<script th:src="@{/js/jquery-1.11.2.js}"></script>
-
-	
- 
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
-	
-	<!-- MANTENIMIENTO DE CUENTA POR COBRAR -->
-	<script type="text/javascript" src="/js/views/cuentaCobrar/cuentaCobrarConsulta.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/cuentaCobrar/cuentaCobrarConsulta.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/cuentaCobrar/imprimirAbono.tag" ></script>
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/views/cuentaCobrar/cuentaCobrarConsulta.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/cuentaCobrarConsulta.tag}" ></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/imprimirAbono.tag}" ></script>
 
 	
     
@@ -32,7 +21,7 @@
 <section layout:fragment="header">
 
 <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
+    <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Inicio</a></li>
     <li class="active">Consultas de cuentas por Cobrar</li>
 </ol>
 </section>

@@ -6,25 +6,14 @@
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
     <title>Compras ingresadas al inventario</title>
-    
-      <script th:src="@{/js/jquery-1.11.2.js}"></script>
-    <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
-	
-	<!-- MANTENIMIENTO DE COMPRAS -->
-	<script type="text/javascript" src="/js/views/compras/listaCompras.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/compras/listaCompras.tag" ></script>
+    <script th:src="@{/js/jquery-1.11.2.js}"></script>
+	<script th:src="@{/riot/riot.js}"></script>
+	<script th:src="@{/riot/riot-compiler.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/views/compras/listaCompras.js}"></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/compras/listaCompras.tag}" ></script>
     
 </head>
 <body>
-<section layout:fragment="header">
-
-
-</section>
 <div layout:fragment="content">
 	<lista-compras></lista-compras>
 </div>
