@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml"  
-	  xmlns:th="http://www.thymeleaf.org" 
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="fAdmin">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,9 +30,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
     
      <!-- Font-->
-    <link rel="stylesheet" type="text/css" href="/css/regular.css" >
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css" >
-    <link rel='stylesheet' type='text/css' href='/css/openSanz.css' >
+    <link rel="stylesheet" type="text/css" th:href="@{/css/regular.css}" >
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}" >
+    <link rel='stylesheet' type='text/css' th:href='@{/css/openSanz.css}' >
     <link th:href='@{/css/montserrat.css}' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.theme.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.css}"/>
@@ -74,19 +74,19 @@
 
 	<div class="containerMenu">
 	    <header class="main-header">
-	        <div layout:replace="administrativo/header"></div>
+	        <div th:replace="administrativo/header"></div>
 	    </header>
 	    <!-- Left side column. contains the logo and sidebar -->
 	    <aside class="main-sidebar">
-	        <div layout:replace="administrativo/mainsidebar"></div>
+	        <div th:replace="administrativo/mainsidebar"></div>
 	    </aside>
 	    <!-- Content Wrapper. Contains page content -->
 	    <div class="content-wrapper">
 	        <!-- Content Header (Page header) -->
-	        <section class="content-header" layout:fragment="header"></section>
+	        <section class="content-header" th:fragment="header"></section>
 	        <!-- Main content -->
 	        <section class="content">
-	             <div layout:fragment="content"></div>
+	             <div th:fragment="content"></div>
 	        </section>
 	        <!-- /.content -->
 	    </div>
@@ -95,8 +95,8 @@
 	        <strong>Copyright &copy; 2018 Factura Electronica EmprendeSoftCR. Telefono : 8312-4207 / 8729-2997 Email:gobookingcr@emprendesoftcr.com</strong>
 	    </footer>
 	</div>
-	 <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
-
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
 	<script type="text/javascript"  th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
 	<!-- JQUERY Properties-->
 	<script type="text/javascript" th:src="@{/js/jquery.i18n.js}"></script>
@@ -146,4 +146,8 @@
 	
 	
 </body>
+
+</div>
+
+
 </html>

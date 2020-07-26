@@ -1,7 +1,16 @@
 package com.emprendesoftcr.fisco;
 
-import static com.emprendesoftcr.fisco.FacturaElectronicaUtils.*;
-import static com.emprendesoftcr.fisco.Keys.*;
+import static com.emprendesoftcr.fisco.FacturaElectronicaUtils.getJsonObject;
+import static com.emprendesoftcr.fisco.FacturaElectronicaUtils.jsonElement;
+import static com.emprendesoftcr.fisco.Keys.CALLBACK_URL;
+import static com.emprendesoftcr.fisco.Keys.CLAVE;
+import static com.emprendesoftcr.fisco.Keys.EMISOR;
+import static com.emprendesoftcr.fisco.Keys.FECHA;
+import static com.emprendesoftcr.fisco.Keys.NOMBRE_COMERCIAL;
+import static com.emprendesoftcr.fisco.Keys.NUMERO_IDENTIFICACION;
+import static com.emprendesoftcr.fisco.Keys.RESPONSE_URL;
+import static com.emprendesoftcr.fisco.Keys.TIPO_IDENTIFICACION;
+import static com.emprendesoftcr.fisco.Keys.UBICACION;
 
 import org.json.JSONObject;
 

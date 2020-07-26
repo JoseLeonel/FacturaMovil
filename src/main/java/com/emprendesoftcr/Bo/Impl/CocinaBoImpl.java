@@ -89,6 +89,7 @@ public class CocinaBoImpl implements CocinaBo {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private ArrayList<ComandaCocinaCommand> formaCommandCocina(ComandaNuevaCommand comandaNuevaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
 		// evitar problemas con el tema de los decimales en el front

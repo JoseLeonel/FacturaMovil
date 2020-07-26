@@ -156,9 +156,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		return usuarioCajaTemp;
 	}
 
-	private void enviarCorreoCajaCerrada(UsuarioCaja usuarioCaja) {
 
-	}
 
 	/**
 	 * Actualiza Caja activa

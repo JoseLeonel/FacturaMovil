@@ -128,19 +128,12 @@ public class EnvioHaciendaComponent {
 	}
 
 	/**
-	 * Retorna el status de la respuesta de hacienda
-	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
-	 * @return Estado de la respuesta de hacienda OK o ERROR
-	 */
-	private static String getHaciendaStatus(String indEstado) {
-		return MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.containsKey(indEstado) ? MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.get(indEstado) : ERROR;
-	}
-
+	
 	/**
 	 * Envia hacia hacienda
 	 * @return
 	 */
-	public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
+ public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			String url_doc = Constantes.EMPTY;

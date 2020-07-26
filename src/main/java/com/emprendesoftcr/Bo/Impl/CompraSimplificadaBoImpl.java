@@ -252,7 +252,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 		Double totalComprobante = Constantes.ZEROS_DOUBLE;
 		Double subTotal = Constantes.ZEROS_DOUBLE;
-		Double totalImpServicios = Constantes.ZEROS_DOUBLE;
+		
 		Double totalExonerado = Constantes.ZEROS_DOUBLE;
 		Double totalIVADevuelto = Constantes.ZEROS_DOUBLE;
 		String unidadMedida = Constantes.EMPTY;
@@ -343,6 +343,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 //		if(montoImpuesto ==null) {
@@ -421,6 +422,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		return resultado;
 	}
 
+	@SuppressWarnings("unused")
 	private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 //		Boolean esMercancia = Boolean.TRUE;
@@ -437,6 +439,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		return resultado;
 	}
 
+	@SuppressWarnings("unused")
 	private Double getTotalImpuesto(Double montoImpuesto, Double montoImpuestoNeto) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 //		resultado = Utils.Maximo5Decimales(montoImpuesto);
@@ -444,6 +447,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		return resultado;
 	}
 
+	@SuppressWarnings("unused")
 	private Double getImpuestoNetoTotal(Double montoImpuesto) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 //		resultado = Utils.Maximo5Decimales(montoImpuesto);
@@ -459,6 +463,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 	 * @param tarifa
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private Double getMontoImpuestoCon13(Double subTotal, Double tarifa) {
 //		Double valor = tarifa / 100d;
 		Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;

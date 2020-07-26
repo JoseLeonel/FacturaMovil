@@ -1,29 +1,36 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
-<head>
- 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Mantenimiento de Empresas</title>
-    
-  <script th:src="@{/js/jquery-1.11.2.js}"></script> 
-    <!-- RIOT -->
-	<script th:src="@{/riot/riot.js}"></script>
-	<script th:src="@{/riot/riot-compiler.min.js}"></script>
-	<script th:src="@{/riot/riot.csp.js}"></script>
-	<!-- include riot.js and the compiler -->
-	<script th:src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
-	
-	<!-- MANTENIMIENTO DE EMPRESA -->
-	<script type="text/javascript" th:src="@{/js/views/empresa/empresa.js}"></script>
-	<script type = "riot/tag"  th:src="@{/js/views/components/empresas/crudEmpresa.tag}" ></script>
-    
-</head>
-<body>
-<div layout:fragment="content">
- 	<empresa-crud></empresa-crud>
-</div>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+	        	<empresa-crud></empresa-crud>
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+<!-- MANTENIMIENTO DE EMPRESA -->
+<script type="text/javascript" th:src="@{/js/views/empresa/empresa.js}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/empresas/crudEmpresa.tag}" ></script>
+
 
 </body>
 </html>

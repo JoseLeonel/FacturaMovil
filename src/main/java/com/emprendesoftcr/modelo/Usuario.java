@@ -74,9 +74,20 @@ public class Usuario implements Serializable {
 	private Empresa						empresa;
 
 	
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
 	private Set<Rol>					roles;
+	
+
+	
+	/*
+	 * 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		@JoinColumn(name = "user_id")
+		@JsonBackReference
+		private List<Role> roles;
+	 * 
+	 */
 
 	
 	public Usuario(Integer id, String nombreUsuario, String cedula, String nombre, String primerApellido, String segundoApellido, Integer estado, String password, String passwordConfirm, Date created_at, Date updated_at, Empresa empresa, Set<Rol> roles,String terminalFactura) {

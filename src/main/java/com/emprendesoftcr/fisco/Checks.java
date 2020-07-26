@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
+
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
