@@ -669,7 +669,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					//recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
 				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -708,7 +708,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/30 * * * ?")
+	@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;

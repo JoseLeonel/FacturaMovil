@@ -58,9 +58,7 @@ public class ReportePdfView {
 	}
 
 	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer, String tipoDoc) throws Exception {
-
 		// document.add(new Paragraph("\n", pequeFont));
-
 		PdfPTable tabla_tercera_tabla = new PdfPTable(9);
 		tabla_tercera_tabla.setWidthPercentage(60);
 		tabla_tercera_tabla.setTotalWidth(570f);

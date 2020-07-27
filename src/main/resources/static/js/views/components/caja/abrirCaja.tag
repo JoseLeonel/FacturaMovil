@@ -41,8 +41,8 @@
 <br>
 <br>
 <br>
-<!-- Listado  -->
-<!-- <div classs="contenedor-listar container" id="container"   >
+<!-- 
+ <div classs="contenedor-listar container" id="container"   >
             
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
@@ -54,7 +54,7 @@
                                 <th class="table-headerEntrada" style="width:10%">Descripcion   </th>
                                 <th class="table-headerEntrada" style="width:10%">Monto   </th>
                                 <th class="table-headerEntrada" style="width:10%">Total  </th>
-                                <th class="table-headerEntrada"  style="width:10%">Opciones   </th>
+                                
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
@@ -63,7 +63,7 @@
                                 <th style="width:10%">Descripcion   </th>
                                 <th style="width:10%">Monto   </th>
                                 <th style="width:10%">Total  </th>
-                                <th style="width:10%"> </th>
+                                
                             </tr>
                         </tfoot>
                     </table>
@@ -73,8 +73,8 @@
 
 <br>
 <br>
-<br>-->
-<!-- Listado  
+<br>
+
 <div classs="contenedor-listar container" id="container"   >
             
         <div class="row">
@@ -83,11 +83,11 @@
                     <table id="tableListarSalida" class="display table responsive table-hover nowrap table-condensed tableListarSalida"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-headerEntrada" style="width:2%" >#Id </th>
-                                <th class="table-headerEntrada" style="width:10%">Descripcion   </th>
-                                <th class="table-headerEntrada" style="width:10%">Monto   </th>
-                                <th class="table-headerEntrada" style="width:10%">Total  </th>
-                                <th class="table-headerEntrada"  style="width:10%">Opciones   </th>
+                                <th class="table-headerSalida" style="width:2%" >#Id </th>
+                                <th class="table-headerSalida" style="width:10%">Descripcion   </th>
+                                <th class="table-headerSalida" style="width:10%">Monto   </th>
+                                <th class="table-headerSalida" style="width:10%">Total  </th>
+                                
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
@@ -96,14 +96,14 @@
                                 <th style="width:10%">Descripcion   </th>
                                 <th style="width:10%">Monto   </th>
                                 <th style="width:10%">Total  </th>
-                                <th style="width:10%"> </th>
+                              
                             </tr>
                         </tfoot>
                     </table>
             </div>
         </div>    
-</div>-->
-
+</div>
+Listado  -->
 
 <div id='modalCerrarCaja' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=800px;>
     <div class="modal-dialog modal-lg">
@@ -224,6 +224,10 @@
     background: #399c58;
     color: #ffffff;
 }
+.table-headerSalida {
+    background: red;
+    color: #ffffff;
+}
 
 .modal-body{
     height: 400px;
@@ -303,6 +307,32 @@
         }
         th, td {
             white-space: nowrap;
+        }
+        .btn-cerrar {
+          background-color: #dc2a14;
+          color: #FFF;
+          border-radius: 5px;
+          padding-bottom: 10px;
+          padding-top: 10px;
+          padding-left: 20px;
+          padding-right: 20px;
+          font-size: 14px;
+          font-weight: bold;
+           border: none;
+           cursor: pointer;
+        }
+        .btn-entrada {
+          background-color: green;
+          color: #FFF;
+          border-radius: 5px;
+          padding-bottom: 10px;
+          padding-top: 10px;
+          padding-left: 20px;
+          padding-right: 20px;
+          font-size: 14px;
+          font-weight: bold;
+           border: none;
+           cursor: pointer;
         }
     </style>
 <script>
@@ -714,12 +744,66 @@ function __InformacionDataTable(){
     self.update();
    
 }
+
+/**
+*  Mostrar listado Enrada
+**/
+function __listado_entrada(){
+    $("#tableListar").dataTable().fnClearTable(); 
+    $.ajax({
+        url: "ListarUsuariosCajasAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                __InformacionDataTableEntrada();
+                loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
+                agregarInputsCombos();
+                ActivarEventoFiltro(".tableListar")
+             } 
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
+} 
+/**
+*Formato Salida
+**/
+function __InformacionDataTableSalida(){
+    self.informacion_tabla_salida = [ 
+                               {'data' : 'id'        ,"name":"id"  ,"title" : "Id"  ,"autoWidth" :false},
+                               {'data' : 'descripcion'        ,"name":"descripcion"  ,"title" : "Descripcion"  ,"autoWidth" :false },
+                               {'data' : 'totalSTR'        ,"name":"totalSTR"  ,"title" : "Total"  ,"autoWidth" :false},
+
+	      		            ];
+    self.update();
+   
+}
+/**
+*Formato Entrada
+**/
+function __InformacionDataTableEntrada(){
+    self.informacion_tabla_Entrada = [ 
+                               {'data' : 'id'        ,"name":"id"  ,"title" : "Id"  ,"autoWidth" :false},
+                               {'data' : 'descripcion'        ,"name":"descripcion"  ,"title" : "Descripcion"  ,"autoWidth" :false },
+                               {'data' : 'totalSTR'        ,"name":"totalSTR"  ,"title" : "Total"  ,"autoWidth" :false},
+
+	      		            ];
+    self.update();
+   
+}
+
 /**
 Opcions del menu
 **/
 function __OpcionesFacturas(id,type,row){
-   var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
-   cerrar = row.estado =="Activo"?cerrar:""
+   var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-cerrar  btn-cerrar btnCerrarCaja" role="button">  </a>';
+   var entrada  = '<a href="#"  title="Entrada de Dinero" class="btn btn-entrada  btnEntradaCaja" role="button"> Entrada</a>';
+   var salida  = '<a href="#"  title="Salida Dinero" class="btn btn-cerrar  btnSalidaCaja" role="button"> Salida</a>';
+   cerrar = row.estado =="Activo"?cerrar :""
   return  cerrar ;
 
 }

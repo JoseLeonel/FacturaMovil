@@ -1,14 +1,24 @@
 <lista-compras>
    <!-- Titulos -->
-    <div  class="row "  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+     <div  id="titulo-encabezado"  >
+        <div  >
             <h1><i class="fa fa-calculator"></i>&nbsp Compras Ingresadas al Inventario </h1>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
-        </div>
+
+       <div id="totalsGenerales" >
+            <div>
+             	<div >
+	                <span>Impuestos: </span>  
+	                <input type="text"  class="totalImpuestos" value="{totalImpuestos}" readonly>
+	            </div>
+                <div >
+                   <span>Total:</span>  
+                   <input type="text" class="totalCompra " value="{total}" readonly>
+                </div>  
+	        </div>
+        </div>    
     </div>
-     <br>
-    <br><br>
+    
     <!-- Inicio Filtros-->
     <div>
         <div class="row" show={mostrarListado}>
@@ -88,21 +98,7 @@
                                     <div class="box">
                                         <div class="box-body">
                                             <div class="planel-body" >
-                                                <div class= "row">
-                                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                                        <div class="form-group">
-                                                            <label  >Impuestos </label>
-                                                            <input type="text" class="form-control totalImpuestos" value="{totalImpuestos}" readonly>
-                                                        </div>  
-                                                    </div>                             
-                                                    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-4">
-                                                        <div class="form-group">
-                                                            <label  >{$.i18n.prop("compra.listado.total")} </label>
-                                                            <input type="text" class="form-control totalCompra " value="{total}" readonly>
-                                                        </div>  
-                                                    </div>                             
-                                            </div>
-
+                                                
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
@@ -460,7 +456,7 @@
     *{
        margin:0;
        padding:0;
-       box-sizing:border-box;idProveedor
+       box-sizing:border-box;
     }
     body{
         background:white;

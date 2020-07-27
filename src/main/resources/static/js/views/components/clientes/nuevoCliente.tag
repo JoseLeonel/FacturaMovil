@@ -169,68 +169,7 @@
 
 <style type ="text/css">
 
-    .botones{
-        margin-bottom: 0.5%;
-    }
-    .tituloBotones{
-        display: flex;
-    }
-    .articulo-title{
-        font-size: 20px;
-        font-weight: 600;
-        flex: 1;
-    }
-    
-    .fondoEncabezado {
-        background: #00539B;
-        color: #f9fafc;
-    }
-    .requeridoDato {
-            color: red;
-            text-align: left;
-            font-weight: 500;
-            font-size: 16px;
-    }
-    .fondoFacturacion {
-        background: rgb(247, 244, 244);
-        color: #f9fafc;
-        border-style: solid;
-        border-width: 5px;cliente
-    }
-    .wrap{
-        max-width:1100px;
-        width:100%;
-    }
-    body {
-        overflow: hidden;
-        background:white;
-        font-size: 12px !important;
-    }
-    .contenedor-listar{
-        width:100%;
-    }
-    .input-table-search{
-        margin-left: 15px;
-        margin-right: 15px;
-        width:100%;
-    }
-    .botonConsulta{
-        margin-top:28px;
-    }
-    table td{ 
-        text-align: left;
-        font-size: 12px;
-    }
-    table th {
-        text-align: center;
-        font-size: 12px;
-    }
-    th, td {
-        white-space: nowrap;
-    }
-     .scroller {
-            width: 200px; height: 600px; overflow-y: scroll;
-        }
+  
 </style>
 <script>
     var self = this;

@@ -60,6 +60,7 @@ import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
+import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
@@ -137,6 +138,11 @@ public class ArticuloController {
 	public String listarXCambioCategoria(ModelMap model) {
 		return "views/articulos/ListarArticulosCambiarCategoria";
 	}
+	
+	@RequestMapping(value = "/Etiquetas.do", method = RequestMethod.GET)
+	public String etiquetas(ModelMap model) {
+		return "views/articulos/etiquetas";
+	}
 
 	@RequestMapping(value = "/TotalesArticulos", method = RequestMethod.GET)
 	public String totalesArticulos(ModelMap model) {
@@ -148,7 +154,7 @@ public class ArticuloController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/ListarArticulos", method = RequestMethod.GET)
+		@RequestMapping(value = "/ListarArticulos", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
 		return "views/articulos/ListarArticulos";
 	}
@@ -226,6 +232,52 @@ public class ArticuloController {
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GenerarEtiquetasPrecios.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public void GenerarEtiquetasPrecios(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+		List<EtiquetasCommand> lista = new ArrayList<>();
+		
+//		try {
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(listaArticuloEtiquetas);
+				// Agregar Lineas de Detalle
+				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+				Gson gson = new Gson();
+				
+				if (jsonArrayDetalleFactura != null) {
+					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+						EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
+						lista.add(etiquetasCommand);
+					}
+				}
+			}
+				 catch (org.json.simple.parser.ParseException e) {
+					throw e;
+				}
+		
+//			response.setContentType("application/octet-stream");
+//			String fileName = Constantes.EMPTY;
+//
+//			int BUFFER_SIZE = 4096;
+//			String headerKey = "Content-Disposition";
+//			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
+//			response.setHeader(headerKey, headerValue);
+//			OutputStream outStream = response.getOutputStream();
+//			byte[] buffer = new byte[BUFFER_SIZE];
+//			int bytesRead = -1;
+////			while ((bytesRead = inputStream.read(buffer)) != -1) {
+////				outStream.write(buffer, 0, bytesRead);
+////			}
+//			inputStream.close();
+//			outStream.close();
+//		} catch (DocumentException e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

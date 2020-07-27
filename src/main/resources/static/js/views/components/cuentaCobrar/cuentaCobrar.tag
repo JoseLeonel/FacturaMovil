@@ -391,74 +391,7 @@
     </div>
 <imprimir-abono></imprimir-abono>
 <style type ="text/css">
-    #titulo-encabezado{
-        display:flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    #totalsGenerales{
-    display: flex;
-    flex-wrap: nowrap;
-    }   
-    #totalsGenerales > div {
-    margin-right: 2px;
-
-    }
-    #totalsGenerales > div > div {
-    display: flex;
-    flex-direction: column;
-    }
-    #totalsGenerales > div > div >input{
-    width: 200px;
-    background-color: #ecf0f5 !important;
-    height: 30px;
-    border-radius: 5px 5px 5px 5px;
-    font-size:16px;
-    /*   font-weight: 900; */
-    }
-    #totalsGenerales > div > div >span{
-    font-size: 18px;
-    font-weight: 600;
-    }
-        .fondoEncabezado {
-            background: #00539B;
-            color: #f9fafc;
-        }
-        .requeridoDato {
-                color: red;
-                text-align: left;
-                font-weight: 500;
-                font-size: 13px;
-        }
-        .fondoFacturacion {
-            background: rgb(247, 244, 244);
-            color: #f9fafc;
-            border-style: solid;
-            border-width: 5px;cliente
-        }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-       
-        th, td {
-            white-space: nowrap;
-        }
-        table.dataTable tr th.select-checkbox.selected::after {
-    content: "✔";
-    margin-top: -11px;
-    margin-left: -4px;
-    text-align: center;
-    text-shadow: rgb(176, 190, 217) 1px 1px, rgb(176, 190, 217) -1px -1px, rgb(176, 190, 217) 1px -1px, rgb(176, 190, 217) -1px 1px;
-}
+   
 </style>
 <script>
     var self = this
@@ -959,6 +892,22 @@ function TotalesGenerales(data){
      self.totalSaldo = formatoDecimales(self.totalSaldo,2)
      self.update()
 }
+function TotalesGeneralesByCuenta(data){
+     self.total             = 0
+    self.totalAbono         = 0
+    self.totalSaldo         = 0
+    self.totalSTR           = 0
+    self.totalAbonoSTR      = 0
+    self.totalSaldoSTR      = 0
+    self.update()
+    self.total      = data.total;
+    self.totalAbono = data.totalAbono;
+    self.totalSaldo = data.totalSaldo;
+     self.total = formatoDecimales(self.total,2)
+     self.totalAbono = formatoDecimales(self.totalAbono,2)
+     self.totalSaldo = formatoDecimales(self.totalSaldo,2)
+     self.update()
+}
 /**
 *  Suma del monto de tarjeta
 **/
@@ -1001,7 +950,22 @@ __regresarAlListado(){
 * Regresar al listado de los abonos 
 **/
 __regresarAlListadoAbono(){
-    __regresar()
+    __regresar1()
+}
+/**
+* Regresar al listado de abonos
+**/
+function __regresar1(){
+    self.mostrarListado       = false
+    self.botonAgregar         = false
+    self.botonModificar       = false   
+    self.mostrarFormulario    = false 
+    self.mostrarListadoAbonos = true
+    self.mostrarCrearAbono    = false
+    self.noMostrarTotales     = true
+    self.update()
+    TotalesGeneralesByCuenta(self.cuentaCobrar)
+    //listadoConsulta();
 }
 /**
 * Regresar al listado de abonos
@@ -1502,7 +1466,7 @@ function __mostrarAbonos(){
            includeActionsAbono('.dataTables_wrapper','.dataTables_length') 
         }
         __LimpiarCuentasPorCobrar() 
-        self.noMostrarTotales          = false
+        self.noMostrarTotales          = true
         self.cuentaCobrar = data    
         self.error                     = false
         self.errors                    = [];
@@ -1514,6 +1478,7 @@ function __mostrarAbonos(){
         self.mostrarCrearAbono         = false
         self.update()
         listaAbonosPorCuentaPorCobrar()
+        TotalesGeneralesByCuenta(self.cuentaCobrar)
     })
 }
 /**
@@ -1655,8 +1620,6 @@ function listaAbonosPorCuentaPorCobrar(){
 
             
             __imprimirAbono()
-            self.noMostrarTotales = false
-            self.update()
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);

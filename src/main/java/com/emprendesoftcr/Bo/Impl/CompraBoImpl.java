@@ -1,8 +1,21 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,6 +40,7 @@ import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.Usuario;
@@ -383,6 +397,110 @@ public class CompraBoImpl implements CompraBo {
 			throw e;
 		}
 
+	}
+
+	@Override
+	public ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException {
+		List<String> headers = Arrays.asList("Id", "Fecha Compra","Fecha Credito" ,"Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total", "usuario");
+	// Libro excel
+			Workbook workbook = new HSSFWorkbook();
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			Map<String, CellStyle> styles = Utils.createStyles(workbook);
+			Sheet sheet = workbook.createSheet("Compras");
+		// title row
+			Row title = sheet.createRow(0);
+			title.setHeightInPoints(25);
+			Cell titleCell = title.createCell(0);
+			titleCell.setCellValue("Resumen de Compras del " + fechaInicio + " al " + fechaFinal);
+			titleCell.setCellStyle(styles.get("title1"));
+			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$H$2"));
+
+			Row titleEmpresa = sheet.createRow(1);
+			titleEmpresa.setHeightInPoints(25);
+			Cell titleCell1 = titleEmpresa.createCell(0);
+			titleCell1.setCellValue(empresa.getNombre());
+			titleCell1.setCellStyle(styles.get("title1"));
+			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$H$3"));
+
+			Row titleCedula = sheet.createRow(2);
+			titleCedula.setHeightInPoints(25);
+			Cell titleCell2 = titleCedula.createCell(0);
+			titleCell2.setCellValue("Cedula:" + empresa.getCedula());
+			titleCell2.setCellStyle(styles.get("title1"));
+			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$4:$H$4"));
+			
+			Row row = sheet.createRow(4);
+			row.setHeightInPoints(25);
+			Cell headerCell;
+			for (int i = 0; i < headers.size(); i++) {
+				headerCell = row.createCell(i);
+				headerCell.setCellValue(headers.get(i));
+				headerCell.setCellStyle(styles.get("header"));
+
+			}
+			int rownum = 5;
+			for (Compra compra : compras) {
+				row = sheet.createRow(rownum);
+				Cell cell = row.createCell(0);
+				Utils.getCelSTR(cell, styles, compra.getId()+"");
+				
+				cell = row.createCell(1);
+				Utils.getCelSTR(cell, styles, compra.getFechaCompraSTR());
+
+				cell = row.createCell(2);
+				Utils.getCelSTR(cell, styles, compra.getFechaCreditoSTR());
+
+				cell = row.createCell(3);
+				Utils.getCelSTR(cell, styles, compra.getFechaIngresoSTR());
+				
+				cell = row.createCell(4);
+				Utils.getCelSTR(cell, styles, compra.getConsecutivo());
+
+				cell = row.createCell(5);
+				Utils.getCelSTR(cell, styles, compra.getProveedorSTR());
+
+				cell = row.createCell(6);
+				Utils.getCel(cell, styles, compra.getTotalImpuesto());
+
+				cell = row.createCell(7);
+				Utils.getCel(cell, styles, compra.getTotalCompra());
+
+				cell = row.createCell(8);
+				Utils.getCelSTR(cell, styles, compra.getUsuarioIngresoInventario().getNombre());
+				rownum++;
+			}	
+			int contnum = rownum;
+			Row sumRow = sheet.createRow(rownum++);
+			for (int j = 0; j <= headers.size(); j++) {
+				Cell cell = sumRow.createCell(j);
+				if (j == 5) {
+					cell.setCellValue("Totales  :");
+					cell.setCellStyle(styles.get("formula"));
+				}
+				if (j <= 6 || j == 8 ) {
+					cell.setCellStyle(styles.get("formula"));
+					sheet.setColumnWidth(j, 8000);
+				}
+				if (j == 6) {
+					// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+					String ref = "G" + 6 + ":G" + contnum;
+					cell.setCellFormula("SUM(" + ref + ")");
+					cell.setCellStyle(styles.get("formula"));
+					sheet.setColumnWidth(j, 8000);
+				}
+				if (j == 7) {
+					// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+					String ref = "H" + 6 + ":H" + contnum;
+					cell.setCellFormula("SUM(" + ref + ")");
+					cell.setCellStyle(styles.get("formula"));
+					sheet.setColumnWidth(j, 8000);
+				}
+
+			}
+
+			workbook.write(stream);
+			workbook.close();
+			return new ByteArrayInputStream(stream.toByteArray());
 	}
 
 }

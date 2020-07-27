@@ -4,7 +4,26 @@
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
             <h1 ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("cuentaPagar.titulo")}  </h1>
         </div>
-        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
+          <div id="totalsGenerales" >
+	             <div>
+	             	 <div >
+	                    <span>Facturacion </span>  
+	                    <input type="text"  class = "totalGeneral" value ="{total}" readonly >
+	                 </div>
+	             </div>
+	             <div>
+	                <div >
+	                   <span>Abonos </span>  
+	                   <input type="text" class = "totalAbonoGeneral" value ="{totalAbono}" readonly >
+	                </div>  
+	             </div>
+	             <div>
+	              	<div >
+	                    <span>Saldos </span>  
+	                    <input type="text" class = "totalSaldoGeneral" value ="{totalSaldo}" readonly >
+	                 </div>  
+	             </div>
+	        </div>
     </div>
     <!-- Modal correo alternativo-->
 	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -259,26 +278,7 @@
 <!-- Fin Formulario -->   
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
-       <div class= "row">
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
-                </div>  
-            </div>                             
-        </div>
+      
 
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">

@@ -322,22 +322,23 @@
                                 </div>
                             </div>
                             <br>
-                            <ul class="seleccionOtroPrecioVenta">
-                                <li class="opcionPrecioPublico">
+                            <div id = "tipoCambioDolarCSS">
+                                <div >
                                     <span class="ssCambioCentral">Tipo Cambio del Banco Central</span>
-                                </li>
-                                <li class="opcionPrecioPublico">
-                                    <span class="ssCambio">Compra USD $ </span>
-                                    <label class="tituloTipoCambio">{tipoCambio.totalCompra} </label>  
-                                </li>
-                                <li class="opcionPrecioPublico">
-                                    <span class="ssCambio">Venta USD $ </span> 
-                                    <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
-                                </li>
-                            </ul>
-                            <div class = 'containerIconosSumaRestaAgregarCliente'>
-                                <div class = 'containerSumarRestar'>
                                 </div>
+                                <div id= "tipoCambioCSS">
+                                    <div >
+                                        <span class="ssCambio">Compra USD $ </span>
+                                        <label class="tituloTipoCambio">{tipoCambio.totalCompra} </label>  
+                                    </div>
+                                    <div>
+                                        <span class="ssCambio">Venta USD $ </span> 
+                                        <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
+                                    </div>
+                                
+                                </div>
+                            </div>
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
@@ -1489,19 +1490,19 @@ var reglasDeValidacionClienteNuevo = function() {
 	return validationOptions;
 };
 
-this.__regresarClienteNuevo = function(){
+__regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
+}
 
-this.__AplicarAgregarCliente = function(){
+__AplicarAgregarCliente(){
      if ($("#formularioAgregarCliente").valid()) {
         aplicarCreacionClienteNuevo()
     }else{
         mensajeAdvertencia("Error Faltan datos requeridos")
         return true
     }
-}.bind(this)
+}
 
 function aplicarCreacionClienteNuevo(){
     var formulario = $("#formularioAgregarCliente").serialize();
@@ -1548,13 +1549,13 @@ function aplicarCreacionClienteNuevo(){
     })
 
 }
-this.__ActualizarPlazoCredito = function(){
+__ActualizarPlazoCredito(){
     actualizaElPlazoDiasCredito();
-}.bind(this)
+}
 
-this.__AsignarActividad = function(e){
+__AsignarActividad(e){
     BuscarActividadComercial()
-}.bind(this)
+}
 
 function BuscarActividadComercial(){
     var codigo =$('#selectActividadComercial').val()
@@ -1617,10 +1618,10 @@ function __RolAdministrador(){
 
 }
 
-this.__SeguridadVentas = function(){
+__SeguridadVentas(){
      __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
 
-}.bind(this)
+}
 
 function __validarRolAdministrador(formulario,url){
     var resultado = false;
@@ -1699,24 +1700,24 @@ function permitirModal(){
     })
 }
 
-this._clickEfectivo = function(){
+_clickEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
-}.bind(this)
+}
 
-this._SeleccionarTarjeta = function(){
+_SeleccionarTarjeta(){
     $('.totalTarjeta').select()
     $(".totalTarjeta").focus()
-}.bind(this)
-this._SeleccionarBanco = function(){
+}
+_SeleccionarBanco(){
     $('.totalBanco').select()
     $(".totalBanco").focus()
-}.bind(this)
+}
 
-this._ReimprimirFactura = function(){
+_ReimprimirFactura(){
     reimprimirFacturaEnMomento()
 
-}.bind(this)
+}
 function reimprimirFacturaEnMomento(){
 
   if(self.facturaReimprimir ==null){
@@ -1960,7 +1961,7 @@ var reglasDescuentoAplicar = function() {
 	return validationOptions;
 };
 
-this.__CambiarDescuento = function(e){
+__CambiarDescuento(e){
     $("#aplicarDescuento").attr("maxlength", 7);
      $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item;
@@ -1978,9 +1979,9 @@ this.__CambiarDescuento = function(e){
             $( "#aplicarDescuento" ).val(null)
         })
     }
-}.bind(this)
+}
 
-this.__CambiarCantidad = function(e){
+__CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item;
    self.rutaAutorizada = '';
@@ -1998,9 +1999,9 @@ this.__CambiarCantidad = function(e){
             $( "#cambiarCantidadArticulo" ).select()
         })
    }
- }.bind(this)
+ }
 
-this.__TotalDeEfectivoAPagar = function(e){
+__TotalDeEfectivoAPagar(e){
     self.totalCambioPagarSTR = 0
     self.factura.totalEfectivo = __valorNumerico(e.target.value)
     if(self.factura.totalEfectivo ==0 ){
@@ -2008,35 +2009,35 @@ this.__TotalDeEfectivoAPagar = function(e){
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__TotalDeTarjetaAPagar = function(e){
+__TotalDeTarjetaAPagar(e){
     self.factura.totalTarjeta = __valorNumerico(e.target.value)
     if(self.factura.totalTarjeta ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__TotalDeBancoAPagar = function(e){
+__TotalDeBancoAPagar(e){
     self.factura.totalBanco = __valorNumerico(e.target.value)
     if(self.factura.totalBanco ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__CalculaCambioAEntregarOnblur = function(e){
+__CalculaCambioAEntregarOnblur(e){
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__CalculaCambioAEntregarKeyPress = function(e){
+__CalculaCambioAEntregarKeyPress(e){
     if (e.keyCode == 13) {
         __Calcular()
     }
-}.bind(this)
+}
 
 function __Calcular(){
        _calculoEnterPago()
@@ -2116,9 +2117,9 @@ function __EnterFacturar(){
         self.update()
 }
 
- this.__ListaDecodigos = function(){
+ __ListaDecodigos(){
      ListarCodigosArticulos()
- }.bind(this)
+ }
 
  function ListarCodigosArticulos(){
     self.mostrarListadoArticulos = true
@@ -2136,20 +2137,20 @@ function __EnterFacturar(){
 
  }
 
-this.__CargarFacturaEspera = function(e){
+__CargarFacturaEspera(e){
    __FacturaEnEspera(e.item)
-}.bind(this)
+}
 
-this.__AplicarYcrearFactura = function(e){
+__AplicarYcrearFactura(e){
 
  aplicarFactura(2)
-}.bind(this)
+}
 
-this.__AplicarYcrearFacturaTemporal = function(e){
+__AplicarYcrearFacturaTemporal(e){
 
  __OpcionAbrirCajon()
  aplicarFactura(1)
-}.bind(this)
+}
 
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
@@ -2203,9 +2204,9 @@ function aplicarFactura(estado){
     crearFactura(estado)
 }
 
-this.__Limpiar = function(){
+__Limpiar(){
     __Init()
-}.bind(this)
+}
 
 function __Init(){
     __DeleteUltimoItemIngresado()
@@ -2722,7 +2723,7 @@ function lecturaCodigo(){
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
 }
 
-this.__addPrecioDetail = function(e){
+__addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     }
@@ -2744,7 +2745,7 @@ this.__addPrecioDetail = function(e){
     }
     __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
     getPosicionInputCodigo()
-}.bind(this)
+}
 
 function getCantidadAdnCodigo_PV(){
     var objeto ={

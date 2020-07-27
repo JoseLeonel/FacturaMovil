@@ -7,7 +7,7 @@
 	<groupId>com.factura</groupId>
 	<artifactId>FacturaElectronica</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>FacturaElectronica</name>
 	<description>Factura Electronica </description>
@@ -34,7 +34,7 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.10.6</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
