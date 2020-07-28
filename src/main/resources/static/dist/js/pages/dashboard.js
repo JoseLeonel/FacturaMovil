@@ -28,17 +28,17 @@ $(function () {
   });
 
  
+//
+//  /* jQueryKnob */
+//  $(".knob").knob();
 
-  /* jQueryKnob */
-  $(".knob").knob();
-
-  //The Calender
-  $("#calendar").datepicker();
-
-  //SLIMSCROLL FOR CHAT WIDGET
-  $('#chat-box').slimScroll({
-    height: '250px'
-  });
+//  //The Calender
+//  $("#calendar").datepicker();
+//
+//  //SLIMSCROLL FOR CHAT WIDGET
+//  $('#chat-box').slimScroll({
+//    height: '250px'
+//  });
 
  
   /* The todo list plugin */
