@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password")
 		
-		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")
+		.and().logout().and().exceptionHandling().accessDeniedPage("/403")
 		.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
 

@@ -130,6 +130,9 @@ public class Usuario implements Serializable {
 		this.roles = usuario.getRoles();
 
 	}
+	
+
+
 
 	public Set<Rol> getRoles() {
 		return roles;

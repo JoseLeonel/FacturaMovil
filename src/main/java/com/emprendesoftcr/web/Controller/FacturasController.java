@@ -2100,8 +2100,6 @@ public class FacturasController {
 	 * @param id
 	 * @return
 	 */
-//	@Autowired
-//	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -2110,24 +2108,6 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-			// criptografica desde linux
-			// certificadoBo.agregar(usuario.getEmpresa(),"","");
-			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
-			// usuario.getEmpresa().getNombreLlaveCriptografica());
-			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
-			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
-
-			// KeyStore keyStore = null;
-			// LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
-			//
-			// llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
-			// XadesSigner xadesSigner =
-			// llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

@@ -1019,11 +1019,11 @@
             }
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible')){
-                    $(".codigo").val(null)
+                    $(".codigo").val("")
                     seguridadCambiarPrecioLinea()
                     return
                 }else{
-                    $(".codigo").val(null)
+                    $(".codigo").val("")
                     event.preventDefault()
                     return
                 }
@@ -1125,12 +1125,12 @@ this.__AplicarCambioPrecioUltimoArticulo = function(){
     __AplicarCambioPrecioBD()
 }.bind(this)
 this.__RegresarInputCodigo = function(){
-    $(".codigo").val(null)
+    $(".codigo").val("")
     $('#modalCambiarPrecio').modal('hide')
     getPosicionInputCodigo()
 }.bind(this)
 this.__RegresarInputSeguridad = function(){
-    $(".codigo").val(null)
+    $(".codigo").val("")
     $('#modalRolUsuario').modal('hide')
     getPosicionInputCodigo()
 }.bind(this)
@@ -2699,7 +2699,7 @@ function mostrarPAgo(){
 
 function lecturaCodigo(){
     var valor = $('.codigo').val()
-    if (valor == ""){
+    if (valor == "" || valor.length == 0){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
             self.update()
@@ -2754,7 +2754,9 @@ function getCantidadAdnCodigo_PV(){
     }
 
     var valor = $('.codigo').val()
-
+    if(valor == "" | valor.length == 0){
+        return objeto
+    }
     var existe = false
     var existeMas = false
     for(i=0; i<valor.length; i++){
@@ -3085,6 +3087,9 @@ function __agregarArticulo(cantidad){
     }
     var encontrado = false;
     var valor = $('.codigo').val()
+    //if(valor == "" || valor.length == 0){
+    //    return
+    //}
     var multiplicaPeso = valor.indexOf("*") !=-1?true : false;
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo" || multiplicaPeso == true){
         __nuevoArticuloAlDetalle(cantidad);
@@ -3979,7 +3984,7 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()
         }else{
-            $(".codigo").val(null)
+            $(".codigo").val("")
             event.preventDefault()
         }
         return
