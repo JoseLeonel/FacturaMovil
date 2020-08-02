@@ -5,11 +5,9 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -53,14 +51,6 @@ public class HeaderFooterGondola extends PdfPageEventHelper {
 		} catch (Exception e) {
 			System.out.println("Error con pie de pagina");
 		}
-	}
-
-	private void addText(PdfContentByte cb, String text, Font font, float x, float y, int align) {
-		Phrase phrase = new Phrase(text, font);
-		ColumnText.showTextAligned(cb, align, phrase, x, y, 0);
-		cb.saveState();
-		cb.stroke();
-		cb.restoreState();
 	}
 
 	@Override

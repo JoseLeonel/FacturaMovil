@@ -245,10 +245,12 @@ public class UsuarioCajasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -303,10 +305,12 @@ public class UsuarioCajasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CerrarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -422,10 +426,12 @@ public class UsuarioCajasController {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator actualizarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status, @RequestParam Long idUsuarioCaja) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(idUsuarioCaja);

@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 import java.util.Date;
 

@@ -90,7 +90,7 @@
         </li>
         
         
-        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios')" >
+        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Empresa',)" >
             <a th:href="@{#}">
                 <i class="fa fa-folder"></i>
                 <span>Condominios</span>
@@ -131,7 +131,6 @@
                 <li><a th:href="@{/postRestaurante}" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
                 <li><a th:href="@{/Saloneros.do}" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i> Salon </a></li>
                 <li><a th:href="@{/proformas.do}" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Proformas </a></li>
-            </a>
             </ul>
         </li>
  		<li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
@@ -194,7 +193,7 @@
 			                <li><a th:href="@{/ListaFacturas}" sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
 			                <li><a th:href="@{/TotalFacturas}"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
 			                <li><a th:href="@{/ListaDetallesxArticulo}"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulos</a></li>
-			                <li><a th:href="@{/ListaDetallesImpuestoServicio}"  sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
+			                <li><a th:href="@{/ListaDetallesImpuestoServicio}"  sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
 			                <li><a th:href="@{/ListaNostas.do}"><i class="fa fa-circle-o"></i>Listado de Notas NC/NB</a></li>
 			                <li><a th:href="@{/TotalImpuestoVentasMensuales}"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
  			                <li><a th:href="@{/UtilidadXArticulo.do}"  sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Empresa')"><i class="fa fa-circle-o"></i>Utilidad</a></li> 

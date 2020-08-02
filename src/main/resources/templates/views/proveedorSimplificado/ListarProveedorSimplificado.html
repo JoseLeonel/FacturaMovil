@@ -17,19 +17,18 @@
 	        <section class="content-header" th:fragment="header"></section>
 	        <!-- Main content -->
 	        <section class="content">
-				<proveedorsimplificado-crud></proveedorsimplificado-crud>
-				 	 <div id="mostrarListado"> 
+				
+			<div id="mostrarListado">
 				    <!-- Titulos -->
 				    <div  class="row "  >
 				        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				            <h1 > <i class="fa fa-cog" th:text="#{proveedorSimplificado.titulo}"></i ></h1>
 				        </div>
-				        
 				    </div>
 				     <!-- Listado  -->
                     <div class="row" >        
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                             <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                             <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "  >
                               <thead>
                                     <tr>
                                         <th class="table-header" th:text="#{proveedorSimplificado.cedula}" >  </th>
@@ -55,7 +54,8 @@
 		              </div>   
 				     
 				    <!-- Fin del Listado -->
-	        
+	          </div>
+	          <proveedorsimplificado-crud></proveedorsimplificado-crud>
             </section>    
  		</div>
          <!-- /.content-wrapper -->

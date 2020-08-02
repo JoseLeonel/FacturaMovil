@@ -20,7 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.TarifaBo;
-import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
@@ -89,6 +88,7 @@ public class TarifaController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Cacheable(value="tarifasCache")
 	@RequestMapping(value = "/ListarTarifasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -99,11 +99,13 @@ public class TarifaController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	@SuppressWarnings("rawtypes")
 	@CacheEvict(value="tarifasCache",allEntries=true)
 	@RequestMapping(value = "/AgregarTarifaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Tarifa tarifa, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 
@@ -121,6 +123,7 @@ public class TarifaController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarTarifaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Tarifa tarifa, BindingResult result, SessionStatus status) throws Exception {
@@ -132,6 +135,7 @@ public class TarifaController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarTarifaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Tarifa tarifa, BindingResult result, SessionStatus status) throws Exception {

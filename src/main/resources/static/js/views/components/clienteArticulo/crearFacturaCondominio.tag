@@ -420,7 +420,7 @@
                         </form>    
                         <br>      
 
-                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " >
                             <thead>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
                                 <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -460,7 +460,7 @@
             <div class="modal-body facturaDiaContainer">
                 <div class="row">
                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "  >
                         <thead>
                             <tr>
                                 <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
@@ -507,7 +507,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
+                        <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " >
                         <thead>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                                 <th style="width:5%" class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
@@ -548,7 +548,7 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " cellspacing="0" width="100%">
+                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " >
                    <thead>
                         <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
@@ -1053,8 +1053,7 @@ div.fondoVentaEspera:hover{
         -ms-transition: background-color 100ms linear;
         transition: background-color 100ms linear;
     }
-    .contenedorExoneracion{
-    }
+    
     .label-totalesComprobanteChino {
         display: flex;
         flex: 1;
@@ -1161,21 +1160,21 @@ div.fondoVentaEspera:hover{
         transition: background-color 100ms linear;
     }
     @media screen and (max-width: 1024px) {
-    .labelBotones {
-        font-size: 14px !important;
-    }
-    .label-totalesComprobante{
-        font-size: 18px !important;
-    }
-    .cantidadArticulosTitulo{
-        font-size: 10px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-        font-size: 14px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-        font-size: 14px !important;
-    }
+        .labelBotones {
+            font-size: 14px !important;
+        }
+        .label-totalesComprobante{
+            font-size: 18px !important;
+        }
+        .cantidadArticulosTitulo{
+            font-size: 10px !important;
+        }
+        .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+            font-size: 14px !important;
+        }
+        .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+            font-size: 14px !important;
+        }
     }
 
     .botonesFuncionalContainer{
@@ -1213,14 +1212,10 @@ div.fondoVentaEspera:hover{
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         text-align: left;
-        /* padding-left: 20px; */
         line-height: 30px;
         border-collapse: separate;
         text-align: center;
         cursor: pointer;
-        /* padding: 5px; */
-        /* margin: 5px; */
-        /* border: none; */
         text-align: center !important;
         background-color: black !important;
         box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
@@ -4781,10 +4776,7 @@ function __Teclas(tecla,event){
       aplicarFactura(1) 
       return   
     }
-     //Reimprimir Factura f6
-    //if(tecla ==117){
-    // reimprimirFacturaEnMomento()
-    //}
+  
      //Reimprimir Factura End
     if(tecla ==35){
      reimprimirFacturaEnMomento()

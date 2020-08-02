@@ -1,11 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;

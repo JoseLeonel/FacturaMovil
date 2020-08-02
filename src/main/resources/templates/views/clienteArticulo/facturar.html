@@ -17,7 +17,7 @@
 	        <!-- Main content -->
 	        <section class="content">
 	        	<factura-condominio></factura-condominio>
- 				<ptv-imprimir></ptv-imprimir>
+<!--  				<ptv-imprimir></ptv-imprimir> -->
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -26,9 +26,9 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/clienteArticulo/crearFacturaCondominio.js}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/clienteArticulo/crearFacturaCondominio.tag}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag}" ></script>
+<script type="text/javascript" th:src="@{/js/views/clienteArticulo/crearFacturaCondominio.js?v=4}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/clienteArticulo/crearFacturaCondominio.tag?v=4}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=4}" ></script>
 <script type="text/javascript"  th:src="@{/js/print.min.js}"></script>
 
 

@@ -22,7 +22,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 /**
  * Empresa es todas las que facturan EmpresaDaoImpl.

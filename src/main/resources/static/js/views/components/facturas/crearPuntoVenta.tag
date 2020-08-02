@@ -1087,7 +1087,7 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             __Teclas(evento.keyCode,event)
+             __Teclas(evento.keyCode,evento)
             disableF5(evento);
         }, false );
 
@@ -1269,12 +1269,13 @@ this.__ConsultarHaciendaBlur = function(){
     getClienteHacienda()
 
 }.bind(this)
-this.__ConsultarHacienda = function(e){
+
+__ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     }
     getClienteHacienda()
-}.bind(this)
+}
 
 function getClienteHacienda(){
      var cedula = $('#cedula').val()
@@ -1374,9 +1375,9 @@ function __listadoTipoCedulas(){
     self.update()
 }
 
-this.__ClienteNuevo = function(){
+__ClienteNuevo(){
     __nuevoCliente()
-}.bind(this)
+}
 
 function __nuevoCliente(){
     $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
@@ -1779,9 +1780,10 @@ function _Empresa(){
 
 }
 
-this.__LimpiarFormulario = function(){
+__LimpiarFormulario(){
     __SeguridadLimpiar()
-}.bind(this)
+}
+
 function __SeguridadLimpiar(){
     self.autorizarBorrado = 2
     self.update()
@@ -3970,13 +3972,25 @@ function __EnviarFacturar(){
 }
 
 function __Teclas(tecla,event){
+    if (tecla === undefined) {
+        return 
+    }
+    if (event === undefined) {
+        return 
+    }
 
+    if(event.id == 'nota' || event.id == 'correoAlternativo' || event.id == 'nombreFactura' ||
+       event.target.id == 'nota' ||  event.target.id == 'correoAlternativo' || event.target.id == 'nombreFactura'){
+        return
+    }
+  //  console.log(event)
+   // console.log(tecla)
     if(tecla ==119){
         __EnviarFacturar()
         return
 
     }
-
+    
     if(tecla ==111){
         if( self.rol.rolAdministrador == 0){
             return

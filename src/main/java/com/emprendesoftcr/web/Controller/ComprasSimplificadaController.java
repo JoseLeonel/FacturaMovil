@@ -307,6 +307,7 @@ public class ComprasSimplificadaController {
 		return respuestaService;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AnularCompraSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator anularCompraSimplificadaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {

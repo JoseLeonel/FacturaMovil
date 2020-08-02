@@ -3,7 +3,6 @@ package com.emprendesoftcr.Dao;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;

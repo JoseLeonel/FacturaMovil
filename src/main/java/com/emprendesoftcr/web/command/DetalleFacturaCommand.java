@@ -63,10 +63,10 @@ public class DetalleFacturaCommand {
 	private Double	porcentajeGanancia;
 
 	private Double	costo;
-	private String	tipoImpuesto1;
-	private Double	impuesto1;
+	private String	tipoImpuestoMag;
+	private Double	impuestoMag;
 
-	private Double	montoImpuesto1;
+	private Double	montoImpuestoMag;
 	private Double	pesoTransporte;
 
 	private Double	pesoTransporteTotal;
@@ -123,9 +123,9 @@ public class DetalleFacturaCommand {
 		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma() != null ? detalle.getFactura().getConsecutivoProforma() : Constantes.EMPTY;
 		this.costo = detalle.getCosto();
 		this.porcentajeGanancia = detalle.getPorcentajeGanancia();
-		this.tipoImpuesto1 = detalle.getTipoImpuesto1();
-		this.impuesto1 = detalle.getImpuesto1();
-		this.montoImpuesto1 = detalle.getMontoImpuesto1();
+		this.tipoImpuestoMag = detalle.getTipoImpuestoMag();
+		this.impuestoMag = detalle.getImpuestoMag();
+		this.montoImpuestoMag = detalle.getMontoImpuestoMag();
 		this.pesoTransporte = detalle.getPesoTransporte();
 		this.pesoTransporteTotal = detalle.getPesoTransporteTotal();
 		this.tipoDocumentoExoneracion = detalle.getTipoDocumentoExoneracion();
@@ -302,7 +302,6 @@ public class DetalleFacturaCommand {
 
 	public String getMontoTotalSinImpuestoSTR() {
 		Double totalIVA = this.montoImpuesto == null ? Constantes.ZEROS_DOUBLE : this.montoImpuesto;
-		totalIVA = this.montoImpuesto1 == null ? totalIVA : totalIVA + this.montoImpuesto1;
 		Double resultado = this.montoTotalLinea - totalIVA;
 		return Utils.formateadorMiles(Utils.round(resultado, 2));
 	}
@@ -363,8 +362,8 @@ public class DetalleFacturaCommand {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
 
-	public String getMontoImpuesto1STR() {
-		return Utils.formateadorMiles(this.montoImpuesto1);
+	public String getMontoImpuestoMagSTR() {
+		return Utils.formateadorMiles(this.montoImpuestoMag);
 	}
 
 	public Double getMontoTotalLinea() {
@@ -427,28 +426,28 @@ public class DetalleFacturaCommand {
 		this.costo = costo;
 	}
 
-	public String getTipoImpuesto1() {
-		return tipoImpuesto1;
+	public String getTipoImpuestoMag() {
+		return tipoImpuestoMag;
 	}
 
-	public void setTipoImpuesto1(String tipoImpuesto1) {
-		this.tipoImpuesto1 = tipoImpuesto1;
+	public void setTipoImpuestoMag(String tipoImpuestoMag) {
+		this.tipoImpuestoMag = tipoImpuestoMag;
 	}
 
-	public Double getImpuesto1() {
-		return impuesto1;
+	public Double getImpuestoMag() {
+		return impuestoMag;
 	}
 
-	public void setImpuesto1(Double impuesto1) {
-		this.impuesto1 = impuesto1;
+	public void setImpuestoMag(Double impuestoMag) {
+		this.impuestoMag = impuestoMag;
 	}
 
-	public Double getMontoImpuesto1() {
-		return montoImpuesto1;
+	public Double getMontoImpuestoMag() {
+		return montoImpuestoMag;
 	}
 
-	public void setMontoImpuesto1(Double montoImpuesto1) {
-		this.montoImpuesto1 = montoImpuesto1;
+	public void setMontoImpuestoMag(Double montoImpuestoMag) {
+		this.montoImpuestoMag = montoImpuestoMag;
 	}
 
 	public Double getPesoTransporte() {

@@ -16,12 +16,10 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
-import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 @Repository("compraDao")
 public class CompraDaoImpl implements CompraDao {

@@ -93,6 +93,7 @@ public class MarcasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarMarcasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -114,6 +115,7 @@ public class MarcasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarMarcasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -137,10 +139,12 @@ public class MarcasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarMarcaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Marca marca, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -175,6 +179,7 @@ public class MarcasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarMarcaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Marca marca, BindingResult result, SessionStatus status) throws Exception {
@@ -220,6 +225,7 @@ public class MarcasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarMarcaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Marca marca, BindingResult result, SessionStatus status) throws Exception {

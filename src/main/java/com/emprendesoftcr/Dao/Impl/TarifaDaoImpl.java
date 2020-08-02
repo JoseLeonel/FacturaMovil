@@ -10,7 +10,6 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.TarifaDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Tarifa;
 import com.emprendesoftcr.web.command.TarifaCommand;
 

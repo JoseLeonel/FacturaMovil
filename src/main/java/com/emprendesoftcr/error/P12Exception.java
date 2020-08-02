@@ -10,6 +10,11 @@ public class P12Exception extends Exception {
 
 	
 
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 		public static P12Exception instance(String message) {
         return new P12Exception(message);
     }

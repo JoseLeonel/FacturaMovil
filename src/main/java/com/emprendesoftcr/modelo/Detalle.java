@@ -100,12 +100,12 @@ public class Detalle implements Serializable {
 	private String						observacion;
 
 	@Column(name = "tipo_impuesto1")
-	private String						tipoImpuesto1;
+	private String						tipoImpuestoMag;
 	@Column(name = "impuesto1", precision = 18, scale = 5)
-	private Double						impuesto1;
+	private Double						impuestoMag;
 
 	@Column(name = "monto_impuesto1", precision = 18, scale = 5)
-	private Double						montoImpuesto1;
+	private Double						montoImpuestoMag;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -136,7 +136,7 @@ public class Detalle implements Serializable {
 	private String						codigoTarifa;
 
 	@Column(name = "cod_tarifa1", length = 2)
-	private String						codigoTarifa1;
+	private String						codigoTarifaMag;
 
 	@Column(name = "tipo_doc_exo", length = 2)
 	private String						tipoDocumentoExoneracion;
@@ -174,53 +174,7 @@ public class Detalle implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
-			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1, Double cantidadAplicadaNotaCredito, Factura factura, Usuario usuario) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.codigo = codigo;
-		this.descripcion = descripcion;
-		this.tipoCodigo = tipoCodigo;
-		this.tipoImpuesto = tipoImpuesto;
-		this.unidadMedida = unidadMedida;
-		this.precioUnitario = precioUnitario;
-		this.cantidad = cantidad;
-		this.montoTotal = montoTotal;
-		this.montoDescuento = montoDescuento;
-		this.naturalezaDescuento = naturalezaDescuento;
-		this.subTotal = subTotal;
-		this.impuesto = impuesto;
-		this.montoImpuesto = montoImpuesto;
-		this.montoTotalLinea = montoTotalLinea;
-		this.ganancia = ganancia;
-		this.porcentajeDesc = porcentajeDesc;
-		this.porcentajeGanancia = porcentajeGanancia;
-		this.costo = costo;
-		this.observacion = observacion;
-		this.tipoImpuesto1 = tipoImpuesto1;
-		this.impuesto1 = impuesto1;
-		this.montoImpuesto1 = montoImpuesto1;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.montoGanancia = montoGanancia;
-		this.pesoTransporte = pesoTransporte;
-		this.pesoTransporteTotal = pesoTransporteTotal;
-		ImpuestoNeto = impuestoNeto;
-		this.baseImponible = baseImponible;
-		this.codigoTarifa = codigoTarifa;
-		this.codigoTarifa1 = codigoTarifa1;
-		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
-		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
-		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
-		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
-		this.porcentajeExoneracion = porcentajeExoneracion;
-		this.montoExoneracion = montoExoneracion;
-		this.montoExoneracion1 = montoExoneracion1;
-		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
-		this.factura = factura;
-		this.usuario = usuario;
-	}
+
 
 	public Detalle() {
 		super();
@@ -240,9 +194,9 @@ public class Detalle implements Serializable {
 		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
 		this.subTotal = detalleFacturaCommand.getSubTotal();
 		this.impuesto = detalleFacturaCommand.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto();
-		this.impuesto1 = detalleFacturaCommand.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto1();
+		this.impuestoMag = detalleFacturaCommand.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuestoMag();
 		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto();
-		this.montoImpuesto1 = detalleFacturaCommand.getMontoImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto1();
+		this.montoImpuestoMag = detalleFacturaCommand.getMontoImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuestoMag();
 		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
@@ -251,7 +205,7 @@ public class Detalle implements Serializable {
 		this.codigo = detalleFacturaCommand.getCodigo();
 		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
 		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto();
-		this.tipoImpuesto1 = detalleFacturaCommand.getTipoImpuesto1() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto1();
+		this.tipoImpuestoMag = detalleFacturaCommand.getTipoImpuestoMag() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuestoMag();
 		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
 		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
 		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
@@ -286,12 +240,12 @@ public class Detalle implements Serializable {
 		return codigoTarifa != null ? MapEnums.ENUM_TARIFAS_IMPUESTOS.get(codigoTarifa) : codigoTarifa;
 	}
 
-	public String getCodigoTarifa1() {
-		return codigoTarifa1;
+	public String getCodigoTarifaMag() {
+		return codigoTarifaMag;
 	}
 
-	public void setCodigoTarifa1(String codigoTarifa1) {
-		this.codigoTarifa1 = codigoTarifa1;
+	public void setCodigoTarifaMag(String codigoTarifaMag) {
+		this.codigoTarifaMag = codigoTarifaMag;
 	}
 
 	public String getTipoImpuesto() {
@@ -384,7 +338,7 @@ public class Detalle implements Serializable {
 	}
 
 	public Double getTotalOtrosCargos() {
-		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, Constantes.ZEROS_DOUBLE);
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
@@ -395,7 +349,7 @@ public class Detalle implements Serializable {
 	
 	
 	public Double getTotalServicioExentos() {
-		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, Constantes.ZEROS_DOUBLE);
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
@@ -417,7 +371,7 @@ public class Detalle implements Serializable {
 	
 	public Double getTotalServicioGravados() {
 		
-		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, this.montoImpuesto1);
+		Double resultado = Utils.getTotalServicioGravados(this.tipoImpuesto,this.unidadMedida, this.montoTotal, this.montoImpuesto, Constantes.ZEROS_DOUBLE);
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				 return resultado == null?Constantes.ZEROS_DOUBLE:(resultado * this.factura.getTipoCambio()) * - 1;
@@ -441,7 +395,7 @@ public class Detalle implements Serializable {
 
 	
 	public Double getTotalMercanciaGravada() {
-		Double resultado = Utils.getTotalMercanciasGravadas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal, this.porcentajeExoneracion);
+		Double resultado = Utils.getTotalMercanciasGravadas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, Constantes.ZEROS_DOUBLE, this.montoTotal, this.porcentajeExoneracion);
 		
 		if (this.factura.getTipoDoc() != null) {
 			if (this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
@@ -454,7 +408,7 @@ public class Detalle implements Serializable {
 	public Double getTotalMercanciaExenta() {
 		
 		Double resultado = Constantes.ZEROS_DOUBLE; 
-		resultado = Utils.getTotalMercanciasExentas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, this.montoImpuesto1, this.montoTotal);
+		resultado = Utils.getTotalMercanciasExentas(this.tipoImpuesto, this.unidadMedida, this.montoImpuesto, Constantes.ZEROS_DOUBLE, this.montoTotal);
 				
 		
 		if (this.factura.getTipoDoc() != null) {
@@ -569,7 +523,7 @@ public class Detalle implements Serializable {
 	}
 
 	public String getMontoImpuesto1STR() {
-		return Utils.formateadorMiles(this.montoImpuesto1);
+		return Utils.formateadorMiles(Constantes.ZEROS_DOUBLE);
 	}
 
 	public Double getMontoTotalLinea() {
@@ -682,28 +636,28 @@ public class Detalle implements Serializable {
 		this.costo = costo;
 	}
 
-	public String getTipoImpuesto1() {
-		return tipoImpuesto1;
+	public String getTipoImpuestoMag() {
+		return tipoImpuestoMag;
 	}
 
-	public void setTipoImpuesto1(String tipoImpuesto1) {
-		this.tipoImpuesto1 = tipoImpuesto1;
+	public void setTipoImpuestoMag(String tipoImpuestoMag) {
+		this.tipoImpuestoMag = tipoImpuestoMag;
 	}
 
-	public Double getImpuesto1() {
-		return impuesto1;
+	public Double getImpuestoMag() {
+		return impuestoMag;
 	}
 
-	public void setImpuesto1(Double impuesto1) {
-		this.impuesto1 = impuesto1;
+	public void setImpuestoMag(Double impuestoMag) {
+		this.impuestoMag = impuestoMag;
 	}
 
-	public Double getMontoImpuesto1() {
-		return montoImpuesto1;
+	public Double getMontoImpuestoMag() {
+		return montoImpuestoMag;
 	}
 
-	public void setMontoImpuesto1(Double montoImpuesto1) {
-		this.montoImpuesto1 = montoImpuesto1;
+	public void setMontoImpuestoMag(Double montoImpuestoMag) {
+		this.montoImpuestoMag = montoImpuestoMag;
 	}
 
 	public Double getPesoTransporte() {

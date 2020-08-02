@@ -29,10 +29,8 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.ClienteArticulo;
-import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.AgregarClienteArticuloCommand;
-import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 
 @Controller
 public class ClienteArticuloController {

@@ -231,7 +231,6 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
             getDescuento(detalle.getMontoDescuento())+
             "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
             xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
                "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
@@ -310,50 +309,8 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 		
       return resultado;
 	}
-	/**
-	 * 
-	 * @param telefono
-	 * @param codigoPais
-	 * @return
-	 */
-	private String getTelefono(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			 if(telefono > Constantes.ZEROS) {
-				 resultado = "<Telefono>" +
-		        "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO) + "</NumTelefono>";
-			      resultado += "</Telefono>";
-		   	 }		
-		} catch (Exception e) {
-			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		return resultado;
-	}
 	
-/**
-* 
-* @param telefono
-* @param codigoPais
-* @return
-*/
-	private String getFax(Integer telefono,Integer codigoPais) throws Exception {
-		String resultado = Constantes.EMPTY;
-		try {
-			if(telefono > Constantes.ZEROS) {
-				 resultado = "<Fax>" +
-		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
-			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";
-		        resultado += "</Fax>";
-			}
-			
-		} catch (Exception e) {
-			log.info("** Error  getFax: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-		return resultado;
-	}
+
 	
 	/**
 	 * 
@@ -413,23 +370,7 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
   	return resultado;
 }
   
- private String ubicacionReceptor(Factura factura) {
-  	
-  	String resultado = Constantes.EMPTY;
-  	if(factura.getCliente().getProvincia() !=null ) {
-  		if(!factura.getCliente().getProvincia().equals(Constantes.EMPTY)) {
-  	    resultado = "<Ubicacion>" +
-  	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-  	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-  	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
- // 	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-  	        "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-  	        "</Ubicacion>" ;
-  		}
-  	}
 
-  	return resultado;
-  }
   
   private String xmlIdentificacion (Factura factura) throws Exception {
   	String resultado = Constantes.EMPTY;

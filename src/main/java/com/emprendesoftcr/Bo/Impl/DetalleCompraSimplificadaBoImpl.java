@@ -13,11 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.DetalleCompraSimplificadaBo;
 import com.emprendesoftcr.Dao.DetalleCompraSimplificadaDao;
 import com.emprendesoftcr.modelo.CompraSimplificada;
-import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.DetalleCompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 @EnableTransactionManagement
 @Service("detalleCompraSimplificadaBo")

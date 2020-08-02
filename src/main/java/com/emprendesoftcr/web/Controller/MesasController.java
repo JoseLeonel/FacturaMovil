@@ -95,6 +95,7 @@ public class MesasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Cacheable(value="mesasCache")
 	@RequestMapping(value = "/ListarMesasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -144,6 +145,7 @@ public class MesasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Cacheable(value="mesasCache")
 	@RequestMapping(value = "/ListarMesasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -161,11 +163,13 @@ public class MesasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	@SuppressWarnings("rawtypes")
 	@CacheEvict(value="mesasCache",allEntries=true)
 	@RequestMapping(value = "/AgregarMesaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Mesa mesa, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -188,6 +192,7 @@ public class MesasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	@SuppressWarnings("rawtypes")
 	@CacheEvict(value="mesasCache",allEntries=true)
 	@RequestMapping(value = "/ModificarMesaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -227,6 +232,7 @@ public class MesasController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarMesaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Mesa mesa, BindingResult result, SessionStatus status) throws Exception {

@@ -227,7 +227,6 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
             getDescuento(detalle.getMontoDescuento())+
             "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
             xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
             "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
@@ -344,23 +343,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
   	return resultado;
 }
   
-private String ubicacionReceptor(Factura factura) {
-  	
-  	String resultado = Constantes.EMPTY;
-  	if(factura.getCliente().getProvincia() !=null ) {
-  		if(!factura.getCliente().getProvincia().equals(Constantes.EMPTY)) {
-  	    resultado = "<Ubicacion>" +
-  	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-  	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-  	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-  //	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-  	        "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-  	        "</Ubicacion>" ;
-  		}
-  	}
 
-  	return resultado;
-  }
   
   private String xmlIdentificacion (Factura factura) throws Exception {
   	String resultado = Constantes.EMPTY;

@@ -98,6 +98,7 @@ public class ProvinciasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarProvinciasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -152,6 +153,7 @@ public class ProvinciasController {
 	 * @param provincia
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarCantonesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarCatonesAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Provincia provincia) {
@@ -191,6 +193,7 @@ public class ProvinciasController {
 	 * @param canton
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarDistritosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarDistritosAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Canton canton) {
@@ -216,6 +219,7 @@ public class ProvinciasController {
 	 * @param canton
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarDistritosTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarDistritosTodosAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -234,6 +238,7 @@ public class ProvinciasController {
 	 * @param distrito
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarBarriosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarBarriosAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Distrito distrito) {
@@ -258,6 +263,7 @@ public class ProvinciasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarBarriosTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarBarriosTodosAjax(HttpServletRequest request, HttpServletResponse response) {

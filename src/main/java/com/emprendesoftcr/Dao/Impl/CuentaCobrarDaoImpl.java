@@ -205,10 +205,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			}
 		}
 		if (cliente != null) {
-			if (!cliente.equals(Constantes.COMBO_TODOS)) {
 				hql.append("and obj.cliente = :cliente ");
-
-			}
 		}
 		hql.append("and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
@@ -219,10 +216,8 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			}
 		}
 		if (cliente != null) {
-			if (!cliente.equals(Constantes.COMBO_TODOS)) {
 				query.setParameter("cliente", cliente);
 
-			}
 		}
 
 		query.setParameter("empresa", empresa);
@@ -244,10 +239,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			}
 		}
 		if (cliente != null) {
-			if (!cliente.equals(Constantes.COMBO_TODOS)) {
 				hql.append("and obj.cliente = :cliente ");
-
-			}
 		}
 		Query query = entityManager.createQuery(hql.toString());
 		if (estado != null) {
@@ -257,10 +249,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			}
 		}
 		if (cliente != null) {
-			if (!cliente.equals(Constantes.COMBO_TODOS)) {
 				query.setParameter("cliente", cliente);
-
-			}
 		}
 		query.setParameter("empresa", empresa);
 		return query.getResultList();

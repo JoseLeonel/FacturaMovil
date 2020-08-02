@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
 
@@ -36,9 +36,9 @@
 	        <!-- Content Header (Page header) -->
 	        <section class="content-header" th:fragment="header"></section>
 						        <!-- Main content -->
-						        <section class="content">
+		      <section class="content">
 					<!-- Inicio Filtros-->
-					<div class="mostrarListadoDeFacturas "  id="mostrarListadoDeFacturas" scrlollT>
+					<div class="mostrarListadoDeFacturas  scrlollT"  id="mostrarListadoDeFacturas" >
 					  <!-- Titulos -->
 					    <div  class="row "  >
 					        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -145,7 +145,7 @@
 					                        <div class="planel-body" >
 					                            <div class="row " >        
 					                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-					                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="97%">
+					                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   >
 					                                        <thead>
 					                                           <tr>
 					                                                <th style="width:6%" class = "table-header" th:text="#{usuario.nombreUsuario}"></th>

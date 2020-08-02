@@ -40,7 +40,6 @@ import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.Usuario;
@@ -101,11 +100,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setEstado(compraCommand.getEstado());
 			compra.setFormaPago(compraCommand.getFormaPago());
 			if (compra.getFechaCompra() != null) {
-				if (compra.getFechaCompra().equals(Constantes.EMPTY)) {
-					compra.setFechaCompra(new Date());
-				} else {
 					compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
-				}
 			} else {
 				compra.setFechaCompra(new Date());
 			}

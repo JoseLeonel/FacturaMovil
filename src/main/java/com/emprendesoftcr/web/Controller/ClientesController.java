@@ -281,6 +281,9 @@ public class ClientesController {
 						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
+						if (clienteCommand.getPorcentajeExoneracion() > Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
+							result.rejectValue("porcentajeExoneracion", "error.cliente.maximo.porcentajeExoneracion");
+						}
 					}
 
 				}
@@ -474,6 +477,10 @@ public class ClientesController {
 						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
+						if (clienteCommand.getPorcentajeExoneracion() > Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
+							result.rejectValue("porcentajeExoneracion", "error.cliente.maximo.porcentajeExoneracion");
+						}
+
 					}
 
 				}

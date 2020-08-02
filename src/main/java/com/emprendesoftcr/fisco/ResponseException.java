@@ -7,7 +7,12 @@ package com.emprendesoftcr.fisco;
  */
 public class ResponseException extends Exception {
 
-    public static ResponseException instance(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+		public static ResponseException instance(String message) {
         return new ResponseException(message);
     }
 

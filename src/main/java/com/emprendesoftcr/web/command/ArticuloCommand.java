@@ -63,12 +63,12 @@ public class ArticuloCommand {
 
 	private String			fechaUltimaCompra;
 
-	private String			tipoImpuesto1;
+	private String			tipoImpuestoMag;
 
-	private Double			impuesto1;
+	private Double			impuestoMag;
 
 	private String			codigoTarifa;
-	private String			codigoTarifa1;
+	private String			codigoTarifaMag;
 	private Integer						baseImponible;
 	private Double cantidad1;
 
@@ -128,15 +128,15 @@ public class ArticuloCommand {
 		this.totalGanancia = articulo.getGananciaTotalPublico();
 		this.precioPublico = articulo.getPrecioPublico();
 		this.totalImpuesto = articulo.getTotalImpuesto();
-		this.impuesto1 = articulo.getImpuesto1();
+		this.impuestoMag = articulo.getImpuestoMag();
 		this.fechaUltimaCompra = articulo.getFechaUltimaCompraSTR();
 		this.consecutivoCompra = articulo.getConsecutivoCompra();
 		this.pesoTransporte = articulo.getPesoTransporte();
-		this.tipoImpuesto1 = articulo.getTipoImpuesto1();
+		this.tipoImpuestoMag = articulo.getTipoImpuestoMag();
 		this.created_atSTR = articulo.getCreated_atSTR();
 		this.updated_atSTR = articulo.getUpdated_atSTR();
 		this.codigoTarifa = articulo.getCodigoTarifa();
-		this.codigoTarifa1 = articulo.getCodigoTarifa1();
+		this.codigoTarifaMag = articulo.getCodigoTarifaMag();
 		this.baseImponible = articulo.getBaseImponible();
 
 	}
@@ -180,12 +180,12 @@ public class ArticuloCommand {
 		this.codigoTarifa = codigoTarifa;
 	}
 
-	public String getCodigoTarifa1() {
-		return codigoTarifa1;
+	public String getCodigoTarifaMag() {
+		return codigoTarifaMag;
 	}
 
-	public void setCodigoTarifa1(String codigoTarifa1) {
-		this.codigoTarifa1 = codigoTarifa1;
+	public void setCodigoTarifaMag(String codigoTarifaMag) {
+		this.codigoTarifaMag = codigoTarifaMag;
 	}
 
 	public String getFechaUltimaCompra() {
@@ -520,20 +520,20 @@ public class ArticuloCommand {
 		this.consecutivoCompra = consecutivoCompra;
 	}
 
-	public String getTipoImpuesto1() {
-		return tipoImpuesto1;
+	public String getTipoImpuestoMag() {
+		return tipoImpuestoMag;
 	}
 
-	public void setTipoImpuesto1(String tipoImpuesto1) {
-		this.tipoImpuesto1 = tipoImpuesto1;
+	public void setTipoImpuestoMag(String tipoImpuestoMag) {
+		this.tipoImpuestoMag = tipoImpuestoMag;
 	}
 
-	public Double getImpuesto1() {
-		return impuesto1;
+	public Double getImpuestoMag() {
+		return impuestoMag;
 	}
 
-	public void setImpuesto1(Double impuesto1) {
-		this.impuesto1 = impuesto1;
+	public void setImpuestoMag(Double impuestoMag) {
+		this.impuestoMag = impuestoMag;
 	}
 
 	public String getCreated_atSTR() {

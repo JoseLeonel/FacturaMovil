@@ -218,7 +218,8 @@ public final class FacturaElectronicaUtils {
 		return resultado;
 	}
 	
-	 public static String digestSha1(String txt) {
+	 @SuppressWarnings("deprecation")
+	public static String digestSha1(String txt) {
 			String resultado = Constantes.EMPTY;
 			try {
 				resultado = BaseEncoding.base64().encode(Hashing.sha1().hashString(txt, StandardCharsets.UTF_8).asBytes());
@@ -422,6 +423,7 @@ public final class FacturaElectronicaUtils {
 	 * @param prc Proceso desde el que se extraer� el texto
 	 * @return Texto contenido en el objeto Process
 	 */
+	@SuppressWarnings("resource")
 	public static String processToString(Process prc) {
 		Scanner s = new Scanner(prc.getInputStream()).useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";

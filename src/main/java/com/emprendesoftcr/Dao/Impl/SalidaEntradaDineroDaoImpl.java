@@ -6,8 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.SalidaEntradaDineroDao;
@@ -19,7 +17,6 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 	@PersistenceContext
 	EntityManager entityManager;
 	
-	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void agregar(SalidaEntradaDinero salidaEntradaDinero) {
@@ -29,6 +26,7 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 
 	
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<SalidaEntradaDinero> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja) {
 		Query query = entityManager.createQuery("select obj from SalidaEntradaDinero obj where obj.usuarioCaja = :usuarioCaja ");
@@ -38,6 +36,7 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<SalidaEntradaDinero> buscarPorUsuarioCajaAndTipo(UsuarioCaja usuarioCaja, Integer tipo) {
 		Query query = entityManager.createQuery("select obj from SalidaEntradaDinero obj where obj.usuariocaja.id = :idUsuarioCaja and obj.tipo = :tipo ");

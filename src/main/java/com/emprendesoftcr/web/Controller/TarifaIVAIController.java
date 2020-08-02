@@ -52,7 +52,7 @@ public class TarifaIVAIController {
 	@Cacheable(value="tarifasIVACache")
 	@RequestMapping(value = "/ListarTarifasIVAIAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable<?> listarAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "TarifaIVAI");

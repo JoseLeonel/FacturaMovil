@@ -138,6 +138,7 @@ public class Constantes {
 	public static final String					URL_ALAJUELA_CALLBACK																					= "http://www.emprendesoftcr.com:8081/service/callback.do";
 	public static final String					URL_GUANACASTE_CALLBACK																				= "http://www.emprendesoftcr.com:8084/service/callback.do";
 	public static final String					URL_INVENTARIO_CALLBACK																				= "http://www.emprendesoftcr.com:8080/service/callback.do";
+//	public static final String					URL_INVENTARIO_CALLBACK																				= "http://facturarcr.emprendesoftcr.com:8080/v1/service/callback.do";
 	public static final String					URL_JACO_CALLBACK																							= "http://www.emprendesoftcr.com:8082/service/callback.do";
 	public static final String					URL_JACODOS_CALLBACK																					= "http://www.emprendesoftcr.com:8086/service/callback.do";
 	public static final String					URL_SANTA_ANA_CALLBACK																				= "http://www.emprendesoftcr.com:8083/service/callback.do";
@@ -365,6 +366,7 @@ public class Constantes {
 	public static final Long						ZEROS_LONG																										= 0l;
 	public static final Float						ZEROS_FLOAT																										= 0F;
 	public static final Double					ZEROS_DOUBLE																									= 0D;
+	public static final Double			PORCENTAJE_MAXIMO_EXONERACION																									= 13D;
 	public static final Double					IMPUESTO_13																										= 13D;
 	public static final String					SEMI_COLON																										= ";";
 	public static final String					PUNTO																													= ".";

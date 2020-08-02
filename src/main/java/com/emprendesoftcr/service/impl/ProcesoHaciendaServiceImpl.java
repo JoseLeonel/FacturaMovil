@@ -107,9 +107,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento() != null ? d.getMontoDescuento() : Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
 																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto() != null ? d.getImpuesto() : Constantes.ZEROS_DOUBLE);
-																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() != null ? d.getImpuesto1() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.set_impuesto1( Constantes.ZEROS_DOUBLE);
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
-																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null ? Constantes.EMPTY : d.getTipoImpuesto());
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
@@ -607,7 +606,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/30 03 * * ?")
+	@Scheduled(cron = "0 0/45 02 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -618,6 +617,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 		Integer annno = new Integer(anno.getValue());
 		graficoVentasBo.actualizarGraficoVenta(annno, month);
+		graficoVentasBo.actualizarGraficoVenta(annno, month-1);
 		log.info("fin Totales de Grafico  {}", new Date());
 
 	}
@@ -672,13 +672,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
-				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				//	recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					/// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1520,7 +1520,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

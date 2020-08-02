@@ -49,7 +49,8 @@ public class ClientPost {
         }
     }
 
-    public Map send (String serviceUrl, MultivaluedMap bodyParams, MediaType contentType, Map<String, String> headers) {
+    @SuppressWarnings("rawtypes")
+		public Map send (String serviceUrl, MultivaluedMap bodyParams, MediaType contentType, Map<String, String> headers) {
         try {
             Client client = Client.create();
             WebResource webResource = client.resource(serviceUrl);

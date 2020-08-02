@@ -94,6 +94,7 @@ public class MotivoSalidasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarMotivoSalidasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -115,6 +116,7 @@ public class MotivoSalidasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarMotivoSalidasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listaraActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -138,10 +140,12 @@ public class MotivoSalidasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarMotivoSalidaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute MotivoSalida motivoSalida, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -177,6 +181,7 @@ public class MotivoSalidasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarMotivoSalidaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute MotivoSalida motivoSalida, BindingResult result, SessionStatus status) throws Exception {
@@ -226,6 +231,7 @@ public class MotivoSalidasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarMotivoSalidaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute MotivoSalida motivoSalida, BindingResult result, SessionStatus status) throws Exception {
@@ -239,11 +245,14 @@ public class MotivoSalidasController {
 
 	private static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
 			private static class MOTIVOSALIDA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoSalida.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoSalida.modificado.correctamente");
 			}
 		}
@@ -252,6 +261,7 @@ public class MotivoSalidasController {
 
 			private static class MOTIVOSALIDA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.motivoSalida.noExiste");
 			}
 		}

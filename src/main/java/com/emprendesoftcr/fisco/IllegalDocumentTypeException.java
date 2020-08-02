@@ -7,7 +7,11 @@ package com.emprendesoftcr.fisco;
  */
 public class IllegalDocumentTypeException extends Exception {
     
-    private final String type;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+		private final String type;
     
     public static IllegalDocumentTypeException instance(String message, String type) {
         return new IllegalDocumentTypeException(message, type);

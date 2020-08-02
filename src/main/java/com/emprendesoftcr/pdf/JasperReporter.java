@@ -32,8 +32,6 @@ public class JasperReporter {
     private JasperReport _report;
     private JRTableModelDataSource _dataSource;
    
-    private InputStream _logo;
-    private InputStream _qr;
     private HashMap<String,Object> _parameters;
     
     

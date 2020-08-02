@@ -1,6 +1,5 @@
 package com.emprendesoftcr.components;
 
-import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static com.emprendesoftcr.fisco.Keys.POST_HEADERS;
 import static com.emprendesoftcr.fisco.Keys.POST_RESPONSE;
 import static com.emprendesoftcr.fisco.Keys.POST_STATUS_CODE;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
-import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.google.common.collect.ImmutableMap;

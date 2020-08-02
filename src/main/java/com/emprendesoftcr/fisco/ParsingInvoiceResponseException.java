@@ -7,7 +7,12 @@ package com.emprendesoftcr.fisco;
  */
 public class ParsingInvoiceResponseException extends Exception {
 
-    public static ParsingInvoiceResponseException instance(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+		public static ParsingInvoiceResponseException instance(String message) {
         return new ParsingInvoiceResponseException(message);
     }
 

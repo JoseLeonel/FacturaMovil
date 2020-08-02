@@ -19,33 +19,32 @@
 	        <section class="content">
 				  <lista-proformas></lista-proformas>
 				   <proforma-imprimir></proforma-imprimir>
-				    <div id="mostrarListado"> 
-				    <!-- Titulos -->
-				    <div  class="row "  >
-				        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				            <h1 > <i class="fa fa-calculator" th:text="#{facturas.proformas}"></i ></h1>
-				        </div>
-				        
-				    </div>
-				     <!-- Listado  -->
-				      <!-- Listado  -->
-				   <div classs="container">
-				        <form id = "filtros" name ="filtros" >
-						  <div class= "row">
-				               	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-				                     <div class="form-group">
-				                         <label th:text="#{combo.estado.titulo}"> </label>  
-				                         <select  class="form-control estado" id="estado" name="estado"  >
-				                             
-				                         </select>
-				                     </div>
-				                 </div>
-				          </div>    
-				          <br>     
-						</form>
+				 <div id="mostrarListado"> 
+						    <!-- Titulos -->
+						    <div  class="row "  >
+						        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						            <h1 > <i class="fa fa-calculator" th:text="#{facturas.proformas}"></i ></h1>
+						        </div>
+						        
+						    </div>
+						     <!-- Listado  -->
+						      <!-- Listado  -->
+						        <form id = "filtros" name ="filtros" >
+								  <div class= "row">
+						               	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						                     <div class="form-group">
+						                         <label th:text="#{combo.estado.titulo}"> </label>  
+						                         <select  class="form-control estado" id="estado" name="estado"  >
+						                             
+						                         </select>
+						                     </div>
+						                 </div>
+						          </div>    
+						         
+								</form>
                         <div class="row" >        
                              <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                   <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                   <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   >
                                         <thead>
                                          <tr>
                                              <th style="width:4%" class = "table-header" th:text="#{factura.id}"></th>
@@ -75,11 +74,11 @@
 	                                            </tr>
 	                                       </tfoot>
 	                                  </table>
-	                             </div>
+	                            
 	                        </div>   
 					    <!-- Fin del Listado -->
 					</div>
-				 	        
+			</div>	 	        
 	        
             </section>    
  		</div>

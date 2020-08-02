@@ -42,6 +42,7 @@ public class RolesController {
 	public void initBinder(WebDataBinder binder) {
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRolesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idCuentaCobrar) {
