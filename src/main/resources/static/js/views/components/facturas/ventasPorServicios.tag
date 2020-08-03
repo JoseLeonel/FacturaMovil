@@ -983,14 +983,14 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : 1,
        pesoPrioridad   : 1,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : " ",
        iva             : parseFloat(self.articulo.impuesto),
-       iva1            : parseFloat(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        cantidad        : parseFloat(cantidad),
        precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
-       impuesto1        : parseFloat(self.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : parseFloat(montoImpuesto),
        montoImpuesto1  : 0,
        montoDescuento  : 0,
@@ -1073,24 +1073,18 @@ function __calculate() {
     self.cantArticulos      = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
         totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
-        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
         totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
         totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
         totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
-        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
         totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
+        totalExento             += e.impuesto == 0 ?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         montoExoneracion        += parseFloat(e.montoExoneracion) 
-        montoExoneracion        += parseFloat(e.montoExoneracion1) 
     });
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)

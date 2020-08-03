@@ -517,11 +517,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
-		if(porcentajeExoneracion.equals(13)) {
-			 if(impuesto < Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
-				 porcentajeExoneracion = impuesto.intValue();
-			 } 
-		}
+		
 		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			if (!tipoImpuesto.equals(Constantes.EMPTY)) {
@@ -568,9 +564,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 		if (tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
 			return Constantes.ZEROS_DOUBLE;
 		}
-		if (porcentajeExoneracion == 100) {
-			return montoImpuesto;
-		}
+	
 		//Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
 		Double resultado = montoImpuesto * porcentajeExoneracion;
 		resultado = resultado /100d;
@@ -579,20 +573,14 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 	
 	public static Double getMontoExoneracionSubTotal(String tipoDocumentoExonerado,Double impuesto, Integer porcentajeExoneracion, Double subTotal) {
 		impuesto = impuesto == null? Constantes.ZEROS_DOUBLE:impuesto;
-		if(porcentajeExoneracion.equals(13)) {
-			 if(impuesto < Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
-				 porcentajeExoneracion = impuesto.intValue();
-			 } 
-		}
+		
 		subTotal = subTotal == null ? Constantes.ZEROS_DOUBLE : subTotal;
 		tipoDocumentoExonerado = tipoDocumentoExonerado == null ? Constantes.EMPTY : tipoDocumentoExonerado;
 		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
 		if (tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
 			return Constantes.ZEROS_DOUBLE;
 		}
-		if (porcentajeExoneracion == 13) {
-			return subTotal;
-		}
+	
 		//Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
 		Double resultado = subTotal * porcentajeExoneracion;
 		resultado = resultado / 100d;
@@ -758,11 +746,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 	
 	public static Double getTotalMercExoneradaSubTotal(String tipoImpuesto, String unidadMedida,Integer porcentajeExonerado,Double impuesto,Double montoTotal) {
 		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
-		if(porcentajeExonerado.equals(13)) {
-			 if(impuesto < Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
-				 porcentajeExonerado = impuesto.intValue();
-			 } 
-		}
+		
 		
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		porcentajeExonerado = porcentajeExonerado == null ? Constantes.ZEROS : porcentajeExonerado;
@@ -805,11 +789,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 
 	public static Double getTotalServExoneradoSubTotal(String tipoImpuesto, String unidadMedida,Integer porcentajeExonerado,Double impuesto,Double montoTotal) {
 		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
-		if(porcentajeExonerado.equals(13)) {
-			 if(impuesto < Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
-				 porcentajeExonerado = impuesto.intValue();
-			 } 
-		}
+	
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		porcentajeExonerado = porcentajeExonerado == null ? Constantes.ZEROS : porcentajeExonerado;
 		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
@@ -975,11 +955,7 @@ public static Cell getCelSTR(Cell cell,Map<String, CellStyle> styles, String val
 		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
 		impuesto = impuesto == null ? Constantes.ZEROS_DOUBLE : impuesto;
-		if(porcentajeExoneracion.equals(13)) {
-			 if(impuesto < Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
-				 porcentajeExoneracion = impuesto.intValue();
-			 } 
-		}
+		
 		porcentajeExoneracion = porcentajeExoneracion == null ? Constantes.ZEROS : porcentajeExoneracion;
 		Boolean esMercancia = Boolean.TRUE;
 		if (tipoImpuesto.equals(Constantes.EMPTY) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {

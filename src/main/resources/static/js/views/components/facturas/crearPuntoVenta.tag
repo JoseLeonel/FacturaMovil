@@ -2410,12 +2410,12 @@ function cargarDetallesFacturaEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
+            tipoImpuesto1   : "",
             descripcion     : modeloTabla.descripcion,
             cantidad        : __valorNumerico(modeloTabla.cantidad),
             precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
             impuesto        : __valorNumerico(modeloTabla.impuesto),
-            impuesto1       : __valorNumerico(modeloTabla.impuesto1),
+            impuesto1       : 0,
             montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
             montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
             montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
@@ -3246,15 +3246,15 @@ function setItemNuevo(cantidad){
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : "",
        iva             : __valorNumerico(self.articulo.impuesto),
-       iva1            : __valorNumerico(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
        montoImpuesto1  : __valorNumerico(montoImpuesto1),
        impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
@@ -3282,9 +3282,9 @@ function setItemNuevo(cantidad){
 }
 
 function verificarTarifa(){
-    if(__valorNumerico(self.articulo.impuesto) > 0 ||  __valorNumerico(self.articulo.impuesto1) > 0){
+    if(__valorNumerico(self.articulo.impuesto) > 0 ){
        if (self.articulo.tipoImpuesto =='01' ||  self.articulo.tipoImpuesto =='07'){
-            if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
+            if (self.articulo.codigoTarifa == "" ){
                 return true
             }
 

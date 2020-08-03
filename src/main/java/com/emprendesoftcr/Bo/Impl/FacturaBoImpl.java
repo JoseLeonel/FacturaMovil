@@ -849,8 +849,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
 			detalle.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
-			detalle.setPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : detalleFacturaCommand.getPorcentajeExoneracion());
-
+			 
+			detalle.setPorcentajeExoneracion(getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalle.getImpuesto()));
+			
 			detalle.setMontoTotal(Utils.getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
 			detalle.setMontoDescuento(Utils.getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
 			detalle.setSubTotal(Utils.getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
@@ -875,6 +876,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
 			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
 			montoTotalLinea = Utils.getMontoTotalLinea(detalle.getSubTotal(), detalle.getImpuestoNeto());
+			detalle.setMontoTotalLinea(montoTotalLinea);
 
 			// cambios de doble impuesto
 
@@ -953,6 +955,25 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuestoServicio(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalImpServicios) ? Utils.roundFactura(totalImpServicios, 5) : totalImpServicios));
 		factura.setTotalComprobante(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante));
 
+	}
+	
+	private Integer getPorcentajeExoneracion(Integer porcentajeExoneracion, Double impuesto) {
+		Integer valor = Constantes.ZEROS;
+		
+		if(porcentajeExoneracion != null) {
+			if(porcentajeExoneracion > Constantes.ZEROS) {
+				if(impuesto.intValue() < porcentajeExoneracion ) {
+           valor = impuesto.intValue(); 					
+				}else {
+					valor = porcentajeExoneracion;
+				}
+			}
+			
+			
+		}
+		
+		
+		return valor;
 	}
 
 	/**

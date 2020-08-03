@@ -63,7 +63,7 @@
 	}
 	
 	<
-	style>.tituloFacturas {
+   .tituloFacturas {
 		font-size: 24px;
 		color: black;
 	}
@@ -88,6 +88,38 @@
 		height: inherit;
 		overflow-x: hidden;
 		overflow-y: auto;
+	}
+		#titulo-encabezado {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+   #totalsGenerales {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	
+	#totalsGenerales>div {
+		margin-right: 2px;
+	}
+	
+	#totalsGenerales>div>div {
+		display: flex;
+		flex-direction: column;
+	}
+	
+#totalsGenerales>div>div>input {
+		width: 200px;
+		background-color: #ecf0f5 !important;
+		height: 30px;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 16px;
+		/*   font-weight: 900; */
+	}
+	
+#totalsGenerales>div>div>span {
+		font-size: 18px;
+		font-weight: 600;
 	}
 </style>
 </head>
@@ -115,8 +147,8 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/articulos/totalInventario.js}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/articulos/totalInventarios.tag}" ></script>
+<script type="text/javascript" th:src="@{/js/views/articulos/totalInventario.js?v=1}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/articulos/totalInventarios.tag?v=1}" ></script>
 
 
 </body>

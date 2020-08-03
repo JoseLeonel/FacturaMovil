@@ -2857,13 +2857,12 @@ function __nuevoArticuloAlDetalle(cantidad){
       
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto1) 
     precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
+    var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
@@ -2875,17 +2874,17 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : " ",
        iva             : __valorNumerico(self.articulo.impuesto),
-       iva1            : __valorNumerico(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       impuesto1        : "",
        montoImpuesto   : __valorNumerico(montoImpuesto),
-       montoImpuesto1  : __valorNumerico(montoImpuesto1),
+       montoImpuesto1  : 0,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),
@@ -3106,15 +3105,15 @@ function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
-    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
+    montoImpuesto1             = 0
+    var resultadoMontoImpuesto1 = subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
+    var montoTotalLinea        = subTotal + montoImpuesto
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
     self.item.montoImpuesto    = montoImpuesto
-    self.item.montoImpuesto1   = montoImpuesto1
+    self.item.montoImpuesto1   = 0
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
     self.totalGananciaByProducto = formatoDecimales(__valorNumerico(self.item.ganancia),2)

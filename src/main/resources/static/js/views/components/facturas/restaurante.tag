@@ -3579,13 +3579,13 @@ function cargarDetallesFacturaEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
+            tipoImpuesto1   : "",
             descripcion     : modeloTabla.descripcion,
             cantidad        : __valorNumerico(modeloTabla.cantidad),
             precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
             impuesto        : __valorNumerico(modeloTabla.impuesto),
             montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
-            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoImpuesto1  : 0,
             montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
             porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
             subTotal        : __valorNumerico(modeloTabla.subTotal),
@@ -4092,13 +4092,13 @@ function __nuevoArticuloAlDetalle(cantidad){
       
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto1) 
+    resultaMontoImpuesto = 0 
     precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
+    var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
@@ -4110,15 +4110,15 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : "",
        iva             : __valorNumerico(self.articulo.impuesto),
-       iva1            : __valorNumerico(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
        montoImpuesto1  : __valorNumerico(montoImpuesto1),
        montoDescuento  : 0,
@@ -4346,7 +4346,7 @@ function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
+    montoImpuesto1             = 0
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
