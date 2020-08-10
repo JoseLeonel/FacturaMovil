@@ -217,6 +217,24 @@ function __ComboImpuestos(){
     return impuestos;
 }
 
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __ComboImpuestosMaG(){
+    var impuestos =[]
+    impuestos.push({
+        codigo: "",
+        descripcion:"Exento"
+     });
+
+    impuestos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("tipo.impuesto.ventas")
+     });
+   
+    return impuestos;
+}
+
 
 
 var myControlPago;

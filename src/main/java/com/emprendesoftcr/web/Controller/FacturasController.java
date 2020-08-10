@@ -20,18 +20,25 @@ import java.util.Map;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -105,6 +112,7 @@ import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
+import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -113,6 +121,7 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -346,6 +355,13 @@ public class FacturasController {
 
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
+	
+	
+	
+	@Autowired
+  public DataSource dataSource;
+	
+  private JdbcTemplate jdbcTemplate;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -453,6 +469,11 @@ public class FacturasController {
 	@RequestMapping(value = "/ListaFacturas", method = RequestMethod.GET)
 	public String listaFacturas(ModelMap model) {
 		return "views/facturas/listaFacturas";
+	}
+	
+	@RequestMapping(value = "/ventaByCategoria", method = RequestMethod.GET)
+	public String ventaByCategoria(ModelMap model) {
+		return "views/facturas/vetasbycategoria";
 	}
 
 	/**
@@ -896,6 +917,156 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
+	
+	
+  @RequestMapping(value = "/ListaVentasByCategoria.do", method = RequestMethod.GET, headers = "Accept=application/json")
+  @ResponseBody
+  public RespuestaServiceDataTable eliminarPedido(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado,@RequestParam Long idCaegoria){
+    Map<String, Object> response_sp = new HashMap<>();
+    RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+    Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+    Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+  	  jdbcTemplate = new JdbcTemplate(dataSource);
+//      SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("cons_vent_cate");
+//      Map<String, Object> parameters = new HashMap<String, Object>();
+//     
+//      parameters.put("fecha_inicial", inicio1);
+//      
+//      parameters.put("fecha_final", fin1);
+//      parameters.put("idempresa", usuarioSesion.getEmpresa().getId());
+//      parameters.put("idcategoria", idCaegoria);
+//      SqlParameterSource in = new MapSqlParameterSource(parameters); 
+//      Map<String, Object> returnSp = simpleJdbcCall.execute(in);
+//      
+      
+      
+      
+      
+      
+      String sql = "select  cat.id, cat.descripcion as nom_cat ,det.cod_tarifa,det.impuesto,det.tipo_impuesto,fact.estado,  \n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.cantidad,2) * -1,ROUND(det.cantidad,2)),0)) cantidad,  \n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND((det.costo * det.cantidad) * fact.tipo_cambio,2) * -1,ROUND(det.costo * det.cantidad,2)) * tipo_cambio,0)) as total_costo,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',det.imp_neto *  -1,det.imp_neto ),0) * fact.tipo_cambio) as total_neto,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.monto_descuento,2) * - 1 * fact.tipo_cambio,ROUND(det.monto_descuento,2)),0)) total_desc,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.monto_total,2) * -1 * fact.tipo_cambio,ROUND(det.monto_total,2)),0)) mont_total,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.sub_total,2) * -1 * fact.tipo_cambio,ROUND(det.sub_total,2)),0)) sub_tota,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',det.monto_total_linea * -1 ,det.monto_total_linea),0) * fact.tipo_cambio) as total_linea,\n" + 
+      		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.mont_exone,2) * -1 * fact.tipo_cambio,ROUND(det.mont_exone,2)),0)) mont_exon\n" + 
+      		"                    from detalles det \n" + 
+      		"                    inner join facturas fact on  fact.id = det.factura_id \n" + 
+      		"                    inner join articulos art on art.codigo = det.codigo  and fact.empresa_id = art.empresa_id \n" + 
+      		"                    inner join categorias  cat on cat.id = art.categoria_id  \n" + 
+      		"                    where  fact.estado = :estado  \n" + 
+      		"                           and fact.empresa_id = :idempresa\n" + 
+      		"                           and cat.id = " + 
+      		"                           and fact.fecha_emision BETWEEN :fecha_inicial  and :fecha_final\n" + 
+      		"                    group by cat.id ,cat.descripcion,det.tipo_impuesto,det.cod_tarifa,det.impuesto,fact.estado \n" + 
+      		"                    order by cat.descripcion ,det.tipo_impuesto,det.cod_tarifa ";
+      
+      MapSqlParameterSource parameters = new MapSqlParameterSource();
+      parameters.addValue("fecha_inicial", inicio1);
+      parameters.addValue("fecha_final",fin1);
+      parameters.addValue("idempresa", usuarioSesion.getEmpresa().getId());
+    	if (estado > Constantes.ZEROS) {
+    		parameters.addValue("estado",estado);
+  		} else {
+  			sql = sql.replaceAll(" fact.estado = :estado", " fact.estado != 3 and fact.estado != 1 and fact.estado != 11 ");
+  		}
+    	if (idCaegoria > Constantes.ZEROS) {
+    		
+    		sql = sql.replaceAll("and cat.id = ", "and cat.id = :idcaegoria ");
+    		parameters.addValue("idcaegoria",idCaegoria);
+  		} else {
+  			sql = sql.replaceAll("and cat.id = ", " ");
+  		}
+      
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+      List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+      
+       
+      @SuppressWarnings("rawtypes")
+			ArrayList arrayList = new ArrayList();
+      arrayList = (ArrayList) listaObjetos;
+//      arrayList = (ArrayList) returnSp.get("#result-set-1");
+      JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+  		ArrayList<VentasByCategoriasCommand> detallesFacturaCommand = new ArrayList<>();
+  		Gson gson = new Gson();
+			if (jsonArray1 != null) {
+				for (int i = 0; i < jsonArray1.size(); i++) {
+					VentasByCategoriasCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), VentasByCategoriasCommand.class);
+					detallesFacturaCommand.add(ventasByCategoriasCommand);
+				}
+			}
+        respuestaService.setRecordsTotal(0l);
+  		respuestaService.setRecordsFiltered(0l);
+  		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+  			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+  		}
+  		respuestaService.setAaData(detallesFacturaCommand);
+  		return respuestaService;
+  
+    
+  }
+	
+  
+  @Secured({ "ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER", "ROLE_INVENTARIO", "ROLE_INVENTARIO_READ", "ROLE_INVENTARIO_READ_WRITER_CREAR_PEDIDOS" })
+  @PostMapping(value = "/obtener-pedidos-activos")
+  public @ResponseBody List<Map<String, Object>> obtenerPedidosActivos(HttpSession session){
+    if (session.getAttribute("SESSION_EMPRESA_ID") != null) {
+      jdbcTemplate = new JdbcTemplate(dataSource);
+      MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("emisorId", Long.parseLong(session.getAttribute("SESSION_EMPRESA_ID").toString()));
+        String sql = "SELECT id, secuencia_factura_compra, codigo_proveedor, nombre_completo, observaciones, proveedor_id FROM v_orden_compra WHERE estado_orden_compra = 'A' AND emisor_id=:emisorId";
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+        List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);    
+        return listaObjetos;
+    }else {
+      return null;
+    }
+  }
+  
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	@RequestMapping(value = "/ListaVentasByCategoria1.do", method = RequestMethod.GET, headers = "Accept=application/json")
+//	@ResponseBody
+//	public RespuestaServiceDataTable listarFacturasByCategoria(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado,@RequestParam Long idCaegoria) {
+//		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+//		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+//		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+//		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+//		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+//			if (fechaFinalP != null) {
+//				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+//			}
+//		}
+//		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+//		String inicio1 = dateFormat1.format(fechaInicioP);
+//		String fin1 = dateFormat1.format(fechaFinalP);
+////		Collection<ConsultaByCategoriaNative> facturas = consultasNativeBo.findVentasByCategoria(usuarioSesion.getEmpresa().getId(),idCaegoria,inicio1,fin1,estado);
+////		List<ConsultaByCategoriaNative> listar = ventaRepository.findVenasByCategorias(inicio1, fin1, usuarioSesion.getEmpresa().getId(), idCaegoria);
+////		List<Object> solicitudList = new ArrayList<Object>();
+////		for (ConsultaByCategoriaNative consultaByCategoriaNative : facturas) {
+////			// no se carga el usuario del sistema el id -1
+////			if (consultaByCategoriaNative.getId().longValue() > 0L) {
+////				solicitudList.add(consultaByCategoriaNative);
+////			}
+////		}
+//		respuestaService.setRecordsTotal(0l);
+//		respuestaService.setRecordsFiltered(0l);
+//		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+//			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+//		}
+//		respuestaService.setAaData(listar);
+//		return respuestaService;
+//	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

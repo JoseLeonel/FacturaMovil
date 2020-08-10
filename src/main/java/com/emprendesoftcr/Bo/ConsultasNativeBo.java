@@ -91,4 +91,6 @@ public interface ConsultasNativeBo {
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa);
 
 	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo, String tipoDoc, String numeroFactura);
+	
+	
 }

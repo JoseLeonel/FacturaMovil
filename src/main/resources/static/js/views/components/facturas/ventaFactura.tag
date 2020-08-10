@@ -828,6 +828,7 @@
             </div>
             <div class="modal-body">
                 <form id="formularioAgregarCliente" name ="formularioAgregarCliente" >
+                    <input type="hidden" id='tipoMag'  name='tipoMag'  value="0" >
                     <div class="row">
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
@@ -898,6 +899,7 @@
     self.mensajesBackEnd       = []
     self.error                 = false
     self.comboEstados          = []
+    self.estadosMag          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
      self.validarRolCommand = {
@@ -1327,8 +1329,10 @@ function modalEntradaSalidaDinero(tipo){
 
 
 __ClienteNuevo(){
+    
     __nuevoCliente()
 }
+
 /**
 * Camps requeridos
 **/

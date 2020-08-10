@@ -163,6 +163,31 @@
                 </div>
             </div>        
         </div>   
+         <div class="row" >  
+            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" >
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5">XII del Decreto  ejecutivo NO. 41779 .Pesca y Agropecuarios Ley  </span> </h4>
+                            </div>
+                        </a>
+                        <div id="collapse3" class="panel-collapse collapse abrirDatos1">
+                            <div class="panel-body">
+                                <div class="row">    
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label  >Autorizacion del Mag</label>
+                                        <select  class="form-control tipoMag" id="tipoMag" name="tipoMag"   >
+                                            <option  each={estadosMag}  value="{codigo}" selected="{cliente.tipoMag ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>   
     </form>            
 </div>
 
@@ -178,6 +203,8 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.comboTipoDocumentoExonerados   = []
+    self.estados   = []
+    self.estadosMag   = []
     self.cliente                   ={
 		id:null,
     	nombreCompleto:"",
@@ -212,6 +239,7 @@ self.on('mount',function(){
     _incializarCampos()
     __Eventos()
     __ComboEstados()
+    __ComboEstadosMag()
     __ComboLibreImpuesto()
     __listadoTipoCedulas()
        __Agregar()
@@ -701,6 +729,29 @@ function __ComboLibreImpuesto(){
      self.update();
 
 }
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosMag(){
+    self.estadosMag =[]
+    self.update()
+    self.estadosMag.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("combo.estadoMag.inactivo")
+     });
+
+    self.estadosMag.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estadoMag.agro")
+     });
+    self.estadosMag.push({
+        codigo: 2,
+        descripcion: $.i18n.prop("combo.estadoMag.pesca")
+     });
+     self.update();
+
+}
+
 /**
 *  Crear el combo de estados
 **/

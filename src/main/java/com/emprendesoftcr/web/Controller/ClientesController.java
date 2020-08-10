@@ -40,6 +40,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ClienteCommand;
+import com.emprendesoftcr.web.command.ClienteMag;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -90,11 +91,11 @@ public class ClientesController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-	
 	@RequestMapping(value = "/nuevoCliente.do", method = RequestMethod.GET)
 	public String nuevoCliente(ModelMap model) {
 		return "views/cliente/nuevoCliente";
 	}
+
 	/**
 	 * Mostrar el JSP de la Clientes
 	 * @param model
@@ -118,14 +119,13 @@ public class ClientesController {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Cliente");
-		if (usuarioBo.isAdministrador_sistema(usuario).equals(Boolean.FALSE) ) {
+		if (usuarioBo.isAdministrador_sistema(usuario).equals(Boolean.FALSE)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
-		
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -249,20 +249,19 @@ public class ClientesController {
 			}
 			Cliente clienteValidar = null;
 
-			if(!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+			if (!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 				clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
 				if (clienteValidar != null) {
 					result.rejectValue("cedula", "error.cliente.existe.cedula");
 				}
-				
-			}else {
+
+			} else {
 				clienteValidar = clienteBo.buscarPorCedulaExtranjera(clienteCommand.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
 				if (clienteValidar != null) {
 					result.rejectValue("cedula", "error.cliente.existe.cedula");
 				}
-				
+
 			}
-			
 
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 
@@ -272,11 +271,11 @@ public class ClientesController {
 					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
 						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
 					}
-						if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
-							if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
-								result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
-							}
+					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
+						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
 						}
+					}
 					if (clienteCommand.getPorcentajeExoneracion() != null) {
 						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
@@ -287,9 +286,28 @@ public class ClientesController {
 					}
 
 				}
-			}else {
-				
+			} 
+			if (!clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
+				ClienteMag clienteMag = clienteBo.clienteRegistradoMag(clienteCommand);
+				if (clienteMag != null) {
+					clienteMag.setIndicadorActivoMAG(clienteMag.getIndicadorActivoMAG() == null ? Constantes.EMPTY : clienteMag.getIndicadorActivoMAG());
+					if (clienteMag.getIndicadorActivoMAG().equals(Constantes.EMPTY)) {
+						result.rejectValue("tipoMag", "cliente.mag.no.existe");
+					} else {
+						if (!clienteMag.getIndicadorActivoMAG().equals(Constantes.INDICADOR_ACTIVO_MAG)) {
+							if (clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO)) {
+								result.rejectValue("tipoMag", "cliente.mag.no.esta.activo");
+							} else {
+								result.rejectValue("tipoMag", "cliente.mag.no.esta.activo");
+							}
+
+						}
+					}
+
+				}
+
 			}
+
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -328,7 +346,7 @@ public class ClientesController {
 				cliente.setPorcentajeExoneracion(Constantes.ZEROS);
 
 			}
-
+			cliente.setTipoMag(clienteCommand.getTipoMag());
 			cliente.setCodigoPais(clienteCommand.getCodigoPais());
 			cliente.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
 			cliente.setEstado(clienteCommand.getEstado());
@@ -388,7 +406,7 @@ public class ClientesController {
 			clienteCommand.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getTipoDocumentoExoneracion());
 			clienteCommand.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : clienteCommand.getPorcentajeExoneracion());
 			clienteCommand.setLibreImpuesto(clienteCommand.getLibreImpuesto() == null ? Constantes.LIBRE_IMPUESTOS_INACTIVO : clienteCommand.getLibreImpuesto());
-			
+
 			if (!clienteCommand.getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
 				clienteCommand.setCedula(Constantes.EMPTY);
 				clienteCommand.setTipoCedula(Constantes.EMPTY);
@@ -405,7 +423,6 @@ public class ClientesController {
 				}
 
 			}
-
 
 			if (clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
 				result.rejectValue("nombreCompleto", Constantes.KEY_REQUERIDO);
@@ -444,18 +461,18 @@ public class ClientesController {
 					}
 				}
 				if (verificarFacturas == false) {
-					if(!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+					if (!clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 						clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
 						if (clienteValidar != null) {
 							result.rejectValue("cedula", "error.cliente.existe.cedula");
 						}
-						
-					}else {
+
+					} else {
 						clienteValidar = clienteBo.buscarPorCedulaExtranjera(clienteCommand.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
 						if (clienteValidar != null) {
 							result.rejectValue("cedula", "error.cliente.existe.cedula");
 						}
-						
+
 					}
 
 				}
@@ -485,6 +502,26 @@ public class ClientesController {
 
 				}
 			}
+			if (!clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
+				ClienteMag clienteMag = clienteBo.clienteRegistradoMag(clienteCommand);
+				if (clienteMag != null) {
+					clienteMag.setIndicadorActivoMAG(clienteMag.getIndicadorActivoMAG() == null ? Constantes.EMPTY : clienteMag.getIndicadorActivoMAG());
+					if (clienteMag.getIndicadorActivoMAG().equals(Constantes.EMPTY)) {
+						result.rejectValue("tipoMag", "cliente.mag.no.existe");
+					} else {
+						if (!clienteMag.getIndicadorActivoMAG().equals(Constantes.INDICADOR_ACTIVO_MAG)) {
+							if (clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO)) {
+								result.rejectValue("tipoMag", "cliente.mag.no.esta.activo");
+							} else {
+								result.rejectValue("tipoMag", "cliente.mag.no.esta.activo");
+							}
+
+						}
+					}
+
+				}
+
+			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -497,7 +534,7 @@ public class ClientesController {
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
 					clienteBD.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
 					clienteBD.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
-				}else {
+				} else {
 					clienteBD.setFechaEmisionExoneracion(null);
 					clienteBD.setNombreInstitucionExoneracion(Constantes.EMPTY);
 					clienteBD.setNumeroDocumentoExoneracion(Constantes.EMPTY);
@@ -512,7 +549,6 @@ public class ClientesController {
 				clienteBD.setPorcentajeExoneracion(Constantes.ZEROS);
 
 			}
-
 
 			clienteBD.setProvincia(Constantes.EMPTY);
 			clienteBD.setDistrito(Constantes.EMPTY);
@@ -547,16 +583,15 @@ public class ClientesController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request, HttpServletResponse response, @RequestParam String cedula) {
 		try {
-		
+
 			// request url
-			String url = "https://api.hacienda.go.cr/fe/ae?identificacion="+cedula;
+			String url = "https://api.hacienda.go.cr/fe/ae?identificacion=" + cedula;
 
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
@@ -573,13 +608,12 @@ public class ClientesController {
 		}
 	}
 
-	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/tipoCambioBancoCentral.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator tipoCambioBancoCentral(HttpServletRequest request, HttpServletResponse response) {
 		try {
-		
+
 			// request url
 			String url = "https://api.hacienda.go.cr/indicadores/tc";
 
@@ -598,7 +632,6 @@ public class ClientesController {
 		}
 	}
 
-
 	/**
 	 * Buscar por id el cliente para mostrar
 	 * @param request
@@ -616,21 +649,19 @@ public class ClientesController {
 		try {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			Cliente clienteBD  = null;
-			if(cliente.getId() != null) {
-				 clienteBD  = clienteBo.buscar(cliente.getId());
-			}else {
-				if(clienteBD == null && !cliente.getCedula().isEmpty()) {
-					clienteBD  = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+			Cliente clienteBD = null;
+			if (cliente.getId() != null) {
+				clienteBD = clienteBo.buscar(cliente.getId());
+			} else {
+				if (clienteBD == null && !cliente.getCedula().isEmpty()) {
+					clienteBD = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
 				}
-				if(clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
-					clienteBD  = clienteBo.buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(),usuarioSesion.getEmpresa());
+				if (clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
+					clienteBD = clienteBo.buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
 				}
-				
+
 			}
-			
-			
-			  
+
 			ClienteCommand clienteCommand = new ClienteCommand(clienteBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", clienteCommand);
 		} catch (Exception e) {

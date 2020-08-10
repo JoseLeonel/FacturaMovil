@@ -677,14 +677,23 @@
                     </div>
 
                     <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
                             <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais"  >
                         </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.telefono")} </label>
                             <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" >
                         </div>
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Autorizacion del Mag</label>
+                                <select  class="form-control tipoMag tamanoClienteNuevo" id="tipoMag" name="tipoMag"   >
+                                    <option  each={estadosMag}  value="{codigo}" selected="{cliente.tipoMag ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                        <div>    
+
+
                     </div>
  
                 </form>    
@@ -794,12 +803,6 @@
     </div>
 </div>
 
-
-
-<style type="text/css"  >
-
-
-</style>    
 <script>
     var self = this;
     self.colorVentaEspera = 'green'
@@ -908,6 +911,7 @@
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
     self.todosBarrios                  = {data:[]}
+    self.estadosMag   = []
     self.clientes                  = {data:[]}
     self.cantones                      = []
     self.distritos                     = []
@@ -1107,12 +1111,13 @@
 
     })
 
-this.__EntradaDinero = function(){
+__EntradaDinero(){
   modalEntradaSalidaDinero(1)
-}.bind(this)
-this.__SalidaDinero = function(){
+}
+
+__SalidaDinero(){
     modalEntradaSalidaDinero(2)
-}.bind(this)
+}
 
 function modalEntradaSalidaDinero(tipo){
  var parametros = {
@@ -1121,19 +1126,21 @@ function modalEntradaSalidaDinero(tipo){
     riot.mount('entrada-salida',{parametros:parametros});
 }
 
-this.__AplicarCambioPrecioUltimoArticulo = function(){
+__AplicarCambioPrecioUltimoArticulo(){
     __AplicarCambioPrecioBD()
-}.bind(this)
-this.__RegresarInputCodigo = function(){
+}
+
+__RegresarInputCodigo(){
     $(".codigo").val("")
     $('#modalCambiarPrecio').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
-this.__RegresarInputSeguridad = function(){
+}
+
+__RegresarInputSeguridad(){
     $(".codigo").val("")
     $('#modalRolUsuario').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
+}
 
 function __ObtengoTipoCambio(){
     var tempTipoCambio =__getTipoCambioCompra()
@@ -1376,7 +1383,31 @@ function __listadoTipoCedulas(){
 }
 
 __ClienteNuevo(){
+    __ComboEstadosMag()
     __nuevoCliente()
+}
+
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosMag(){
+    self.estadosMag =[]
+    self.update()
+    self.estadosMag.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("combo.estadoMag.inactivo")
+     });
+
+    self.estadosMag.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estadoMag.agro")
+     });
+    self.estadosMag.push({
+        codigo: 2,
+        descripcion: $.i18n.prop("combo.estadoMag.pesca")
+     });
+     self.update();
+
 }
 
 function __nuevoCliente(){

@@ -208,4 +208,5 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 		return consultasNativeDao.findByUtilidad(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria, codigo,tipoDoc,numeroFactura);
 	}
 
+	
 }

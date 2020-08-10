@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.ibm.icu.util.TimeZone;
 
-@SpringBootApplication
+@SpringBootApplication 
 @Configuration
 @EnableAutoConfiguration
 @EnableTransactionManagement

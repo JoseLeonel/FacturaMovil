@@ -41,7 +41,7 @@ public class MapEnums {
        .build();
 
    public static final Map<String, String> ENUM_TIPOS_IMPUESTOS = ImmutableMap.<String, String>builder()
-   		.put("01", "Impuesto al Valor Agregado").
+   		.put("01", "Impuesto Valor Agregado").
         put("02", "Impuesto Selectivo de Consumo").
         put("03", "Impuesto Único a los Combustibles").
         put("07", "IVA (calculo especial)").

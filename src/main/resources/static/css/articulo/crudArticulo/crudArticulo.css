@@ -30,7 +30,7 @@
 }
 .scrollerT {
     width: 100% !important;
-    height: 650px;
+    height: 900px;
     overflow-y: scroll;
 }
 .botones{
@@ -63,7 +63,7 @@
         transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         background-color: #fcfcfc;
         border: 1px solid #ccc;
-        font-size: 28px;
+        font-size: 20px;
         margin: 2px 0;
         padding: 1px 2px;
         overflow: visible;

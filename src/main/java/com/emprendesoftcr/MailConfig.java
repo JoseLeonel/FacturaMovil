@@ -6,6 +6,8 @@ import java.util.Properties;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 public class MailConfig {
@@ -18,17 +20,19 @@ public class MailConfig {
 //		mailSender.setPort(587);
 //		mailSender.setUsername("gobookingcr@emprendesoftcr.com");
 //		mailSender.setPassword("simo9090");
+//		mailSender.setProtocol("smtp");
 //
 //		Properties javaMailProperties = new Properties();
 //
 //		javaMailProperties.put("mail.transport.protocol", "smtp");
-//		javaMailProperties.put("mail.smtp.auth", true);
+////		javaMailProperties.put("mail.smtp.auth", false);
 //
-//		javaMailProperties.put("mail.smtp.starttls.enable", true);
-//		javaMailProperties.put("mail.debug", true);
-//		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
+//		javaMailProperties.put("mail.smtp.starttls.enable", false);
+//		javaMailProperties.put("mail.smtp.ssl.enable", false);
+//		javaMailProperties.put("mail.debug", false);
+//		javaMailProperties.put("mail.smtp.connectiontimeout", 1000);
 //		javaMailProperties.put("mail.smtp.ssl.trust", "mail.emprendesoftcr.com");
-//
+//		
 //		mailSender.setJavaMailProperties(javaMailProperties);
 //
 //		

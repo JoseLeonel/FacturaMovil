@@ -16,9 +16,6 @@
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
-                <input type="hidden"  id="tipoImpuesto1" name="tipoImpuesto1" value="{articulo.tipoImpuesto1}"  >
-                <input type="hidden"  id="codigoTarifa1" name="codigoTarifa1" value="{articulo.codigoTarifa1}"  >
-                <input type="hidden"  id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  >
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -103,7 +100,7 @@
                                     <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                         <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1 campoNumerico" id="codigoTarifa" name="codigoTarifa"  >
-                                            <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                            <option  each={tarifas.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
                                         </select>
                                     </div>
 
@@ -210,6 +207,39 @@
                         </div>
                     </div>
                 </div>            
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" id="cuentas">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Tarifas Producto Agropecuario y Pesca</h4>
+                            </div>
+                        </a>
+                        <div id="collapse3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+
+                                        <label class="tamanoLetra">Tipo Impuesto MAG </label>
+                                        <select onchange= {__asignarImpuestoMag} class="form-control selectTipoImpuestoMag campoNumerico" id="tipoImpuestoMag" name="tipoImpuestoMag"  >
+                                            <option  each={impuestosMag}  value="{codigo}" selected="{articulo.tipoImpuestoMag ==codigo?true:false}"  >{descripcion}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra">Tarifa MAG</label>
+                                        <select  onchange= {__AsignarTarifaMag} class="form-control selectCodigoTarifaMag campoNumerico" id="codigoTarifaMag" name="codigoTarifaMag"  >
+                                            <option  each={tarifasMag.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifaMag ==tarifaIVAI.codigoTarifa && articulo.tipoImpuestoMag ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                        </select>
+                                    </div>
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra"  >Impuesto MAG  </label>
+                                        <input type="number" step="any" class="form-control impuestoMag campoNumerico" id="impuestoMag" name="impuestoMag" value="{articulo.impuestoMag}"  readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                 
 
             </form>
         </div>
@@ -412,8 +442,9 @@
         prioridad:1
     }    
    
-   self.tarifas1    = {aaData:[]}
-   self.tarifas2    = {aaData:[]}
+    self.tarifas    = {aaData:[]}
+    self.tarifasMag    = {aaData:[]}
+    self.impuestosMag =[]
    
     // variables para modulo de inventario 
     self.mostrarFormularioEntrada    = false
@@ -431,6 +462,7 @@ self.on('mount',function(){
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
     self.impuestos = __ComboImpuestos()
+    self.impuestosMag = __ComboImpuestosMaG()
     self.tipoCodigos =__CombotipoCodigo()
     self.update()
      LimpiarArticulo()
@@ -514,6 +546,7 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
         self.botonAgregar  = false;            
         self.update()
         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+        __listadoTarifasByTipoImpuestoMag(self.articulo.tipoImpuestoMag,1)
         $("#formulario").validate(reglasDeValidacion());     
        
     }  
@@ -567,9 +600,9 @@ function LimpiarArticulo(){
 		unidadMedida:"",
 		costo:null,
 		impuesto:null,
-        impuesto1:null,
+        impuestoMag:null,
         codigoTarifa:null,
-        codigoTarifa1:null,
+        codigoTarifaMag:null,
         minimo:0,
         maximo:0,
 		precioPublico:null,
@@ -592,6 +625,7 @@ function LimpiarArticulo(){
     }    
     self.update() 
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
+   $('.selectTipoImpuestoMag').prop("selectedIndex", 0);
    $('.selectTipoCodigo').prop("selectedIndex", 0);
    $('.selectTipoCodigo1').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
@@ -605,10 +639,12 @@ function LimpiarArticulo(){
    $('.descripcion').val(null)
    $('.serie').val(null)
    $('.costo').val(null)
-   $('.codigoTarifa1').val(null)
+   $('.codigoTarifaMag').val(null)
    $('.codigoTarifa').val(null)
    $('.tipoImpuesto').val(null)
+   $('.tipoImpuestoMag').val(null)
    $('.impuesto').val(null)
+   $('.impuestoMag').val(null)
    $('.precioPublico').val(null)
    $('.gananciaPrecioPublico').val(null)
    $('.precioMayorista').val(null)
@@ -1006,15 +1042,38 @@ function getPublico(){
 }
 
 __AsignarTarifa(){
-    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas.aaData)
     self.update()
     $('#impuesto').val(self.articulo.impuesto)
     getPublico()
     getPrecioEspecial()
     getPrecioMayorista()
 }
+__AsignarTarifaMag(){
+    self.articulo.impuestoMag = getMontoImpuesto(self.articulo.tipoImpuestoMag,$('#codigoTarifaMag').val(),self.tarifasMag.aaData)
+    self.update()
+    $('#impuestoMag').val(self.articulo.impuestoMag)
+}
+/**
+* Asigna el impuesto 13 cuando es valor igual 01
+**/
+__asignarImpuestoMag(){
+    if($('.selectTipoImpuestoMag').val()=="01"){
+        self.articulo.tipoImpuestoMag ="01"
+         self.articulo.impuestoMag = 0
+        self.update()
+    }else{
+        $('.impuestoMag').val(null)
+        self.articulo.impuestoMag = 0  
+        self.articulo.tipoImpuestoMag =$('#tipoImpuestoMag').val() == "Exento"?"":$('#tipoImpuestoMag').val()
+        self.update()
+        $('#impuestoMag').val(self.articulo.impuestoMag)
+    } 
+     __listadoTarifasByTipoImpuestoMag(self.articulo.tipoImpuestoMag,1)
+    self.tarifasMag  = {aaData:[]}
+    self.update()
 
-
+}
 
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
@@ -1042,6 +1101,39 @@ __asignarImpuesto(){
 /**
 *  Mostrar listado datatable Categorias Actimpuestos
 **/
+function __listadoTarifasByTipoImpuestoMag(tipoImpuestoMag,indicador){
+    if (typeof tipoImpuestoMag == 'undefined') {
+        return
+    }
+    if (tipoImpuestoMag.length == 0 ){
+        return
+    }
+    var selector = ""
+    $.ajax({
+         url: "ListarTarifasByTipoImpuestoAjax.do",
+        datatype: "json",
+         data: {tipoImpuesto:tipoImpuestoMag},
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                // Tipo de impuesto 1
+                if(indicador ==1 ){
+                    self.tarifasMag =  result
+                    self.update()
+                    self.articulo.impuestoMag = getMontoImpuesto(self.articulo.tipoImpuestoMag,$('#codigoTarifaMag').val(),self.tarifasMag.aaData)
+                    self.update()
+                }
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+/**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
 function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
     if (typeof tipoImpuesto == 'undefined') {
         return
@@ -1059,9 +1151,9 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
             if(result.aaData.length > 0){
                 // Tipo de impuesto 1
                 if(indicador ==1 ){
-                    self.tarifas1 =  result
+                    self.tarifas =  result
                     self.update()
-                    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+                    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas.aaData)
                     self.update()
                 }
             }            

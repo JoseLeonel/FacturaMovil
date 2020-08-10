@@ -122,6 +122,9 @@ public class Cliente implements Serializable {
 	@Column(name = "fecha_emision_exo")
 	private Date							fechaEmisionExoneracion;
 
+	@Column(name = "tipo_mag", columnDefinition = "INT default '0'")
+	private Integer						tipoMag;
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -130,7 +133,9 @@ public class Cliente implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Integer porcentajeExoneracion, Integer libreImpuesto, Date fechaEmisionExoneracion, Empresa empresa, Usuario usuario) {
+	
+
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Integer porcentajeExoneracion, Integer libreImpuesto, Date fechaEmisionExoneracion, Integer tipoMag, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -161,6 +166,7 @@ public class Cliente implements Serializable {
 		this.porcentajeExoneracion = porcentajeExoneracion;
 		this.libreImpuesto = libreImpuesto;
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
+		this.tipoMag = tipoMag;
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
@@ -420,5 +426,16 @@ public class Cliente implements Serializable {
 	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
 		this.porcentajeExoneracion = porcentajeExoneracion;
 	}
+
+	
+	public Integer getTipoMag() {
+		return tipoMag;
+	}
+
+	
+	public void setTipoMag(Integer tipoMag) {
+		this.tipoMag = tipoMag;
+	}
+	
 
 }

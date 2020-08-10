@@ -625,4 +625,5 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ConsultaUtilidadNative>) query.getResultList();
 	}
 
+	
 }

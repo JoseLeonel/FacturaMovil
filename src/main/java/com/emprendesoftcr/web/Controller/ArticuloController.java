@@ -818,9 +818,9 @@ public class ArticuloController {
 			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
-			articulo.setTipoImpuestoMag(Constantes.EMPTY);
-			articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
-			articulo.setCodigoTarifaMag(Constantes.EMPTY);
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null?Constantes.EMPTY:articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null? Constantes.ZEROS_DOUBLE:articulo.getImpuestoMag());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null?Constantes.EMPTY:articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
 
@@ -1003,9 +1003,9 @@ public class ArticuloController {
 
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
-			articulo.setTipoImpuestoMag(Constantes.EMPTY);
-			articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
-			articulo.setCodigoTarifaMag(Constantes.EMPTY);
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null?Constantes.EMPTY:articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null? Constantes.ZEROS_DOUBLE:articulo.getImpuestoMag());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null?Constantes.EMPTY:articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
@@ -1057,10 +1057,10 @@ public class ArticuloController {
 			if (!articulo.getCodigoTarifaMag().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifaMag());
 				if (tarifaIVAI == null) {
-					result.rejectValue("codigoTarifa1", "error.articulo.codigo.tarifa.no.existe");
+					result.rejectValue("codigoTarifaMag", "error.articulo.codigo.tarifa.no.existe");
 				} else {
 					if (!tarifaIVAI.getMonto().equals(articulo.getImpuestoMag())) {
-						result.rejectValue("impuesto1", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+						result.rejectValue("impuestoMag", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
 					} else {
 						articulo.setImpuestoMag(tarifaIVAI.getMonto());
 					}
