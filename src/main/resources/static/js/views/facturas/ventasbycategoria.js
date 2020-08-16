@@ -36,9 +36,12 @@ var _Init = function() {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
     });
-
-
-
+    $('.descargarExcel').click(function() {
+        if ($("#filtros").valid()) {
+            descargarExcel()
+        }
+    });
+    $('.descargarExcel').hide();
     $("#filtros").validate(reglasDeValidacion());
     var advanced_search_section = $('#filtrosAvanzados');
     advanced_search_section.slideToggle(750);
@@ -81,6 +84,16 @@ function __Inicializar_Table(nombreTabla) {
     });
 }
 
+/**
+ * Descargar Excel de la consulta del usuario
+ */
+function descargarExcel() {
+    var fechaInicio = $('.fechaInicial').val();
+    var fechaFin = $('.fechaFinal').val();
+    var idCategoria = $('#categoria').val();
+    var estado = $('.selectEstado').val();
+    location.href = "DescargarVentasByCategoria.do?fechaInicioParam=" + fechaInicio + "&fechaFinParam=" + fechaFin + "&idCaegoria=" + idCategoria + "&estado=" + estado;
+}
 
 /**
  *  Obtiene la lista de los clientes activos
@@ -117,7 +130,7 @@ function ListarFacturas() {
     $('.totalDescuento').val(0);
     $('.totalIVA').val(0);
     $('.totalVenta').val(0);
-
+    $('.descargarExcel').hide();
     var fechaInicio = $('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
     var idCliente = $('#categoria').val();
@@ -146,6 +159,7 @@ function ListarFacturas() {
                 console.log(facturas)
                     //__CorreoAlternativo();
                 suma(facturas.data);
+                $('.descargarExcel').show();
 
             } else {
                 __Inicializar_Table('.tableListar');

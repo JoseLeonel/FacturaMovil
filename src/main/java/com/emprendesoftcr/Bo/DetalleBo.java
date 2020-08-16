@@ -1,14 +1,18 @@
 package com.emprendesoftcr.Bo;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
+import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
 
 public interface DetalleBo {
 
@@ -42,4 +46,8 @@ public interface DetalleBo {
 	
 	ByteArrayInputStream createExcelVentasXCodigo(Collection<Detalle> detalles,String fechaInicio, String fechaFinal, Empresa empresa, String actividadEconomica) throws Exception ;
 
+	ByteArrayInputStream  ventasbyCategoriaExcel(String fechaInicial ,String fechaFinal,Integer estado,Long idCategoria,Empresa empresa) throws IOException;
+	List<Map<String, Object>>  ventasbyCategoria(String fechaInicial ,String fechaFinal,Integer estado,Long idCategoria,Integer idEmpresa);
+	
+	
 }

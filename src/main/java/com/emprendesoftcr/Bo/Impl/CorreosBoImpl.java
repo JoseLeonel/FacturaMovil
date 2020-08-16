@@ -5,10 +5,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +23,8 @@ import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.VelocityEngineUtils;
 import com.emprendesoftcr.modelo.Attachment;
+import javax.mail.*; 
+import javax.mail.internet.*; 
 
 @Service("correosBo")
 public class CorreosBoImpl implements CorreosBo {
@@ -28,37 +34,47 @@ public class CorreosBoImpl implements CorreosBo {
 
 	@Autowired
 	private VelocityEngine	velocityEngine;
+	
+	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
-		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+		try {
+			 mailSender.send(new MimeMessagePreparator() {
+			   public void prepare(MimeMessage mimeMessage) throws MessagingException {
+		
+			  	 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			  	 
+			  	 for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
+							String correo = (String) iterator.next();
+							if (Utils.validarCorreo(correo)) {
+								message.addTo(new InternetAddress(correo));
+							}
+							if (attachments != null) {
+								for (Iterator<Attachment> iterator1 = attachments.iterator(); iterator1.hasNext();) {
+									Attachment attachment = iterator1.next();
+									message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+								}
+							}
 
-			public void prepare(MimeMessage mimeMessage) throws Exception {
-				MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-				
-				for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
-					String correo = (String) iterator.next();
-					if(Utils.validarCorreo(correo)) {
-						message.addTo(correo);
-					}
-
-				}
-
-				message.setFrom(from);
-				message.setSubject(subjet);
-        if(attachments !=null) {
-  				for (Iterator<Attachment> iterator = attachments.iterator(); iterator.hasNext();) {
-  					Attachment attachment = iterator.next();
-  					message.addAttachment(attachment.getNombre(), attachment.getAttachment());
-  				}
-
-        	
-        } 
-				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
-				message.setText(text, true);
-			}
-		};
-		this.mailSender.send(preparator);
+						}
+			  	 
+			  	 message.setSubject(subjet); 
+			  	 message.setFrom(from);
+			  	 
+			  	 String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model); 
+			     message.setText(text, true);
+			     
+//			     message.addInline("myLogo", new ClassPathResource("img/mylogo.gif"));
+			 //    message.addAttachment("myDocument.pdf", new ClassPathResource("doc/myDocument.pdf"));
+//			   }
+			 }});
+			
+		} catch (Exception e) {
+			
+			log.error("Error al enviar el mail: ", e);
+		}
+			 
 	}
 
 	@Override

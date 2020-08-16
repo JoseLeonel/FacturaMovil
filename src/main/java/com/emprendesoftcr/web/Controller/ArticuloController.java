@@ -1034,6 +1034,8 @@ public class ArticuloController {
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
+				result.rejectValue("codigo", "error.articulo.codigo.no.modificarse");
+				
 			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");

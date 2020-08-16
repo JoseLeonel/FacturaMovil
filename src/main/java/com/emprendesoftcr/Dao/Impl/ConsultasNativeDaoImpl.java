@@ -309,7 +309,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (estado > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + estado + ") ");
 		} else {
-			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + "2,6,7,5" + ") ");
+			queryStr = queryStr.replaceAll("facturas.estado in", " and facturas.estado in (" + "2,6,7" + ") ");
 		}
 
 		if (codigo.length() > 0) {
@@ -335,7 +335,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (estado > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("and facturas.estado", " and facturas.estado in (" + estado + ") ");
 		} else {
-			queryStr = queryStr.replaceAll("and facturas.estado", " and facturas.estado in (" + "2,6,7,5" + ") ");
+			queryStr = queryStr.replaceAll("and facturas.estado", " and facturas.estado in (" + "2,6,7" + ") ");
 		}
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasImpuestoServicioNativa.class);
@@ -556,7 +556,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (estado > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + estado + ") ");
 		} else {
-			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7,5" + ") ");
+			queryStr = queryStr.replaceAll("and fac.estado", " and fac.estado in (" + "2,6,7" + ") ");
 		}
 
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasTableNativa.class);
@@ -606,7 +606,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (estado > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + estado + ") ");
 		} else {
-			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + "2,6,7,5" + ") ");
+			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + "2,6,7" + ") ");
 		}
 
 		if (codigo.length() > 0) {

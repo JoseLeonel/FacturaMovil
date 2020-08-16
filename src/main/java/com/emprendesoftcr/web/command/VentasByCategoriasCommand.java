@@ -66,7 +66,13 @@ public class VentasByCategoriasCommand {
 	}
 	
 	public String getCodigoTarifaSTR() {
-		return cod_tarifa != null ? MapEnums.ENUM_TARIFAS_IMPUESTOS.get(cod_tarifa) : cod_tarifa;
+		
+		String codigoTarifa = this.cod_tarifa == null? Constantes.EMPTY:this.cod_tarifa;
+		String tipoImpuesto = this.tipo_impuesto == null? Constantes.EMPTY:this.tipo_impuesto;
+		if(tipoImpuesto.equals(Constantes.EMPTY)) {
+			codigoTarifa = Constantes.EMPTY;
+		}
+		return !codigoTarifa.equals(Constantes.EMPTY) ? MapEnums.ENUM_TARIFAS_IMPUESTOS.get(cod_tarifa) : codigoTarifa;
 	}
 	
 	public Double getImpuesto() {
@@ -81,7 +87,11 @@ public class VentasByCategoriasCommand {
 		return tipo_impuesto;
 	}
 	public String getTipoImpuestoSTR() {
-		return tipo_impuesto != null ? MapEnums.ENUM_TIPOS_IMPUESTOS.get(tipo_impuesto) : tipo_impuesto;
+		String tipoImpuesto = this.tipo_impuesto == null? Constantes.EMPTY:this.tipo_impuesto;
+		String codigoTarifa = this.cod_tarifa == null? Constantes.EMPTY:this.cod_tarifa;
+		String valor = tipoImpuesto.equals(Constantes.EMPTY) && codigoTarifa.equals(Constantes.EMPTY)?"Exento": MapEnums.ENUM_TIPOS_IMPUESTOS.get(tipo_impuesto);
+		
+		return valor;
 	}
 	
 	public void setTipo_impuesto(String tipo_impuesto) {

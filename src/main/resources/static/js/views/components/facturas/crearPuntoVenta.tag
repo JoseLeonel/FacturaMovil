@@ -1,4 +1,89 @@
 <punto-venta>
+
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
+            </div>
+            <div class="modal-body">
+                <form  >
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >Codigo</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
+                        </div>
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descripcion</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  id="descripcionArticuloAcambiar" name="descripcionArticuloAcambiar"  value ="{ultimoArticulo.descripcion}">
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Precio al Publico </label>
+                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
+            </div>
+            <div class="modal-body">
+                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
+                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
+                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
  <!-- Titulos -->
     <div  class="row titulo-encabezado" show={parametros.codigoMoneda =="USD"?true:false} >
         <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -714,94 +799,13 @@
 
 
 
-<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
-            </div>
-            <div class="modal-body">
-                <form  >
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
-                            <label class="tituloClienteNuevo" >Codigo</label>
-                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
-                        </div>
-                    </div>
-                    <div class="row">    
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Descripcion</label>
-                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  id="descripcionArticuloAcambiar" name="descripcionArticuloAcambiar"  value ="{ultimoArticulo.descripcion}">
 
-                        </div>                            
-                    </div>
-
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Precio al Publico </label>
-                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
-                        </div>
-                    </div>
- 
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                </div>
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
 
 <!--fin validar rol de usuario-->
 
-<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
-            </div>
-            <div class="modal-body">
-                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
-                    <div class="row">    
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
-                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
-
-                        </div>                            
-                    </div>
-
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
-                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
-                        </div>
-                    </div>
- 
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                </div>
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     var self = this;
