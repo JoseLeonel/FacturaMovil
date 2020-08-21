@@ -80,6 +80,10 @@ public class Compra implements Serializable {
 
 	@Column(name = "estado")
 	private Integer						estado;
+	
+//	@Column(name = "tipo_gasto")
+//	private Integer						tipoGasto;
+	
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -116,29 +120,14 @@ public class Compra implements Serializable {
 
 	}
 
-	public Compra(Long id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario) {
-		super();
-		this.id = id;
-		this.consecutivo = consecutivo;
-		this.fechaCredito = fechaCredito;
-		this.fechaPago = fechaPago;
-		this.fechaCompra = fechaCompra;
-		this.fechaIngreso = fechaIngreso;
-		this.tipoDocumento = tipoDocumento;
-		this.formaPago = formaPago;
-		this.totalImpuesto = totalImpuesto;
-		this.totalDescuento = totalDescuento;
-		this.subTotal = subTotal;
-		this.totalCompra = totalCompra;
-		this.nota = nota;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.proveedor = proveedor;
-		this.empresa = empresa;
-		this.usuarioCreacion = usuarioCreacion;
-		this.usuarioIngresoInventario = usuarioIngresoInventario;
-	}
+	
+
+	
+
+
+
+
+
 
 	public Long getId() {
 		return id;
@@ -348,6 +337,29 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 	}
 
-	
 
+
+
+
+
+
+	
+//	public Integer getTipoGasto() {
+//		return tipoGasto;
+//	}
+//
+//
+//
+//
+//
+//
+//
+//	
+//	public void setTipoGasto(Integer tipoGasto) {
+//		this.tipoGasto = tipoGasto;
+//	}
+//
+//	
+
+	
 }

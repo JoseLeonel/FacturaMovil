@@ -36,6 +36,80 @@ function cargarImagen(data64,id){
 
     
 }
+/**
+ * Aplicar a clientes exonerados
+ * @param porcentajeExoneracion
+ * @param impuesto
+ * @returns
+ */
+function getPorcentajeExoneracion(porcentajeExoneracion, impuesto) {
+	var valor = 0;
+	porcentajeExoneracion = __valorNumerico(porcentajeExoneracion );
+	if(porcentajeExoneracion != null) {
+	  if(porcentajeExoneracion > 0) {
+		if(impuesto < porcentajeExoneracion ) {
+           valor = impuesto; 					
+		}else {
+			valor = porcentajeExoneracion;
+		}
+	  }
+	}
+	return valor;
+}
+/**
+ * Aplicar a clientes exonerados
+ * @param cliente
+ * @param detail
+ * @returns
+ */
+function getExoneracion(cliente,detail){
+    var aplicaExo = false;
+    var porcentaje = __valorNumerico(cliente.porcentajeExoneracion );
+    if(porcentaje == 0){
+        return detail;
+    }
+    var valorTotal = 0;
+    for (var count = 0; count < detail.length; count++) {
+        item = detail[count];
+        cliente.porcentajeExoneracion = __valorNumerico(cliente.porcentajeExoneracion);
+        if(item.montoImpuesto > 0  ){
+           if(cliente.porcentajeExoneracion > 0  ){
+             item.porcentajeExoneracion = getPorcentajeExoneracion( __valorNumerico(cliente.porcentajeExoneracion), item.impuesto);
+             item.fechaEmisionExoneracion = cliente.fechaEmisionExoneracion;
+             item.nombreInstitucionExoneracion = cliente.nombreInstitucionExoneracion;
+             item.numeroDocumentoExoneracion = cliente.numeroDocumentoExoneracion;
+             item.tipoDocumentoExoneracion = cliente.tipoDocumentoExoneracion;
+             valorTotal = __valorNumerico(item.subTotal) * __valorNumerico(item.porcentajeExoneracion);
+             item.montoExoneracion = valorTotal / 100;
+             item.ImpuestoNeto = item.montoImpuesto - item.montoExoneracion;
+             item.montoTotalLinea = item.subTotal +  item.ImpuestoNeto;
+             detail[count] = item;
+           }else{
+             item.porcentajeExoneracion = 0;
+             item.fechaEmisionExoneracion = null;
+             item.nombreInstitucionExoneracion = "";
+             item.numeroDocumentoExoneracion = "";
+             item.tipoDocumentoExoneracion = "";
+             item.montoExoneracion = 0;
+             item.montoExoneracion1 = 0;
+             item.ImpuestoNeto = __valorNumerico(item.montoImpuesto); 
+             item.montoTotalLinea = item.subTotal +  item.ImpuestoNeto;
+             detail[count] = item;
+            }
+        }else{
+                item.porcentajeExoneracion = 0;
+                item.fechaEmisionExoneracion = null;
+                item.nombreInstitucionExoneracion = "";
+                item.numeroDocumentoExoneracion = "";
+                item.tipoDocumentoExoneracion = "";
+                item.montoExoneracion = 0;
+                item.montoExoneracion1 = 0;
+        }
+     }
+        
+    return detail;
+}
+
 
 function cargarImagenBusca(data64,id){
     var imagenTemporal = data64;

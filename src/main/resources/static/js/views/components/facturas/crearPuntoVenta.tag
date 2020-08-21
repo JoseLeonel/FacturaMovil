@@ -3828,6 +3828,7 @@ function __aplicarExoneracionPorCliente(){
 
             }
     }
+    
     __calculate()
     if(aplicaExo == true){
        self.factura.totalCambioPagar = self.factura.totalComprobante

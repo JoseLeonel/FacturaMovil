@@ -485,9 +485,13 @@ public class Constantes {
 
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_FACTURA																	= 1;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";
+	public static final String					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO_STR												= "Nota Credito";
+	public static final String					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO_STR													= "Nota Debido";
 
 	public static final Integer					COMPRA_FORMA_PAGO_CONTADO																			= 1;
 	public static final Integer					COMPRA_FORMA_PAGO_CREDITO																			= 2;

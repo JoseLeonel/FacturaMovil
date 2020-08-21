@@ -38,6 +38,9 @@
 		input[type="submit"]:hover {
   			background-color: #197071;
 		}
+		#importante{
+		  color:red;
+		}
     </style>
     <!-- Bootstrap 4.0.0 -->
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.css}" />
@@ -91,6 +94,11 @@
                      </div>
                      <div class="form-group">
                          <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="fa fa-btn fa-sign-in"></i> Acceder</button>
+                      </div>
+                      <div id= "notaInformativa">
+                          <span> Estimado Cliente , Le recordamos que el uso de plataforma de la factura electronica</span>
+                          <span  id= "importante"> es un servicio que se cancela por mes adelantado, evitese la suspension del mismo.</span>
+                      
                       </div>
                      
     			 </form>
