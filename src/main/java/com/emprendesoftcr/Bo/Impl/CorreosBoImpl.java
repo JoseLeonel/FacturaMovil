@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.VelocityEngineUtils;
-import com.emprendesoftcr.modelo.Attachment;
-import javax.mail.*; 
-import javax.mail.internet.*; 
+import com.emprendesoftcr.modelo.Attachment; 
 
 @Service("correosBo")
 public class CorreosBoImpl implements CorreosBo {
@@ -38,7 +36,8 @@ public class CorreosBoImpl implements CorreosBo {
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
-	public void enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
+	public Boolean enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
+    Boolean resultado  = Boolean.FALSE;		
 		try {
 			 mailSender.send(new MimeMessagePreparator() {
 			   public void prepare(MimeMessage mimeMessage) throws MessagingException {
@@ -69,12 +68,12 @@ public class CorreosBoImpl implements CorreosBo {
 			 //    message.addAttachment("myDocument.pdf", new ClassPathResource("doc/myDocument.pdf"));
 //			   }
 			 }});
-			
+			 resultado  = Boolean.TRUE;	
 		} catch (Exception e) {
 			
 			log.error("Error al enviar el mail: ", e);
 		}
-			 
+			 return resultado;
 	}
 
 	@Override

@@ -18,9 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jxls.template.SimpleExporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +42,12 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
@@ -107,6 +111,8 @@ public class DetalleController {
 
 	@Autowired
 	private FechaPropertyEditor																		fechaPropertyEditor;
+	
+	private Logger																						log					= LoggerFactory.getLogger(this.getClass());
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -126,7 +132,7 @@ public class DetalleController {
 	public String listaFacturaGanancia(ModelMap model) {
 		return "views/detalle/ListaGanancia";
 	}
-	
+
 	@RequestMapping(value = "/UtilidadXArticulo.do", method = RequestMethod.GET)
 	public String listaUtilidadArticulo(ModelMap model) {
 		return "views/detalle/ListaUtilidad";
@@ -164,7 +170,6 @@ public class DetalleController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
 		Collection<Detalle> objetos = detalleBo.findbyIdFactura(idFactura);
@@ -180,23 +185,23 @@ public class DetalleController {
 		return respuestaService;
 
 	}
-	
-	 @RequestMapping(value = "/ListaVentasByCategoria.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	  @ResponseBody
-	  public RespuestaServiceDataTable eliminarPedido(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado,@RequestParam Long idCaegoria){
-	    Map<String, Object> response_sp = new HashMap<>();
-	    RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-	    Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-	    Date fechaInicioP = Utils.parseDate(fechaInicioParam);
-			Date fechaFinalP = Utils.parseDate(fechaFinParam);
-			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
-				if (fechaFinalP != null) {
-					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
-				}
+
+	@RequestMapping(value = "/ListaVentasByCategoria.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable eliminarPedido(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Long idCaegoria) {
+		Map<String, Object> response_sp = new HashMap<>();
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
-			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-			String inicio1 = dateFormat1.format(fechaInicioP);
-			String fin1 = dateFormat1.format(fechaFinalP);
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
 
 //	      SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("cons_vent_cate");
 //	      Map<String, Object> parameters = new HashMap<String, Object>();
@@ -209,67 +214,61 @@ public class DetalleController {
 //	      SqlParameterSource in = new MapSqlParameterSource(parameters); 
 //	      Map<String, Object> returnSp = simpleJdbcCall.execute(in);
 //	      
-	      
-	      
-	     
-	      List<Map<String, Object>> listaObjetos = detalleBo.ventasbyCategoria(inicio1, fin1, estado, idCaegoria, usuarioSesion.getEmpresa().getId());
-	      
-	       
-	      @SuppressWarnings("rawtypes")
-				ArrayList arrayList = new ArrayList();
-	      arrayList = (ArrayList) listaObjetos;
+
+		List<Map<String, Object>> listaObjetos = detalleBo.ventasbyCategoria(inicio1, fin1, estado, idCaegoria, usuarioSesion.getEmpresa().getId());
+
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList) listaObjetos;
 //	      arrayList = (ArrayList) returnSp.get("#result-set-1");
-	      JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
-	  		ArrayList<VentasByCategoriasCommand> detallesFacturaCommand = new ArrayList<>();
-	  		Gson gson = new Gson();
-				if (jsonArray1 != null) {
-					for (int i = 0; i < jsonArray1.size(); i++) {
-						VentasByCategoriasCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), VentasByCategoriasCommand.class);
-						detallesFacturaCommand.add(ventasByCategoriasCommand);
-					}
-				}
-	        respuestaService.setRecordsTotal(0l);
-	  		respuestaService.setRecordsFiltered(0l);
-	  		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-	  			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-	  		}
-	  		respuestaService.setAaData(detallesFacturaCommand);
-	  		return respuestaService;
-	  
-	    
-	  }
-	 
-	 @RequestMapping(value = "/DescargarVentasByCategoria.do", method = RequestMethod.GET)
-		public void descargaByCategoriaVentas(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado,@RequestParam Long idCaegoria) throws IOException, Exception {
-
-		
-
-			 Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		    Date fechaInicioP = Utils.parseDate(fechaInicioParam);
-				Date fechaFinalP = Utils.parseDate(fechaFinParam);
-				if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
-					if (fechaFinalP != null) {
-						fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
-					}
-				}
-				DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-				String inicio1 = dateFormat1.format(fechaInicioP);
-				String fin1 = dateFormat1.format(fechaFinalP);
-			String nombreArchivo = "ventaxcategorias.xls";
-			response.setContentType("application/octet-stream");
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-
-			// Se prepara el excell
-			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.ventasbyCategoriaExcel(inicio1, fin1, estado, idCaegoria, usuarioSesion.getEmpresa()));
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-
-			int BUFFER_SIZE = 4096;
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead = -1;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				response.getOutputStream().write(buffer, 0, bytesRead);
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<VentasByCategoriasCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				VentasByCategoriasCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), VentasByCategoriasCommand.class);
+				detallesFacturaCommand.add(ventasByCategoriasCommand);
 			}
 		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFacturaCommand);
+		return respuestaService;
+
+	}
+
+	@RequestMapping(value = "/DescargarVentasByCategoria.do", method = RequestMethod.GET)
+	public void descargaByCategoriaVentas(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Long idCaegoria) throws IOException, Exception {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		String nombreArchivo = "ventaxcategorias.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.ventasbyCategoriaExcel(inicio1, fin1, estado, idCaegoria, usuarioSesion.getEmpresa()));
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaConsecutivoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -321,36 +320,57 @@ public class DetalleController {
 	}
 
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
-	public void envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	public RespuestaServiceValidator envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result,@RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
+
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idClienteParam, usuario.getEmpresa());
-		// Se buscan las facturas
-		Date fechaInicio = Utils.parseDate(fechaInicialParam);
-		Date fechaFinal = Utils.parseDate(fechaFinalParam);
-		if (fechaFinal == null) {
-			fechaFinal = new Date(System.currentTimeMillis());
-		}
-		if (fechaFinal != null && fechaFinal != null) {
-			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-		}
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa());
-		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
-		Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-		// Se prepara el correo
-		String from = "FacturasEmitidas@emprendesoftcr.com";
-		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@emprendesoftcr.com";
+			// Se buscan las facturas
+			Date fechaInicio = Utils.parseDate(fechaInicialParam);
+			Date fechaFinal = Utils.parseDate(fechaFinalParam);
+			if (fechaFinal == null) {
+				fechaFinal = new Date(System.currentTimeMillis());
 			}
+			if (fechaFinal != null && fechaFinal != null) {
+				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+			}
+			Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa());
+			// Se prepara el excell
+			ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
+			Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+			// Se prepara el correo
+			String from = "FacturasEmitidas@emprendesoftcr.com";
+			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			String subject = "Ventas por articulo dentro del rango de fechas: " + fechaInicialParam + " al " + fechaFinalParam;
+			ArrayList<String> listaCorreos = new ArrayList<>();
+			listaCorreos.add(correoAlternativo);
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("fechaInicial", fechaInicialParam);
+			modelEmail.put("fechaFinal", fechaFinalParam);
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			}
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
 		}
-		String subject = "Ventas por articulo dentro del rango de fechas: " + fechaInicialParam + " al " + fechaFinalParam;
-		ArrayList<String> listaCorreos = new ArrayList<>();
-		listaCorreos.add(correoAlternativo);
-		Map<String, Object> modelEmail = new HashMap<>();
-		modelEmail.put("fechaInicial", fechaInicialParam);
-		modelEmail.put("fechaFinal", fechaFinalParam);
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
+		return respuestaServiceValidator;
+
 	}
 
 	private Collection<Attachment> createAttachments(Attachment... attachments) {
@@ -370,7 +390,7 @@ public class DetalleController {
 	 * @param codigoParam
 	 * @param tipoDocumentoParam
 	 * @param idClienteParam
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/DescargarDetallexCodigoAjax.do", method = RequestMethod.GET)
 	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws Exception {
@@ -403,7 +423,7 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA","Total IVA Neto","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA", "Total IVA Neto", "Mercancia Gravada", "Mercancia Exenta", "Mercancia Exonerada", "Servicios Gravados", "Servicios Exentos", "Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
 		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,factura.tipoDocSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, factura.nombreFactura, cantidadSTR, precioUnitarioSTR, montoTotalNC, montoDescuentoNC,tipoImpuestoSTR, codigoTarifaSTR,impuesto, montoImpuestoNC,montoImpuestoNeto,totalMercanciaGravada,totalMercanciaExenta,totalMercanciaExonerada,totalServicioGravados,totalServicioExentos,totalServicioExonerados, montoTotalLineaNC,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}

@@ -1117,6 +1117,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
+		Boolean resultado = Boolean.FALSE;
 		try {
 			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS);
 			if (semaforoEnvioCorreo != null) {
@@ -1158,13 +1159,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
-											enviarCorreos(factura, haciendaBD, listaCorreos);
+											resultado = enviarCorreos(factura, haciendaBD, listaCorreos);
 										}
 									}
 
 								}
-								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-								haciendaBo.modificar(haciendaBD);
+								if(resultado.equals(Boolean.TRUE)){
+									haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+									haciendaBo.modificar(haciendaBD);
+									
+								}
 
 							} catch (Exception e) {
 								// Se modifica el registros
@@ -1241,7 +1245,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	@Override
-	public void enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception {
+	public Boolean enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception {
+		Boolean resultado = Boolean.FALSE;
 		try {
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
@@ -1272,11 +1277,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
 			log.info("Documento enviado al correo: " + factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+			resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+			
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + factura.getEmpresa().getNombre() + " Consecutivo" + factura.getNumeroConsecutivo());
 			throw e;
 		}
+		return resultado;
 	}
 
 	private void soporteProblemaEnvioCorreos(Empresa empresa, String consecutivo, Exception error) throws Exception {
@@ -1297,7 +1304,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
 	 */
 	@Override
-	public void enviarCorreos(Factura factura, Hacienda haciendaTemp, ArrayList<String> listaCorreos) throws Exception {
+	public Boolean enviarCorreos(Factura factura, Hacienda haciendaTemp, ArrayList<String> listaCorreos) throws Exception {
+		Boolean resultado = Boolean.FALSE;
 		try {
 			String xmlFactura = Constantes.EMPTY;
 			String xmlRespuesta = Constantes.EMPTY;
@@ -1343,11 +1351,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
 			log.info("Documento enviado al correo: " + haciendaTemp.getConsecutivo() + " Empresa:" + haciendaTemp.getEmpresa().getNombre());
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+			resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
+			
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + haciendaTemp.getEmpresa().getNombre() + " Consecutivo" + haciendaTemp.getConsecutivo());
 			throw e;
 		}
+		return resultado;
 	}
 
 	/**

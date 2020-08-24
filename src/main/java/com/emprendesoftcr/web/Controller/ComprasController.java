@@ -21,7 +21,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.jxls.template.SimpleExporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -98,6 +101,7 @@ public class ComprasController {
 
 	@Autowired
 	private RecepcionFacturaBo																				recepcionFacturaBo;
+	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -443,77 +447,100 @@ public class ComprasController {
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
+	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
+		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// Se obtiene los totales
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			
+			TotalComprasAceptadasCommand totalComprasAceptadasCommand = new TotalComprasAceptadasCommand();
 
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		// Se obtiene los totales
-		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY, estado, tipoGasto, actividadEconomica);
+			Double totalImpuestoNotaCredito = Constantes.ZEROS_DOUBLE;
+			Double totalImpuestoNotaDebito = Constantes.ZEROS_DOUBLE;
+			Double totalImpuestosCompras = Constantes.ZEROS_DOUBLE;
+			Double totalCompraNotaCredito = Constantes.ZEROS_DOUBLE;
+			Double totalCompraNotaDebito = Constantes.ZEROS_DOUBLE;
+			Double totalCompra = Constantes.ZEROS_DOUBLE;
+			for (RecepcionFactura recepcionFactura : recepcionFacturas) {
+				if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				} else if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				}
+				if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+
+				}
+			}
+			totalComprasAceptadasCommand.setTotalImpuesto(totalImpuestosCompras);
+			totalComprasAceptadasCommand.setTotalImpuestoNotaCredito(totalImpuestoNotaCredito);
+			totalComprasAceptadasCommand.setTotalImpuestoNotaDebito(totalImpuestoNotaDebito);
+			totalComprasAceptadasCommand.setTotalNotaCredito(totalCompraNotaCredito);
+			totalComprasAceptadasCommand.setTotalNotaDebito(totalCompraNotaDebito);
+			totalComprasAceptadasCommand.setTotal(totalCompra);
+
+			// Se prepara el excell
+			ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
+			Collection<Attachment> attachments = createAttachments(attachment("ComprasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+			// Se prepara el correo
+			String from = "ComprasEmitidas@emprendesoftcr.com";
+			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			String subject = "Compras dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+
+			ArrayList<String> listaCorreos = new ArrayList<>();
+			if (correoAlternativo != null && correoAlternativo.length() > 0) {
+				listaCorreos.add(correoAlternativo);
+			} else {
+				listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+			}
+
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+			if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+				modelEmail.put("estado", "Aceptadas");
+			}
+			if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+				modelEmail.put("estado", "No Aceptadas");
+			}
+			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
+			modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);
+			modelEmail.put("totalImpuesto", totalComprasAceptadasCommand.getTotalImpuesto() != null ? totalComprasAceptadasCommand.getTotalImpuestoSTR() : Constantes.ZEROS);
+
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_COMPRAS_ACEPTADAS, modelEmail);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			}
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+
 		
-		TotalComprasAceptadasCommand totalComprasAceptadasCommand = new TotalComprasAceptadasCommand();
-
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY, estado, tipoGasto, actividadEconomica);
-		Double totalImpuestoNotaCredito = Constantes.ZEROS_DOUBLE;
-		Double totalImpuestoNotaDebito = Constantes.ZEROS_DOUBLE;
-		Double totalImpuestosCompras = Constantes.ZEROS_DOUBLE;
-		Double totalCompraNotaCredito = Constantes.ZEROS_DOUBLE;
-		Double totalCompraNotaDebito = Constantes.ZEROS_DOUBLE;
-		Double totalCompra = Constantes.ZEROS_DOUBLE;
-		for (RecepcionFactura recepcionFactura : recepcionFacturas) {
-			if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
-			} else if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-				totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
-			}
-			if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-				totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
-
-			}
-		}
-		totalComprasAceptadasCommand.setTotalImpuesto(totalImpuestosCompras);
-		totalComprasAceptadasCommand.setTotalImpuestoNotaCredito(totalImpuestoNotaCredito);
-		totalComprasAceptadasCommand.setTotalImpuestoNotaDebito(totalImpuestoNotaDebito);
-		totalComprasAceptadasCommand.setTotalNotaCredito(totalCompraNotaCredito);
-		totalComprasAceptadasCommand.setTotalNotaDebito(totalCompraNotaDebito);
-		totalComprasAceptadasCommand.setTotal(totalCompra);
-
-		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
-		Collection<Attachment> attachments = createAttachments(attachment("ComprasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-
-		// Se prepara el correo
-		String from = "ComprasEmitidas@emprendesoftcr.com";
-		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@emprendesoftcr.com";
-			}
-		}
-		String subject = "Compras dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
-
-		ArrayList<String> listaCorreos = new ArrayList<>();
-		if (correoAlternativo != null && correoAlternativo.length() > 0) {
-			listaCorreos.add(correoAlternativo);
-		} else {
-			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
-		}
-
-		Map<String, Object> modelEmail = new HashMap<>();
-		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
-			modelEmail.put("estado", "Aceptadas");
-		}
-		if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
-			modelEmail.put("estado", "No Aceptadas");
-		}
-		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
-		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
-		modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);
-		modelEmail.put("totalImpuesto", totalComprasAceptadasCommand.getTotalImpuesto() != null ? totalComprasAceptadasCommand.getTotalImpuestoSTR() : Constantes.ZEROS);
-
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_COMPRAS_ACEPTADAS, modelEmail);
+		return respuestaServiceValidator;
 	}
 
 	private Collection<Attachment> createAttachments(Attachment... attachments) {

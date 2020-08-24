@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.ServletOutputStream;
@@ -27,8 +28,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,6 +68,7 @@ import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
+import com.emprendesoftcr.web.command.AgregarClienteArticuloCommand;
 import com.emprendesoftcr.web.command.HaciendaCommand;
 import com.emprendesoftcr.web.command.HaciendaNativeCommand;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -447,7 +451,6 @@ public class HaciendasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
 
 		Date fechaIniciot = Utils.parseDate(fechaInicio);
 		Date fechaFinalt = Utils.parseDate(fechaFin);
@@ -459,11 +462,6 @@ public class HaciendasController {
 		}
 
 		DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-//		delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
-//		delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
-//		
-//		Long total = dataTableBo.contar(query);
-//		Collection<Object> objetos = dataTableBo.listar(query);
 		Collection<HaciendaNative> objetos = cedulaReceptor.equals(Constantes.COMBO_TODOS) ? haciendaNativeBo.findByEmpresaAndEstado(usuarioSesion.getEmpresa(), dateFormat.format(fechaIniciot), dateFormat.format(fechaFinalt)) : null;
 		Collection<HaciendaNativeByEmpresaAndFechaAndCliente> objetos_1 = objetos == null ? haciendaNativeBo.findByEmpresaAndFechaAndCliente(usuarioSesion.getEmpresa(), dateFormat.format(fechaIniciot), dateFormat.format(fechaFinalt), cedulaReceptor) : null;
 
@@ -586,7 +584,7 @@ public class HaciendasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoClienteAndEmisorAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoEmisorAndReceptor(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) {
+	public RespuestaServiceValidator enviarCorreoEmisorAndReceptor(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idHacienda) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -620,7 +618,16 @@ public class HaciendasController {
 			}
 
 			listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			Boolean resultado = procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			}
+			
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
@@ -643,7 +650,7 @@ public class HaciendasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda, @RequestParam String correo) {
+	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result,  @RequestParam Long idHacienda, @RequestParam String correo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -676,7 +683,15 @@ public class HaciendasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
 
 			}
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			Boolean resultado = procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			}
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));

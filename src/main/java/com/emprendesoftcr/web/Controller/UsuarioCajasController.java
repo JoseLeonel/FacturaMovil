@@ -372,6 +372,7 @@ public class UsuarioCajasController {
 	}
 
 	private void enviarCorreoCierreCaja(UsuarioCajaCommand usuarioCajaCommand, Usuario usuario) throws Exception {
+		
 		Map<String, Object> modelEmail = new HashMap<>();
 		ArrayList<String> listaCorreos = new ArrayList<>();
 
@@ -440,7 +441,7 @@ public class UsuarioCajasController {
 			String from = "CierreCaja@emprendesoftcr.com";
 			String subject = "Cierre Caja-" + usuarioCajaBd.getCaja().getEmpresa().getAbreviaturaEmpresa() + " Apertura :" + usuarioCajaCommand.getCreated_atSTR() + " Cierre: " + usuarioCajaCommand.getCierreCajaSTR();
 
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);
+			Boolean resultado =  correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);
 		}
 
 	}

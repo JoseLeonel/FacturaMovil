@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jxls.template.SimpleExporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -72,15 +75,17 @@ public class CuentaPagarController {
 																																				};
 	@Autowired
 	private UsuarioBo																					usuarioBo;
-	
+
 	@Autowired
-	private CorreosBo																									correosBo;
+	private CorreosBo																					correosBo;
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
 
 	@Autowired
 	private ProveedorBo																				proveedorBo;
+
+	private Logger																						log					= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private CuentaPagarBo																			cuentaPagarBo;
@@ -89,7 +94,7 @@ public class CuentaPagarController {
 	private EmpresaPropertyEditor															empresaPropertyEditor;
 	@Autowired
 	private CuentaPagarPropertyEditor													cuentaPagarPropertyEditor;
-	
+
 	private ProveedorPropertyEditor														proveedorPropertyEditor;
 	@Autowired
 	private StringPropertyEditor															stringPropertyEditor;
@@ -107,62 +112,60 @@ public class CuentaPagarController {
 	public String listar(ModelMap model) {
 		return "views/cuentasxpagar/ListarCuentasXPagar";
 	}
-	
+
 	@RequestMapping(value = "/ListarCuentaPagarConsulta", method = RequestMethod.GET)
 	public String listarConsulta(ModelMap model) {
 		return "views/cuentasxpagar/ListarCuentasXPagarConsulta";
 	}
-	
-	
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaPagarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idProveedor,@RequestParam String estado) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idProveedor, @RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, proveedor, usuarioSesion.getEmpresa(),estado);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, proveedor, usuarioSesion.getEmpresa(), estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaPagarEstadoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarEstadoAjax(HttpServletRequest request, HttpServletResponse response,  @RequestParam Long idProveedor,@RequestParam String estado) {
+	public RespuestaServiceDataTable listarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idProveedor, @RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);
-		DataTableDelimitador query = DelimitadorBuilderEstado.get(request,  proveedor, usuarioSesion.getEmpresa(),estado);
+		DataTableDelimitador query = DelimitadorBuilderEstado.get(request, proveedor, usuarioSesion.getEmpresa(), estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
+
 	private static class DelimitadorBuilderEstado {
 
-		static DataTableDelimitador get(HttpServletRequest request,  Proveedor proveedor, Empresa empresa,String estado) {
+		static DataTableDelimitador get(HttpServletRequest request, Proveedor proveedor, Empresa empresa, String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaPagar");
-	
+
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (proveedor != null) {
 				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
 			}
-			if(estado !=null) {
-				if(!estado.equals(Constantes.EMPTY)) {
-					if(!estado.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+			if (estado != null) {
+				if (!estado.equals(Constantes.EMPTY)) {
+					if (!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 					}
-						
+
 				}
 			}
 			return delimitador;
 		}
 	}
-	
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa,String estado) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa, String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaPagar");
 			Date fechaInicio = new Date();
@@ -173,12 +176,12 @@ public class CuentaPagarController {
 			if (proveedor != null) {
 				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
 			}
-			if(estado !=null) {
-				if(!estado.equals(Constantes.EMPTY)) {
-					if(!estado.equals(Constantes.COMBO_TODOS)) {
-						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+			if (estado != null) {
+				if (!estado.equals(Constantes.EMPTY)) {
+					if (!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 					}
-						
+
 				}
 			}
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
@@ -202,79 +205,78 @@ public class CuentaPagarController {
 			return delimitador;
 		}
 	}
-	
-/**
- * Descarga de manuales de usuario de acuerdo con su perfil
- * @param request
- * @param response
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param idProveedorParam
- * @param estadoParam
- * @throws IOException
- * @throws Exception
- */
-@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarAjax.do", method = RequestMethod.GET)
-public void descargarDetalleTotalFacturasPagarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
 
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+	/**
+	 * Descarga de manuales de usuario de acuerdo con su perfil
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param idProveedorParam
+	 * @param estadoParam
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarAjax.do", method = RequestMethod.GET)
+	public void descargarDetalleTotalFacturasPagarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idProveedorParam, @RequestParam String estadoParam) throws IOException, Exception {
 
-	// Se buscan las facturas
-	Date fechaInicio = Utils.parseDate(fechaInicioParam);
-	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
 
-	String nombreArchivo = "cuentaxPagar.xls";
-	response.setContentType("application/octet-stream");
-	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, usuario.getEmpresa(), proveedor, estadoParam);
 
-	// Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
-	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		String nombreArchivo = "cuentaxPagar.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
-	int BUFFER_SIZE = 4096;
-	byte[] buffer = new byte[BUFFER_SIZE];
-	int bytesRead = -1;
-	while ((bytesRead = inputStream.read(buffer)) != -1) {
-		response.getOutputStream().write(buffer, 0, bytesRead);
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
 	}
-}
 
+	@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarEstadoAjax.do", method = RequestMethod.GET)
+	public void descargarDetalleTotalFacturasPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idProveedorParam, @RequestParam String estadoParam) throws IOException, Exception {
 
-@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarEstadoAjax.do", method = RequestMethod.GET)
-public void descargarDetalleTotalFacturasPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
 
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+		// Se buscan las facturas
+		Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado(usuario.getEmpresa(), proveedor, estadoParam);
 
-	// Se buscan las facturas
-	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado(usuario.getEmpresa(),proveedor,estadoParam);
+		String nombreArchivo = "cuentaxPagar.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
-	String nombreArchivo = "cuentaxPagar.xls";
-	response.setContentType("application/octet-stream");
-	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
-	// Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
-	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-
-	int BUFFER_SIZE = 4096;
-	byte[] buffer = new byte[BUFFER_SIZE];
-	int bytesRead = -1;
-	while ((bytesRead = inputStream.read(buffer)) != -1) {
-		response.getOutputStream().write(buffer, 0, bytesRead);
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
 	}
-}
 
-private ByteArrayOutputStream createExcelCuentaPagar(Collection<CuentaPagar> cuentaPagar) {
-	// Se prepara el excell
-	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Proveedor", "Total", "Saldo", "Abono");
-	new SimpleExporter().gridExport(headers, cuentaPagar, "id, created_atSTR, consecutivo, proveedorSTR, total,totalSaldo,totalAbono", baos);
-	return baos;
-}
-	
+	private ByteArrayOutputStream createExcelCuentaPagar(Collection<CuentaPagar> cuentaPagar) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Proveedor", "Total", "Saldo", "Abono");
+		new SimpleExporter().gridExport(headers, cuentaPagar, "id, created_atSTR, consecutivo, proveedorSTR, total,totalSaldo,totalAbono", baos);
+		return baos;
+	}
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarCuentaPagarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -286,104 +288,143 @@ private ByteArrayOutputStream createExcelCuentaPagar(Collection<CuentaPagar> cue
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-/**
- * Enviar Correo de las cuentas por cobrar
- * @param request
- * @param response
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param idProveedorParam
- * @param estadoParam
- * @param correoAlternativo
- * @param total
- * @param saldo
- * @param abono
- * @throws IOException
- * @throws Exception
- */
-@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoAjax.do", method = RequestMethod.GET)
-public void enviarCorreoCuentasXPagarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
 
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+	/**
+	 * Enviar Correo de las cuentas por cobrar
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param idProveedorParam
+	 * @param estadoParam
+	 * @param correoAlternativo
+	 * @param total
+	 * @param saldo
+	 * @param abono
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoAjax.do", method = RequestMethod.GET)
+	public RespuestaServiceValidator<?> enviarCorreoCuentasXPagarAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result,@RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idProveedorParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
+		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
 
-	// Se buscan las facturas
-	Date fechaInicio = Utils.parseDate(fechaInicioParam);
-	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
-//Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
-	
-	Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+			// Se buscan las facturas
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, usuario.getEmpresa(), proveedor, estadoParam);
+			// Se prepara el excell
+			ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
 
-		// Se prepara el correo
-		String from = "ComprasEmitidas@emprendesoftcr.com";
-		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+			Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+			// Se prepara el correo
+			String from = "ComprasEmitidas@emprendesoftcr.com";
+			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+				}
 			}
-		}
-		String subject = "Compras Pendientes de cancelar dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			String subject = "Compras Pendientes de cancelar dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
-		ArrayList<String> listaCorreos = new ArrayList<>();
-	
+			ArrayList<String> listaCorreos = new ArrayList<>();
+
 			listaCorreos.add(correoAlternativo);
-	
-		Map<String, Object> modelEmail = new HashMap<>();
-		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
-		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFin));
-		modelEmail.put("total", total);
-		modelEmail.put("abono", abono);
-		modelEmail.put("saldo", saldo);
 
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
-}
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFin));
+			modelEmail.put("total", total);
+			modelEmail.put("abono", abono);
+			modelEmail.put("saldo", saldo);
 
-
-@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoEstadoAjax.do", method = RequestMethod.GET)
-public void enviarCorreoCuentasXPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idProveedorParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
-
-	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
-
-	// Se buscan las facturas
-	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado( usuario.getEmpresa(),proveedor,estadoParam);
-//Se prepara el excell
-		ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
-	
-	Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-
-		// Se prepara el correo
-		String from = "ComprasEmitidas@emprendesoftcr.com";
-		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 			}
+
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
 		}
-		String subject = "Compras Pendientes de cancelar ";
 
-		ArrayList<String> listaCorreos = new ArrayList<>();
-	
+		return respuestaServiceValidator;
+	}
+
+	@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoEstadoAjax.do", method = RequestMethod.GET)
+	public RespuestaServiceValidator enviarCorreoCuentasXPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idProveedorParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+
+			// Se buscan las facturas
+			Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado(usuario.getEmpresa(), proveedor, estadoParam);
+			// Se prepara el excell
+			ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
+
+			Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+			// Se prepara el correo
+			String from = "ComprasEmitidas@emprendesoftcr.com";
+			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			String subject = "Compras Pendientes de cancelar ";
+
+			ArrayList<String> listaCorreos = new ArrayList<>();
+
 			listaCorreos.add(correoAlternativo);
-	
-		Map<String, Object> modelEmail = new HashMap<>();
-		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		modelEmail.put("total", total);
-		modelEmail.put("abono", abono);
-		modelEmail.put("saldo", saldo);
 
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
-}
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+			modelEmail.put("total", total);
+			modelEmail.put("abono", abono);
+			modelEmail.put("saldo", saldo);
 
-private Collection<Attachment> createAttachments(Attachment... attachments) {
-	return Arrays.asList(attachments);
-}
-private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
-	return new Attachment(name + ext, data);
-}
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
+			if (resultado.equals(Boolean.TRUE)) {
+				log.info("Enviado correctamente el correo {}", new Date());
+				System.out.println("Enviado correctamente el correo");
+			} else {
+				log.error("** Error  Enviado correo: " + " fecha " + new Date());
+				System.out.println("No enviado correctamente el correo");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			}
 
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+		return respuestaServiceValidator;
+	}
+
+	private Collection<Attachment> createAttachments(Attachment... attachments) {
+		return Arrays.asList(attachments);
+	}
+
+	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+		return new Attachment(name + ext, data);
+	}
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {
