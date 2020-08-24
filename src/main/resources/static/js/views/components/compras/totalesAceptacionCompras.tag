@@ -352,6 +352,14 @@ function __EnviarPorCorreo(){
         data:parametros ,
         method:"POST",
         success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                	sweetAlert("", data.message, "error");
+                }
+            }else{
+             	sweetAlert("", data.message, "info");
+            }
+			self.update();
         },
         error: function (xhr, status) {
             console.log(xhr);

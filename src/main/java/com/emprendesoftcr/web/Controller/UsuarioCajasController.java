@@ -151,7 +151,7 @@ public class UsuarioCajasController {
 	 * @param request
 	 * @param response
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarUsuariosCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -160,17 +160,15 @@ public class UsuarioCajasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
-		
-		
+
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
-		if(usuarioCajaBd != null) {
-			usuarioCajaBo.actualizarCaja(usuarioCajaBd);	
+		if (usuarioCajaBd != null) {
+			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 		}
-		
-		
-		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)) {
+
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario) || usuarioBo.isUsuario_SuperDario(usuario)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
@@ -185,26 +183,26 @@ public class UsuarioCajasController {
 		if (objetos != null) {
 			for (UsuarioCaja usuarioCaja : objetos) {
 				if (usuarioCaja.getId().longValue() > 0L) {
-					if(usuarioBo.isUsuario_SuperDario(usuario)) {
-						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+					if (usuarioBo.isUsuario_SuperDario(usuario)) {
+						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())) {
 							usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
-						//	usuarioCaja.settotal
+							// usuarioCaja.settotal
 							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
 						}
-						
-					}else {
+
+					} else {
 						if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
-						}else {
-							if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+						} else {
+							if (usuarioCaja.getUsuario().getId().equals(usuario.getId())) {
 								usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
-							//	usuarioCaja.settotal
+								// usuarioCaja.settotal
 								solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
 							}
 						}
-					
+
 					}
-	
+
 				}
 			}
 
@@ -230,7 +228,7 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(idUsuario);
-		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario)) {
+		if (usuarioBo.isUsuario_Vendedor(usuario) || usuarioBo.isUsuario_Cajero(usuario) || usuarioBo.isUsuario_Mesero(usuario) || usuarioBo.isUsuario_SuperDario(usuario)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
@@ -283,7 +281,7 @@ public class UsuarioCajasController {
 			}
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
-			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa(),usuario);
+			Caja caja = cajaBo.buscarCajaActiva(usuario.getEmpresa(), usuario);
 			UsuarioCaja usuarioCaja = usuarioCajaBo.aperturaCaja(listaCoteo, usuario, caja);
 			UsuarioCaja usuarioCajaBd1 = usuarioCajaBo.buscar(usuarioCaja.getId());
 			UsuarioCajaCommand usuarioCajaCommand = new UsuarioCajaCommand(usuarioCajaBd1);
@@ -345,8 +343,8 @@ public class UsuarioCajasController {
 
 			ArrayList<DenominacionCommand> listaCoteo = new ArrayList<>();
 			listaCoteo = denominacionCommand(conteoManualCommand);
-			
-			usuarioCajaBo.eliminarConteo(usuarioCajaBd,2);
+
+			usuarioCajaBo.eliminarConteo(usuarioCajaBd, 2);
 			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 
@@ -372,21 +370,21 @@ public class UsuarioCajasController {
 	}
 
 	private void enviarCorreoCierreCaja(UsuarioCajaCommand usuarioCajaCommand, Usuario usuario) throws Exception {
-		
+
 		Map<String, Object> modelEmail = new HashMap<>();
 		ArrayList<String> listaCorreos = new ArrayList<>();
 
 		if (usuario.getEmpresa().getCorreoCaja1() != null) {
-			if(!usuario.getEmpresa().getCorreoCaja1().isEmpty()) {
-				listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());	
+			if (!usuario.getEmpresa().getCorreoCaja1().isEmpty()) {
+				listaCorreos.add(usuario.getEmpresa().getCorreoCaja1());
 			}
-			
+
 		}
 		if (usuario.getEmpresa().getCorreoCaja2() != null) {
-			if(!usuario.getEmpresa().getCorreoCaja2().isEmpty()) {
-				listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());	
+			if (!usuario.getEmpresa().getCorreoCaja2().isEmpty()) {
+				listaCorreos.add(usuario.getEmpresa().getCorreoCaja2());
 			}
-			
+
 		}
 
 		if (!listaCorreos.isEmpty()) {
@@ -441,7 +439,7 @@ public class UsuarioCajasController {
 			String from = "CierreCaja@emprendesoftcr.com";
 			String subject = "Cierre Caja-" + usuarioCajaBd.getCaja().getEmpresa().getAbreviaturaEmpresa() + " Apertura :" + usuarioCajaCommand.getCreated_atSTR() + " Cierre: " + usuarioCajaCommand.getCierreCajaSTR();
 
-			Boolean resultado =  correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);
 		}
 
 	}

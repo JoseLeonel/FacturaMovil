@@ -447,7 +447,7 @@ public class ComprasController {
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
+	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -517,6 +517,7 @@ public class ComprasController {
 			if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 				modelEmail.put("estado", "No Aceptadas");
 			}
+			
 			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 			modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);

@@ -305,6 +305,7 @@ public class CuentaPagarController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoAjax.do", method = RequestMethod.GET)
+	@ResponseBody
 	public RespuestaServiceValidator<?> enviarCorreoCuentasXPagarAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result,@RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idProveedorParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -366,6 +367,7 @@ public class CuentaPagarController {
 	}
 
 	@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoEstadoAjax.do", method = RequestMethod.GET)
+	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoCuentasXPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idProveedorParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {

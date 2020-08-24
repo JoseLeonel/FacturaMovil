@@ -183,6 +183,7 @@ public class CuentaCobrarController {
 //Enviar Correo de las cuentas por cobrar
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
+	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idClienteParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -242,6 +243,7 @@ public class CuentaCobrarController {
 
 //Enviar Correo de las cuentas por cobrar
 	@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do", method = RequestMethod.GET)
+	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoCuentasXCobrarEstadoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idClienteParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
