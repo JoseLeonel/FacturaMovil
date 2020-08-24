@@ -8,6 +8,8 @@ import com.emprendesoftcr.modelo.UsuarioCaja;
 public interface SalidaEntradaDineroBo {
 
 	void agregar(SalidaEntradaDinero salidaEntradaDinero);
+	void eliminar(SalidaEntradaDinero salidaEntradaDinero);
+	SalidaEntradaDinero findById(Long id) ;
 
 	Collection<SalidaEntradaDinero> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja);
 	

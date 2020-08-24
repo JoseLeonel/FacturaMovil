@@ -176,16 +176,26 @@ public class UsuarioCajasController {
 		if (objetos != null) {
 			for (UsuarioCaja usuarioCaja : objetos) {
 				if (usuarioCaja.getId().longValue() > 0L) {
-					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
-						solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
-					}else {
+					if(usuarioBo.isUsuario_SuperDario(usuario)) {
 						if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
 							usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
 						//	usuarioCaja.settotal
 							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
 						}
+						
+					}else {
+						if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+							solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+						}else {
+							if (usuarioCaja.getUsuario().getId().equals(usuario.getId())){
+								usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
+							//	usuarioCaja.settotal
+								solicitudList.add(new UsuarioCajaCommand(usuarioCaja));
+							}
+						}
+					
 					}
-
+	
 				}
 			}
 

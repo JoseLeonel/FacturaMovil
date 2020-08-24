@@ -81,6 +81,9 @@ public class SalidaEntradaDinero implements Serializable {
 	public String getDescripcion() {
 		return descripcion;
 	}
+	public String getDescripcionSTR() {
+		return descripcion.length() > 30?descripcion.substring(0,30)+"....":descripcion;
+	}
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;

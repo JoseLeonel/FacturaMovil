@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.SalidaEntradaDineroDao;
 import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.modelo.UsuarioCajaFactura;
 
 @Repository("salidaEntradaDineroDao")
 public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
@@ -24,7 +26,17 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 
 	}
 
-	
+	@Override
+	public SalidaEntradaDinero findById(Long id) {
+		Query query = entityManager.createQuery("select obj from SalidaEntradaDinero obj where obj.id = :id");
+		query.setParameter("id", id);
+		List<SalidaEntradaDinero> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (SalidaEntradaDinero) results.get(0);
+		} else {
+			return null;
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -43,6 +55,14 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 		query.setParameter("idUsuarioCaja", usuarioCaja.getId());
 		query.setParameter("tipo", tipo);
 		return query.getResultList();
+	}
+
+
+
+	@Override
+	public void eliminar(SalidaEntradaDinero salidaEntradaDinero) {
+		 entityManager.remove(salidaEntradaDinero);
+		
 	}
 
 }

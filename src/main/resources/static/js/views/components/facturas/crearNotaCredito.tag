@@ -1028,7 +1028,7 @@ function mostrarPAgo(){
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
     }
-    getSubTotalGeneral()
+   // getSubTotalGeneral()
     self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
      self.mostrarCrearNota      = false
@@ -1131,93 +1131,31 @@ function aplicarCambioLineaDetalle(){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.total            = 0;
+        self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
-    self.factura.subTotal         = 0;
+    self.factura.totalImpuestoServ = 0; 
+    self.factura.subTotal          = 0;
     self.update()
-    var totalVenta     = 0
-    var subTotal       = 0
-    var totalDescuento = 0
-    var totalImpuesto  = 0
-    var totalMercanciasGravadas = 0
-    var totalMercanciasExentas  = 0
-    var totalServGravados       = 0
-    var totalServExentos        = 0
-    var totalGravado            = 0
-    var totalExento             = 0
-    var totalComprobante        = 0
-    var totalventaNeta          = 0
-    var totalGanancia           = 0
-    self.cantArticulos      = 0
-    var montoExoneracion = 0
-    self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.tipoImpuesto.length > 0  && e.unidadMedida !="Sp"?e.montoTotal:0
-        totalMercanciasExentas  += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0
-        totalServGravados       += e.tipoImpuesto.length > 0 && e.unidadMedida =="Sp"?e.montoTotal:0
-        totalServExentos        += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0
-        totalGravado            += e.tipoImpuesto.length > 0 ?e.montoTotal:0
-        totalExento             += e.tipoImpuesto.length == 0 ?e.montoTotal:0
-        totalComprobante        += e.montoTotalLinea
-        subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalVenta              += e.montoTotal
-        totalGanancia           +=__valorNumerico(e.ganancia)
-        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion) 
-    });
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) 
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-//Se verifica si la mesa tiene impuestos
-
-    var tieneMesa = typeof self.factura.mesa !== 'undefined'?true:false;
-    tieneMesa = self.factura.mesa == null?false:true
-
-
-    var tieneImpuestoServiciot = false
-    if(tieneMesa){
-      tieneImpuestoServiciot = typeof self.factura.mesa.impuestoServicio !== 'undefined'?true:false;  
-    }
-    if (tieneMesa && tieneImpuestoServiciot){
-        if(self.factura.mesa.impuestoServicio  == true){
-            self.factura.totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10))
-            self.factura.totalVentaNeta    = Math.round(__valorNumerico(totalVenta-totalDescuento) + __valorNumerico(self.factura.totalImpuestoServ))
-            totalComprobante          = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(self.factura.totalImpuestoServ))
-        }
-    }    
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
-    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
-    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
-    self.update(); 
-    getSubTotalGeneral()
-  //  $('#totalTarjeta').val(null)
-  //  $('#totalBanco').val(null)
-  //  $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
-}
-/**
-*  Sub Total Generar
-**/
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
-    self.subTotalGeneral = formatoDecimales(resultado,2)
-    self.factura.subtotal =  resultado
-    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
-    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
+                        //Factura.js
+    var resultado = __ResumenFactura(self.detail,self.factura);
+    self.factura = resultado.factura
     self.update()
+    self.cantArticulos = resultado.cantArticulos
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
+    self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
+    self.totalPesoByFacturaSTR = formatoDecimales(resultado.totalPesoByFactura,2);
+    self.totalComprobante = formatoDecimales(resultado.totalComprobante,2);
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2);
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2);
+    self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
+    self.subTotalGeneral =  resultado.subTotalGeneral
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
+    self.totalImpuesto = resultado.totalImpuesto
+    self.update()
+
+ 
 }
 
 

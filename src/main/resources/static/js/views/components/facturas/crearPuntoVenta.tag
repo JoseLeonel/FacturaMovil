@@ -2723,7 +2723,7 @@ function mostrarPAgo(){
     }
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    getSubTotalGeneral()
+   // getSubTotalGeneral()
     self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -2841,7 +2841,10 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
-            ActualizarLineaDEtalle()
+                        //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+    
             self.detail[count] = self.item;
             self.update();
         }
@@ -3146,7 +3149,10 @@ function __agregarArticulo(cantidad){
                 self.cantidadEnterFacturar = 0
                 self.cantArticulos = self.cantArticulos + 1
                 self.update();
-                ActualizarLineaDEtalle()
+                            //factura.js
+                self.item = ActualizarLineaDEtalle(self.item) 
+                self.update()
+    
                 self.detail[count] = self.item;
                 encontrado = true;
                 self.update();
@@ -3176,7 +3182,10 @@ function aplicarLineaFacturaCambioPrecio(){
             var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
             self.item.precioUnitario = precioUnitario
             self.update();
-            ActualizarLineaDEtalle()
+            //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+    
 
             self.detail[count] = self.item;
             self.update();
@@ -3456,62 +3465,17 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 }
 
 
-function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
-    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = 0
-    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
-    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1
-    self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
 
-    self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = montoDescuento
-    self.item.subTotal         = subTotal
-    self.item.montoImpuesto    = montoImpuesto
-    self.item.montoImpuesto1   = montoImpuesto1
-
-    self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
-    self.item.montoGanancia    = self.item.ganancia
-    self.update()
-}
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-	    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc <= porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-        if(porcentajeGanancia <=0){
-            porcentaje =  porcentajeDesc;
-        }
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    self.item.porcentajeDesc = porcentaje
-	    self.update()
-
-	    var totalDescuento =  precioUnitario * cantidad
-        totalDescuento = totalDescuento * porcentaje
-        totalDescuento = totalDescuento /100
-	    var resultado = totalDescuento;
-	    return resultado
-}
 
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
     self.item.ganancia = ganancia
     self.item.montoGanancia    = self.item.ganancia
-
+                //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
     self.update()
-    ActualizarLineaDEtalle()
+    
     aplicarCambioLineaDetalle()
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide')
@@ -3551,7 +3515,10 @@ function _actualizarDesc(){
 
     self.item.porcentajeDesc =  __valorNumerico(descuento);
     self.update()
-    ActualizarLineaDEtalle()
+                //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+    
     aplicarCambioLineaDetalle()
      $(".aplicarDescuento").val(null);
     $('#modalCambiarDescuento').modal('hide')
@@ -3563,50 +3530,28 @@ function __calculate() {
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
-    self.factura.subTotal         = 0;
+    self.factura.totalImpuestoServ = 0; 
+    self.factura.subTotal          = 0;
     self.update()
-    var totalVenta     = 0
-    var subTotal       = 0
-    var totalDescuento = 0
-    var totalImpuesto  = 0
-    var totalImpuesto1 = 0
-    var totalComprobante        = 0
-    var totalventaNeta          = 0
-    var totalGanancia           = 0
-    self.cantArticulos      = 0
-    var totalPesoByFactura = 0
-    var montoExoneracion = 0
-    self.detail.forEach(function(e){
-        totalComprobante        += e.montoTotalLinea
-        subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
-        totalVenta              += e.montoTotal
-        totalGanancia           +=__valorNumerico(e.ganancia)
-        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1
-        totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad)
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion)
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion1)
-    });
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
-    self.totalPesoByFactura = __valorNumerico(totalPesoByFactura)
-    self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
+                        //Factura.js
+    var resultado = __ResumenFactura(self.detail,self.factura);
+    self.factura = resultado.factura
+    self.update()
+    self.cantArticulos = resultado.cantArticulos
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
+    self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
+    self.totalPesoByFacturaSTR = formatoDecimales(resultado.totalPesoByFactura,2);
+    self.totalComprobante = formatoDecimales(resultado.totalComprobante,2);
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2);
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2);
+    self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
+    self.subTotalGeneral =  resultado.subTotalGeneral
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
+    self.totalImpuesto = resultado.totalImpuesto
+    self.update()
 
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
-    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
-    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
-    self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
-    self.update();
     getPosicionInputCodigo()
-    getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
@@ -3619,14 +3564,6 @@ function __calculate() {
 
 }
 
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
-    self.subTotalGeneral = formatoDecimales(resultado,2)
-    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
-    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
-    self.update()
-}
 
 function _informacionData_Articulo(){
    self.informacion_tabla_articulo = [

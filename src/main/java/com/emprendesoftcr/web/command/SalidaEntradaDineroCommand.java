@@ -1,17 +1,39 @@
 package com.emprendesoftcr.web.command;
 
-public class SalidaEntradaDineroCommand {
+import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 
+public class SalidaEntradaDineroCommand {
+  private Long id;
 	private String	descripcion;
 
 	private Double	total;
 
 	private Integer	tipo;
+	
+	private String	totalSTR;
 
-
+	public SalidaEntradaDineroCommand(SalidaEntradaDinero salidaEntradaDinero) {
+		super();
+		this.setDescripcion(salidaEntradaDinero.getDescripcion());
+		this.setTipo(salidaEntradaDinero.getTipo());
+		this.setTotal(salidaEntradaDinero.getTotal());
+		this.setId(salidaEntradaDinero.getId());
+		this.setTotalSTR(salidaEntradaDinero.getTotalSTR());
+	}
 
 	public SalidaEntradaDineroCommand() {
 		super();
+	}
+	
+
+	
+	public String getTotalSTR() {
+		return totalSTR;
+	}
+
+	
+	public void setTotalSTR(String totalSTR) {
+		this.totalSTR = totalSTR;
 	}
 
 	public String getDescripcion() {
@@ -38,6 +60,16 @@ public class SalidaEntradaDineroCommand {
 	
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	
+	public Long getId() {
+		return id;
+	}
+
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	

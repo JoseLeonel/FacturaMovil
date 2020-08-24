@@ -1405,14 +1405,14 @@ function __ComboTipoDocumentos(){
         estado:2,
         descripcion:$.i18n.prop("combos.tipoDocumento.boleta")
     })
-     self.comboTipoDocumentos.push({
-        estado:3,
-        descripcion:$.i18n.prop("combos.tipoDocumento.nota.credito")
-    })
-    self.comboTipoDocumentos.push({
-        estado:4,
-        descripcion:$.i18n.prop("combos.tipoDocumento.nota.debido")
-    })
+  //   self.comboTipoDocumentos.push({
+  //      estado:3,
+  //      descripcion:$.i18n.prop("combos.tipoDocumento.nota.credito")
+  //  })
+  //  self.comboTipoDocumentos.push({
+  //      estado:4,
+  //      descripcion:$.i18n.prop("combos.tipoDocumento.nota.debido")
+  //  })
 
 
     self.update()
