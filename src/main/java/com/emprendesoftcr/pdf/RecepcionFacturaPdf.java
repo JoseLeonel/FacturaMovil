@@ -6,12 +6,7 @@
 package com.emprendesoftcr.pdf;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class RecepcionFacturaPdf {
 

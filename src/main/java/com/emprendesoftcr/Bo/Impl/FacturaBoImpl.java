@@ -838,27 +838,28 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
 			detalle.setUsuario(usuario);
 			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() != null ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
-			detalleFacturaCommand.setTipoImpuesto1(detalleFacturaCommand.getTipoImpuesto1() != null ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
+			detalleFacturaCommand.setTipoImpuestoMag(detalleFacturaCommand.getTipoImpuestoMag() != null ? detalleFacturaCommand.getTipoImpuestoMag() : Constantes.EMPTY);
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
-			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() != null ? detalleFacturaCommand.getImpuesto1() : Constantes.ZEROS_DOUBLE);
+			detalle.setImpuestoMag(detalleFacturaCommand.getImpuestoMag() != null ? detalleFacturaCommand.getImpuestoMag() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
-			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
+			detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
 			detalle.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
-			detalle.setTipoImpuesto1(Constantes.EMPTY);
+			
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
 			detalle.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
-			detalle.setPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : detalleFacturaCommand.getPorcentajeExoneracion());
-
+			 
+			detalle.setPorcentajeExoneracion(getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalle.getImpuesto()));
+			
 			detalle.setMontoTotal(Utils.getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
 			detalle.setMontoDescuento(Utils.getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
 			detalle.setSubTotal(Utils.getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
-			detalle.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
+			detalle.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			detalle.setMontoImpuesto(Utils.getMontoImpuesto(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion1(), detalle.getImpuesto()));
-
-			detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal()));
+			detalle.setMontoImpuesto(Utils.getMontoImpuesto(detalle.getSubTotal(), Constantes.ZEROS_DOUBLE, detalle.getMontoExoneracion1(), detalle.getImpuesto()));
+      
+			detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(),detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal()));
 
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 
@@ -875,6 +876,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
 			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
 			montoTotalLinea = Utils.getMontoTotalLinea(detalle.getSubTotal(), detalle.getImpuestoNeto());
+			detalle.setMontoTotalLinea(montoTotalLinea);
 
 			// cambios de doble impuesto
 
@@ -883,11 +885,11 @@ public class FacturaBoImpl implements FacturaBo {
 			totalServExonerado = totalServExonerado + Utils.getTotalServExoneradoSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getPorcentajeExoneracion(), detalle.getImpuesto(), detalle.getMontoTotal());
 			totalMercExonerada = totalMercExonerada + Utils.getTotalMercExoneradaSubTotal(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getPorcentajeExoneracion(), detalle.getImpuesto(), detalle.getMontoTotal());
 			totalImpuesto = totalImpuesto + Utils.getTotalImpuesto(detalle.getImpuestoNeto());
-			totalMercanciasExentas = totalMercanciasExentas + Utils.getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
+			totalMercanciasExentas = totalMercanciasExentas + Utils.getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), Constantes.ZEROS_DOUBLE, detalle.getMontoTotal());
 
-			totalServExentos = totalServExentos + Utils.getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
+			totalServExentos = totalServExentos + Utils.getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), Constantes.ZEROS_DOUBLE, detalle.getMontoTotal());
 
-			totalExento = totalExento + Utils.getTotalExentos(detalle.getTipoImpuesto(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
+			totalExento = totalExento + Utils.getTotalExentos(detalle.getTipoImpuesto(), detalle.getMontoImpuesto(), Constantes.ZEROS_DOUBLE, detalle.getMontoTotal());
 
 			totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalle.getMontoDescuento());
 
@@ -953,6 +955,25 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuestoServicio(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalImpServicios) ? Utils.roundFactura(totalImpServicios, 5) : totalImpServicios));
 		factura.setTotalComprobante(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante));
 
+	}
+	
+	private Integer getPorcentajeExoneracion(Integer porcentajeExoneracion, Double impuesto) {
+		Integer valor = Constantes.ZEROS;
+		
+		if(porcentajeExoneracion != null) {
+			if(porcentajeExoneracion > Constantes.ZEROS) {
+				if(impuesto.intValue() < porcentajeExoneracion ) {
+           valor = impuesto.intValue(); 					
+				}else {
+					valor = porcentajeExoneracion;
+				}
+			}
+			
+			
+		}
+		
+		
+		return valor;
 	}
 
 	/**

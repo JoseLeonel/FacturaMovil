@@ -278,6 +278,7 @@ public class ProveedorArticuloController {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/findArticuloProveedorByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo,@RequestParam Long idProveedor, BindingResult result, SessionStatus status) {

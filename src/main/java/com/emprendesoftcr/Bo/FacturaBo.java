@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.TipoCambio;
@@ -43,6 +42,7 @@ public interface FacturaBo {
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconomica);
+
 	TotalFacturaCommand sumarFacturasNoElectronica(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconomica);
 
 	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa, String actividadEconomica);
@@ -51,15 +51,15 @@ public interface FacturaBo {
 
 	Collection<Object[]> proformasByState(Integer estado, Integer idEmpresa);
 
-
 	ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception;
+
 	Collection<Factura> findByEnvioCorreoSimplificado(Integer estadoFirma);
+
 	ArrayList<String> listaCorreosAsociadosFactura(Factura factura);
-	
+
 	Collection<Factura> findBySinNotificarCorreo();
-	
-	
-	ByteArrayInputStream createExcelFacturas(Collection<ListarFacturasNativa> facturas,Empresa empresa, String fechaInicio,String fechaFinal,Integer estado, Cliente cliente)throws IOException;
-	
-	ByteArrayInputStream createExcelFacturasTotalMensual(Collection<Factura> facturas,Empresa empresa, String fechaInicio,String fechaFinal,Integer estado, String actividadEconomica)throws IOException;
+
+	ByteArrayInputStream createExcelFacturas(Collection<ListarFacturasNativa> facturas, Empresa empresa, String fechaInicio, String fechaFinal, Integer estado, Cliente cliente) throws IOException;
+
+	ByteArrayInputStream createExcelFacturasTotalMensual(Collection<Factura> facturas, Empresa empresa, String fechaInicio, String fechaFinal, Integer estado, String actividadEconomica) throws IOException;
 }

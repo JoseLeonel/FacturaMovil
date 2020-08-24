@@ -1,23 +1,38 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <div th:replace="fragments/header :: header-css"/>
-</head>
-<body>
+<head th:replace="layout/layout :: head"></head>
 
-<div th:replace="fragments/header :: header"/>
 
-<div class="container">
-
-    <div class="starter-template">
-        <h1>403 - Access is denied</h1>
-        <div th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]', you do not have permission to access this page.</div>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+	        	<div class="container">
+				    <div class="starter-template">
+				        <h1>403 - Access is denied</h1>
+				        <div th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]', you do not have permission to access this page.</div>
+				    </div>
+				</div>
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
     </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
 
-</div>
-<!-- /.container -->
-
-<div th:replace="fragments/footer :: footer"/>
 
 </body>
 </html>

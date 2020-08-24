@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
@@ -36,5 +38,5 @@ public interface CompraBo {
 	
 	void anularCompra(Compra compra) throws Exception;
 
-
+	ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException;
 }

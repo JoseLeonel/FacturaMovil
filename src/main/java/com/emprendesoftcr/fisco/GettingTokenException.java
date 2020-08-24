@@ -2,7 +2,11 @@ package com.emprendesoftcr.fisco;
 
 public class GettingTokenException extends Exception {
 
-    private final int statusCode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+		private final int statusCode;
 
     public static GettingTokenException instance(String message, int statusCode) {
         return new GettingTokenException(message, statusCode);

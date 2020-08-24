@@ -1,0 +1,493 @@
+#tipoCambioDolarCSS{
+	display: flex;
+    flex-direction: column;
+}
+#tipoCambioCSS{
+	display:flex;
+	justify-content: space-around;
+}
+
+.tamanoVentaEspera{
+   font-size: 14px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+div.fondoVentaEspera:hover{
+    color:#30ed17 !important;
+    cursor: pointer;
+    
+}
+.ventaEspera{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+    div.labelBotones:hover{
+        color:#30ed17 !important;
+        font-size: 22px
+    }
+    .simbolodividir{
+        font-size:20px;
+    }
+    span.fontSumarRestar:hover{
+        background-color: black;
+        font-size: 22px
+    }
+    div.BotonesSumarRestar:hover {
+        background-color: black;
+        font-size: 22px
+    }
+    .modalTitleCambioPrecio{
+        color: white;
+    }
+    .modalInputCambioPrecioCodigoDescripcion{
+       border-radius: 10px !important;
+       font-size: 40px !important;
+    }
+    .modalInputCambioPrecio{
+        font-size: 70px !important;
+        color:blue !important;
+        border-radius: 16px !important;
+    }
+    .modalCambioPrecioBotones{
+         border-radius: 16px !important;
+    }
+
+    .fontSumarRestar{
+        font-size: 20px;
+    }
+    .input-group-botonessumarrestarnuevocliente {
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: #555;
+        text-align: center;
+        background-color: #151517;
+        border-radius: 4px;
+    }
+    .BotonesSumarRestar{
+        position: relative;
+        border-collapse: separate;
+    }
+    .containerSumarRestar{
+        flex:1;
+    }
+    .containerIconosSumaRestaAgregarCliente{
+        flex:1;
+    }
+    .campoDetalle {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        /* margin: 2px 0; */
+        padding: 1px 2px;
+        overflow: visible;
+    }
+    .campoLabel{
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .teclashift {
+        font-weight: 700;
+        font-size: 27px !important;
+        text-align: center;
+        color: red;
+
+    }
+    .teclaFuncion{
+
+    }
+    .opcionPrecioPublico{
+        display: flex;
+        flex-direction: column;
+    }
+    .tituloTipoCambio{
+        color: #0c3f65 !important;
+        float: left !important;
+        font-size: 20px !important;
+        background-color: transparent !important;
+        font-weight: normal;
+        text-align: left;
+    }
+    .ssCambioCentral{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: center;
+            font-weight: 900;
+
+    }
+    .ssCambio{
+        color: #0c3f65 !important;
+        display: block;
+        text-align: left;
+    }
+    @media (min-width: 992px){
+    .modal-lg {
+        width: 1024px !important;
+    }
+    }
+    .facturaDiaContainer{
+    display:flex;
+    }
+    .tamanoClienteNuevo{
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        height: 10%;
+
+    }
+    .tituloClienteNuevo{
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 600;
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+    }
+    .btn-dark-gray {
+        background-color: #3D3E42;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px!important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .btn-green {
+        background-color: #4cae4c;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 30px !important;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    .botonesContainer{
+       display:flex;
+    }
+    .boton{
+       flex: 1;
+    }
+    .imagenesBilletes{
+      height: 90px;
+      width: 170px;
+    }
+   .pantallaBilletes{
+       display:flex;
+
+   }
+   .billeteContainer{
+       display:flex;
+       flex-flow: wrap;
+       flex-direction: row;
+   }
+   .billete{
+    cursor: pointer;
+    margin-right: 4%;
+    margin-top: 2%;
+
+   }
+    .input-group {
+        position: relative;
+        display: flex;
+        border-collapse: separate;
+    }
+     .input-group-addon.btnClientes {
+       color: #66b12f;
+        cursor: pointer;
+    }
+    .elementoTotalesChino{
+        font-weight: 600 !important;
+        font-size: 32px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        margin-left: 4%;
+        margin-bottom: 2%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+    .elementoTotales{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+        margin-left: 2%;
+    }
+    .TotalesContainer{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .contenedorExoneracion{
+    }
+    .label-totalesComprobanteChino {
+        display: flex;
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 37px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
+        cursor: pointer;
+        margin: 2%!important;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 7px !important;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .titleListaPrecio{
+        color:#0c3f65;
+       
+    }
+    .btn-block{
+          display: block;
+        width: 100%;
+        margin-top: 12% !important;
+        margin-left: 24% !important; 
+    }
+    .tituloDetalle{
+        text-align: center;
+        text-decoration: none;
+        font-style: italic;
+        color: black;
+        font-weight: 600;
+        font-size: 20px;
+    }
+    
+    .fondoVentaEspera{
+        background: black;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
+        font-style: italic;
+        color: #e2f312 !important;
+        font-weight: 600;
+        font-size: 14px;
+        
+    }
+    .ventaEsperaSeleccionada{
+        display: flex;
+        padding-bottom: 0.2%;
+    }  
+    .ventaEsperaSeleccionada .tituloVentaEspera{
+        font-weight: 700;
+        font-size:20px;
+            color: brown;
+    }                           
+    .contenedorFactura{
+        display: flex;
+        flex: 1;
+        border: 1px solid #3c8dbc;
+        background: #ffffff;
+    }
+    .precioTotalFacturaContainer{
+        display:flex;
+        flex:1;
+    }
+
+    .codigoBarraPrecioContainer{
+        display:flex;
+        flex:1;
+    }
+    .codigoBarraPrecioContainer .inputCodigoPrecio{
+        flex:1;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-bottom: 1%;
+    }
+
+    .labelBotones {
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    @media screen and (max-width: 1024px) {
+    .labelBotones {
+        font-size: 14px !important;
+    }
+    .label-totalesComprobante{
+        font-size: 18px !important;
+    }
+    .cantidadArticulosTitulo{
+        font-size: 10px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        font-size: 14px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        font-size: 14px !important;
+    }
+    }
+
+    .botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
+        display:flex !important;
+    }
+
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
+        flex:1;
+        padding-right: 1%;
+        padding-bottom: 2%;
+    }
+    .gananciaContainer{
+        display:flex;
+        flex:1;
+    }
+    .gananciaContainer .formatoTituloGanancia{
+        flex:1;
+        color: black;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+    .tituloCantidadArticulos{
+        display:flex;
+    }
+    .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #edea17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        /* padding: 5px; */
+        /* margin: 5px; */
+        /* border: none; */
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+
+    }
+
+    .tituloProductoIngresadoContainer{
+        display:flex;
+        flex:1;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
+        flex: 1;
+        display: flex;
+        padding-left: 2%;
+        padding-right: 2%;
+    
+    }
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        flex: 0.15;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: yellow !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+    }
+
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        text-align: center;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+    }

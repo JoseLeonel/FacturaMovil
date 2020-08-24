@@ -7,6 +7,8 @@ $.i18n.properties({
     language: 'es',
 });
 
+var pathWebFactura  = 'factura';
+
 // Se configura un bloqueo para todo el ajax que se utiliza en la aplicacion
 $(document)
 
@@ -34,6 +36,239 @@ function cargarImagen(data64,id){
 
     
 }
+/************************************************************************************rutinas de factura de la venta ****************************************************************
+/**
+ * Aplicar a clientes exonerados
+ * @param porcentajeExoneracion
+ * @param impuesto
+ * @returns
+ */
+function getPorcentajeExoneracion(porcentajeExoneracion, impuesto) {
+	var valor = 0;
+	porcentajeExoneracion = __valorNumerico(porcentajeExoneracion );
+	if(porcentajeExoneracion != null) {
+	  if(porcentajeExoneracion > 0) {
+		if(impuesto < porcentajeExoneracion ) {
+           valor = impuesto; 					
+		}else {
+			valor = porcentajeExoneracion;
+		}
+	  }
+	}
+	return valor;
+}
+/**
+ * Aplicar a clientes exonerados
+ * @param cliente
+ * @param detail
+ * @returns
+ */
+function getExoneracion(cliente,detail){
+    var aplicaExo = false;
+    var porcentaje = __valorNumerico(cliente.porcentajeExoneracion );
+    if(porcentaje == 0){
+        return detail;
+    }
+    var valorTotal = 0;
+    for (var count = 0; count < detail.length; count++) {
+        item = detail[count];
+        cliente.porcentajeExoneracion = __valorNumerico(cliente.porcentajeExoneracion);
+        if(item.montoImpuesto > 0  ){
+           if(cliente.porcentajeExoneracion > 0  ){
+             item.porcentajeExoneracion = getPorcentajeExoneracion( __valorNumerico(cliente.porcentajeExoneracion), item.impuesto);
+             item.fechaEmisionExoneracion = cliente.fechaEmisionExoneracion;
+             item.nombreInstitucionExoneracion = cliente.nombreInstitucionExoneracion;
+             item.numeroDocumentoExoneracion = cliente.numeroDocumentoExoneracion;
+             item.tipoDocumentoExoneracion = cliente.tipoDocumentoExoneracion;
+             valorTotal = __valorNumerico(item.subTotal) * __valorNumerico(item.porcentajeExoneracion);
+             item.montoExoneracion = valorTotal / 100;
+             item.ImpuestoNeto = item.montoImpuesto - item.montoExoneracion;
+             item.montoTotalLinea = item.subTotal +  item.ImpuestoNeto;
+             detail[count] = item;
+           }else{
+             item.porcentajeExoneracion = 0;
+             item.fechaEmisionExoneracion = null;
+             item.nombreInstitucionExoneracion = "";
+             item.numeroDocumentoExoneracion = "";
+             item.tipoDocumentoExoneracion = "";
+             item.montoExoneracion = 0;
+             item.montoExoneracion1 = 0;
+             item.ImpuestoNeto = __valorNumerico(item.montoImpuesto); 
+             item.montoTotalLinea = item.subTotal +  item.ImpuestoNeto;
+             detail[count] = item;
+            }
+        }else{
+                item.porcentajeExoneracion = 0;
+                item.fechaEmisionExoneracion = null;
+                item.nombreInstitucionExoneracion = "";
+                item.numeroDocumentoExoneracion = "";
+                item.tipoDocumentoExoneracion = "";
+                item.montoExoneracion = 0;
+                item.montoExoneracion1 = 0;
+        }
+     }
+        
+    return detail;
+}
+/**
+* calculacion de los detalle de la factura 
+**/
+function __ResumenFactura(detail,fact) {
+	var objetos = {
+			factura:fact,
+			cantArticulos:0,
+			totalGananciaByProducto:0,
+			totalComprobante:0,
+			totalDescuentos:0,
+			totalImpuesto:0,
+			montoExoneracion:0,
+			subTotalGeneral:0,
+			totalImpuesto:0,
+			totalPesoByFactura:0
+	};
+	
+    var totalVenta     = 0;
+    var subTotal       = 0;
+    var totalDescuentos = 0;
+    var totalImpuesto  = 0;
+    var totalMercanciasGravadas = 0;
+    var totalMercanciasExentas  = 0;
+    var totalServGravados       = 0;
+    var totalServExentos        = 0;
+    var totalGravado            = 0;
+    var totalExento             = 0;
+    var totalComprobante        = 0;
+    var totalventaNeta          = 0;
+    var totalGanancia           = 0;
+  
+    objetos.cantArticulos      = 0;
+    var montoExoneracion = 0;
+    detail.forEach(function(e){
+        totalMercanciasGravadas += e.tipoImpuesto.length > 0  && e.unidadMedida !="Sp"?e.montoTotal:0;
+        totalMercanciasExentas  += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0;
+        totalServGravados       += e.tipoImpuesto.length > 0 && e.unidadMedida =="Sp"?e.montoTotal:0;
+        totalServExentos        += e.tipoImpuesto.length == 0 && e.unidadMedida =="Sp"?e.montoTotal:0;
+        totalGravado            += e.tipoImpuesto.length > 0 ?e.montoTotal:0;
+        totalExento             += e.tipoImpuesto.length == 0 ?e.montoTotal:0;
+        totalComprobante        += e.montoTotalLinea;
+        subTotal                += e.subTotal >0?e.subTotal:0;
+        totalDescuentos          += e.montoDescuento >0?e.montoDescuento:0;
+        totalImpuesto           += __valorNumerico(e.montoImpuesto);
+        totalVenta              += e.montoTotal;
+        totalGanancia           +=__valorNumerico(e.ganancia);
+        objetos.cantArticulos   += esEntero(e.cantidad) == true? e.cantidad:1; 
+        objetos.montoExoneracion  = objetos.montoExoneracion + __valorNumerico(e.montoExoneracion); 
+        objetos.totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad);
+    });
+    objetos.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2);
+    objetos.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas);
+    objetos.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas);
+    objetos.factura.totalServGravados       = __valorNumerico(totalServGravados);
+    objetos.factura.totalServExentos        = __valorNumerico(totalServExentos);
+    objetos.factura.totalGravado            = __valorNumerico(totalGravado);
+    objetos.factura.totalExento             = __valorNumerico(totalExento);
+    objetos.factura.totalVenta              = __valorNumerico(totalVenta);
+    objetos.factura.totalDescuentos         = __valorNumerico(totalDescuentos);
+    objetos.factura.subTotal                = __valorNumerico(subTotal);
+    objetos.factura.totalImpuesto           = __valorNumerico(totalImpuesto); 
+    objetos.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuentos);
+//Se verifica si la mesa tiene impuestos
+    var tieneMesa = typeof objetos.factura.mesa !== 'undefined'?true:false;
+    tieneMesa = objetos.factura.mesa == null?false:true;
+    var tieneImpuestoServiciot = false;
+    if(tieneMesa){
+      tieneImpuestoServiciot = typeof objetos.factura.mesa.impuestoServicio !== 'undefined'?true:false;  
+    }
+    if (tieneMesa && tieneImpuestoServiciot){
+        if(objetos.factura.mesa.impuestoServicio == true){
+        	objetos.factura.totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10));
+            objetos.factura.totalVentaNeta = Math.round(__valorNumerico(totalVenta-totalDescuentos) + __valorNumerico(objetos.factura.totalImpuestoServ));
+            objetos.totalComprobante = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(objetos.factura.totalImpuestoServ));
+        }
+    }    
+    objetos.factura.totalComprobante = __valorNumerico(totalComprobante);
+    objetos.totalComprobante = totalComprobante;
+    objetos.totalDescuentos = totalDescuentos;
+    objetos.totalImpuesto = totalImpuesto;
+    
+     
+    var resultado = __valorNumerico(objetos.factura.subTotal) + __valorNumerico(objetos.factura.totalDescuentos);
+    objetos.subTotalGeneral = resultado;
+    objetos.factura.subTotal =  resultado;
+    objetos.totalDescuentos = totalDescuentos;
+    var resultadoTotalImpuesto = __valorNumerico(totalImpuesto);
+    objetos.totalImpuesto   = totalImpuesto;
+    return objetos;
+}
+/**
+ * Calcula el descuento
+ * @param precioUnitario
+ * @param cantidad
+ * @param porcentajeDesc
+ * @param porcentajeGanancia
+ * @returns
+ */
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+   
+    var totalDescuento =  precioUnitario * cantidad;
+    totalDescuento = totalDescuento * porcentajeDesc;
+    totalDescuento = totalDescuento /100;
+    var resultado = totalDescuento;
+    return resultado;
+}
+
+function getPorcentaje(temp){
+	
+	if(temp.porcentajeDesc == 0){
+        return 0;
+    }
+     if(temp.porcentajeDesc > 100){
+    	 temp.porcentajeDesc = 100;
+    }
+    var porcentaje =  temp.porcentajeGanancia;
+    if(temp.porcentajeDesc <= temp.porcentajeGanancia){
+       porcentaje =  temp.porcentajeDesc;
+    }
+    if(temp.porcentajeGanancia <=0){
+        porcentaje =  temp.porcentajeDesc;
+    }
+    if(temp.porcentajeDesc ==100){
+        porcentaje = 0;
+    }
+    
+    return porcentaje;
+}
+
+function ActualizarLineaDEtalle(itemtemp){
+	var  resultado = {
+			item:itemtemp,
+			
+	};
+	resultado.item.porcentajeDesc = getPorcentaje(resultado.item);
+	
+    var montoTotal = getMontoTotal(resultado.item.precioUnitario,resultado.item.cantidad);
+                                  //factura.js
+    var montoDescuento = getMontoDescuento(resultado.item.precioUnitario,resultado.item.cantidad,resultado.item.porcentajeDesc,resultado.item.porcentajeGanancia);
+    var subTotal = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal;
+    montoImpuesto1 = 0;
+    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
+    var montoImpuesto = _calcularImpuesto(resultadoMontoImpuesto1,resultado.item.impuesto ==null?0:resultado.item.impuesto);
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1;
+    resultado.item.pesoTransporteTotal = __valorNumerico(resultado.item.cantidad) *  __valorNumerico(resultado.item.pesoTransporte);
+
+    resultado.item.montoTotal       = montoTotal;
+    resultado.item.montoDescuento   = montoDescuento;
+    resultado.item.subTotal         = subTotal;
+    resultado.item.montoImpuesto    = montoImpuesto;
+    resultado.item.montoImpuesto1   = montoImpuesto1;
+
+    resultado.item.montoTotalLinea  = montoTotalLinea;
+    resultado.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,resultado.item.precioUnitario,resultado.item.costo ==null?0:__valorNumerico(resultado.item.costo),resultado.item.cantidad);
+    resultado.item.montoGanancia    = resultado.item.ganancia;
+    return resultado.item;
+}
+
+/****************************************************************************************************************************************************************************************/
 
 function cargarImagenBusca(data64,id){
     var imagenTemporal = data64;
@@ -151,7 +386,7 @@ function __TipoCambio(){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       localStorage.setItem('tipoCambioTotal', __valorNumerico(response.dolar.venta.valor));
+                       localStorage.setItem('tipoCambioTotal', __valorNumerico(modeloTabla.dolar.venta.valor));
                        localStorage.setItem('tipoCambioCompra', __valorNumerico(modeloTabla.total));
                     });
                 }
@@ -210,6 +445,24 @@ function __ComboImpuestos(){
     impuestos.push({
         codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
+    return impuestos;
+}
+
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __ComboImpuestosMaG(){
+    var impuestos =[]
+    impuestos.push({
+        codigo: "",
+        descripcion:"Exento"
+     });
+
+    impuestos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
    
     return impuestos;

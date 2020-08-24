@@ -104,7 +104,7 @@
                                                                    
                                     </tr>
                                     
-                                     <tr each={totalesIVAI.data}>
+                                     <tr each={totalesIVAI}>
                                         <td></td>
                                         <td ><strong>{descripcion}</strong></td>
                                         <td ><strong>{totalSTR}</strong></td>
@@ -439,8 +439,8 @@ self.impuestoReducida4 = 0
 self.impuestoTransitorio0 = 0
 self.impuestoTransitorio4 = 0
 self.impuestoTransitorio8 = 0
-self.totalesIVAI               = {data:[]}
-
+self.totalesIVAI    = []
+  
 self.on('mount',function(){
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
@@ -618,24 +618,36 @@ function consultaDetalles(data){
 
 
 function sumarImpuesto(detalle){
-     if(self.totalesIVAI[0] == null){
+    if(detalle.tipoImpuesto == 'undefined'){
+       return 
+    }
+
+    if(detalle.tipoImpuesto.length == 0){
+       return 
+    }
+    var encontrado = false
+     if(self.totalesIVAI[0] == null ){
+         encontrado = true
         __nuevoImpuesto(detalle)
      }else{ // buscar y sumar si ya existe en el array
         for (var count = 0; count < self.totalesIVAI.length; count++) {
-            if (self.totalesIVAI[count].impuesto == self.detalle.impuesto ){
+            if (self.totalesIVAI[count].impuesto == detalle.impuesto ){
                 var itemIVA = self.totalesIVAI[count];
-                itemIVA.montoImpuesto = itemIVA.montoImpuesto + __valorNumerico(detalle).montoImpuesto
-                itemIVA.totalSTR = formatoDecimales(itemIVA.montoImpuesto,2)
+                itemIVA.total = itemIVA.total + __valorNumerico(detalle.montoImpuesto)
+                itemIVA.totalSTR = formatoDecimales(itemIVA.total,2)
                 self.totalesIVAI[count] = itemIVA;
                 self.update()
+                encontrado = true
             }    
         }
-
      }
+     if(encontrado == false){
+        __nuevoImpuesto(detalle);
+    }
 }
 function __nuevoImpuesto(detalle){
 
-    self.totalesIVAI.data.push({
+    self.totalesIVAI.push({
         impuesto:detalle.impuesto,
         descripcion:"Imp " + detalle.impuesto + "%",
         total : detalle.montoImpuesto,

@@ -2,12 +2,8 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.ProveedorSimplificado;
-import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 public class CompraSimplificadaCommand {

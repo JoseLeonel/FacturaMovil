@@ -1,103 +1,122 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
-    
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title> Ingreso al Sistema de Facturacion  </title>
+       <link rel="shortcut icon" type="image/png" th:href="@{/dist/img/6446374_preview.png}"/>
+    <title> Ingreso al Sistema de Facturacion </title>
     <style type="text/css">
-        .centerImage
-        {
-        text-align:center;
-        display:block;
+    	html {
+   			height: 100%;
+		}
+        .centerImage {
+            text-align: center;
+            display: block;
         }
-        </style>
-       <!-- Bootstrap 4.0.0 -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+        body {
+			
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100%;
+			font-family: 'lato', sans-serif;
+			color: #fff;
+			
+		}
+        #principalLogin {
+			
+		  border-radius: 5px;
+		  box-shadow: 0 1.5px 0 0 rgba(0,0,0,0.1);
+		  width:630px;
+		  display: flex;  
+		  flex-direction: column;
+		}
+		input[type="submit"]:hover {
+  			background-color: #197071;
+		}
+		#importante{
+		  color:red;
+		}
+    </style>
+    <!-- Bootstrap 4.0.0 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.css}" />
     <!-- Normalize-->
-    <link rel="stylesheet" href="/css/normalize.min.css">
-      <!-- Font-->
-    <link rel="stylesheet" type="text/css" href="/css/regular.css" >
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css" >
-  
-   <link rel='stylesheet' type='text/css' href='/css/openSanz.css' >
-   
-     <link href='/css/montserrat.css' rel='stylesheet'>
-   
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.theme.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.css}"/>
-     <!-- Theme style -->
-    <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.css}" />
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" th:href="@{/dist/css/skins/_all-skins.css}"/>
-       <!-- JQUERY UI-->
-    <link rel="stylesheet" type="text/css" th:href="@{css/jquery-ui-1.10.3.custom.min.css}" />
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{css/jquery-ui.css}"/>
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{css/jquery-ui.theme.css}"/>
+    <link rel="stylesheet" th:href="@{/css/normalize.min.css}">
+    <!-- Font-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/regular.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}">
+
+    <link rel='stylesheet' type='text/css' th:href='@{/css/openSanz.css}'>
+
+    <link th:href='@{/css/montserrat.css}' rel='stylesheet'>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.theme.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.css}" />
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/css/factura.css?v88}" />
+
+
 </head>
+
 <body>
-    <br>
-    <br>
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Acceso al Sistema</div>
-                    <div class="panel-body">
-                        <img th:src="@{/dist/img/logo-lgoin.jpg}" style = "width:200px;" alt="" class="img-responsive centerImage"  >
-                        <hr>
-                        <form th:action="@{/login}" method="post">
-                        <div th:if="${param.error}">
-                        <div class="alert alert-danger">
-                            Invalido el usuario y contrase&ntilde;a.
-                        </div>
-                    </div>
-                    <div th:if="${param.logout}">
+   
+   <div id= "principalLogin">
+    	
+    	<div class="panel panel-primary">
+    		<div class="panel-heading">Acceso al Sistema</div>
+    		<div class="panel-body">
+    			<img th:src="@{/dist/img/logo-lgoin.jpg}" style="width:200px;" alt="" class="img-responsive centerImage">
+    			 <form th:action="@{/login}" method="post">
+    			 	<div th:if="${param.error}">
+    			 		<div class="alert alert-danger">
+    			 			 Invalido el usuario y contrase&ntilde;a.
+    			 		</div>
+    			 	</div>
+    			 	<div th:if="${param.logout}">
                         <div class="alert alert-info">
                             Usted ha salido de la aplicacion.
                         </div>
                     </div>
-                        
-                            <div class="form-group has-feedback">
-                                <label for="uname">Usuario</label>
-                                <input type="text" class="form-control" placeholder="usuario" name="username"/>
-                                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                            </div>
-                            <label for="uname">Contrase&ntilde;a</label>
-                            <div class="form-group has-feedback">
-                                <input type="password" class="form-control" placeholder="Contrase&ntilde;a" name="password"/>
-                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                            </div>
-                            <div class="form-group">
-                                    <div class="col-md-6 col-md-offset-4">
-                                        <button type="submit" class="btn btn-primary btn-block btn-flat">
-                                             <i class="fa fa-btn fa-sign-in"></i> Acceder
-                                        </button>
-                                    </div><!-- /.col -->
-                            </div><!-- /.col -->
-                        </form>    
-               
-                    </div>    
-              
-                </div>    
-                    
-            </div>
-        </div>
-    </div>
-<!-- ./wrapper -->
-	<!-- jQuery 2.2.0 -->
-	<script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
-	<!-- jQuery UI 1.11.4 -->
-	<script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
+                    <div class="form-group has-feedback">
+                        <label for="uname">Usuario</label>
+                        <input type="text" class="form-control" placeholder="usuario" name="username" />
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                     
+                     <div class="form-group has-feedback">
+                     	<label for="uname">Contrase&ntilde;a</label>
+                        <input type="password" class="form-control" placeholder="Contrase&ntilde;a" name="password" autocomplete="on" />
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                     </div>
+                     <div class="form-group">
+                         <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="fa fa-btn fa-sign-in"></i> Acceder</button>
+                      </div>
+                      <div id= "notaInformativa">
+                          <span> Estimado Cliente , Le recordamos que el uso de plataforma de la factura electronica</span>
+                          <span  id= "importante"> es un servicio que se cancela por mes adelantado, evitese la suspension del mismo.</span>
+                      
+                      </div>
+                     
+    			 </form>
+    		</div>
+    	</div>
+    	
+    	
+    	
+   </div>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+	<script type="text/javascript"  th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
 	<!-- JQUERY Properties-->
-	<script type="text/javascript" th:src="@{js/jquery.i18n.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.i18n.js}"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-	<script th:src="@{/js/popper.js}"></script>
-	<script th:src="@{/js/tooltip.js}"></script>
-	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-    </body>
+	<script type="text/javascript" th:src="@{/js/jquery.blockUI.js}"></script>
+	    	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
+    <script type="text/javascript" th:src="@{/prueba/bootstrapPrueba.min.js?v=1}"></script>
+</body>
+
 </html>

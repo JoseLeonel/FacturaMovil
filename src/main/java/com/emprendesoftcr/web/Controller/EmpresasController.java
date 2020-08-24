@@ -77,6 +77,7 @@ public class EmpresasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarEmpresasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -94,6 +95,7 @@ public class EmpresasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarEmpresasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarEmpresasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -115,6 +117,7 @@ public class EmpresasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregarEmpresaAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -150,6 +153,7 @@ public class EmpresasController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ConfiguracionCorreoCierreCaja.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator configuracionCorreoCierreCaja(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -184,6 +188,7 @@ public class EmpresasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -271,6 +276,7 @@ public class EmpresasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarEmpresaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -282,6 +288,7 @@ public class EmpresasController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ParametrosEmpresaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator parametros(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
@@ -298,11 +305,14 @@ public class EmpresasController {
 
 	private static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
 			private static class EMPRESA {
 
+				@SuppressWarnings({ "rawtypes" })
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente");
 			}
 		}
@@ -311,6 +321,7 @@ public class EmpresasController {
 
 			private static class EMPRESA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.empresa.noExiste");
 			}
 		}

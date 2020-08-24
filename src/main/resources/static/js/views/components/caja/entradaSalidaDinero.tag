@@ -24,7 +24,31 @@
                         </div>
                     </div>
  
-                </form>    
+                </form>  
+                <div  id="listarentradaContainer" class="scrlollT">
+                      <div id="listarEntradas">
+                      <div  id =  "tituloListaentradas">
+                          <div><span>Accion</span></div>
+                          <div><span>Descripcion</span></div>
+                          <div><span>Total</span></div>                      
+                      </div>
+                        <div class ="detalleListarEntradas"  each={listado}>
+                            <div><button id="{id}" name="{id}"  onclick={__removeEntraSalidas} class="btn btn-danger btn-xs btn-block">X</button></div>
+                            <div><span>{descripcion} </span></div>
+                            <div><span>{totalSTR}</span></div> 
+                        </div>
+                    </div>    
+
+                </div>  
+                <div  id="totalEntradasSalidas">
+                    <div></div>
+                   
+                    <div></div>
+                     <div>
+                        <span>Total:</span>
+                        <span>{totalEntradasOrSalida}</span>
+                    </div>               
+                </div>
             </div>
             <div class="modal-footer">
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
@@ -47,6 +71,13 @@
 
 
 <style type ="text/css">
+.scrlollT {
+		overflow-y: scroll;
+		overflow-x: scroll;
+		height: 350px;
+	}
+	
+	
     .btn-ATRAS {
         background-color: #3D3E42;
         color: #FFF;
@@ -125,6 +156,59 @@
     .modalCambioPrecioBotones{
          border-radius: 16px !important;
     }
+    #listarentradaContainer{
+        display:flex;
+        flex-direction: column;
+    }
+  
+    #tituloListaentradas{
+        font-size: 20px;
+        font-weight: 800;
+        font-family: Verdana, arial, sans-serif;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding-top: 20px;
+    }
+    .detalleListarEntradas{
+        display:flex;
+        justify-content: space-between;
+        font-size: 20px;
+        font-family: Verdana, arial, sans-serif;
+    }
+    #listarEntradas{
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+    }
+     #listarEntradas > div{
+       justify-content: space-between;
+       display: flex;
+       font-size: 20px;
+       font-family: Verdana, arial, sans-serif;
+        align-items: center;
+        padding-bottom: 5px;
+            padding-top: 5px;
+     }
+    #listarEntradas > div > button{
+        font-size: 18px;
+        font-family: Verdana, arial, sans-serif;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-left: 15px;
+     }
+    #totalEntradasSalidas{
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    #totalEntradasSalidas > div >span{
+      font-size: 20px;
+      font-weight: 800;
+      font-family: Verdana, arial, sans-serif;
+ 
+    }
+
     </style>
 <script>
     var selfEntradaDinero = this;
@@ -134,6 +218,8 @@
     selfEntradaDinero.motivo = ""
     selfEntradaDinero.colorTemp = "#30d13c;"
     selfEntradaDinero.colorBoton = "#4cae4c;"
+    selfEntradaDinero.listado = []
+    selfEntradaDinero.totalEntradasOrSalida = "0.00"
 
     selfEntradaDinero.valorTitulo = ""
     selfEntradaDinero.on('mount',function(){
@@ -152,6 +238,7 @@
             selfEntradaDinero.titulo = "Registrar Salida de Efectivo"
             selfEntradaDinero.motivo = "Salida de Dinero"
         }
+        __listado_entrada(selfEntradaDinero.parametro.tipo,null)
         selfEntradaDinero.update()
         showModal(selfEntradaDinero.motivo)
          var xTriggered1 = 0;
@@ -173,7 +260,9 @@
 
 })
 
-
+__removeEntraSalidas(e){
+    __listado_entrada(selfEntradaDinero.parametro.tipo,e.item.id)
+}
 
 function showModal(motivo){
     $('#modalEntradaSalidaDinero').modal({backdrop: 'static', keyboard: true}) 
@@ -213,6 +302,23 @@ function registrarEntradaSalidaAjax(tipo,mensaje){
             $(".montoEntradaSalidaDinero").select()
             return
         } 
+        if(valor == null){
+            mensajeAdvertencia("Digite el monto a registrar")
+            $(".montoEntradaSalidaDinero").val(0)
+            $(".montoEntradaSalidaDinero").focus()
+            $(".montoEntradaSalidaDinero").select()
+            return
+            
+        }
+        if(valor > 5000000){
+            mensajeAdvertencia("Monto mayor o igual a 5 millones no es permitido")
+            $(".montoEntradaSalidaDinero").val(0)
+            $(".montoEntradaSalidaDinero").focus()
+            $(".montoEntradaSalidaDinero").select()
+            return
+            
+        }
+    
         var parametros = {
              descripcion:$(".descripEntradaSalidaDinero").val(),
              total:$(".montoEntradaSalidaDinero").val(),
@@ -261,6 +367,47 @@ function registrarEntradaSalidaAjax(tipo,mensaje){
      
     riot.mount('impentrada-salida',{parametros:parametros});
  }
+
+ /**
+*  Mostrar listado Entrada o salida
+**/
+function __listado_entrada(tipo,idEntradaSalida){
+     var parametros = {
+             idTipoEntrada :tipo,
+             idEntradaSalida:idEntradaSalida
+         }
+    selfEntradaDinero.listado = []
+    selfEntradaDinero.update()     
+    $.ajax({
+        url: "listarEntradasOrSalidas.do",
+        datatype: "json",
+        global: false,
+        data : parametros,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+               selfEntradaDinero.listado = result.aaData
+               selfEntradaDinero.update() 
+               sumarTotales()
+             } 
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
+}
+
+
+
+function sumarTotales(){
+    var total =  0
+	$.each(selfEntradaDinero.listado , function( index, modeloTabla ) {
+        total = total + modeloTabla.total
+    })
+    selfEntradaDinero.totalEntradasOrSalida  =  formatoDecimales(total,2)
+    selfEntradaDinero.update()
+}
 
 </script>
 </entrada-salida>

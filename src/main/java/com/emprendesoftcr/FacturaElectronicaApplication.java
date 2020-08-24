@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.ibm.icu.util.TimeZone;
 
-@SpringBootApplication
+@SpringBootApplication 
 @Configuration
 @EnableAutoConfiguration
 @EnableTransactionManagement
@@ -23,9 +23,9 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 	
 
 	@PostConstruct
-	public void init() {
+	public void init() { 
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Costa_Rica"));
-	}	
+	}	 
 	
 	public static void main(String[] args) {
 		System.out.println("----------------- Inciando la Factura Electronica de EmprendeSoftCR 2018-09-01  ---------------------------");

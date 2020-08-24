@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
-import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -62,7 +61,7 @@ public interface ConsultasNativeBo {
 	Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial, String fechaFinal, Long idProveedor, Integer estado, Integer idUsuario);
 
 	Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
-	
+
 	Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial);
 
 	Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial);
@@ -82,10 +81,16 @@ public interface ConsultasNativeBo {
 	Collection<GraficoCuentasPorCobrarNative> findByGraficoCuentasXCobrar(Empresa empresa);
 
 	Collection<GraficoArticuloMasVendidoNative> findByGraficoArticuloMasVendido(Empresa empresa);
-	
+
 	Collection<GraficoCuentasPorPagarNative> findByGraficoCuentasXPagar(Empresa empresa);
+
 	Collection<FacturasEsperaNativa> findByVentaEspera(Empresa empresa);
-	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
+
+	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa, String fechaInicial, String fechaFinal);
+
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa);
-	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc ,String numeroFactura);
+
+	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo, String tipoDoc, String numeroFactura);
+	
+	
 }

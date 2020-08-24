@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
-import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 

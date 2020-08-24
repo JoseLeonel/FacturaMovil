@@ -5,6 +5,8 @@ import java.util.Collection;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.web.command.ClienteCommand;
+import com.emprendesoftcr.web.command.ClienteMag;
 
 public interface ClienteBo {
 
@@ -24,4 +26,6 @@ public interface ClienteBo {
 	Collection<Cliente> findByEmpresa(Integer idEmpresa);
 	
 	Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa);
+	ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand);
+	
 }

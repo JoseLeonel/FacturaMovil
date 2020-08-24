@@ -163,74 +163,38 @@
                 </div>
             </div>        
         </div>   
+         <div class="row" >  
+            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" >
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5">XII del Decreto  ejecutivo NO. 41779 .Pesca y Agropecuarios Ley  </span> </h4>
+                            </div>
+                        </a>
+                        <div id="collapse3" class="panel-collapse collapse abrirDatos1">
+                            <div class="panel-body">
+                                <div class="row">    
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label  >Autorizacion del Mag</label>
+                                        <select  class="form-control tipoMag" id="tipoMag" name="tipoMag"   >
+                                            <option  each={estadosMag}  value="{codigo}" selected="{cliente.tipoMag ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>   
     </form>            
 </div>
 
 
 <style type ="text/css">
 
-    .botones{
-        margin-bottom: 0.5%;
-    }
-    .tituloBotones{
-        display: flex;
-    }
-    .articulo-title{
-        font-size: 20px;
-        font-weight: 600;
-        flex: 1;
-    }
-    
-    .fondoEncabezado {
-        background: #00539B;
-        color: #f9fafc;
-    }
-    .requeridoDato {
-            color: red;
-            text-align: left;
-            font-weight: 500;
-            font-size: 16px;
-    }
-    .fondoFacturacion {
-        background: rgb(247, 244, 244);
-        color: #f9fafc;
-        border-style: solid;
-        border-width: 5px;cliente
-    }
-    .wrap{
-        max-width:1100px;
-        width:100%;
-    }
-    body {
-        overflow: hidden;
-        background:white;
-        font-size: 12px !important;
-    }
-    .contenedor-listar{
-        width:100%;
-    }
-    .input-table-search{
-        margin-left: 15px;
-        margin-right: 15px;
-        width:100%;
-    }
-    .botonConsulta{
-        margin-top:28px;
-    }
-    table td{ 
-        text-align: left;
-        font-size: 12px;
-    }
-    table th {
-        text-align: center;
-        font-size: 12px;
-    }
-    th, td {
-        white-space: nowrap;
-    }
-     .scroller {
-            width: 200px; height: 600px; overflow-y: scroll;
-        }
+  
 </style>
 <script>
     var self = this;
@@ -239,6 +203,8 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.comboTipoDocumentoExonerados   = []
+    self.estados   = []
+    self.estadosMag   = []
     self.cliente                   ={
 		id:null,
     	nombreCompleto:"",
@@ -273,6 +239,7 @@ self.on('mount',function(){
     _incializarCampos()
     __Eventos()
     __ComboEstados()
+    __ComboEstadosMag()
     __ComboLibreImpuesto()
     __listadoTipoCedulas()
        __Agregar()
@@ -762,6 +729,29 @@ function __ComboLibreImpuesto(){
      self.update();
 
 }
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosMag(){
+    self.estadosMag =[]
+    self.update()
+    self.estadosMag.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("combo.estadoMag.inactivo")
+     });
+
+    self.estadosMag.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estadoMag.agro")
+     });
+    self.estadosMag.push({
+        codigo: 2,
+        descripcion: $.i18n.prop("combo.estadoMag.pesca")
+     });
+     self.update();
+
+}
+
 /**
 *  Crear el combo de estados
 **/

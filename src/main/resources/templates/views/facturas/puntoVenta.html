@@ -1,68 +1,42 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
-<head>
- 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-	<meta http-equiv="Expires" content="0">
-	<meta http-equiv="Last-Modified" content="0">
-	<meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-	
-    <title>Ventas</title>
- 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
     <link rel="stylesheet" type="text/css" th:href="@{/css/ventasPuntoVenta.css}"/>
-<!-- 	<script type="text/javascript" th:src="@{webjars/jquery/3.0.0/jquery.js}"></script> -->
-	
-<!-- 	  <script th:src="@{/js/jquery-1.11.2.js}"></script> -->
-	  
-	  <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-	  
-	  
-	<!-- jQuery UI 1.11.4 -->
-	<script src="/js/jquery-ui.min.js"></script>
-<!-- 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/puntoVenta/reatil.css}"/>
 
-	<script type="text/javascript" th:src="@{js/jquery.i18n.js}"></script>
-	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.blockUI.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
-	 
-	 <!-- MASK -->
-	 <script type="text/javascript" th:src="@{/js/jquery.mask.js}"></script>
-	 
-	 
-   <!-- SWEERT ALERT -->
-        <script type="text/javascript" th:src="@{/js/sweetalert2.min.js}"></script>
-
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+  				<punto-venta></punto-venta>
+    			<ptv-imprimir></ptv-imprimir>
+    			<entrada-salida></entrada-salida>
+    			<impentrada-salida></impentrada-salida>	        
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
  
-    <!-- RIOT -->
-	<script type="text/javascript" th:src="@{/riot/riot.js}"></script>
-	<script type="text/javascript" th:src="@{/riot/riot-compiler.min.js}"></script>
-<!-- 	<script type="text/javascript" th:src="@{/riot/riot.csp.js}"></script> -->
-	
-	<!-- MANTENIMIENTO DE COMPRAS -->
-	
-	<script type="text/javascript"  th:src="@{/js/jQuery.print.js}"></script>
-	<script type="text/javascript"  th:src="@{/js/views/facturas/puntoVenta.js}"></script>
-	<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag}" ></script>
-	<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag}" ></script>
-	<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag}" ></script>
-	<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag}" ></script>
-    <script type="text/javascript"  th:src="@{/js/print.min.js}"></script>
-    
-</head>
-<body>
+<div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript"  th:src="@{/js/views/facturas/puntoVenta.js?v=4}"></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag?v=7}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=4}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=3}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=2}" ></script>
 
-<div layout:fragment="content">
-
-    <punto-venta></punto-venta>
-    <ptv-imprimir></ptv-imprimir>
-    <entrada-salida></entrada-salida>
-    <impentrada-salida></impentrada-salida>
-    
-</div>
 
 </body>
 </html>

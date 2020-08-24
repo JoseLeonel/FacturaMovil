@@ -3,8 +3,10 @@ package com.emprendesoftcr.modelo;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -106,9 +108,11 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "marca_id")
 	private Marca							marca;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
+	
+	
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
@@ -137,26 +141,42 @@ public class Articulo implements Serializable {
 	private Date							fechaUltimaCompra;
 
 	@Column(name = "tipo_impuesto1", length=2)
-	private String						tipoImpuesto1;
+	private String						tipoImpuestoMag;
 
 	@Column(name = "impuesto1", columnDefinition = "Decimal(10,2) default '0.00'")
-	private Double						impuesto1;
+	private Double						impuestoMag;
 	
 	@Column(name = "cod_tarifa", length=2)
 	private String						codigoTarifa;
 	
 	@Column(name = "cod_tarifa1", length=2)
-	private String						codigoTarifa1;
+	private String						codigoTarifaMag;
 
 	@Column(name = "base_imponible", columnDefinition = "INT default '0'")
 	private Integer						baseImponible;
 
 
-	
+	public Articulo() {
+		super();
+		this.costo = Constantes.ZEROS_DOUBLE;
+		this.impuesto = Constantes.ZEROS_DOUBLE;
+		this.precioPublico = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioPublico = Constantes.ZEROS_DOUBLE;
+		this.precioMayorista = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioMayorista = Constantes.ZEROS_DOUBLE;
+		this.precioEspecial = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioEspecial = Constantes.ZEROS_DOUBLE;
+		this.created_at = new Date();
+		this.updated_at = new Date();
+		this.maximo = Constantes.ZEROS_DOUBLE;
+		this.minimo = Constantes.ZEROS_DOUBLE;
+		this.cantidad = Constantes.ZEROS_DOUBLE;
+
+	}
 
 	
-
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuesto1, Double impuesto1, String codigoTarifa, String codigoTarifa1, Integer baseImponible) {
+	
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuestoMag, Double impuestoMag, String codigoTarifa, String codigoTarifaMag, Integer baseImponible) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -189,35 +209,15 @@ public class Articulo implements Serializable {
 		this.pesoTransporte = pesoTransporte;
 		this.consecutivoCompra = consecutivoCompra;
 		this.fechaUltimaCompra = fechaUltimaCompra;
-		this.tipoImpuesto1 = tipoImpuesto1;
-		this.impuesto1 = impuesto1;
+		this.tipoImpuestoMag = tipoImpuestoMag;
+		this.impuestoMag = impuestoMag;
 		this.codigoTarifa = codigoTarifa;
-		this.codigoTarifa1 = codigoTarifa1;
+		this.codigoTarifaMag = codigoTarifaMag;
 		this.baseImponible = baseImponible;
 	}
 
 
 
-	public Articulo() {
-		super();
-		this.costo = Constantes.ZEROS_DOUBLE;
-		this.impuesto = Constantes.ZEROS_DOUBLE;
-		this.precioPublico = Constantes.ZEROS_DOUBLE;
-		this.gananciaPrecioPublico = Constantes.ZEROS_DOUBLE;
-		this.precioMayorista = Constantes.ZEROS_DOUBLE;
-		this.gananciaPrecioMayorista = Constantes.ZEROS_DOUBLE;
-		this.precioEspecial = Constantes.ZEROS_DOUBLE;
-		this.gananciaPrecioEspecial = Constantes.ZEROS_DOUBLE;
-		this.created_at = new Date();
-		this.updated_at = new Date();
-		this.maximo = Constantes.ZEROS_DOUBLE;
-		this.minimo = Constantes.ZEROS_DOUBLE;
-		this.cantidad = Constantes.ZEROS_DOUBLE;
-
-	}
-
-	
-	
 	public Long getId() {
 		return id;
 	}
@@ -227,14 +227,7 @@ public class Articulo implements Serializable {
 	}
 
 	
-	public String getCodigoTarifa1() {
-		return codigoTarifa1;
-	}
-
 	
-	public void setCodigoTarifa1(String codigoTarifa1) {
-		this.codigoTarifa1 = codigoTarifa1;
-	}
 
 	public String getCodigoTarifa() {
 		return codigoTarifa;
@@ -427,9 +420,7 @@ public class Articulo implements Serializable {
 		Double totalCosto = costoTem * cantidadTem;
 
 		Double totalVenta = totalCosto == 0 ? Constantes.ZEROS_DOUBLE : precioPublicoTem * cantidadTem;
-		Double valorImpuesto1 = this.impuesto1 != null ? this.impuesto1 : Constantes.ZEROS_DOUBLE;
 		Double valorImpuesto = this.impuesto == null ? Constantes.ZEROS_DOUBLE : this.impuesto;
-		valorImpuesto = valorImpuesto + valorImpuesto1;
 		valorImpuesto = (valorImpuesto / 100) + 1;
 		Double valor = this.impuesto != null ? totalVenta / valorImpuesto : Constantes.ZEROS_DOUBLE;
 		Double totalImpuesto = totalVenta > 0 ? totalVenta - valor : Constantes.ZEROS_DOUBLE;
@@ -444,9 +435,7 @@ public class Articulo implements Serializable {
 		Double totalCosto = costoTem * cantidadTem;
 
 		Double totalVenta = totalCosto == 0 ? Constantes.ZEROS_DOUBLE : precioPublicoTem * cantidadTem;
-		Double valorImpuesto1 = this.impuesto1 != null ? this.impuesto1 : Constantes.ZEROS_DOUBLE;
 		Double valorImpuesto = this.impuesto == null ? Constantes.ZEROS_DOUBLE : this.impuesto;
-		valorImpuesto = valorImpuesto + valorImpuesto1;
 		valorImpuesto = (valorImpuesto / 100) + 1;
 		Double valor = this.impuesto != null ? totalVenta / valorImpuesto : Constantes.ZEROS_DOUBLE;
 		Double totalImpuesto = totalVenta > 0 ? totalVenta - valor : Constantes.ZEROS_DOUBLE;
@@ -559,21 +548,6 @@ public class Articulo implements Serializable {
 		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 
-	public String getTipoImpuesto1() {
-		return tipoImpuesto1;
-	}
-
-	public void setTipoImpuesto1(String tipoImpuesto1) {
-		this.tipoImpuesto1 = tipoImpuesto1;
-	}
-
-	public Double getImpuesto1() {
-		return impuesto1;
-	}
-
-	public void setImpuesto1(Double impuesto1) {
-		this.impuesto1 = impuesto1;
-	}
 
 	
 	public Integer getBaseImponible() {
@@ -584,6 +558,53 @@ public class Articulo implements Serializable {
 	public void setBaseImponible(Integer baseImponible) {
 		this.baseImponible = baseImponible;
 	}
+
+
+
+	
+	public String getTipoImpuestoMag() {
+		return tipoImpuestoMag;
+	}
+
+
+
+	
+	public void setTipoImpuestoMag(String tipoImpuestoMag) {
+		this.tipoImpuestoMag = tipoImpuestoMag;
+	}
+
+
+
+	
+	public Double getImpuestoMag() {
+		return impuestoMag;
+	}
+
+
+
+	
+	public void setImpuestoMag(Double impuestoMag) {
+		this.impuestoMag = impuestoMag;
+	}
+
+
+
+	
+	public String getCodigoTarifaMag() {
+		return codigoTarifaMag;
+	}
+
+
+
+	
+	public void setCodigoTarifaMag(String codigoTarifaMag) {
+		this.codigoTarifaMag = codigoTarifaMag;
+	}
+
+
+
+	
+	
 	
 	
 

@@ -2,11 +2,15 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,18 +22,25 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Dao.DetalleDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
+import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 @EnableTransactionManagement
 @Service("detalleBo")
@@ -38,6 +49,11 @@ public class DetalleBoImpl implements DetalleBo {
 	@Autowired
 	private DetalleDao	detalleDao;
 
+	@Autowired
+  public DataSource dataSource;
+	
+  private JdbcTemplate jdbcTemplate;
+  
 	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -478,6 +494,204 @@ public class DetalleBoImpl implements DetalleBo {
 			return new ByteArrayInputStream(stream.toByteArray());
 	}
 
+	
+	@Override
+	public List<Map<String, Object>>  ventasbyCategoria(String fechaInicial ,String fechaFinal,Integer estado,Long idCategoria,Integer idEmpresa){
+	  jdbcTemplate = new JdbcTemplate(dataSource);
+    String sql = "select  ifnull(cat.id,'9999') as id, ifnull(cat.descripcion,'Sin categoria') as nom_cat ,det.cod_tarifa,det.impuesto,det.tipo_impuesto,fact.estado,  \n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.cantidad,2) * -1,ROUND(det.cantidad,2)),0)) cantidad,  \n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND((det.costo * det.cantidad) * fact.tipo_cambio,2) * -1,ROUND(det.costo * det.cantidad,2)) * tipo_cambio,0)) as total_costo,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',det.imp_neto *  -1,det.imp_neto ),0) * fact.tipo_cambio) as total_neto,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.monto_descuento,2) * - 1 * fact.tipo_cambio,ROUND(det.monto_descuento,2)),0)) total_desc,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.monto_total,2) * -1 * fact.tipo_cambio,ROUND(det.monto_total,2)),0)) mont_total,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.sub_total,2) * -1 * fact.tipo_cambio,ROUND(det.sub_total,2)),0)) sub_tota,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',det.monto_total_linea * -1 ,det.monto_total_linea),0) * fact.tipo_cambio) as total_linea,\n" + 
+    		"                      sum(ifnull(if(fact.tipo_doc = '03' or fact.tipo_doc = '86',ROUND(det.mont_exone,2) * -1 * fact.tipo_cambio,ROUND(det.mont_exone,2)),0)) mont_exon\n" + 
+    		"                    from detalles det \n" + 
+    		"                    inner join facturas fact on  fact.id = det.factura_id \n" + 
+    		"                    left join articulos art on art.codigo = det.codigo  and fact.empresa_id = art.empresa_id \n" + 
+    		"                    inner join categorias  cat on cat.id = art.categoria_id  \n" + 
+    		"                    where  fact.estado = :estado  \n" + 
+    		"                           and fact.empresa_id = :idempresa\n" + 
+    		"                           and cat.id = " + 
+    		"                           and fact.fecha_emision >= :fecha_inicial  and fact.fecha_emision <= :fecha_final\n" + 
+    		"                    group by cat.id ,cat.descripcion,det.tipo_impuesto,det.cod_tarifa,det.impuesto,fact.estado \n" + 
+    		"                    order by cat.descripcion ,det.tipo_impuesto,det.cod_tarifa ";
+    
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("fecha_inicial", fechaInicial);
+    parameters.addValue("fecha_final",fechaFinal);
+    parameters.addValue("idempresa", idEmpresa);
+  	if (estado > Constantes.ZEROS) {
+  		parameters.addValue("estado",estado);
+		} else {
+			sql = sql.replaceAll(" fact.estado = :estado", " fact.estado in (2,6,7) ");
+		}
+  	if (idCategoria > Constantes.ZEROS) {
+  		
+  		sql = sql.replaceAll("and cat.id = ", "and cat.id = :idcaegoria ");
+  		parameters.addValue("idcaegoria",idCategoria);
+		} else {
+			sql = sql.replaceAll("and cat.id = ", " ");
+		}
+    
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		
+		return listaObjetos;
+	}
+
+	@Override
+	public ByteArrayInputStream ventasbyCategoriaExcel(String fechaInicial, String fechaFinal, Integer estado, Long idCategoria, Empresa empresa) throws IOException {
+
+		List<Map<String, Object>> lista  = ventasbyCategoria( fechaInicial, fechaFinal, estado,idCategoria, empresa.getId());
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+    arrayList = (ArrayList) lista;
+    JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<VentasByCategoriasCommand> listaDatos = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				VentasByCategoriasCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), VentasByCategoriasCommand.class);
+				listaDatos.add(ventasByCategoriasCommand);
+			}
+		}
+		List<String> headers = Arrays.asList("Estado", "Categoria", "Tipo Impuesto", "Tarifa", "Impuesto", "Costo", "Descuento", "Total IVA", "Total", "Total Exonerado");
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		 Map<String, CellStyle> styles = Utils.createStyles(workbook);
+		Sheet sheet  = workbook.createSheet("Venta por Categoria");
+		
+		
+	//title row
+		 Row title = sheet.createRow(0);
+		 title.setHeightInPoints(25);
+	    Cell titleCell = title.createCell(0);
+	    titleCell.setCellValue("Ventas por categoria del "+fechaInicial.replace("00:00:00", "")+" al "+ fechaFinal.replace("00:00:00", ""));
+	    titleCell.setCellStyle(styles.get("title1"));
+	    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$AC$1"));
+		
+    Row titleEmpresa = sheet.createRow(1);
+    titleEmpresa.setHeightInPoints(25);
+    Cell titleCell1 = titleEmpresa.createCell(0);
+    titleCell1.setCellValue(empresa.getNombre());
+    titleCell1.setCellStyle(styles.get("title1"));
+    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$AC$2"));
+    
+
+    Row titleCedula = sheet.createRow(2);
+    titleCedula.setHeightInPoints(25);
+    Cell titleCell2 = titleCedula.createCell(0);
+    titleCell2.setCellValue("Cedula:"+ empresa.getCedula());
+    titleCell2.setCellStyle(styles.get("title1"));
+    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$AC$3"));
+    
+    
+	  Row row = sheet.createRow(3);
+    row.setHeightInPoints(25);
+    Cell headerCell;
+		for (int i = 0; i < headers.size(); i++) {
+			 headerCell = row.createCell(i);
+       headerCell.setCellValue(headers.get(i));
+       headerCell.setCellStyle(styles.get("header"));
+       
+		}
+		
+	//
+		int rownum = 4 ;
+	
+		for(VentasByCategoriasCommand ventasByCategoriasCommand : listaDatos) {
+			row = sheet.createRow(rownum);
+			// Usuario
+			Cell cell = row.createCell(0);
+			Utils.getCelSTR(cell,styles,ventasByCategoriasCommand.getEstadoSTR());
+			// Fecha Emision
+		 cell = row.createCell(1);
+		 Utils.getCelSTR(cell,styles,ventasByCategoriasCommand.getDescrpcion());
+		 // Tipo de Documento
+		 cell = row.createCell(2);
+		 Utils.getCelSTR(cell,styles,ventasByCategoriasCommand.getTipoImpuestoSTR());
+		 // Codigo
+		 cell = row.createCell(3);
+		 Utils.getCelSTR(cell,styles,ventasByCategoriasCommand.getCodigoTarifaSTR());
+		 // Descripcion
+		 cell = row.createCell(4);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getImpuesto());
+		 // clave
+		 cell = row.createCell(5);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getTotal_costo());
+		 // Documento
+		 cell = row.createCell(6);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getTotal_desc());
+		 // Proforma
+		 cell = row.createCell(7);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getTotal_neto());
+		 // Cedula
+		 cell = row.createCell(8);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getTotal_linea());
+		 // Cliente
+		 cell = row.createCell(9);
+		 Utils.getCel(cell,styles,ventasByCategoriasCommand.getMont_exon());
+			
+		 
+
+		 rownum++;
+		}
+    int contnum = rownum;
+		Row sumRow = sheet.createRow(rownum++);
+
+		for (int j = 0; j < 10; j++) {
+      Cell cell = sumRow.createCell(j);
+      if(j == 4 ) {
+        cell.setCellValue("Totales  :");
+        cell.setCellStyle(styles.get("formula"));
+        
+      }
+      if(j <= 3 ) {
+      	cell.setCellStyle(styles.get("formula"));
+      }
+      if(j == 5 ) {
+        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+        String ref = "F" +4+ ":F" + contnum;
+        cell.setCellFormula("SUM("+ref+")");
+        cell.setCellStyle(styles.get("formula"));
+      }
+      if(j == 6 ) {
+        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+        String ref = "G" +4+ ":G" + contnum;
+        cell.setCellFormula("SUM("+ref+")");
+        cell.setCellStyle(styles.get("formula"));
+      }
+       if(j == 7 ) {
+        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+        String ref = "H" +4+ ":H" + contnum;
+        cell.setCellFormula("SUM("+ref+")");
+        cell.setCellStyle(styles.get("formula"));
+      }
+      if(j == 8 ) {
+        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+        String ref = "I" +4+ ":I" + contnum;
+        cell.setCellFormula("SUM("+ref+")");
+        cell.setCellStyle(styles.get("formula"));
+      }
+      if(j == 9 ) {
+        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+        String ref = "J" +4+ ":J" + contnum;
+        cell.setCellFormula("SUM("+ref+")");
+        cell.setCellStyle(styles.get("formula"));
+      }
+ 
+      sheet.setColumnWidth(j,8000);
+		}
+
+    
+		
+		workbook.write(stream);
+		workbook.close();
+		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
 	
 	 
 

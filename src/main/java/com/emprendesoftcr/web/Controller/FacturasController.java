@@ -20,19 +20,25 @@ import java.util.Map;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -156,9 +162,8 @@ public class FacturasController {
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento() != null ? d.getMontoDescuento() : Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
 																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto() != null ? d.getImpuesto() : Constantes.ZEROS_DOUBLE);
-																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() != null ? d.getImpuesto1() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.set_impuesto1(Constantes.ZEROS_DOUBLE);
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
-																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null ? Constantes.EMPTY : d.getTipoImpuesto());
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
@@ -349,6 +354,13 @@ public class FacturasController {
 
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
+	
+	
+	
+	@Autowired
+  public DataSource dataSource;
+	
+  private JdbcTemplate jdbcTemplate;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -400,15 +412,15 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
-	//@Autowired
-	//private CertificadoBo certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-	//	certificadoBo.agregar(usuario.getEmpresa(), "", "");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
@@ -456,6 +468,11 @@ public class FacturasController {
 	@RequestMapping(value = "/ListaFacturas", method = RequestMethod.GET)
 	public String listaFacturas(ModelMap model) {
 		return "views/facturas/listaFacturas";
+	}
+	
+	@RequestMapping(value = "/ventaByCategoria", method = RequestMethod.GET)
+	public String ventaByCategoria(ModelMap model) {
+		return "views/facturas/vetasbycategoria";
 	}
 
 	/**
@@ -899,6 +916,28 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
+	
+	
+ 
+	
+  
+  @Secured({ "ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER", "ROLE_INVENTARIO", "ROLE_INVENTARIO_READ", "ROLE_INVENTARIO_READ_WRITER_CREAR_PEDIDOS" })
+  @PostMapping(value = "/obtener-pedidos-activos")
+  public @ResponseBody List<Map<String, Object>> obtenerPedidosActivos(HttpSession session){
+    if (session.getAttribute("SESSION_EMPRESA_ID") != null) {
+      jdbcTemplate = new JdbcTemplate(dataSource);
+      MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("emisorId", Long.parseLong(session.getAttribute("SESSION_EMPRESA_ID").toString()));
+        String sql = "SELECT id, secuencia_factura_compra, codigo_proveedor, nombre_completo, observaciones, proveedor_id FROM v_orden_compra WHERE estado_orden_compra = 'A' AND emisor_id=:emisorId";
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+        List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);    
+        return listaObjetos;
+    }else {
+      return null;
+    }
+  }
+  
+
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -1020,6 +1059,7 @@ public class FacturasController {
 	
 	
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura) throws IOException, Exception {
@@ -1153,6 +1193,7 @@ public class FacturasController {
 		JSONObject json = null;
 		ArrayList<ProformasSQLNativeCommand> detallesFacturaCommand = new ArrayList<>();
 		// Agregar Lineas de Detalle
+		
 		JSONArray jsonArrayDetalleFactura = (JSONArray) json.get(objetos);
 		Gson gson = new Gson();
 		if (jsonArrayDetalleFactura != null) {
@@ -2102,8 +2143,6 @@ public class FacturasController {
 	 * @param id
 	 * @return
 	 */
-//	@Autowired
-//	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -2112,24 +2151,6 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-			// criptografica desde linux
-			// certificadoBo.agregar(usuario.getEmpresa(),"","");
-			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
-			// usuario.getEmpresa().getNombreLlaveCriptografica());
-			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
-			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
-
-			// KeyStore keyStore = null;
-			// LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
-			//
-			// llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
-			// XadesSigner xadesSigner =
-			// llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

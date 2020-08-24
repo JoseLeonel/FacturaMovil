@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
+
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -18,12 +18,14 @@ import com.google.common.collect.Iterables;
  */
 public class Checks {
 
-    public static Iterable checkMaxSize(Iterable values, int maxLength) {
+    @SuppressWarnings("rawtypes")
+		public static Iterable checkMaxSize(Iterable values, int maxLength) {
         checkArgument((Iterables.size(values) <= maxLength), "La lista EXCEDE la longitud máxima.");
         return values;
     }
 
-    public static Iterable checkMaxSize(Iterable values, int maxLength, String argName) {
+    @SuppressWarnings("rawtypes")
+		public static Iterable checkMaxSize(Iterable values, int maxLength, String argName) {
         checkArgument((Iterables.size(values) <= maxLength),
                 argName + " la lista EXCEDE la longitud máxima.");
         return values;

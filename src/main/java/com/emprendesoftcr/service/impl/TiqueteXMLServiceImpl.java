@@ -392,9 +392,8 @@ private String informacionFerencia(Factura factura) {
           getDescuento(detalle.getMontoDescuento())+
           "<SubTotal>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getSubTotal(),5) + "</SubTotal>" +
           xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
-          xmlImpuestos1(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1(),detalle) +
           xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto(),detalle) +
-          xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
+          xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),Constantes.ZEROS_DOUBLE,detalle.getImpuestoNeto()) +
           "<MontoTotalLinea>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getMontoTotalLinea(),5) + "</MontoTotalLinea>" +
           "</LineaDetalle>";
     }
@@ -443,41 +442,7 @@ private String informacionFerencia(Factura factura) {
     return resultado;
 }
 	
-	private String xmlImpuestos1(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto,Detalle detalle) throws Exception {
-  	String resultado = Constantes.EMPTY;
-  	String nodoCodigoTarifa = Constantes.EMPTY;
-  	String nodoTarifa = Constantes.EMPTY;
-  	try {
-  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
-  			return resultado;
-  		}
-  		if (codigoTarifa !=null) {
-  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
-  				nodoCodigoTarifa ="<CodigoTarifa>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(codigoTarifa, 2)) + "</CodigoTarifa>";
-  				
-  			}
-  			
-  		}
-  		
-  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
-  		if(montoImpuesto != null && tipoImpuesto !=null) {
-	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
-	        resultado = "<Impuesto>" +
-	            "<Codigo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoImpuesto, 2)) + "</Codigo>" +
-	            nodoCodigoTarifa +
-	            nodoTarifa+
-	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,5) + "</Monto>"
-	        +  xmlExoneracion(detalle.getTipoDocumentoExoneracion(),detalle.getFechaEmisionExoneracion(),detalle.getNumeroDocumentoExoneracion(),detalle.getNombreInstitucionExoneracion(),detalle.getPorcentajeExoneracion(),detalle.getMontoExoneracion1());
-	        resultado += "</Impuesto>";
-	    	}
-  		}
-			
-		} catch (Exception e) {
-			log.error("** Error  xmlImpuestos1 Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-    return resultado;
-}
+
   private String xmlBaseImponible(Long idFactura,Double baseImponible) throws Exception {
   	String resultado = Constantes.EMPTY;
   	
@@ -552,40 +517,7 @@ private String getDescuento(Double descuento) throws Exception {
    * @param detalle
    * @return
    */
-private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
-  	String resultado = Constantes.EMPTY;
-  	String nodoCodigoTarifa = Constantes.EMPTY;
-  	String nodoTarifa = Constantes.EMPTY;
-  	tipoImpuesto = tipoImpuesto == null?Constantes.EMPTY:tipoImpuesto;
-  	try {
-  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
-  			return resultado;
-  		}
-  		if (codigoTarifa !=null) {
-  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
-  				nodoCodigoTarifa ="<CodigoTarifa>" + Utils.zeroPad( FacturaElectronicaUtils.procesarTexto(codigoTarifa), 2) + "</CodigoTarifa>";
-  				
-  			}
-  			
-  		}
-  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
-  		if(montoImpuesto != null || tipoImpuesto !=null) {
-	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE || !tipoImpuesto.equals(Constantes.EMPTY) ) {
-	        resultado = "<Impuesto>" +
-	            "<Codigo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoImpuesto), 2) + "</Codigo>" +
-	            nodoCodigoTarifa +
-	            nodoTarifa+
-	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,5) + "</Monto>";
-	        resultado += "</Impuesto>";
-	    	}
-  		}
-			
-		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-    return resultado;
-}
+
 
 private Double impuestoTotal(Double impuestoTotal,Double totalExonerado) {
 	Double resultado = Constantes.ZEROS_DOUBLE;

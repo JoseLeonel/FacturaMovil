@@ -828,6 +828,7 @@
             </div>
             <div class="modal-body">
                 <form id="formularioAgregarCliente" name ="formularioAgregarCliente" >
+                    <input type="hidden" id='tipoMag'  name='tipoMag'  value="0" >
                     <div class="row">
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
@@ -885,691 +886,7 @@
 
 <style type="text/css">
 
-.botonesFuncionalContainer{
-        display:flex;
-        flex:1;
 
-    }
-.botonesFuncionalContainer{
-        display:flex;
-        flex:1;
-
-    }
-  .botonesFuncionalContainer{
-        display:flex;
-    }
-
-  .botonesFuncional{
-        flex:1;
-        padding-right: 1%;
-        padding-bottom: 2%;
-    }
-    .gananciaContainer{
-        display:flex;
-        flex:1;
-    }
-.tamanoVentaEspera{
-   font-size: 14px;
-    margin-left: 2%;
-    margin-right: 2%;
-}
-div.fondoVentaEspera:hover{
-    color:#30ed17 !important;
-    cursor: pointer;
-}
-.ventaEspera{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    margin-top: 3%;
-    margin-bottom: 3%;
-}
- .fondoVentaEspera{
-        background: black;
-        text-align: center;
-        text-decoration: none;
-        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
-        font-style: italic;
-        color: #e2f312 !important;
-        font-weight: 600;
-        font-size: 14px;
-            margin-right: 2px;
-        
-    }
-    .ventaEsperaSeleccionada{
-        display: flex;
-        padding-bottom: 0.2%;
-    }  
-    .ventaEsperaSeleccionada .tituloVentaEspera{
-        font-weight: 700;
-        font-size:20px;
-            color: brown;
-    }                           
-    .contenedorFactura{
-        display: flex;
-        flex: 1;
-        border: 1px solid #3c8dbc;
-        background: #ffffff;
-    }
-    div.labelBotones:hover{
-        color:#30ed17 !important;
-
-    }
-       .labelBotones {
-        font-weight: 600 !important;
-        font-size: 16px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-     
-    .simbolodividir{
-        font-size:20px;
-    }
-    span.fontSumarRestar:hover{
-        background-color: black;
-    }
-    div.BotonesSumarRestar:hover {
-        background-color: black;
-    }
-    .modalTitleCambioPrecio{
-        color: white;
-    }
-    .modalInputCambioPrecioCodigoDescripcion{
-       border-radius: 10px !important;
-       font-size: 40px !important;
-    }
-    .modalInputCambioPrecio{
-        font-size: 70px !important;
-        color:blue !important;
-        border-radius: 16px !important;
-    }
-    .modalCambioPrecioBotones{
-         border-radius: 16px !important;
-    }
-
-    .fontSumarRestar{
-        font-size: 20px;
-    }
-    .input-group-botonessumarrestarnuevocliente {
-        padding: 6px 12px;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 1;
-        color: #555;
-        text-align: center;
-        background-color: #151517;
-        border-radius: 4px;
-    }
-    .BotonesSumarRestar{
-        position: relative;
-        border-collapse: separate;
-    }
-    .containerSumarRestar{
-        flex:1;
-    }
-    .containerIconosSumaRestaAgregarCliente{
-        flex:1;
-    }
-    .tamanoClienteNuevo{
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        height: 10%;
-    }
-    .modalTitleCambioPrecio{
-        color: white;
-    }
-    .modalInputCambioPrecioCodigoDescripcion{
-       border-radius: 10px !important;
-       font-size: 40px !important;
-    }
-    .modalInputCambioPrecio{
-        font-size: 70px !important;
-        color:blue !important;
-        border-radius: 16px !important;
-    }
-    .modalCambioPrecioBotones{
-         border-radius: 16px !important;
-         font-size: 60px !important;
-    }
-    .btn-PagarICON:before {
-        font-family: FontAwesome;
-        content: "\f09d ";
-    }
-    .btn-Pagar {
-        background-color: #4cae4c;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 24px;
-        padding-right: 20px;
-        font-size: 30px;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .containerBotonesPagar{
-        display:flex;
-        margin-top: 2%;
-    }
-    .elementoPagar{
-
-    }
-    .teclashift {
-        font-weight: 700;
-        font-size: 27px !important;
-        text-align: center;
-        color: red;
-
-    }
- .imagenesBilletes{
-      height: 75px;
-      width: 170px;
-    }
-   .pantallaBilletes{
-       display:flex;
-
-   }
-   .billeteContainer{
-       display:flex;
-       flex-flow: wrap;
-       flex-direction: row;
-   }
-   .billete{
-    cursor: pointer;
-    margin-right: 4%;
-    margin-top: 2%;
-
-   }
-    .billetes1{
-        margin-left: 1%;
-        /* margin-bottom: 9px; */
-        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        align-self: flex-start;
-    }
-    .tituloTotal{
-        font-weight: 600 !important;
-        font-size: 25px !important;
-        font-family: Roboto, sans-serif !important;
-        color:#d3ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        /* padding-left: 20px; */
-        /* line-height: 30px; */
-        border-collapse: separate;
-        text-align: center;
-        /* cursor: pointer; */
-        /* padding: 10px; */
-        /* margin: 20px; */
-        border: none;
-        text-align: center !important;
-
-    }
-    .valorTotal{
-        font-weight: 600 !important;
-        font-size: 25px !important;
-        font-family: Roboto, sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        /* padding-left: 20px; */
-        /* line-height: 30px; */
-        border-collapse: separate;
-        text-align: center;
-        /* cursor: pointer; */
-        /* padding: 10px; */
-        /* margin: 20px; */
-        border: none;
-        text-align: center !important;
-
-    }
-    .containerTotales{
-        display:flex;
-        flex-direction: column;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-    .elementoTotales{
-        display: flex;
-        justify-content: space-around;
-        font-weight: 600 !important;
-            font-size: 25px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            align-items: center;
-            text-align: left;
-    
-    }
-    .sizeBilletes{
-        height:90px;
-        width:160px;
-    }
-
-    @media only screen and (max-width: 1024px) and (min-width:768px)  {
-    .sizeBilletes{
-        height:90px;
-        width:160px;
-    }
-    .tituloTotal{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto, sans-serif !important;
-        color:#d3ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-
-    }
-    .valorTotal{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto, sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-
-    }
-    .containerTotales{
-        display:flex;
-        flex-direction: column;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-
-
-
-    }
-    .labelDetalleVenta {
-        display: inline;
-        padding: .2em .6em .3em;
-        font-weight: 700;
-        line-height: 1;
-        color: black;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: baseline;
-        border-radius: .25em;
-    }
-        .clickable {
-            cursor: pointer;
-        }
-        .modal {
-    position: fixed;
-    top: 3%;
-    right: 3%;
-    left: 3%;
-    bottom: 3%;
-    width: auto;
-    margin: 0;
-    }
-    .modal-body {
-    max-height: 350px;
-    padding: 15px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    }
-
-    .modal-body { height: 60%; }
-
-    @media (max-width: 480px) 
-    {
-        .modal.fade.in {
-            top: 10px;
-    }
-    }
-
-    td.col-1, th.col-1 {
-    width: 8.33333%; }
-
-    td.col-2, th.col-2 {
-    width: 16.66667%; }
-
-    td.col-3, th.col-3 {
-    width: 25%; }
-
-    td.col-4, th.col-4 {
-    width: 33.33333%; }
-
-    td.col-5, th.col-5 {
-    width: 41.66667%; }
-
-    td.col-6, th.col-6 {
-    width: 50%; }
-
-    td.col-7, th.col-7 {
-    width: 58.33333%; }
-
-    td.col-8, th.col-8 {
-    width: 66.66667%; }
-
-    td.col-9, th.col-9 {
-    width: 75%; }
-
-    td.col-10, th.col-10 {
-    width: 83.33333%; }
-
-    td.col-11, th.col-11 {
-    width: 91.66667%; }
-
-    td.col-12, th.col-12 {
-    width: 100%; }
-
-    td.col-sm-1, th.col-sm-1 {
-    width: 8.33333%; }
-
-    td.col-sm-2, th.col-sm-2 {
-    width: 16.66667%; }
-
-    td.col-sm-3, th.col-sm-3 {
-    width: 25%; }
-
-    td.col-sm-4, th.col-sm-4 {
-    width: 33.33333%; }
-
-    td.col-sm-5, th.col-sm-5 {
-    width: 41.66667%; }
-
-    td.col-sm-6, th.col-sm-6 {
-    width: 50%; }
-
-    td.col-sm-7, th.col-sm-7 {
-    width: 58.33333%; }
-
-    td.col-sm-8, th.col-sm-8 {
-    width: 66.66667%; }
-
-    td.col-sm-9, th.col-sm-9 {
-    width: 75%; }
-
-    td.col-sm-10, th.col-sm-10 {
-    width: 83.33333%; }
-
-    td.col-sm-11, th.col-sm-11 {
-    width: 91.66667%; }
-
-    td.col-sm-12, th.col-sm-12 {
-    width: 100%; }
-
-    td.col-md-1, th.col-md-1 {
-    width: 8.33333%; }
-
-    td.col-md-2, th.col-md-2 {
-    width: 16.66667%; }
-
-    td.col-md-3, th.col-md-3 {
-    width: 25%; }
-
-    td.col-md-4, th.col-md-4 {
-    width: 33.33333%; }
-
-    td.col-md-5, th.col-md-5 {
-    width: 41.66667%; }
-
-    td.col-md-6, th.col-md-6 {
-    width: 50%; }
-
-    td.col-md-7, th.col-md-7 {
-    width: 58.33333%; }
-
-    td.col-md-8, th.col-md-8 {
-    width: 66.66667%; }
-
-    td.col-md-9, th.col-md-9 {
-    width: 75%; }
-
-    td.col-md-10, th.col-md-10 {
-    width: 83.33333%; }
-
-    td.col-md-11, th.col-md-11 {
-    width: 91.66667%; }
-
-    td.col-md-12, th.col-md-12 {
-    width: 100%; }
-
-    td.col-lg-1, th.col-lg-1 {
-    width: 8.33333%; }
-
-    td.col-lg-2, th.col-lg-2 {
-    width: 16.66667%; }
-
-    td.col-lg-3, th.col-lg-3 {
-    width: 25%; }
-
-    td.col-lg-4, th.col-lg-4 {
-    width: 33.33333%; }
-
-    td.col-lg-5, th.col-lg-5 {
-    width: 41.66667%; }
-
-    td.col-lg-6, th.col-lg-6 {
-    width: 50%; }
-
-    td.col-lg-7, th.col-lg-7 {
-    width: 58.33333%; }
-
-    td.col-lg-8, th.col-lg-8 {
-    width: 66.66667%; }
-
-    td.col-lg-9, th.col-lg-9 {
-    width: 75%; }
-
-    td.col-lg-10, th.col-lg-10 {
-    width: 83.33333%; }
-
-    td.col-lg-11, th.col-lg-11 {
-    width: 91.66667%; }
-
-    td.col-lg-12, th.col-lg-12 {
-    width: 100%; }
-
-    td.col-xl-1, th.col-xl-1 {
-    width: 8.33333%; }
-
-    td.col-xl-2, th.col-xl-2 {
-    width: 16.66667%; }
-
-    td.col-xl-3, th.col-xl-3 {
-    width: 25%; }
-
-    td.col-xl-4, th.col-xl-4 {
-    width: 33.33333%; }
-
-    td.col-xl-5, th.col-xl-5 {
-    width: 41.66667%; }
-
-    td.col-xl-6, th.col-xl-6 {
-    width: 50%; }
-
-    td.col-xl-7, th.col-xl-7 {
-    width: 58.33333%; }
-
-    td.col-xl-8, th.col-xl-8 {
-    width: 66.66667%; }
-
-    td.col-xl-9, th.col-xl-9 {
-    width: 75%; }
-
-    td.col-xl-10, th.col-xl-10 {
-    width: 83.33333%; }
-
-    td.col-xl-11, th.col-xl-11 {
-    width: 91.66667%; }
-
-    td.col-xl-12, th.col-xl-12 {
-    width: 100%; }
-
- @media screen and (max-width: 1024px) {
-    .labelBotones {
-        font-size: 11px !important;
-    }
-    div.labelBotones:hover{
-        color:#30ed17 !important;
-
-    }
-    .label-totalesComprobante{
-        font-size: 16px !important;
-    }
-    .cantidadArticulosTitulo{
-        font-size: 10px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-        font-size: 12px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-        font-size: 12px !important;
-    }
-    }
-
-    .botonesFuncionalContainer{
-        display:flex;
-        flex:1;
-
-    }
-     .botonesFuncionalContainer{
-        display:flex;
-    }
-
-    .botonesFuncionalContainer .botonesFuncional{
-        flex:1;
-        padding-right: 1%;
-        padding-bottom: 2%;
-    }
-    .gananciaContainer{
-        display:flex;
-        flex:1;
-    }
-    .gananciaContainer .formatoTituloGanancia{
-        flex:1;
-        color: black;
-        font-size: 15px;
-        font-weight: bolder;
-    }
-    .tituloCantidadArticulos{
-        display:flex;
-    }
-     .cantidadArticulosTitulo{
-        font-weight: 600 !important;
-        font-size: 25px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #edea17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        /* padding-left: 20px; */
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        /* padding: 5px; */
-        /* margin: 5px; */
-        /* border: none; */
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-
-    }
-
-    .tituloProductoIngresadoContainer{
-        display:flex;
-        flex:1;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
-        flex: 1;
-        display: flex;
-        padding-left: 2%;
-        padding-right: 2%;
-    
-    }
-
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-        flex: 0.15;
-        font-weight: 600 !important;
-        font-size: 36px !important;
-        font-family: Roboto,sans-serif !important;
-        color: yellow !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-    }
-
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-        flex: 1;
-        font-weight: 600 !important;
-        font-size: 36px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-    }
-}
 </style> 
 
 <script>
@@ -1582,6 +899,7 @@ div.fondoVentaEspera:hover{
     self.mensajesBackEnd       = []
     self.error                 = false
     self.comboEstados          = []
+    self.estadosMag          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
      self.validarRolCommand = {
@@ -2011,8 +1329,10 @@ function modalEntradaSalidaDinero(tipo){
 
 
 __ClienteNuevo(){
+    
     __nuevoCliente()
 }
+
 /**
 * Camps requeridos
 **/
@@ -3420,7 +2740,7 @@ function cargarDetallesFacturaEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
+            tipoImpuesto1   : "",
             descripcion     : modeloTabla.descripcion,
             cantidad        : __valorNumerico(modeloTabla.cantidad),
             precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
@@ -3646,7 +2966,7 @@ function mostrarPAgo(){
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    getSubTotalGeneral()
+    //getSubTotalGeneral()
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3710,7 +3030,10 @@ function __sumarMasArticulo(codigo){
             self.item          = self.detail[count];
             self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
             self.update();
-            ActualizarLineaDEtalle()
+               //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+
             self.detail[count] = self.item;
             self.update();
         }
@@ -3847,7 +3170,10 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-               ActualizarLineaDEtalle()
+                  //factura.js
+                self.item = ActualizarLineaDEtalle(self.item) 
+                self.update()
+
                self.detail[count] = self.item;
                encontrado = true;
                self.seIncluyoUnArticulo = 0
@@ -3932,13 +3258,13 @@ function __nuevoArticuloAlDetalle(cantidad){
       
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
+    resultaMontoImpuesto = 0 
     precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
+    var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
@@ -3950,17 +3276,17 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : "",
        iva             : parseFloat(self.articulo.impuesto),
-       iva1            : parseFloat(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
        precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
-       impuesto1        : parseFloat(self.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : parseFloat(montoImpuesto),
-       montoImpuesto1  : parseFloat(montoImpuesto1),
+       montoImpuesto1  : 0,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
@@ -4106,7 +3432,9 @@ function __cambiarElPrecioModal(){
 * Cambiar el precio en el detalle
 **/
 function agregarPrecioAlDetalle(precio){
-    ActualizarLineaDEtalle()
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
     aplicarCambioLineaDetalle() 
     $(".cambiarprecioArticulo").val(null);
     $('#modalCambiarPrecio').modal('hide') 
@@ -4119,57 +3447,7 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
     return
 }
 
-/**
-*Actualizar linea en el detalle
-**/
-function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
-    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
-    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
-    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
-    self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = montoDescuento
-    self.item.subTotal         = subTotal
-    self.item.montoImpuesto    = montoImpuesto
-    self.item.montoImpuesto1   = montoImpuesto1
-    self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
-    self.update()
-}
-/**
-*Monto en el descuento
-**/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc <= porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-        if(porcentajeGanancia <= 0){
-            porcentaje =  porcentajeDesc;
-        }
 
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    self.item.porcentajeDesc = porcentaje
-	    self.update()
-
-	    var totalDescuento =  precioUnitario * cantidad
-        totalDescuento = totalDescuento * porcentaje
-        totalDescuento = totalDescuento /100
-	    var resultado = totalDescuento;
-	    return resultado
-}
 /**
 * Agregar en la cantidad la Venta
 **/
@@ -4179,7 +3457,10 @@ function agregarCantidadAlaVenta(cantidad){
     self.item.ganancia = ganancia
     self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
-    ActualizarLineaDEtalle()
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
@@ -4219,74 +3500,48 @@ function _actualizarDesc(){
        self.item.porcentajeDesc =  parseFloat(descuento);  
     }    
     self.update()
-    ActualizarLineaDEtalle()  
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+
     aplicarCambioLineaDetalle()
     $('#modalCambiarDescuento').modal('hide') 
     aplicarDescuento.value = 0
 }
 
 /**
-*  Obtener el subtotal sin el impuesto
-**/
-function getSubTotal(precio,cantidad){
-    var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return valor
-}
-/**
-* calcular el descuento
-**/
-function getTotalDescuento(precio,cantidad,porcentajeDesc){
-    var porcentaje = __valorNumerico(porcentajeDesc)/100
-    var valor =  __valorNumerico(precio) * porcentaje
-    return valor * cantidad
-}
-/**
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
     calcularImpuestoServicio()
+    
+
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
-    self.factura.subTotal         = 0;
+    self.factura.totalImpuestoServ = 0; 
+    self.factura.subTotal          = 0;
     self.update()
-    totalVenta     = 0
-    subTotal       = 0
-    totalDescuento = 0
-    totalImpuesto  = 0
-    totalImpuesto1  = 0
-    totalComprobante        = 0
-    totalventaNeta          = 0
-    self.cantArticulos      = 0
-    var montoExoneracion = 0
-    self.detail.forEach(function(e){
-        totalComprobante        += e.montoTotalLinea
-        subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
-        totalVenta              += e.montoTotal
-        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
-         montoExoneracion        += parseFloat(e.montoExoneracion) 
-         montoExoneracion        += parseFloat(e.montoExoneracion1) 
-    });
-    //cuando se aplica descuentos
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
-    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
-    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
-    self.update(); 
+                        //Factura.js
+    var resultado = __ResumenFactura(self.detail,self.factura);
+    self.factura = resultado.factura
+    self.cantArticulos = resultado.cantArticulos
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
+    self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
+    self.totalPesoByFacturaSTR = formatoDecimales(resultado.totalPesoByFactura,2);
+    self.totalComprobante = formatoDecimales(self.factura.totalComprobante,2);
+    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto = formatoDecimales(self.factura.totalImpuesto,2);
+    self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
+    self.subTotalGeneral = formatoDecimales(resultado.subTotalGeneral,2)
+    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2)
+    self.update()
     $('.precioVenta').val(null)
     $('.codigo').val(null)
     $('.codigo').select()
     $('.codigo').focus()
-    getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 
@@ -4313,23 +3568,16 @@ function calcularImpuestoServicio(){
             self.item.montoTotal     = resultado
             self.item.montoTotalLinea = resultado
             self.update();
-            ActualizarLineaDEtalle()
+               //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+
             self.detail[count] = self.item;
             self.update();
         }
     }
 }
-/**
-*  Sub Total Generar de la factura
-**/
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
-    self.subTotalGeneral = formatoDecimales(resultado,2)
-    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
-    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
-    self.update()
-}
+
 /**
 * Definicion de la tabla articulos 
 **/

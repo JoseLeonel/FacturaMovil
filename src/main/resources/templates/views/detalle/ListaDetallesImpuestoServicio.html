@@ -1,52 +1,458 @@
- <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
-<head>
- 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Lista de Facturas</title>
-     	<script th:src="@{/js/jquery-1.11.2.js}"></script>
- 
-<!--        <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script> -->
-	<!-- jQuery UI 1.11.4 -->
-<!-- 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script> -->
-	<script src="/js/jquery-ui.min.js"></script>
-	<!-- JQUERY Properties -->
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
-	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
-	 <!-- MASK -->
-	 <script type="text/javascript" src="js/jquery.mask.js"></script>
-	 
-	 <script th:src="@{/js/jsonPath.js}"></script>
-		
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<style type="text/css">
+	.btn-success {
+		color: #e7e7e7;
+		background-color: #00a65a !important;
+		border-color: #008d4c;
+	}
+	/* Lista de facturas en espera*/
+	.cabecera-derecha .lista-compras-espera {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
 	
+	.cabecera-derecha .lista-compras-espera .compras-espera {
+		display: block;
+		width: 90%;
+		padding: 6px 0;
+		margin-bottom: 20px;
+		margin-left: 15px;
+		margin-right: 5px;
+		background: red;
+		text-align: center;
+		text-decoration: none;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		font-style: italic;
+	}
 	
-
-    <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-<!-- 	<script src="/riot/riot.csp.js"></script> -->
-	<!-- include riot.js and the compiler -->
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script> -->
+	.label-limpiar {
+		font-weight: 600 !important;
+		font-size: 20px !important;
+		font-family: Roboto, sans-serif !important;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		font-style: italic;
+		text-align: left;
+		padding-left: 20px;
+		line-height: 30px;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		padding: 5px;
+		margin: 10px;
+		border: none;
+		text-align: center !important;
+		background-color: black !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0
+			rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
 	
-	<!-- LISTADO DE FACTURAS -->
-	<script type="text/javascript" src="/js/views/detalle/detalleImpuestoServicio"></script>
-	<script type = "riot/tag"  src="/js/views/components/detalle/consultaImpuestoServicio.tag" ></script>
+	#pagarTitulo {
+		font-weight: 600 !important;
+		font-size: 30px !important;
+		font-family: Roboto, sans-serif !important;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		font-style: italic;
+		text-align: left;
+		padding-left: 20px;
+		line-height: 30px;
+	}
 	
-    
+	.tamanoLetraTotales {
+		font-weight: 600 !important;
+		font-size: 30px !important;
+	}
+	
+	#pagarTable, #pagarTableInfo {
+		border-collapse: separate;
+	}
+	
+	#pagarTableInfo {
+		background-color: #f2f2f2;
+		color: #000;
+		text-align: center;
+	}
+	
+	#total-show {
+		padding: 0px;
+		font-weight: 400;
+		background: none !important;
+		font-size: 30px;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		padding-top: 0px;
+		line-height: 40px;
+	}
+	
+	#btnGrandePagar, #btnGrandePagar2 {
+		cursor: pointer;
+		padding: 0px;
+		margin: 10px;
+		border: none;
+		text-align: center !important;
+		background-color: #6dca42 !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0
+			rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
+	
+	#pagarInfo, #iva-total, #subtotal, #sigPeso {
+		font-weight: 100 !important;
+		font-size: 14px !important;
+	}
+	
+	#pagarInfo {
+		font-size: 12px !important;
+	}
+	
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	
+	body {
+		background: white;
+	}
+	
+	.wrap {
+		max-width: 1100px;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.contenedor-compra {
+		display: flex;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.cabecera-izquierda {
+		margin-right: 5%;
+		width: 85%;
+	}
+	
+	.cabecera-derecha {
+		width: 25%;
+	}
+	
+	.contenedor-detalle {
+		display: flex;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.booking-details h1 {
+		font-size: 1.5em;
+		color: #666;
+		text-shadow: none;
+	}
+	
+	.booking-details .booking-info {
+		border-top: 1px solid #DFDCD1;
+		padding: 15px 0 0;
+		margin: 15px 0 0;
+		font-size: 25px;
+		display: inline-block;
+		width: 100%;
+	}
+	
+	.total {
+		font-weight: bold;
+		font-size: 20px;
+	}
+	
+	.precioTotalFactura {
+		font-weight: bold;
+		font-size: 30px;
+		color: #0C9C22;
+		border-top: 1px solid #DFDCD1;
+		padding: 0 0 5px;
+		padding: 15px 0 0;
+		margin: 10px 0 0;
+	}
+	
+	label {
+		display: inline-block;
+		max-width: 100%;
+		margin-bottom: 5px;
+		font-weight: 600;
+	}
+	
+	.tituloTotal {
+		font-size: 30px;
+	}
+	
+	.wrap {
+		max-width: 100%;
+		width: 100%;
+	}
+	
+	body {
+		overflow: hidden;
+		background: white;
+		font-size: 14px !important;
+		margin: 0;
+		padding: 0;
+		height: 100%
+	}
+	
+	.contenedor-listar {
+		width: 100%;
+		max-width: 1100px;
+		width: 100%;
+	}
+	
+	.input-table-search {
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 100%;
+	}
+	
+	.botonConsulta {
+		margin-top: 28px;
+	}
+	
+	table td {
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	table th {
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	/* Lista de facturas en espera*/
+	.cabecera-derecha .lista-compras-espera {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	
+	.cabecera-derecha .lista-compras-espera .compras-espera {
+		display: block;
+		width: 90%;
+		padding: 6px 0;
+		margin-bottom: 20px;
+		margin-left: 15px;
+		margin-right: 5px;
+		background: red;
+		text-align: center;
+		text-decoration: none;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		font-style: italic;
+	}
+	
+	#pagarTitulo {
+		font-weight: 600 !important;
+		font-size: 16px !important;
+		font-family: Roboto, sans-serif !important;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		font-style: italic;
+		text-align: left;
+		padding-left: 20px;
+		line-height: 30px;
+	}
+	
+	#pagarTable, #pagarTableInfo {
+		border-collapse: separate;
+	}
+	
+	#pagarTableInfo {
+		background-color: #f2f2f2;
+		color: #000;
+		text-align: center;
+	}
+	
+	#total-show {
+		padding: 0px;
+		font-weight: 400;
+		background: none !important;
+		font-size: 16px;
+		color: #ffffff !important;
+		text-shadow: 0px 0px 1px #ffffff;
+		padding-top: 0px;
+		line-height: 40px;
+	}
+	
+	#btnGrandePagar, #btnGrandePagar2 {
+		cursor: pointer;
+		padding: 0px;
+		margin: 10px;
+		border: none;
+		text-align: center !important;
+		background-color: #6dca42 !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0
+			rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
+	
+	#pagarInfo, #iva-total, #subtotal, #sigPeso {
+		font-weight: 100 !important;
+		font-size: 16px !important;
+	}
+	
+	#pagarInfo {
+		font-size: 16px !important;
+	}
+	
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	
+	body {
+		background: white;
+	}
+	
+	.wrap {
+		max-width: 1100px;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.contenedor-compra {
+		display: flex;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.cabecera-izquierda {
+		margin-right: 5%;
+		width: 85%;
+	}
+	
+	.cabecera-derecha {
+		width: 25%;
+	}
+	
+	.contenedor-detalle {
+		display: flex;
+		width: 100%;
+		margin: auto;
+	}
+	
+	.booking-details h1 {
+		font-size: 1.5em;
+		color: #666;
+		text-shadow: none;
+	}
+	
+	.booking-details .booking-info {
+		border-top: 1px solid #DFDCD1;
+		padding: 15px 0 0;
+		margin: 15px 0 0;
+		display: inline-block;
+		width: 100%;
+	}
+	
+	.total {
+		font-weight: bold;
+		font-size: 20px;
+	}
+	
+	.precioTotalFactura {
+		font-weight: bold;
+		font-size: 20px;
+		color: #0C9C22;
+		border-top: 1px solid #DFDCD1;
+		padding: 0 0 5px;
+		padding: 15px 0 0;
+		margin: 10px 0 0;
+	}
+	
+	label {
+		display: inline-block;
+		max-width: 100%;
+		margin-bottom: 5px;
+		font-weight: 600;
+	}
+	
+	#titulo-encabezado {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+   #totalsGenerales {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	
+	#totalsGenerales>div {
+		margin-right: 2px;
+	}
+	
+	#totalsGenerales>div>div {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#totalsGenerales>div>div>input {
+		width: 200px;
+		background-color: #ecf0f5 !important;
+		height: 30px;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 16px;
+		/*   font-weight: 900; */
+	}
+	
+	#totalsGenerales>div>div>span {
+		font-size: 18px;
+		font-weight: 600;
+	}	
+</style>
 </head>
-<body>
-<section layout:fragment="header">
-
-
-</section>
-<div layout:fragment="content">
-
-    <consulta-impuestoServicio></consulta-impuestoServicio>
-</div>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+	        	<consulta-impuestoServicio></consulta-impuestoServicio>
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript" th:src="@{/js/views/detalle/detalleImpuestoServicio.js}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/detalle/consultaImpuestoServicio.tag}" ></script>
 
 </body>
 </html>

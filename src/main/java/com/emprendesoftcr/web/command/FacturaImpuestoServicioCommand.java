@@ -4,9 +4,7 @@ import java.util.Date;
 
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
-import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
-import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 
 public class FacturaImpuestoServicioCommand {
 

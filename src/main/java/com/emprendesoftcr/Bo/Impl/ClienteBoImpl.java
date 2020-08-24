@@ -2,11 +2,15 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Dao.ClienteDao;
@@ -14,6 +18,9 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.web.command.ClienteCommand;
+import com.emprendesoftcr.web.command.ClienteMag;
+import com.emprendesoftcr.web.command.ClienteMagList;
 
 /**
  * Clientes asociados a una empresa ClienteBoImpl.
@@ -24,9 +31,11 @@ import com.emprendesoftcr.modelo.Usuario;
 @Service("clienteBo")
 public class ClienteBoImpl implements ClienteBo {
 
-	@Autowired
-	private ClienteDao clienteDao;
+	
+	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	private ClienteDao	clienteDao;
 
 	@Transactional
 	@Override
@@ -110,7 +119,7 @@ public class ClienteBoImpl implements ClienteBo {
 
 	@Override
 	public Collection<Cliente> findByEmpresa(Integer idEmpresa) {
-		
+
 		return clienteDao.findByEmpresa(idEmpresa);
 	}
 
@@ -118,6 +127,34 @@ public class ClienteBoImpl implements ClienteBo {
 	public Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa) {
 
 		return clienteDao.buscarPorCedulaExtranjera(cedula, empresa);
+	}
+
+	@Override
+	public ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand) {
+		ClienteMag clienteMag = new ClienteMag();
+
+		try {
+			// request url
+
+			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null ? Constantes.CLIENTE_MAG_INACTIVO : clienteCommand.getTipoMag());
+			String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + "204050862" : Constantes.API_MAG_PESCA + "3101050217";
+
+			// create an instance of RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
+			// make an HTTP GET request
+			ClienteMagList response = restTemplate.getForObject(url, ClienteMagList.class);
+			List<ClienteMag> employees = response.getListaDatosMAG();
+			for (int i = 0; i < employees.size(); i++) {
+				clienteMag = employees.get(i);
+
+			}
+
+		} catch (Exception e) {
+			log.error(String.format("--error consultar APi de hacienda de agro o pesca :" + e.getMessage() + new Date()));
+			throw e;
+
+		}
+		return clienteMag;
 	}
 
 }

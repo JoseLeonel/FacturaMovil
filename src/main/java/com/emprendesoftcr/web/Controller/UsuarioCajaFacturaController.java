@@ -53,6 +53,7 @@ public class UsuarioCajaFacturaController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosCajasFacturasNoAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasNoAnuladasAjax(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja) {

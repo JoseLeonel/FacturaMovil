@@ -811,416 +811,7 @@
 
 
 <style type="text/css">
-    .tamanoClienteNuevo{
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        height: 10%;
-
-    }
-    .modalTitleCambioPrecio{
-        color: white;
-    }
-    .modalInputCambioPrecioCodigoDescripcion{
-       border-radius: 10px !important;
-       font-size: 40px !important;
-    }
-    .modalInputCambioPrecio{
-        font-size: 70px !important;
-        color:blue !important;
-        border-radius: 16px !important;
-    }
-    .modalCambioPrecioBotones{
-         border-radius: 16px !important;
-         font-size: 60px !important;
-    }
-
-    .botones-funcionales {
-        float: left;
-        margin-left: 6px;
-        margin-top: 16px;
-    }
-    .btn-PagarICON:before {
-        font-family: FontAwesome;
-        content: "\f09d ";
-    }
-    .btn-Pagar {
-        background-color: #4cae4c;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 24px;
-        padding-right: 20px;
-        font-size: 30px;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .containerBotonesPagar{
-        display:flex;
-        margin-top: 2%;
-    }
-    .elementoPagar{
-
-    }
-    .teclashift {
-        font-weight: 700;
-        font-size: 27px !important;
-        text-align: center;
-        color: red;
-
-    }
-    .tituloDescuento{
-        font-size: 50px;
-    }
-    .cambiarDescripcionArticulo{
-        font-size: 40px;
-        font-weight: 800;
-        color: black;
-        height: 3%;
-        text-align: center;
-
-    }
-    .cambiarCantidadArticulo{
-        font-size: 80px;
-        font-weight: 800;
-        color: black;
-        height: 3%;
-        text-align: center;
-
-    }
-    .cambiarprecioArticulo{
-        font-size: 40px;
-        font-weight: 800;
-        color: black;
-        height: 3%;
-        text-align: center;
-
-    }
-    .aplicarDescuento{
-        font-size: 40px;
-        font-weight: 800;
-        color: black;
-        height: 3%;
-        text-align: center;
-    }
-    .billetes1{
-        margin-left: 1%;
-        /* margin-bottom: 9px; */
-        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        align-self: flex-start;
-    }
-    .tituloTotal{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto, sans-serif !important;
-        color:#d3ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-         border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-    }
-    .valorTotal{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto, sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-    }
-    .containerTotales{
-        display:flex;
-        flex-direction: column;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-    .elementoTotales{
-        display: flex;
-        justify-content: space-around;
-    
-    }
-    .sizeBilletes{
-        height:90px;
-        width:160px;
-    }
-
-    @media only screen and (max-width: 1024px) and (min-width:768px)  {
-    .sizeBilletes{
-        height:90px;
-        width:160px;
-    }
-    .tituloTotal{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto, sans-serif !important;
-        color:#d3ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-
-    }
-    .valorTotal{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto, sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        border-collapse: separate;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-
-    }
-    .containerTotales{
-        display:flex;
-        flex-direction: column;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-
-
-
-    }
-
-        .clickable {
-            cursor: pointer;
-        }
-        .modal {
-    position: fixed;
-    top: 3%;
-    right: 3%;
-    left: 3%;
-    bottom: 3%;
-    width: auto;
-    margin: 0;
-    }
-    .modal-body {
-    max-height: 350px;
-    padding: 15px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    }
-
-    .modal-body { height: 60%; }
-
-    @media (max-width: 480px) 
-    {
-        .modal.fade.in {
-            top: 10px;
-    }
-    }
-
-    td.col-1, th.col-1 {
-    width: 8.33333%; }
-
-    td.col-2, th.col-2 {
-    width: 16.66667%; }
-
-    td.col-3, th.col-3 {
-    width: 25%; }
-
-    td.col-4, th.col-4 {
-    width: 33.33333%; }
-
-    td.col-5, th.col-5 {
-    width: 41.66667%; }
-
-    td.col-6, th.col-6 {
-    width: 50%; }
-
-    td.col-7, th.col-7 {
-    width: 58.33333%; }
-
-    td.col-8, th.col-8 {
-    width: 66.66667%; }
-
-    td.col-9, th.col-9 {
-    width: 75%; }
-
-    td.col-10, th.col-10 {
-    width: 83.33333%; }
-
-    td.col-11, th.col-11 {
-    width: 91.66667%; }
-
-    td.col-12, th.col-12 {
-    width: 100%; }
-
-    td.col-sm-1, th.col-sm-1 {
-    width: 8.33333%; }
-
-    td.col-sm-2, th.col-sm-2 {
-    width: 16.66667%; }
-
-    td.col-sm-3, th.col-sm-3 {
-    width: 25%; }
-
-    td.col-sm-4, th.col-sm-4 {
-    width: 33.33333%; }
-
-    td.col-sm-5, th.col-sm-5 {
-    width: 41.66667%; }
-
-    td.col-sm-6, th.col-sm-6 {
-    width: 50%; }
-
-    td.col-sm-7, th.col-sm-7 {
-    width: 58.33333%; }
-
-    td.col-sm-8, th.col-sm-8 {
-    width: 66.66667%; }
-
-    td.col-sm-9, th.col-sm-9 {
-    width: 75%; }
-
-    td.col-sm-10, th.col-sm-10 {
-    width: 83.33333%; }
-
-    td.col-sm-11, th.col-sm-11 {
-    width: 91.66667%; }
-
-    td.col-sm-12, th.col-sm-12 {
-    width: 100%; }
-
-    td.col-md-1, th.col-md-1 {
-    width: 8.33333%; }
-
-    td.col-md-2, th.col-md-2 {
-    width: 16.66667%; }
-
-    td.col-md-3, th.col-md-3 {
-    width: 25%; }
-
-    td.col-md-4, th.col-md-4 {
-    width: 33.33333%; }
-
-    td.col-md-5, th.col-md-5 {
-    width: 41.66667%; }
-
-    td.col-md-6, th.col-md-6 {
-    width: 50%; }
-
-    td.col-md-7, th.col-md-7 {
-    width: 58.33333%; }
-
-    td.col-md-8, th.col-md-8 {
-    width: 66.66667%; }
-
-    td.col-md-9, th.col-md-9 {
-    width: 75%; }
-
-    td.col-md-10, th.col-md-10 {
-    width: 83.33333%; }
-
-    td.col-md-11, th.col-md-11 {
-    width: 91.66667%; }
-
-    td.col-md-12, th.col-md-12 {
-    width: 100%; }
-
-    td.col-lg-1, th.col-lg-1 {
-    width: 8.33333%; }
-
-    td.col-lg-2, th.col-lg-2 {
-    width: 16.66667%; }
-
-    td.col-lg-3, th.col-lg-3 {
-    width: 25%; }
-
-    td.col-lg-4, th.col-lg-4 {
-    width: 33.33333%; }
-
-    td.col-lg-5, th.col-lg-5 {
-    width: 41.66667%; }
-
-    td.col-lg-6, th.col-lg-6 {
-    width: 50%; }
-
-    td.col-lg-7, th.col-lg-7 {
-    width: 58.33333%; }
-
-    td.col-lg-8, th.col-lg-8 {
-    width: 66.66667%; }
-
-    td.col-lg-9, th.col-lg-9 {
-    width: 75%; }
-
-    td.col-lg-10, th.col-lg-10 {
-    width: 83.33333%; }
-
-    td.col-lg-11, th.col-lg-11 {
-    width: 91.66667%; }
-
-    td.col-lg-12, th.col-lg-12 {
-    width: 100%; }
-
-    td.col-xl-1, th.col-xl-1 {
-    width: 8.33333%; }
-
-    td.col-xl-2, th.col-xl-2 {
-    width: 16.66667%; }
-
-    td.col-xl-3, th.col-xl-3 {
-    width: 25%; }
-
-    td.col-xl-4, th.col-xl-4 {
-    width: 33.33333%; }
-
-    td.col-xl-5, th.col-xl-5 {
-    width: 41.66667%; }
-
-    td.col-xl-6, th.col-xl-6 {
-    width: 50%; }
-
-    td.col-xl-7, th.col-xl-7 {
-    width: 58.33333%; }
-
-    td.col-xl-8, th.col-xl-8 {
-    width: 66.66667%; }
-
-    td.col-xl-9, th.col-xl-9 {
-    width: 75%; }
-
-    td.col-xl-10, th.col-xl-10 {
-    width: 83.33333%; }
-
-    td.col-xl-11, th.col-xl-11 {
-    width: 91.66667%; }
-
-    td.col-xl-12, th.col-xl-12 {
-    width: 100%; }
+  
     
 </style> 
 
@@ -3008,7 +2599,7 @@ function mostrarPAgo(){
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    getSubTotalGeneral()
+    //getSubTotalGeneral()
     self.primeraVezBilleteClick = false    
     self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
@@ -3073,7 +2664,10 @@ function __sumarMasArticulo(codigo){
             self.item          = self.detail[count];
             self.item.cantidad = self.item.cantidad + __valorNumerico(cantidadAct)
             self.update();
-            ActualizarLineaDEtalle()
+               //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+
             self.detail[count] = self.item;
             self.update();
         }
@@ -3180,7 +2774,10 @@ function __agregarArticulo(cantidad){
 	  	      	if(self.articulo.comanda == 1 || self.articulo.comanda == 2){	
 	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion,self.articulo.comanda);
 	  	    	}	
-               ActualizarLineaDEtalle()   	
+                  //factura.js
+                self.item = ActualizarLineaDEtalle(self.item) 
+                self.update()
+  	
                self.detail[count] = self.item;
                encontrado = true;
                self.seIncluyoUnArticulo = 0
@@ -3266,13 +2863,12 @@ function __nuevoArticuloAlDetalle(cantidad){
       
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
-    resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto1) 
     precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto1) ==null?0:__valorNumerico(self.articulo.impuesto1))
+    var montoImpuesto1  = 0
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
@@ -3284,17 +2880,17 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : " ",
        iva             : __valorNumerico(self.articulo.impuesto),
-       iva1            : __valorNumerico(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       impuesto1        : "",
        montoImpuesto   : __valorNumerico(montoImpuesto),
-       montoImpuesto1  : __valorNumerico(montoImpuesto1),
+       montoImpuesto1  : 0,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),
@@ -3472,7 +3068,10 @@ __cambiarElPrecio(e){
 function agregarPrecioAlDetalle(precio){
     self.item.precioUnitario = precio
     self.update()
-    ActualizarLineaDEtalle()
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+
     aplicarCambioLineaDetalle() 
     $(".cambiarprecioArticulo").val(null);
     $('#modalCambiarPrecio').modal('hide') 
@@ -3484,51 +3083,8 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
     agregarCantidadAlaVenta(cantidad)
     return
 }
-/**
-*Monto en el descuento
-**/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-    if(porcentajeDesc == 0){
-        return 0
-    }
-     if(porcentajeDesc > 100){
-        porcentajeDesc = 100
-    }
-    self.item.porcentajeDesc = porcentajeDesc
-    self.update()
-  var porcentaje =  porcentajeGanancia;
-    if(porcentajeDesc != porcentajeGanancia){
-       porcentaje =  porcentajeDesc;
-    }
-    porcentaje = porcentaje/ 100;
-    if(porcentajeDesc ==100){
-        porcentaje = 0
-    }
-    var totalDescuento =  precioUnitario * cantidad
-    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
-    return resultado
-}
-/**
-*Actualizar linea en el detalle
-**/
-function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
-    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
-    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
-    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
-    self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = montoDescuento
-    self.item.subTotal         = subTotal
-    self.item.montoImpuesto    = montoImpuesto
-    self.item.montoImpuesto1   = montoImpuesto1
-    self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
-    self.totalGananciaByProducto = formatoDecimales(__valorNumerico(self.item.ganancia),2)
-    self.update()
-}
+
+
 /**
 * Agregar en la cantidad la Venta
 **/
@@ -3540,7 +3096,10 @@ function agregarCantidadAlaVenta(cantidad){
    // self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
 
-    ActualizarLineaDEtalle()
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+
     aplicarCambioLineaDetalle() 
     $('#modalCambiarCantidad').modal('hide') 
      
@@ -3581,7 +3140,10 @@ function _actualizarDesc(){
        self.item.porcentajeDesc =  parseFloat(descuento);  
     }    
     self.update()
-    ActualizarLineaDEtalle()  
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+
     aplicarCambioLineaDetalle()
     $('#modalCambiarDescuento').modal('hide') 
     aplicarDescuento.value = 0
@@ -3611,78 +3173,34 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.total            = 0;
+   self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
     self.factura.totalImpuestoServ = 0; 
     self.factura.subTotal          = 0;
     self.update()
-    var totalVenta     = 0
-    var subTotal       = 0
-    var totalDescuento = 0
-    var totalImpuesto  = 0
-    var totalImpuesto1 = 0
-    var totalComprobante        = 0
-    var totalventaNeta          = 0
-    self.cantArticulos      = 0
-    var montoExoneracion = 0
-    self.detail.forEach(function(e){
-        totalComprobante        += e.montoTotalLinea
-        subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
-        totalVenta              += e.montoTotal
-        montoExoneracion       += __valorNumerico(e.montoExoneracion) 
-        montoExoneracion      += __valorNumerico(e.montoExoneracion1) 
-    });
-   
-    //cuando se aplica descuentos
-    self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
-    self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
-    self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
-    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto)) + Math.round(__valorNumerico(totalImpuesto1))
-    
-    //Se verifica si la mesa tiene impuestos
-
-    var tieneMesa = typeof self.factura.mesa !== 'undefined'?true:false;
-    tieneMesa = self.factura.mesa == null?false:true
-
-
-    var tieneImpuestoServiciot = false
-    if(tieneMesa){
-      tieneImpuestoServiciot = typeof self.factura.mesa.impuestoServicio !== 'undefined'?true:false;  
-    }
-    
-    if (tieneMesa && tieneImpuestoServiciot){
-        if(self.factura.mesa.impuestoServicio  == true){
-            self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
-            self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))
-            self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante + self.factura.totalImpuestoServ))
-            self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-        }else{
-            self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
-            self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
-            self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-        }
-
-    }else{
-        self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
-        self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
-        self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-
-    }
-    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
-    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.totalImpuestoServ  = formatoDecimales(self.factura.totalImpuestoServ,2);
-    self.ImpuestoServicio  = self.factura.totalImpuestoServ;
-    self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
+             //Factura.js
+    var resultado = __ResumenFactura(self.detail,self.factura);
+    self.factura = resultado.factura
+    self.cantArticulos = resultado.cantArticulos
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
+    self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
+    self.totalPesoByFacturaSTR = formatoDecimales(resultado.totalPesoByFactura,2);
+    self.totalComprobante = formatoDecimales(self.factura.totalComprobante,2);
+    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto = formatoDecimales(self.factura.totalImpuesto,2);
+    self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
+    self.subTotalGeneral = resultado.subTotalGeneral
+    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
+    self.totalImpuesto = resultado.totalImpuesto
+    self.totalImpuestoServ = formatoDecimales(self.factura.totalImpuestoServ,2);
+    self.ImpuestoServicio = self.factura.totalImpuestoServ;
+    self.montoExoneracion = formatoDecimales(montoExoneracion,2);
     self.update(); 
-    $( "#quantity" ).val(null);
-    getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
-     localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
+    localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
 }	
 
 

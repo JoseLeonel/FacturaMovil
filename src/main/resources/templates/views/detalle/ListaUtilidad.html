@@ -1,397 +1,402 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
-<head>
- 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Utilidad por articulo</title>
-    <meta http-equiv="Expires" content="0">
-   <meta http-equiv="Last-Modified" content="0">
-   <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-   <meta http-equiv="Pragma" content="no-cache">
-    
-   <style type ="text/css">
-    .fondoEncabezado {
-        background: #00539B;
-        color: #f9fafc;
-    }
-  	.requeridoDato {
-            color: red;
-            text-align: left;
-            font-weight: 500;
-            font-size: 13px;
-        }
-    .fondoFacturacion {
-	    background: rgb(247, 244, 244);
-	    color: #f9fafc;
-	    border-style: solid;
-	    border-width: 5px;
-    }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-        .input-table-search{
-            margin-left: 15px;
-            margin-right: 15px;
-            width:100%;
-        }
-        .botonConsulta{
-            margin-top:28px;
-        }
-        
-        table td{ 
-            text-align: left;
-            font-size: 12px;
-            
-                }
-        table th {
-                text-align: center;
-                font-size: 12px;
-        }
-        th, td {
-            white-space: nowrap;
-        }
-        .scroller {
-            width: 500px; height: 500px; overflow-y: scroll;overflow-x: scroll;
-        }
-        .tamanoClienteNuevo{
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        height: 10%;
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
 
-    }
-    .tituloClienteNuevo{
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-    }
-   
-  
-    .botonesContainer{
-       display:flex;
-    }
-    .boton{
-       flex: 1;
-    }
-   
-  
-    
- .scrollerT {
-    width: 100% !important;
-    height: 800px;
-    overflow-y: scroll;
-}
-#containerFiltros{
-  display:flex;
-  flex-direction: column;
-  
-}
-#containerFiltros > div{
-	padding : 2px;  
-	cursor: pointer;
-}
-#panelFiltros{
- background-color: #e7e7e7;
-}
-#panelFiltros > div{
-	padding-top : 5px; 
-	padding-bottom : 5px;
-}
-.parametros{
- display:flex;
- justify-content: space-between;
- flex-wrap: wrap;
-}
-
-
-.parametros > div{
-  flex:1;
-  margin-right: 2%;
-}
-#titulo-encabezado{
-	display:flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-#totalsGenerales{
-  display: flex;
-  flex-wrap: nowrap;
-}   
-#totalsGenerales > div {
-  margin-right: 2px;
-
-}
-#totalsGenerales > div > div {
-  display: flex;
-  flex-direction: column;
-}
-#totalsGenerales > div > div >input{
-  width: 200px;
-  background-color: #ecf0f5 !important;
-  height: 30px;
-  border-radius: 5px 5px 5px 5px;
-  font-size:16px;
-/*   font-weight: 900; */
-}
-#totalsGenerales > div > div >span{
-  font-size: 18px;
-  font-weight: 600;
-}
-
-#botonesConsulta{
-  display: flex;
-  justify-content: space-between;
-}
-#Listado{
-
-    height: 800px;
-    idth: 100%;
-    overflow-y: scroll;
-}
-        
-</style> 
-   <script th:src="@{/js/jquery-1.11.2.js}"></script>
-	<script src="/js/jquery-ui.min.js"></script>
-	<!-- JQUERY Properties-->
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
-	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
-	 <!-- MASK -->
-	 <script type="text/javascript" src="js/jquery.mask.js"></script>
-	 <script type="text/javascript" src="/js/print.min.js"></script>
-	 <script th:src="@{/js/jsonPath.js}"></script>
-   <!-- SWEERT ALERT -->
-        <script type="text/javascript" src="/js/sweetalert2.min.js"></script>
-    <!-- RIOT -->
+<style type="text/css">
+	.fondoEncabezado {
+		background: #00539B;
+		color: #f9fafc;
+	}
 	
-	<!-- LISTADO DE FACTURAS -->
-	<script type="text/javascript" src="/js/views/detalle/utilidad.js"></script>
+	.requeridoDato {
+		color: red;
+		text-align: left;
+		font-weight: 500;
+		font-size: 13px;
+	}
 	
-    
+	.fondoFacturacion {
+		background: rgb(247, 244, 244);
+		color: #f9fafc;
+		border-style: solid;
+		border-width: 5px;
+	}
+	
+	.wrap {
+		max-width: 1100px;
+		width: 100%;
+	}
+	
+	body {
+		overflow: hidden;
+		background: white;
+		font-size: 12px !important;
+	}
+	
+	.contenedor-listar {
+		width: 100%;
+	}
+	
+	.input-table-search {
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 100%;
+	}
+	
+	.botonConsulta {
+		margin-top: 28px;
+	}
+	
+	table td {
+		text-align: left;
+		font-size: 12px;
+	}
+	
+	table th {
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	th, td {
+		white-space: nowrap;
+	}
+	
+	.scroller {
+		width: 500px;
+		height: 500px;
+		overflow-y: scroll;
+		overflow-x: scroll;
+	}
+	
+	.tamanoClienteNuevo {
+		font-size: 30px;
+		font-weight: 600;
+		color: black;
+		height: 10%;
+	}
+	
+	.tituloClienteNuevo {
+		display: inline-block;
+		max-width: 100%;
+		margin-bottom: 5px;
+		font-weight: 600;
+		font-size: 30px;
+		font-weight: 600;
+		color: black;
+	}
+	
+	.botonesContainer {
+		display: flex;
+	}
+	
+	.boton {
+		flex: 1;
+	}
+	
+	.scrollerT {
+		width: 100% !important;
+		height: 800px;
+		overflow-y: scroll;
+	}
+	
+	#containerFiltros {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#containerFiltros>div {
+		padding: 2px;
+		cursor: pointer;
+	}
+	
+	#panelFiltros {
+		background-color: #e7e7e7;
+	}
+	
+	#panelFiltros>div {
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	
+	.parametros {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+	
+	.parametros>div {
+		flex: 1;
+		margin-right: 2%;
+	}
+	
+	#titulo-encabezado {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	
+	#totalsGenerales {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	
+	#totalsGenerales>div {
+		margin-right: 2px;
+	}
+	
+	#totalsGenerales>div>div {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#totalsGenerales>div>div>input {
+		width: 200px;
+		background-color: #ecf0f5 !important;
+		height: 30px;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 16px;
+		/*   font-weight: 900; */
+	}
+	
+	#totalsGenerales>div>div>span {
+		font-size: 18px;
+		font-weight: 600;
+	}
+	
+	#botonesConsulta {
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	#Listado {
+		height: 800px;
+		idth: 100%;
+		overflow-y: scroll;
+	}
+</style>
+
+
 </head>
-<body>
 
-	<div layout:fragment="content">
-	    <div  id="titulo-encabezado"  >
-	        <div>
-	           <h1><i class="fa fa-university"></i>&nbsp Utilidad por Articulo </h1>
-	        </div>
-	        <div id="totalsGenerales">
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+				   <div  id="titulo-encabezado"  >
+					        <div>
+					           <h1><i class="fa fa-university"></i>&nbsp Utilidad por Articulo </h1>
+					        </div>
+					        <div id="totalsGenerales">
+					             <div>
+					             	 <div >
+					                    <span>Total Venta </span>  
+					                    <input type="text" class="totalVenta " id="totalVenta"  name= "totalVenta" readonly >
+					                 </div>
+					             </div>
+					             <div>
+					                <div >
+					                   <span>Total Costo </span>  
+					                   <input type="text" class="totalCosto " id="totalCosto"  name= "totalCosto" readonly >
+					                </div>  
+					             </div>
+					             <div>
+					              	<div >
+					                    <span>Utilidad(Ventas-Costo) </span>  
+					                    <input type="text" class="utilidadBruta " id="utilidadBruta"  name= "utilidadBruta" readonly >
+					                 </div>  
+					             </div>
+					        </div>
+					    </div>
+					<!-- Modal correo alternativo-->
+				
+						<div class="modal fade" id="ModalCorreoAlternativoFactura" tabindex="-1" role="dialog"  aria-hidden="true">
+						    <div class="modal-dialog" role="document">
+						        <div class="modal-content">
+						            <div class="modal-header"> <h1 class="box-title"><i class="btn-correo"></i> Correo Alternativo </h1> </div>
+						            <div class="modal-body">
+						                <form id = "formularioEnviarCorreoUtilidad" name ="formularioEnviarCorreoUtilidad "   class="advanced-search-form">
+						                    <div class="row">   
+						                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+						                            <label class="knob-label" >Correl Electronico</label>
+						                            <input type="email" class="form-control correoAlternativoUtilidad" placeHolder ="Correo Alternativo" id="correoAlternativoUtilidad" name="correoAlternativoUtilidad" value=""  >
+						                        </div>
+						                    </div>
+						                </form>
+						            </div>
+						            <div class="modal-footer">
+						                <div class="row">
+						                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+						                        <button  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+						                            Volver
+						                        </button>
+						                    </div>
+						                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+						                        <button     class="btn-green btn-correo pull-right" >  Enviar</button>
+						                    </div>
+						                </div>
+						            </div>
+						        </div>
+						     </div>
+						</div>
+					
+				  	 
+							<!-- Titulos -->
+				    <!-- Listado  -->
+				           <div id="containerFiltros">
+				           		<div  id="panelFiltros">
+				           		    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltros de Consulta <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4> 
+				           		    <div>
+				           		    	<form id="filtros" name="filtros">
+				           		    	    <div class="parametros">
+				           		    	        <div>
+				 	          		    	       <div class="form-group">
+				                                   	  <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
+				                                      <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+				                                        	<input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+				                                        	<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+				                                       </div>	                             
+				                                	</div>  
+				           		    	        </div>
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+				                                       	<label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
+				                                       	<div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+				                                           	<input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+				                                           	<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+				                                        </div>	                             
+				                                    </div>
+				           		    	        </div>
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+				                                    	<label>Cliente </label>  
+				                                    	<select  class="combosSelect selectCliente" id= "cliente" name="cliente" data-live-search="true">
+				                                        	<option  data-tokens="Todos"   value="0"  >Todos</option>
+				                                    	</select>
+				                                	</div>  
+				           		    	        </div>
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+				                                    	<label th:text="#{factura.tipo.documento}"> </label>  
+				                                    	<select  class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento" >
+				                                        	<option  value="0"  th:text="#{todos.select}"></option>
+				                                    	</select>
+				                                 	</div>  
+				           		    	        </div>
+				           		    	    </div>
+				           		    	    <div class="parametros">
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+				                                    	<label>Actividad Economica </label>  
+				                                    	<select  class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+				                                        	<option  data-tokens="Todos"   value="0"  >Todos</option>  
+				                                    	</select>
+				                                	</div>  
+				           		    	        </div>
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+				                                    	<label>Estado </label>  
+				                                    	<select  class="form-control selectEstado" id= "estado" name="estado" >
+				                                    		<option  value="0"  th:text="#{todos.select}"></option>
+				                                    		<option  value="6"  th:text="#{estado.factura.aceptada}"></option>
+				                                        	<option  value="2"  th:text="#{estado.factura.facturada}"></option>
+				                                    		<option  value="7"  th:text="#{estado.factura.rechazada}"></option>
+				                                    	</select>
+				                                	</div>  
+				           		    	        </div>
+				           		    	        <div>
+				           		    	        	<div class="form-group">
+					                                    <label>Categoria </label>  
+					                                    <select  class="combosSelect selectCategorias" id= "idCategoria" name="idCategoria" data-live-search="true">
+					                                        <option  data-tokens="Todos"   value="0"  >Todos</option>
+					                                    </select>
+					                                </div>  
+				           		    	        </div>
+				           		    	        <div>
+				           		    	         	<div class="form-group">
+					                                    <label>Digite codigo del Articulo </label>  
+					                                     <input type="text" class="form-control idArticulo" id="idArticulo"  name= "idArticulo" >
+					                                </div> 
+				           		    	        </div>
+				           		    	          <div>
+				           		    	         	<div class="form-group">
+					                                    <label>Numero Factura </label>  
+					                                     <input type="text" class="form-control numeroFactura" id="numeroFactura"  name= "numeroFactura" >
+					                                </div> 
+				           		    	        </div>
+				           		    	    
+				           		    	    
+				           		    	    
+				           		    	    </div>
+				           		    	</form>              
+				           		    
+				           		    </div>
+				           		    
+				           		</div>
+				           		<div  id="botonesConsulta">
+				           		   <div></div>
+				           		   <div>
+				           		      <button type="button" class="btn btn-success btnBusquedaAvanzada descargarExcel" title="Descargar excel" name="button"> Descargar  <i class="fa fa-download"></i></button> 
+				           		      <button type="button" class="btn btn-success btnBusquedaAvanzada enviarCorreo" title="Enviar corre " name="button"> Enviar  <i class="fa fa-envelope"></i></button>
+				           		      <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+						              <button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+				           		   </div>
+				           		</div>
+				           		<div  id="Listado">
+				           		    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   >
+				                        <thead>
+				                            <tr>
+				                                <th class="table-header"  >Fecha</th>
+				                                <th class="table-header"  >Categoria</th>
+				                                <th class="table-header"  >Factura</th>
+				                                <th class="table-header"  >Codigo</th>
+				                                <th class="table-header" >Descripcion</th>
+				                                <th class="table-header" >Venta Neta</th>
+				                                <th class="table-header" >Costo </th>
+				                                <th class="table-header" >Util.Bruta</th>
+				                                <th class="table-header" >Opcion</th>
+				                            </tr>
+				                        </thead>
+				                        <tfoot style="display: table-header-group;">
+				                            <tr>
+				                                <th>Fecha   </th>
+				                                <th>Categoria    </th>
+				                                <th>Factura    </th>
+				                                <th>Codigo       </th>
+				                                <th>Descripcion  </th>
+				                                <th>Venta Neta   </th>
+				                                <th>Costo        </th>
+				                                <th>Util.Bruta   </th>
+				                                <th>   </th>
+				                            </tr>
+				                        </tfoot>
+				                 	</table>
+				           		       
+				           		</div>
+				           		
+				           			
+				       	   </div>
 	        
-	             <div>
-	             	 <div >
-	                    <span>Total Venta </span>  
-	                    <input type="text" class="totalVenta " id="totalVenta"  name= "totalVenta" readonly >
-	                 </div>
-	             </div>
-	             <div>
-	                <div >
-	                   <span>Total Costo </span>  
-	                   <input type="text" class="totalCosto " id="totalCosto"  name= "totalCosto" readonly >
-	                </div>  
-	             </div>
-	             <div>
-	              	<div >
-	                    <span>Utilidad(Ventas-Costo) </span>  
-	                    <input type="text" class="utilidadBruta " id="utilidadBruta"  name= "utilidadBruta" readonly >
-	                 </div>  
-	             </div>
-	        
-	        
-	        </div>
-            
-	    </div>
-
-	
-	<!-- Modal correo alternativo-->
-
-		<div class="modal fade" id="ModalCorreoAlternativoFactura" tabindex="-1" role="dialog"  aria-hidden="true">
-		    <div class="modal-dialog" role="document">
-		        <div class="modal-content">
-		            <div class="modal-header"> <h1 class="box-title"><i class="btn-correo"></i>&nbsp Correo Alternativo </h1> </div>
-		            <div class="modal-body">
-		                <form id = "formularioEnviarCorreoUtilidad" name ="formularioEnviarCorreoUtilidad "   class="advanced-search-form">
-		                    <div class="row">   
-		                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-		                            <label class="knob-label" >Correl Electronico</label>
-		                            <input type="email" class="form-control correoAlternativoUtilidad" placeHolder ="Correo Alternativo" id="correoAlternativoUtilidad" name="correoAlternativoUtilidad" value=""  >
-		                        </div>
-		                    </div>
-		                </form>
-		            </div>
-		            <div class="modal-footer">
-		                <div class="row">
-		                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-		                        <button  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-		                            Volver
-		                        </button>
-		                    </div>
-		                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-		                        <button     class="btn-green btn-correo pull-right" >  Enviar</button>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		     </div>
-		</div>
-	
-  	 
-			<!-- Titulos -->
-    <!-- Listado  -->
-           <div id="containerFiltros">
-           		<div  id="panelFiltros">
-           		    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltros de Consulta <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4> 
-           		    <div>
-           		    	<form id="filtros" name="filtros">
-           		    	    <div class="parametros">
-           		    	        <div>
- 	          		    	       <div class="form-group">
-                                   	  <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
-                                      <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                        	<input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
-                                        	<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                                       </div>	                             
-                                	</div>  
-           		    	        </div>
-           		    	        <div>
-           		    	        	<div class="form-group">
-                                       	<label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
-                                       	<div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                           	<input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
-                                           	<div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                                        </div>	                             
-                                    </div>
-           		    	        </div>
-           		    	        <div>
-           		    	        	<div class="form-group">
-                                    	<label>Cliente </label>  
-                                    	<select  class="combosSelect selectCliente" id= "cliente" name="cliente" data-live-search="true">
-                                        	<option  data-tokens="Todos"   value="0"  >Todos</option>
-                                    	</select>
-                                	</div>  
-           		    	        </div>
-           		    	        <div>
-           		    	        	<div class="form-group">
-                                    	<label th:text="#{factura.tipo.documento}"> </label>  
-                                    	<select  class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento" >
-                                        	<option  value="0"  th:text="#{todos.select}"></option>
-                                    	</select>
-                                 	</div>  
-           		    	        </div>
-           		    	    </div>
-           		    	    <div class="parametros">
-           		    	        <div>
-           		    	        	<div class="form-group">
-                                    	<label>Actividad Economica </label>  
-                                    	<select  class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
-                                        	<option  data-tokens="Todos"   value="0"  >Todos</option>  
-                                    	</select>
-                                	</div>  
-           		    	        </div>
-           		    	        <div>
-           		    	        	<div class="form-group">
-                                    	<label>Estado </label>  
-                                    	<select  class="form-control selectEstado" id= "estado" name="estado" >
-                                    		<option  value="0"  th:text="#{todos.select}"></option>
-                                    		<option  value="6"  th:text="#{estado.factura.aceptada}"></option>
-                                        	<option  value="2"  th:text="#{estado.factura.facturada}"></option>
-                                    		<option  value="7"  th:text="#{estado.factura.rechazada}"></option>
-                                    	</select>
-                                	</div>  
-           		    	        </div>
-           		    	        <div>
-           		    	        	<div class="form-group">
-	                                    <label>Categoria </label>  
-	                                    <select  class="combosSelect selectCategorias" id= "idCategoria" name="idCategoria" data-live-search="true">
-	                                        <option  data-tokens="Todos"   value="0"  >Todos</option>
-	                                    </select>
-	                                </div>  
-           		    	        </div>
-           		    	        <div>
-           		    	         	<div class="form-group">
-	                                    <label>Digite codigo del Articulo </label>  
-	                                     <input type="text" class="form-control idArticulo" id="idArticulo"  name= "idArticulo" >
-	                                </div> 
-           		    	        </div>
-           		    	          <div>
-           		    	         	<div class="form-group">
-	                                    <label>Numero Factura </label>  
-	                                     <input type="text" class="form-control numeroFactura" id="numeroFactura"  name= "numeroFactura" >
-	                                </div> 
-           		    	        </div>
-           		    	    
-           		    	    
-           		    	    
-           		    	    </div>
-           		    	</form>              
-           		    
-           		    </div>
-           		    
-           		</div>
-           		<div  id="botonesConsulta">
-           		   <div></div>
-           		   <div>
-           		      <button type="button" class="btn btn-success btnBusquedaAvanzada descargarExcel" title="Descargar excel" name="button"> Descargar  <i class="fa fa-download"></i></button> 
-           		      <button type="button" class="btn btn-success btnBusquedaAvanzada enviarCorreo" title="Enviar corre " name="button"> Enviar  <i class="fa fa-envelope"></i></button>
-           		      <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-		              <button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
-           		   </div>
-           		</div>
-           		<div  id="Listado">
-           		    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   >
-                        <thead>
-                            <tr>
-                                <th class="table-header"  >Fecha</th>
-                                <th class="table-header"  >Categoria</th>
-                                <th class="table-header"  >Factura</th>
-                                <th class="table-header"  >Codigo</th>
-                                <th class="table-header" >Descripcion</th>
-                                <th class="table-header" >Venta Neta</th>
-                                <th class="table-header" >Costo </th>
-                                <th class="table-header" >Util.Bruta</th>
-                                <th class="table-header" >Opcion</th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>Fecha   </th>
-                                <th>Categoria    </th>
-                                <th>Factura    </th>
-                                <th>Codigo       </th>
-                                <th>Descripcion  </th>
-                                <th>Venta Neta   </th>
-                                <th>Costo        </th>
-                                <th>Util.Bruta   </th>
-                                <th>   </th>
-                            </tr>
-                        </tfoot>
-                 	</table>
-           		       
-           		</div>
-           		
-           			
-       	   </div>
-    
-        
-	</div>
-	
-	
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+<!-- LISTADO DE FACTURAS -->
+<script type="text/javascript" th:src="@{/js/views/detalle/utilidad.js?v=1}"></script>
 
 	
 

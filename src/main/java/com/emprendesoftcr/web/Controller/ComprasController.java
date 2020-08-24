@@ -681,7 +681,8 @@ public class ComprasController {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelComprasIngresadasAlmacen(compras);
+		ByteArrayOutputStream baos = Utils.convertirOutStream(compraBo.createExcelCompras(compras, usuario.getEmpresa(), fechaInicioParam, fechaFinParam, proveedor));
+
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
@@ -692,14 +693,7 @@ public class ComprasController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelComprasIngresadasAlmacen(Collection<Compra> compras) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total", "usuario");
-		new SimpleExporter().gridExport(headers, compras, "id, fechaIngresoSTR,consecutivo, proveedorSTR, totalImpuestoSTR,totalCompraSTR,usuarioIngresoInventario.nombreUsuario ", baos);
-		return baos;
-	}
-
+	
 	/**
 	 * Lista las compras pendientes de ingresar al inventario
 	 * @param request

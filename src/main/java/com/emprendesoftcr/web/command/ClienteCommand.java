@@ -60,6 +60,7 @@ public class ClienteCommand {
 	private String	fechaEmisionExoneracionSTR;
 	private Integer	porcentajeExoneracion;
 	private Integer						libreImpuesto;
+	private Integer						tipoMag;
 
 	private Empresa	empresa;
 
@@ -96,6 +97,7 @@ public class ClienteCommand {
 		this.fechaEmisionExoneracion = cliente.getFechaEmisionExoneracion();
 		this.fechaEmisionExoneracionSTR = Utils.fechaExoneracionSTR(cliente.getFechaEmisionExoneracion());
 		this.libreImpuesto = cliente.getLibreImpuesto();
+		this.tipoMag = cliente.getTipoMag();
 
 	}
 
@@ -381,4 +383,17 @@ public class ClienteCommand {
 		this.libreImpuesto = libreImpuesto;
 	}
 
+	
+	public Integer getTipoMag() {
+		return tipoMag;
+	}
+
+	
+	public void setTipoMag(Integer tipoMag) {
+		this.tipoMag = tipoMag;
+	}
+
+	
+	
+	
 }

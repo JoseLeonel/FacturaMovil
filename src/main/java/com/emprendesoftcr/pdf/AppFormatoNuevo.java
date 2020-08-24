@@ -280,6 +280,7 @@ public class AppFormatoNuevo {
 		addText(cb, "Total Linea", font, col12, row, Element.ALIGN_LEFT);
 	}
 
+	@SuppressWarnings("unused")
 	private void addProducts(PdfContentByte cb, Font font, Document document, FacturaElectronica facturaElectronica, String dir) throws IOException, DocumentException {
 		float row1 = PageSize.TABLOID.rotate().getHeight() - 245;
 		float row = 245;
@@ -300,7 +301,6 @@ public class AppFormatoNuevo {
 		float col10 = 1060;
 		float col11 = 1130;
 		float col12 = 1205;
-		float col20 = 150;
 		cb.setColorFill(BaseColor.BLACK);
 		Integer contadorLinea = 0;
 		Integer pag = 1;
@@ -371,123 +371,9 @@ public class AppFormatoNuevo {
 
 	}
 
-	private void addTotals(PdfContentByte cb, Font font, Font fontB, FacturaElectronica facturaElectronica) {
-		float col1 = 635;
-		float col2 = 738;
-		float col3 = 842;
-		float col4 = 1001;
-		float col5 = 1101;
-		float col6 = 1201;
-		//
-		float col7 = 579;
-		float col8 = 657;
-		float col9 = 760;
-		float col10 = 920;
-		float col11 = 1037;
-		float col12 = 1106;
-		//
-		float row1 = PageSize.TABLOID.rotate().getHeight() - 723;
-		float row2 = PageSize.TABLOID.rotate().getHeight() - 743;
-		// Cuadro 5
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 755, 538, PageSize.TABLOID.rotate().getHeight() - 755);
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 755, 1215, PageSize.TABLOID.rotate().getHeight() - 715);
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 715, 538, PageSize.TABLOID.rotate().getHeight() - 715);
-		addLine(cb, BaseColor.GRAY, 538, PageSize.TABLOID.rotate().getHeight() - 715, 538, PageSize.TABLOID.rotate().getHeight() - 755);
-		// Fondo
-		cb.setColorFill(bColor);
-		cb.rectangle(538, PageSize.TABLOID.rotate().getHeight() - 732, 677, 20);
-		cb.fill();
-		cb.setColorFill(BaseColor.BLACK);
-		// Etiquetas Totales
-		addText(cb, "Total venta", fontB, col7, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total descuento", fontB, col8, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total venta neta", fontB, col9, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total impuestos", fontB, col10, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total exento", fontB, col11, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total comprobante", fontB, col12, row1, Element.ALIGN_LEFT);
 
-		// Sumatorias Totales
-		cb.setColorFill(BaseColor.BLACK);
-		double monto = 0;
-		double descuento = 0;
-		double subTotal = 0;
-		double impuesto = 0;
-		double exento = 0;
-		double total = 0;
-		List<DetalleFacturaElectronica> detalleFacturaElectronica = facturaElectronica.getDetalleFacturaElectronica();
-		for (int i = 0; i < detalleFacturaElectronica.size(); i++) {
-			monto = monto + (double) Math.round(detalleFacturaElectronica.get(i).getMonto() * 100000d) / 100000d;
-			descuento = descuento + (double) Math.round(detalleFacturaElectronica.get(i).getDescuento() * 100000d) / 100000d;
-			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
-			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
-			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
-			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
-		}
-		addText(cb, Utils.formateadorMiles(monto), font, col1, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(descuento), font, col2, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(subTotal), font, col3, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(impuesto), font, col4, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(exento), font, col5, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(total), fontB, col6, row2, Element.ALIGN_RIGHT);
 
-	}
-
-	private void addTotalsSinDescuentos(PdfContentByte cb, Font font, Font fontB, FacturaElectronica facturaElectronica) {
-		float col1 = 635;
-		float col2 = 738;
-		float col3 = 842;
-		float col4 = 1001;
-		float col5 = 1101;
-		float col6 = 1201;
-		//
-		float col7 = 579;
-		float col9 = 760;
-		float col10 = 920;
-		float col11 = 1037;
-		float col12 = 1106;
-		//
-		float row1 = PageSize.TABLOID.rotate().getHeight() - 723;
-		float row2 = PageSize.TABLOID.rotate().getHeight() - 743;
-		// Cuadro 5
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 755, 538, PageSize.TABLOID.rotate().getHeight() - 755);
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 755, 1215, PageSize.TABLOID.rotate().getHeight() - 715);
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 715, 538, PageSize.TABLOID.rotate().getHeight() - 715);
-		addLine(cb, BaseColor.GRAY, 538, PageSize.TABLOID.rotate().getHeight() - 715, 538, PageSize.TABLOID.rotate().getHeight() - 755);
-		// Fondo
-		cb.setColorFill(bColor);
-		cb.rectangle(538, PageSize.TABLOID.rotate().getHeight() - 732, 677, 20);
-		cb.fill();
-		cb.setColorFill(BaseColor.BLACK);
-		// Etiquetas Totales
-		addText(cb, "Total venta", fontB, col7, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total venta neta", fontB, col9, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total impuestos", fontB, col10, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total exento", fontB, col11, row1, Element.ALIGN_LEFT);
-		addText(cb, "Total comprobante", fontB, col12, row1, Element.ALIGN_LEFT);
-
-		// Sumatorias Totales
-		cb.setColorFill(BaseColor.BLACK);
-		double monto = 0;
-		double descuento = 0;
-		double subTotal = 0;
-		double impuesto = 0;
-		double exento = 0;
-		double total = 0;
-		List<DetalleFacturaElectronica> detalleFacturaElectronica = facturaElectronica.getDetalleFacturaElectronica();
-		for (int i = 0; i < detalleFacturaElectronica.size(); i++) {
-			monto = monto + (double) Math.round(detalleFacturaElectronica.get(i).getMonto() * 100000d) / 100000d;
-			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
-			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
-			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
-			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
-		}
-		addText(cb, Utils.formateadorMiles(monto), font, col1, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(subTotal), font, col3, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(impuesto), font, col4, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(exento), font, col5, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formateadorMiles(total), fontB, col6, row2, Element.ALIGN_RIGHT);
-
-	}
+	
 
 	private void addRectanguleProducts(PdfContentByte cb, Font font) {
 		// Cuadro 6

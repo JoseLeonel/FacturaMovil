@@ -5,13 +5,20 @@ import java.util.ResourceBundle;
 
 public class Constantes {
 
+	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
+	public static final String					API_MAG_PESCA																									= "https://api.hacienda.go.cr/fe/pesca?identificacion=";
+	public static final String					INDICADOR_ACTIVO_MAG																					= "true";
+	public static final Integer					CLIENTE_MAG_INACTIVO																					= 0;
+	public static final Integer					CLIENTE_MAG_AGRO																							= 1;
+	public static final Integer					CLIENTE_MAG_PESCA																							= 2;
+
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA																	= "3109177612";
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD												= "3102767133";
 	public static final ResourceBundle	RESOURCE_BUNDLE																								= ResourceBundle.getBundle("factura");
 	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR													= "/home/jose/dev/archivosXMLs";
 
 	public static final Integer					VERSION_EXONERACION_SUBTOTAL_SI																= 1;
-	public static final Integer					VERSION_EXONERACION_SUBTOTAL_NO																	= 0;
+	public static final Integer					VERSION_EXONERACION_SUBTOTAL_NO																= 0;
 
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																	= 0;
@@ -70,7 +77,7 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_CIERRE_CAJA																	= "email/emailCaja.vm";
 	public static final String					PLANTILLA_CORREO_LISTAR_FACTURAS															= "email/emailResumenListarFactura.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA		= "email/emailResumenComprasSimplificadas.vm";
-	public static final String          PLANTILLA_CORREO_UTILIDAD                                     = "email/emailUtilidad.vm";
+	public static final String					PLANTILLA_CORREO_UTILIDAD																			= "email/emailUtilidad.vm";
 
 // Version de los tipos de documentos 
 	public static final String					TIQUETE_ELECTRONICO_VERSION_4_2																= "Tiquete Electrónico ver 4.2";
@@ -138,6 +145,7 @@ public class Constantes {
 	public static final String					URL_ALAJUELA_CALLBACK																					= "http://www.emprendesoftcr.com:8081/service/callback.do";
 	public static final String					URL_GUANACASTE_CALLBACK																				= "http://www.emprendesoftcr.com:8084/service/callback.do";
 	public static final String					URL_INVENTARIO_CALLBACK																				= "http://www.emprendesoftcr.com:8080/service/callback.do";
+//	public static final String					URL_INVENTARIO_CALLBACK																				= "http://facturarcr.emprendesoftcr.com:8080/v1/service/callback.do";
 	public static final String					URL_JACO_CALLBACK																							= "http://www.emprendesoftcr.com:8082/service/callback.do";
 	public static final String					URL_JACODOS_CALLBACK																					= "http://www.emprendesoftcr.com:8086/service/callback.do";
 	public static final String					URL_SANTA_ANA_CALLBACK																				= "http://www.emprendesoftcr.com:8083/service/callback.do";
@@ -365,6 +373,7 @@ public class Constantes {
 	public static final Long						ZEROS_LONG																										= 0l;
 	public static final Float						ZEROS_FLOAT																										= 0F;
 	public static final Double					ZEROS_DOUBLE																									= 0D;
+	public static final Double					PORCENTAJE_MAXIMO_EXONERACION																	= 13D;
 	public static final Double					IMPUESTO_13																										= 13D;
 	public static final String					SEMI_COLON																										= ";";
 	public static final String					PUNTO																													= ".";
@@ -476,9 +485,13 @@ public class Constantes {
 
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_FACTURA																	= 1;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";
+	public static final String					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO_STR												= "Nota Credito";
+	public static final String					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO_STR													= "Nota Debido";
 
 	public static final Integer					COMPRA_FORMA_PAGO_CONTADO																			= 1;
 	public static final Integer					COMPRA_FORMA_PAGO_CREDITO																			= 2;

@@ -9,11 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CocinaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -25,8 +23,7 @@ import com.emprendesoftcr.web.command.ComandaNuevaCommand;
 @Controller
 public class CocinaController {
 	
-	@Autowired
-	private CocinaBo cocinaBo;
+
 	
 	@Autowired
 	private UsuarioBo usuarioBo;

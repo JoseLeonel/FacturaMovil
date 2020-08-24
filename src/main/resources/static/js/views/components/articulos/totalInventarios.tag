@@ -1,13 +1,34 @@
 <total-inventarios>
 
 <div class='scrlollT'>
-   <!-- Titulos -->
-    <div class="row">
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <div class='titulo'><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("titulo.inventario.totales")} </div>
-        </div>
+  
+    <!-- Titulos -->
+    <div  id="titulo-encabezado"  >
+        <div>
+		    <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("titulo.inventario.totales")} </h1>
+		</div>
+        <div id="totalsGenerales">
+                <div>
+               	    <div >
+                         <span>Total Costo   </span>  
+                        <input type="text"  value={totalCostoSTR} readonly >
+                     </div>
+                </div>
+                <div>
+               	    <div >
+                         <span>Total Venta Publico   </span>  
+                        <input type="text"  value={totalPublicoSTR} readonly >
+                     </div>
+                </div>
+                <div>
+               	    <div >
+                         <span>Total Venta Especial   </span>  
+                        <input type="text"  value={totalEspecialSTR} readonly >
+                     </div>
+                </div>
+
+	    </div>
     </div>
-    <br>
 
     
     <!-- Inicio Filtros-->
@@ -31,18 +52,7 @@
                                 </div>	                             
                             </div>  
                         </div>             
-                        <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                            <label> Total Esperada Costo  </label>
-                            <input type="text" readonly="readonly" class="form-control" value="{totalCostoSTR}">
-                        </div>
-                        <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                            <label> Total Venta Esperada Publico  </label>
-                            <input type="text" readonly="readonly" class="form-control"  value="{totalPublicoSTR}">                    
-                        </div>
-                        <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                            <label> Total Venta Esperada Especial  </label>
-                            <input type="text" readonly="readonly" class="form-control" value="{totalEspecialSTR}">
-                        </div>
+                       
 
                     </div>    
                 </form>

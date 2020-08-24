@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+<style>
+	.tituloFacturas {
+		font-size: 24px;
+		color: black;
+	}
+	
+	.formatoEntrada {
+		margin-bottom: 1%;
+	}
+	
+	.scrlollT {
+		overflow-y: scroll;
+		overflow-x: scroll;
+		height: 400px;
+	}
+	
+	html {
+		scroll-behavior: smooth;
+	}
+	
+	#titulo-encabezado {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	
+	#totalsGenerales {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	
+	#totalsGenerales>div {
+		margin-right: 2px;
+	}
+	
+	#totalsGenerales>div>div {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#totalsGenerales>div>div>input {
+		width: 200px;
+		background-color: #ecf0f5 !important;
+		height: 30px;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 16px;
+		/*   font-weight: 900; */
+	}
+	
+	#totalsGenerales>div>div>span {
+		font-size: 18px;
+		font-weight: 600;
+	}
+	.itemTable{
+		text-align: center;
+	}
+</style>
+
+</head>
+
+
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+				 <div  id="titulo-encabezado"  >
+			        <div><h1><i class="fa fa-calculator"></i> Ventas por categoria  </h1></div>
+					<div id="totalsGenerales">
+						<div><div ><span>Total Exonerado </span><input type="text" class="totalExonerado " id="totalExonerado"  name= "totalExonerado" readonly ></div></div>
+						<div><div ><span>Total Costo </span><input type="text" class="totalCosto " id="totalCosto"  name= "totalCosto" readonly ></div></div>
+						<div><div ><span>Total Descuento </span><input type="text" class="totalDescuento " id="totalDescuento"  name= "totalDescuento" readonly ></div></div>
+						<div><div ><span>Total IVA </span><input type="text" class="totalIVA " id="totalIVA"  name= "totalIVA" readonly ></div></div>
+						<div><div ><span>Total Venta </span><input type="text" class="totalVenta " id="totalVenta"  name= "totalVenta" readonly ></div></div>
+						
+					</div>
+			    </div>
+				 <!-- Modal correo alternativo-->
+					<div class="modal fade" id="correoAlternativoListar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+				                <h1 class="box-title"><i class="btn-correo"></i> Correo Alternativo </h1>
+					      </div>
+					      <div class="modal-body">
+					        <form id = "formularioListarEnviarCorreo" name ="formularioListarEnviarCorreo "   class="advanced-search-form">
+					            <div class="row">   
+					                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+					                    <label class="knob-label" >Correo </label>
+					                    <input type="email" class="form-control correo"  id="correo" name="correo" value=""  >
+					                </div>
+					            </div>
+					        </form>
+					      </div>
+					      <div class="modal-footer">
+					        <div class="row">
+					            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+					                <button   type="button" class="btn-dark-gray btn-back  pull-left"  data-dismiss="modal">
+					                    Volver
+					                </button>
+					            </div>
+					            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+					                <button  class="btn-green btn-correo pull-right enviarListarCorreo" > Enviar </button>
+					            </div>
+					         </div>		       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				
+				
+				  
+				    
+				    <!-- Inicio Filtros-->
+				<div class="mostrarListadoDeFacturas "  id="mostrarListadoDeFacturas">
+				        <div class="row" >
+				            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				                <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
+				                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltros de Consulta <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+				                </div>  
+				                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+				                    <form id="filtros" name="filtros">              
+				                        <div class= "row">
+				                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				                                <div class="form-group">
+				                                    <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
+				                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+				                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+				                                        <div class="input-group-addon">
+				                                            <span class="glyphicon glyphicon-th"></span>
+				                                        </div>
+				                                    </div>	                             
+				                                </div>  
+				                            </div>             
+				                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				                                <div class="form-group">
+				                                    <div class="form-group">
+				                                        <label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
+				                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+				                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+				                                            <div class="input-group-addon">
+				                                                <span class="glyphicon glyphicon-th"></span>
+				                                            </div>
+				                                        </div>	                             
+				                                    </div>
+				                                </div>  
+				                            </div>
+				                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				                                <div class="form-group">
+				                                    <label>Categorias </label>  
+				                                    <select  class="form-control selectCategoria" id= "categoria" name="categoria" data-live-search="true">
+				                                        <option  data-tokens="Todos"   value="0"  >Todos</option>
+				                                    </select>
+				                                </div>  
+				                            </div>  
+				                        </div>
+				                        <div class= "row">
+				                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				                                <div class="form-group">
+				                                    <label>Estado </label>  
+				                                    <select  class="form-control selectEstado" id= "estado" name="estado" >
+				                                    	<option  value="0"  th:text="#{todos.select}"></option>
+				                                    	<option  value="6"  th:text="#{estado.factura.aceptada}"></option>
+				                                        <option  value="2"  th:text="#{estado.factura.facturada}"></option>
+				                                    	<option  value="7"  th:text="#{estado.factura.rechazada}"></option>
+				                                    </select>
+				                                </div>  
+				                            </div>    
+				                        </div>   
+				                    </form>  
+				                </div>
+				            </div>
+				            <div class="col-xs-12 text-right formatoEntrada">
+				                <button type="button" class="btn btn-success btnBusquedaAvanzada descargarExcel" title="Descargar excel" name="button"> Descargar  <i class="fa fa-download"></i></button>
+				                <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+				            	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+				            </div>
+				        </div>
+				       
+				   <!-- Listado  -->
+				    
+				        <div class="row">
+				            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+				                <div class="box">
+				                    <div class="box-body">
+				                        <div class="planel-body" >
+				                            <div class="row scrlollT" >        
+				                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+				                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "  >
+                                                       <thead>
+				                                            <tr>
+				                                                <th class = "table-header " th:text="#{venta.por.categoria.estado}"></th>
+				                                                <th class = "table-header" th:text="#{venta.por.categoria.nombre}"></th>
+				                                                <th class = "table-header" th:text="#{venta.por.categoria.tipo.impuesto}"></th>
+				                                                <th class = "table-header" th:text="#{venta.por.categoria.tarifa}"></th>
+				                                                <th class = "table-header  itemTable" th:text="#{venta.por.categoria.impuesto}"></th>
+				                                                <th class = "table-header itemTable" th:text="#{venta.por.categoria.costo}"></th>
+				                                                <th class = "table-header itemTable" th:text="#{venta.por.categoria.descuento}"></th>
+				                                                <th class = "table-header itemTable" th:text="#{venta.por.categoria.total.iva}"></th>
+				                                                <th class = "table-header itemTable" th:text="#{venta.por.categoria.total}"></th>
+				                                                <th class = "table-header itemTable" th:text="#{venta.por.categoria.total.exonerado}"></th>
+				                                            </tr>
+				                                        </thead>
+				                                        <tfoot style="display: table-header-group;">
+				                                            <tr>
+				                                                <th th:text="#{venta.por.categoria.id}"></th>
+				                                                <th th:text="#{venta.por.categoria.nombre}"></th>
+				                                                <th th:text="#{venta.por.categoria.tipo.impuesto}"></th>
+				                                                <th th:text="#{venta.por.categoria.tarifa}"></th>
+				                                                <th class = "itemTable" th:text="#{venta.por.categoria.impuesto}"></th>
+				                                                <th th:text="#{venta.por.categoria.costo}"></th>
+				                                                <th th:text="#{venta.por.categoria.descuento}"></th>
+				                                                <th th:text="#{venta.por.categoria.total.iva}"></th>
+				                                                <th th:text="#{venta.por.categoria.total}"></th>
+				                                                <th th:text="#{venta.por.categoria.total.exonerado}"></th>
+				                                            </tr>
+				                                        </tfoot>
+				                                    </table>
+				                                </div>   
+				                            </div> 
+				                        </div>    
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript" th:src="@{/js/views/facturas/ventasbycategoria.js?v=1}"></script>
+
+
+</body>
+</html>

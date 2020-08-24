@@ -1,4 +1,89 @@
 <punto-venta>
+
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
+            </div>
+            <div class="modal-body">
+                <form  >
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
+                            <label class="tituloClienteNuevo" >Codigo</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
+                        </div>
+                    </div>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descripcion</label>
+                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  id="descripcionArticuloAcambiar" name="descripcionArticuloAcambiar"  value ="{ultimoArticulo.descripcion}">
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Precio al Publico </label>
+                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
+            </div>
+            <div class="modal-body">
+                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
+                    <div class="row">    
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
+                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
+
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
+                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
  <!-- Titulos -->
     <div  class="row titulo-encabezado" show={parametros.codigoMoneda =="USD"?true:false} >
         <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -322,22 +407,23 @@
                                 </div>
                             </div>
                             <br>
-                            <ul class="seleccionOtroPrecioVenta">
-                                <li class="opcionPrecioPublico">
+                            <div id = "tipoCambioDolarCSS">
+                                <div >
                                     <span class="ssCambioCentral">Tipo Cambio del Banco Central</span>
-                                </li>
-                                <li class="opcionPrecioPublico">
-                                    <span class="ssCambio">Compra USD $ </span>
-                                    <label class="tituloTipoCambio">{tipoCambio.totalCompra} </label>  
-                                </li>
-                                <li class="opcionPrecioPublico">
-                                    <span class="ssCambio">Venta USD $ </span> 
-                                    <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
-                                </li>
-                            </ul>
-                            <div class = 'containerIconosSumaRestaAgregarCliente'>
-                                <div class = 'containerSumarRestar'>
                                 </div>
+                                <div id= "tipoCambioCSS">
+                                    <div >
+                                        <span class="ssCambio">Compra USD $ </span>
+                                        <label class="tituloTipoCambio">{tipoCambio.totalCompra} </label>  
+                                    </div>
+                                    <div>
+                                        <span class="ssCambio">Venta USD $ </span> 
+                                        <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
+                                    </div>
+                                
+                                </div>
+                            </div>
+                            <div class = 'containerIconosSumaRestaAgregarCliente'>
                                 <div class="BotonesSumarRestar">
                                     <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
@@ -676,14 +762,23 @@
                     </div>
 
                     <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
                             <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais"  >
                         </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.telefono")} </label>
                             <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" >
                         </div>
+                        <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <label class="tituloClienteNuevo" >Autorizacion del Mag</label>
+                                <select  class="form-control tipoMag tamanoClienteNuevo" id="tipoMag" name="tipoMag"   >
+                                    <option  each={estadosMag}  value="{codigo}" selected="{cliente.tipoMag ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                        <div>    
+
+
                     </div>
  
                 </form>    
@@ -704,584 +799,14 @@
 
 
 
-<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
-            </div>
-            <div class="modal-body">
-                <form  >
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-6 col-lg-12">
-                            <label class="tituloClienteNuevo" >Codigo</label>
-                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion " readonly  value ="{ultimoArticulo.codigo}">
-                        </div>
-                    </div>
-                    <div class="row">    
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Descripcion</label>
-                            <input type="text" class="form-control tamanoClienteNuevo modalInputCambioPrecioCodigoDescripcion "  id="descripcionArticuloAcambiar" name="descripcionArticuloAcambiar"  value ="{ultimoArticulo.descripcion}">
 
-                        </div>                            
-                    </div>
-
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Precio al Publico </label>
-                            <input type="text" class="form-control precioAcambiar tamanoClienteNuevo modalInputCambioPrecio"  id="precioAcambiar" name="precioAcambiar" autofocus="autofocus"  value ="{ultimoArticulo.precioPublico}" autocomplete="off">
-                        </div>
-                    </div>
- 
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button onclick={__RegresarInputCodigo}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                </div>
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  onclick={__AplicarCambioPrecioUltimoArticulo}   class=" btn-green pull-right modalCambioPrecioBotones" > Cambiar Precio </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
 
 <!--fin validar rol de usuario-->
 
-<div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
-            </div>
-            <div class="modal-body">
-                <form  id='formularioModalRolUsuario' name='formularioModalRolUsuario'>
-                    <div class="row">    
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Digite el Usuario Administrador</label>
-                            <input type="text" class="form-control usuarioSistema tamanoClienteNuevo modalInputCambioPrecio"  id="usuarioSistema" name="usuarioSistema" autofocus="autofocus"  >
 
-                        </div>                            
-                    </div>
-
-                    <div class="row">
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="tituloClienteNuevo" >Digite la Clave  </label>
-                            <input type="password" class="form-control claveSistema tamanoClienteNuevo modalInputCambioPrecio"  id="claveSistema" name="claveSistema" autofocus="autofocus"   autocomplete="off">
-                        </div>
-                    </div>
- 
-                </form>    
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                    <button onclick={__RegresarInputSeguridad}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                </div>
-                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
-                    <button  onclick={__SeguridadVentas}   class=" btn-green pull-right modalCambioPrecioBotones" > Autorizar </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<style type="text/css"  >
-.tamanoVentaEspera{
-   font-size: 14px;
-    margin-left: 2%;
-    margin-right: 2%;
-}
-div.fondoVentaEspera:hover{
-    color:#30ed17 !important;
-    cursor: pointer;
-    
-}
-.ventaEspera{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    margin-top: 3%;
-    margin-bottom: 3%;
-}
-    div.labelBotones:hover{
-        color:#30ed17 !important;
-        font-size: 22px
-    }
-    .simbolodividir{
-        font-size:20px;
-    }
-    span.fontSumarRestar:hover{
-        background-color: black;
-        font-size: 22px
-    }
-    div.BotonesSumarRestar:hover {
-        background-color: black;
-        font-size: 22px
-    }
-    .modalTitleCambioPrecio{
-        color: white;
-    }
-    .modalInputCambioPrecioCodigoDescripcion{
-       border-radius: 10px !important;
-       font-size: 40px !important;
-    }
-    .modalInputCambioPrecio{
-        font-size: 70px !important;
-        color:blue !important;
-        border-radius: 16px !important;
-    }
-    .modalCambioPrecioBotones{
-         border-radius: 16px !important;
-    }
-
-    .fontSumarRestar{
-        font-size: 20px;
-    }
-    .input-group-botonessumarrestarnuevocliente {
-        padding: 6px 12px;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 1;
-        color: #555;
-        text-align: center;
-        background-color: #151517;
-        border-radius: 4px;
-    }
-    .BotonesSumarRestar{
-        position: relative;
-        border-collapse: separate;
-    }
-    .containerSumarRestar{
-        flex:1;
-    }
-    .containerIconosSumaRestaAgregarCliente{
-        flex:1;
-    }
-    .campoDetalle {
-        display: block;
-        width: 100%;
-        height: 34px;
-        padding: 8px 18px;
-        font-size: 10px;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        font: 20px verdana, arial, helvetica, sans-serif;
-        /* margin: 2px 0; */
-        padding: 1px 2px;
-        overflow: visible;
-    }
-    .campoLabel{
-        font-size: 18px;
-        font-weight: 600;
-        text-align: center;
-    }
-    .teclashift {
-        font-weight: 700;
-        font-size: 27px !important;
-        text-align: center;
-        color: red;
-
-    }
-    .teclaFuncion{
-
-    }
-    .opcionPrecioPublico{
-        display: flex;
-        flex-direction: column;
-    }
-    .tituloTipoCambio{
-        color: #0c3f65 !important;
-        float: left !important;
-        font-size: 13px !important;
-        background-color: transparent !important;
-        font-weight: normal;
-        text-align: left;
-    }
-    .ssCambioCentral{
-        color: #0c3f65 !important;
-        display: block;
-        text-align: center;
-            font-weight: 900;
-
-    }
-    .ssCambio{
-        color: #0c3f65 !important;
-        display: block;
-        text-align: left;
-    }
-    @media (min-width: 992px){
-    .modal-lg {
-        width: 1024px !important;
-    }
-    }
-    .facturaDiaContainer{
-    display:flex;
-    }
-    .tamanoClienteNuevo{
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        height: 10%;
-
-    }
-    .tituloClienteNuevo{
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-    }
-    .btn-dark-gray {
-        background-color: #3D3E42;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        font-size: 30px!important;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .btn-green {
-        background-color: #4cae4c;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        font-size: 30px !important;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .botonesContainer{
-       display:flex;
-    }
-    .boton{
-       flex: 1;
-    }
-    .imagenesBilletes{
-      height: 90px;
-      width: 170px;
-    }
-   .pantallaBilletes{
-       display:flex;
-
-   }
-   .billeteContainer{
-       display:flex;
-       flex-flow: wrap;
-       flex-direction: row;
-   }
-   .billete{
-    cursor: pointer;
-    margin-right: 4%;
-    margin-top: 2%;
-
-   }
-    .input-group {
-        position: relative;
-        display: flex;
-        border-collapse: separate;
-    }
-     .input-group-addon.btnClientes {
-       color: #66b12f;
-        cursor: pointer;
-    }
-    .elementoTotalesChino{
-        font-weight: 600 !important;
-        font-size: 32px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        margin-left: 4%;
-        margin-bottom: 2%;
-        margin-top: 2%;
-        margin-right: 2%;
-    }
-    .elementoTotales{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        align-items: center;
-        text-align: left;
-        margin-left: 2%;
-    }
-    .TotalesContainer{
-        display:flex;
-        flex-direction: column;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-    .contenedorExoneracion{
-    }
-    .label-totalesComprobanteChino {
-        display: flex;
-        flex: 1;
-        font-weight: 600 !important;
-        font-size: 37px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        border-collapse: separate;
-        cursor: pointer;
-        margin: 2%!important;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 7px !important;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-    .titleListaPrecio{
-        color:#0c3f65;
-       
-    }
-    .btn-block{
-          display: block;
-        width: 100%;
-        margin-top: 12% !important;
-        margin-left: 24% !important; 
-    }
-    .tituloDetalle{
-        text-align: center;
-        text-decoration: none;
-        font-style: italic;
-        color: black;
-        font-weight: 600;
-        font-size: 20px;
-    }
-    
-    .fondoVentaEspera{
-        background: black;
-        text-align: center;
-        text-decoration: none;
-        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
-        font-style: italic;
-        color: #e2f312 !important;
-        font-weight: 600;
-        font-size: 14px;
-        
-    }
-    .ventaEsperaSeleccionada{
-        display: flex;
-        padding-bottom: 0.2%;
-    }  
-    .ventaEsperaSeleccionada .tituloVentaEspera{
-        font-weight: 700;
-        font-size:20px;
-            color: brown;
-    }                           
-    .contenedorFactura{
-        display: flex;
-        flex: 1;
-        border: 1px solid #3c8dbc;
-        background: #ffffff;
-    }
-    .precioTotalFacturaContainer{
-        display:flex;
-        flex:1;
-    }
-
-    .codigoBarraPrecioContainer{
-        display:flex;
-        flex:1;
-    }
-    .codigoBarraPrecioContainer .inputCodigoPrecio{
-        flex:1;
-        padding-left: 2%;
-        padding-right: 2%;
-        padding-bottom: 1%;
-    }
-
-    .labelBotones {
-        font-weight: 600 !important;
-        font-size: 16px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    }
-    @media screen and (max-width: 1024px) {
-    .labelBotones {
-        font-size: 14px !important;
-    }
-    .label-totalesComprobante{
-        font-size: 18px !important;
-    }
-    .cantidadArticulosTitulo{
-        font-size: 10px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-        font-size: 14px !important;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-        font-size: 14px !important;
-    }
-    }
-
-    .botonesFuncionalContainer{
-        display:flex;
-        flex:1;
-
-    }
-    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
-        display:flex;
-    }
-
-    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
-        flex:1;
-        padding-right: 1%;
-        padding-bottom: 2%;
-    }
-    .gananciaContainer{
-        display:flex;
-        flex:1;
-    }
-    .gananciaContainer .formatoTituloGanancia{
-        flex:1;
-        color: black;
-        font-size: 15px;
-        font-weight: bolder;
-    }
-    .tituloCantidadArticulos{
-        display:flex;
-    }
-    .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #edea17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        /* padding-left: 20px; */
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        /* padding: 5px; */
-        /* margin: 5px; */
-        /* border: none; */
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-
-    }
-
-    .tituloProductoIngresadoContainer{
-        display:flex;
-        flex:1;
-    }
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
-        flex: 1;
-        display: flex;
-        padding-left: 2%;
-        padding-right: 2%;
-    
-    }
-
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-        flex: 0.15;
-        font-weight: 600 !important;
-        font-size: 36px !important;
-        font-family: Roboto,sans-serif !important;
-        color: yellow !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-    }
-
-    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-        flex: 1;
-        font-weight: 600 !important;
-        font-size: 36px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        text-align: center;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-    }
-
-</style>    
 <script>
     var self = this;
     self.colorVentaEspera = 'green'
@@ -1390,6 +915,7 @@ div.fondoVentaEspera:hover{
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
     self.todosBarrios                  = {data:[]}
+    self.estadosMag   = []
     self.clientes                  = {data:[]}
     self.cantones                      = []
     self.distritos                     = []
@@ -1501,11 +1027,11 @@ div.fondoVentaEspera:hover{
             }
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible')){
-                    $(".codigo").val(null)
+                    $(".codigo").val("")
                     seguridadCambiarPrecioLinea()
                     return
                 }else{
-                    $(".codigo").val(null)
+                    $(".codigo").val("")
                     event.preventDefault()
                     return
                 }
@@ -1569,7 +1095,7 @@ div.fondoVentaEspera:hover{
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             __Teclas(evento.keyCode,event)
+             __Teclas(evento.keyCode,evento)
             disableF5(evento);
         }, false );
 
@@ -1589,12 +1115,13 @@ div.fondoVentaEspera:hover{
 
     })
 
-this.__EntradaDinero = function(){
+__EntradaDinero(){
   modalEntradaSalidaDinero(1)
-}.bind(this)
-this.__SalidaDinero = function(){
+}
+
+__SalidaDinero(){
     modalEntradaSalidaDinero(2)
-}.bind(this)
+}
 
 function modalEntradaSalidaDinero(tipo){
  var parametros = {
@@ -1603,19 +1130,21 @@ function modalEntradaSalidaDinero(tipo){
     riot.mount('entrada-salida',{parametros:parametros});
 }
 
-this.__AplicarCambioPrecioUltimoArticulo = function(){
+__AplicarCambioPrecioUltimoArticulo(){
     __AplicarCambioPrecioBD()
-}.bind(this)
-this.__RegresarInputCodigo = function(){
-    $(".codigo").val(null)
+}
+
+__RegresarInputCodigo(){
+    $(".codigo").val("")
     $('#modalCambiarPrecio').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
-this.__RegresarInputSeguridad = function(){
-    $(".codigo").val(null)
+}
+
+__RegresarInputSeguridad(){
+    $(".codigo").val("")
     $('#modalRolUsuario').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
+}
 
 function __ObtengoTipoCambio(){
     var tempTipoCambio =__getTipoCambioCompra()
@@ -1751,12 +1280,13 @@ this.__ConsultarHaciendaBlur = function(){
     getClienteHacienda()
 
 }.bind(this)
-this.__ConsultarHacienda = function(e){
+
+__ConsultarHacienda(e){
      if (e.keyCode != 13) {
         return;
     }
     getClienteHacienda()
-}.bind(this)
+}
 
 function getClienteHacienda(){
      var cedula = $('#cedula').val()
@@ -1856,9 +1386,33 @@ function __listadoTipoCedulas(){
     self.update()
 }
 
-this.__ClienteNuevo = function(){
+__ClienteNuevo(){
+    __ComboEstadosMag()
     __nuevoCliente()
-}.bind(this)
+}
+
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosMag(){
+    self.estadosMag =[]
+    self.update()
+    self.estadosMag.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("combo.estadoMag.inactivo")
+     });
+
+    self.estadosMag.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estadoMag.agro")
+     });
+    self.estadosMag.push({
+        codigo: 2,
+        descripcion: $.i18n.prop("combo.estadoMag.pesca")
+     });
+     self.update();
+
+}
 
 function __nuevoCliente(){
     $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
@@ -1972,19 +1526,19 @@ var reglasDeValidacionClienteNuevo = function() {
 	return validationOptions;
 };
 
-this.__regresarClienteNuevo = function(){
+__regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
     getPosicionInputCodigo()
-}.bind(this)
+}
 
-this.__AplicarAgregarCliente = function(){
+__AplicarAgregarCliente(){
      if ($("#formularioAgregarCliente").valid()) {
         aplicarCreacionClienteNuevo()
     }else{
         mensajeAdvertencia("Error Faltan datos requeridos")
         return true
     }
-}.bind(this)
+}
 
 function aplicarCreacionClienteNuevo(){
     var formulario = $("#formularioAgregarCliente").serialize();
@@ -2031,13 +1585,13 @@ function aplicarCreacionClienteNuevo(){
     })
 
 }
-this.__ActualizarPlazoCredito = function(){
+__ActualizarPlazoCredito(){
     actualizaElPlazoDiasCredito();
-}.bind(this)
+}
 
-this.__AsignarActividad = function(e){
+__AsignarActividad(e){
     BuscarActividadComercial()
-}.bind(this)
+}
 
 function BuscarActividadComercial(){
     var codigo =$('#selectActividadComercial').val()
@@ -2100,10 +1654,10 @@ function __RolAdministrador(){
 
 }
 
-this.__SeguridadVentas = function(){
+__SeguridadVentas(){
      __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
 
-}.bind(this)
+}
 
 function __validarRolAdministrador(formulario,url){
     var resultado = false;
@@ -2182,24 +1736,24 @@ function permitirModal(){
     })
 }
 
-this._clickEfectivo = function(){
+_clickEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()
-}.bind(this)
+}
 
-this._SeleccionarTarjeta = function(){
+_SeleccionarTarjeta(){
     $('.totalTarjeta').select()
     $(".totalTarjeta").focus()
-}.bind(this)
-this._SeleccionarBanco = function(){
+}
+_SeleccionarBanco(){
     $('.totalBanco').select()
     $(".totalBanco").focus()
-}.bind(this)
+}
 
-this._ReimprimirFactura = function(){
+_ReimprimirFactura(){
     reimprimirFacturaEnMomento()
 
-}.bind(this)
+}
 function reimprimirFacturaEnMomento(){
 
   if(self.facturaReimprimir ==null){
@@ -2261,9 +1815,10 @@ function _Empresa(){
 
 }
 
-this.__LimpiarFormulario = function(){
+__LimpiarFormulario(){
     __SeguridadLimpiar()
-}.bind(this)
+}
+
 function __SeguridadLimpiar(){
     self.autorizarBorrado = 2
     self.update()
@@ -2443,7 +1998,7 @@ var reglasDescuentoAplicar = function() {
 	return validationOptions;
 };
 
-this.__CambiarDescuento = function(e){
+__CambiarDescuento(e){
     $("#aplicarDescuento").attr("maxlength", 7);
      $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item;
@@ -2461,9 +2016,9 @@ this.__CambiarDescuento = function(e){
             $( "#aplicarDescuento" ).val(null)
         })
     }
-}.bind(this)
+}
 
-this.__CambiarCantidad = function(e){
+__CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item;
    self.rutaAutorizada = '';
@@ -2481,9 +2036,9 @@ this.__CambiarCantidad = function(e){
             $( "#cambiarCantidadArticulo" ).select()
         })
    }
- }.bind(this)
+ }
 
-this.__TotalDeEfectivoAPagar = function(e){
+__TotalDeEfectivoAPagar(e){
     self.totalCambioPagarSTR = 0
     self.factura.totalEfectivo = __valorNumerico(e.target.value)
     if(self.factura.totalEfectivo ==0 ){
@@ -2491,35 +2046,35 @@ this.__TotalDeEfectivoAPagar = function(e){
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__TotalDeTarjetaAPagar = function(e){
+__TotalDeTarjetaAPagar(e){
     self.factura.totalTarjeta = __valorNumerico(e.target.value)
     if(self.factura.totalTarjeta ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__TotalDeBancoAPagar = function(e){
+__TotalDeBancoAPagar(e){
     self.factura.totalBanco = __valorNumerico(e.target.value)
     if(self.factura.totalBanco ==0 ){
         self.cantidadEnterFacturar = 0
     }
     self.update()
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__CalculaCambioAEntregarOnblur = function(e){
+__CalculaCambioAEntregarOnblur(e){
     _calculoEnterPago()
-}.bind(this)
+}
 
-this.__CalculaCambioAEntregarKeyPress = function(e){
+__CalculaCambioAEntregarKeyPress(e){
     if (e.keyCode == 13) {
         __Calcular()
     }
-}.bind(this)
+}
 
 function __Calcular(){
        _calculoEnterPago()
@@ -2599,9 +2154,9 @@ function __EnterFacturar(){
         self.update()
 }
 
- this.__ListaDecodigos = function(){
+ __ListaDecodigos(){
      ListarCodigosArticulos()
- }.bind(this)
+ }
 
  function ListarCodigosArticulos(){
     self.mostrarListadoArticulos = true
@@ -2619,20 +2174,20 @@ function __EnterFacturar(){
 
  }
 
-this.__CargarFacturaEspera = function(e){
+__CargarFacturaEspera(e){
    __FacturaEnEspera(e.item)
-}.bind(this)
+}
 
-this.__AplicarYcrearFactura = function(e){
+__AplicarYcrearFactura(e){
 
  aplicarFactura(2)
-}.bind(this)
+}
 
-this.__AplicarYcrearFacturaTemporal = function(e){
+__AplicarYcrearFacturaTemporal(e){
 
  __OpcionAbrirCajon()
  aplicarFactura(1)
-}.bind(this)
+}
 
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
@@ -2686,9 +2241,9 @@ function aplicarFactura(estado){
     crearFactura(estado)
 }
 
-this.__Limpiar = function(){
+__Limpiar(){
     __Init()
-}.bind(this)
+}
 
 function __Init(){
     __DeleteUltimoItemIngresado()
@@ -2890,12 +2445,12 @@ function cargarDetallesFacturaEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
+            tipoImpuesto1   : "",
             descripcion     : modeloTabla.descripcion,
             cantidad        : __valorNumerico(modeloTabla.cantidad),
             precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
             impuesto        : __valorNumerico(modeloTabla.impuesto),
-            impuesto1       : __valorNumerico(modeloTabla.impuesto1),
+            impuesto1       : 0,
             montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
             montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
             montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
@@ -3168,7 +2723,7 @@ function mostrarPAgo(){
     }
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    getSubTotalGeneral()
+   // getSubTotalGeneral()
     self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3181,7 +2736,7 @@ function mostrarPAgo(){
 
 function lecturaCodigo(){
     var valor = $('.codigo').val()
-    if (valor == ""){
+    if (valor == "" || valor.length == 0){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
             self.update()
@@ -3205,7 +2760,7 @@ function lecturaCodigo(){
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
 }
 
-this.__addPrecioDetail = function(e){
+__addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     }
@@ -3227,7 +2782,7 @@ this.__addPrecioDetail = function(e){
     }
     __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
     getPosicionInputCodigo()
-}.bind(this)
+}
 
 function getCantidadAdnCodigo_PV(){
     var objeto ={
@@ -3236,7 +2791,9 @@ function getCantidadAdnCodigo_PV(){
     }
 
     var valor = $('.codigo').val()
-
+    if(valor == "" | valor.length == 0){
+        return objeto
+    }
     var existe = false
     var existeMas = false
     for(i=0; i<valor.length; i++){
@@ -3284,7 +2841,10 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
-            ActualizarLineaDEtalle()
+                        //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+    
             self.detail[count] = self.item;
             self.update();
         }
@@ -3567,6 +3127,9 @@ function __agregarArticulo(cantidad){
     }
     var encontrado = false;
     var valor = $('.codigo').val()
+    //if(valor == "" || valor.length == 0){
+    //    return
+    //}
     var multiplicaPeso = valor.indexOf("*") !=-1?true : false;
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo" || multiplicaPeso == true){
         __nuevoArticuloAlDetalle(cantidad);
@@ -3586,7 +3149,10 @@ function __agregarArticulo(cantidad){
                 self.cantidadEnterFacturar = 0
                 self.cantArticulos = self.cantArticulos + 1
                 self.update();
-                ActualizarLineaDEtalle()
+                            //factura.js
+                self.item = ActualizarLineaDEtalle(self.item) 
+                self.update()
+    
                 self.detail[count] = self.item;
                 encontrado = true;
                 self.update();
@@ -3616,7 +3182,10 @@ function aplicarLineaFacturaCambioPrecio(){
             var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
             self.item.precioUnitario = precioUnitario
             self.update();
-            ActualizarLineaDEtalle()
+            //factura.js
+            self.item = ActualizarLineaDEtalle(self.item) 
+            self.update()
+    
 
             self.detail[count] = self.item;
             self.update();
@@ -3721,15 +3290,15 @@ function setItemNuevo(cantidad){
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : "",
        iva             : __valorNumerico(self.articulo.impuesto),
-       iva1            : __valorNumerico(self.articulo.impuesto1),
+       iva1            : 0,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : __valorNumerico(self.articulo.impuesto1),
+       impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
        montoImpuesto1  : __valorNumerico(montoImpuesto1),
        impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
@@ -3757,9 +3326,9 @@ function setItemNuevo(cantidad){
 }
 
 function verificarTarifa(){
-    if(__valorNumerico(self.articulo.impuesto) > 0 ||  __valorNumerico(self.articulo.impuesto1) > 0){
+    if(__valorNumerico(self.articulo.impuesto) > 0 ){
        if (self.articulo.tipoImpuesto =='01' ||  self.articulo.tipoImpuesto =='07'){
-            if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
+            if (self.articulo.codigoTarifa == "" ){
                 return true
             }
 
@@ -3896,62 +3465,17 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 }
 
 
-function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
-    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    montoImpuesto1             = 0
-    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
-    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1
-    self.item.pesoTransporteTotal = __valorNumerico(self.item.cantidad) *  __valorNumerico(self.item.pesoTransporte)
 
-    self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = montoDescuento
-    self.item.subTotal         = subTotal
-    self.item.montoImpuesto    = montoImpuesto
-    self.item.montoImpuesto1   = montoImpuesto1
-
-    self.item.montoTotalLinea  = montoTotalLinea
-    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:__valorNumerico(self.item.costo),self.item.cantidad)
-    self.item.montoGanancia    = self.item.ganancia
-    self.update()
-}
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-	    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc <= porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-        if(porcentajeGanancia <=0){
-            porcentaje =  porcentajeDesc;
-        }
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    self.item.porcentajeDesc = porcentaje
-	    self.update()
-
-	    var totalDescuento =  precioUnitario * cantidad
-        totalDescuento = totalDescuento * porcentaje
-        totalDescuento = totalDescuento /100
-	    var resultado = totalDescuento;
-	    return resultado
-}
 
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
     self.item.ganancia = ganancia
     self.item.montoGanancia    = self.item.ganancia
-
+                //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
     self.update()
-    ActualizarLineaDEtalle()
+    
     aplicarCambioLineaDetalle()
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide')
@@ -3991,7 +3515,10 @@ function _actualizarDesc(){
 
     self.item.porcentajeDesc =  __valorNumerico(descuento);
     self.update()
-    ActualizarLineaDEtalle()
+                //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+    
     aplicarCambioLineaDetalle()
      $(".aplicarDescuento").val(null);
     $('#modalCambiarDescuento').modal('hide')
@@ -4003,50 +3530,28 @@ function __calculate() {
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
-    self.factura.subTotal         = 0;
+    self.factura.totalImpuestoServ = 0; 
+    self.factura.subTotal          = 0;
     self.update()
-    var totalVenta     = 0
-    var subTotal       = 0
-    var totalDescuento = 0
-    var totalImpuesto  = 0
-    var totalImpuesto1 = 0
-    var totalComprobante        = 0
-    var totalventaNeta          = 0
-    var totalGanancia           = 0
-    self.cantArticulos      = 0
-    var totalPesoByFactura = 0
-    var montoExoneracion = 0
-    self.detail.forEach(function(e){
-        totalComprobante        += e.montoTotalLinea
-        subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += __valorNumerico(e.montoImpuesto)
-        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
-        totalVenta              += e.montoTotal
-        totalGanancia           +=__valorNumerico(e.ganancia)
-        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1
-        totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad)
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion)
-        montoExoneracion        = montoExoneracion + __valorNumerico(e.montoExoneracion1)
-    });
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
-    self.totalPesoByFactura = __valorNumerico(totalPesoByFactura)
-    self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
+                        //Factura.js
+    var resultado = __ResumenFactura(self.detail,self.factura);
+    self.factura = resultado.factura
+    self.update()
+    self.cantArticulos = resultado.cantArticulos
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
+    self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
+    self.totalPesoByFacturaSTR = formatoDecimales(resultado.totalPesoByFactura,2);
+    self.totalComprobante = formatoDecimales(resultado.totalComprobante,2);
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2);
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2);
+    self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
+    self.subTotalGeneral =  resultado.subTotalGeneral
+    self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
+    self.totalImpuesto = resultado.totalImpuesto
+    self.update()
 
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
-    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
-    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
-    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.totalImpuesto1                  = formatoDecimales(totalImpuesto1,2);
-    self.montoExoneracion                = montoExoneracion > 0 ?formatoDecimales(montoExoneracion,2):"";
-    self.update();
     getPosicionInputCodigo()
-    getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
@@ -4059,14 +3564,6 @@ function __calculate() {
 
 }
 
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
-    self.subTotalGeneral = formatoDecimales(resultado,2)
-    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
-    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
-    self.update()
-}
 
 function _informacionData_Articulo(){
    self.informacion_tabla_articulo = [
@@ -4268,6 +3765,7 @@ function __aplicarExoneracionPorCliente(){
 
             }
     }
+    
     __calculate()
     if(aplicaExo == true){
        self.factura.totalCambioPagar = self.factura.totalComprobante
@@ -4447,13 +3945,25 @@ function __EnviarFacturar(){
 }
 
 function __Teclas(tecla,event){
+    if (tecla === undefined) {
+        return 
+    }
+    if (event === undefined) {
+        return 
+    }
 
+    if(event.id == 'nota' || event.id == 'correoAlternativo' || event.id == 'nombreFactura' ||
+       event.target.id == 'nota' ||  event.target.id == 'correoAlternativo' || event.target.id == 'nombreFactura'){
+        return
+    }
+  //  console.log(event)
+   // console.log(tecla)
     if(tecla ==119){
         __EnviarFacturar()
         return
 
     }
-
+    
     if(tecla ==111){
         if( self.rol.rolAdministrador == 0){
             return
@@ -4461,7 +3971,7 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()
         }else{
-            $(".codigo").val(null)
+            $(".codigo").val("")
             event.preventDefault()
         }
         return

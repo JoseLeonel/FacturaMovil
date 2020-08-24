@@ -10,14 +10,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,9 +47,6 @@ import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
-import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
-import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorCobrarNative;
-import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CuentaCobrarCommand;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -269,13 +264,6 @@ public class CuentaCobrarController {
 		return new Attachment(name + ext, data);
 	}
 
-	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Moneda", "Facturacion", "Saldo", "Abono");
-		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR,codigoMoneda, total,totalSaldo,totalAbono", baos);
-		return baos;
-	}
 
 	/**
 	 * Total de Cuentas por cobrar

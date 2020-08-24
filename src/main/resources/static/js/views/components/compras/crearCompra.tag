@@ -53,7 +53,7 @@
                             <input   type="hidden" class="proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.forma.pago")} </label> 
                                         <select  onchange= {__formaPago} class="form-control formaPago campo" id="formaPago" >
@@ -62,7 +62,7 @@
                                     </div>
  
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("compra.tipo.documento")} </label> 
                                         <select class="form-control tipoDocumento campo" id="tipoDocumento" name="tipoDocumento"   >
@@ -70,6 +70,8 @@
                                         </select>
                                     </div>
                                 </div>
+                             
+
                             </div>    
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
@@ -330,496 +332,9 @@
 </div>
 <!--fin del modal-->
 
-<style type="text/css">
-.detalle1{
-    flex: 0.5;
-   
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-bottom: 1%;
-}
-.detalleDescripcion{
-   flex: 1.5;
-    text-align: center;
-    color: black;
-    font-weight: 600;
-    font-size: 14px;
-  
-}
-.detalleDescripcion1{
-   flex: 1.5;
-    text-align: center;
-    color: black;
-    font-size: 14px;
-  
-}
-.detalleCodigo{
-    flex: 0.8;
-    text-align: center;
-}
-.detalleLinea{
-    flex: 0.1;
-    text-align: center;
-}
-.detallesProductos{
-    display:flex;
-
-    justify-content: space-around;
-
-}
-.detalleEliminar{
-    flex:0.3;
-}
-.encabezadoContainer{
-  
-}
-.containerUno{
-    display: flex;
-   justify-content: space-between;
-}
-.tituloDetalle1{
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
-        flex: 1;
-    
-    text-align: center;
-}
-.totalesContainer{
-    display: flex;
-    flex: 1;
-    justify-content: space-around;
-}
-.tituloTotales{
-    text-align: left;
-    margin-right: 3%;
-    color: yellow;
-    margin-top: 2%;
-    flex: 0.5;
-}
-.valorTotal{
-    margin-top: 2%;
-}
-.label-totalesComprobanteChino {
-    font-weight: 600 !important;
-    font-size: 18px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    border-collapse: separate;
-    cursor: pointer;
-    margin: 1%!important;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 25px !important;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.precioTotalFacturaContainer{
-    display:flex;
-    flex:1;
-    flex-direction: column;
-    ont-weight: 600 !important;
-    font-size: 14px !important;
-    color:yellow !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    border-collapse: separate;
-    cursor: pointer;
-    margin: 2%!important;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 25px !important;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.tituloFormat{
-    color: black;
-    font-size: 14px;
-    font-weight: bold;   
-        padding-top: 5%; 
-        text-align: center;
-}
-.contenedor-compra {
-    display:flex;
-    flex-wrap: nowrap;
-}
-.cabecera-derecha{
-    flex:0.25;
-}
-.totalLabel {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 18%;
-text-align: center;
-}
-.totalLabelImpuesto {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 31%;
-text-align: center;
-}
- #contenedor {
-  width:500px;
-  height:200px;
-  background: #fff;
-  padding:10px;￼    color: blue;
-￼    font-size: 18px;
-  border:10px solid #2c3e50;
-  margin:20px;
-  display:flex;
-  display:-webkit-flex;
-  display:-ms-flexbox;
- justify-content:space-between;
-}
- .cabecera-izquierda {
-       flex:1;
-       margin-right: 1%;
-
-    }
-
-    .cabecera-derecha {
-        width:25%;
-    }
-
-.elemento{
-  background: #E67E22;
-  color:#fff;
-  margin:5px;
-  flex-basis:150px; 
-  
-  height:50px;
-
-  
-}
-
-.item {
-  
-  width: 50%;
-}
-
-    .boton-consultar1 {
-       display: block;
-    display: inline-block;
-    margin-bottom: 0;
-    
-    border-radius: 3px;
-    height: 30px;
-    /* padding: 6px 12px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #fff;
-    background-color: #3c8dbc;
-    border-color: #367fa9;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .
-    }
-    /* Lista de facturas en espera*/
-    .cabecera-derecha .lista-compras-espera{
-        width:100%;
-        display:flex;
-        flex-wrap:wrap;
-    }
-    .box-body{
-        padding: 0px !important;
-    }
-    .label-limpiar{
-        font-weight: 600 !important;
-        font-size: 16px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        line-height: 30px;
-        border-collapse: separate;
-        background-color: #f2f2f2;
-        color: #000;
-        text-align: center;
-        cursor: pointer;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
-    }
-    .cabecera-derecha .lista-compras-espera .compras-espera{
-        display:block;
-        width:90%;
-        margin-bottom:4px;
-        margin-right:5px;
-        background:red;
-        text-align:center;
-        text-decoration:none;
-        color:#ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-    }
-    #pagarTitulo{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-    }
-    #pagarTable,#pagarTableInfo{
-        border-collapse: separate;
-    }
-    #pagarTableInfo{
-        background-color: #f2f2f2;
-        color: #000;
-        text-align: center;
-    }
-    #total-show {
-        padding: 0px;
-        font-weight: 400;
-        background: none!important;
-        font-size: 30px;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        padding-top: 0px;
-        line-height: 40px;
-    }
-    #btnGrandePagar,#btnGrandePagar2{
-        cursor: pointer;
-        padding: 0px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: yellow !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    } 
-    #pagarInfo,#iva-total,#subtotal,#sigPeso{
-        font-weight: 100 !important;
-        font-size: 14px !important;
-    }
-    #pagarInfo{
-        font-size: 12px !important;
-    }
-    *{
-       margin:0;
-       padding:0;
-       box-sizing:border-box;
-    }
-    body{
-        background:white;
-    }
-    .wrap{
-        max-width:1100px;
-        width:100%;
-        margin:auto;
-    }
-  
-   
-    .contenedor-detalle   {
-        display:flex;
-        width:100%;
-        margin :auto;
-    }
-
-    .booking-details h1 {
-        font-size: 1.5em;
-        color: #666;
-        text-shadow: none;
-    }
-    .booking-details .booking-info {
-        border-top: 1px solid #DFDCD1;
-        padding: 15px 0 0;
-        margin: 15px 0 0;
-        display: inline-block;
-        width: 100%;
-    }
-    .total{
-        font-weight:bold;
-        font-size:23px;
-    }
-    .precioTotalFactura{
-        font-weight:bold;
-        font-size:23px;
-        color:black;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-    }
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-    }
-    .campo {
-            display: block;
-    width: 100%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 12px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-    }
-    .campodetalle {
-    width: 170px;
-    height: 30px;
-    /* padding: 6px 16px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    /* border: 1px solid #ccc; */
-    margin: 2px 0;
-    padding: 1px 2px;
-    /* overflow: visible; */
-}
-.campodetalleDescuento {
-    width: 100%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color:#333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-}
-
-/*1024x768*/
-@media only screen and (max-width: 1024px) and (min-width:768px)  {
-    .campodetalle {
-    width: 145px;
-    height: 30px;
-    /* padding: 6px 16px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    /* border: 1px solid #ccc; */
-    margin: 2px 0;
-    padding: 1px 2px;
-    /* overflow: visible; */
-}
-
-    .detalle1{
-        flex: 0.80 !important;
-        margin-left: 2% !important;
-        margin-right: 2% !important;
-        text-align: center;
-        margin-bottom: 1%;
-    }
-    .detalleEliminar{
-        flex:0;
-        margin-left: 0.5%;
-    }
-   .tituloDetalle1 {
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
-    flex: 1.3;
-    text-align: left;
-}
-.campodetalleDescuento {
-    width: 188%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-}
 
 
-}
-</style>
+
 
 <script>
     var self = this;
@@ -844,7 +359,11 @@ text-align: center;
         subTotal:0,  
         total:0,
         nota:""
-    }                            
+    }       
+    self.proveedor = {
+        id:null,
+        nombreCompleto:'',
+    }                     
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
@@ -876,6 +395,7 @@ text-align: center;
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeProveedores()
+        __ComboTipoGasto()
         $('.datepickerFechaCompra').datepicker(
         {
             format: 'yyyy-mm-dd',
@@ -883,11 +403,16 @@ text-align: center;
         }
     );
     var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasNueva'));
-    self.detail = retrievedObject == null?self.detail = []:retrievedObject
-    var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
-    self.compra = compraObject ==null?self.compra:compraObject
+    if (retrievedObject != 'undefined') {
+       self.detail = retrievedObject == null? self.detail = []:retrievedObject  
+    }
+    if (compraObject != 'undefined') {
+       var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
+    }
     var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
-    self.proveedor = proveedorObject == null? self.proveedor:proveedorObject
+    if (compraObject != 'undefined') {
+       self.proveedor = proveedorObject == null? self.proveedor:proveedorObject  
+    }
     self.update()
     __calculate()
     //__Init()
@@ -916,6 +441,21 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
+
+function __ComboTipoGasto(){
+    self.tipoGastos =[]
+    self.update()
+    self.tipoGastos.push({
+        codigo: 1,
+        descripcion: $.i18n.prop("boolean.no") 
+     });
+    self.tipoGastos.push({
+        codigo: 2,
+        descripcion:$.i18n.prop("boolean.si")
+     });
+     self.update();
+}
+
  /**
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
@@ -1865,6 +1405,16 @@ function __ComboTipoDocumentos(){
         estado:2,
         descripcion:$.i18n.prop("combos.tipoDocumento.boleta")
     })
+  //   self.comboTipoDocumentos.push({
+  //      estado:3,
+  //      descripcion:$.i18n.prop("combos.tipoDocumento.nota.credito")
+  //  })
+  //  self.comboTipoDocumentos.push({
+  //      estado:4,
+  //      descripcion:$.i18n.prop("combos.tipoDocumento.nota.debido")
+  //  })
+
+
     self.update()
 }
 /**
@@ -1876,7 +1426,9 @@ function agregarInputsCombos_Articulo(){
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 4    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	        var name = '<input id = "filtroCampos' + e + '"';
+            $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
+
 	    }
     })
 } 
@@ -1885,12 +1437,17 @@ function agregarInputsCombos_Articulo(){
 **/
 function agregarInputsCombos_Proveedores(){
      // Agregar los input de busqueda 
+     var cont = 2;
     $('.tableListaProveedor tfoot th').each( function (e) {
         var title = $('.tableListaProveedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
+
         if ( $(this).index() != 3    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	        var name = '<input id = "filtroCampos' + e + cont + '"';
+            $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
+
 	    }
+        cont = cont + 1;
     })
 }     
 

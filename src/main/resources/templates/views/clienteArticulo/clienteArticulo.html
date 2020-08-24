@@ -1,233 +1,231 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
-<head>
- 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <!-- Meta -->
-	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Agregar Rubros por cliente</title>
-<!--     <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script> -->
-  <script th:src="@{/js/jquery-1.11.2.js}"></script>
-	<!-- jQuery UI 1.11.4 -->
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-	<!-- JQUERY Properties-->
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
-	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
-	<link rel="stylesheet" type="text/css" th:href="@{css/ventaPost.css}"/>
-	 
-	 <!-- MASK -->
-	 <script type="text/javascript" src="js/jquery.mask.js"></script>
-	 
-	 
-   <!-- SWEERT ALERT -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.js"></script>
-
-    <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-	<script src="/riot/riot.csp.js"></script>
-	<!-- include riot.js and the compiler -->
-	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
-	<!-- MANTENIMIENTO DE ARTICULOS -->
-	<script type="text/javascript" src="/js/views/clienteArticulo/clienteArticulo.js"></script>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
  <style type ="text/css">
-    .fondoEncabezado {
-        background: #00539B;
-        color: #f9fafc;
-    }
-  .requeridoDato {
-            color: red;
-            text-align: left;
-            font-weight: 500;
-            font-size: 13px;
-        }
-    .fondoFacturacion {
-    background: rgb(247, 244, 244);
-    color: #f9fafc;
-    border-style: solid;
-    border-width: 5px;
-    }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-        .input-table-search{
-            margin-left: 15px;
-            margin-right: 15px;
-            width:100%;
-        }
-        .botonConsulta{
-            margin-top:28px;
-        }
-        
-        table td{ 
-            text-align: left;
-            font-size: 12px;
-            
-                }
-        table th {
-                text-align: center;
-                font-size: 12px;
-        }
-        th, td {
-            white-space: nowrap;
-        }
-        .scroller {
-            width: 200px; height: 600px; overflow-y: scroll;
-        }
-        .tamanoClienteNuevo{
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        height: 10%;
-
-    }
-    .tituloClienteNuevo{
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-    }
-    .btn-dark-gray {
-        background-color: #3D3E42;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        font-size: 30px!important;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .btn-green {
-        background-color: #4cae4c;
-        color: #FFF;
-        border-radius: 5px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        font-size: 30px !important;
-        font-weight: bold;
-        margin-right: 15px;
-        border: none;
-        float: right;
-        cursor: pointer;
-    }
-    .botonesContainer{
-       display:flex;
-    }
-    .boton{
-       flex: 1;
-    }
-    .dropdown-toggle{
-    font-size:30px !important;
-    }
-   
-    text.{
-    font-size:30px !important;
-    }
-    </style>
+	.fondoEncabezado {
+		background: #00539B;
+		color: #f9fafc;
+	}
+	
+	.requeridoDato {
+		color: red;
+		text-align: left;
+		font-weight: 500;
+		font-size: 13px;
+	}
+	
+	.fondoFacturacion {
+		background: rgb(247, 244, 244);
+		color: #f9fafc;
+		border-style: solid;
+		border-width: 5px;
+	}
+	
+	.wrap {
+		max-width: 1100px;
+		width: 100%;
+	}
+	
+	body {
+		overflow: hidden;
+		background: white;
+		font-size: 12px !important;
+	}
+	
+	.contenedor-listar {
+		width: 100%;
+	}
+	
+	.input-table-search {
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 100%;
+	}
+	
+	.botonConsulta {
+		margin-top: 28px;
+	}
+	
+	table td {
+		text-align: left;
+		font-size: 12px;
+	}
+	
+	table th {
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	th, td {
+		white-space: nowrap;
+	}
+	
+	.scroller {
+		width: 200px;
+		height: 600px;
+		overflow-y: scroll;
+	}
+	
+	.tamanoClienteNuevo {
+		font-size: 30px;
+		font-weight: 600;
+		color: black;
+		height: 10%;
+	}
+	
+	.tituloClienteNuevo {
+		display: inline-block;
+		max-width: 100%;
+		margin-bottom: 5px;
+		font-weight: 600;
+		font-size: 30px;
+		font-weight: 600;
+		color: black;
+	}
+	
+	.btn-dark-gray {
+		background-color: #3D3E42;
+		color: #FFF;
+		border-radius: 5px;
+		padding-bottom: 10px;
+		padding-top: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		font-size: 30px !important;
+		font-weight: bold;
+		margin-right: 15px;
+		border: none;
+		float: right;
+		cursor: pointer;
+	}
+	
+	.btn-green {
+		background-color: #4cae4c;
+		color: #FFF;
+		border-radius: 5px;
+		padding-bottom: 10px;
+		padding-top: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		font-size: 30px !important;
+		font-weight: bold;
+		margin-right: 15px;
+		border: none;
+		float: right;
+		cursor: pointer;
+	}
+	
+	.botonesContainer {
+		display: flex;
+	}
+	
+	.boton {
+		flex: 1;
+	}
+	
+	.dropdown-toggle {
+		font-size: 30px !important;
+	}
+	
+	text .{
+		font-size: 30px !important;
+	}
+</style>
 </head>
-<body>
-
-<div layout:fragment="content">
-
- 	 <!-- Titulos -->
-<div id="mostrarListado" class="mostrarListado" >	 
-    <div  class="row titulo-encabezado "  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-cog"></i>&nbsp Agregar rubros por Cliente </h1>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
-    </div>
-    <!-- Listado  -->
-   <div classs="container">
-       <div class="row">
-           <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6 has-success">
-                <label >Clientes <span class="requeridoDato">*</span></label>
-                <select  class="form-control clientes"   name="clientes" id="clientes"  data-live-search="true">
-                </select>
-            </div>
-        </div>  
-        </br>
-        </br>        
-        <div class="row">
-            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
-                 <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header"  >Categoria       </th>
-                                <th class="table-header"  >Codigo          </th>
-                                <th class="table-header" >Descripcion                       </th>
-                                <th class="table-header" >Precio                            </th>
-                                <th class="table-header" > Acciones                         </th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>Categoria        </th>
-                                <th>Codigo           </th>
-                                <th>Descripcion      </th>
-                                <th>Precio           </th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    
-            </div>
-        </div>    
-    </div>
- </div>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+					<!-- Titulos -->
+					<div id="mostrarListado" class="mostrarListado" >	 
+					    <div  class="row titulo-encabezado "  >
+					        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+					            <h1><i class="fa fa-cog"></i>&nbsp Agregar rubros por Cliente </h1>
+					        </div>
+					        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
+					    </div>
+					    <!-- Listado  -->
+					   <div classs="container">
+					       <div class="row">
+					           <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6 has-success">
+					                <label >Clientes <span class="requeridoDato">*</span></label>
+					                <select  class="form-control clientes"   name="clientes" id="clientes"  data-live-search="true">
+					                </select>
+					            </div>
+					        </div>  
+					        <div class="row">
+					            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
+					                 <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   >
+					                        <thead>
+					                            <tr>
+					                                <th class="table-header"  >Categoria</th>
+					                                <th class="table-header"  >Codigo    </th>
+					                                <th class="table-header" >Descripcion</th>
+					                                <th class="table-header" >Precio     </th>
+					                                <th class="table-header" > Acciones  </th>
+					                            </tr>
+					                        </thead>
+					                        <tfoot style="display: table-header-group;">
+					                            <tr>
+					                                <th>Categoria        </th>
+					                                <th>Codigo           </th>
+					                                <th>Descripcion      </th>
+					                                <th>Precio           </th>
+					                                <th></th>
+					                            </tr>
+					                        </tfoot>
+					                    </table>
+					                    
+					            </div>
+					        </div>    
+					    </div>
+					 </div>
     
-<!--Modal mostrar  -->
-<div id="modalAgregarArticulo"  class="modal fade  modalAgregarArticulo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Rubros al Cliente   </h4>
-            </div>
-            <div class="modal-body">
-		       <div class="row">
-		           <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
-		                <label class = 'tituloClienteNuevo' >Rubros <span class="requeridoDato">*</span></label>
-		                <select  class="form-control articulo tamanoClienteNuevo"   name="articulo" id="articulo"  data-live-search="true">
-		                </select>
-		            </div>
-		        </div>  
-		        </br>     
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >Volver</button>
-                <button type="button" class="btn-green btn-edit pull-right" >Agregar</button>
-            </div>
-        </div>
+					<!--Modal mostrar  -->
+					<div id="modalAgregarArticulo"  class="modal fade  modalAgregarArticulo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+					    <div class="modal-dialog modal-lg">
+					        <div class="modal-content">
+					            <div class="modal-header with-border table-header" >
+					                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Rubros al Cliente   </h4>
+					            </div>
+					            <div class="modal-body">
+							       <div class="row">
+							           <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
+							                <label class = 'tituloClienteNuevo' >Rubros <span class="requeridoDato">*</span></label>
+							                <select  class="form-control articulo tamanoClienteNuevo"   name="articulo" id="articulo"  data-live-search="true">
+							                </select>
+							            </div>
+							        </div>  
+					
+					            </div>
+					            <div class="modal-footer">
+					                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >Volver</button>
+					                <button type="button" class="btn-green btn-edit pull-right" >Agregar</button>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					<!--fin del modal-->    	        
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
     </div>
-</div>
-<!--fin del modal-->    
-    
-</div>
-
-
-
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript" th:src="@{/js/views/clienteArticulo/clienteArticulo.js?v=1}"></script>
 
 </body>
 </html>

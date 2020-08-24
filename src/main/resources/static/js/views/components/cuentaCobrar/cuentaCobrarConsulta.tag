@@ -4,7 +4,31 @@
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
             <h1 ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("cuentaCobrar.titulo")}  </h1>
         </div>
-        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
+        <div id="totalsGenerales" show ="{noMostrarTotales == true  }">
+	        
+	             <div>
+	             	 <div >
+	                    <span>Facturacion </span>  
+	                    <input type="text"  class = "totalGeneral" value ="{total}" readonly >
+	                 </div>
+	             </div>
+	             <div>
+	                <div >
+	                   <span>Abonos </span>  
+	                   <input type="text" class = "totalAbonoGeneral" value ="{totalAbono}" readonly >
+	                </div>  
+	             </div>
+	             <div>
+	              	<div >
+	                    <span>Saldos </span>  
+	                    <input type="text" class = "totalSaldoGeneral" value ="{totalSaldo}" readonly >
+	                 </div>  
+	             </div>
+                
+	        
+	        
+	        </div>
+            
     </div>
     
 
@@ -261,26 +285,7 @@
 <!-- Fin Formulario -->   
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
-        <div class= "row">
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
-                </div>  
-            </div>                             
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="form-group">
-                    <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
-                </div>  
-            </div>                             
-        </div>
+       
 
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
@@ -392,43 +397,12 @@
 <imprimir-abono></imprimir-abono>
 
 <style type ="text/css">
-        .fondoEncabezado {
-            background: #00539B;
-            color: #f9fafc;
-        }
-        .requeridoDato {
-                color: red;
-                text-align: left;
-                font-weight: 500;
-                font-size: 13px;
-        }
-        .fondoFacturacion {
-            background: rgb(247, 244, 244);
-            color: #f9fafc;
-            border-style: solid;
-            border-width: 5px;cliente
-        }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-       
-        th, td {
-            white-space: nowrap;
-        }
-
+  
 </style>
 
 <script>
     var self = this
+    self.noMostrarTotales = true
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del LiUtils.roundFactura(tado de la Tabla 
     self.estados                   =[]
@@ -782,6 +756,7 @@ __Busqueda(){
 * Lista de consulta
 **/
 function listadoConsulta(){
+    self.noMostrarTotales          = true
     self.fechaInicio =$('.fechaInicio').val()
     self.fechaFin =$('.fechaFinal').val()
     self.cliente =$('#idCliente').val()
@@ -812,11 +787,13 @@ function listadoConsulta(){
                       __imprimirPTV()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
+                     self.noMostrarTotales          = true
                     self.update()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
                     self.hay_datos  = false
+                     self.noMostrarTotales          = true
                     self.update()
                 }           
             },
@@ -842,6 +819,22 @@ function TotalesGenerales(data){
         self.totalAbono += data[i].totalAbono;
         self.totalSaldo += data[i].totalSaldo;
      }
+     self.total = formatoDecimales(self.total,2)
+     self.totalAbono = formatoDecimales(self.totalAbono,2)
+     self.totalSaldo = formatoDecimales(self.totalSaldo,2)
+     self.update()
+}
+function TotalesGeneralesByCuenta(data){
+     self.total             = 0
+    self.totalAbono         = 0
+    self.totalSaldo         = 0
+    self.totalSTR           = 0
+    self.totalAbonoSTR      = 0
+    self.totalSaldoSTR      = 0
+    self.update()
+    self.total      = data.total;
+    self.totalAbono = data.totalAbono;
+    self.totalSaldo = data.totalSaldo;
      self.total = formatoDecimales(self.total,2)
      self.totalAbono = formatoDecimales(self.totalAbono,2)
      self.totalSaldo = formatoDecimales(self.totalSaldo,2)
@@ -881,6 +874,7 @@ __regresarAlListado(){
     self.mostrarFormulario    = false 
     self.mostrarListadoAbonos = false
     self.mostrarCrearAbono    = false
+     self.noMostrarTotales     = true
     self.update()
     listadoConsulta();
 }
@@ -888,7 +882,22 @@ __regresarAlListado(){
 * Regresar al listado de los abonos 
 **/
 __regresarAlListadoAbono(){
-    __regresar()
+    __regresar1()
+}
+/**
+* Regresar al listado de abonos
+**/
+function __regresar1(){
+    self.mostrarListado       = false
+    self.botonAgregar         = false
+    self.botonModificar       = false   
+    self.mostrarFormulario    = false 
+    self.mostrarListadoAbonos = true
+    self.mostrarCrearAbono    = false
+    self.noMostrarTotales     = true
+    self.update()
+    TotalesGeneralesByCuenta(self.cuentaCobrar)
+    //listadoConsulta();
 }
 /**
 * Regresar al listado de abonos
@@ -900,6 +909,7 @@ function __regresar(){
     self.mostrarFormulario    = false 
     self.mostrarListadoAbonos = true
     self.mostrarCrearAbono    = false
+    self.noMostrarTotales     = true
     self.update()
     listadoConsulta();
 }
@@ -1132,8 +1142,8 @@ function consultaFactura(consecutivo){
                         self.factura = modeloTabla
                         self.update()
                         if(self.factura !=null){
-           riot.mount('ptv-imprimir',{factura:self.factura});    
-        }
+                            riot.mount('ptv-imprimir',{factura:self.factura});    
+                        }
                     });
                 }
             }
@@ -1160,7 +1170,7 @@ function __mostrarAbonos(){
 	    }
         $(".tableListaAbonos").dataTable().fnClearTable()
        
-        
+        self.noMostrarTotales          = true
         __LimpiarCuentasPorCobrar() 
         self.cuentaCobrar = data    
         self.error                     = false
@@ -1172,6 +1182,7 @@ function __mostrarAbonos(){
         self.mostrarListadoAbonos      = true
         self.mostrarCrearAbono         = false
         self.update()
+        TotalesGeneralesByCuenta(self.cuentaCobrar)
         listaAbonosPorCuentaPorCobrar()
     })
 }
@@ -1191,6 +1202,7 @@ function __mostrarCuentaPorCobrar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        self.noMostrarTotales          = false
         __LimpiarCuentasPorCobrar() 
         self.cuentaCobrar = data
         self.update()
@@ -1220,6 +1232,7 @@ function __consultar(){
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         self.botonModificar   = true;
+                        self.noMostrarTotales  = true
                         self.botonAgregar = false;
                         self.cuentaCobrar  =  modeloTabla
                         self.cuentaCobrar.fechaPlazo = __displayDate_detail(self.cuentaCobrar.fechaPlazo)
@@ -1227,6 +1240,7 @@ function __consultar(){
                         self.update()
                          listaClientesActivos() 
                         __ComboEstadosCuentaCobrar()
+                        TotalesGeneralesByCuenta(modeloTabla)
                     });
                 }
             }
@@ -1364,6 +1378,7 @@ function __verAbono(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         self.abono = data
+        self.noMostrarTotales  = false
         self.update()
         consultaAbono()
 	});
@@ -1394,6 +1409,7 @@ function consultaAbono(){
                         self.botonAgregar              = false
                         self.mostrarListadoAbonos      = false
                         self.mostrarCrearAbono         = true
+                        self.noMostrarTotales          = false
                         __LimpiarAbonos()
                         self.abono  =  modeloTabla
                         self.abono.fechaPago = __displayDate_detail(self.abono.fechaPago)

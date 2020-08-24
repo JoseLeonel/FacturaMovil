@@ -92,6 +92,7 @@ public class UsuarioController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cambioclave(HttpServletRequest request, ModelMap model, @ModelAttribute Usuario usuario, BindingResult result, SessionStatus status) throws Exception {
@@ -130,6 +131,7 @@ public class UsuarioController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/validarRolAdministradorAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator validarRolAdministrador(HttpServletRequest request, ModelMap model, @ModelAttribute ValidarRolCommand validarRolCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -170,6 +172,7 @@ public class UsuarioController {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/RolUsuarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator rolUsuario(HttpServletRequest request,  ModelMap model,RolAdministradorCommand rolAdministradorCommand, BindingResult result, SessionStatus status) throws Exception {
@@ -214,6 +217,7 @@ public class UsuarioController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -224,6 +228,7 @@ public class UsuarioController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosByEmpresaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarByEmpresaAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -250,6 +255,7 @@ public class UsuarioController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarUsuarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Usuario usuario, BindingResult result, SessionStatus status) throws Exception {
@@ -290,6 +296,7 @@ public class UsuarioController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarUsuarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Usuario usuario, BindingResult result, SessionStatus status) throws Exception {
@@ -339,6 +346,7 @@ public class UsuarioController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarUsuarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Usuario usuario, BindingResult result, SessionStatus status) throws Exception {
@@ -353,11 +361,14 @@ public class UsuarioController {
 	
 	private static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
 			private static class USUARIO {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.modificado.correctamente");
 			}
 		}
@@ -366,6 +377,7 @@ public class UsuarioController {
 
 			private static class USUARIO {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.usuario.noExiste");
 			}
 		}

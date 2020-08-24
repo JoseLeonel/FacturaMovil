@@ -99,11 +99,13 @@ public class TipoCambiosController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	@SuppressWarnings("rawtypes")
 	@CacheEvict(value="tipoCambioCache",allEntries=true)
 	@RequestMapping(value = "/AgregarTipoCambioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -131,6 +133,7 @@ public class TipoCambiosController {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/DesactivarTipoCambioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {
@@ -154,6 +157,7 @@ public class TipoCambiosController {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarTipoCambioActivoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {

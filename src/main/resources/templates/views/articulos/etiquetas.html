@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+<style type="text/css">
+#parametros {
+	display: flex;
+}
+
+#parametros>div {
+	padding-right: 10px;
+	padding-top: 20px;
+	padding-left: 10px;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+#listaEtiquetas {
+	display: flex;
+	padding-top: 3%;
+}
+
+.tituloDetalle {
+	text-align: center;
+	text-decoration: none;
+	font-style: italic;
+	color: black;
+	font-weight: 600;
+	font-size: 20px;
+}
+.campo {
+    display: block;
+    width: 100%;
+    height: 45px;
+    padding: 8px 18px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 89px solid #3c8dbc;
+    border-radius: 12px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 2px solid #3c8dbc;
+    font: 20px verdana, arial, helvetica, sans-serif;
+    margin: 2px 0;
+    padding: 1px 2px;
+    overflow: visible;
+}
+.contenedorFactura {
+    display: flex;
+    flex: 1;
+    border: 1px solid #3c8dbc;
+    background: #ffffff;
+    flex-direction: column;
+}
+#botones{
+	display:flex;
+}
+#botones > div{
+	margin-top: 26px;
+}
+.btn-boton-agregar {
+    background-color: #6dca42 !important;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.btn-boton-generar {
+    background-color: #3c8dbc;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.campoLabel {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+				<etiqueta-imprimir></etiqueta-imprimir>
+	        		
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript" th:src="@{/js/views/articulos/etiquetas.js}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/articulos/etiqueta.tag}" ></script>
+
+
+</body>
+</html>

@@ -84,10 +84,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			}
 		}
 		if (proveedor != null) {
-			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
 				hql.append("and obj.proveedor = :proveedor ");
-
-			}
 		}
 		hql.append("and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
@@ -98,10 +95,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			}
 		}
 		if (proveedor != null) {
-			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
 				query.setParameter("proveedor", proveedor);
-
-			}
 		}
 		query.setParameter("empresa", empresa);
 		query.setParameter("fechaInicio", fechaInicio);
@@ -124,10 +118,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			}
 		}
 		if (proveedor != null) {
-			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
 				hql.append("and obj.proveedor.id = :idProveedor ");
-
-			}
 		}
 		Query query = entityManager.createQuery(hql.toString());
 		if (estado != null) {
@@ -137,10 +128,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			}
 		}
 		if (proveedor != null) {
-			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
 				query.setParameter("idProveedor", proveedor.getId());
-
-			}
 		}
 		query.setParameter("idEmpresa", empresa.getId());
 		return query.getResultList();
