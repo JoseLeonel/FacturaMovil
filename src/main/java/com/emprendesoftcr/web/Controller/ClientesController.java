@@ -196,7 +196,8 @@ public class ClientesController {
 
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null?Constantes.ZEROS:clienteCommand.getTipoMag());
+			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null ? Constantes.ZEROS : clienteCommand.getTipoMag());
+			clienteCommand.setLimiteCredito(clienteCommand.getLimiteCredito() == null ? Constantes.ZEROS : clienteCommand.getLimiteCredito());
 			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
 			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
 			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
@@ -286,7 +287,7 @@ public class ClientesController {
 					}
 
 				}
-			} 
+			}
 			if (!clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
 				ClienteMag clienteMag = clienteBo.clienteRegistradoMag(clienteCommand);
 				if (clienteMag != null) {
@@ -308,11 +309,11 @@ public class ClientesController {
 
 			}
 
-
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Cliente cliente = new Cliente();
+			cliente.setLimiteCredito(clienteCommand.getLimiteCredito());
 			cliente.setCedula(clienteCommand.getCedula());
 			cliente.setTipoCedula(clienteCommand.getTipoCedula());
 			cliente.setDescuento(clienteCommand.getDescuento());
@@ -388,7 +389,9 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null?Constantes.ZEROS:clienteCommand.getTipoMag()); 
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			clienteCommand.setLimiteCredito(clienteCommand.getLimiteCredito() == null ? Constantes.ZEROS : clienteCommand.getLimiteCredito());
+			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null ? Constantes.ZEROS : clienteCommand.getTipoMag());
 			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
 			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
 			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
@@ -522,6 +525,16 @@ public class ClientesController {
 				}
 
 			}
+			// Validar el limite de credito de un cliente
+				if (!clienteBD.getLimiteCredito().equals(clienteCommand.getLimiteCredito())) {
+					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+						clienteBD.setLimiteCredito(clienteCommand.getLimiteCredito());
+					} else {
+						// No Permitido
+						result.rejectValue("limiteCredito", "cliente.limiteCredito.no.autorizado");
+					}
+				}
+
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());

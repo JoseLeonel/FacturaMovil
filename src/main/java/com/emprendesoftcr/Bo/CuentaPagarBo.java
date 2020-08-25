@@ -19,4 +19,5 @@ public interface CuentaPagarBo {
 	Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor, String estado);
 	Collection<CuentaPagar> cuentasPorPagarbyEmpresaAndClienteAndEstado( Empresa empresa, Proveedor proveedor, String estado);
 	CuentaPagar findByConsecutivoAndEmpresa(String consecutivo,Empresa empresa);
+	
 }

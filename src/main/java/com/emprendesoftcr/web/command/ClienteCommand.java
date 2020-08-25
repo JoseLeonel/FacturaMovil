@@ -61,6 +61,7 @@ public class ClienteCommand {
 	private Integer	porcentajeExoneracion;
 	private Integer						libreImpuesto;
 	private Integer						tipoMag;
+	private Double limiteCredito;
 
 	private Empresa	empresa;
 
@@ -98,6 +99,7 @@ public class ClienteCommand {
 		this.fechaEmisionExoneracionSTR = Utils.fechaExoneracionSTR(cliente.getFechaEmisionExoneracion());
 		this.libreImpuesto = cliente.getLibreImpuesto();
 		this.tipoMag = cliente.getTipoMag();
+		this.limiteCredito = cliente.getLimiteCredito();
 
 	}
 
@@ -107,6 +109,16 @@ public class ClienteCommand {
 
 	public Long getId() {
 		return id;
+	}
+
+	
+	public Double getLimiteCredito() {
+		return limiteCredito;
+	}
+
+	
+	public void setLimiteCredito(Double limiteCredito) {
+		this.limiteCredito = limiteCredito;
 	}
 
 	public Integer getPorcentajeExoneracion() {

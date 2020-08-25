@@ -97,17 +97,19 @@
                                 </div>
 
                                 <div class="row">    
-                                    <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                    <div class= "l-md-4 col-sx-4 col-sm-4 col-lg-4">
                                         <label  >{$.i18n.prop("cliente.otraSena")}</label>
                                         <textarea maxlength="250" placeHolder ="{$.i18n.prop("cliente.otraSena")}"  class="form-control otraSena" id="otraSena" name="otraSena" value="{cliente.otraSena}" > </textarea> 
                                     </div>
-                                    <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                    <div class="l-md-4 col-sx-4 col-sm-4 col-lg-4">
                                         <label >{$.i18n.prop("cliente.otros")}</label>
                                         <textarea maxlength="250" placeHolder ="{$.i18n.prop("cliente.otros")}"  class="form-control observacionVenta" id="observacionVenta" name="observacionVenta" value="{cliente.observacionVenta}" > </textarea>                                
                                     </div>
-                                </div>
-
-                                
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                        <label>Limite Credito</label>
+                                        <input type="number" step="any" class="form-control limiteCredito " id="limiteCredito" name="limiteCredito" value="{cliente.limiteCredito}"  >
+                                    </div>
+                                 </div>
                             </div>
                         </div>
                     </div>

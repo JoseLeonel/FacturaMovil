@@ -2194,6 +2194,14 @@ function aplicarFactura(estado){
         mensajeAdvertencia($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
         return
     }
+    var limiteCredito = __valorNumerico(self.cliente.limiteCredito)
+    var totalComprobante = self.factura.totalComprobante
+    if(limiteCredito > 0){
+        if(totalComprobante > limiteCredito ){
+            sweetAlert("", "El Cliente ya no tiene saldo para credito,El Limite maximo es: " + limiteCredito + " \n    Colaborador por favor Solicite autorizacion con el administrador", "error");
+            return
+        }
+    }
     if(self.detail.length == 0 ){
         mensajeAdvertencia($.i18n.prop("factura.alert.sin.detalles"))
         getPosicionInputCodigo()

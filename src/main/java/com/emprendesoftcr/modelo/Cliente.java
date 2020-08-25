@@ -125,6 +125,11 @@ public class Cliente implements Serializable {
 	@Column(name = "tipo_mag", columnDefinition = "INT default '0'")
 	private Integer						tipoMag;
 	
+	@Column(name = "lim_credito", columnDefinition = "INT default '0'")
+	private Double						limiteCredito;
+
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -135,7 +140,10 @@ public class Cliente implements Serializable {
 
 	
 
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Integer porcentajeExoneracion, Integer libreImpuesto, Date fechaEmisionExoneracion, Integer tipoMag, Empresa empresa, Usuario usuario) {
+	
+
+	
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Integer porcentajeExoneracion, Integer libreImpuesto, Date fechaEmisionExoneracion, Integer tipoMag, Double limiteCredito, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -167,8 +175,19 @@ public class Cliente implements Serializable {
 		this.libreImpuesto = libreImpuesto;
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 		this.tipoMag = tipoMag;
+		this.limiteCredito = limiteCredito;
 		this.empresa = empresa;
 		this.usuario = usuario;
+	}
+
+
+	public Double getLimiteCredito() {
+		return limiteCredito;
+	}
+
+	
+	public void setLimiteCredito(Double limiteCredito) {
+		this.limiteCredito = limiteCredito;
 	}
 
 	public Integer getLibreImpuesto() {

@@ -638,6 +638,7 @@ public class Constantes {
 
 	// Totales de cuentas por cobrar
 	public static final String					SP_TOTAL_CUENTA_COBRAR																				= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_POR_CLIENTE														= "sp_cuent_cobrar";
 	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_FECHA_INICIO												= "FECHA_INICIO";
 	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_FECHA_FIN														= "FECHA_FIN";
 	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_ID_EMPRESA													= "ID_EMPRESA";

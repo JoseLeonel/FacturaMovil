@@ -267,27 +267,14 @@ function enviarGenerarPDF(){
     }
     self.etiquetas.data =self.detail
     var JSONDetalles = JSON.stringify( self.etiquetas );
-    $('#listaArticuloEtiquetas').val(JSONDetalles)
-    $.ajax({
-        type : "GET",
-        dataType : "json",
-        data : {listaArticuloEtiquetas:JSONDetalles},
-        url : "GenerarEtiquetasPrecios.do",
-        success : function(data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                     mensajeAdvertencia(data.message);
-                }
-                self.update()
-            } else {
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
 
+    $('#listaArticuloEtiquetas').val(JSONDetalles)
+    var temp = btoa(JSONDetalles)
+
+    var parametros = {
+        direccion:"GenerarEtiquetasPrecios.do?listaArticuloEtiquetas=" + temp
+        }
+    riot.mount('view-pdf',{datos:parametros});
 }
 
 </script>

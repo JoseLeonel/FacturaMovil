@@ -51,6 +51,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
@@ -306,6 +307,9 @@ public class FacturasController {
 	private HaciendaBo																								haciendaBo;
 
 	@Autowired
+	private CuentaCobrarBo																						cuentaCobrarBo;
+
+	@Autowired
 	private CorreosBo																									correosBo;
 
 	@Autowired
@@ -356,7 +360,7 @@ public class FacturasController {
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
 
-	private Logger																										log =  LoggerFactory.getLogger(this.getClass());
+	private Logger																						log =  LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public DataSource																									dataSource;
@@ -1971,9 +1975,20 @@ public class FacturasController {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.frecuente", result.getAllErrors());
 						}
 					}
-
+					if (facturaCommand.getCliente() != null) {
+						Double limite  = facturaCommand.getCliente().getLimiteCredito() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getCliente().getLimiteCredito();
+						if(limite > Constantes.ZEROS_DOUBLE) {
+							// validar si tiene disponible
+							Double saldo = cuentaCobrarBo.getDisponible(usuario.getEmpresa().getId(), facturaCommand.getCliente());
+							saldo = saldo == null ? Constantes.ZEROS_DOUBLE : saldo;
+							Double comprobante = facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante();
+							if (comprobante > saldo) {
+								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.sinlimiteCredito", result.getAllErrors());
+							}
+							
+						}
+					}
 				}
-
 			}
 			if (facturaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());

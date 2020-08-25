@@ -40,6 +40,7 @@ public class AbonoPagarDaoImpl implements AbonoPagarDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public AbonoPagar buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from AbonoPagar obj where obj.id = :id");
 		query.setParameter("id", id);
