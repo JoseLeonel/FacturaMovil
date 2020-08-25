@@ -46,10 +46,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
@@ -305,6 +305,9 @@ public class FacturasController {
 	private HaciendaBo																								haciendaBo;
 
 	@Autowired
+	private CuentaCobrarBo																						cuentaCobrarBo;
+
+	@Autowired
 	private CorreosBo																									correosBo;
 
 	@Autowired
@@ -354,13 +357,11 @@ public class FacturasController {
 
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
-	
-	
-	
+
 	@Autowired
-  public DataSource dataSource;
-	
-  private JdbcTemplate jdbcTemplate;
+	public DataSource																									dataSource;
+
+	private JdbcTemplate																							jdbcTemplate;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -469,7 +470,7 @@ public class FacturasController {
 	public String listaFacturas(ModelMap model) {
 		return "views/facturas/listaFacturas";
 	}
-	
+
 	@RequestMapping(value = "/ventaByCategoria", method = RequestMethod.GET)
 	public String ventaByCategoria(ModelMap model) {
 		return "views/facturas/vetasbycategoria";
@@ -916,28 +917,22 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
-	
-	
- 
-	
-  
-  @Secured({ "ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER", "ROLE_INVENTARIO", "ROLE_INVENTARIO_READ", "ROLE_INVENTARIO_READ_WRITER_CREAR_PEDIDOS" })
-  @PostMapping(value = "/obtener-pedidos-activos")
-  public @ResponseBody List<Map<String, Object>> obtenerPedidosActivos(HttpSession session){
-    if (session.getAttribute("SESSION_EMPRESA_ID") != null) {
-      jdbcTemplate = new JdbcTemplate(dataSource);
-      MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("emisorId", Long.parseLong(session.getAttribute("SESSION_EMPRESA_ID").toString()));
-        String sql = "SELECT id, secuencia_factura_compra, codigo_proveedor, nombre_completo, observaciones, proveedor_id FROM v_orden_compra WHERE estado_orden_compra = 'A' AND emisor_id=:emisorId";
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
-        List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);    
-        return listaObjetos;
-    }else {
-      return null;
-    }
-  }
-  
 
+	@Secured({ "ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER", "ROLE_INVENTARIO", "ROLE_INVENTARIO_READ", "ROLE_INVENTARIO_READ_WRITER_CREAR_PEDIDOS" })
+	@PostMapping(value = "/obtener-pedidos-activos")
+	public @ResponseBody List<Map<String, Object>> obtenerPedidosActivos(HttpSession session) {
+		if (session.getAttribute("SESSION_EMPRESA_ID") != null) {
+			jdbcTemplate = new JdbcTemplate(dataSource);
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("emisorId", Long.parseLong(session.getAttribute("SESSION_EMPRESA_ID").toString()));
+			String sql = "SELECT id, secuencia_factura_compra, codigo_proveedor, nombre_completo, observaciones, proveedor_id FROM v_orden_compra WHERE estado_orden_compra = 'A' AND emisor_id=:emisorId";
+			NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+			List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
+			return listaObjetos;
+		} else {
+			return null;
+		}
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaFacturasGananciaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -1001,7 +996,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
 
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
@@ -1020,10 +1015,10 @@ public class FacturasController {
 	@RequestMapping(value = "/DescargarUtilidadAjax.do", method = RequestMethod.GET)
 	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura) throws IOException, Exception {
 
-		fechaInicioParam = fechaInicioParam == null?Constantes.EMPTY:fechaInicioParam;
-		fechaFinParam = fechaFinParam == null?Constantes.EMPTY:fechaFinParam;
-		numeroFactura = numeroFactura == null?Constantes.EMPTY:numeroFactura;		
-		
+		fechaInicioParam = fechaInicioParam == null ? Constantes.EMPTY : fechaInicioParam;
+		fechaFinParam = fechaFinParam == null ? Constantes.EMPTY : fechaFinParam;
+		numeroFactura = numeroFactura == null ? Constantes.EMPTY : numeroFactura;
+
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
@@ -1037,16 +1032,16 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
 
 		String nombreArchivo = "Utilidad_" + fechaInicioParam + "_al_" + fechaFinParam + ".xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-	//	ByteArrayOutputStream baos = createExcelUtilidad(facturas);
+		// ByteArrayOutputStream baos = createExcelUtilidad(facturas);
 //		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-		ByteArrayInputStream inputStream = detalleBo.createExcelUtilidad(facturas,usuarioSesion.getEmpresa(),fechaInicioParam,fechaFinParam);
+		ByteArrayInputStream inputStream = detalleBo.createExcelUtilidad(facturas, usuarioSesion.getEmpresa(), fechaInicioParam, fechaFinParam);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -1056,15 +1051,12 @@ public class FacturasController {
 		}
 	}
 
-	
-	
-
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura) throws IOException, Exception {
+	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		
+
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
@@ -1077,19 +1069,18 @@ public class FacturasController {
 					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 				}
 			}
-			
+
 			Cliente cliente = clienteBo.buscar(idCliente);
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicioP);
 			String fin1 = dateFormat1.format(fechaFinalP);
-			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc,numeroFactura);
+			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
 
 			// Se prepara el excell
-			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelUtilidad(facturas,usuarioSesion.getEmpresa(),fechaInicioParam,fechaFinParam));
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelUtilidad(facturas, usuarioSesion.getEmpresa(), fechaInicioParam, fechaFinParam));
 
 			Collection<Attachment> attachments = createAttachments(attachment("utilidad", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-			
-			
+
 			// Se prepara el correo
 			String from = "UtilidadProductos@emprendesoftcr.com";
 			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
@@ -1097,7 +1088,7 @@ public class FacturasController {
 					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
-			
+
 			String subject = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + " Utilidad del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			listaCorreos.add(correoAlternativo);
@@ -1108,8 +1099,7 @@ public class FacturasController {
 			modelEmail.put("totalCosto", totalCosto);
 			modelEmail.put("totalUtilidad", totalUtilidad);
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_UTILIDAD, modelEmail);
-			
-			
+
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -1118,10 +1108,6 @@ public class FacturasController {
 		}
 		return respuestaServiceValidator;
 	}
-
-	
-	
-
 
 	/**
 	 * Lista de las Proformas activas
@@ -1193,7 +1179,7 @@ public class FacturasController {
 		JSONObject json = null;
 		ArrayList<ProformasSQLNativeCommand> detallesFacturaCommand = new ArrayList<>();
 		// Agregar Lineas de Detalle
-		
+
 		JSONArray jsonArrayDetalleFactura = (JSONArray) json.get(objetos);
 		Gson gson = new Gson();
 		if (jsonArrayDetalleFactura != null) {
@@ -1353,8 +1339,8 @@ public class FacturasController {
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 		// Se prepara el excell
-		//ByteArrayOutputStream baos = createExcelListar(objetos);
-		ByteArrayInputStream inputStream = facturaBo.createExcelFacturas(objetos,usuarioSesion.getEmpresa(), fechaInicio, fechaFin, estado, cliente);
+		// ByteArrayOutputStream baos = createExcelListar(objetos);
+		ByteArrayInputStream inputStream = facturaBo.createExcelFacturas(objetos, usuarioSesion.getEmpresa(), fechaInicio, fechaFin, estado, cliente);
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
 		int bytesRead = -1;
@@ -1368,7 +1354,7 @@ public class FacturasController {
 //		// Se prepara el excell
 //		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Usuaro Responsable", "Actividad Economica", "Tipo Documento", "Condicion Venta", "# Documento", "#Proforma", "Exonerado", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
-	  //  List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
+	// List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
 //		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaPrin, nombreCompleto,nombreFactura, nombreUsuario,codigoActividad,tipoDocSTR,condicionVentaSTR,numeroConsecutivo,consecutivoProforma,totalExonerado, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivo,totalTarjeta,totalBanco,totalCredito,nota", baos);
 //		return baos;
 //	}
@@ -1391,8 +1377,8 @@ public class FacturasController {
 		String fin1 = dateFormat1.format(fechaFinalP);
 		Collection<ListarFacturasNativa> objetos = consultasNativeBo.findByFacturasAndFechaAndTipoDocAndUsuario(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
 		// Se prepara el excell
-		ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturas(objetos,usuarioSesion.getEmpresa(),fechaInicio,fechaFin,estado,cliente));
-		 
+		ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturas(objetos, usuarioSesion.getEmpresa(), fechaInicio, fechaFin, estado, cliente));
+
 		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 		// Se prepara el correo
@@ -1922,9 +1908,9 @@ public class FacturasController {
 				}
 			}
 			if (facturaCommand.getNota() != null) {
-         if(facturaCommand.getNota().length() > 250) {
-        	 return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.nota.lenght", result.getAllErrors());
-         }
+				if (facturaCommand.getNota().length() > 250) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.nota.lenght", result.getAllErrors());
+				}
 			}
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				if (facturaCommand.getCorreoAlternativo() != null) {
@@ -1949,9 +1935,20 @@ public class FacturasController {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.frecuente", result.getAllErrors());
 						}
 					}
-
+					if (facturaCommand.getCliente() != null) {
+						Double limite  = facturaCommand.getCliente().getLimiteCredito() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getCliente().getLimiteCredito();
+						if(limite > Constantes.ZEROS_DOUBLE) {
+							// validar si tiene disponible
+							Double saldo = cuentaCobrarBo.getDisponible(usuario.getEmpresa().getId(), facturaCommand.getCliente());
+							saldo = saldo == null ? Constantes.ZEROS_DOUBLE : saldo;
+							Double comprobante = facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante();
+							if (comprobante > saldo) {
+								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.sinlimiteCredito", result.getAllErrors());
+							}
+							
+						}
+					}
 				}
-
 			}
 			if (facturaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
@@ -2114,7 +2111,7 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if (usuarioCajaBd !=null) {
+			if (usuarioCajaBd != null) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
 			List<Object> solicitudList = new ArrayList<Object>();
@@ -2150,7 +2147,6 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
-
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

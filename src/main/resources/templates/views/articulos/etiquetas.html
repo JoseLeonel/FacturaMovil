@@ -100,6 +100,20 @@
     font-weight: 600;
     text-align: center;
 }
+.modal-header > span{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+
+}
+#titulo-viewPDF{
+  display:flex;
+}
+
+#titulo-viewPDF > span{
+  font-size: 30px;
+  font-weight: 800;
+}
 </style>
 </head>
 <body class="hold-transition skin-blue  sidebar-mini">
@@ -118,6 +132,8 @@
 	        <!-- Main content -->
 	        <section class="content">
 				<etiqueta-imprimir></etiqueta-imprimir>
+				
+				<view-pdf></view-pdf>
 	        		
             </section>    
  		</div>
@@ -129,6 +145,7 @@
 <div th:replace="layout/layout :: scripts"></div>
 <script type="text/javascript" th:src="@{/js/views/articulos/etiquetas.js}"></script>
 <script type = "riot/tag"  th:src="@{/js/views/components/articulos/etiqueta.tag}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag}" ></script>
 
 
 </body>

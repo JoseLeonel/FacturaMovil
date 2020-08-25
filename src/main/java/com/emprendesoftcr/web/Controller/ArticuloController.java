@@ -2,17 +2,21 @@ package com.emprendesoftcr.web.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -70,6 +74,13 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
+
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JsonDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
@@ -236,14 +247,21 @@ public class ArticuloController {
 	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarEtiquetasPrecios.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public void GenerarEtiquetasPrecios(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+	public void GenerarEtiquetasPrecios(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
 		List<EtiquetasCommand> lista = new ArrayList<>();
+		
+		
+		byte[] decodedBytes = Base64.getDecoder().decode(listaArticuloEtiquetas);
+		String decodedString = new String(decodedBytes);
+		
+		System.out.println("decodedString ============================ > " + decodedString);
+		
+		
 		
 //		try {
 			JSONObject json = null;
 			try {
-				json = (JSONObject) new JSONParser().parse(listaArticuloEtiquetas);
+				json = (JSONObject) new JSONParser().parse(decodedString);
 				// Agregar Lineas de Detalle
 				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
 				Gson gson = new Gson();
@@ -251,14 +269,41 @@ public class ArticuloController {
 				if (jsonArrayDetalleFactura != null) {
 					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
 						EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
-						lista.add(etiquetasCommand);
+						for (int e = 0; e < etiquetasCommand.getCantidadEtiqueta(); e++) {
+							lista.add(etiquetasCommand);	
+						}
+						
 					}
 				}
 			}
 				 catch (org.json.simple.parser.ParseException e) {
 					throw e;
 				}
-		
+		  // jasper
+			
+			
+			//JasperReport report = (JasperReport) JRLoader.loadObject(new File( "/data/reportes/articulos/reporte_etiquetas.jasper" ));
+			
+			InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/reporte_etiquetas.jasper");			
+			ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( new Gson().toJson(lista).getBytes());
+			JsonDataSource ds = new JsonDataSource(jsonDataStream);
+			//Map parameters = new HashMap();
+			//JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, ds);
+			
+			byte[] bytes = JasperRunManager.runReportToPdf(reportfile, null, ds);
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
+
+			} else {
+				System.out.println("NO trae nada");
+			}
+			
+			
 //			response.setContentType("application/octet-stream");
 //			String fileName = Constantes.EMPTY;
 //

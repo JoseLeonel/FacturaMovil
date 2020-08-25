@@ -273,5 +273,6 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	}
 
 	
+	
 
 }

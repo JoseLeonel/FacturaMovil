@@ -6,7 +6,7 @@ public class EtiquetasCommand {
 	private String codigo;
 	private String descripcion;
 	private Double precio;
-	
+	private Integer cantidadEtiqueta;
 	
 	
 	public EtiquetasCommand() {
@@ -35,6 +35,16 @@ public class EtiquetasCommand {
 	
 	public void setPrecio(Double precio) {
 		this.precio = precio;
+	}
+
+	
+	public Integer getCantidadEtiqueta() {
+		return cantidadEtiqueta;
+	}
+
+	
+	public void setCantidadEtiqueta(Integer cantidadEtiqueta) {
+		this.cantidadEtiqueta = cantidadEtiqueta;
 	}
 	
 	
