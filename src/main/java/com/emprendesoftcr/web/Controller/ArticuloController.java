@@ -293,7 +293,7 @@ public class ArticuloController {
 			byte[] bytes = JasperRunManager.runReportToPdf(reportfile, null, ds);
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
 				ServletOutputStream outputstream = response.getOutputStream();
 				outputstream.write(bytes, 0, bytes.length);
 				outputstream.flush();

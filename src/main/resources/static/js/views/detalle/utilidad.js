@@ -576,7 +576,11 @@ function __BajarPDFHacienda() {
         } else {
             var data = table.row($(this).parents("tr")).data();
         }
-        BajarArchivos("generaFacturaPDF", data)
+        var parametros = {
+            direccion: "generaFacturaPDF?consecutivo=" + data.numeroConsecutivo,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
     });
 }
 
@@ -604,11 +608,4 @@ function __consultar(url, objeto) {
             console.log(xhr);
         }
     });
-}
-/**
- *  BajarDocumentos 
- **/
-function BajarArchivos(url, objeto) {
-    location.href = url + "?consecutivo=" + objeto.numeroConsecutivo
-
 }

@@ -20,6 +20,7 @@
 	        	<cuenta-cobrar></cuenta-cobrar>
     			<ptv-imprimir></ptv-imprimir>
  				<lista-facturas></lista-facturas>
+ 				<view-pdf></view-pdf>
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -28,11 +29,12 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/cuentaCobrar/cuentaCobrar.js}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/cuentaCobrar.tag}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/imprimirAbono.tag}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTV.tag}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/listaFacturas.tag}" ></script>
+<script type="text/javascript" th:src="@{/js/views/cuentaCobrar/cuentaCobrar.js?v=1}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/cuentaCobrar.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/cuentaCobrar/imprimirAbono.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturas/listaFacturas.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=1}" ></script>
 
 
 </body>

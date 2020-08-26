@@ -21,7 +21,7 @@ import com.emprendesoftcr.modelo.AbonoPagar;
 @Service("abonoPagarBo")
 public class AbonoPagarBoImpl implements AbonoPagarBo {
 
-	@Autowired
+	@Autowired(required=true)
 	AbonoPagarDao abonoPagarDao;
 
 	@Transactional

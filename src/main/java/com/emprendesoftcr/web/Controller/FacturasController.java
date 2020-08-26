@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -756,38 +757,61 @@ public class FacturasController {
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-			int BUFFER_SIZE = 4096;
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-			response.setContentType("application/octet-stream");
-			response.setContentLength((int) namePDF.toByteArray().length);
-			String fileName = Constantes.EMPTY;
+//			int BUFFER_SIZE = 4096;
+//			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
+			
+			byte[] bytes  =  namePDF.toByteArray();
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
 
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-				fileName = "TiquetePDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+			} else {
+				System.out.println("NO trae nada");
 			}
-
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-				fileName = "FacturaPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-			}
-
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				fileName = "NotaCreditoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-			}
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-				fileName = "NotaDebitoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-			}
-
-			String headerKey = "Content-Disposition";
-			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-			response.setHeader(headerKey, headerValue);
-			OutputStream outStream = response.getOutputStream();
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead = -1;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, bytesRead);
-			}
-			inputStream.close();
-			outStream.close();
+			
+//			//response.setContentType("application/octet-stream");
+//			response.setContentType("application/pdf");
+//			response.setContentLength((int) namePDF.toByteArray().length);
+//			String fileName = Constantes.EMPTY;
+//
+//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+//				fileName = "TiquetePDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+//			}
+//
+//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+//				fileName = "FacturaPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+//			}
+//
+//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+//				fileName = "NotaCreditoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+//			}
+//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+//				fileName = "NotaDebitoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+//			}
+//
+//			String headerKey = "Content-Disposition";
+//		//	String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
+//		//	response.setHeader(headerKey, headerValue);
+//			OutputStream outStream = response.getOutputStream();
+//			
+//			
+//			byte[] buffer = new byte[BUFFER_SIZE];
+//			int bytesRead = -1;
+//			while ((bytesRead = inputStream.read(buffer)) != -1) {
+//				outStream.write(buffer, 0, bytesRead);
+//			}
+//			inputStream.close();
+//	//		ServletOutputStream outputstream = response.getOutputStream();
+//			
+//	//		outputstream.write(bytes, 0, bytes.length);
+////			outputstream.flush();
+////			outputstream.close();
+//			outStream.flush();
+//			outStream.close();
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		} catch (com.google.zxing.WriterException ex) {

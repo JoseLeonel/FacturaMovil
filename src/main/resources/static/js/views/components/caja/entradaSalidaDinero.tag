@@ -74,7 +74,7 @@
 .scrlollT {
 		overflow-y: scroll;
 		overflow-x: scroll;
-		height: 350px;
+		height: 320px;
 	}
 	
 	

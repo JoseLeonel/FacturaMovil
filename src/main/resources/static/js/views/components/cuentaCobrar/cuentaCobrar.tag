@@ -1424,7 +1424,14 @@ function __BajarPDF(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        location.href = "generaFacturaPDF?consecutivo=" + data.factura
+       // location.href = "generaFacturaPDF?consecutivo=" + data.factura
+        var parametros = {
+            direccion: "generaFacturaPDF?consecutivo=" + data.factura,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
+
+
 	});
 }
 /**

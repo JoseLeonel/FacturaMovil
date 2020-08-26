@@ -258,7 +258,8 @@
 				    </div>
 				    <!-- Fin del Listado -->
 				      <lista-facturas></lista-facturas>
-				     <ptv-imprimir></ptv-imprimir>   	        
+				     <ptv-imprimir></ptv-imprimir>   	
+				     <view-pdf></view-pdf>        
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -270,6 +271,8 @@
 	<script type="text/javascript" th:src="@{/js/views/facturas/listaFacturas.js?v=1}"></script>
 	<script type = "riot/tag"  th:src="@{/js/views/components/facturas/listaFacturas.tag?v=1}" ></script>
 	<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=1}" ></script>
+	<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=1}" ></script>
+	
 
 
 </body>

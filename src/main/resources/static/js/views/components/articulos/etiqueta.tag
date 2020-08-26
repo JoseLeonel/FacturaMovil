@@ -272,7 +272,8 @@ function enviarGenerarPDF(){
     var temp = btoa(JSONDetalles)
 
     var parametros = {
-        direccion:"GenerarEtiquetasPrecios.do?listaArticuloEtiquetas=" + temp
+        direccion:"GenerarEtiquetasPrecios.do?listaArticuloEtiquetas=" + temp,
+        stylemodal :'modal-medium'
         }
     riot.mount('view-pdf',{datos:parametros});
 }

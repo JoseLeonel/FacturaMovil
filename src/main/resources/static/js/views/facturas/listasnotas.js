@@ -402,7 +402,12 @@ function __BajarPDF(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        location.href = "generaFacturaPDF?idFactura=" + data.id
+		var parametros = {
+		    direccion: "generaFacturaPDF?idFactura=" + data.id,
+		    stylemodal: "modal-xl"
+		  }
+		riot.mount('view-pdf', { datos: parametros });
+       // location.href = "generaFacturaPDF?idFactura=" + data.id
 	});
 }
 /**
