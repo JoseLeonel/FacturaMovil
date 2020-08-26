@@ -841,21 +841,18 @@ public class HaciendasController {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			int BUFFER_SIZE = 4096;
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-			response.setContentType("application/octet-stream");
-			response.setContentLength((int) namePDF.toByteArray().length);
-			String headerKey = "Content-Disposition";
-			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-			response.setHeader(headerKey, headerValue);
-			OutputStream outStream = response.getOutputStream();
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead = -1;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, bytesRead);
+			byte[] bytes  =  namePDF.toByteArray();
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
+
+			} else {
+				System.out.println("NO trae nada");
 			}
-			inputStream.close();
-			outStream.close();
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

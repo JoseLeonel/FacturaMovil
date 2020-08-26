@@ -120,7 +120,8 @@
 					            <div class="col-md-1 col-lg-1 "> </div>
 					        </div>
 					    </div>
-					    <!-- Fin del Listado -->	        
+					    <!-- Fin del Listado -->	
+					    <view-pdf></view-pdf>        
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -129,8 +130,9 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/hacienda/hacienda.js}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/hacienda/hacienda.tag}" ></script>
+<script type="text/javascript" th:src="@{/js/views/hacienda/hacienda.js?v=1}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/hacienda/hacienda.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=1}" ></script>
 
 </body>
 </html>

@@ -79,7 +79,7 @@
 					    <!-- Fin del Listado -->
 					</div>
 			</div>	 	        
-	        
+	        <view-pdf></view-pdf>  
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -88,9 +88,10 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/facturas/listarProformas.js}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/proFormas.tag}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTVProforma.tag}" ></script>
+<script type="text/javascript" th:src="@{/js/views/facturas/listarProformas.js?v=1}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturas/proFormas.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTVProforma.tag?v=1}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=1}" ></script>
 
 
 </body>
