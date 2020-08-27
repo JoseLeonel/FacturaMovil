@@ -1,5 +1,5 @@
 <view-pdf>
-    <div class="modal fade" id="mostrarPDF" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="mostrarPDFVIEW" tabindex="-1" role="dialog" aria-labelledby="mostraPDFModalLabel" aria-hidden="true">
         <div class="modal-dialog {stylemodal}">
             <div class="modal-content ">
                 <div class="modal-header">
@@ -16,7 +16,7 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                    <button  onclick={deleteModalViewPDF} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
                 </div>
             </div>    
         </div>
@@ -50,13 +50,30 @@ selfView.on('mount',function(){
        mostarModal()
     }
 })
+
+deleteModalViewPDF(){
+   // $( '#mostrarPDF' ).remove();
+   //$("#mostrarPDF .close").click()
+   
+   $('#mostrarPDFVIEW').modal('hide')
+   $('.modal-backdrop').remove();//eliminamos el backdrop del modal
+   $('#mostrarPDFVIEW').remove();//eliminamos el backdrop del modal
+   
+    
+
+}
+
 function mostarModal(){
+    
+    if($('#mostrarPDFVIEW').is(':visible')){
+        return
+    }
     var href =  selfView.datos.direccion + '&t=' + $.now() 
     //location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
     selfView.stylemodal = 	selfView.datos.stylemodal
     selfView.update()	
 	$('#loadPdf').attr("src", href );	
-	$("#mostrarPDF").modal("show");
+	$("#mostrarPDFVIEW").modal("show");
 }
 </script>
 </view-pdf>

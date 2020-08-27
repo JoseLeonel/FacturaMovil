@@ -79,6 +79,9 @@ public class CuentaCobrar implements Serializable {
 
 	@Column(name = "tipo")
 	private String						tipo;
+	
+	@Column(name = "notificacion", columnDefinition = "Double default '1'")
+	private Integer						notificacion;
 
 	@Column(name = "cambio_moneda", columnDefinition = "varchar(3) default 'CRC'")
 	private String						codigoMoneda;
@@ -127,6 +130,10 @@ public class CuentaCobrar implements Serializable {
 
 	@Column(name = "nombre", length = 180)
 	private String						nombreFactura;
+
+	
+
+	
 
 	public CuentaCobrar() {
 		super();
@@ -426,6 +433,20 @@ public class CuentaCobrar implements Serializable {
 
 	public void setNombreFactura(String nombreFactura) {
 		this.nombreFactura = nombreFactura;
+	}
+
+
+
+	
+	public Integer getNotificacion() {
+		return notificacion;
+	}
+
+
+
+	
+	public void setNotificacion(Integer notificacion) {
+		this.notificacion = notificacion;
 	}
 
 }

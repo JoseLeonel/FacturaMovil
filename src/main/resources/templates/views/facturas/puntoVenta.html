@@ -22,7 +22,8 @@
   				<punto-venta></punto-venta>
     			<ptv-imprimir></ptv-imprimir>
     			<entrada-salida></entrada-salida>
-    			<impentrada-salida></impentrada-salida>	        
+    			<impentrada-salida></impentrada-salida>	    
+    			<view-pdf></view-pdf>    
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -31,11 +32,12 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript"  th:src="@{/js/views/facturas/puntoVenta.js?v=4}"></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag?v=7}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=4}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=4}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=2}" ></script>
+<script type="text/javascript"  th:src="@{/js/views/facturas/puntoVenta.js?v=8}"></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag?v=8}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=8}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=8}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=8}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=8}" ></script>
 
 
 </body>

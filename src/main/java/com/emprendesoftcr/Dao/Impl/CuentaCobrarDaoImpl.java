@@ -135,6 +135,12 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setTipoCambio(factura.getTipoCambio());
 			cuentaCobrar.setCodigoMoneda(factura.getCodigoMoneda());
 			cuentaCobrar.setPlazoCredito(factura.getPlazoCredito());
+			if(cuentaCobrar.getEmpresa().getEnviarCredito() != null && cuentaCobrar.getEmpresa().getEnviarCredito().equals(Constantes.EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO) ) {
+				cuentaCobrar.setNotificacion(Constantes.NOTIFICACION_CUENTA_CREDITO_SIN_ENVIAR);	
+			}else {
+				cuentaCobrar.setNotificacion(Constantes.NOTIFICACION_CUENTA_CREDITO_ENVIADO);
+			}
+			
 			agregar(cuentaCobrar);
 
 		} catch (Exception e) {

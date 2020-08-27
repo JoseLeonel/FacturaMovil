@@ -53,4 +53,6 @@ public interface ProcesoHaciendaService {
 	void taskEnvioCorreosNoElectronico() throws Exception;
 	Boolean enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception;
 	
+	void envioFacturasCredito();
+	
 }
