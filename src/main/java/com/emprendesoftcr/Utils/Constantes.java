@@ -26,6 +26,10 @@ public class Constantes {
 	public static final Integer					COCINA_ACTIVO																									= 1;
 	public static final Integer					COCINA_INACTIVO																								= 2;
 
+	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO													= 1;
+	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO													= 2;
+
+	
 	public static final Integer					COMMANDA_COCINA_ACTIVO																				= 1;
 	public static final Integer					COMMANDA_COCINA_INACTIVO																			= 2;
 
@@ -362,6 +366,10 @@ public class Constantes {
 	// Estados
 	public static final String					ESTADO_ACTIVO																									= "Activo";
 	public static final String					ESTADO_INACTIVO																								= "Inactivo";
+
+	// Notificacion
+	public static final Integer					NOTIFICACION_CUENTA_CREDITO_SIN_ENVIAR												= 1;
+	public static final Integer					NOTIFICACION_CUENTA_CREDITO_ENVIADO														= 2;
 
 //Estados
 	public static final Integer					ESTADO_ACTIVO_PROVEEDOR_SIMPLIFICADO													= 1;

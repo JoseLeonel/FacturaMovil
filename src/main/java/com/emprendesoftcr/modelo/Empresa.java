@@ -254,90 +254,15 @@ public class Empresa implements Serializable {
 
 	@Column(name = "correo_caj2" )
 	private String						correoCaja2;
+	
+	@Column(name = "enviar_credito", columnDefinition = "INT default '0'")
+	private Integer				enviarCredito		;
 
 
 	
 	
 	
-	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma, String codigoActividad, Integer consecutivoCompraSimplificada, Integer notaCreditoConsecutivo, Integer notaDebitoConsecutivo, String correoPDF, String correoCredito, String cuenta1, String cuenta2, String cuenta3,
-			String cuenta4, String cuenta5, String cuenta6, String cuenta7, String cuenta8, String ipImprimirComanda, String correoCaja1, String correoCaja2) {
-		super();
-		this.id = id;
-		this.abreviaturaEmpresa = abreviaturaEmpresa;
-		this.numeroConsecutivo = numeroConsecutivo;
-		this.notacConsecutivo = notacConsecutivo;
-		this.notadConsecutivo = notadConsecutivo;
-		this.tiqueteConsecutivo = tiqueteConsecutivo;
-		this.cazaMatriz = cazaMatriz;
-		this.codigoSeguridad = codigoSeguridad;
-		this.nombre = nombre;
-		this.nombreComercial = nombreComercial;
-		this.tipoCedula = tipoCedula;
-		this.cedula = cedula;
-		this.otraSenas = otraSenas;
-		this.codigoPais = codigoPais;
-		this.telefono = telefono;
-		this.correoElectronico = correoElectronico;
-		this.provincia = provincia;
-		this.canton = canton;
-		this.distrito = distrito;
-		this.barrio = barrio;
-		this.logo = logo;
-		this.tieneInventario = tieneInventario;
-		this.tieneLector = tieneLector;
-		this.cambiarPrecio = cambiarPrecio;
-		this.estadoProduccion = estadoProduccion;
-		this.enviarTiquete = enviarTiquete;
-		this.representante = representante;
-		this.nombreLlaveCriptografica = nombreLlaveCriptografica;
-		this.claveLlaveCriptografica = claveLlaveCriptografica;
-		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
-		this.passwordEnvioComprobante = passwordEnvioComprobante;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.aceptadoConsecutivo = aceptadoConsecutivo;
-		this.aceptadoParcialConsecutivo = aceptadoParcialConsecutivo;
-		this.rechazadoConsecutivo = rechazadoConsecutivo;
-		this.vueltoImprimir = vueltoImprimir;
-		this.noFacturaElectronica = noFacturaElectronica;
-		this.correoFrecuente = correoFrecuente;
-		this.comandaEmpresa = comandaEmpresa;
-		this.aplicaGanancia = aplicaGanancia;
-		this.enterFacturar = enterFacturar;
-		this.imprimirDirecto = imprimirDirecto;
-		this.abrirSinComanda = abrirSinComanda;
-		this.abrirConComanda = abrirConComanda;
-		this.pantChino = pantChino;
-		this.impresoraCocina = impresoraCocina;
-		this.impresoraFactura = impresoraFactura;
-		this.separarCuenta = separarCuenta;
-		this.prioridadFacturar = prioridadFacturar;
-		this.imprimirCelular = imprimirCelular;
-		this.imprimirSiempre = imprimirSiempre;
-		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
-		this.seguridadEnVentas = seguridadEnVentas;
-		this.descargarInventario = descargarInventario;
-		this.consecutivoProforma = consecutivoProforma;
-		this.codigoActividad = codigoActividad;
-		this.consecutivoCompraSimplificada = consecutivoCompraSimplificada;
-		this.notaCreditoConsecutivo = notaCreditoConsecutivo;
-		this.notaDebitoConsecutivo = notaDebitoConsecutivo;
-		this.correoPDF = correoPDF;
-		this.correoCredito = correoCredito;
-		this.cuenta1 = cuenta1;
-		this.cuenta2 = cuenta2;
-		this.cuenta3 = cuenta3;
-		this.cuenta4 = cuenta4;
-		this.cuenta5 = cuenta5;
-		this.cuenta6 = cuenta6;
-		this.cuenta7 = cuenta7;
-		this.cuenta8 = cuenta8;
-		this.ipImprimirComanda = ipImprimirComanda;
-		this.correoCaja1 = correoCaja1;
-		this.correoCaja2 = correoCaja2;
-	}
+	
 
 	public Empresa() {
 		super();
@@ -947,6 +872,16 @@ public class Empresa implements Serializable {
 
 	public void setNotaDebitoConsecutivo(Integer notaDebitoConsecutivo) {
 		this.notaDebitoConsecutivo = notaDebitoConsecutivo;
+	}
+
+	
+	public Integer getEnviarCredito() {
+		return enviarCredito;
+	}
+
+	
+	public void setEnviarCredito(Integer enviarCredito) {
+		this.enviarCredito = enviarCredito;
 	}
 
 }

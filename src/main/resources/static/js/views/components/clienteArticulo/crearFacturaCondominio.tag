@@ -552,6 +552,9 @@
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeClientes()
+        __reimprimir()
+        __bajarPDF()
+
         $('.selectFechaEmision').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -809,8 +812,6 @@ function ListadoFacturasDelDia(){
                     agregarInputsCombos_Facturas_Dias();
                     ActivarEventoFiltro(".tableListarFacturasDia")
                     $('#modalFacturasDia').modal('show')    
-                     __reimprimir()
-                     __bajarPDF()
                      
                 }else{
                     __InformacionDataTableDia();
@@ -852,7 +853,13 @@ function __bajarPDF(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-       location.href = "generaFacturaPDF?idFactura=" + data.id
+       //location.href = "generaFacturaPDF?idFactura=" + data.id
+       var parametros = {
+            direccion: "generaFacturaPDF?idFactura=" + data.id,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
+
 	});
 }
 

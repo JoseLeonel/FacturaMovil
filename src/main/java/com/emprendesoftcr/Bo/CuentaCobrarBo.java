@@ -34,4 +34,6 @@ public interface CuentaCobrarBo {
 	Double getDisponible(Integer idEmpresa, Cliente cliente);
 	ByteArrayInputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar,Empresa empresa, String fechaInicio,String fechaFinal,String estado, Cliente cliente)throws IOException;
 	
+	
+	
 }

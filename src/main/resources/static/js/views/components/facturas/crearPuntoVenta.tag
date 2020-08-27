@@ -1003,6 +1003,8 @@
        _Empresa()
        __ComboTipoDocumentoExonerados()
         getPosicionInputCodigo()
+         __bajarPDF()
+          __reimprimir()
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
             {
@@ -1865,11 +1867,12 @@ var reglasDeValidacionFactura = function() {
 	return validationOptions;
 };
 
-this._ListaFacturasDia = function(){
+_ListaFacturasDia(){
    ListadoFacturasDelDia()
-}.bind(this)
+}
 
 function ListadoFacturasDelDia(){
+      
       $(".tableListarFacturasDia").dataTable().fnClearTable();
         __InicializarTabla('.tableListarFacturasDia')
         $.ajax({
@@ -1883,8 +1886,11 @@ function ListadoFacturasDelDia(){
                     loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
                     agregarInputsCombos_Facturas_Dias();
                     ActivarEventoFiltro(".tableListarFacturasDia")
+                  //  $('#modalFacturasDia').remove()
                     $('#modalFacturasDia').modal('show')
-                     __reimprimir()
+                    // __reimprimir()
+                    // __bajarPDF()
+                     
                 }else{
                     __InformacionDataTableDia();
                      agregarInputsCombos_Facturas_Dias();
@@ -1895,6 +1901,7 @@ function ListadoFacturasDelDia(){
                 console.log(xhr);
             }
         });
+        
 }
 
 function loadListar(table,idioma,formatoTabla,data){
@@ -1959,9 +1966,38 @@ function __ClienteNombreFactura(row){
 }
 
 function __Opciones(){
-  var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
-  return  agregar;
+    let menu = '<div class="dropdown">' 
+	menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
+	menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
+	menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+    menu += '<li><a href="#"  title="Imprimir" class="  btnReimprimir" >Imprimir</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPdf" >Bajar PDF</a></li>'
+  
+  return  menu ;
 }
+
+/**
+*imprimir
+**/
+function __bajarPDF(){
+	$('#tableListarFacturasDia').on('click','.btnBajarPdf',function(e){
+		var table = $('#tableListarFacturasDia').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+       //location.href = "generaFacturaPDF?idFactura=" + data.id
+       var parametros = {
+            direccion: "generaFacturaPDF?idFactura=" + data.id,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
+
+	});
+}
+
 
 function __reimprimir(){
 	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
