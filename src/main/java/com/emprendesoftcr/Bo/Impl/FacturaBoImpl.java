@@ -857,7 +857,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setSubTotal(Utils.getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
 			detalle.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			detalle.setMontoImpuesto(Utils.getMontoImpuesto(detalle.getSubTotal(), Constantes.ZEROS_DOUBLE, detalle.getMontoExoneracion1(), detalle.getImpuesto()));
+			detalle.setMontoImpuesto(Utils.getMontoImpuesto(detalle.getSubTotal(), Constantes.ZEROS_DOUBLE, detalle.getMontoExoneracion(), detalle.getImpuesto()));
       
 			detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(),detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal()));
 

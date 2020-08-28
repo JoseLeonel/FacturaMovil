@@ -106,6 +106,9 @@ public class Detalle implements Serializable {
 
 	@Column(name = "monto_impuesto1", precision = 18, scale = 5)
 	private Double						montoImpuestoMag;
+	
+	@Column(name = "precio", precision = 18, scale = 5, columnDefinition = "default '0.00'")
+	private Double						precio;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -763,6 +766,16 @@ public class Detalle implements Serializable {
 
 	public void setCantidadAplicadaNotaCredito(Double cantidadAplicadaNotaCredito) {
 		this.cantidadAplicadaNotaCredito = cantidadAplicadaNotaCredito;
+	}
+
+	
+	public Double getPrecio() {
+		return precio;
+	}
+
+	
+	public void setPrecio(Double precio) {
+		this.precio = precio;
 	}
 
 	

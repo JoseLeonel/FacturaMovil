@@ -1160,29 +1160,7 @@ function __ObtengoTipoCambio(){
 
 }
 
-function __SetUltimoArticuloIngresado(){
-   localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
-}
 
-function __getUltimoArticuloIngresado(){
-    return JSON.parse(localStorage.getItem('ultimoArticulo'));
-}
-
-function __DeleteUltimoArticuloIngresado(){
-    localStorage.removeItem('ultimoArticulo');
-}
-
-function __SetUltimoItemIngresado(item){
-   localStorage.setItem('ultimoItem', JSON.stringify(item));
-}
-
-function __getUltimoItemIngresado(){
-    return JSON.parse(localStorage.getItem('ultimoItem'));
-}
-
-function __DeleteUltimoItemIngresado(){
-    localStorage.removeItem('ultimoItem');
-}
 
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
@@ -1255,7 +1233,7 @@ function __AplicarCambioPrecioBD(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
                         self.update()
-                        __SetUltimoArticuloIngresado()
+                        __SetUltimoArticuloIngresado(self.articulo)
                         aplicarLineaFacturaCambioPrecio()
                         $('#modalCambiarPrecio').modal('hide')
                         getPosicionInputCodigo()
@@ -3321,8 +3299,8 @@ function setItemNuevo(cantidad){
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto1  = 0
-    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1
+    var montoImpuesto   = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto 
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
@@ -3330,10 +3308,11 @@ function setItemNuevo(cantidad){
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
 
    var item = {
+
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : "",
+       impuestoMag     : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
        iva             : __valorNumerico(self.articulo.impuesto),
        iva1            : 0,
        codigo          : self.articulo.codigo,
@@ -3341,10 +3320,12 @@ function setItemNuevo(cantidad){
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuesto1        : 0,
+       impuestoMag     : __valorNumerico(self.articulo.impuesto1),
+       codigoTarifa : __valorNumerico(self.articulo.codigoTarifa),
+       codigoTarifaMag : __valorNumerico(self.articulo.codigoTarifa1),
        montoImpuesto   : __valorNumerico(montoImpuesto),
-       montoImpuesto1  : __valorNumerico(montoImpuesto1),
-       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
+       montoImpuestoMag: __valorNumerico(montoImpuesto1),
+       impuestoNeto    : __valorNumerico(montoImpuesto) ,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),
@@ -3362,7 +3343,8 @@ function setItemNuevo(cantidad){
        fechaEmisionExoneracion:null,
        nombreInstitucionExoneracion:"",
        numeroDocumentoExoneracion:"",
-       tipoDocumentoExoneracion:""
+       tipoDocumentoExoneracion:"",
+       precio:resultadoPrecio
     }
     __SetUltimoItemIngresado(item);
     return item;

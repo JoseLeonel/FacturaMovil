@@ -12,7 +12,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
-import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
 
 public interface DetalleBo {
 

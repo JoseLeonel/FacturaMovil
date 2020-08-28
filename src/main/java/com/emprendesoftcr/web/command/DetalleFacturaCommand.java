@@ -86,7 +86,7 @@ public class DetalleFacturaCommand {
 
 	private Double	cantidadAplicadaNotaCredito;
 	private String						codigoTarifa;
-
+  private Double precio;
 
 	
 
@@ -137,6 +137,7 @@ public class DetalleFacturaCommand {
 		this.montoExoneracion1 = detalle.getMontoExoneracion1();
 		this.cantidadAplicadaNotaCredito = detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito();
 		this.codigoTarifa = detalle.getCodigoTarifa();
+		this.precio = detalle.getPrecio();
 
 	}
 
@@ -151,6 +152,16 @@ public class DetalleFacturaCommand {
 	
 
 	
+	
+	public Double getPrecio() {
+		return precio;
+	}
+
+	
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+
 	public String getCodigoTarifa() {
 		return codigoTarifa;
 	}

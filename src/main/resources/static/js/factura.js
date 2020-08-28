@@ -268,6 +268,33 @@ function ActualizarLineaDEtalle(itemtemp){
     return resultado.item;
 }
 
+
+
+/*--------LocalStorage------------------*/
+	function __SetUltimoArticuloIngresado(articulo){
+	   localStorage.setItem('ultimoArticulo', JSON.stringify(articulo));
+	}
+
+	function __getUltimoArticuloIngresado(){
+	    return JSON.parse(localStorage.getItem('ultimoArticulo'));
+	}
+
+	function __DeleteUltimoArticuloIngresado(){
+	    localStorage.removeItem('ultimoArticulo');
+	}
+
+	function __SetUltimoItemIngresado(item){
+	   localStorage.setItem('ultimoItem', JSON.stringify(item));
+	}
+
+	function __getUltimoItemIngresado(){
+	    return JSON.parse(localStorage.getItem('ultimoItem'));
+	}
+
+	function __DeleteUltimoItemIngresado(){
+	    localStorage.removeItem('ultimoItem');
+	}
+
 /****************************************************************************************************************************************************************************************/
 
 function cargarImagenBusca(data64,id){
