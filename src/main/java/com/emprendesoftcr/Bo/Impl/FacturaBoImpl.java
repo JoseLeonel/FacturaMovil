@@ -828,6 +828,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			String tipoImpuesto = Constantes.EMPTY;
 			String codigoTarifa  = Constantes.EMPTY;
+			Double impuesto = Constantes.ZEROS_DOUBLE;
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setId(null);

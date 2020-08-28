@@ -3273,10 +3273,14 @@ function __nuevoArticuloAlDetalle(cantidad){
     var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
+        tipoImpuestoMag   : "",
+        impuestoMag:0,
+        montoImpuestoMag:0,
+        precio:0,
+        codigoTarifaMag:'',
        numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       tipoImpuesto1   : "",
        iva             : parseFloat(self.articulo.impuesto),
        iva1            : 0,
        codigo          : self.articulo.codigo,
@@ -3284,9 +3288,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        cantidad        : parseFloat(cantidad),
        precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
-       impuesto1        : 0,
        montoImpuesto   : parseFloat(montoImpuesto),
-       montoImpuesto1  : 0,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
