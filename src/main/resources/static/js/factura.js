@@ -140,7 +140,9 @@ function __ResumenFactura(detail,fact) {
     var totalComprobante        = 0;
     var totalventaNeta          = 0;
     var totalGanancia           = 0;
-  
+    var tieneMesa = typeof objetos.factura.mesa !== 'undefined'?true:false;
+    tieneMesa = objetos.factura.mesa == null?false:true
+
     objetos.cantArticulos      = 0;
     var montoExoneracion = 0;
     detail.forEach(function(e){
@@ -160,6 +162,7 @@ function __ResumenFactura(detail,fact) {
         objetos.montoExoneracion  = objetos.montoExoneracion + __valorNumerico(e.montoExoneracion); 
         objetos.totalPesoByFactura      += __valorNumerico(e.pesoTransporte) * __valorNumerico(e.cantidad);
     });
+     
     objetos.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2);
     objetos.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas);
     objetos.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas);
@@ -186,7 +189,7 @@ function __ResumenFactura(detail,fact) {
             objetos.totalComprobante = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(objetos.factura.totalImpuestoServ));
         }
     }    
-    objetos.factura.totalComprobante = __valorNumerico(totalComprobante);
+    objetos.factura.totalComprobante = __valorNumerico(objetos.totalComprobante);
     objetos.totalComprobante = totalComprobante;
     objetos.totalDescuentos = totalDescuentos;
     objetos.totalImpuesto = totalImpuesto;
@@ -196,7 +199,7 @@ function __ResumenFactura(detail,fact) {
     objetos.subTotalGeneral = resultado;
     objetos.factura.subTotal =  resultado;
     objetos.totalDescuentos = totalDescuentos;
-    var resultadoTotalImpuesto = __valorNumerico(totalImpuesto);
+    var resultadoTotalImpuesto = __valorNumerico(objetos.totalImpuesto);
     objetos.totalImpuesto   = totalImpuesto;
     return objetos;
 }
