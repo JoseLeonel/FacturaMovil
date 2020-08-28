@@ -826,6 +826,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
+			String tipoImpuesto = Constantes.EMPTY;
+			String codigoTarifa  = Constantes.EMPTY;
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setId(null);
@@ -843,7 +845,6 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuestoMag(detalleFacturaCommand.getImpuestoMag() != null ? detalleFacturaCommand.getImpuestoMag() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
-			detalle.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
 			
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
