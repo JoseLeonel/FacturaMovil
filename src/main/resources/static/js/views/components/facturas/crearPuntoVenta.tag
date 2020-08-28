@@ -910,7 +910,6 @@
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false
-    self.subTotalGeneral               = 0
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
@@ -3589,10 +3588,10 @@ function __calculate() {
     self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2);
     self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2);
     self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
-    self.subTotalGeneral =  resultado.subTotalGeneral
+    self.subTotalGeneral =  formatoDecimales(resultado.subTotalGeneral,2)
     self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
-    self.totalImpuesto = resultado.totalImpuesto
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2)
     self.update()
 
     getPosicionInputCodigo()

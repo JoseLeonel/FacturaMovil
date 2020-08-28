@@ -132,12 +132,19 @@ public class ClienteBoImpl implements ClienteBo {
 	@Override
 	public ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand) {
 		ClienteMag clienteMag = new ClienteMag();
+		
+		String cedula  = clienteCommand.getCedula() !=null && clienteCommand.getCedula().equals(Constantes.EMPTY)? clienteCommand.getCedula():clienteCommand.getIdentificacionExtranjero();
+		
+		
+		
 
 		try {
 			// request url
 
 			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null ? Constantes.CLIENTE_MAG_INACTIVO : clienteCommand.getTipoMag());
-			String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + "204050862" : Constantes.API_MAG_PESCA + "3101050217";
+			//String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + "204050862" : Constantes.API_MAG_PESCA + "3101050217";
+			
+			String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + cedula : Constantes.API_MAG_PESCA + cedula;
 
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
