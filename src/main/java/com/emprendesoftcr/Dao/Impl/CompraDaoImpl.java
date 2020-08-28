@@ -91,7 +91,7 @@ public class CompraDaoImpl implements CompraDao {
 			query.setParameter("compra", compra);
 			int deletedCount = query.executeUpdate();
 
-			log.info("** Fin de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
+			log.info("** Fin de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date() + " " + deletedCount);
 
 		} catch (Exception e) {
 			log.error("** Error ejecutar el procedimineto almacenados de eliminar detalles de una compra : " + e.getMessage() + " fecha " + new Date());

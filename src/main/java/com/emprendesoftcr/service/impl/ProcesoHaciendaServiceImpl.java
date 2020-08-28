@@ -63,7 +63,6 @@ import com.emprendesoftcr.modelo.ArchivoXML;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CompraSimplificada;
-import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;

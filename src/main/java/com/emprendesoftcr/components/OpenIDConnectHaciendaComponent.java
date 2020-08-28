@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.fisco.ClientPost;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.TokenInfo;
 import com.emprendesoftcr.fisco.TokenInfoJson;

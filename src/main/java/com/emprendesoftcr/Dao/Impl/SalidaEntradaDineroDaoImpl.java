@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.SalidaEntradaDineroDao;
 import com.emprendesoftcr.modelo.SalidaEntradaDinero;
 import com.emprendesoftcr.modelo.UsuarioCaja;
-import com.emprendesoftcr.modelo.UsuarioCajaFactura;
 
 @Repository("salidaEntradaDineroDao")
 public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {

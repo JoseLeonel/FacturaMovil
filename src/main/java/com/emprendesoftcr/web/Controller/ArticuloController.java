@@ -2,7 +2,6 @@ package com.emprendesoftcr.web.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -75,12 +74,8 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
 
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
