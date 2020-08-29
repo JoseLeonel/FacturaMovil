@@ -186,10 +186,10 @@ function __ResumenFactura(detail,fact) {
         if(objetos.factura.mesa.impuestoServicio == true){
         	objetos.factura.totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10));
             objetos.factura.totalVentaNeta = Math.round(__valorNumerico(totalVenta-totalDescuentos) + __valorNumerico(objetos.factura.totalImpuestoServ));
-            objetos.totalComprobante = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(objetos.factura.totalImpuestoServ));
+            totalComprobante = Math.round(__valorNumerico(totalComprobante) + __valorNumerico(objetos.factura.totalImpuestoServ));
         }
     }    
-    objetos.factura.totalComprobante = __valorNumerico(objetos.totalComprobante);
+    objetos.factura.totalComprobante = __valorNumerico(totalComprobante);
     objetos.totalComprobante = totalComprobante;
     objetos.totalDescuentos = totalDescuentos;
     objetos.totalImpuesto = totalImpuesto;
