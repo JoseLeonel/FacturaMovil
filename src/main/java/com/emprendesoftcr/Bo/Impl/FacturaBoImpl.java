@@ -826,9 +826,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			String tipoImpuesto = Constantes.EMPTY;
-			String codigoTarifa  = Constantes.EMPTY;
-			Double impuesto = Constantes.ZEROS_DOUBLE;
+			
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setId(null);
@@ -852,7 +850,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
 			detalle.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
 			 
-			detalle.setPorcentajeExoneracion(getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalle.getImpuesto()));
+			detalle.setPorcentajeExoneracion(Utils.getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalle.getImpuesto()));
 			
 			detalle.setMontoTotal(Utils.getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
 			detalle.setMontoDescuento(Utils.getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
@@ -959,24 +957,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 	}
 	
-	private Integer getPorcentajeExoneracion(Integer porcentajeExoneracion, Double impuesto) {
-		Integer valor = Constantes.ZEROS;
-		
-		if(porcentajeExoneracion != null) {
-			if(porcentajeExoneracion > Constantes.ZEROS) {
-				if(impuesto.intValue() < porcentajeExoneracion ) {
-           valor = impuesto.intValue(); 					
-				}else {
-					valor = porcentajeExoneracion;
-				}
-			}
-			
-			
-		}
-		
-		
-		return valor;
-	}
+	
 
 	/**
 	 * Actualiza inventari

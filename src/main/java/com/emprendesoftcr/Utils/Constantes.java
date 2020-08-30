@@ -20,6 +20,9 @@ public class Constantes {
 	public static final Integer					VERSION_EXONERACION_SUBTOTAL_SI																= 1;
 	public static final Integer					VERSION_EXONERACION_SUBTOTAL_NO																= 0;
 
+	public static final Integer					RETOTALIZA_MAG_SI																							= 1;
+	public static final Integer					RETOTALIZA_MAG_NO																							= 0;
+
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																	= 0;
 
@@ -27,9 +30,8 @@ public class Constantes {
 	public static final Integer					COCINA_INACTIVO																								= 2;
 
 	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO													= 1;
-	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO													= 2;
+	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO												= 2;
 
-	
 	public static final Integer					COMMANDA_COCINA_ACTIVO																				= 1;
 	public static final Integer					COMMANDA_COCINA_INACTIVO																			= 2;
 

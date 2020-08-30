@@ -1160,7 +1160,29 @@ function __ObtengoTipoCambio(){
 
 }
 
+function __SetUltimoArticuloIngresado(){
+   localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
+}
 
+function __getUltimoArticuloIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoArticulo'));
+}
+
+function __DeleteUltimoArticuloIngresado(){
+    localStorage.removeItem('ultimoArticulo');
+}
+
+function __SetUltimoItemIngresado(item){
+   localStorage.setItem('ultimoItem', JSON.stringify(item));
+}
+
+function __getUltimoItemIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoItem'));
+}
+
+function __DeleteUltimoItemIngresado(){
+    localStorage.removeItem('ultimoItem');
+}
 
 function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
@@ -1233,7 +1255,7 @@ function __AplicarCambioPrecioBD(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
                         self.update()
-                        __SetUltimoArticuloIngresado(self.articulo)
+                        __SetUltimoArticuloIngresado()
                         aplicarLineaFacturaCambioPrecio()
                         $('#modalCambiarPrecio').modal('hide')
                         getPosicionInputCodigo()
@@ -2412,10 +2434,8 @@ function __Init(){
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
     $('.selectActividadComercial').prop("selectedIndex", 0);
-
-     __comboCondicionPago()
-
-      __ComboTipoDocumentos(0)
+    __comboCondicionPago()
+    __ComboTipoDocumentos(0)
     __ListaFacturasEnEspera()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
@@ -3299,8 +3319,8 @@ function setItemNuevo(cantidad){
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto1  = 0
-    var montoImpuesto   = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto 
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
@@ -3308,11 +3328,10 @@ function setItemNuevo(cantidad){
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
 
    var item = {
-
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
-       impuestoMag     : self.articulo.tipoImpuesto1 ==null?"":self.articulo.tipoImpuesto1,
+       tipoImpuesto1   : "",
        iva             : __valorNumerico(self.articulo.impuesto),
        iva1            : 0,
        codigo          : self.articulo.codigo,
@@ -3320,12 +3339,10 @@ function setItemNuevo(cantidad){
        cantidad        : __valorNumerico(cantidad),
        precioUnitario  : __valorNumerico(precioUnitario),
        impuesto        : __valorNumerico(self.articulo.impuesto),
-       impuestoMag     : __valorNumerico(self.articulo.impuesto1),
-       codigoTarifa : __valorNumerico(self.articulo.codigoTarifa),
-       codigoTarifaMag : __valorNumerico(self.articulo.codigoTarifa1),
+       impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
-       montoImpuestoMag: __valorNumerico(montoImpuesto1),
-       impuestoNeto    : __valorNumerico(montoImpuesto) ,
+       montoImpuesto1  : __valorNumerico(montoImpuesto1),
+       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),
@@ -3343,8 +3360,7 @@ function setItemNuevo(cantidad){
        fechaEmisionExoneracion:null,
        nombreInstitucionExoneracion:"",
        numeroDocumentoExoneracion:"",
-       tipoDocumentoExoneracion:"",
-       precio:resultadoPrecio
+       tipoDocumentoExoneracion:""
     }
     __SetUltimoItemIngresado(item);
     return item;
@@ -3722,12 +3738,57 @@ function __seleccionarClientes() {
             self.factura.tipoDoc ='04'
             __ComboTipoDocumentos(0)
         }
+        self.cliente.tipoMag = __valorNumerico(self.cliente.tipoMag)
         self.update()
+        retotalizarMAG(self.cliente.tipoMag = 1 || self.cliente.tipoMag = 2 ? 1:0 ) 
        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
        seleccionarEfectivo()
     });
+
+}
+
+/**
+*  Retotalizar  Montos al detallle
+**/
+function retotalizarMAG(valor){
+    self.detalleFactura.data =self.detail
+    var JSONDetalles = JSON.stringify( self.detalleFactura );
+    var datos = {
+        detalleFactura: JSONDetalles,
+        acionRetoralizar = valor
+    }
+    $.ajax({
+        url: "clienteHacienda.do",
+        datatype: "json",
+        data: {cedula:cedula},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeErrorTiempo( data.message )
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.update()
+                        
+                    });
+                }
+            }
+            $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+            $('#totalTarjeta').val(null)
+            $('#totalBanco').val(null)
+            seleccionarEfectivo()
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+
 }
 
 function __aplicarExoneracionPorCliente(){

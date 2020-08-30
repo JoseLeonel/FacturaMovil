@@ -82,6 +82,26 @@ public final class Utils {
 		return resultado;
 	}
 	
+	public static Integer getPorcentajeExoneracion(Integer porcentajeExoneracion, Double impuesto) {
+		Integer valor = Constantes.ZEROS;
+		
+		if(porcentajeExoneracion != null) {
+			if(porcentajeExoneracion > Constantes.ZEROS) {
+				if(impuesto.intValue() < porcentajeExoneracion ) {
+           valor = impuesto.intValue(); 					
+				}else {
+					valor = porcentajeExoneracion;
+				}
+			}
+			
+			
+		}
+		
+		
+		return valor;
+	}
+
+	
 	public static  ByteArrayOutputStream convertirOutStream(ByteArrayInputStream inputStream) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] data = new byte[4096];

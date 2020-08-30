@@ -33,11 +33,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -45,6 +47,7 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
@@ -53,6 +56,7 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.modelo.sqlNativo.DetallesFacturaNotaCreditoNativa;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
+import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -93,6 +97,12 @@ public class DetalleController {
 	private ClienteBo																							clienteBo;
 
 	@Autowired
+	private FacturaBo																							facturaBo;
+
+	@Autowired
+	private ArticuloBo																						articuloBo;
+
+	@Autowired
 	private CorreosBo																							correosBo;
 
 	@Autowired
@@ -112,8 +122,8 @@ public class DetalleController {
 
 	@Autowired
 	private FechaPropertyEditor																		fechaPropertyEditor;
-	
-	private Logger																						log					= LoggerFactory.getLogger(this.getClass());
+
+	private Logger																								log									= LoggerFactory.getLogger(this.getClass());
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -295,6 +305,89 @@ public class DetalleController {
 
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @param detalles
+	 * @param acionRetoralizar 1 = Con
+	 * @return
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/retotalizarVentaMAG.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable retotalizarVentaMAG(HttpServletRequest request, HttpServletResponse response, @RequestParam String detalleFactura,@RequestParam Integer acionRetoralizar ) throws Exception {
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		// Usuario de la session
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		
+		List<Object> detallesFactura = new ArrayList<Object>();
+		FacturaCommand facturaCommand = new FacturaCommand();
+		DetalleFacturaCommand detalleFacturaCommand= null;
+		facturaCommand.setDetalleFactura(detalles);
+		ArrayList<DetalleFacturaCommand> lista= facturaBo.formaDetallesCommand(facturaCommand);
+		for (int i = 0; i < lista.size(); i++) {
+			Articulo articulo = articuloBo.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuarioSesion.getEmpresa());
+			detalleFacturaCommand = lista.get(i);
+			if(articulo != null) {
+				if(acionRetoralizar.equals(Constantes.RETOTALIZA_MAG_SI)) {
+					detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuestoMag() !=null && articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)?articulo.getTipoImpuestoMag():articulo.getTipoImpuesto());
+					detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifaMag() !=null && articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? articulo.getCodigoTarifaMag() : articulo.getCodigoTarifa());
+					detalleFacturaCommand.setImpuesto(articulo.getImpuestoMag() !=null && articulo.getImpuestoMag() > Constantes.ZEROS_DOUBLE ?  articulo.getImpuestoMag() : articulo.getImpuesto() );
+				}else {
+					detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuesto());
+					detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifa());
+					detalleFacturaCommand.setImpuesto(articulo.getImpuesto() );
+				}
+				detalleFacturaCommand.setCosto(articulo.getCosto() != null && articulo.getCosto().equals(Constantes.ZEROS_DOUBLE)?Constantes.ZEROS_DOUBLE:articulo.getCosto());
+				detalleFacturaCommand.setPrecioUnitario(Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario()));
+				Double gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(detalleFacturaCommand.getPrecioUnitario() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getCosto() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
+				detalleFacturaCommand.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
+				detalleFacturaCommand.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
+				detalleFacturaCommand.setCosto(Utils.Maximo5Decimales(detalleFacturaCommand.getCosto()));
+				detalleFacturaCommand.setGanancia(gananciaProducto);
+				detalleFacturaCommand.setMontoGanancia(gananciaProducto);
+				detalleFacturaCommand.setPorcentajeGanancia(Utils.getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
+				detalleFacturaCommand.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
+				detalleFacturaCommand.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
+				detalleFacturaCommand.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
+				detalleFacturaCommand.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
+				detalleFacturaCommand.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
+				detalleFacturaCommand.setPorcentajeExoneracion(Utils.getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getImpuesto()));
+				detalleFacturaCommand.setMontoTotal(Utils.getMontoTotal(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCantidad()));
+				detalleFacturaCommand.setMontoDescuento(Utils.getDescuento(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getPorcentajeDesc()));
+				detalleFacturaCommand.setSubTotal(Utils.getSubtotal(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getMontoDescuento()));
+				detalleFacturaCommand.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
+				detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
+				detalleFacturaCommand.setMontoImpuesto(Utils.getMontoImpuesto(detalleFacturaCommand.getSubTotal(), Constantes.ZEROS_DOUBLE, detalleFacturaCommand.getMontoExoneracion(), detalleFacturaCommand.getImpuesto()));
+				detalleFacturaCommand.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalleFacturaCommand.getTipoDocumentoExoneracion(),detalleFacturaCommand.getImpuesto(), detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getSubTotal()));
+				detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
+				Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
+				if (detalleFacturaCommand.getMontoDescuento() == null) {
+					detalleFacturaCommand.setMontoDescuento(Constantes.ZEROS_DOUBLE);
+				}
+				detalleFacturaCommand.setNaturalezaDescuento(detalleFacturaCommand.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
+				detalleFacturaCommand.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
+				detalleFacturaCommand.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
+				Double montoTotalLinea = Utils.getMontoTotalLinea(detalleFacturaCommand.getSubTotal(), detalleFacturaCommand.getMontoImpuesto());
+				detalleFacturaCommand.setMontoTotalLinea(montoTotalLinea);
+				detallesFactura.add(detalleFacturaCommand);
+				
+			}
+			
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFactura);
+		return respuestaService;
+
+	}
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByConsecutivoNotaCreditoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -321,7 +414,7 @@ public class DetalleController {
 	}
 
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
-	public RespuestaServiceValidator envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result,@RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
+	public RespuestaServiceValidator envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
