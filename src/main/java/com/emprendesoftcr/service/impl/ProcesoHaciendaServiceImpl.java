@@ -338,34 +338,31 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
 
-//	 @Scheduled(cron = "0 0/1 * * * ?")
+  @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoCambiarConsecutivo() throws Exception {
 
-		Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(2, 2);
-		log.info("Inicio de actualizar estado - {}", formatter.format(LocalDateTime.now()));
+		// Primero borramos los rechados y luego cambiamos el consecutivo.
+
+		Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(90, 90);
+		log.info("Inicio de cambiar consecutivo estado - {}", formatter.format(LocalDateTime.now()));
 		Integer cont = 0;
 		for (Factura factura : listaHacienda) {
-
-			Hacienda hacienda = haciendaBo.findByEmpresaAndClave(factura.getEmpresa(), factura.getClave());
-
+			log.info("Empresa:"+ factura.getEmpresa().getId() + " consecutiv:" + factura.getNumeroConsecutivo());
 			if (cont >= 100) {
 				log.info(cont + "contador - {}", formatter.format(LocalDateTime.now()));
 				cont = 0;
 
 			}
-
-			if (hacienda != null) {
-				if (hacienda.getEstado() == 7 || hacienda.getEstado() == 6) {
-					cont += 1;
-					factura.setEstado(hacienda.getEstado());
-					facturaBo.modificar(factura);
-
-				}
-
-			}
+			cont++;
+			factura.setNota("cambio de consecutivo por problemas de hacienda:" + factura.getNumeroConsecutivo());
+			factura.setNumeroConsecutivo(empresaBo.spGenerarConsecutivoFactura(factura.getEmpresa(), factura.getUsuarioCreacion(), factura.getTipoDoc()));
+			factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+			factura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+			facturaBo.modificar(factura);
 		}
-		log.info("fin de actualizar estado - {}", formatter.format(LocalDateTime.now()));
+		log.info("cerrar de cambiar consecutivo estado  - {}", formatter.format(LocalDateTime.now()));
 
 	}
 
@@ -686,7 +683,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/35 23 * * ?")
+	@Scheduled(cron = "0 0/5 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -758,7 +755,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
