@@ -2860,7 +2860,6 @@ function __sumarMasArticulo(codigo,precio,cant){
     if(temArticulo == null){
         return;
     }
-
     var valorPrecio =  parseFloat(precio)
     var cantidadAct =cant
     aplicarSumaAlCodigo(valorPrecio,cantidadAct,true);
@@ -2874,18 +2873,16 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
         return
     }
    for (var count = 0; count < self.detail.length; count++) {
-        if (self.detail[count].codigo == temItem.codigo  && temItem.numeroLinea == self.detail[count].numeroLinea    ){
+        if (self.detail[count].codigo == temItem.codigo  && temItem.numeroLinea == self.detail[count].numeroLinea){
             self.item          = self.detail[count];
             var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
             self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
-
             self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
             self.cantidadEnterFacturar = 0
             self.update();
                         //factura.js
             self.item = ActualizarLineaDEtalle(self.item) 
             self.update()
-    
             self.detail[count] = self.item;
             self.update();
         }
@@ -3550,7 +3547,6 @@ function _actualizarDesc(){
         }
     }
     var index     = self.detail.indexOf(self.item);
-
     self.item.porcentajeDesc =  __valorNumerico(descuento);
     self.update()
                 //factura.js
@@ -3588,7 +3584,6 @@ function __calculate() {
     var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
     self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2)
     self.update()
-
     getPosicionInputCodigo()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
@@ -3711,7 +3706,6 @@ function __seleccionarClientes() {
         self.cliente = data
         self.update();
         $('#modalClientes').modal('hide')
-
         if(!verificarSiClienteFrecuente(self.cliente)){
             __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
@@ -3729,7 +3723,6 @@ function __seleccionarClientes() {
                self.factura.tipoDoc ='04'
                self.update()
             }
-
            __ComboTipoDocumentos(1)
         }else{
             self.factura.tipoDoc ='04'

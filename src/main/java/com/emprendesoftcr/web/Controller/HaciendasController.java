@@ -3,9 +3,7 @@ package com.emprendesoftcr.web.Controller;
 import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static java.util.stream.Collectors.toList;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.ServletOutputStream;
@@ -68,7 +65,6 @@ import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
-import com.emprendesoftcr.web.command.AgregarClienteArticuloCommand;
 import com.emprendesoftcr.web.command.HaciendaCommand;
 import com.emprendesoftcr.web.command.HaciendaNativeCommand;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;

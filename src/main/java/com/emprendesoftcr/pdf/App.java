@@ -430,7 +430,6 @@ public class App {
 
 	private void addTotalsSinDescuentos(PdfContentByte cb, Font font, Font fontB, FacturaElectronica facturaElectronica) {
 		float col1 = 635;
-		float col2 = 738;
 		float col3 = 842;
 		float col4 = 1001;
 		float col5 = 1101;
