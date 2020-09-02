@@ -2521,11 +2521,11 @@ function cargarDetallesFacturaEnEspera(data){
     self.factura.totalCambioPagar = self.factura.totalComprobante;
     self.totalCambioPagar         = self.factura.totalComprobante
     self.detail.sort(function(a,b) {
-    if ( a.pesoPrioridad > b.pesoPrioridad )
-        return -1;
-    if ( a.pesoPrioridad < b.pesoPrioridad )
-        return 1;
-    return 0;
+        if ( a.pesoPrioridad > b.pesoPrioridad )
+            return -1;
+        if ( a.pesoPrioridad < b.pesoPrioridad )
+            return 1;
+        return 0;
     } );
     self.update()
     $(".nombreFactura").val(self.factura.nombreFactura)
@@ -3226,8 +3226,6 @@ function aplicarLineaFacturaCambioPrecio(){
             //factura.js
             self.item = ActualizarLineaDEtalle(self.item) 
             self.update()
-    
-
             self.detail[count] = self.item;
             self.update();
          }
@@ -3248,6 +3246,7 @@ this.__removeProductFromDetail = function(e) {
         eliminarDetalle()
     }
 }.bind(this)
+
 function buscarItemEliminar(item){
     for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == item.codigo && self.detail[count].numeroLinea == item.numeroLinea ){
@@ -3310,7 +3309,6 @@ function __nuevoArticuloAlDetalle(cantidad){
 }
 
 function setItemNuevo(cantidad){
-
     var resultadoPrecio = getListaPrecio(self.articulo)
     var resultaMontoImpuesto = __valorNumerico(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
@@ -3319,15 +3317,14 @@ function setItemNuevo(cantidad){
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto1  = 0
-    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1
+    var montoImpuesto   = _calcularImpuesto(subTotal,__valorNumerico(self.articulo.impuesto) ==null?0:__valorNumerico(self.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto 
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
     var costoTotal      = __valorNumerico(self.articulo.costo) > precioUnitario ?0:__valorNumerico(self.articulo.costo);
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:__valorNumerico(self.articulo.costo),cantidad)
-
-   var item = {
+    var item = {
        numeroLinea     : __valorNumerico(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
@@ -3342,7 +3339,7 @@ function setItemNuevo(cantidad){
        impuesto1        : 0,
        montoImpuesto   : __valorNumerico(montoImpuesto),
        montoImpuesto1  : __valorNumerico(montoImpuesto1),
-       impuestoNeto    : __valorNumerico(montoImpuesto) + __valorNumerico(montoImpuesto1),
+       impuestoNeto    : __valorNumerico(montoImpuesto) ,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : __valorNumerico(ganancia),
@@ -3740,7 +3737,9 @@ function __seleccionarClientes() {
         }
         self.cliente.tipoMag = __valorNumerico(self.cliente.tipoMag)
         self.update()
-        retotalizarMAG(self.cliente.tipoMag = 1 || self.cliente.tipoMag = 2 ? 1:0 ) 
+        if(self.cliente.tipoMag > 0){
+            retotalizarMAG(self.cliente.tipoMag == 1 || self.cliente.tipoMag == 2 ? 1:0 )                 
+        }
        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
        $('#totalTarjeta').val(null)
        $('#totalBanco').val(null)
@@ -3754,15 +3753,16 @@ function __seleccionarClientes() {
 **/
 function retotalizarMAG(valor){
     self.detalleFactura.data =self.detail
+    self.update()
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     var datos = {
         detalleFactura: JSONDetalles,
-        acionRetoralizar = valor
+        acionRetoralizar : valor
     }
     $.ajax({
-        url: "clienteHacienda.do",
+        url: "retotalizarVentaMAG.do",
         datatype: "json",
-        data: {cedula:cedula},
+        data: datos,
         method:"GET",
         success: function (data) {
             if (data.status != 200) {

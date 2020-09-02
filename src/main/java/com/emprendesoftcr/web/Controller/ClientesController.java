@@ -588,6 +588,7 @@ public class ClientesController {
 			clienteBD.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
 			clienteBD.setObservacionVenta(clienteCommand.getObservacionVenta() == null ? Constantes.EMPTY : clienteCommand.getObservacionVenta());
 			clienteBD.setLibreImpuesto(clienteCommand.getLibreImpuesto());
+			clienteBD.setTipoMag(clienteCommand.getTipoMag());
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);

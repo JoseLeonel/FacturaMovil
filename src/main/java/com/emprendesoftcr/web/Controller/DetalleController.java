@@ -322,11 +322,10 @@ public class DetalleController {
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		
 		List<Object> detallesFactura = new ArrayList<Object>();
 		FacturaCommand facturaCommand = new FacturaCommand();
 		DetalleFacturaCommand detalleFacturaCommand= null;
-		facturaCommand.setDetalleFactura(detalles);
+		facturaCommand.setDetalleFactura(detalleFactura);
 		ArrayList<DetalleFacturaCommand> lista= facturaBo.formaDetallesCommand(facturaCommand);
 		for (int i = 0; i < lista.size(); i++) {
 			Articulo articulo = articuloBo.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuarioSesion.getEmpresa());

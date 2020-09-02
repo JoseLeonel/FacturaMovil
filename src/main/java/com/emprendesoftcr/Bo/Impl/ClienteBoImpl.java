@@ -133,7 +133,7 @@ public class ClienteBoImpl implements ClienteBo {
 	public ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand) {
 		ClienteMag clienteMag = new ClienteMag();
 		
-		String cedula  = clienteCommand.getCedula() !=null && clienteCommand.getCedula().equals(Constantes.EMPTY)? clienteCommand.getCedula():clienteCommand.getIdentificacionExtranjero();
+		String cedula  = clienteCommand.getCedula() !=null && !clienteCommand.getCedula().equals(Constantes.EMPTY)? clienteCommand.getCedula():clienteCommand.getIdentificacionExtranjero();
 		
 		
 		
@@ -150,11 +150,13 @@ public class ClienteBoImpl implements ClienteBo {
 			RestTemplate restTemplate = new RestTemplate();
 			// make an HTTP GET request
 			ClienteMagList response = restTemplate.getForObject(url, ClienteMagList.class);
+			System.out.println(response.toString());
 			List<ClienteMag> employees = response.getListaDatosMAG();
 			for (int i = 0; i < employees.size(); i++) {
 				clienteMag = employees.get(i);
 
 			}
+			
 
 		} catch (Exception e) {
 			log.error(String.format("--error consultar APi de hacienda de agro o pesca :" + e.getMessage() + new Date()));
