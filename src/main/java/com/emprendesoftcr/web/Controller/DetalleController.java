@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -315,75 +316,82 @@ public class DetalleController {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/retotalizarVentaMAG.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/retotalizarVentaMAG.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable retotalizarVentaMAG(HttpServletRequest request, HttpServletResponse response, @RequestParam String detalleFactura,@RequestParam Integer acionRetoralizar ) throws Exception {
+	public ResponseEntity<?> retotalizarVentaMAG(HttpServletRequest request, HttpServletResponse response, @RequestParam String detalleFactura,@RequestParam Integer acionRetoralizar ) throws Exception {
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Map<String, Object> resp = new HashMap<>();
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		List<Object> detallesFactura = new ArrayList<Object>();
 		FacturaCommand facturaCommand = new FacturaCommand();
 		DetalleFacturaCommand detalleFacturaCommand= null;
 		facturaCommand.setDetalleFactura(detalleFactura);
-		ArrayList<DetalleFacturaCommand> lista= facturaBo.formaDetallesCommand(facturaCommand);
-		for (int i = 0; i < lista.size(); i++) {
-			Articulo articulo = articuloBo.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuarioSesion.getEmpresa());
-			detalleFacturaCommand = lista.get(i);
-			if(articulo != null) {
-				if(acionRetoralizar.equals(Constantes.RETOTALIZA_MAG_SI)) {
-					detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuestoMag() !=null && articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)?articulo.getTipoImpuestoMag():articulo.getTipoImpuesto());
-					detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifaMag() !=null && articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? articulo.getCodigoTarifaMag() : articulo.getCodigoTarifa());
-					detalleFacturaCommand.setImpuesto(articulo.getImpuestoMag() !=null && articulo.getImpuestoMag() > Constantes.ZEROS_DOUBLE ?  articulo.getImpuestoMag() : articulo.getImpuesto() );
-				}else {
-					detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuesto());
-					detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifa());
-					detalleFacturaCommand.setImpuesto(articulo.getImpuesto() );
+		try {
+			ArrayList<DetalleFacturaCommand> lista= facturaBo.formaDetallesCommand(facturaCommand);
+			for (int i = 0; i < lista.size(); i++) {
+				detalleFacturaCommand = lista.get(i);
+				Articulo articulo = detalleFacturaCommand.getCodigo() != null && !detalleFacturaCommand.getCodigo().equals(Constantes.EMPTY) ?	articuloBo.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuarioSesion.getEmpresa()): null;
+				
+				if(articulo != null) {
+					if(acionRetoralizar.equals(Constantes.RETOTALIZA_MAG_SI)) {
+						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuestoMag() !=null && !articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)?articulo.getTipoImpuestoMag():articulo.getTipoImpuesto());
+						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifaMag() !=null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? articulo.getCodigoTarifaMag() : articulo.getCodigoTarifa());
+						detalleFacturaCommand.setImpuesto(articulo.getImpuestoMag() !=null && articulo.getImpuestoMag() > Constantes.ZEROS_DOUBLE ?  articulo.getImpuestoMag() : articulo.getImpuesto() );
+					}else {
+						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuesto());
+						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifa());
+						detalleFacturaCommand.setImpuesto(articulo.getImpuesto() );
+					}
+					detalleFacturaCommand.setCosto(articulo.getCosto() != null && articulo.getCosto().equals(Constantes.ZEROS_DOUBLE)?Constantes.ZEROS_DOUBLE:articulo.getCosto());
+					detalleFacturaCommand.setPrecioUnitario(Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario()));
+					Double gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(detalleFacturaCommand.getPrecioUnitario() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getCosto() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
+					detalleFacturaCommand.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
+					detalleFacturaCommand.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
+					detalleFacturaCommand.setCosto(Utils.Maximo5Decimales(detalleFacturaCommand.getCosto()));
+					detalleFacturaCommand.setGanancia(gananciaProducto);
+					detalleFacturaCommand.setMontoGanancia(gananciaProducto);
+					detalleFacturaCommand.setPorcentajeGanancia(Utils.getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
+					detalleFacturaCommand.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
+					detalleFacturaCommand.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
+					detalleFacturaCommand.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
+					detalleFacturaCommand.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
+					detalleFacturaCommand.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
+					detalleFacturaCommand.setPorcentajeExoneracion(Utils.getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getImpuesto()));
+					detalleFacturaCommand.setMontoTotal(Utils.getMontoTotal(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCantidad()));
+					detalleFacturaCommand.setMontoDescuento(Utils.getDescuento(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getPorcentajeDesc()));
+					detalleFacturaCommand.setSubTotal(Utils.getSubtotal(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getMontoDescuento()));
+					detalleFacturaCommand.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
+					detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
+					detalleFacturaCommand.setMontoImpuesto(Utils.getMontoImpuesto(detalleFacturaCommand.getSubTotal(), Constantes.ZEROS_DOUBLE, detalleFacturaCommand.getMontoExoneracion(), detalleFacturaCommand.getImpuesto()));
+					detalleFacturaCommand.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalleFacturaCommand.getTipoDocumentoExoneracion(),detalleFacturaCommand.getImpuesto(), detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getSubTotal()));
+					detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
+					Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
+					if (detalleFacturaCommand.getMontoDescuento() == null) {
+						detalleFacturaCommand.setMontoDescuento(Constantes.ZEROS_DOUBLE);
+					}
+					detalleFacturaCommand.setNaturalezaDescuento(detalleFacturaCommand.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
+					detalleFacturaCommand.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
+					detalleFacturaCommand.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
+					Double montoTotalLinea = Utils.getMontoTotalLinea(detalleFacturaCommand.getSubTotal(), detalleFacturaCommand.getMontoImpuesto());
+					detalleFacturaCommand.setMontoTotalLinea(montoTotalLinea);
+					detallesFactura.add(detalleFacturaCommand);
+					
 				}
-				detalleFacturaCommand.setCosto(articulo.getCosto() != null && articulo.getCosto().equals(Constantes.ZEROS_DOUBLE)?Constantes.ZEROS_DOUBLE:articulo.getCosto());
-				detalleFacturaCommand.setPrecioUnitario(Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario()));
-				Double gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(detalleFacturaCommand.getPrecioUnitario() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getCosto() * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
-				detalleFacturaCommand.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
-				detalleFacturaCommand.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
-				detalleFacturaCommand.setCosto(Utils.Maximo5Decimales(detalleFacturaCommand.getCosto()));
-				detalleFacturaCommand.setGanancia(gananciaProducto);
-				detalleFacturaCommand.setMontoGanancia(gananciaProducto);
-				detalleFacturaCommand.setPorcentajeGanancia(Utils.getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
-				detalleFacturaCommand.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
-				detalleFacturaCommand.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
-				detalleFacturaCommand.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
-				detalleFacturaCommand.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
-				detalleFacturaCommand.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
-				detalleFacturaCommand.setPorcentajeExoneracion(Utils.getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getImpuesto()));
-				detalleFacturaCommand.setMontoTotal(Utils.getMontoTotal(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCantidad()));
-				detalleFacturaCommand.setMontoDescuento(Utils.getDescuento(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getPorcentajeDesc()));
-				detalleFacturaCommand.setSubTotal(Utils.getSubtotal(detalleFacturaCommand.getMontoTotal(), detalleFacturaCommand.getMontoDescuento()));
-				detalleFacturaCommand.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
-				detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-				detalleFacturaCommand.setMontoImpuesto(Utils.getMontoImpuesto(detalleFacturaCommand.getSubTotal(), Constantes.ZEROS_DOUBLE, detalleFacturaCommand.getMontoExoneracion(), detalleFacturaCommand.getImpuesto()));
-				detalleFacturaCommand.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalleFacturaCommand.getTipoDocumentoExoneracion(),detalleFacturaCommand.getImpuesto(), detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getSubTotal()));
-				detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-				Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
-				if (detalleFacturaCommand.getMontoDescuento() == null) {
-					detalleFacturaCommand.setMontoDescuento(Constantes.ZEROS_DOUBLE);
-				}
-				detalleFacturaCommand.setNaturalezaDescuento(detalleFacturaCommand.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
-				detalleFacturaCommand.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
-				detalleFacturaCommand.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
-				Double montoTotalLinea = Utils.getMontoTotalLinea(detalleFacturaCommand.getSubTotal(), detalleFacturaCommand.getMontoImpuesto());
-				detalleFacturaCommand.setMontoTotalLinea(montoTotalLinea);
-				detallesFactura.add(detalleFacturaCommand);
 				
 			}
+			resp.put("message", "Detalles retotalizados exitos");
+			resp.put("listaObjetos", detallesFactura);
+			resp.put("status", 200);		
+						
+		} catch (Exception e) {
+			resp.put("message", "Problemas para retotalizar la factura con el Mag");
+			log.error("** Error retotalizarVentaMAG " + " fecha " + new Date() + " Error:" + e.getMessage());
+			resp.put("status", 400);
 			
 		}
-		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
-		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(detallesFactura);
-		return respuestaService;
+		return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.OK);
 
 	}
 

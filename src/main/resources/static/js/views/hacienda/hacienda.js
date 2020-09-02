@@ -33,6 +33,13 @@ var _Init = function() {
         $("#fechaFinal").val(null);
     });
     $("#filtros").validate(reglasDeValidacion());
+    __CorreoAlternativo()
+    __BajarDocumentoXML()
+    __EnviarCorreos()
+    __EnviarAceptarHacienda()
+    __EnviarHacienda()
+    __RespuestaHacienda()
+    __BajarPDFHacienda()
 
 }
 
@@ -66,13 +73,7 @@ function _consulta() {
                 haciendas.data = result.aaData
                 agregarInputsCombos();
                 ActivarEventoFiltro(".tableListar")
-                __CorreoAlternativo()
-                __BajarDocumentoXML()
-                __EnviarCorreos()
-                __EnviarAceptarHacienda()
-                __EnviarHacienda()
-                __RespuestaHacienda()
-                __BajarPDFHacienda()
+
                 EventoFiltro();
             } else {
                 __Inicializar_Table('.tableListar')

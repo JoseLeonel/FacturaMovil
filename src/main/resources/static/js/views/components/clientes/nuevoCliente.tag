@@ -1,5 +1,5 @@
 <cliente-nuevo>
-<div class="tituloBotones" show={mostrarFormulario}>
+<div id="tituloBotones" show={mostrarFormulario}>
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {cliente.id > 0 ? $.i18n.prop("titulo.modificar.cliente")   :$.i18n.prop("titulo.agregar.cliente")}  </div>
     <div class="botones">
         <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>

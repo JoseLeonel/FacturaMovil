@@ -1,5 +1,5 @@
 <cliente-crud>
-<div class="tituloBotones" show={mostrarFormulario}>
+<div id="tituloBotones" show={mostrarFormulario}>
     <div class="articulo-title"><i class="fa fa-edit"></i>&nbsp {cliente.id > 0 ? $.i18n.prop("titulo.modificar.cliente")   :$.i18n.prop("titulo.agregar.cliente")}  </div>
     <div class="botones">
         <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
@@ -167,20 +167,43 @@
                 </div>
             </div>        
         </div>   
+          <div class="row" >  
+            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" >
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5">XII del Decreto  ejecutivo NO. 41779 .Pesca y Agropecuarios Ley  </span> </h4>
+                            </div>
+                        </a>
+                        <div id="collapse3" class="panel-collapse collapse abrirDatos1">
+                            <div class="panel-body">
+                                <div class="row">    
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label  >Autorizacion del Mag</label>
+                                        <select  class="form-control tipoMag" id="tipoMag" name="tipoMag"   >
+                                            <option  each={estadosMag}  value="{codigo}" selected="{cliente.tipoMag ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>   
     </form>            
 </div>
 
 
-<style type ="text/css">
 
-  
-</style>
 <script>
     var self = this;
     self.parametros          = opts.parametros;  
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
     self.botonModificar            = false
     self.botonAgregar              = false
+    self.estadosMag   = []
     self.comboTipoDocumentoExonerados   = []
     self.cliente                   ={
 		id:null,
@@ -235,47 +258,33 @@ self.on('mount',function(){
         todayHighlight:true,
     }
     );
+    __ComboEstadosMag()
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
     }, false );
 })
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosMag(){
+    self.estadosMag =[]
+    self.update()
+    self.estadosMag.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("combo.estadoMag.inactivo")
+     });
 
+    self.estadosMag.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estadoMag.agro")
+     });
+    self.estadosMag.push({
+        codigo: 2,
+        descripcion: $.i18n.prop("combo.estadoMag.pesca")
+     });
+     self.update();
 
-
-
-//function configuracionDatePicker(){
-//    $("#fechaEmisionExoneracionSTR").keydown(function(e) {
-//        e.preventDefault();
-//    });
-//    $('#fechaEmisionExoneracionSTR').datetimepicker({
-//        locale: 'es',
-//        format: 'YYYY-MM-DD HH:mm',
-//        keyBinds: {
-//           'delete': function () {
-//                return false;
-//            }
-//        },
-//        tooltips: {
-//           today: 'Hoy',
-//           clear: 'Limpiar',
-//           close: 'Cerrar',
-//           selectMonth: 'Seleccionar Mes',
-//           prevMonth: 'Mes Anterior',
-//           nextMonth: 'Mes Siguiente',
-//           selectYear: 'Seleccionar A\u00F1o',
-//           prevYear: 'A\u00F1o Anterior',
-//           nextYear: 'A\u00F1o Siguiente',
-//           selectTime: 'Seleccionar',
-//           incrementHour: 'Incrementar Hora',
-//           decrementHour: 'Decrementar Hora',
-//           incrementMinute: 'Incrementar Minutos',
-//           decrementMinute: 'Decrementar Minutos',
-//           togglePeriod: 'Cambiar',
-//           pickHour: 'Seleccionar Hora',
-//           pickMinute: 'Seleccionar Minutos'
-//        }
-//    });
-//}
+}
 
 /**
 * cargar los tipos de Documento de la factura
@@ -757,20 +766,11 @@ __Modificar(){
 }
 
 function validaExoneracion(){
- 
-   
    valor  = __valorNumerico($('#porcentajeExoneracion').val())
-   //if(valor ==0){
-   //     sweetAlert("", "El 1 porcentaje debe ser mayor a cero", "error");
-   //    return true
-   //}
    if(valor > 100){
         sweetAlert("", "El porcentaje debe ser menor o igual al 100%", "error");
        return true
    }
-
-   
-
    return false;
 
 }
@@ -793,8 +793,6 @@ __agregar(){
 }
 
 function aplicarCreacion(){
-        // Permite obtener todos los valores de los elementos del form del jsp
-        //resultado = __agregarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.agregar"),'AgregarClienteAjax.do','ListarClientesAjax.do','#tableListar')
         var formulario = $("#formulario").serialize();
         swal({
            title: '',
@@ -808,7 +806,6 @@ function aplicarCreacion(){
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
         }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
             if(isConfirm){
                 $.ajax({
                     type : "POST",

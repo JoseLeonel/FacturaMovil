@@ -1004,6 +1004,7 @@
         getPosicionInputCodigo()
          __bajarPDF()
           __reimprimir()
+          __seleccionarClientes()
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
             {
@@ -2452,7 +2453,7 @@ function __FacturaEnEspera(factura){
         method:"POST",
         success: function (data) {
             if(data.aaData.length > 0){
-               cargarDetallesFacturaEnEspera(data.aaData)
+               cargarDetallesFacturaEnEspera(data.aaData,null,1)
             }
         },
         error: function (xhr, status) {
@@ -2460,81 +2461,6 @@ function __FacturaEnEspera(factura){
 
         }
     });
-}
-
-function cargarDetallesFacturaEnEspera(data){
-    $('.nota').val(null);
-    $('.correoAlternativo').val(null);
-    $('.nombreFactura').val(null);
-    self.detail = [];
-    self.numeroLinea =  0
-    self.cantArticulos =  0
-    self.pesoPrioridad = 0
-    self.update()
-    $.each(data, function( index, modeloTabla ) {
-        self.factura = modeloTabla.factura
-        $('.nota').val(self.factura.nota);
-        $('.correoAlternativo').val(self.factura.correoAlternativo);
-        $('.nombreFactura').val(self.factura.nombreFactura);
-        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-        self.cliente              = modeloTabla.factura.cliente
-        self.vendedor             = modeloTabla.factura.vendedor
-        self.update()
-        self.descripcionArticulo = modeloTabla.descripcion
-        self.detail.push({
-            numeroLinea     : modeloTabla.numeroLinea,
-            pesoPrioridad    :modeloTabla.numeroLinea,
-            codigo          : modeloTabla.codigo,
-            tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : "",
-            descripcion     : modeloTabla.descripcion,
-            cantidad        : __valorNumerico(modeloTabla.cantidad),
-            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
-            impuesto        : __valorNumerico(modeloTabla.impuesto),
-            impuesto1       : 0,
-            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
-            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
-            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
-            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
-            subTotal        : __valorNumerico(modeloTabla.subTotal),
-            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
-            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
-            costo           : __valorNumerico(modeloTabla.costo),
-            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
-            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
-            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
-            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
-            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
-            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
-            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
-            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
-            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
-            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
-            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
-            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
-        });
-        self.update()
-        self.numeroLinea   = self.numeroLinea + 1
-        self.cantArticulos = self.cantArticulos + 1
-        self.pesoPrioridad = self.numeroLinea
-    })
-    self.factura.totalCambioPagar = self.factura.totalComprobante;
-    self.totalCambioPagar         = self.factura.totalComprobante
-    self.detail.sort(function(a,b) {
-        if ( a.pesoPrioridad > b.pesoPrioridad )
-            return -1;
-        if ( a.pesoPrioridad < b.pesoPrioridad )
-            return 1;
-        return 0;
-    } );
-    self.update()
-    $(".nombreFactura").val(self.factura.nombreFactura)
-    $(".correoAlternativo").val(self.factura.correoAlternativo)
-    seleccionarEfectivo()
-    $('#totalBanco').val(null)
-    __ComboTipoDocumentos(0)
-    __aplicarExoneracionPorCliente()
-    __calculate()
 }
 
 function seleccionarEfectivo(){
@@ -2993,7 +2919,7 @@ function __ListaDeClientes(){
                 loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
-                __seleccionarClientes()
+                
                  $('#modalClientes').modal('show')
             }
         },
@@ -3326,6 +3252,8 @@ function setItemNuevo(cantidad){
        pesoPrioridad   : self.pesoPrioridad,
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?"":self.articulo.tipoImpuesto,
        tipoImpuesto1   : "",
+       tipoCodigo      : self.articulo.tipoCodigo,
+       unidadMedida    : self.articulo.unidadMedida,
        iva             : __valorNumerico(self.articulo.impuesto),
        iva1            : 0,
        codigo          : self.articulo.codigo,
@@ -3764,10 +3692,7 @@ function retotalizarMAG(valor){
                 }
             }else{
                 if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.update()
-                        
-                    });
+                    cargarDetallesFacturaEnEspera(data.listaObjetos,self.factura,2)
                 }
             }
             $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
@@ -3783,6 +3708,85 @@ function retotalizarMAG(valor){
     });
 
 }
+
+
+function cargarDetallesFacturaEnEspera(data,facturaPametros,tipo){
+    $('.nota').val(null);
+    $('.correoAlternativo').val(null);
+    $('.nombreFactura').val(null);
+    self.detail = [];
+    self.numeroLinea =  0
+    self.cantArticulos =  0
+    self.pesoPrioridad = 0
+    self.update()
+    $.each(data, function( index, modeloTabla ) {
+        self.factura = tipo == 1?modeloTabla.factura:facturaPametros
+        $('.nota').val(self.factura.nota);
+        $('.correoAlternativo').val(self.factura.correoAlternativo);
+        $('.nombreFactura').val(self.factura.nombreFactura);
+        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+        self.cliente              = tipo == 1?modeloTabla.factura.cliente:self.cliente
+        self.vendedor             = tipo == 1?modeloTabla.factura.vendedor:null
+        self.update()
+        self.descripcionArticulo = modeloTabla.descripcion
+        self.detail.push({
+            numeroLinea     : modeloTabla.numeroLinea,
+            tipoCodigo      : modeloTabla.tipoCodigo,
+            unidadMedida    : modeloTabla.unidadMedida,
+            pesoPrioridad    :modeloTabla.numeroLinea,
+            codigo          : modeloTabla.codigo,
+            tipoImpuesto    : modeloTabla.tipoImpuesto,
+            tipoImpuesto1   : "",
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : __valorNumerico(modeloTabla.cantidad),
+            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+            impuesto        : __valorNumerico(modeloTabla.impuesto),
+            impuesto1       : 0,
+            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+            subTotal        : __valorNumerico(modeloTabla.subTotal),
+            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+            costo           : __valorNumerico(modeloTabla.costo),
+            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
+            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
+            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
+            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
+        });
+        self.update()
+        self.numeroLinea   = self.numeroLinea + 1
+        self.cantArticulos = self.cantArticulos + 1
+        self.pesoPrioridad = self.numeroLinea
+    })
+    self.factura.totalCambioPagar = self.factura.totalComprobante;
+    self.totalCambioPagar         = self.factura.totalComprobante
+    self.detail.sort(function(a,b) {
+        if ( a.pesoPrioridad > b.pesoPrioridad )
+            return -1;
+        if ( a.pesoPrioridad < b.pesoPrioridad )
+            return 1;
+        return 0;
+    } );
+    self.update()
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    seleccionarEfectivo()
+    $('#totalBanco').val(null)
+    __ComboTipoDocumentos(0)
+    __aplicarExoneracionPorCliente()
+    __calculate()
+}
+
 
 function __aplicarExoneracionPorCliente(){
     var aplicaExo = false

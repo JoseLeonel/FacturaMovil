@@ -1118,7 +1118,7 @@ function mensajeErrorServidor(xhr, status) {
 	if(xhr.getResponseHeader("UNAUTHORIZED")=="true"){
         window.location.href = "login";
 	}else if (xhr.status == 500) {
-		window.location.href = "ErrorPage.jsp?exceptionMessage="
+		window.location.href = "403?exceptionMessage="
 			+ xhr.getResponseHeader("exception");
     }else {
     	 mensajeAlertErrorOConfirmacion('error',$.i18n.prop("mensaje.error.general"));    	
@@ -1648,7 +1648,7 @@ function mensajeErrorServidorQAManager(xhr, status, mensaje) {
     if (xhr.getResponseHeader("UNAUTHORIZED") == "true") {
         window.location.href = "Login.do";
     } else if (xhr.status == 500) {
-        window.location.href = "ErrorPage.jsp?exceptionMessage="
+        window.location.href = "403?exceptionMessage="
                 + xhr.getResponseHeader("exception");
     } else {
         mensajeErrorQAManager(mensaje);

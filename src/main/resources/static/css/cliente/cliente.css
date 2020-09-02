@@ -1,0 +1,6 @@
+#tituloBotones{
+	display:flex;
+	justify-content: space-between;
+}
+#tituloBotones > div{
+}
