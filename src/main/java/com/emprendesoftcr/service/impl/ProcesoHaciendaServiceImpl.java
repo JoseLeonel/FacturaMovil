@@ -338,7 +338,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
 
-  @Scheduled(cron = "0 0/1 * * * ?")
+ // @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoCambiarConsecutivo() throws Exception {
 
@@ -683,7 +683,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/5 23 * * ?")
+	@Scheduled(cron = "0 0/5 13 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -752,7 +752,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
 				//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);

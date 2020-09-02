@@ -575,6 +575,7 @@ function findByCodigo(){
                 self.botonAgregar  = true;            
                 self.update()
                 __listadoTarifasByTipoImpuesto("",1)
+                __listadoTarifasByTipoImpuestoMag("",1)
                 enviarCargarCombos()
                 
             }else{
@@ -592,6 +593,8 @@ function findByCodigo(){
                         self.botonEntrada = true
                         self.update()
                         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+                        __listadoTarifasByTipoImpuestoMag(self.articulo.tipoImpuestoMag,1)
+                        
                         $("#formulario").validate(reglasDeValidacion());   
                         enviarCargarCombos()
                         inicializarCursorCodigo()
