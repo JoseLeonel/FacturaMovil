@@ -112,6 +112,7 @@
             </div>
             <div class="col-xs-12 text-right">
                 <a      show={hay_datos== true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar " href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar Detallada</a>        
                 <button  show={hay_datos== true} onclick ={__CorreoAlternativo} type="button" class="btn btn-primary btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>                        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             </div>

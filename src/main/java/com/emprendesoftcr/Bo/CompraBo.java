@@ -10,6 +10,8 @@ import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
@@ -39,4 +41,6 @@ public interface CompraBo {
 	void anularCompra(Compra compra) throws Exception;
 
 	ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException;
+	
+	ByteArrayInputStream  createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
 }

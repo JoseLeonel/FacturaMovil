@@ -418,15 +418,15 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
-	@Autowired
-	private CertificadoBo certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -644,13 +644,6 @@ public class FacturasController {
 		}
 	}
 
-//	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
-//		// Se prepara el excell
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		List<String> headers = Arrays.asList("Fecha Emision", "Cedula", "Cliente", "A nombre", "Actividad Economica", "Tipo Documento", "Condicion Venta", "Fecha Credito", "# Documento", "#Proforma", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito", "Nota");
-//		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR,cedulaCliente, nombreCliente,nombreFactura,codigoActividad,tipoDocSTR,condicionVentaSTR,fechaCreditoSTR, numeroConsecutivo,consecutivoProforma, totalGravadoNC, totalExentoNC, totalVentaNetaNC, totalImpuestoNC, totalDescuentosNC,totalOtrosCargosNC, totalComprobanteNC,codigoMoneda, tipoCambioSTR, totalColonesNC,totalEfectivoNC,totalTarjetaNC,totalBancoNC,totalCreditoNC,nota", baos);
-//		return baos;
-//	}
 
 	@RequestMapping(value = "/DescargarPorDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
 	public void descargarPorDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException, Exception {
@@ -678,7 +671,7 @@ public class FacturasController {
 		}
 	}
 
-	/**
+	/**i
 	 * Enviar coreo de la consulta listar factura
 	 * @param request
 	 * @param response
@@ -709,17 +702,9 @@ public class FacturasController {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-//			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-//			response.setContentType("application/octet-stream");
-//			response.setContentLength((int) namePDF.toByteArray().length);
-//			String fileName = Constantes.EMPTY;
-//
-//			fileName = "Proforma_" + factura.getId().toString();
-
 			byte[] bytes  =  namePDF.toByteArray();
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
-				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
 				ServletOutputStream outputstream = response.getOutputStream();
 				outputstream.write(bytes, 0, bytes.length);
 				outputstream.flush();
@@ -756,13 +741,9 @@ public class FacturasController {
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-//			int BUFFER_SIZE = 4096;
-//			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-			
 			byte[] bytes  =  namePDF.toByteArray();
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
-				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
 				ServletOutputStream outputstream = response.getOutputStream();
 				outputstream.write(bytes, 0, bytes.length);
 				outputstream.flush();
@@ -772,45 +753,7 @@ public class FacturasController {
 				System.out.println("NO trae nada");
 			}
 			
-//			//response.setContentType("application/octet-stream");
-//			response.setContentType("application/pdf");
-//			response.setContentLength((int) namePDF.toByteArray().length);
-//			String fileName = Constantes.EMPTY;
-//
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-//				fileName = "TiquetePDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-//			}
-//
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-//				fileName = "FacturaPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-//			}
-//
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-//				fileName = "NotaCreditoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-//			}
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-//				fileName = "NotaDebitoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
-//			}
-//
-//			String headerKey = "Content-Disposition";
-//		//	String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-//		//	response.setHeader(headerKey, headerValue);
-//			OutputStream outStream = response.getOutputStream();
-//			
-//			
-//			byte[] buffer = new byte[BUFFER_SIZE];
-//			int bytesRead = -1;
-//			while ((bytesRead = inputStream.read(buffer)) != -1) {
-//				outStream.write(buffer, 0, bytesRead);
-//			}
-//			inputStream.close();
-//	//		ServletOutputStream outputstream = response.getOutputStream();
-//			
-//	//		outputstream.write(bytes, 0, bytes.length);
-////			outputstream.flush();
-////			outputstream.close();
-//			outStream.flush();
-//			outStream.close();
+
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		} catch (com.google.zxing.WriterException ex) {

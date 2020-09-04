@@ -1,9 +1,12 @@
 package com.emprendesoftcr.Bo;
 
+import java.io.ByteArrayInputStream;
 import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
+import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 
 public interface DetalleCompraBo {
 	
@@ -16,6 +19,6 @@ public interface DetalleCompraBo {
 	
 	Collection<DetalleCompra> findByCompra(Compra compra);
 	
-	
+	ByteArrayInputStream  createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
 
 }

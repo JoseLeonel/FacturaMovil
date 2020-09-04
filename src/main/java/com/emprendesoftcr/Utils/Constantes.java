@@ -713,4 +713,14 @@ public class Constantes {
 	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO															= "ID_CAJA_USUARIO";
 	public static final String					SP_ELIMINA_CAJA_ID_CAJA_USUARIO																= "usua_caja_id";
 	public static final String					SP_ELIMINA_CONTEO_TIPO																				= "tipo";
+
+	public static final String					CODIGO_TARIFA_0_PORCIENTO																			= "01";
+	public static final String					CODIGO_TARIFA_1_PORCIENTO																			= "02";
+	public static final String					CODIGO_TARIFA_2_PORCIENTO																			= "03";
+	public static final String					CODIGO_TARIFA_4_PORCIENTO																			= "04";
+	public static final String					CODIGO_TARIFA_0_TRANSITORIO_PORCIENTO													= "05";
+	public static final String					CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO													= "06";
+	public static final String					CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO													= "07";
+	public static final String					CODIGO_TARIFA_13_GENERAL_PORCIENTO														= "08";
+
 }

@@ -40,6 +40,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.DetalleCompraBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
@@ -101,7 +102,7 @@ public class ComprasController {
 
 	@Autowired
 	private RecepcionFacturaBo																				recepcionFacturaBo;
-	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
+	private Logger																										log									= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -114,6 +115,9 @@ public class ComprasController {
 
 	@Autowired
 	private CompraBo																									compraBo;
+
+	@Autowired
+	private DetalleCompraBo																						detalleCompraBo;
 
 	@Autowired
 	private EmpresaBo																									empresaBo;
@@ -129,12 +133,10 @@ public class ComprasController {
 
 	@Autowired
 	private FechaPropertyEditor																				fechaPropertyEditor;
-	
+
 	@Autowired
 	private ClientePropertyEditor																			clientePropertyEditor;
 
-
-	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Proveedor.class, proveedorPropertyEditor);
@@ -142,7 +144,7 @@ public class ComprasController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
-		
+
 	}
 
 	@RequestMapping(value = "/ListaCompras", method = RequestMethod.GET)
@@ -169,7 +171,7 @@ public class ComprasController {
 	public String listaRecepcionFacturas(ModelMap model) {
 		return "views/facturas/listaRecepcionFacturas";
 	}
-	
+
 	/**
 	 * Recibir factura de otro emisor
 	 * @param request
@@ -403,14 +405,14 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) {
 		Date inicio = Utils.parseDate(fechaInicio);
 		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		
+
 		TotalComprasAceptadasCommand totalCompras = new TotalComprasAceptadasCommand();
 		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(inicio, finalDate, usuario.getEmpresa(), Constantes.EMPTY, estado, tipoGasto, actividadEconomica);
 		Double totalImpuestoNotaCredito = Constantes.ZEROS_DOUBLE;
@@ -421,44 +423,63 @@ public class ComprasController {
 		Double totalCompra = Constantes.ZEROS_DOUBLE;
 		Double tipoCambio = Constantes.ZEROS_DOUBLE;
 		for (RecepcionFactura recepcionFactura : recepcionFacturas) {
-			tipoCambio = recepcionFactura.getFacturaTipoCambio() == null?1:recepcionFactura.getFacturaTipoCambio();
+			 tipoCambio = recepcionFactura.getFacturaTipoCambio() == null ? 1 : recepcionFactura.getFacturaTipoCambio();
+			Double valor = Constantes.ZEROS_DOUBLE;
 			if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + (recepcionFactura.getFacturaTotalImpuestos()*tipoCambio) : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
+				valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
+				totalImpuestoNotaCredito = totalImpuestoNotaCredito + valor;
+				valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
+				totalCompraNotaCredito = totalCompraNotaCredito + valor;
 			} else if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-				totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + (recepcionFactura.getFacturaTotalImpuestos()*tipoCambio) : Constantes.ZEROS_DOUBLE;
-				totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
-			}
-			if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + (recepcionFactura.getFacturaTotalImpuestos() *tipoCambio) : Constantes.ZEROS_DOUBLE;
-				totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + (recepcionFactura.getFacturaTotalComprobante()*tipoCambio) : Constantes.ZEROS_DOUBLE;
+				valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
+				totalImpuestoNotaDebito = totalImpuestoNotaDebito + valor;
+				valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
 
+				totalCompraNotaDebito = totalCompraNotaDebito + valor;
+			}
+			if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
+
+				totalImpuestosCompras = valor + totalImpuestosCompras;
+				valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+				valor = valor * tipoCambio;
+
+				totalCompra = valor + totalCompra;
 			}
 		}
-		totalCompras.setTotalImpuesto(totalImpuestosCompras);
+		Double resultadoFinal = totalImpuestoNotaDebito + totalImpuestosCompras;
+		resultadoFinal = resultadoFinal - totalImpuestoNotaCredito;
+		totalCompras.setTotalImpuesto(resultadoFinal);
 		totalCompras.setTotalImpuestoNotaCredito(totalImpuestoNotaCredito);
 		totalCompras.setTotalImpuestoNotaDebito(totalImpuestoNotaDebito);
 		totalCompras.setTotalNotaCredito(totalCompraNotaCredito);
 		totalCompras.setTotalNotaDebito(totalCompraNotaDebito);
-		totalCompras.setTotal(totalCompra);
+		resultadoFinal = totalCompraNotaDebito + totalCompra;
+		resultadoFinal = resultadoFinal - totalCompraNotaCredito;
+		totalCompras.setTotal(resultadoFinal);
 
 		return totalCompras;
 	}
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
+	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-			
+
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			// Se obtiene los totales
 			Date fechaInicio = Utils.parseDate(fechaInicioParam);
 			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-			
+
 			TotalComprasAceptadasCommand totalComprasAceptadasCommand = new TotalComprasAceptadasCommand();
 
 			Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY, estado, tipoGasto, actividadEconomica);
@@ -469,28 +490,53 @@ public class ComprasController {
 			Double totalCompraNotaDebito = Constantes.ZEROS_DOUBLE;
 			Double totalCompra = Constantes.ZEROS_DOUBLE;
 			for (RecepcionFactura recepcionFactura : recepcionFacturas) {
+				Double tipoCambio = recepcionFactura.getFacturaTipoCambio() == null ? 1 : recepcionFactura.getFacturaTipoCambio();
+				Double valor = Constantes.ZEROS_DOUBLE;
 				if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-					totalImpuestoNotaCredito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaCredito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-					totalCompraNotaCredito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaCredito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+					valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
+					totalImpuestoNotaCredito = totalImpuestoNotaCredito + valor;
+					valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
+					totalCompraNotaCredito = totalCompraNotaCredito + valor;
 				} else if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-					totalImpuestoNotaDebito = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestoNotaDebito + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-					totalCompraNotaDebito = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompraNotaDebito + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
-				}
-				if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-					totalImpuestosCompras = recepcionFactura.getFacturaTotalImpuestos() != null ? totalImpuestosCompras + recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
-					totalCompra = recepcionFactura.getFacturaTotalComprobante() != null ? totalCompra + recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+					valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
+					totalImpuestoNotaDebito = totalImpuestoNotaDebito + valor;
+					valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
 
+					totalCompraNotaDebito = totalCompraNotaDebito + valor;
+				}
+				if (!recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
+
+					totalImpuestosCompras = valor + totalImpuestosCompras;
+					valor = recepcionFactura.getFacturaTotalComprobante() != null ? recepcionFactura.getFacturaTotalComprobante() : Constantes.ZEROS_DOUBLE;
+					valor = valor * tipoCambio;
+
+					totalCompra = valor + totalCompra;
 				}
 			}
-			totalComprasAceptadasCommand.setTotalImpuesto(totalImpuestosCompras);
+			Double resultadoFinal = totalImpuestoNotaDebito + totalImpuestosCompras;
+			resultadoFinal = resultadoFinal - totalImpuestoNotaCredito;
+			totalComprasAceptadasCommand.setTotalImpuesto(resultadoFinal);
 			totalComprasAceptadasCommand.setTotalImpuestoNotaCredito(totalImpuestoNotaCredito);
 			totalComprasAceptadasCommand.setTotalImpuestoNotaDebito(totalImpuestoNotaDebito);
 			totalComprasAceptadasCommand.setTotalNotaCredito(totalCompraNotaCredito);
 			totalComprasAceptadasCommand.setTotalNotaDebito(totalCompraNotaDebito);
-			totalComprasAceptadasCommand.setTotal(totalCompra);
+			resultadoFinal = totalCompraNotaDebito + totalCompra;
+			resultadoFinal = resultadoFinal - totalCompraNotaCredito;
+			totalComprasAceptadasCommand.setTotal(resultadoFinal);
 
-			// Se prepara el excell
-			ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
+			// Se prepara el excell createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) 
+		// Se buscan las facturas
+			Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			Collection<RecepcionFacturaDetalle> lista = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), "", estado, tipoGasto, actividadEconomica);
+
+			
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleCompraBo.createExcelDetalleCompra(lista, fechaInicioParam, fechaFinParam, usuario.getEmpresa()));
 			Collection<Attachment> attachments = createAttachments(attachment("ComprasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
@@ -517,7 +563,7 @@ public class ComprasController {
 			if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 				modelEmail.put("estado", "No Aceptadas");
 			}
-			
+
 			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 			modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);
@@ -540,7 +586,6 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 
-		
 		return respuestaServiceValidator;
 	}
 
@@ -559,12 +604,12 @@ public class ComprasController {
 	 * @param fechaFinParam
 	 * @param cedulaEmisor
 	 * @param estado
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) throws IOException {
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) throws Exception {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		
+
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
@@ -573,9 +618,8 @@ public class ComprasController {
 		String nombreArchivo = "comprasAceptadas.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		
+		ByteArrayInputStream inputStream = compraBo.createExcelRecepcionCompra(recepcionFacturas, fechaInicioParam, fechaFinParam, usuario.getEmpresa());
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -583,7 +627,7 @@ public class ComprasController {
 		while ((bytesRead = inputStream.read(buffer)) != -1) {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
-	}
+			}
 
 	/**
 	 * Modulo de compras
@@ -600,8 +644,8 @@ public class ComprasController {
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
 
-			@SuppressWarnings("unused")
-			RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		@SuppressWarnings("unused")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
@@ -642,13 +686,13 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica","Estado Hacienda","Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor","Correo","Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo Documento","Tipo de Gasto");
+		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total", "Total(total X tipoCambio)", "Tipo Documento", "Tipo de Gasto");
 		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad,estadoSTR,mensajeSTR, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre,emisorCorreo,emisorTelefono, facturaConsecutivo,facturaCodigoMoneda,facturaTipoCambio, totalImpuestosSTR,totalImpuestosSTRTipoCambio,totalFacturaSTR,totalFacturaSTRTipoCambio,   tipoDocumentoStr,tipoGastoStr", baos);
 		return baos;
 	}
 
 	@RequestMapping(value = "/DescargarDetalladaAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws IOException {
+	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -657,13 +701,12 @@ public class ComprasController {
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor, estado, tipoGasto, actividadEconomica);
 
-		String nombreArchivo = "comprasPorDetalleAceptadas.xls";
+		String nombreArchivo = "compras.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelDetalleRecepcionCompras(recepcionFacturas);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ByteArrayInputStream inputStream = detalleCompraBo.createExcelDetalleCompra(recepcionFacturas, fechaInicioParam, fechaFinParam, usuario.getEmpresa());
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -676,7 +719,7 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica","Estado Hacienda","Aceptacion Receptor","Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor","Correo","Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total","Total(total X tipoCambio)", "Tipo de Gasto");
+		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total", "Total(total X tipoCambio)", "Tipo de Gasto");
 		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.estadoSTR,recepcionFactura.mensajeSTR,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre,recepcionFactura.emisorCorreo,recepcionFactura.emisorTelefono, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoMontoSTR,impuestoMontoSTRTimpoCambio,montoLineaSTR,montoLineaSTRTimpoCambio,recepcionFactura.tipoGastoStr", baos);
 		return baos;
 	}
@@ -721,7 +764,6 @@ public class ComprasController {
 		}
 	}
 
-	
 	/**
 	 * Lista las compras pendientes de ingresar al inventario
 	 * @param request

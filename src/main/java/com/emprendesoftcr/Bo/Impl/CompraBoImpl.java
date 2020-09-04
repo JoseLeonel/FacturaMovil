@@ -19,6 +19,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.jxls.template.SimpleExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
+import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
@@ -100,7 +103,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setEstado(compraCommand.getEstado());
 			compra.setFormaPago(compraCommand.getFormaPago());
 			if (compra.getFechaCompra() != null) {
-					compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
+				compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
 			} else {
 				compra.setFechaCompra(new Date());
 			}
@@ -164,17 +167,17 @@ public class CompraBoImpl implements CompraBo {
 					articulo.setFechaUltimaCompra(compra.getFechaCompra());
 					articulo.setGananciaPrecioPublico(detalleCompra.getGanancia());
 					articulo.setUpdated_at(new Date());
-					
+
 					articuloDao.modificar(articulo);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 							aplicarInventario(compra, detalleCompra, articulo);
-						}else {
+						} else {
 							articulo.setCosto(detalleCompra.getCosto());
 							articulo.setPrecioPublico(detalleCompra.getPrecio());
 							articuloDao.modificar(articulo);
-							
+
 						}
 
 						actualizarProveedor(detalleCompra, compra.getProveedor());
@@ -231,9 +234,9 @@ public class CompraBoImpl implements CompraBo {
 	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor) {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			//	totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
-				Double descuento = detalleCompra.getTotalDescuento() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getTotalDescuento()/detalleCompra.getCantidad();
-				Double costo = totalLinea - descuento;
+			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
+			Double costo = totalLinea - descuento;
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
@@ -268,15 +271,14 @@ public class CompraBoImpl implements CompraBo {
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-		//	totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
-			Double descuento = detalleCompra.getTotalDescuento() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getTotalDescuento()/detalleCompra.getCantidad();
+			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
 			Double costo = totalLinea - descuento;
-			
-		
+
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entradaCosto(articulo, costo, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 //			articulo.setCosto(costoPromedio);
-			Double porcentajeGanancia =articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
+			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
@@ -290,8 +292,6 @@ public class CompraBoImpl implements CompraBo {
 		}
 
 	}
-
-
 
 	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
@@ -346,8 +346,8 @@ public class CompraBoImpl implements CompraBo {
 	}
 
 	@Override
-	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconocimica,String tipoGasto) {
-		return compraDao.sumarComprasAceptadas(fechaInicio, fechaFinal, idEmpresa,estado,actividadEconocimica,tipoGasto);
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconocimica, String tipoGasto) {
+		return compraDao.sumarComprasAceptadas(fechaInicio, fechaFinal, idEmpresa, estado, actividadEconocimica, tipoGasto);
 	}
 
 	@Override
@@ -357,8 +357,8 @@ public class CompraBoImpl implements CompraBo {
 			compra.setUpdated_at(new Date());
 			compra.setEstado(Constantes.COMPRA_ESTADO_ANULADA);
 			compraDao.modificar(compra);
-			CuentaPagar cuentaPagar = cuentaPagarDao.findByConsecutivoAndEmpresa(compra.getConsecutivo(),compra.getEmpresa());
-			if(cuentaPagar !=null) {
+			CuentaPagar cuentaPagar = cuentaPagarDao.findByConsecutivoAndEmpresa(compra.getConsecutivo(), compra.getEmpresa());
+			if (cuentaPagar != null) {
 				cuentaPagarDao.eliminar(cuentaPagar);
 			}
 			Collection<DetalleCompra> detalleCompras = detalleCompraDao.findByCompra(compra);
@@ -366,7 +366,7 @@ public class CompraBoImpl implements CompraBo {
 				for (DetalleCompra detalleCompra : detalleCompras) {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleCompra.getArticulo().getCodigo(), compra.getEmpresa());
 					if (articulo != null) {
-						disminuirInventario(articulo,compra,detalleCompra);
+						disminuirInventario(articulo, compra, detalleCompra);
 					}
 				}
 			}
@@ -396,106 +396,246 @@ public class CompraBoImpl implements CompraBo {
 
 	@Override
 	public ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException {
-		List<String> headers = Arrays.asList("Id", "Fecha Compra","Fecha Credito" ,"Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total", "usuario");
-	// Libro excel
-			Workbook workbook = new HSSFWorkbook();
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			Map<String, CellStyle> styles = Utils.createStyles(workbook);
-			Sheet sheet = workbook.createSheet("Compras");
+		List<String> headers = Arrays.asList("Id", "Fecha Compra", "Fecha Credito", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total", "usuario");
+		// Libro excel
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Map<String, CellStyle> styles = Utils.createStyles(workbook);
+		Sheet sheet = workbook.createSheet("Compras");
 		// title row
-			Row title = sheet.createRow(0);
-			title.setHeightInPoints(25);
-			Cell titleCell = title.createCell(0);
-			titleCell.setCellValue("Resumen de Compras del " + fechaInicio + " al " + fechaFinal);
-			titleCell.setCellStyle(styles.get("title1"));
-			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$H$2"));
+		Row title = sheet.createRow(0);
+		title.setHeightInPoints(25);
+		Cell titleCell = title.createCell(0);
+		titleCell.setCellValue("Resumen de Compras del " + fechaInicio + " al " + fechaFinal);
+		titleCell.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$H$2"));
 
-			Row titleEmpresa = sheet.createRow(1);
-			titleEmpresa.setHeightInPoints(25);
-			Cell titleCell1 = titleEmpresa.createCell(0);
-			titleCell1.setCellValue(empresa.getNombre());
-			titleCell1.setCellStyle(styles.get("title1"));
-			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$H$3"));
+		Row titleEmpresa = sheet.createRow(1);
+		titleEmpresa.setHeightInPoints(25);
+		Cell titleCell1 = titleEmpresa.createCell(0);
+		titleCell1.setCellValue(empresa.getNombre());
+		titleCell1.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$H$3"));
 
-			Row titleCedula = sheet.createRow(2);
-			titleCedula.setHeightInPoints(25);
-			Cell titleCell2 = titleCedula.createCell(0);
-			titleCell2.setCellValue("Cedula:" + empresa.getCedula());
-			titleCell2.setCellStyle(styles.get("title1"));
-			sheet.addMergedRegion(CellRangeAddress.valueOf("$A$4:$H$4"));
+		Row titleCedula = sheet.createRow(2);
+		titleCedula.setHeightInPoints(25);
+		Cell titleCell2 = titleCedula.createCell(0);
+		titleCell2.setCellValue("Cedula:" + empresa.getCedula());
+		titleCell2.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$4:$H$4"));
+
+		Row row = sheet.createRow(4);
+		row.setHeightInPoints(25);
+		Cell headerCell;
+		for (int i = 0; i < headers.size(); i++) {
+			headerCell = row.createCell(i);
+			headerCell.setCellValue(headers.get(i));
+			headerCell.setCellStyle(styles.get("header"));
+
+		}
+		int rownum = 5;
+		for (Compra compra : compras) {
+			row = sheet.createRow(rownum);
+			Cell cell = row.createCell(0);
+			Utils.getCelSTR(cell, styles, compra.getId() + "");
+
+			cell = row.createCell(1);
+			Utils.getCelSTR(cell, styles, compra.getFechaCompraSTR());
+
+			cell = row.createCell(2);
+			Utils.getCelSTR(cell, styles, compra.getFechaCreditoSTR());
+
+			cell = row.createCell(3);
+			Utils.getCelSTR(cell, styles, compra.getFechaIngresoSTR());
+
+			cell = row.createCell(4);
+			Utils.getCelSTR(cell, styles, compra.getConsecutivo());
+
+			cell = row.createCell(5);
+			Utils.getCelSTR(cell, styles, compra.getProveedorSTR());
+
+			cell = row.createCell(6);
+			Utils.getCel(cell, styles, compra.getTotalImpuesto());
+
+			cell = row.createCell(7);
+			Utils.getCel(cell, styles, compra.getTotalCompra());
+
+			cell = row.createCell(8);
+			Utils.getCelSTR(cell, styles, compra.getUsuarioIngresoInventario().getNombre());
+			rownum++;
+		}
+		int contnum = rownum;
+		Row sumRow = sheet.createRow(rownum++);
+		for (int j = 0; j <= headers.size(); j++) {
+			Cell cell = sumRow.createCell(j);
+			if (j == 5) {
+				cell.setCellValue("Totales  :");
+				cell.setCellStyle(styles.get("formula"));
+			}
+			if (j <= 6 || j == 8) {
+				cell.setCellStyle(styles.get("formula"));
+				sheet.setColumnWidth(j, 8000);
+			}
+			if (j == 6) {
+				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+				String ref = "G" + 6 + ":G" + contnum;
+				cell.setCellFormula("SUM(" + ref + ")");
+				cell.setCellStyle(styles.get("formula"));
+				sheet.setColumnWidth(j, 8000);
+			}
+			if (j == 7) {
+				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+				String ref = "H" + 6 + ":H" + contnum;
+				cell.setCellFormula("SUM(" + ref + ")");
+				cell.setCellStyle(styles.get("formula"));
+				sheet.setColumnWidth(j, 8000);
+			}
+
+		}
+
+		workbook.write(stream);
+		workbook.close();
+		return new ByteArrayInputStream(stream.toByteArray());
+	}
+
+	@Override
+	public ByteArrayInputStream createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {
+		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio",  "Total Impuesto(total impuesto X tipoCambio)",  "Total(total X tipoCambio)", "Tipo Documento", "Tipo de Gasto");
+
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Map<String, CellStyle> styles = Utils.createStyles(workbook);
+		Sheet sheet = workbook.createSheet("Compras");
+		// title row
+		Row title = sheet.createRow(0);
+		title.setHeightInPoints(25);
+		Cell titleCell = title.createCell(0);
+		titleCell.setCellValue("Compras Resumen " + fechaInicio + " al " + fechaFin);
+		titleCell.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$AC$1"));
+
+		Row titleEmpresa = sheet.createRow(1);
+		titleEmpresa.setHeightInPoints(25);
+		Cell titleCell1 = titleEmpresa.createCell(0);
+		titleCell1.setCellValue(empresa.getNombre());
+		titleCell1.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$2:$AC$2"));
+
+		Row titleCedula = sheet.createRow(2);
+		titleCedula.setHeightInPoints(25);
+		Cell titleCell2 = titleCedula.createCell(0);
+		titleCell2.setCellValue("Cedula:" + empresa.getCedula());
+		titleCell2.setCellStyle(styles.get("title1"));
+		sheet.addMergedRegion(CellRangeAddress.valueOf("$A$3:$AC$3"));
+		Row row = sheet.createRow(3);
+		row.setHeightInPoints(25);
+		Cell headerCell;
+		for (int i = 0; i < headers.size(); i++) {
+			headerCell = row.createCell(i);
+			headerCell.setCellValue(headers.get(i));
+			headerCell.setCellStyle(styles.get("header"));
+
+		}
+
+		//
+		int rownum = 4;
+		for (RecepcionFactura recepcionFactura : lista) {
+			row = sheet.createRow(rownum);
+			// Codigo Actividad
+			Cell cell = row.createCell(0);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getCodigoActividad());
+			// Estado
+			cell = row.createCell(1);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getEstadoSTR());
+			// Aceptacion Receptor
+			cell = row.createCell(2);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getMensajeSTR());
+
+			// Fecha Crecion
+			cell = row.createCell(3);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getCreated_atSTR());
+			// Fecha Emision
+			cell = row.createCell(4);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getFechaEmisionSTR());
+			// Clave
+			cell = row.createCell(5);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getFacturaClave());
+			// Consecutivo receptor
+			cell = row.createCell(6);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getNumeroConsecutivoReceptor());
+			// Cedula
+			cell = row.createCell(7);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getEmisorCedula());
+			// Nombre Emisor
+			cell = row.createCell(8);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getEmisorNombre());
+			// Emisor Correo
+			cell = row.createCell(9);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getEmisorCorreo());
+			// Emisor telefono
+			cell = row.createCell(10);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getEmisorTelefono());
+			// Compra
+			cell = row.createCell(11);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getFacturaConsecutivo());
+
+			// CodigoMoneda
+			cell = row.createCell(12);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getFacturaCodigoMoneda());
+
+			// Tipo Cambio
+			cell = row.createCell(13);
+			Utils.getCel(cell, styles, recepcionFactura.getFacturaTipoCambio());
+
 			
-			Row row = sheet.createRow(4);
-			row.setHeightInPoints(25);
-			Cell headerCell;
-			for (int i = 0; i < headers.size(); i++) {
-				headerCell = row.createCell(i);
-				headerCell.setCellValue(headers.get(i));
-				headerCell.setCellStyle(styles.get("header"));
+			// Total Impuesto * tipo cambio
+			cell = row.createCell(14);
+			Utils.getCel(cell, styles, recepcionFactura.getTotalImpuestosSTRTipoCambio());
+			// Total Facturas * tipo Cambio
+			cell = row.createCell(15);
+			Utils.getCel(cell, styles, recepcionFactura.getTotalFacturaSTRTipoCambio());
+
+			cell = row.createCell(16);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getTipoDocumentoStr());
+			cell = row.createCell(17);
+			Utils.getCelSTR(cell, styles, recepcionFactura.getTipoGastoStr());
+			rownum++;
+
+		}
+		int contnum = rownum;
+		Row sumRow = sheet.createRow(rownum++);
+
+		for (int j = 0; j < 18; j++) {
+			Cell cell = sumRow.createCell(j);
+			if (j == 13) {
+				cell.setCellValue("Totales  :");
+				cell.setCellStyle(styles.get("formula"));
 
 			}
-			int rownum = 5;
-			for (Compra compra : compras) {
-				row = sheet.createRow(rownum);
-				Cell cell = row.createCell(0);
-				Utils.getCelSTR(cell, styles, compra.getId()+"");
-				
-				cell = row.createCell(1);
-				Utils.getCelSTR(cell, styles, compra.getFechaCompraSTR());
-
-				cell = row.createCell(2);
-				Utils.getCelSTR(cell, styles, compra.getFechaCreditoSTR());
-
-				cell = row.createCell(3);
-				Utils.getCelSTR(cell, styles, compra.getFechaIngresoSTR());
-				
-				cell = row.createCell(4);
-				Utils.getCelSTR(cell, styles, compra.getConsecutivo());
-
-				cell = row.createCell(5);
-				Utils.getCelSTR(cell, styles, compra.getProveedorSTR());
-
-				cell = row.createCell(6);
-				Utils.getCel(cell, styles, compra.getTotalImpuesto());
-
-				cell = row.createCell(7);
-				Utils.getCel(cell, styles, compra.getTotalCompra());
-
-				cell = row.createCell(8);
-				Utils.getCelSTR(cell, styles, compra.getUsuarioIngresoInventario().getNombre());
-				rownum++;
-			}	
-			int contnum = rownum;
-			Row sumRow = sheet.createRow(rownum++);
-			for (int j = 0; j <= headers.size(); j++) {
-				Cell cell = sumRow.createCell(j);
-				if (j == 5) {
-					cell.setCellValue("Totales  :");
-					cell.setCellStyle(styles.get("formula"));
-				}
-				if (j <= 6 || j == 8 ) {
-					cell.setCellStyle(styles.get("formula"));
-					sheet.setColumnWidth(j, 8000);
-				}
-				if (j == 6) {
-					// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
-					String ref = "G" + 6 + ":G" + contnum;
-					cell.setCellFormula("SUM(" + ref + ")");
-					cell.setCellStyle(styles.get("formula"));
-					sheet.setColumnWidth(j, 8000);
-				}
-				if (j == 7) {
-					// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
-					String ref = "H" + 6 + ":H" + contnum;
-					cell.setCellFormula("SUM(" + ref + ")");
-					cell.setCellStyle(styles.get("formula"));
-					sheet.setColumnWidth(j, 8000);
-				}
-
+			if (j <= 12 || j == 16 || j == 17 ) {
+				cell.setCellStyle(styles.get("formula"));
 			}
 
-			workbook.write(stream);
-			workbook.close();
-			return new ByteArrayInputStream(stream.toByteArray());
+			if (j == 14) {
+				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+				String ref = "O" + 4 + ":O" + contnum;
+				cell.setCellFormula("SUM(" + ref + ")");
+				cell.setCellStyle(styles.get("formula"));
+			}
+			if (j == 15) {
+				// the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+				String ref = "P" + 4 + ":P" + contnum;
+				cell.setCellFormula("SUM(" + ref + ")");
+				cell.setCellStyle(styles.get("formula"));
+			}
+		
+
+			sheet.setColumnWidth(j, 8500);
+		}
+
+		workbook.write(stream);
+		workbook.close();
+		return new ByteArrayInputStream(stream.toByteArray());
 	}
 
 }
