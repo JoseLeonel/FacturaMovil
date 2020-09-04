@@ -683,7 +683,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/5 13 * * ?")
+	@Scheduled(cron = "0 0/5 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -740,7 +740,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 					// San Ana
-					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
@@ -1606,7 +1606,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
