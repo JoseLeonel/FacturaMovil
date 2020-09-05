@@ -3618,6 +3618,7 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalEfectivo').select()
     __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
+    __calculate()
 }
 /** 
 *Formato de la fecha con hora
