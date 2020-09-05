@@ -365,7 +365,7 @@ public class DetalleController {
 					detalleFacturaCommand.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
 					detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 					detalleFacturaCommand.setMontoImpuesto(Utils.getMontoImpuesto(detalleFacturaCommand.getSubTotal(), Constantes.ZEROS_DOUBLE, detalleFacturaCommand.getMontoExoneracion(), detalleFacturaCommand.getImpuesto()));
-					detalleFacturaCommand.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalleFacturaCommand.getTipoDocumentoExoneracion(),detalleFacturaCommand.getImpuesto(), detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getSubTotal()));
+					detalleFacturaCommand.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalleFacturaCommand.getTipoDocumentoExoneracion(),detalleFacturaCommand.getImpuesto(), detalleFacturaCommand.getPorcentajeExoneracion(), detalleFacturaCommand.getSubTotal(),detalleFacturaCommand.getMontoImpuesto()));
 					detalleFacturaCommand.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 					Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
 					if (detalleFacturaCommand.getMontoDescuento() == null) {

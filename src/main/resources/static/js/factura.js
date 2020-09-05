@@ -57,6 +57,22 @@ function getPorcentajeExoneracion(porcentajeExoneracion, impuesto) {
 	}
 	return valor;
 }
+
+function getMontoExoneracionSubTotal(tipoDocumentoExonerado,impuesto, porcentajeExoneracion, subTotal, montoImpuesto) {
+	impuesto = __valorNumerico(impuesto);
+	montoImpuesto = __valorNumerico(montoImpuesto);
+	subTotal = __valorNumerico(subTotal);
+	tipoDocumentoExonerado = tipoDocumentoExonerado == null ? "" : tipoDocumentoExonerado;
+	porcentajeExoneracion = porcentajeExoneracion == null ? 0 : porcentajeExoneracion;
+	if (tipoDocumentoExonerado.length == 0) {
+		return 0;
+	}
+	var resultado = 0;
+	resultado = subTotal * porcentajeExoneracion;
+	resultado = resultado / 100;
+	return resultado;	
+}
+
 /**
  * Aplicar a clientes exonerados
  * @param cliente
@@ -959,11 +975,10 @@ function cambioColonesADolar(valor,venta){
 	    if(iva == 0){
 	        return 0;
 	    }
-	    var impuesto = iva > 0 ?parseFloat(iva)/100:0
-	    impuesto = impuesto > 0 ?impuesto+1:0
-	    var total = precio * impuesto
-	    var total = total - precio 
-	    return total
+	    var impuesto = iva ;
+	    var resultado = precio * impuesto;
+		resultado = resultado / 100;
+	    return resultado;
 	}
 	
 	/**

@@ -526,7 +526,7 @@ public class ClientesController {
 
 			}
 			// Validar el limite de credito de un cliente
-				if (!clienteBD.getLimiteCredito().equals(clienteCommand.getLimiteCredito())) {
+				if (clienteBD.getLimiteCredito() !=null && !clienteBD.getLimiteCredito().equals(clienteCommand.getLimiteCredito())) {
 					if (usuarioBo.isAdministrador_cajero(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 						clienteBD.setLimiteCredito(clienteCommand.getLimiteCredito());
 					} else {

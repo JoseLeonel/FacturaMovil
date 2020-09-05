@@ -1,0 +1,130 @@
+.titleListaPrecio {
+	color: blue;
+	text-decoration: underline;
+}
+
+.formItem {
+	color: #ffffff !important;
+	display: block;
+	text-align: center;
+	line-height: 150%;
+	font-size: .85em;
+	font-family: "Times New Roman", Times, serif;
+}
+
+.tituloparrafo {
+	margin-left: 10em;
+	position: relative;
+	color: #6dca42;
+}
+
+.parrafoservicio {
+	margin-left: 1em;
+	position: relative;
+	color: #6dca42;
+}
+
+.price {
+	font-weight: bold;
+	font-size: 20px;
+	color: #0C9C22;
+}
+
+.bottonCar {
+	font-weight: bold;
+	font-size: 14px;
+	color: #6dca42;
+}
+
+.thumbnail .description {
+	font-size: 16px;
+}
+
+.title {
+	margin-left: 0.5em;
+	position: relative;
+	color: #303a5b;
+	margin: 0;
+	font-size: 20px;
+	font-weight: 800;
+}
+
+.view {
+	position: relative;
+	color: #21870a;
+	margin: 0;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+.ec-stars-wrapper {
+	font-size: 50;
+	display: inline-block;
+}
+
+.ec-stars-wrapper a {
+	text-decoration: none;
+	display: inline-block;
+	/* Volver a dar tamaño al texto */
+	font-size: 50px;
+	font-size: 4rem;
+	color: #888;
+}
+
+.ec-stars-wrapper:hover a {
+	color: rgb(39, 130, 228);
+}
+/*
+        * El selector de hijo, es necesario para aumentar la especifidad
+        */
+.ec-stars-wrapper>a:hover ~ a {
+	color: #888;
+}
+#containerArticulos {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.carrito {
+		width: 250px;
+		height: 125px;
+		margin-left: 10px;
+		margin-bottom: 20px;
+		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+	}
+	.carrito>span {
+		font-size: 16px;
+		font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+			sans-serif;
+		font-weight: 500;
+	}
+	
+@media only screen and (max-width: 600px) {
+#containerArticulos {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.carrito {
+		width: 130px;
+		height: 125px;
+		margin-left: 20px;
+		margin-bottom: 10px;
+		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+	}
+	.carrito>span {
+		font-size: 10px;
+		font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+			sans-serif;
+		font-weight: 500;
+	}
+	
+}

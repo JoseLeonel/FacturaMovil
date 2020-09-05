@@ -1,9 +1,10 @@
 <venta-servicios>
-    <div class="row" show ={mostrarProductos}>
-        <div  each={articulos.data} class="col-sx-12 col-sm-3 col-md-3 col-lg-3 " onclick={__formularioDetalle}>
-            <div  class="thumbnail" style="background: #6dca42;">
-                 <div class="caption">
-                     <h3 class="title formItem">{descripcion}</h3>
+    <div id="containerArticulos" show ={mostrarProductos}>
+        <div  each={articulos.data}  onclick={__formularioDetalle}>
+            <div  class="itemArticulos">
+                 <div class="carrito" >
+                    <img  style = "width:50px;height:50px;" alt="" class="img-responsive " src="data:image/png;base64,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">
+                    <span class="label-titulos-articulo">{descripcion.length > 25 ? descripcion.substring(1,25) +"...":descripcion}</span>
                 </div>    
             </div>
         </div> 
@@ -173,11 +174,11 @@
                         <div class="row" >
                             <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.impuesto")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{totalImpuesto}" readonly>
+                                <input type="text" step="any"  class="form-control "  value="{totalImpuesto}" readonly>
                             </div>
                             <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.exoneracion")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{montoExoneracion}" readonly>
+                                <input type="text" id = "montoExoneracion" step="any"  class="form-control "  value="{montoExoneracion}" readonly>
                             </div>
 
                         </div>    
@@ -296,83 +297,7 @@
 
 <!--fin del modal-->
 <STYLE TYPE="text/css" rel="stylesheet" type="text/css" media="all" >
-        .titleListaPrecio{
-            color:blue;
-            text-decoration:underline;
-        }
-
-        .formItem {
-            color: #ffffff !important;
-            display: block;
-            text-align: center;
-            line-height: 150%;
-            font-size: .85em;
-        }
-
-        .tituloparrafo {
-            margin-left: 10em;
-            position: relative;
-            color:#6dca42;
-        }
-        .parrafoservicio {
-            margin-left: 1em;
-            position: relative;
-            color:#6dca42;
-            
-        }
-        .price{
-            font-weight:bold;
-            font-size:20px;
-            color: #0C9C22;
-        }
-        .bottonCar{
-            font-weight:bold;
-            font-size:14px;
-            color: #6dca42;
-        }
-        
-        .thumbnail .description{
-            
-            font-size:16px;
-        }
-        .title {
-            margin-left: 0.5em;
-            position: relative;
-            color:#303a5b;
-            margin: 0;
-            font-size: 20px;
-            font-weight: normal;
-        }
-        .view{
-            position: relative;
-            color:#21870a;
-            margin: 0;
-            font-size: 18px;
-            font-weight: normal;
-        }
-        .ec-stars-wrapper {
-            font-size: 50;
-            display: inline-block;
-        }
-        .ec-stars-wrapper a {
-            text-decoration: none;
-            display: inline-block;
-            /* Volver a dar tamaño al texto */
-            font-size: 50px;
-            font-size: 4rem;
-            
-            color: #888;
-        }
-
-        .ec-stars-wrapper:hover a {
-            color: rgb(39, 130, 228);
-        }
-        /*
-        * El selector de hijo, es necesario para aumentar la especifidad
-        */
-        .ec-stars-wrapper > a:hover ~ a {
-            color: #888;
-        }
+       
 
 </STYLE>
 <script>
@@ -457,6 +382,7 @@ self.on('mount',function(){
     __ListaActividadesComercales()
     __combocodigosReferencia()
     getTipoCambioDolar()
+      __seleccionarClientes()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -1048,8 +974,10 @@ function __calculate() {
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto = formatoDecimales(self.factura.totalImpuesto,2);
     self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
-    self.subTotalGeneral = resultado.subTotalGeneral
+    $('#montoExoneracion').val(self.montoExoneracion);
+    
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
+    self.subTotalGeneral = resultado.subTotalGeneral
     var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
     self.totalImpuesto = resultado.totalImpuesto
     self.update()
@@ -1191,7 +1119,7 @@ function __ListaDeClientes(){
                 loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
-                __seleccionarClientes()
+              
             }
         },
         error: function (xhr, status) {
@@ -1279,8 +1207,8 @@ function __seleccionarClientes() {
 /**
 * Aplicar la exoneracion de detalles
 **/
+
 function __aplicarExoneracionPorCliente(){
-    
     var aplicaExo = false
     var porcentaje = __valorNumerico(self.cliente.porcentajeExoneracion )
     if(porcentaje == 0){
@@ -1292,15 +1220,12 @@ function __aplicarExoneracionPorCliente(){
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0  ){
-                    self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
+                    self.item.porcentajeExoneracion = getPorcentajeExoneracion(__valorNumerico(self.cliente.porcentajeExoneracion),self.item.impuesto )
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = 0
-                    self.item.montoExoneracion1 = 0
-                     valorTotal = __valorNumerico(self.item.subTotal) * __valorNumerico(porcentaje)
-                    self.item.montoExoneracion = valorTotal / 100
+                    self.item.montoExoneracion = getMontoExoneracionSubTotal(self.item.tipoDocumentoExoneracion,self.item.impuesto, self.item.porcentajeExoneracion, self.item.subTotal, self.item.montoImpuesto)   
                     self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
@@ -1340,6 +1265,7 @@ function __aplicarExoneracionPorCliente(){
 
             }
     }
+    
     __calculate()
     if(aplicaExo == true){
        self.factura.totalCambioPagar = self.factura.totalComprobante
@@ -1355,7 +1281,6 @@ function __aplicarExoneracionPorCliente(){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-
 }
 
 /**
