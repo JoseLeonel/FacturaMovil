@@ -3800,15 +3800,12 @@ function __aplicarExoneracionPorCliente(){
         self.cliente.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0  ){
-                    self.item.porcentajeExoneracion = __valorNumerico(self.cliente.porcentajeExoneracion)
+                    self.item.porcentajeExoneracion = getPorcentajeExoneracion(__valorNumerico(self.cliente.porcentajeExoneracion),self.item.impuesto )
                     self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
                     self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
                     self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
                     self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
-                    valorTotal = 0
-                    self.item.montoExoneracion1 = 0
-                     valorTotal = __valorNumerico(self.item.subTotal) * __valorNumerico(porcentaje)
-                    self.item.montoExoneracion = valorTotal / 100
+                    self.item.montoExoneracion = getMontoExoneracionSubTotal(self.item.tipoDocumentoExoneracion,self.item.impuesto, self.item.porcentajeExoneracion, self.item.subTotal, self.item.montoImpuesto)   
                     self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;

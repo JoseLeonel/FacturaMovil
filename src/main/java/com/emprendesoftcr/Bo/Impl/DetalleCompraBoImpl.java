@@ -205,20 +205,21 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 			// Monto Linea * tipo cambio
 			cell = row.createCell(25);
 			Utils.getCel(cell, styles, getMonto(recepcionFacturaDetalle.getRecepcionFactura().getTipoDoc(), tipoCambio, recepcionFacturaDetalle.getMontoTotalLinea()));
+			// Monto Linea * tipo cambio
+			cell = row.createCell(26);
+			Utils.getCelSTR(cell, styles, recepcionFacturaDetalle.getRecepcionFactura().getFacturaCodigoMoneda());
+			cell = row.createCell(27);
+			Utils.getCel(cell, styles, recepcionFacturaDetalle.getRecepcionFactura().getFacturaTipoCambio());
 
 			rownum++;
 		}
 		int contnum = rownum;
 		Row sumRow = sheet.createRow(rownum++);
 
-		for (int j = 0; j < 26; j++) {
+		for (int j = 0; j < 28; j++) {
 			Cell cell = sumRow.createCell(j);
-			if (j == 15) {
-				cell.setCellValue("Totales  :");
-				cell.setCellStyle(styles.get("formula"));
-
-			}
-			if (j <= 15 ) {
+			
+			if (j <= 15 || j == 27 || j == 28 ) {
 				cell.setCellStyle(styles.get("formula"));
 			}
 
