@@ -23,8 +23,6 @@
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                                
-
                             </div>
                         </div>
                         <div class="row">
