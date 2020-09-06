@@ -36,6 +36,7 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
@@ -257,7 +258,7 @@ public class DetalleBoImpl implements DetalleBo {
 
 	@Override
 	public ByteArrayInputStream createExcelVentasXCodigo(Collection<Detalle> detalles,String fechaInicio, String fechaFinal, Empresa empresa, String actividadEconomica) throws Exception {
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa", "%IVA", "Total IVA","Total IVA Neto","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa 0% Exento", "Tarifa 1%", "Tarifa 2%", "Tarifa 4%", "Transitorio 0%", "Transitorio 4%", "Transitorio 8%", "Tarifa general 13%", "Exento","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
 			Workbook workbook = new HSSFWorkbook();
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			 Map<String, CellStyle> styles = Utils.createStyles(workbook);
@@ -300,8 +301,9 @@ public class DetalleBoImpl implements DetalleBo {
 			
 		//
 			int rownum = 4 ;
-		
+		  Double tipoCambio = Constantes.ZEROS_DOUBLE;
 			for(Detalle detalle : detalles) {
+			  tipoCambio = detalle.getFactura().getTipoCambio();
 				row = sheet.createRow(rownum);
 				// Usuario
 				Cell cell = row.createCell(0);
@@ -355,19 +357,47 @@ public class DetalleBoImpl implements DetalleBo {
   		 // IVA
 			 cell = row.createCell(15);
 			 Utils.getCelSTR(cell,styles,detalle.getTipoImpuestoSTR());
-
-  		 // Tarifa
+			//0% impuesto exento
 			 cell = row.createCell(16);
-			 Utils.getCelSTR(cell,styles,detalle.getCodigoTarifaSTR());
-  		 // impuesto
-			 cell = row.createCell(17);
-			 Utils.getCel(cell,styles,detalle.getImpuesto());
-  		 // Monto del Impuesto
-			 cell = row.createCell(18);
-			 Utils.getCel(cell,styles,detalle.getMontoImpuestoNC());
-  		 // Monto del Impuesto  Neto
+			 Utils.getCel(cell,styles,detalle.getImpuestoNeto());
+		// Codigo Tarifa 0 %
+				cell = row.createCell(16);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_0_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa 1 %
+				cell = row.createCell(17);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_1_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa 2 %
+
+				cell = row.createCell(18);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_2_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa 4 %
+
+				cell = row.createCell(19);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_4_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa Transitorio 0 %
+				cell = row.createCell(20);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_0_TRANSITORIO_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa Transitorio 4 %
+				cell = row.createCell(21);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO, tipoCambio));
+
+				// Codigo Tarifa Transitorio 8 %
+				cell = row.createCell(22);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO, tipoCambio));
+				// Codigo Tarifa General 13 %
+				cell = row.createCell(23);
+				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_13_GENERAL_PORCIENTO, tipoCambio));
+
+			 
+			 // Monto del Impuesto  Neto
 			 cell = row.createCell(19);
 			 Utils.getCel(cell,styles,detalle.getImpuestoNeto());
+			 
   		 // Total mercancia grabada
 			 cell = row.createCell(20);
 			 Utils.getCel(cell,styles,detalle.getTotalMercanciaGravada());
@@ -494,6 +524,20 @@ public class DetalleBoImpl implements DetalleBo {
 			return new ByteArrayInputStream(stream.toByteArray());
 	}
 
+	private Double getMonto(String tipoDoc, Double tipoCambio, Double monto) {
+		monto = monto == null ? Constantes.ZEROS_DOUBLE : monto;
+		return tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? monto * tipoCambio * -1 : monto * tipoCambio;
+	}
+
+	private Double getMontoImpuestoTotal(Detalle detalle, String tarifa, Double tipoCambio) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (detalle.getCodigoTarifa() != null && detalle.getCodigoTarifa().equals(tarifa)) {
+			resultado = detalle.getImpuestoNeto() != null ? detalle.getImpuestoNeto() * tipoCambio : Constantes.ZEROS_DOUBLE;
+		} 
+
+		return detalle.getFactura().getTipoDoc() !=null && detalle.getFactura().getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? resultado * -1 : resultado;
+
+	}
 	
 	@Override
 	public List<Map<String, Object>>  ventasbyCategoria(String fechaInicial ,String fechaFinal,Integer estado,Long idCategoria,Integer idEmpresa){
