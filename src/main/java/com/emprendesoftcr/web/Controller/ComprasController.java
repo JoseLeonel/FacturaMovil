@@ -61,8 +61,10 @@ import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
+import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -715,14 +717,48 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		
+		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicioP, fechaFinalP, usuarioSesion.getEmpresa(), Constantes.EMPTY, estado, 0, "0");
 
-	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto", "Total Impuesto(total impuesto X tipoCambio)", "Total", "Total(total X tipoCambio)", "Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.codigoActividad,recepcionFactura.estadoSTR,recepcionFactura.mensajeSTR,recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre,recepcionFactura.emisorCorreo,recepcionFactura.emisorTelefono, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoMontoSTR,impuestoMontoSTRTimpoCambio,montoLineaSTR,montoLineaSTRTimpoCambio,recepcionFactura.tipoGastoStr", baos);
-		return baos;
+		ConsultaComprasIvaCommand tarifa_0 = new ConsultaComprasIvaCommand(); 
+	
+		
+		
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
+				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 	}
+
+
+	
 
 	/**
 	 * Descargar Compras

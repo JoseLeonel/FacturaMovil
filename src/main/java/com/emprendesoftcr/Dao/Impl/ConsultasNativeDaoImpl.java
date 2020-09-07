@@ -201,7 +201,12 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":FECHAINICIAL", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":FECHAFINAL", "'" + fechaFinal + "'");
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
-		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", "in ('" + codigoActividadComercial.toString() + "')");
+		if (codigoActividadComercial > Constantes.ZEROS) {
+			queryStr = queryStr.replace("ACT_COMERCIAL", " and f.act_comercial in ('" + codigoActividadComercial.toString() + "')  and");
+		} else {
+			queryStr = queryStr.replace("ACT_COMERCIAL", Constantes.EMPTY);
+		}
+	//	queryStr = queryStr.replaceAll(":ACT_COMERCIAL", "in ('" + codigoActividadComercial.toString() + "')");
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaComprasIvaNative.class);
 		return (Collection<ConsultaComprasIvaNative>) query.getResultList();
 	}

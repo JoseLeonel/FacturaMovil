@@ -78,6 +78,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -526,13 +527,14 @@ public class FacturasController {
 			Date fechaInicio = Utils.parseDate(fechaInicioParam);
 			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
+			
 
-			// Se buscan las facturas
-			Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinal, usuario.getEmpresa().getId(), actividadEconomica);
+			Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinal, usuario.getEmpresa(), "0", actividadEconomica);
 
-			// Se prepara el excell
-			ByteArrayOutputStream baos = Utils.convertirOutStream(facturaBo.createExcelFacturasTotalMensual(facturas, usuario.getEmpresa(), fechaInicioParam, fechaFinParam, estado, actividadEconomica));
+						// Se prepara el excell
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detalles, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
 			Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
 
 			// Se prepara el correo
 			String from = "FacturasEmitidas@emprendesoftcr.com";
@@ -1541,39 +1543,7 @@ public class FacturasController {
 	 * @return
 	 */
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Date fechaInicioP = Utils.parseDate(fechaInicio);
-		Date fechaFinalP = Utils.parseDate(fechaFin);
-		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
-			if (fechaFinalP != null) {
-				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
-			}
-		}
-		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-		String inicio1 = dateFormat1.format(fechaInicioP);
-		String fin1 = dateFormat1.format(fechaFinalP);
-		
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
-		List<Object> solicitudList = new ArrayList<Object>();
-		if (objetos != null) {
-			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
-				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
-			}
-		}
-		respuestaService.setRecordsTotal(0l);
-		respuestaService.setRecordsFiltered(0l);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(solicitudList);
-		return respuestaService;
-	}
-
+	
 	/**
 	 * Facturas sin notas de creditos de anulacion completa
 	 * @param request

@@ -74,7 +74,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		hql.append(" where obj.factura.estado = :estado ");
 		hql.append("and obj.factura.empresa.id = :idEmpresa ");
 
-		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
+		hql.append("and obj.factura.fechaEmision >= :fechaInicio and obj.factura.fechaEmision <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
 
@@ -91,7 +91,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		hql.append(" where obj.factura.estado = :estado ");
 		hql.append("and obj.factura.empresa.id = :idEmpresa ");
 
-		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin  ");
+		hql.append("and obj.factura.fechaEmision >= :fechaInicio and obj.factura.fechaEmision <= :fechaFin  ");
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			hql.append("and obj.tipoImpuesto = :tipoImpuesto");
 		}

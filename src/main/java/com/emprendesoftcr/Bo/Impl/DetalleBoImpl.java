@@ -36,7 +36,6 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
@@ -258,7 +257,7 @@ public class DetalleBoImpl implements DetalleBo {
 
 	@Override
 	public ByteArrayInputStream createExcelVentasXCodigo(Collection<Detalle> detalles,String fechaInicio, String fechaFinal, Empresa empresa, String actividadEconomica) throws Exception {
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa 0% Exento", "Tarifa 1%", "Tarifa 2%", "Tarifa 4%", "Transitorio 0%", "Transitorio 4%", "Transitorio 8%", "Tarifa general 13%", "Exento","Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Tipo Documento", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Nombre a", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "IVA", "Tarifa 0% Exento", "Tarifa 1%", "Tarifa 2%", "Tarifa 4%", "Transitorio 0%", "Transitorio 4%", "Transitorio 8%", "Tarifa general 13%", "Mercancia Gravada","Mercancia Exenta","Mercancia Exonerada","Servicios Gravados","Servicios Exentos","Servicios Exonerados", "Total", "Tipo Moneda", "Tipo Cambio");
 			Workbook workbook = new HSSFWorkbook();
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			 Map<String, CellStyle> styles = Utils.createStyles(workbook);
@@ -357,10 +356,7 @@ public class DetalleBoImpl implements DetalleBo {
   		 // IVA
 			 cell = row.createCell(15);
 			 Utils.getCelSTR(cell,styles,detalle.getTipoImpuestoSTR());
-			//0% impuesto exento
-			 cell = row.createCell(16);
-			 Utils.getCel(cell,styles,detalle.getImpuestoNeto());
-		// Codigo Tarifa 0 %
+			// Codigo Tarifa 0 %
 				cell = row.createCell(16);
 				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_0_PORCIENTO, tipoCambio));
 
@@ -393,44 +389,42 @@ public class DetalleBoImpl implements DetalleBo {
 				cell = row.createCell(23);
 				Utils.getCel(cell, styles, getMontoImpuestoTotal(detalle, Constantes.CODIGO_TARIFA_13_GENERAL_PORCIENTO, tipoCambio));
 
-			 
-			 // Monto del Impuesto  Neto
-			 cell = row.createCell(19);
-			 Utils.getCel(cell,styles,detalle.getImpuestoNeto());
-			 
-  		 // Total mercancia grabada
-			 cell = row.createCell(20);
-			 Utils.getCel(cell,styles,detalle.getTotalMercanciaGravada());
+				 // Total mercancia grabada
+				 cell = row.createCell(24);
+				 Utils.getCel(cell,styles,detalle.getTotalMercanciaGravada());
 
-  		 // Total mercancia exenta
-			 cell = row.createCell(21);
-			 Utils.getCel(cell,styles,detalle.getTotalMercanciaExenta());
+			 
+				// Total mercancia exenta
+				 cell = row.createCell(25);
+				 Utils.getCel(cell,styles,detalle.getTotalMercanciaExenta());
+			 
+  	
   		 // Total mercancia exonerada
-			 cell = row.createCell(22);
+			 cell = row.createCell(26);
 			 Utils.getCel(cell,styles,detalle.getTotalMercanciaExonerada());
 
   		 // Total servicios gravados
-			 cell = row.createCell(23);
+			 cell = row.createCell(27);
 			 Utils.getCel(cell,styles,detalle.getTotalServicioGravados());
 
   		 // Total servicios exentos
-			 cell = row.createCell(24);
+			 cell = row.createCell(28);
 			 Utils.getCel(cell,styles,detalle.getTotalServicioExentos());
 
 			 // Total servicios exonerados
-			 cell = row.createCell(25);
+			 cell = row.createCell(29);
 			 Utils.getCel(cell,styles,detalle.getTotalServicioExonerados());
 
 			 // Total linea
-			 cell = row.createCell(26);
+			 cell = row.createCell(30);
 			 Utils.getCel(cell,styles,detalle.getMontoTotalLineaNC());
 			 
 			 // Codigo moneda
-			 cell = row.createCell(27);
+			 cell = row.createCell(31);
 			 Utils.getCelSTR(cell,styles,detalle.getFactura().getCodigoMoneda());
 			 
 			 // Tipo cambio 
-			 cell = row.createCell(28);
+			 cell = row.createCell(32);
 			 Utils.getCel(cell,styles,detalle.getFactura().getTipoCambio());
 
 			 rownum++;
@@ -438,14 +432,14 @@ public class DetalleBoImpl implements DetalleBo {
 	    int contnum = rownum;
 			Row sumRow = sheet.createRow(rownum++);
 
-			for (int j = 0; j <29 ; j++) {
+			for (int j = 0; j <33 ; j++) {
 	      Cell cell = sumRow.createCell(j);
 	      if(j == 12 ) {
 	        cell.setCellValue("Totales  :");
 	        cell.setCellStyle(styles.get("formula"));
 	        
 	      }
-	      if(j <= 12 || j == 27 || j == 28 || j == 15 || j == 16 || j == 17 ) {
+	      if(j <= 15 || j == 31 || j == 32  ) {
 	      	cell.setCellStyle(styles.get("formula"));
 	      }
 	      if(j == 13 ) {
@@ -461,7 +455,18 @@ public class DetalleBoImpl implements DetalleBo {
 	        cell.setCellStyle(styles.get("formula"));
 	      }
 	     
-	      
+	      if(j == 16 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "Q" +4+ ":Q" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 17 ) {
+	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
+	        String ref = "R" +4+ ":R" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
 	      
 	      if(j == 18 ) {
 	        //the 10th cell contains sum over week days, e.g. SUM(C3:I3)
@@ -510,6 +515,26 @@ public class DetalleBoImpl implements DetalleBo {
 	      }
 	      if(j == 26 ) {
 	        String ref = "AA" +4+ ":AA" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 27 ) {
+	        String ref = "AB" +4+ ":AB" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 28 ) {
+	        String ref = "AC" +4+ ":AC" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 29 ) {
+	        String ref = "AD" +4+ ":AD" + contnum;
+	        cell.setCellFormula("SUM("+ref+")");
+	        cell.setCellStyle(styles.get("formula"));
+	      }
+	      if(j == 30 ) {
+	        String ref = "AE" +4+ ":AE" + contnum;
 	        cell.setCellFormula("SUM("+ref+")");
 	        cell.setCellStyle(styles.get("formula"));
 	      }

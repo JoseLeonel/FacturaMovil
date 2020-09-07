@@ -29,6 +29,10 @@ public class ConsultaComprasIvaCommand {
 		this.totalVentas=consultaComprasIvaNative.getTotalVentas();	
 		this.totalExoneraciones=consultaComprasIvaNative.getTotalExoneraciones();
 	}
+	public ConsultaComprasIvaCommand() {
+		super();
+	}
+	
 
 	public Long getId() {
 		return id;
