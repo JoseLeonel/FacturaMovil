@@ -96,6 +96,8 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setCelular(Constantes.ZEROS);
 		cliente.setTelefono(Constantes.ZEROS);
 		cliente.setEmpresa(empresa);
+		cliente.setTipoMag(Constantes.CLIENTE_MAG_INACTIVO);
+		cliente.setLimiteCredito(0d);
 		cliente.setDescuento(Constantes.ZEROS);
 		cliente.setEstado(Constantes.ESTADO_ACTIVO);
 		cliente.setTipoDocumentoExoneracion(Constantes.EMPTY);
