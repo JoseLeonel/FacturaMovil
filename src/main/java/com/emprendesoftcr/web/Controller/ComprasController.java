@@ -741,19 +741,19 @@ public class ComprasController {
 		
 		
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
-		List<Object> solicitudList = new ArrayList<Object>();
-		if (objetos != null) {
-			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
-				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
-			}
-		}
+//		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
+//		List<Object> solicitudList = new ArrayList<Object>();
+//		if (objetos != null) {
+//			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
+//				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
+//			}
+//		}
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
 		}
-		respuestaService.setAaData(solicitudList);
+		respuestaService.setAaData(null);
 		return respuestaService;
 	}
 
