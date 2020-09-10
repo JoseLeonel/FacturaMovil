@@ -512,9 +512,15 @@ public class FacturasController {
 	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
 
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+	
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) ? facturaBo.sumarFacturasNoElectronica(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica) : facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
+		return usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) ? facturaBo.sumarFacturasNoElectronica(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica) : facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
 	}
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -525,11 +531,16 @@ public class FacturasController {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			// Se obtiene los totales
 			Date fechaInicio = Utils.parseDate(fechaInicioParam);
-			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
+			Date fechaFinalP = Utils.parseDate(fechaFinParam);
+			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+				if (fechaFinalP != null) {
+					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+				}
+			}
+			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
 			
 
-			Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinal, usuario.getEmpresa(), "0", actividadEconomica);
+			Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinalP, usuario.getEmpresa(), "0", actividadEconomica);
 
 						// Se prepara el excell
 			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detalles, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
@@ -571,7 +582,7 @@ public class FacturasController {
 			modelEmail.put("estadoDesc", "Documentos con Estado:" + estadoDesc);
 			modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS) ? Constantes.EMPTY : "Actividad Economica:" + actividadEconomica);
 			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
-			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
+			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinalP));
 			modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
 			modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos() != null ? facturaCommand.getTotalDescuentosSTR() : Constantes.ZEROS);
 			modelEmail.put("totalOtrosCargos", facturaCommand.getTotalOtrosCargos() != null ? facturaCommand.getTotalOtrosCargosSTR() : Constantes.ZEROS);
@@ -628,8 +639,13 @@ public class FacturasController {
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFin, usuario.getEmpresa().getId(), actividadEconomica);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), actividadEconomica);
 
 		String nombreArchivo = "FacturasMensuales.xls";
 		response.setContentType("application/octet-stream");
@@ -654,8 +670,14 @@ public class FacturasController {
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFin, usuario.getEmpresa().getId(), actividadEconomica);
+		
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), actividadEconomica);
 
 		String nombreArchivo = "FacturasMensuales.xls";
 		response.setContentType("application/octet-stream");
@@ -883,12 +905,14 @@ public class FacturasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
+		
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
