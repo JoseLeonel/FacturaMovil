@@ -421,7 +421,7 @@ public class FacturasController {
 	 */
 //	@Autowired
 //	private CertificadoBo certificadoBo;
-
+//
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
