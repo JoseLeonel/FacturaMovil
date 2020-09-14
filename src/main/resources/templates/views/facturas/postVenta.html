@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="layout/layout :: head"></head>
- <link rel="stylesheet" type="text/css" th:href="@{/css/ventaPost.css}"/>
- <link rel="stylesheet" type="text/css" th:href="@{/css/postVenta/post.css}"/>
-	    
+<link rel="stylesheet" type="text/css" th:href="@{/css/ventaPost.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/postVenta/post.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/postVenta/postMovil.css}" />
 
 
 
 <body class="hold-transition skin-blue  sidebar-mini">
-	<div class="containerMenu">
-	    <header class="main-header">
-	        <div th:replace="administrativo/header"></div>
-	    </header>
-	    <!-- Left side column. contains the logo and sidebar -->
-	    <aside class="main-sidebar">
-	        <div th:replace="administrativo/mainsidebar"></div>
-	    </aside>
-	    <!-- Content Wrapper. Contains page content -->
-	    <div class="content-wrapper">
-	        <!-- Content Header (Page header) -->
-	        <section class="content-header" th:fragment="header"></section>
-	        <!-- Main content -->
-	        <section class="content">
-				<tiquete-imprimir></tiquete-imprimir>
-    			<venta-factura></venta-factura>
-    			<ptv-imprimir></ptv-imprimir>
-    			<entrada-salida></entrada-salida>
-    			<impentrada-salida></impentrada-salida>	        
-            </section>    
- 		</div>
-         <!-- /.content-wrapper -->
-	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    <div class="containerMenu">
+        <header class="main-header">
+            <div th:replace="administrativo/header"></div>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <div th:replace="administrativo/mainsidebar"></div>
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header" th:fragment="header"></section>
+            <!-- Main content -->
+            <section class="content">
+                <tiquete-imprimir></tiquete-imprimir>
+                <venta-factura></venta-factura>
+                <ptv-imprimir></ptv-imprimir>
+                <entrada-salida></entrada-salida>
+                <impentrada-salida></impentrada-salida>
+            </section>
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
     </div>
-	  
- 
-<div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/facturas/postVenta.js?v=10}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/ventaFactura.tag?v=10}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=10}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/facturas/imprimirTiquete.tag?v=10}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=10}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=10}" ></script>
+
+
+    <div th:replace="layout/layout :: scripts"></div>
+    <script type="text/javascript" th:src="@{/js/views/facturas/postVenta.js?v=10}"></script>
+    <script type="riot/tag" th:src="@{/js/views/components/facturas/ventaFactura.tag?v=10}"></script>
+    <script type="riot/tag" th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=10}"></script>
+    <script type="riot/tag" th:src="@{/js/views/components/facturas/imprimirTiquete.tag?v=10}"></script>
+    <script type="riot/tag" th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=10}"></script>
+    <script type="riot/tag" th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=10}"></script>
 </body>
+
 </html>

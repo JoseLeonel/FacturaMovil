@@ -572,8 +572,9 @@ public class Factura implements Serializable {
 
 	public String getSubTotalGeneralSTR() {
 		Double valorSubTotal = this.subTotal != null ? this.subTotal : Constantes.ZEROS;
-		Double valorDescuento = this.totalDescuentos != null ? this.totalDescuentos : Constantes.ZEROS;
-		return Utils.formateadorMiles(Utils.round(valorSubTotal + valorDescuento, 2));
+//		Double valorDescuento = this.totalDescuentos != null ? this.totalDescuentos : Constantes.ZEROS;
+		return Utils.formateadorMiles(Utils.round(valorSubTotal, 2));
+//		return Utils.formateadorMiles(Utils.round(valorSubTotal + valorDescuento, 2));
 	}
 
 	public String getSubTotalSTR() {
