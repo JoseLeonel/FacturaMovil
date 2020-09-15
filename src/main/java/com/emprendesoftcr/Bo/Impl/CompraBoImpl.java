@@ -19,13 +19,13 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.jxls.template.SimpleExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
@@ -44,10 +44,11 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
+import com.emprendesoftcr.web.command.RecepcionComprasCommand;
+import com.emprendesoftcr.web.command.RecepcionList;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.google.gson.Gson;
 
@@ -500,7 +501,7 @@ public class CompraBoImpl implements CompraBo {
 
 	@Override
 	public ByteArrayInputStream createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {
-		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio",  "Total Impuesto(total impuesto X tipoCambio)",  "Total(total X tipoCambio)", "Tipo Documento", "Tipo de Gasto");
+		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuesto(total impuesto X tipoCambio)", "Total(total X tipoCambio)", "Tipo Documento", "Tipo de Gasto");
 
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -587,7 +588,6 @@ public class CompraBoImpl implements CompraBo {
 			cell = row.createCell(13);
 			Utils.getCel(cell, styles, recepcionFactura.getFacturaTipoCambio());
 
-			
 			// Total Impuesto * tipo cambio
 			cell = row.createCell(14);
 			Utils.getCel(cell, styles, recepcionFactura.getTotalImpuestosSTRTipoCambio());
@@ -612,7 +612,7 @@ public class CompraBoImpl implements CompraBo {
 				cell.setCellStyle(styles.get("formula"));
 
 			}
-			if (j <= 12 || j == 16 || j == 17 ) {
+			if (j <= 12 || j == 16 || j == 17) {
 				cell.setCellStyle(styles.get("formula"));
 			}
 
@@ -628,7 +628,6 @@ public class CompraBoImpl implements CompraBo {
 				cell.setCellFormula("SUM(" + ref + ")");
 				cell.setCellStyle(styles.get("formula"));
 			}
-		
 
 			sheet.setColumnWidth(j, 8500);
 		}
@@ -636,6 +635,30 @@ public class CompraBoImpl implements CompraBo {
 		workbook.write(stream);
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());
+	}
+/**
+ * Para consultar las compras enviadas al correo de recepcion
+ */
+	@Override
+	public List<RecepcionComprasCommand> getAllRecepcionCompras(Empresa empresa) {
+		List<RecepcionComprasCommand> lista = null;
+		try {
+
+			// request url
+			String url = Constantes.API_RECEPCION_COMPRAS + empresa.getCedula() + "&t=R24.asd24fg";
+			// create an instance of RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
+			// make an HTTP GET request
+			RecepcionList response = restTemplate.getForObject(url, RecepcionList.class);
+			
+			System.out.println(response.toString());
+			lista = response.getListRecepcionCompras();
+		} catch (Exception e) {
+			log.error(String.format("--error consultar APi de compras de recepcion  :" + e.getMessage() + new Date()));
+			throw e;
+
+		}
+		return lista;
 	}
 
 }

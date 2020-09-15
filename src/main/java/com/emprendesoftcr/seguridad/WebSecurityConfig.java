@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/administrativo/**", "/templates/**","/resources/**", "/static/**","/css/**", "/js/**","/prueba/**", "/images/**", "/dist/**");
 	}
-
+ 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		 http.csrf().disable();
@@ -59,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll().antMatchers("/movil/ListarArticulosAjax.do")
 		.permitAll().antMatchers("/webjars/**")
 		.permitAll().antMatchers("/login")
+		.permitAll().antMatchers("http://localhost:8083/api-v1/get-all")
+		.permitAll().antMatchers("http://localhost:8083/api-v1/repositorio/")
 		.permitAll().antMatchers("https://api.hacienda.go.cr/")
 		.permitAll().antMatchers("https://api.hacienda.go.cr/indicadores/tc")
 		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")

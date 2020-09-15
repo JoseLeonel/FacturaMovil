@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.jxls.template.SimpleExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +60,11 @@ import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
+import com.emprendesoftcr.web.command.RecepcionComprasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -172,6 +171,34 @@ public class ComprasController {
 	@RequestMapping(value = "/ListaRecepcionFacturas", method = RequestMethod.GET)
 	public String listaRecepcionFacturas(ModelMap model) {
 		return "views/facturas/listaRecepcionFacturas";
+	}
+
+	/**
+	 * recepcion de Facturas del servidor de revision de correos por cliente
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/recepcionComprasPorCorreo", method = RequestMethod.GET)
+	public String recepcionComprasPorCorreo(ModelMap model) {
+		return "views/compras/recepcionCompras";
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/listarRecepcionCompras.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarRecepcionCompras(HttpServletRequest request, HttpServletResponse response) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<RecepcionComprasCommand> solicitudList = compraBo.getAllRecepcionCompras(usuarioSesion.getEmpresa());
+		respuestaService.setAaData(solicitudList);
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+	//	respuestaService.setAaData(null);
+		return respuestaService;
 	}
 
 	/**
@@ -425,7 +452,7 @@ public class ComprasController {
 		Double totalCompra = Constantes.ZEROS_DOUBLE;
 		Double tipoCambio = Constantes.ZEROS_DOUBLE;
 		for (RecepcionFactura recepcionFactura : recepcionFacturas) {
-			 tipoCambio = recepcionFactura.getFacturaTipoCambio() == null ? 1 : recepcionFactura.getFacturaTipoCambio();
+			tipoCambio = recepcionFactura.getFacturaTipoCambio() == null ? 1 : recepcionFactura.getFacturaTipoCambio();
 			Double valor = Constantes.ZEROS_DOUBLE;
 			if (recepcionFactura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 				valor = recepcionFactura.getFacturaTotalImpuestos() != null ? recepcionFactura.getFacturaTotalImpuestos() : Constantes.ZEROS_DOUBLE;
@@ -532,12 +559,11 @@ public class ComprasController {
 			resultadoFinal = resultadoFinal - totalCompraNotaCredito;
 			totalComprasAceptadasCommand.setTotal(resultadoFinal);
 
-			// Se prepara el excell createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) 
-		// Se buscan las facturas
+			// Se prepara el excell createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa)
+			// Se buscan las facturas
 			Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 			Collection<RecepcionFacturaDetalle> lista = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), "", estado, tipoGasto, actividadEconomica);
 
-			
 			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleCompraBo.createExcelDetalleCompra(lista, fechaInicioParam, fechaFinParam, usuario.getEmpresa()));
 			Collection<Attachment> attachments = createAttachments(attachment("ComprasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
@@ -606,7 +632,7 @@ public class ComprasController {
 	 * @param fechaFinParam
 	 * @param cedulaEmisor
 	 * @param estado
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
 	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) throws Exception {
@@ -620,7 +646,7 @@ public class ComprasController {
 		String nombreArchivo = "comprasAceptadas.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-		
+
 		ByteArrayInputStream inputStream = compraBo.createExcelRecepcionCompra(recepcionFacturas, fechaInicioParam, fechaFinParam, usuario.getEmpresa());
 
 		int BUFFER_SIZE = 4096;
@@ -629,7 +655,7 @@ public class ComprasController {
 		while ((bytesRead = inputStream.read(buffer)) != -1) {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
-			}
+	}
 
 	/**
 	 * Modulo de compras
@@ -685,14 +711,6 @@ public class ComprasController {
 		}
 	}
 
-	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
-		// Se prepara el excell
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Estado Hacienda", "Aceptacion Receptor", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "Correo", "Telefono", "# Compra", "Tipo Moneda", "Tipo Cambio", "Total Impuestos", "Total Impuesto(total impuesto X tipoCambio)", "Total", "Total(total X tipoCambio)", "Tipo Documento", "Tipo de Gasto");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "codigoActividad,estadoSTR,mensajeSTR, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre,emisorCorreo,emisorTelefono, facturaConsecutivo,facturaCodigoMoneda,facturaTipoCambio, totalImpuestosSTR,totalImpuestosSTRTipoCambio,totalFacturaSTR,totalFacturaSTRTipoCambio,   tipoDocumentoStr,tipoGastoStr", baos);
-		return baos;
-	}
-
 	@RequestMapping(value = "/DescargarDetalladaAceptadasAjax.do", method = RequestMethod.GET)
 	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws Exception {
 
@@ -717,7 +735,7 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -733,13 +751,11 @@ public class ComprasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		
+
 		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicioP, fechaFinalP, usuarioSesion.getEmpresa(), Constantes.EMPTY, estado, 0, "0");
 
-		ConsultaComprasIvaCommand tarifa_0 = new ConsultaComprasIvaCommand(); 
-	
-		
-		
+		ConsultaComprasIvaCommand tarifa_0 = new ConsultaComprasIvaCommand();
+
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 //		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
 //		List<Object> solicitudList = new ArrayList<Object>();
@@ -756,9 +772,6 @@ public class ComprasController {
 		respuestaService.setAaData(null);
 		return respuestaService;
 	}
-
-
-	
 
 	/**
 	 * Descargar Compras

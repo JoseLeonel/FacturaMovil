@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
@@ -11,9 +12,9 @@ import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
+import com.emprendesoftcr.web.command.RecepcionComprasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 
 public interface CompraBo {
@@ -43,4 +44,7 @@ public interface CompraBo {
 	ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException;
 	
 	ByteArrayInputStream  createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
+	
+	List<RecepcionComprasCommand> getAllRecepcionCompras(Empresa empresa);
+	
 }

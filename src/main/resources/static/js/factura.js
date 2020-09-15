@@ -8,6 +8,7 @@ $.i18n.properties({
 });
 
 var pathWebFactura  = 'factura';
+var pathWebRecepcionCompras  = 'http://localhost:8083/api-v1/';
 
 // Se configura un bloqueo para todo el ajax que se utiliza en la aplicacion
 $(document)
