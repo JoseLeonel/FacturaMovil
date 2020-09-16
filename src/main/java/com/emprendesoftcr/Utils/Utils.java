@@ -883,7 +883,6 @@ public final class Utils {
 	public static Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double montoTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		montoTotal = montoTotal == null ? Constantes.ZEROS_DOUBLE : montoTotal;
-		montoImpuesto1 = montoImpuesto1 == null ? Constantes.ZEROS_DOUBLE : montoImpuesto1;
 		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
 		tipoImpuesto = tipoImpuesto == null ? Constantes.EMPTY : tipoImpuesto;
 		unidadMedida = unidadMedida == null ? Constantes.EMPTY : unidadMedida;
@@ -895,7 +894,7 @@ public final class Utils {
 			esMercancia = Boolean.FALSE;
 		}
 		if (esMercancia) {
-			if (montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+			if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
 				resultado = montoTotal;
 			}
 
