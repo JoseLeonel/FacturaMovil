@@ -1,5 +1,6 @@
 <recepcion-api>
 <div id = "div1"></div>
+
  	<!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         
@@ -441,6 +442,7 @@
 		self.tiposCondiciones     = {data:[]}
 		self.detalleServicio 	  = {data:[]}
 		self.empresaActividadComercial= {}
+		self.documentoXML = null;
 		
 		self.mensaje ={				
 				facturaClave:"",
@@ -564,9 +566,11 @@
 		
 		//Se cargan al montar el tag
 		self.on('mount',function(){
-			$('#fileUpload').val(self.parametros.url);
-			$("#div1").load(self.parametros.url); 
-			__cargarXML(self.parametros.url);
+		
+		     self.documentoXML = self.parametros.xml
+			 self.update()
+			__cargarXML();
+		
 		    __listadoTipoCedulas();
 		    __listadoMediosPago();
 		    __listadoCondicionImpuesto();
@@ -784,21 +788,14 @@ function BuscarActividadComercial(){
     })
 }
 		
-		function __cargarXML(xml) {
+		function __cargarXML() {
 			limpiar()
             self.archivo ={}
 			self.update()
-			//Se limpian los errores
-			$(".errorServerSideJgrid").remove();
-
-           
-	        if (typeof (FileReader) != "undefined") {
-                var reader = new FileReader();
-				//xmlDoc = $.parseXML( xml ),
-                reader.onload = function (e) {
+			
 
                 	//Se carga el XML
-                	var xmlDoc = $.parseXML(e.target.result);
+                	var xmlDoc = $.parseXML(self.documentoXML);
                 	
                 	//Se cargan los datos para presentar el detalle de una factura
 
@@ -1105,16 +1102,7 @@ function BuscarActividadComercial(){
 		    	   		 	self.mostrarCargaArchivoMensaje = true;														
 						
 					
-                }
-
-                reader.readAsText($("#fileUpload")[0].files[0]);
                 
-                //Se muestra la pantalla
-	   		    self.update();					
-
-            } else {
-	   		 	sweetAlert("", "Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5", "error");
-            }
 		}
 		
 		function __cargarXMLMensaje(xml) {

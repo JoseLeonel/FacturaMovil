@@ -146,6 +146,8 @@ function __MostrarPDF() {
 }
 
 
+
+
 function __MostrarAceptarManual() {
     $('.tableListar').on('click', '.btnAceptarXMLManual', function(e) {
         var table = $('#tableListar').DataTable();
@@ -155,16 +157,34 @@ function __MostrarAceptarManual() {
         } else {
             var data = table.row($(this).parents("tr")).data();
         }
-
-        var parametros = {
-            url: pathWebRecepcionCompras + "repositorio/" + data.facturaXml,
-            tipoEjecucion: 1
-        }
-        riot.mount('recepcion-api', { parametros: parametros });
+        gargarXML(data)
 
     });
 }
 
+function gargarXML(data) {
+    $.ajax({
+        url: "http://localhost:8083/api-v1/base64",
+        datatype: "json",
+        data: { ruta: data.facturaXml },
+        method: "GET",
+        success: function(data) {
+            var parametros = {
+                xml: data.xmlString,
+                tipoEjecucion: 1
+            }
+            riot.mount('recepcion-api', { parametros: parametros });
+
+
+        },
+        error: function(xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+
+
+}
 
 /**
  * Formato de la fecha con hora
