@@ -176,6 +176,11 @@ public class Constantes {
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 700;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 300;
 
+	
+//	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;
+//	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 5;
+
+	
 	// 48 horas cada 5 minutos
 
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																	= 10;
