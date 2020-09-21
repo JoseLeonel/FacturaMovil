@@ -20,9 +20,9 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import com.emprendesoftcr.Bo.CorreosBo;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.VelocityEngineUtils;
-import com.emprendesoftcr.modelo.Attachment; 
+import com.emprendesoftcr.modelo.Attachment;
+import com.emprendesoftcr.utils.Utils; 
 
 @Service("correosBo")
 public class CorreosBoImpl implements CorreosBo {

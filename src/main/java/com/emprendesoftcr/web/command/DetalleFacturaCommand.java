@@ -2,10 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Linea de detalles que viene en la venta desde el front end DetalleFacturaCommand.

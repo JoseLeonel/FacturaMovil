@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * Modelo para seleccionar los diferentes articulos del almacen Categoria.

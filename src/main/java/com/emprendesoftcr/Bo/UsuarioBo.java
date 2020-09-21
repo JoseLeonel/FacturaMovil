@@ -1,8 +1,8 @@
 package com.emprendesoftcr.Bo;
 
-import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.JqGridFilter;
 
 public interface UsuarioBo {
 

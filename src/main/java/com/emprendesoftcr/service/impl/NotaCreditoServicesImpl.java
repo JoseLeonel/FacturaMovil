@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
@@ -24,6 +22,8 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.NotaCreditoXMLServices;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @Service("notaCreditoXMLServices")
 @Transactional

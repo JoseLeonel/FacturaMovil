@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraSimplificadaDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.utils.Constantes;
 
 @Repository("compraSimplificadaDao")
 public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {

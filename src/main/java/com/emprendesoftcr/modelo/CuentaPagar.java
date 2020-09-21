@@ -18,8 +18,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @Entity
 @Table(name = "cuentas_pagar")

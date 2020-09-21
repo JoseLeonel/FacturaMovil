@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * Semaforo. Si una empresa tiene problemas con los envios de tributacion se bloquea y no se envia hasta que se solucione el problema

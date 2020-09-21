@@ -21,13 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleCompraBo;
 import com.emprendesoftcr.Dao.DetalleCompraDao;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @EnableTransactionManagement
 @Service("detalleCompraBo")

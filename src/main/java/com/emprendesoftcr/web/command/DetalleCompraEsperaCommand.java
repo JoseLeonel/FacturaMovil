@@ -2,10 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
+import com.emprendesoftcr.utils.Utils;
 
 public class DetalleCompraEsperaCommand {
 

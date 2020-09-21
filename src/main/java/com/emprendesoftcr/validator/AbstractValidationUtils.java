@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
-import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * Validador para los formularios de la aplicación.

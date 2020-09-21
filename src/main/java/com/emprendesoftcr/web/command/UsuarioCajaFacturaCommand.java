@@ -1,7 +1,7 @@
 package com.emprendesoftcr.web.command;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
+import com.emprendesoftcr.utils.Constantes;
 
 public class UsuarioCajaFacturaCommand {
 

@@ -12,9 +12,9 @@ import javax.persistence.StoredProcedureQuery;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.GraficoVentasDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.GraficoVenta;
+import com.emprendesoftcr.utils.Constantes;
 
 @Repository("graficoVentasDao")
 public class GraficoVentasDaoImpl implements GraficoVentasDao {

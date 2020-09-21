@@ -48,8 +48,6 @@ import com.emprendesoftcr.Bo.GraficoVentasBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.SemaforoBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.components.EnvioHaciendaComponent;
 import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
 import com.emprendesoftcr.fisco.EmisorHacienda;
@@ -88,6 +86,8 @@ import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.service.TiqueteXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 import com.google.common.base.Function;
 
 /**

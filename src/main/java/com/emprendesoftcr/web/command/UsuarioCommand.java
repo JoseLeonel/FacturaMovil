@@ -2,10 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Set;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Rol;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * UsuarioCommand. Modelo para definir la presentacion en el front end

@@ -35,9 +35,9 @@ import javax.imageio.ImageIO;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONObject;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.DateTime;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.DateTime;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;

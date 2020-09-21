@@ -1,5 +1,5 @@
 
-package com.emprendesoftcr.Utils;
+package com.emprendesoftcr.utils;
 
 import java.util.ResourceBundle;
 

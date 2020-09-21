@@ -11,10 +11,10 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
+import com.emprendesoftcr.utils.Constantes;
 
 @Repository("recepcionFacturaDao")
 public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {

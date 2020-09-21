@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.utils.Constantes;
 
 @BaseNativeQuery(name = "fact_espera	", query = "\n" + 
 		"SELECT facturas.id,"

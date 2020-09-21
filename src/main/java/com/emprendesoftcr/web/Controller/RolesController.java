@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.modelo.Rol;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.web.command.RolCommand;
 import com.google.common.base.Function;
 

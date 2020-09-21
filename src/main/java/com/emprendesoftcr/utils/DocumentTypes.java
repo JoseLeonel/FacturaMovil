@@ -1,4 +1,4 @@
-package com.emprendesoftcr.Utils;
+package com.emprendesoftcr.utils;
 
 /**
  * @author Luis Matamoros luis.matamoros@efika.solutions

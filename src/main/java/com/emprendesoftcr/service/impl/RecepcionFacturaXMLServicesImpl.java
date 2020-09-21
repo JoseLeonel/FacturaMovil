@@ -17,7 +17,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
@@ -25,6 +24,7 @@ import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RecepcionFacturaXMLServices;
+import com.emprendesoftcr.utils.Constantes;
 
 @Service("recepcionFacturaXMLServices")
 @EnableTransactionManagement

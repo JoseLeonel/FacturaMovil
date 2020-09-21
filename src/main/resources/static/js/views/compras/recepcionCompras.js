@@ -3,16 +3,22 @@ $(document).ready(function() {
 
 }); /* fin document */
 
+var comprasData = { data: [] };
+
 var _Init = function() {
     __Inicializar_Table('.tableListar');
     agregarInputsCombos();
     EventoFiltro();
 
-    $('#panelFiltros').click(function() {
-        var advanced_search_section = $('#filtrosAvanzados');
-        advanced_search_section.slideToggle(750);
-    });
-    ListarRecepcionCompras();
+
+    //  ListarRecepcionCompras();
+    agregarInputsCombos();
+    EventoFiltro();
+    __MostrarPDF();
+    __MostrarAceptarManual();
+    checkBoxSelected()
+    _marcarTodos();
+    riot.mount('recepcion-api');
 }
 
 /**
@@ -32,88 +38,123 @@ function __Inicializar_Table(nombreTabla) {
     });
 }
 
-var ListarRecepcionCompras = function() {
-    var table = $('#tableListar').DataTable({
-        "responsive": true,
-        "bAutoWidth": true,
-        "destroy": true,
-        "order": [1, 'asc'],
-        "bInfo": true,
-        "bPaginate": true,
-        "bFilter": true,
-        "bDeferRender": true,
-        "sDom": 'lrtip',
-        "searching": true,
-        "processing": false,
-        "serverSide": true,
-        "sort": "position",
-        "lengthChange": true,
-        "ajax": {
-            "url": "listarRecepcionCompras.do",
-            "deferRender": true,
-            "type": "GET",
-            "dataType": 'json',
 
-        },
-        "columns": formato_tabla,
-        "language": idioma_espanol,
-    }); // fin del table
-    agregarInputsCombos();
-    EventoFiltro();
-    __MostrarPDF();
-    __MostrarAceptarManual();
 
+function listadoRecepcionCompras() {
+
+    $.ajax({
+        url: 'listarRecepcionCompras.do',
+        datatype: "json",
+        method: "GET",
+        success: function(result) {
+            console.log(result);
+            if (result.rows[0].length > 0) {
+                console.log(result)
+                self.compras.data = result.rows[0]
+                __cargarTablaCompras()
+
+            }
+        }
+
+
+    });
 }
 
+function __cargarTablaCompras() {
+    $("#tableListarSIM").dataTable().fnClearTable();
+    __InformacionDataTableCuentas();
+    $('#tableListarSIM').DataTable().destroy();
+    $("#tableListarSIM").DataTable({
+        destroy: true,
+        "aLengthMenu": [
+            [5, 10, 15, 25, -1],
+            [5, 10, 15, 25, "All"]
+        ],
+        "language": idioma_espanol,
+        "sDom": 'lfrtip',
+        "order": [],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        "columns": formato_tabla,
+    })
+    $("#tableListarSIM").dataTable().fnAddData(self.sim.data);
+}
+
+function checkBoxSelected() {
+
+    //Loop through all checked CheckBoxes in GridView.
+    $('#tableListar tbody').on('change', 'input[type="checkbox"]', function(e) {
+        var check1 = ($(this).attr('id'));
+        var table = $('#tableListarSIM').DataTable();
+        if (table.row(this).child.isShown()) {
+            /*cuando el datatable esta en modo responsive*/
+            var data = table.row(this).data();
+        } else {
+            var data = table.row($(this).parents("tr")).data();
+        }
+        var chk1 = document.getElementById(check1)
+            // Este IF es para cuando usuario deschequea el SIM y se debe reversar el estado
+        if (chk1.checked == false) {
+            //reversar
+            console.log(chk1.checked);
+        } else {
+            console.log(chk1.checked);
+        }
+        alert(1);
+    });
+}
+
+
+function _marcarTodos() {
+    if ($('#marcarDatos').is(':checked')) {
+        $("input[type=checkbox]").prop('checked', true); //todos los check
+    } else {
+        $("input[type=checkbox]").prop('checked', false); //todos los check
+    }
+}
 /**
  * Formato del listado
  */
 var formato_tabla = [{
-    'data': 'id',
-    "name": "id",
-    "title": "#id",
-    "autoWidth": true
-}, {
-    'data': 'consecutivo',
-    "name": "consecutivo",
-    "title": "#Consecutivo",
-    "autoWidth": true
-}, {
-    'data': 'fechaEmision',
-    "name": "fechaEmision",
-    "title": "Fecha Emision",
-    "autoWidth": true
-}, {
-    'data': 'emisorFactura',
-    "name": "emisorFactura",
-    "title": "#Proveedor",
-    "autoWidth": true
-}, {
-    'data': 'totalImpuestos',
-    "name": "totalImpuestos",
-    "title": "IVA",
-    "autoWidth": true
-}, {
-    'data': 'moneda',
-    "name": "moneda",
-    "title": "Moneda",
-    "autoWidth": true
-}, {
-    'data': 'totalComprobante',
-    "name": "totalComprobante",
-    "title": "Total",
-    "autoWidth": true
-}, {
-    'data': 'id',
-    "name": "id",
-    "bSortable": false,
-    "bSearchable": false,
-    "autoWidth": true,
-    "render": function(id, type, row) {
-        return __Opciones(id, type, row);
+        'data': 'id',
+        "name": "id",
+        "bSortable": false,
+        "bSearchable": false,
+        "autoWidth": false,
+        "render": function(id, type, row) {
+            return __checkbox(row);
+        }
+    },
+    { 'data': 'id', "name": "id", "title": "#id", "autoWidth": true },
+    { 'data': 'consecutivo', "name": "consecutivo", "title": "#Consecutivo", "autoWidth": true },
+    { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
+    { 'data': 'emisorFactura', "name": "emisorFactura", "title": "#Proveedor", "autoWidth": true },
+    { 'data': 'totalImpuestos', "name": "totalImpuestos", "title": "IVA", "autoWidth": true },
+    { 'data': 'moneda', "name": "moneda", "title": "Moneda", "autoWidth": true },
+    { 'data': 'totalComprobante', "name": "totalComprobante", "title": "Total", "autoWidth": true },
+    {
+        'data': 'id',
+        "name": "id",
+        "bSortable": false,
+        "bSearchable": false,
+        "autoWidth": true,
+        "render": function(id, type, row) {
+            return __Opciones(id, type, row);
+        }
     }
-}];
+];
 
+/**
+check de cuentas por cobrar
+**/
+function __checkbox(row) {
+    var idCheck = 'check-' + row.id;
+    var checked = " ";
+    var inputcheck = '<div ><input type="checkbox" id="' + idCheck + '"  "  ' + checked + '></div>'
+    return inputcheck;
+}
 /**
  * Opciones listado de los clientes
  */
@@ -198,13 +239,12 @@ function agregarInputsCombos() {
     // Agregar los input de busqueda
     $('.tableListar tfoot th').each(
         function(e) {
+            var name = '<input id = "filtroCampos' + e + '"';
             var title = $('.tableListar thead th').eq($(this).index())
                 .text();
             // No se toma en cuenta la columna de las acctiones(botones)
-            if ($(this).index() != 7) {
-                $(this).html(
-                    '<input id = "filtroCampos" type="text" class="form-control"  placeholder="' +
-                    title + '" />');
+            if ($(this).index() != 8 || $(this).index() != 0) {
+                $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
             }
         })
 }

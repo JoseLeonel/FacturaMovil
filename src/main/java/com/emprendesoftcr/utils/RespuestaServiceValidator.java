@@ -1,4 +1,4 @@
-package com.emprendesoftcr.Utils;
+package com.emprendesoftcr.utils;
 
 import java.io.Serializable;
 import java.util.Collection;

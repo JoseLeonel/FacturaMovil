@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Dao.DataTableDao;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.DataTableDelimitador;
 
 
 

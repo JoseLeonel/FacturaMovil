@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Utils;
 @Entity
 @Table(name = "contr_pago")
 public class ControlPago implements Serializable {

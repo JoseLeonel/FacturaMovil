@@ -11,8 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.MapEnums;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * Detalle de Recepcion de la factura, aceptacion de facturas de un emisor.

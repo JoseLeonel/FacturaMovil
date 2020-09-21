@@ -1,6 +1,6 @@
 package com.emprendesoftcr.web.command;
 
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Utils;
 
 public class TotalInventarioCommand {
 

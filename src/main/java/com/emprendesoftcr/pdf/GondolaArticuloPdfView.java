@@ -3,8 +3,8 @@ package com.emprendesoftcr.pdf;
 
 import java.io.ByteArrayOutputStream;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.utils.Constantes;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;

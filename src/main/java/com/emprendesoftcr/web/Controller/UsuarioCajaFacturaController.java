@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.JqGridFilter;
-import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.JqGridFilter;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.web.command.UsuarioCajaFacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.UsuarioCajaFacturaPropertyEditor;

@@ -5,10 +5,10 @@ package com.emprendesoftcr.type.json;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.Checks;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.type.CertificateInfo;
+import com.emprendesoftcr.utils.Constantes;
 
 public class CertificateInfoJson implements CertificateInfo {
 

@@ -2,12 +2,12 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.sqlNativo.GraficoCuentasPorPagarNative;
+import com.emprendesoftcr.utils.Utils;
 
 public class CuentaPagarCommand {
 

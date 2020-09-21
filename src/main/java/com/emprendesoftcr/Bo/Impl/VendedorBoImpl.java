@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.VendedorBo;
 import com.emprendesoftcr.Dao.VendedorDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * ClienteBoImpl.

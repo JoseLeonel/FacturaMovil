@@ -14,10 +14,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Dao.ClienteDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.ClienteCommand;
 import com.emprendesoftcr.web.command.ClienteMag;
 import com.emprendesoftcr.web.command.ClienteMagList;

@@ -11,10 +11,10 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CuentaPagarDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * 

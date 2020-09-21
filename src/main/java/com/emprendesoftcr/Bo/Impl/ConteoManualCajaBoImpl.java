@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.ConteoManualCajaBo;
 import com.emprendesoftcr.Dao.ConteoManualCajaDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.DenominacionCommand;
 
 @EnableTransactionManagement

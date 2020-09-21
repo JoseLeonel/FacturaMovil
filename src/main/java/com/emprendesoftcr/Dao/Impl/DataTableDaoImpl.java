@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.emprendesoftcr.Dao.DataTableDao;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.JqGridFilter;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.JqGridFilter;
 
 /**
  * Clase para realizar listados con el objeto enviado es una clase generica

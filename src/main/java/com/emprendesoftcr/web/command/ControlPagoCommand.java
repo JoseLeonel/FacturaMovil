@@ -2,10 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.ControlPago;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.utils.Utils;
 
 public class ControlPagoCommand {
 

@@ -2,11 +2,11 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Espera de las solicitudes que no han ingresado al inventario CompraEsperaCommand.

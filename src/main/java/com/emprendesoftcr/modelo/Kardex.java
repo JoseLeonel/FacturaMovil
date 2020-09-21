@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Kardex. Registro de la trazabilidad del articulo en el inventario

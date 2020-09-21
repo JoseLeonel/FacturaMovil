@@ -11,8 +11,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @BaseNativeQuery(name = "compra_simpli", query = "Select ref_numero,compra_simpli.created_at,compra_simpli.clave,compra_simpli.numero_consecutivo,compra_simpli.total_descuentos,compra_simpli.total_impuesto,compra_simpli.total_comprobante,usuarios.nombre_usuario,"
 + "compra_simpli.fecha_emision, provee_simpli.nombre_completo,compra_simpli.total_descuentos, compra_simpli.act_comercial,compra_simpli.id,compra_simpli.empresa_id,compra_simpli.estado" 

@@ -23,13 +23,13 @@ import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.ClienteArticuloBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
-import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.ClienteArticulo;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.AgregarClienteArticuloCommand;
 
 @Controller

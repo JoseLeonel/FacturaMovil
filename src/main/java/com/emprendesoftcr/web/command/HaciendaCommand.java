@@ -2,9 +2,9 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Hacienda;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Status de los documentos HaciendaCommand.

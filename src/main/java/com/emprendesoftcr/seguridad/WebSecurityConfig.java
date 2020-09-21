@@ -19,6 +19,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.emprendesoftcr.repository.UsuarioRepository;
@@ -103,6 +106,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void addCorsMappings(CorsRegistry registry) {
       registry.addMapping("/**");
   }
-	
+	@Bean
+	public CorsFilter corsFilter() {
+	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    final CorsConfiguration configuration = new CorsConfiguration();
+	    configuration.setAllowCredentials(true);
+	    configuration.addAllowedOrigin("*");
+	    configuration.addAllowedHeader("*");
+	    configuration.addAllowedMethod("OPTIONS");
+	    configuration.addAllowedMethod("HEAD");
+	    configuration.addAllowedMethod("GET");
+	    configuration.addAllowedMethod("PUT");
+	    configuration.addAllowedMethod("POST");
+	    configuration.addAllowedMethod("DELETE");
+	    configuration.addAllowedMethod("PATCH");
+	    source.registerCorsConfiguration("/**", configuration);
+	    return new CorsFilter(source);
+	}
 	
 }

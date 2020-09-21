@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 
 @Repository("compraDao")

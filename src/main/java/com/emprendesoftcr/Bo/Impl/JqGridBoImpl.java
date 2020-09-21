@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.emprendesoftcr.Bo.JqGridBo;
 import com.emprendesoftcr.Dao.JqGridDao;
-import com.emprendesoftcr.Utils.JqGridDelimitador;
+import com.emprendesoftcr.utils.JqGridDelimitador;
 
 @Service("jqGridBo")
 public class JqGridBoImpl implements JqGridBo {

@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleCompraSimplificadaBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.CompraSimplificada;
@@ -22,6 +20,8 @@ import com.emprendesoftcr.modelo.DetalleCompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.service.CompraSimplificadaXMLServices;
 import com.emprendesoftcr.service.FirmaElectronicaService;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Proceso de armado del XML Firmado del XML FacturaXMLServicesImpl.

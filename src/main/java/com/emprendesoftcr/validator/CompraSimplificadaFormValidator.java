@@ -5,8 +5,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.CompraSimplificada;
+import com.emprendesoftcr.utils.Constantes;
 
 @Component
 public class CompraSimplificadaFormValidator implements Validator {

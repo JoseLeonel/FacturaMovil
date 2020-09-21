@@ -11,8 +11,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @BaseNativeQuery(name = "invet_fech", query = "SELECT a.id, \n" + 
 "       a.codigo, \n" + 

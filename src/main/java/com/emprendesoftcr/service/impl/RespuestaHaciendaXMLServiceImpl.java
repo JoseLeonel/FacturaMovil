@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
+import com.emprendesoftcr.utils.Constantes;
 
 @Service("respuestaHaciendaXMLService")
 @EnableTransactionManagement

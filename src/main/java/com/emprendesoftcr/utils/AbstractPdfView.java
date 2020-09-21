@@ -3,7 +3,7 @@
  * El PDF que se rellena se presenta en el browser
  * */
 
-package com.emprendesoftcr.Utils;
+package com.emprendesoftcr.utils;
 
 import java.io.OutputStream;
 import java.util.Map;

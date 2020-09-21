@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Dao.UsuarioDao;
-import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.JqGridFilter;
 
 /**
  * Usuarios que pueden ingresar al sistema UsuarioBoImpl.

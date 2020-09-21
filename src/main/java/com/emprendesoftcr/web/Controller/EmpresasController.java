@@ -18,13 +18,13 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.JqGridFilter;
-import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
-import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.JqGridFilter;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.EmpresaCommand;
 import com.google.common.base.Function;
 

@@ -24,11 +24,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.TokenInfo;
 import com.emprendesoftcr.fisco.TokenInfoJson;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.utils.Constantes;
 import com.google.common.collect.ImmutableMap;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;

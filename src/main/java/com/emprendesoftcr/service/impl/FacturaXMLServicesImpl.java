@@ -21,8 +21,6 @@ import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleBo;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
@@ -31,6 +29,8 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.service.FirmaElectronicaService;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * Proceso de armado del XML

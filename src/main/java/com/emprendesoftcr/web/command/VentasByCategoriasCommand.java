@@ -1,8 +1,8 @@
 package com.emprendesoftcr.web.command;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 import com.google.gson.Gson;
 
 public class VentasByCategoriasCommand {

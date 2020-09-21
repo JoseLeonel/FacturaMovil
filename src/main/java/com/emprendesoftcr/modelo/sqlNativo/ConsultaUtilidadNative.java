@@ -6,8 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 @BaseNativeQuery(name = "cons_vent_gana", query = "SELECT det.id,det.cantidad,fact.tipo_doc,articulos.tipo_codigo,fact.numero_consecutivo,"
 		+ " DATE_FORMAT(fact.fecha_emision, \"%d-%c-%Y\") as fecha,"

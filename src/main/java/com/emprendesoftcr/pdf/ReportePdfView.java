@@ -4,8 +4,8 @@ package com.emprendesoftcr.pdf;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;

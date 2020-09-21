@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Dao.TipoCambioDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.TipoCambio;
+import com.emprendesoftcr.utils.Constantes;
 
 /**
  * TipoCambios aplicados en las cuentas por cobrar a los clientes TipoCambioBoImpl.

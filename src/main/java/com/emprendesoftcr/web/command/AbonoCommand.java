@@ -2,9 +2,9 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Abono;
 import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.utils.Utils;
 
 /**
  * ClienteCommand.

@@ -6,8 +6,8 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 

@@ -2,7 +2,7 @@ package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
 
-import com.emprendesoftcr.Utils.JqGridDelimitador;
+import com.emprendesoftcr.utils.JqGridDelimitador;
 
 /**
  * 

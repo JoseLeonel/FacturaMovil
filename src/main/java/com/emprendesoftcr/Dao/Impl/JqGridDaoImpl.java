@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.emprendesoftcr.Dao.JqGridDao;
-import com.emprendesoftcr.Utils.JqGridDelimitador;
-import com.emprendesoftcr.Utils.JqGridFilter;
+import com.emprendesoftcr.utils.JqGridDelimitador;
+import com.emprendesoftcr.utils.JqGridFilter;
 
 @Repository("jqGridDaoImpl")
 public class JqGridDaoImpl implements JqGridDao {

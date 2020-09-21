@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CocinaBo;
 import com.emprendesoftcr.Dao.CocinaDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cocina;
 import com.emprendesoftcr.modelo.CocinaComanda;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.ComandaCocinaCommand;
 import com.emprendesoftcr.web.command.ComandaNuevaCommand;
 import com.google.gson.Gson;

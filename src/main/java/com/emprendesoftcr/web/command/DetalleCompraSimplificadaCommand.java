@@ -1,9 +1,9 @@
 package com.emprendesoftcr.web.command;
 
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.DetalleCompraSimplificada;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.Utils;
 
 
 public class DetalleCompraSimplificadaCommand {
