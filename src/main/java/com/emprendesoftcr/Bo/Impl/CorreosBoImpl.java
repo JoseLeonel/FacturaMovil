@@ -82,7 +82,7 @@ public class CorreosBoImpl implements CorreosBo {
 		message.setTo(to);
 		message.setSubject(subject);
 		message.setText(text);
-		message.setFrom("SoporteEmpredesoftCR@emprendesoftcr.com");
+		message.setFrom("SoporteEmpredesoftCR@facturaemprendesoftcr.com");
 		this.mailSender.send(message);
 
 	}

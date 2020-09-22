@@ -325,10 +325,10 @@ public class CuentaPagarController {
 			Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "ComprasEmitidas@emprendesoftcr.com";
+			String from = "ComprasEmitidas@facturaemprendesoftcr.com";
 			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Compras Pendientes de cancelar dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
@@ -382,10 +382,10 @@ public class CuentaPagarController {
 			Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "ComprasEmitidas@emprendesoftcr.com";
+			String from = "ComprasEmitidas@facturaemprendesoftcr.com";
 			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Compras Pendientes de cancelar ";

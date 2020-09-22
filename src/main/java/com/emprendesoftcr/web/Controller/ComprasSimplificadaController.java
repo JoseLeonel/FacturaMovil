@@ -418,10 +418,10 @@ public class ComprasSimplificadaController {
 			Collection<Attachment> attachments = createAttachments(attachment("CompraSimplificadas", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "ComprasSimplificadasEmitidas@emprendesoftcr.com";
+			String from = "ComprasSimplificadasEmitidas@facturaemprendesoftcr.com";
 			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_ComprasSimplificadas" + "_No_Reply@emprendesoftcr.com";
+					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_ComprasSimplificadas" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Compras Simplificadas dentro del rango de fechas: " + fechaInicio + " al " + fechaFin;

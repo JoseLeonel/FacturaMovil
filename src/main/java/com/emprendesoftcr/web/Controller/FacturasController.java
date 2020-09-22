@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -416,15 +417,15 @@ public class FacturasController {
 	 * @return
 	 */
 
-//	@Autowired
-//	private CertificadoBo certificadoBo;
-//
+	@Autowired
+	private CertificadoBo certificadoBo;
+
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -545,10 +546,10 @@ public class FacturasController {
 
 
 			// Se prepara el correo
-			String from = "FacturasEmitidas@emprendesoftcr.com";
+			String from = "FacturasEmitidas@facturaemprendesoftcr.com";
 			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@emprendesoftcr.com";
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
@@ -1094,10 +1095,10 @@ public class FacturasController {
 			Collection<Attachment> attachments = createAttachments(attachment("utilidad", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "UtilidadProductos@emprendesoftcr.com";
+			String from = "UtilidadProductos@facturaemprendesoftcr.com";
 			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@emprendesoftcr.com";
+					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 
@@ -1404,10 +1405,10 @@ public class FacturasController {
 			Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "FacturasEmitidas@emprendesoftcr.com";
+			String from = "FacturasEmitidas@facturaemprendesoftcr.com";
 			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@emprendesoftcr.com";
+					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Facturas dentro del rango de fechas: " + fechaInicio + " al " + fechaFin;
@@ -2342,10 +2343,10 @@ public class FacturasController {
 			modelEmail.put("telefono", facturaBD.getEmpresa().getTelefono());
 
 			String nombre = facturaBD.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? facturaBD.getEmpresa().getNombre() : facturaBD.getEmpresa().getNombreComercial();
-			String from = "Proforma_No_Reply@emprendesoftcr.com";
+			String from = "Proforma_No_Reply@facturaemprendesoftcr.com";
 			if (facturaBD.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_Proforma" + "_No_Reply@emprendesoftcr.com";
+					from = facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_Proforma" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 

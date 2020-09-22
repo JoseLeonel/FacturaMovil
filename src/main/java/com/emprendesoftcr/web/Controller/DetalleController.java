@@ -441,10 +441,10 @@ public class DetalleController {
 			ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
 			Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 			// Se prepara el correo
-			String from = "FacturasEmitidas@emprendesoftcr.com";
+			String from = "FacturasEmitidas@facturaemprendesoftcr.com";
 			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
 				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@emprendesoftcr.com";
+					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@facturaemprendesoftcr.com";
 				}
 			}
 			String subject = "Ventas por articulo dentro del rango de fechas: " + fechaInicialParam + " al " + fechaFinalParam;
