@@ -568,13 +568,13 @@ public class ComprasController {
 			Collection<Attachment> attachments = createAttachments(attachment("ComprasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "ComprasEmitidas@emprendesoftcr.com";
-			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@emprendesoftcr.com";
-				}
-			}
-			String subject = "Compras dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			String from = "aceptarCompraXProveedor@facturaemprendesoftcr.com";
+//			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
+			String subject = "Compras Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			if (correoAlternativo != null && correoAlternativo.length() > 0) {

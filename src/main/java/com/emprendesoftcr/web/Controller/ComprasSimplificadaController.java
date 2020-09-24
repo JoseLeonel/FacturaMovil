@@ -418,12 +418,12 @@ public class ComprasSimplificadaController {
 			Collection<Attachment> attachments = createAttachments(attachment("CompraSimplificadas", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "ComprasSimplificadasEmitidas@emprendesoftcr.com";
-			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_ComprasSimplificadas" + "_No_Reply@emprendesoftcr.com";
-				}
-			}
+			String from = "comprasimplificada@facturaemprendesoftcr.com" ;
+//			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_ComprasSimplificadas" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
 			String subject = "Compras Simplificadas dentro del rango de fechas: " + fechaInicio + " al " + fechaFin;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();

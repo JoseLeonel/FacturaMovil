@@ -441,13 +441,15 @@ public class DetalleController {
 			ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
 			Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 			// Se prepara el correo
-			String from = "FacturasEmitidas@emprendesoftcr.com";
-			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@emprendesoftcr.com";
-				}
-			}
-			String subject = "Ventas por articulo dentro del rango de fechas: " + fechaInicialParam + " al " + fechaFinalParam;
+			String from = "factura@facturaemprendesoftcr.com";
+//			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasCodigo" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
+			String nombre = usuario.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuario.getEmpresa().getNombre() : usuario.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			String subject = nombre+ " Ventas por articulo rango de fechas: " + fechaInicialParam + " al " + fechaFinalParam;
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			listaCorreos.add(correoAlternativo);
 			Map<String, Object> modelEmail = new HashMap<>();
