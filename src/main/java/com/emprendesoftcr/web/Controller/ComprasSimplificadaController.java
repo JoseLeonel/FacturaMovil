@@ -418,7 +418,7 @@ public class ComprasSimplificadaController {
 			Collection<Attachment> attachments = createAttachments(attachment("CompraSimplificadas", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "comprasimplificada@facturaemprendesoftcr.com ;
+			String from = "comprasimplificada@facturaemprendesoftcr.com" ;
 //			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
 //				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
 //					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_ComprasSimplificadas" + "_No_Reply@facturaemprendesoftcr.com";
