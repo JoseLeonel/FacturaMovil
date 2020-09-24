@@ -44,7 +44,6 @@ public interface CompraBo {
 	ByteArrayInputStream createExcelCompras(Collection<Compra> compras, Empresa empresa, String fechaInicio, String fechaFinal, Proveedor proveedor) throws IOException;
 	
 	ByteArrayInputStream  createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
-	
-	List<RecepcionComprasCommand> getAllRecepcionCompras(Empresa empresa);
+
 	
 }

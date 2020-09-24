@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;
 
 
+@SuppressWarnings("deprecation")
 public class RFC3339DateFormat extends ISO8601DateFormat {
 
  private static final long serialVersionUID = 1L;

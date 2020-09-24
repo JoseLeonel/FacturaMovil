@@ -636,29 +636,5 @@ public class CompraBoImpl implements CompraBo {
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());
 	}
-/**
- * Para consultar las compras enviadas al correo de recepcion
- */
-	@Override
-	public List<RecepcionComprasCommand> getAllRecepcionCompras(Empresa empresa) {
-		List<RecepcionComprasCommand> lista = null;
-		try {
-
-			// request url
-			String url = Constantes.API_RECEPCION_COMPRAS + empresa.getCedula() + "&t=R24.asd24fg";
-			// create an instance of RestTemplate
-			RestTemplate restTemplate = new RestTemplate();
-			// make an HTTP GET request
-			RecepcionList response = restTemplate.getForObject(url, RecepcionList.class);
-			
-			System.out.println(response.toString());
-			lista = response.getListRecepcionCompras();
-		} catch (Exception e) {
-			log.error(String.format("--error consultar APi de compras de recepcion  :" + e.getMessage() + new Date()));
-			throw e;
-
-		}
-		return lista;
-	}
 
 }

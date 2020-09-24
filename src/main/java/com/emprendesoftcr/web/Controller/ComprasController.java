@@ -41,6 +41,7 @@ import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleCompraBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
+import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -50,6 +51,7 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
@@ -64,7 +66,6 @@ import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
-import com.emprendesoftcr.web.command.RecepcionComprasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -117,6 +118,8 @@ public class ComprasController {
 	@Autowired
 	private CompraBo																									compraBo;
 
+	@Autowired
+	private IFEMensajeReceptorAutomaticoBo ifEMensajeReceptorAutomaticoBo;
 	@Autowired
 	private DetalleCompraBo																						detalleCompraBo;
 
@@ -190,7 +193,7 @@ public class ComprasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		List<RecepcionComprasCommand> solicitudList = compraBo.getAllRecepcionCompras(usuarioSesion.getEmpresa());
+		List<FEMensajeReceptorAutomatico> solicitudList = ifEMensajeReceptorAutomaticoBo.getAll("P", usuarioSesion.getEmpresa().getCedula());
 		respuestaService.setAaData(solicitudList);
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);

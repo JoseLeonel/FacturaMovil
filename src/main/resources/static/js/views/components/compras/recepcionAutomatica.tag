@@ -5,6 +5,12 @@
 					<div class="box">
 						<div class="box-body">
 							<div class="planel-body">
+
+							  	<div class="row">
+                        			<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
+                            			<label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
+                        			</div>
+                    			</div>
 								<div class="row">
 									<div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 		<label> {$.i18n.prop("receptor.tipoCondicionImpuesto")}  <span class="requeridoDato">*</span></label>
@@ -69,7 +75,7 @@
 						</div>
 					</div>
 
-					<div class="row">
+					<div class="row" show="{mostrarDetalle == false}">
 						<div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 ">
 							<div class="box">
 								<div class="box-body">
@@ -121,63 +127,8 @@
 
 
  	
-    <div id="formularioMensajeArchivo" class="row center-block" show={mostrarCargaArchivoMensaje == true}>    	
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-header with-border">
-                    <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.aceptar.factura")}</h1>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
-                            <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                        </div>
-                    </div>
-				</div>
-				<div class="box-body" >
-                    <form id="formulario" name="formulario" class="advanced-search-form">
-                        <div class="row">
-        	                <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4" show={mostrarFormulario ==true}>
-								<button onclick={__crearFactura}   type="button" class="btn-green btn-add pull-left" id="btnAceptar" name ="btnAceptar">
-									{$.i18n.prop("btn.aceptar")}
-								</button>
-							</div>
-                        </div>
-						<br>
-						<div class="row">
-							
-                        </div>
-					</form>
-				</div>					
-								
-			</div>
-		</div>						
-	</div>          
+       
 	
-	<div id="formularioAceptar" class="row center-block" show={mostrarFormulario == true} >
-        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
-            <div class="box box-solid box-primary">
-                <div class="box-body">
-                    <form id="formularioAceptarForm" name="formularioAceptarForm" class="advanced-search-form">
-				        <input type="hidden" name="emisorTipoCedula" id="emisorTipoCedula" value="{recepcionFactura.emisorTipoCedula}">
-                        <div class="row">                        
-                                                   
-						</div>
-					</form>
-				</div>				
-				<div class="box-footer">
-	                <div class="row">
-	                     <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-	                         <button onclick={__detalle}    type="button" class="btn-green btn-edit pull-left" id="btnDetalle" name ="btnDetalle"> 
-	                         	{$.i18n.prop("btn.detalle")}
-	                         </button>
-	                     </div>
-	                   
-	                 </div>    
-	            </div>    
-			</div>
-		</div>						
-	</div>	
 	<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
@@ -590,12 +541,11 @@
 		//Se cargan al montar el tag
 		self.on('mount',function(){
 		
-		     self.documentoXML = null
-			 self.update()
+		   
             __InformacionDataTableCuentas(); 
 			listadoRecepcionCompras();
 
-			//__cargarXML();
+			//
 		
 		    __listadoTipoCedulas();
 		    __listadoMediosPago();
@@ -604,6 +554,8 @@
 		    __listadoTiposMensajes();
 			__listadoTiposGasto();
 		    __ListaActividadesComercales();
+			__MostrarPDF()
+			__MostrarAceptarManual()
 		    
 		});
 
@@ -676,7 +628,7 @@ function __cargarTablaCompras() {
         "columns": self.formato_tabla ,
     })
     $("#tableListar").dataTable().fnAddData(self.compras.aaData);
-	__MostrarPDF()
+	
 }
 
 /**
@@ -748,8 +700,11 @@ function __MostrarPDF() {
         } else {
             var data = table.row($(this).parents("tr")).data();
         }
-        location.href = pathWebRecepcionCompras + "repositorio/" + data.facturaPdf;
-
+      	var parametros = {
+            direccion: "bajarArchivo.do?filename=" + data.facturaPdf,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
 
     });
 }
@@ -766,24 +721,25 @@ function __MostrarAceptarManual() {
         } else {
             var data = table.row($(this).parents("tr")).data();
         }
-        gargarXML(data)
+        getXML(data)
 
     });
 }
 
-function gargarXML(data) {
+function getXML(data) {
     $.ajax({
-        url: "http://localhost:8083/api-v1/base64",
+        url: "base64",
         datatype: "json",
         data: { ruta: data.facturaXml },
         method: "GET",
         success: function(data) {
-            var parametros = {
-                xml: data.xmlString,
-                tipoEjecucion: 1
-            }
-            riot.mount('recepcion-api', { parametros: parametros });
-
+		    self.documentoXML = data.xmlString
+			self.mostrarCargaArchivo = false;
+			self.mostrarCargaArchivoMensaje = false;
+		    self.mostrarFormulario   = false;
+		    self.mostrarDetalle      = true;
+			self.update()
+              __cargarXML();
 
         },
         error: function(xhr, status) {

@@ -1,5 +1,6 @@
 package com.emprendesoftcr.modelo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,9 +17,13 @@ import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "fe_mensaje_receptor_automatico", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "receptor_tipo_identificacion", "receptor_identificacion", "clave" }) })
-public class FEMensajeReceptorAutomatico {
+@Table(name = "fe_mensaje_receptor_automatico")
+public class FEMensajeReceptorAutomatico implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4620130448381526880L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,14 +77,20 @@ public class FEMensajeReceptorAutomatico {
 	@Column(name = "factura_pdf", length = 250)
 	private String facturaPdf;
 
-	@NotNull
+
 	@Column(name = "fecha_creacion")
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	private Date fechaCreacion;
 
 	@Column(length = 1)
 	private String estado;
+	
+	
+
+	public FEMensajeReceptorAutomatico() {
+		super();
+	}
 
 	public Long getId() {
 		return id;

@@ -81,7 +81,7 @@ public class MensajeReceptorAutomatico {
 	@Value("${api.tipo.gasto}")
 	private String apiTipoGasto;
 	
-	@SuppressWarnings("unused")
+	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private ZipFile zipFile;

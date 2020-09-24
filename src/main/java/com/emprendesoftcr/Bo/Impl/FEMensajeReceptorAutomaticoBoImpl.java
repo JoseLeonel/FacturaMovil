@@ -4,23 +4,22 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
-import com.emprendesoftcr.Dao.IFEMensajeReceptorAutomaticoDao;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
+import com.emprendesoftcr.repository.IFEMensajeReceptorAutomaticoRepository;
 
-@EnableTransactionManagement
-@Service("IFEMensajeReceptorAutomaticoBo")
+
+@Service("ifEMensajeReceptorAutomaticoBo")
 public class FEMensajeReceptorAutomaticoBoImpl implements IFEMensajeReceptorAutomaticoBo {
 	
 	@Autowired
-	private IFEMensajeReceptorAutomaticoDao _dao;
+	private IFEMensajeReceptorAutomaticoRepository ifEMensajeReceptorAutomaticoRepository;
 
 	@Override
 	public void save(FEMensajeReceptorAutomatico entity) {
-		_dao.save(entity);
+		ifEMensajeReceptorAutomaticoRepository.save(entity);
 	}
 
 	@Override
@@ -31,13 +30,13 @@ public class FEMensajeReceptorAutomaticoBoImpl implements IFEMensajeReceptorAuto
 
 	@Override
 	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente) {
-		return _dao.getAll(estado, identifiacionCliente);
+		return ifEMensajeReceptorAutomaticoRepository.getAll(estado, identifiacionCliente);
 	}
 
 	@Override
 	@Transactional
 	public void updateEstado(String estado, Long id) {
-		_dao.updateEstado(estado, id);
+		ifEMensajeReceptorAutomaticoRepository.updateEstado(estado, id);
 	}
 
 }
