@@ -404,7 +404,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										listaCorreos.add(cliente.getCorreoElectronico3());
 										Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 										List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
-										String from = "CuentasPorCobrar_replay@facturaemprendesoftcr.com";
+										String from = "cuentasxcobrar@facturaemprendesoftcr.com";
 										String subject = "#Factura a Credito  #: " + cuentaCobrar.getFactura().trim();
 										modelEmail.put("nombreComercial", cuentaCobrar.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? cuentaCobrar.getEmpresa().getNombre() : cuentaCobrar.getEmpresa().getNombreComercial());
 										modelEmail.put("cliente", factura.getCliente().getNombreCompleto());
@@ -472,15 +472,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("nombreEmpresa", cuentaCobrar.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? cuentaCobrar.getEmpresa().getNombre() : cuentaCobrar.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", cuentaCobrar.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", cuentaCobrar.getEmpresa().getTelefono());
-			String from = cuentaCobrar.getEmpresa().getCorreoCredito();
-			if (cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!cuentaCobrar.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Creditos_" + cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
+			String from = "cuentasxcobrar@facturaemprendesoftcr.com";
+//			if (cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!cuentaCobrar.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = "Creditos_" + cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			Factura factura = facturaBo.findByConsecutivoAndEmpresa(cuentaCobrar.getFactura(), cuentaCobrar.getEmpresa());
-			String subject = "#Factura con el Credito vencido #: " + cuentaCobrar.getFactura().trim();
+			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			String subject = nombre + "#Factura Credito vencido #: " + cuentaCobrar.getFactura().trim();
 			String plantillaEmail = "email/cuentasPorCobrarVendidas.vm";
 			modelEmail.put("totalSaldo", Utils.formateadorMiles(cuentaCobrar.getTotalSaldo()));
 			modelEmail.put("cliente", cuentaCobrar.getCliente().getNombreCompleto());
@@ -1334,13 +1336,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-			String from = "document_No_Reply@facturaemprendesoftcr.com";
-			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@facturaemprendesoftcr.com";
-					
-				}
-			}
+			//String from = "emprendesoftcr@facturaemprendesoftcr.com";
+//			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@facturaemprendesoftcr.com";
+//					
+//				}
+//			}
+			String from = "factura@facturaemprendesoftcr.com";
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 			String plantillaEmail = "email/emaiNoElectronico.vm";
@@ -1408,13 +1411,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-			String from = "FISCO_No_Reply@facturaemprendesoftcr.com";
-			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = factura.getEmpresa().getAbreviaturaEmpresa() +  "_No_Reply@facturaemprendesoftcr.com.com";
-				}
-			}
-		//	from = "emprendesoftcr@facturaemprendesoftcr.com";
+			String from = "factura@facturaemprendesoftcr.com";
+//			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = factura.getEmpresa().getAbreviaturaEmpresa() +  "_No_Reply@facturaemprendesoftcr.com.com";
+//				}
+//			}
+//			from = "emprendesoftcr@facturaemprendesoftcr.com";
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 			String plantillaEmail = "email/emailHacienda.vm";
@@ -1503,13 +1506,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("correo", recepcionFactura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("consecutivoCompra", recepcionFactura.getFacturaConsecutivo() != null ? recepcionFactura.getFacturaConsecutivo() : Constantes.EMPTY);
 			modelEmail.put("consecutivoGenerado", consecutivoGenerado);
-			String from = tipoMensajeTitulo + "_Reply@facturaemprendesoftcr.com";
+			String from = "aceptarcompraxproveedor@facturaemprendesoftcr.com";
 
-			if (hacienda.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = hacienda.getEmpresa().getAbreviaturaEmpresa() + "_" + tipoMensajeTitulo + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
+//			if (hacienda.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = hacienda.getEmpresa().getAbreviaturaEmpresa() + "_" + tipoMensajeTitulo + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
 
 			String subject = nombreEmpresa + " Aceptando o Rechazando Compras documento Electrónico N° " + recepcionFactura.getNumeroConsecutivoReceptor() + " del emisor con cédula: " + recepcionFactura.getEmpresa().getCedula();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);

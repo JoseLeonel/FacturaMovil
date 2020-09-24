@@ -417,15 +417,15 @@ public class FacturasController {
 	 * @return
 	 */
 
-	@Autowired
-	private CertificadoBo certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -546,13 +546,15 @@ public class FacturasController {
 
 
 			// Se prepara el correo
-			String from = "FacturasEmitidas@facturaemprendesoftcr.com";
-			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
-			String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			String from = "factura@facturaemprendesoftcr.com";
+//			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
+			String nombre = usuario.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuario.getEmpresa().getNombre() : usuario.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			String subject = nombre + " Facturas Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			if (correoAlternativo != null && correoAlternativo.length() > 0) {
@@ -1095,14 +1097,16 @@ public class FacturasController {
 			Collection<Attachment> attachments = createAttachments(attachment("utilidad", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "UtilidadProductos@facturaemprendesoftcr.com";
-			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
-
-			String subject = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + " Utilidad del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			String from = "factura@facturaemprendesoftcr.com";
+//			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_Ventas_Utilidad" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
+			String nombre = usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuarioSesion.getEmpresa().getNombre() : usuarioSesion.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			
+			String subject = nombre + " Utilidad Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			listaCorreos.add(correoAlternativo);
 			Map<String, Object> modelEmail = new HashMap<>();
@@ -1405,13 +1409,15 @@ public class FacturasController {
 			Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 			// Se prepara el correo
-			String from = "FacturasEmitidas@facturaemprendesoftcr.com";
-			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
-			String subject = "Facturas dentro del rango de fechas: " + fechaInicio + " al " + fechaFin;
+			String from = "factura@facturaemprendesoftcr.com";
+//			if (usuarioSesion.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!usuarioSesion.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = usuarioSesion.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
+			String nombre = usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuarioSesion.getEmpresa().getNombre() : usuarioSesion.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			String subject = nombre + " Facturas Rango de fechas: " + fechaInicio + " al " + fechaFin;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			if (correoAlternativo != null && correoAlternativo.length() > 0) {
@@ -2343,12 +2349,12 @@ public class FacturasController {
 			modelEmail.put("telefono", facturaBD.getEmpresa().getTelefono());
 
 			String nombre = facturaBD.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? facturaBD.getEmpresa().getNombre() : facturaBD.getEmpresa().getNombreComercial();
-			String from = "Proforma_No_Reply@facturaemprendesoftcr.com";
-			if (facturaBD.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_Proforma" + "_No_Reply@facturaemprendesoftcr.com";
-				}
-			}
+			String from = "proforma@facturaemprendesoftcr.com";
+//			if (facturaBD.getEmpresa().getAbreviaturaEmpresa() != null) {
+//				if (!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+//					from = facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_Proforma" + "_No_Reply@facturaemprendesoftcr.com";
+//				}
+//			}
 
 			String subject = "Proforma N° " + facturaBD.getId().toString() + " del Emisor: " + nombre;
 
