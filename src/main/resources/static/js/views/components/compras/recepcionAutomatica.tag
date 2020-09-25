@@ -927,57 +927,182 @@ function BuscarActividadComercial(){
 
     })
 }
-		
-		function __cargarXML() {
-			limpiar()
-            self.archivo ={}
-			self.update()
-			
+/**
+* Cargar el Emisor
+**/
+function cargaEmisor(){
+    //Se cargan los datos del emisor
+	var emisor = $(xmlDoc).find("Emisor");
+	self.archivo.emisorNombre = emisor.find("Nombre").text();
+	self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
+	self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
+	self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
+	self.archivo.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
+	self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
+	self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
+	self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
+	self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
+	self.archivo.emisorNombreComercial = emisor.find("NombreComercial").text();
 
-                	//Se carga el XML
-                	var xmlDoc = $.parseXML(self.documentoXML);
-                	
-                	//Se cargan los datos para presentar el detalle de una factura
+}
 
-                
-						console.log($(xmlDoc).find("Clave").first().text());
-						console.log(self.mensaje.facturaClave);
-						
-							//Se cargan los datos del emisor
-							var emisor = $(xmlDoc).find("Emisor");
-		                    self.archivo.emisorNombre = emisor.find("Nombre").text();
-		                    self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
-		                    self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-		                    self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
-		                    self.archivo.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
-		                    self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
-		                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
-		                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
-		                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
-		                    self.archivo.emisorNombreComercial = emisor.find("NombreComercial").text();
+/**
+* Cargar el Receptor
+**/
+function cargaReceptor(){
+    //Se cargan los datos del Receptor
+    var receptor = $(xmlDoc).find("Receptor");
+	self.archivo.receptorNombre = __valorString(receptor.find("Nombre").text());
+	self.archivo.receptorCedula = __valorString(receptor.find("Identificacion").find("Numero").text());
+	self.archivo.receptorTipoCedula = __valorString(receptor.find("Identificacion").find("Tipo").text());
+	self.archivo.receptorCorreo = __valorString(receptor.find("CorreoElectronico").text());
+	self.archivo.receptorCodigoProvincia = __valorString(receptor.find("Ubicacion").find("Provincia").text());
+	self.archivo.receptorCodigoCanton = __valorString(receptor.find("Ubicacion").find("Canton").text());
+	self.archivo.receptorCodigoDistrito = __valorString(receptor.find("Ubicacion").find("Distrito").text());
+	self.archivo.receptorOtraSena = __valorString(receptor.find("Ubicacion").find("OtrasSenas").text());
+	self.archivo.receptorTelefono = __valorString(receptor.find("Telefono").find("NumTelefono").text());
+	self.archivo.receptorNombreComercial = __valorString(receptor.find("NombreComercial").text());
 
-		                   //Se cargan los datos del emisor
-		                    var receptor = $(xmlDoc).find("Receptor");
-		                    self.archivo.receptorNombre = __valorString(receptor.find("Nombre").text());
-		                    self.archivo.receptorCedula = __valorString(receptor.find("Identificacion").find("Numero").text());
-		                    self.archivo.receptorTipoCedula = __valorString(receptor.find("Identificacion").find("Tipo").text());
-		                    self.archivo.receptorCorreo = __valorString(receptor.find("CorreoElectronico").text());
-		                    self.archivo.receptorCodigoProvincia = __valorString(receptor.find("Ubicacion").find("Provincia").text());
-		                    self.archivo.receptorCodigoCanton = __valorString(receptor.find("Ubicacion").find("Canton").text());
-		                    self.archivo.receptorCodigoDistrito = __valorString(receptor.find("Ubicacion").find("Distrito").text());
-		                    self.archivo.receptorOtraSena = __valorString(receptor.find("Ubicacion").find("OtrasSenas").text());
-		                    self.archivo.receptorTelefono = __valorString(receptor.find("Telefono").find("NumTelefono").text());
-		                    self.archivo.receptorNombreComercial = __valorString(receptor.find("NombreComercial").text());
-		                      
-		                    //Se cargan los datos de la factura
-		                    self.archivo.facturaConsecutivo = __valorString($(xmlDoc).find("NumeroConsecutivo").first().text());
-		                    self.archivo.facturaClave = __valorString($(xmlDoc).find("Clave").first().text());
-		                    self.archivo.facturaFechaEmision = __valorString(($(xmlDoc).find("FechaEmision")).first().text());
-		                    self.archivo.facturaCondicionVenta = __valorString($(xmlDoc).find("CondicionVenta").first().text());
-		                    self.archivo.facturaMedioPago = __valorString($(xmlDoc).find("MedioPago").first().text());
+}
 
-		                    self.archivo.facturaCodigoActividad = __valorString($(xmlDoc).find("CodigoActividad").first().text());
-		                    self.archivo.facturaPlazoCredito = __valorString($(xmlDoc).find("PlazoCredito").first().text());
+function datosGeneralesFactura(){
+    //Se cargan los datos de la factura
+    self.archivo.facturaConsecutivo = __valorString($(xmlDoc).find("NumeroConsecutivo").first().text());
+    self.archivo.facturaClave = __valorString($(xmlDoc).find("Clave").first().text());
+    self.archivo.facturaFechaEmision = __valorString(($(xmlDoc).find("FechaEmision")).first().text());
+    self.archivo.facturaCondicionVenta = __valorString($(xmlDoc).find("CondicionVenta").first().text());
+    self.archivo.facturaMedioPago = __valorString($(xmlDoc).find("MedioPago").first().text());
+    self.archivo.facturaCodigoActividad = __valorString($(xmlDoc).find("CodigoActividad").first().text());
+    self.archivo.facturaPlazoCredito = __valorString($(xmlDoc).find("PlazoCredito").first().text());
+
+}
+function iniImpuestos(){
+	var impuestos ={
+		    codigo1 :'',
+			codigoTarifa1:'',
+			tarifa1:'',
+			monto1:0,
+		    codigo2 :'',
+			codigoTarifa2:'',
+			tarifa2:'',
+			monto2:0,
+		    codigo3 :'',
+			codigoTarifa3:'',
+			tarifa3:'',
+			monto3:0,
+		    codigo4 :'',
+			codigoTarifa4:'',
+			tarifa4:'',
+			monto4:0,
+		    codigo5 :'',
+			codigoTarifa5:'',
+			tarifa5:'',
+			monto5:0,
+		    codigo6 :'',
+			codigoTarifa6:'',
+	    	tarifa6:'',
+			monto6:0,
+		    codigo7 :'',
+			codigoTarifa7:'',
+			tarifa7:'',
+			monto7:0
+    }
+	return impuestos
+
+}
+
+function agregarDetalle(impuestos,xmlt){
+	self.detalleServicio.data.push({
+		detalleImpuestos : impuestos,	
+		numeroLinea     : 0,
+		cantidad        : __valorFloat($(xmlt).find("Cantidad").text()),
+		unidadMedida    : __valorString($(xmlt).find("UnidadMedida").text()),
+		detalle         : __valorString($(xmlt).find("Detalle").text()),
+		precioUnitario  : __valorFloat($(xmlt).find("PrecioUnitario").text()),
+		montoTotal      : __valorFloat($(xmlt).find("MontoTotal").text()),
+		subTotal        : __valorFloat($(xmlt).find("SubTotal").text()),
+		montoTotalLinea : __valorFloat($(xmlt).find("MontoTotalLinea").text()),
+		impuestoNeto    : __valorFloat($(xmlt).find("ImpuestoNeto").text()),
+		baseImponible   : __valorFloat($(xmlt).find("BaseImponible").text()),
+		codigoComercialTipo   : "",
+		codigoComercialCodigo : "",
+		descuentoMonto        : __valorFloat($(xmlt).find("Descuento").find("MontoDescuento").text()),
+		descuentoNaturaleza   : __valorString($(xmlt).find("Descuento").find("NaturalezaDescuento").text()),
+		impuestoCodigo        : __valorString(impuestos.codigo1),
+		impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
+		impuestoTarifa        : __valorFloat(impuestos.tarifa1),
+     	impuestoMonto         : __valorFloat(impuestos.monto1),
+		impuestoCodigo1        : __valorString(impuestos.codigo2),
+		impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
+		impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
+     	impuestoMonto1         : __valorFloat(impuestos.monto2),
+		impuestoCodigo2        : __valorString(impuestos.codigo3),
+		impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
+		impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
+     	impuestoMonto2         : __valorFloat(impuestos.monto3),
+		impuestoCodigo3        : __valorString(impuestos.codigo4),
+		impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
+		impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
+     	impuestoMonto3         : __valorFloat(impuestos.monto4),
+		impuestoCodigo4        : __valorString(impuestos.codigo5),
+		impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
+		impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
+     	impuestoMonto4         : __valorFloat(impuestos.monto5),
+		impuestoCodigo5        : __valorString(impuestos.codigo6),
+		impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
+		impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
+     	impuestoMonto5         : __valorFloat(impuestos.monto6),
+		impuestoCodigo6        : __valorString(impuestos.codigo7),
+		impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
+		impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
+     	impuestoMonto6         : __valorFloat(impuestos.monto7),
+        impuestoExoneracionTipoDocumento         : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
+        impuestoExoneracionNumeroDocumento       : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
+        impuestoExoneracionNombreInstitucion     : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),
+        impuestoExoneracionFechaEmision          : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("FechaEmision").text()),
+        impuestoExoneracionPorcentaje            : __valorFloat($(xmlt).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text()),
+        impuestoExoneracionMonto                 : __valorFloat($(xmlt).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
+     });	       	            
+
+
+}
+
+function getResumenFactura(){
+    self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
+	self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("CodigoTipoMoneda").find("TipoCambio").text());
+	if(self.archivo.facturaCodigoMoneda != 'CRC' && self.archivo.facturaCodigoMoneda != 'USD' ){
+        self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoMoneda").text());
+        self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("TipoCambio").text());
+	}
+    self.archivo.facturaTotalServExentos = __valorFloat(resumenFactura.find("TotalServExentos").text());
+    self.archivo.facturaTotalExento = __valorFloat(resumenFactura.find("TotalExento").text());
+    self.archivo.facturaTotalVenta = __valorFloat(resumenFactura.find("TotalVenta").text());
+    self.archivo.facturaTotalVentaNeta = __valorFloat(resumenFactura.find("TotalVentaNeta").text());
+    self.archivo.facturaTotalComprobante = __valorFloat(resumenFactura.find("TotalComprobante").text());
+    self.archivo.facturaTotalImpuestos = __valorFloat(resumenFactura.find("TotalImpuesto").text());
+    self.archivo.facturaTotalServGravados = __valorFloat(resumenFactura.find("TotalServGravados").text());
+    self.archivo.facturaTotalServExonerado = __valorFloat(resumenFactura.find("TotalServExonerado").text());
+    self.archivo.facturaTotalMercanciasGravadas = __valorFloat(resumenFactura.find("TotalMercanciasGravadas").text());
+    self.archivo.facturaTotalMercanciasExentas = __valorFloat(resumenFactura.find("TotalMercanciasExentas").text());
+    self.archivo.facturaTotalMercExonerada =__valorFloat(resumenFactura.find("TotalMercExonerada").text());
+    self.archivo.facturaTotalGravado = __valorFloat(resumenFactura.find("TotalGravado").text());
+    self.archivo.facturaTotalExonerado = __valorFloat(resumenFactura.find("TotalExonerado").text());
+    self.archivo.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
+    self.archivo.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
+    self.archivo.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	                    
+
+
+}
+
+function __cargarXML() {
+	limpiar()
+    self.archivo ={}
+	self.update()
+	//Se carga el XML
+    var xmlDoc = $.parseXML(self.documentoXML);
+	cargaEmisor()
+	cargaReceptor()
+	datosGeneralesFactura();
 							
 		                    
 		                    //Se carga el detalle de la factura
@@ -987,41 +1112,10 @@ function BuscarActividadComercial(){
 		                    $(detallesServicioXml).each(function () {
 								var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
 		                    	$(this).children().each(function () {
+									var impuestos = iniImpuestos
 									var impuestosItems    = this.getElementsByTagName("Impuesto");
-									var impuestos ={
-										    codigo1 :'',
-											codigoTarifa1:'',
-											tarifa1:'',
-											monto1:0,
-										    codigo2 :'',
-											codigoTarifa2:'',
-											tarifa2:'',
-											monto2:0,
-										    codigo3 :'',
-											codigoTarifa3:'',
-											tarifa3:'',
-											monto3:0,
-										    codigo4 :'',
-											codigoTarifa4:'',
-											tarifa4:'',
-											monto4:0,
-										    codigo5 :'',
-											codigoTarifa5:'',
-											tarifa5:'',
-											monto5:0,
-										    codigo6 :'',
-											codigoTarifa6:'',
-											tarifa6:'',
-											monto6:0,
-					        			    codigo7 :'',
-											codigoTarifa7:'',
-											tarifa7:'',
-											monto7:0
-					
-					
-					
-										}
 									$.each(impuestosItems, function(i, impuesto){
+
 									    var codigo = ''
 										var codigoTarifa = ''
 										var tarifa = 0 
@@ -1079,101 +1173,12 @@ function BuscarActividadComercial(){
 										}       
 									    
 									});
-
-				                    var row = "<tr>" + 
-												  "<td>" + __valorFloat($(this).find("Cantidad").text()) + "</td>" + 
-					                    		  "<td>" + __valorString($(this).find("UnidadMedida").text()) + "</td>" + 
-					                    		  "<td>" + __valorString($(this).find("Detalle").text()) + "</td>" + 
-					                    		  "<td>" + __valorFloat($(this).find("PrecioUnitario").text()) + "</td>" + 
-					                    		  "<td>" + __valorFloat($(this).find("MontoTotal").text()) + "</td>" + 
-					                    		  "<td>" + __valorFloat($(this).find("SubTotal").text()) + "</td>" + 
-					                    		  "<td>" + __valorFloat($(this).find("MontoTotalLinea").text()) + "</td>" +
-				                    		  "</tr>";
-				      	            $('#detalleFactura tr:last').after(row);
-				      	            
-				      	          	self.detalleServicio.data.push({
-										detalleImpuestos : impuestos,	
-					      	            numeroLinea     : 0,
-					      	            cantidad        : __valorFloat($(this).find("Cantidad").text()),
-					      	            unidadMedida    : __valorString($(this).find("UnidadMedida").text()),
-					      	            detalle         : __valorString($(this).find("Detalle").text()),
-					      	            precioUnitario  : __valorFloat($(this).find("PrecioUnitario").text()),
-					      	            montoTotal      : __valorFloat($(this).find("MontoTotal").text()),
-					      	            subTotal        : __valorFloat($(this).find("SubTotal").text()),
-					      	            montoTotalLinea : __valorFloat($(this).find("MontoTotalLinea").text()),
-					      	            impuestoNeto    : __valorFloat($(this).find("ImpuestoNeto").text()),
-					      	            baseImponible   : __valorFloat($(this).find("BaseImponible").text()),
-					      	            codigoComercialTipo   : "",
-					      	            codigoComercialCodigo : "",
-					      	            descuentoMonto        : __valorFloat($(this).find("Descuento").find("MontoDescuento").text()),
-					      	            descuentoNaturaleza   : __valorString($(this).find("Descuento").find("NaturalezaDescuento").text()),
-					      	            impuestoCodigo        : __valorString(impuestos.codigo1),
-					      	            impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
-					      	            impuestoTarifa        : __valorFloat(impuestos.tarifa1),
-     				      	            impuestoMonto         : __valorFloat(impuestos.monto1),
-					      	            impuestoCodigo1        : __valorString(impuestos.codigo2),
-					      	            impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
-					      	            impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
-     				      	            impuestoMonto1         : __valorFloat(impuestos.monto2),
-					      	            impuestoCodigo2        : __valorString(impuestos.codigo3),
-					      	            impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
-					      	            impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
-     				      	            impuestoMonto2         : __valorFloat(impuestos.monto3),
-					      	            impuestoCodigo3        : __valorString(impuestos.codigo4),
-					      	            impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
-					      	            impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
-     				      	            impuestoMonto3         : __valorFloat(impuestos.monto4),
-					      	            impuestoCodigo4        : __valorString(impuestos.codigo5),
-					      	            impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
-					      	            impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
-     				      	            impuestoMonto4         : __valorFloat(impuestos.monto5),
-					      	            impuestoCodigo5        : __valorString(impuestos.codigo6),
-					      	            impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
-					      	            impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
-     				      	            impuestoMonto5         : __valorFloat(impuestos.monto6),
-					      	            impuestoCodigo6        : __valorString(impuestos.codigo7),
-					      	            impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
-					      	            impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
-     				      	            impuestoMonto6         : __valorFloat(impuestos.monto7),
-
-					      	            impuestoExoneracionTipoDocumento         : __valorString($(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
-					      	            impuestoExoneracionNumeroDocumento       : __valorString($(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
-					      	            impuestoExoneracionNombreInstitucion     : __valorString($(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),
-					      	            impuestoExoneracionFechaEmision          : __valorString($(this).find("Impuesto").find("Exoneracion").find("FechaEmision").text()),
-					      	            impuestoExoneracionPorcentaje            : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text()),
-					      	            impuestoExoneracionMonto                 : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
-					      	        });	       	            
+                                    agregarDetalle(impuestos,this)
 		                        });
 		                    });
-
+                               
 		                    //Se carga el resumen de la factura
 		                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
-		                    self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
-							self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("CodigoTipoMoneda").find("TipoCambio").text());
-							if(self.archivo.facturaCodigoMoneda != 'CRC' && self.archivo.facturaCodigoMoneda != 'USD' ){
-		                       self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoMoneda").text());
-							   self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("TipoCambio").text());
-
-							}
-		                    
-		                    self.archivo.facturaTotalServExentos = __valorFloat(resumenFactura.find("TotalServExentos").text());
-		                    self.archivo.facturaTotalExento = __valorFloat(resumenFactura.find("TotalExento").text());
-		                    self.archivo.facturaTotalVenta = __valorFloat(resumenFactura.find("TotalVenta").text());
-		                    self.archivo.facturaTotalVentaNeta = __valorFloat(resumenFactura.find("TotalVentaNeta").text());
-		                    self.archivo.facturaTotalComprobante = __valorFloat(resumenFactura.find("TotalComprobante").text());
-		                    self.archivo.facturaTotalImpuestos = __valorFloat(resumenFactura.find("TotalImpuesto").text());
-
-		                    self.archivo.facturaTotalServGravados = __valorFloat(resumenFactura.find("TotalServGravados").text());
-		                    self.archivo.facturaTotalServExonerado = __valorFloat(resumenFactura.find("TotalServExonerado").text());
-		                    self.archivo.facturaTotalMercanciasGravadas = __valorFloat(resumenFactura.find("TotalMercanciasGravadas").text());
-		                    self.archivo.facturaTotalMercanciasExentas = __valorFloat(resumenFactura.find("TotalMercanciasExentas").text());
-		                    self.archivo.facturaTotalMercExonerada =__valorFloat(resumenFactura.find("TotalMercExonerada").text());
-		                    self.archivo.facturaTotalGravado = __valorFloat(resumenFactura.find("TotalGravado").text());
-		                    self.archivo.facturaTotalExonerado = __valorFloat(resumenFactura.find("TotalExonerado").text());
-		                    self.archivo.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
-		                    self.archivo.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
-		                    self.archivo.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	                    
-
 		                    self.update();
 
 		                    
