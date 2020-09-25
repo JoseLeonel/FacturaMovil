@@ -1090,7 +1090,63 @@ function getResumenFactura(){
     self.archivo.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
     self.archivo.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
     self.archivo.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	                    
-
+	//Se cargan los datos del objecto a almacenar en base de datos
+	self.recepcionFactura.tipoGasto = 1
+	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
+	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
+	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
+	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
+	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
+	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
+	self.emisorTelefono = self.archivo.emisorTelefono;
+	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
+	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
+	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
+	       	self.recepcionFactura.emisorCodigoCanton = self.archivo.emisorCodigoCanton;
+		                	self.recepcionFactura.emisorDistrito = self.archivo.emisorDistrito;
+		                	self.recepcionFactura.emisorCodigoDistrito = self.archivo.emisorCodigoDistrito;
+		                	self.recepcionFactura.emisorOtraSena = self.archivo.emisorOtraSena;
+		                	self.recepcionFactura.receptorNombre = self.archivo.receptorNombre;
+		                	self.recepcionFactura.receptorCedula = self.archivo.receptorCedula;
+		                	self.recepcionFactura.receptorTipoCedula = self.archivo.receptorTipoCedula;
+		                	self.recepcionFactura.receptorCorreo = self.archivo.receptorCorreo;
+		                	self.recepcionFactura.receptorProvincia = self.archivo.receptorProvincia;
+		                	self.recepcionFactura.receptorCodigoProvincia = self.archivo.receptorCodigoProvincia;
+		                	self.recepcionFactura.receptorCanton = self.archivo.receptorCanton;
+		                	self.recepcionFactura.receptorCodigoCanton = self.archivo.receptorCodigoCanton;
+		                	self.recepcionFactura.receptorDistrito = self.archivo.receptorDistrito;
+		                	self.recepcionFactura.receptorCodigoDistrito = self.archivo.receptorCodigoDistrito;
+		                	self.recepcionFactura.receptorOtraSena = self.archivo.receptorOtraSena;
+		                	self.recepcionFactura.receptorTelefono = self.archivo.receptorTelefono;
+		                	self.recepcionFactura.receptorNombreComercial = self.archivo.receptorNombreComercial;
+		                	self.recepcionFactura.facturaConsecutivo = self.archivo.facturaConsecutivo;
+		                	self.recepcionFactura.facturaClave = self.archivo.facturaClave;
+		                	self.recepcionFactura.facturaFechaEmision = self.archivo.facturaFechaEmision;
+		                	self.recepcionFactura.facturaCondicionVenta = self.archivo.facturaCondicionVenta;
+		                	self.recepcionFactura.facturaMedioPago = self.archivo.facturaMedioPago;
+		                	self.recepcionFactura.facturaCodigoMoneda = self.archivo.facturaCodigoMoneda;
+		                	self.recepcionFactura.facturaTipoCambio = self.archivo.facturaTipoCambio;
+		                	self.recepcionFactura.facturaTotalServExentos = self.archivo.facturaTotalServExentos;
+		                	self.recepcionFactura.facturaTotalExento = self.archivo.facturaTotalExento;
+		                	self.recepcionFactura.facturaTotalVenta = self.archivo.facturaTotalVenta;
+		                	self.recepcionFactura.facturaTotalVentaNeta = self.archivo.facturaTotalVentaNeta;
+		                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
+		                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
+		                	
+		                	self.recepcionFactura.emisorNombreComercial = self.archivo.emisorNombreComercial;
+		                	self.recepcionFactura.facturaCodigoActividad = self.archivo.facturaCodigoActividad;
+		                	self.recepcionFactura.facturaPlazoCredito = self.archivo.facturaPlazoCredito;
+		                	self.recepcionFactura.facturaTotalServGravados = self.archivo.facturaTotalServGravados;
+		                	self.recepcionFactura.facturaTotalServExonerado = self.archivo.facturaTotalServExonerado;
+		                	self.recepcionFactura.facturaTotalMercanciasGravadas = self.archivo.facturaTotalMercanciasGravadas;
+		                	self.recepcionFactura.facturaTotalMercanciasExentas = self.archivo.facturaTotalMercanciasExentas;
+		                	self.recepcionFactura.facturaTotalMercExonerada = self.archivo.facturaTotalMercExonerada;
+		                	self.recepcionFactura.facturaTotalGravado = self.archivo.facturaTotalGravado;
+		                	self.recepcionFactura.facturaTotalExonerado = self.archivo.facturaTotalExonerado;
+		                	self.recepcionFactura.facturaTotalIVADevuelto = self.archivo.facturaTotalIVADevuelto;
+		                	self.recepcionFactura.facturaTotalOtrosCargos = self.archivo.facturaTotalOtrosCargos;				
+		                	
+     
 
 }
 
@@ -1185,63 +1241,8 @@ function __cargarXML() {
 		                    __buscaProvincias();
 		                    __buscaCantones();
 		                    __buscaDistritos();
+							getResumenFactura()
 		                                        
-		                	//Se cargan los datos del objecto a almacenar en base de datos
-							self.recepcionFactura.tipoGasto = 1
-							self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
-							self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
-		                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
-		                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
-		                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
-		                	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
-		                	self.emisorTelefono = self.archivo.emisorTelefono;
-		                	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
-		                	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
-		                	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
-		                	self.recepcionFactura.emisorCodigoCanton = self.archivo.emisorCodigoCanton;
-		                	self.recepcionFactura.emisorDistrito = self.archivo.emisorDistrito;
-		                	self.recepcionFactura.emisorCodigoDistrito = self.archivo.emisorCodigoDistrito;
-		                	self.recepcionFactura.emisorOtraSena = self.archivo.emisorOtraSena;
-		                	self.recepcionFactura.receptorNombre = self.archivo.receptorNombre;
-		                	self.recepcionFactura.receptorCedula = self.archivo.receptorCedula;
-		                	self.recepcionFactura.receptorTipoCedula = self.archivo.receptorTipoCedula;
-		                	self.recepcionFactura.receptorCorreo = self.archivo.receptorCorreo;
-		                	self.recepcionFactura.receptorProvincia = self.archivo.receptorProvincia;
-		                	self.recepcionFactura.receptorCodigoProvincia = self.archivo.receptorCodigoProvincia;
-		                	self.recepcionFactura.receptorCanton = self.archivo.receptorCanton;
-		                	self.recepcionFactura.receptorCodigoCanton = self.archivo.receptorCodigoCanton;
-		                	self.recepcionFactura.receptorDistrito = self.archivo.receptorDistrito;
-		                	self.recepcionFactura.receptorCodigoDistrito = self.archivo.receptorCodigoDistrito;
-		                	self.recepcionFactura.receptorOtraSena = self.archivo.receptorOtraSena;
-		                	self.recepcionFactura.receptorTelefono = self.archivo.receptorTelefono;
-		                	self.recepcionFactura.receptorNombreComercial = self.archivo.receptorNombreComercial;
-		                	self.recepcionFactura.facturaConsecutivo = self.archivo.facturaConsecutivo;
-		                	self.recepcionFactura.facturaClave = self.archivo.facturaClave;
-		                	self.recepcionFactura.facturaFechaEmision = self.archivo.facturaFechaEmision;
-		                	self.recepcionFactura.facturaCondicionVenta = self.archivo.facturaCondicionVenta;
-		                	self.recepcionFactura.facturaMedioPago = self.archivo.facturaMedioPago;
-		                	self.recepcionFactura.facturaCodigoMoneda = self.archivo.facturaCodigoMoneda;
-		                	self.recepcionFactura.facturaTipoCambio = self.archivo.facturaTipoCambio;
-		                	self.recepcionFactura.facturaTotalServExentos = self.archivo.facturaTotalServExentos;
-		                	self.recepcionFactura.facturaTotalExento = self.archivo.facturaTotalExento;
-		                	self.recepcionFactura.facturaTotalVenta = self.archivo.facturaTotalVenta;
-		                	self.recepcionFactura.facturaTotalVentaNeta = self.archivo.facturaTotalVentaNeta;
-		                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
-		                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
-		                	
-		                	self.recepcionFactura.emisorNombreComercial = self.archivo.emisorNombreComercial;
-		                	self.recepcionFactura.facturaCodigoActividad = self.archivo.facturaCodigoActividad;
-		                	self.recepcionFactura.facturaPlazoCredito = self.archivo.facturaPlazoCredito;
-		                	self.recepcionFactura.facturaTotalServGravados = self.archivo.facturaTotalServGravados;
-		                	self.recepcionFactura.facturaTotalServExonerado = self.archivo.facturaTotalServExonerado;
-		                	self.recepcionFactura.facturaTotalMercanciasGravadas = self.archivo.facturaTotalMercanciasGravadas;
-		                	self.recepcionFactura.facturaTotalMercanciasExentas = self.archivo.facturaTotalMercanciasExentas;
-		                	self.recepcionFactura.facturaTotalMercExonerada = self.archivo.facturaTotalMercExonerada;
-		                	self.recepcionFactura.facturaTotalGravado = self.archivo.facturaTotalGravado;
-		                	self.recepcionFactura.facturaTotalExonerado = self.archivo.facturaTotalExonerado;
-		                	self.recepcionFactura.facturaTotalIVADevuelto = self.archivo.facturaTotalIVADevuelto;
-		                	self.recepcionFactura.facturaTotalOtrosCargos = self.archivo.facturaTotalOtrosCargos;				
-		                	
 		    	  		    self.mostrarFormulario     = true;
 		    	   		    self.mostrarCargaArchivo   = true;
 		    	   		 	self.mostrarCargaArchivoMensaje = true;														
