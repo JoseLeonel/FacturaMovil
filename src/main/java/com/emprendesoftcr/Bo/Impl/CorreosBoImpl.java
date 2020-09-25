@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.VelocityEngineUtils;
-import com.emprendesoftcr.modelo.Attachment; 
+import com.emprendesoftcr.modelo.Attachment;
 
 @Service("correosBo")
 public class CorreosBoImpl implements CorreosBo {
@@ -32,48 +32,50 @@ public class CorreosBoImpl implements CorreosBo {
 
 	@Autowired
 	private VelocityEngine	velocityEngine;
-	
-	private Logger								log	= LoggerFactory.getLogger(this.getClass());
+
+	private Logger					log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public Boolean enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
-    Boolean resultado  = Boolean.FALSE;		
+		Boolean resultado = Boolean.FALSE;
 		try {
-			 mailSender.send(new MimeMessagePreparator() {
-			   public void prepare(MimeMessage mimeMessage) throws MessagingException {
-		
-			  	 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-			  	 
-			  	 for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
-							String correo = (String) iterator.next();
-							if (Utils.validarCorreo(correo)) {
-								message.addTo(new InternetAddress(correo));
-							}
-							if (attachments != null) {
-								for (Iterator<Attachment> iterator1 = attachments.iterator(); iterator1.hasNext();) {
-									Attachment attachment = iterator1.next();
-									message.addAttachment(attachment.getNombre(), attachment.getAttachment());
-								}
-							}
+			mailSender.send(new MimeMessagePreparator() {
 
+				public void prepare(MimeMessage mimeMessage) throws MessagingException {
+
+					MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+					for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
+						String correo = (String) iterator.next();
+						if (Utils.validarCorreo(correo)) {
+							message.addTo(new InternetAddress(correo));
 						}
-			  	 
-			  	 message.setSubject(subjet); 
-			  	 message.setFrom(from);
-			  	 
-			  	 String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model); 
-			     message.setText(text, true);
-			     
+						if (attachments != null) {
+							for (Iterator<Attachment> iterator1 = attachments.iterator(); iterator1.hasNext();) {
+								Attachment attachment = iterator1.next();
+								message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+							}
+						}
+
+					}
+
+					message.setSubject(subjet);
+					message.setFrom(from);
+
+					String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
+					message.setText(text, true);
+
 //			     message.addInline("myLogo", new ClassPathResource("img/mylogo.gif"));
-			 //    message.addAttachment("myDocument.pdf", new ClassPathResource("doc/myDocument.pdf"));
+					// message.addAttachment("myDocument.pdf", new ClassPathResource("doc/myDocument.pdf"));
 //			   }
-			 }});
-			 resultado  = Boolean.TRUE;	
+				}
+			});
+			resultado = Boolean.TRUE;
 		} catch (Exception e) {
-			
+
 			log.error("Error al enviar el mail: ", e);
 		}
-			 return resultado;
+		return resultado;
 	}
 
 	@Override
