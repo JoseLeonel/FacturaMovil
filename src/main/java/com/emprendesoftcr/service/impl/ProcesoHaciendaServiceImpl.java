@@ -676,7 +676,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	@Scheduled(cron = "0 0/45 22 * * ?")
+	@Scheduled(cron = "0 0/45 16 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
