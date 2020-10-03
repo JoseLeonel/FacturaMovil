@@ -75,7 +75,7 @@
 						</div>
 					</div>
 
-					<div class="row" show="{mostrarDetalle == false}">
+					<div class="row" >
 						<div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 ">
 							<div class="box">
 								<div class="box-body">
@@ -121,15 +121,6 @@
 					<!-- Fin del Listado -->
 				</div>
 				<!-- Fin del Listado -->
-
-
-
-
-
- 	
-       
-	
-	
 <style type="text/css"  >
 .btn-green {
     background-color: #4cae4c;
@@ -149,7 +140,6 @@
 }
 </style>
 	<script>
-	
 		var self = this;
 	    self.mostrarCargaArchivo = false;
 	    self.mostrarCargaArchivoMensaje = false;
@@ -166,13 +156,10 @@
 		self.empresaActividadComercial= {}
 		self.compras              = {aaData:[]}
 		self.documentoXML = null;
-		
 		self.mensaje ={				
 				facturaClave:"",
 				mensaje:"",
 		}		
-		
-		
 		self.recepcionFactura ={
 				id:null,
 				mensaje:"0",
@@ -237,51 +224,89 @@
 		
 		//Se cargan al montar el tag
 		self.on('mount',function(){
-		
-		   
-            __InformacionDataTableCuentas(); 
+			__InformacionDataTableCuentas(); 
 			listadoRecepcionCompras();
-
-			//
-		  	    __listadoTiposMensajes();
+			__listadoTiposMensajes();
 			__listadoTiposGasto();
-		    __ListaActividadesComercales();
+			__ListaActividadesComercales();
 			__MostrarPDF()
 			__MostrarAceptarManual()
 		    
 		});
-
-		//Se actualiza la pagina
-		//self.update();
-
-		__MostrarGuia(){
-			if(self.verAyuda ==true){
-				self.verAyuda = false
-			}else{
-				self.verAyuda = true
-			}
-			self.update()
+/**
+*Marcar o desmarcar 
+**/
+function __MarcarCompras() {
+	$('.tableListar tbody').on('change','input[type="checkbox"]', function (e) {
+	//	$("#marcarDatos").prop('checked', false);
+        var check1 =  ($(this).attr('id'));
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			/*cuando el datatable esta en modo responsive*/
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+         var chk1 =  document.getElementById(check1)
+         // Este IF es para cuando usuario deschequea el SIM y se debe reversar el estado
+		 if (chk1.checked == false){
+             //reversar
+			eliminarVectorFactruasCheckeadasAceptadas(data.id ,1);
+			console.log(self.comprasIngresadas)
+		 }
+		else{
+			  getXML(data)
+			  console.log(self.comprasIngresadas)
 		}
-
-		//Rereso a la pantalla para cargar otro archivo
-		__regresarAlListado(){
-			self.mostrarCargaArchivoMensaje = true;
-			self.mostrarCargaArchivo = true;
-		    self.mostrarFormulario   = true;
-		    self.mostrarDetalle      = false;
-		    self.update();
-		}
-
-		__detalle(){
-			self.mostrarCargaArchivo = false;
-			self.mostrarCargaArchivoMensaje = false;
-		    self.mostrarFormulario   = false;
-		    self.mostrarDetalle      = true;
-		    self.update();			
-		}
-		
+			
+	});
+} 
+/**
+* Eliminar del vector de las facturas checkeadas aceptadas si el usuario descheckea
+**/
+function eliminarVectorFactruasCheckeadasAceptadas(id){
+ 	for (var count = 0; count < self.comprasIngresadas.data.length; count++) {
+        if (self.comprasIngresadas.data[count].recepcionFactura.id == id ){
+             self.comprasIngresadas.data.splice(count, 1);
+             self.update()
+        }
+    }
+}
+/**
+Mostrar la guia de ayuda
+**/
+__MostrarGuia(){
+	if(self.verAyuda ==true){
+		self.verAyuda = false
+	}else{
+    	self.verAyuda = true
+	}
+	self.update()
+}
+/**
+Rereso a la pantalla para cargar otro archivo
+**/
+__regresarAlListado(){
+	self.mostrarCargaArchivoMensaje = true;
+	self.mostrarCargaArchivo = true;
+    self.mostrarFormulario   = true;
+    self.mostrarDetalle      = false;
+    self.update();
+}
+/**
+Detalles
+**/
+__detalle(){
+	self.mostrarCargaArchivo = false;
+	self.mostrarCargaArchivoMensaje = false;
+    self.mostrarFormulario   = false;
+    self.mostrarDetalle      = true;
+    self.update();			
+}
+/**
+Listado de recepcion de compras
+**/		
 function listadoRecepcionCompras() {
-
     $.ajax({
         url: 'listarRecepcionCompras.do',
         datatype: "json",
@@ -292,14 +317,13 @@ function listadoRecepcionCompras() {
                 console.log(result)
                 self.compras.aaData = result.aaData
                 __cargarTablaCompras()
-
             }
         }
-
-
     });
 }
-
+/**
+Carga Tablas de compras
+**/
 function __cargarTablaCompras() {
     $("#tableListar").dataTable().fnClearTable();
     __InformacionDataTableCuentas();
@@ -320,44 +344,43 @@ function __cargarTablaCompras() {
         "columns": self.formato_tabla ,
     })
     $("#tableListar").dataTable().fnAddData(self.compras.aaData);
+	__MarcarCompras();
 	
 }
-
 /**
  * Formato del listado
  */
 function __InformacionDataTableCuentas(){
-self.formato_tabla = [{
-        'data': 'id',
-        "name": "id",
-        "bSortable": false,
-        "bSearchable": false,
-        "autoWidth": false,
-        "render": function(id, type, row) {
-            return __checkbox(row);
-        }
-    },
-    { 'data': 'id', "name": "id", "title": "#id", "autoWidth": true },
-    { 'data': 'consecutivo', "name": "consecutivo", "title": "#Consecutivo", "autoWidth": true },
-    { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
-    { 'data': 'emisorFactura', "name": "emisorFactura", "title": "#Proveedor", "autoWidth": true },
-    { 'data': 'totalImpuestos', "name": "totalImpuestos", "title": "IVA", "autoWidth": true },
-    { 'data': 'moneda', "name": "moneda", "title": "Moneda", "autoWidth": true },
-    { 'data': 'totalComprobante', "name": "totalComprobante", "title": "Total", "autoWidth": true },
-    {
-        'data': 'id',
-        "name": "id",
-        "bSortable": false,
-        "bSearchable": false,
-        "autoWidth": true,
-        "render": function(id, type, row) {
-            return __Opciones(id, type, row);
-        }
-    }
-];
-self.update()
+	self.formato_tabla = [{
+			'data': 'id',
+			"name": "id",
+			"bSortable": false,
+			"bSearchable": false,
+			"autoWidth": false,
+			"render": function(id, type, row) {
+				return __checkbox(row);
+			}
+		},
+		{ 'data': 'id', "name": "id", "title": "#id", "autoWidth": true },
+		{ 'data': 'consecutivo', "name": "consecutivo", "title": "#Consecutivo", "autoWidth": true },
+		{ 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
+		{ 'data': 'emisorFactura', "name": "emisorFactura", "title": "#Proveedor", "autoWidth": true },
+		{ 'data': 'totalImpuestos', "name": "totalImpuestos", "title": "IVA", "autoWidth": true },
+		{ 'data': 'moneda', "name": "moneda", "title": "Moneda", "autoWidth": true },
+		{ 'data': 'totalComprobante', "name": "totalComprobante", "title": "Total", "autoWidth": true },
+		{
+			'data': 'id',
+			"name": "id",
+			"bSortable": false,
+			"bSearchable": false,
+			"autoWidth": true,
+			"render": function(id, type, row) {
+				return __Opciones(id, type, row);
+			}
+		}
+	];
+	self.update()
 }
-
 /**
 check de cuentas por cobrar
 **/
@@ -400,138 +423,30 @@ function __MostrarPDF() {
 
     });
 }
-
-
-
-
-function __MostrarAceptarManual() {
-    $('.tableListar').on('click', '.btnAceptarXMLManual', function(e) {
-        var table = $('#tableListar').DataTable();
-        if (table.row(this).child.isShown()) {
-            //cuando el datatable esta en modo responsive
-            var data = table.row(this).data();
-        } else {
-            var data = table.row($(this).parents("tr")).data();
-        }
-        getXML(data)
-
-    });
-}
-
+/**
+Cargar el XML
+**/
 function getXML(data) {
     $.ajax({
         url: "base64",
         datatype: "json",
         data: { ruta: data.facturaXml },
         method: "GET",
-        success: function(data) {
-		    self.documentoXML = data.xmlString
+        success: function(resultado) {
+		    self.documentoXML = resultado.xmlString
+			self.recepcionFactura.id = data.id
 			self.mostrarCargaArchivo = false;
 			self.mostrarCargaArchivoMensaje = false;
 		    self.mostrarFormulario   = false;
 		    self.mostrarDetalle      = true;
 			self.update()
-              __cargarXML();
-
+            __cargarXML(data);
         },
         error: function(xhr, status) {
             mensajeErrorServidor(xhr, status);
             console.log(xhr);
         }
     });
-
-
-}
-			
-
-		
-		//Se muestra los tipos medio de pago	
-		function __listadoTiposMensajes(){
-		    self.tiposMensajes = {data:[]}  // definir el data del datatable
-		    self.update()
-		    self.tiposMensajes.data.push({
-		        valor:"01",
-		        descripcion:$.i18n.prop("tipo.mensaje.aceptado")
-		    })
-		    self.tiposMensajes.data.push({
-		        valor:"02",
-		        descripcion:$.i18n.prop("tipo.mensaje.aceptado.parcial")
-		    })
-		    self.tiposMensajes.data.push({
-		        valor:"03",
-		        descripcion:$.i18n.prop("tipo.mensaje.aceptado.rechazado")
-		    })
-		    self.update()
-		}
-		//Se muestra los tipos medio de pago	
-		function __listadoTiposGasto(){
-		    self.tiposGasto = {data:[]}  // definir el data del datatable
-		    self.update()
-		    self.tiposGasto.data.push({
-		        valor:"01",
-		        descripcion:$.i18n.prop("tipo.gasto.inventario.mensaje")
-		    })
-		    self.tiposGasto.data.push({
-		        valor:"02",
-		        descripcion:$.i18n.prop("tipo.gasto.gasto.mensaje")
-		    })
-		    self.update()
-		}
-
-		//Se muestra los tipos impuestos	
-		function __listadoCondicionImpuesto(){
-		    self.tiposCondiciones = {data:[]}  // definir el data del datatable
-		    self.update()
-		    self.tiposCondiciones.data.push({
-		        valor:"01",
-		        descripcion:$.i18n.prop("tipo.condicion.impuesto.01")
-		    })
-		    self.update()
-		}
-
-		
-		
-		/**
-		*  Lista de las actividades
-		**/
-		function __ListaActividadesComercales(){
-		    $.ajax({
-		        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
-		        datatype: "json",
-		        global: false,
-		        method:"GET",
-		        success: function (result) {
-		            if(result.aaData.length > 0){
-		                self.empresaActividadComercial   = result.aaData
-		                self.update()
-		                BuscarActividadComercial()
-
-		            }
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
-		    return
-		}
-function BuscarActividadComercial(){
-    var codigo =$('#selectActividadComercial').val()
-    if(self.empresaActividadComercial == null){
-       return    
-    }
-    if(self.empresaActividadComercial.length == 0){
-       return    
-    }
-    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
-        if(modeloTabla.codigo == codigo  ){
-           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
-            self.actividadComercial.codigo =  codigo
-            self.factura.codigoActividad = codigo
-            self.update()
-        }
-
-    })
 }
 /**
 * Cargar el Emisor
@@ -550,9 +465,7 @@ function cargaEmisor(){
 	self.recepcionFactura.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 	self.recepcionFactura.emisorNombreComercial = emisor.find("NombreComercial").text();
 	self.update()
-
 }
-
 /**
 * Cargar el Receptor
 **/
@@ -570,9 +483,10 @@ function cargaReceptor(){
 	self.recepcionFactura.receptorTelefono = __valorString(receptor.find("Telefono").find("NumTelefono").text());
 	self.recepcionFactura.receptorNombreComercial = __valorString(receptor.find("NombreComercial").text());
 	self.update()
-
 }
-
+/**
+* Datos Generales de la factura
+**/
 function datosGeneralesFactura(){
     //Se cargan los datos de la factura
     self.recepcionFactura.facturaConsecutivo = __valorString($(self.xmlDoc).find("NumeroConsecutivo").first().text());
@@ -583,8 +497,10 @@ function datosGeneralesFactura(){
     self.recepcionFactura.facturaCodigoActividad = __valorString($(self.xmlDoc).find("CodigoActividad").first().text());
     self.recepcionFactura.facturaPlazoCredito = __valorString($(self.xmlDoc).find("PlazoCredito").first().text());
 	self.update()
-
 }
+/**
+Inicializar los impuestos
+**/
 function iniImpuestos(){
 	var impuestos ={
 		    codigo1 :'',
@@ -619,7 +535,9 @@ function iniImpuestos(){
 	return impuestos
 
 }
-
+/**
+Agregar detalles
+**/
 function agregarDetalle(impuestos,xmlt){
 	self.detalleServicio.data.push({
 		detalleImpuestos : impuestos,	
@@ -677,9 +595,11 @@ function agregarDetalle(impuestos,xmlt){
 
 
 }
-
+/**
+Resumen de la factura
+**/
 function getResumenFactura(){
-	  //Se carga el resumen de la factura
+	//Se carga el resumen de la factura
     var resumenFactura = $(self.xmlDoc).find("ResumenFactura");
     self.recepcionFactura.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
 	self.recepcionFactura.facturaTipoCambio = __valorFloat(resumenFactura.find("CodigoTipoMoneda").find("TipoCambio").text());
@@ -703,18 +623,29 @@ function getResumenFactura(){
     self.recepcionFactura.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
     self.recepcionFactura.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
     self.recepcionFactura.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	                    
-	
 	self.update()		
 }
-
-function __cargarXML() {
+/**
+Cargar XML de los escoge en el listado
+**/
+function __cargarXML(data) {
 	limpiar()
- 
-	//Se carga el XML
+ 	//Se carga el XML
     self.xmlDoc = $.parseXML(self.documentoXML);
+	self.recepcionFactura.id = data.id
+	self.update()
 	cargaEmisor()
 	cargaReceptor()
 	datosGeneralesFactura();
+    agregarDetallesFacturaXML()  
+	getResumenFactura()
+	agregarVentorCompras()
+	self.update();
+}
+/**
+Agregar los detalles de la factura de los que vienen en el xml
+**/
+function agregarDetallesFacturaXML(){
     //Se carga el detalle de la factura
 	$("#detalleFactura").find("tr:gt(0)").remove();
         var detallesServicioXml = $(self.xmlDoc).find("DetalleServicio");
@@ -778,14 +709,14 @@ function __cargarXML() {
 					}       
 				});
                 agregarDetalle(impuestos,this)
+				self.update();
              });
        });
-      
-        self.update();
-		getResumenFactura()
-		agregarVentorCompras()
+
 }
-		
+/**
+Incluir en el vector de compras
+**/		
 function agregarVentorCompras(){
 	 self.comprasIngresadas.data.push({
           recepcionFactura:self.recepcionFactura,
@@ -793,129 +724,213 @@ function agregarVentorCompras(){
 	 })
 	 console.log("compras ingresadas al vector")
 	 console.log(self.comprasIngresadas)
-
 }	
-
+/**
+Limpiar parametros de los objetos
+**/
 function limpiar(){
-            self.comprasIngresadas = {data:[]}
+    self.comprasIngresadas = {data:[]}
+	self.detalleServicio = {data:[]}
+	self.recepcionFactura ={
+		id:null,
+		mensaje:"0",
+		detalleMensaje:"",
+		emisorNombre:"",
+		emisorCedula:"",
+		emisorTipoCedula:"",
+		emisorCorreo:"",
+		emisorTelefono:"0",
+		emisorCodigoProvincia:"0",
+		emisorProvincia:"",
+		emisorCanton:"",
+		emisorCodigoCanton:"",
+		emisorDistrito:"",
+		emisorCodigoDistrito:"",
+		emisorOtraSena:"",
+		receptorNombre:"",
+		receptorCedula:"",
+		receptorTipoCedula:"",
+		receptorCorreo:"",
+		receptorProvincia:"",
+    	receptorCodigoProvincia:"",
+		receptorCanton:"",
+		receptorCodigoCanton:"",
+		receptorDistrito:"",
+		receptorCodigoDistrito:"",
+		receptorOtraSena:"",
+		receptorTelefono:"0",
+		receptorNombreComercial:"",
+		facturaConsecutivo:"",
+		facturaClave:"",
+		facturaFechaEmision:"",
+		facturaCondicionVenta:"0",
+		facturaMedioPago:"0",
+		facturaCodigoMoneda:"CRC",
+		facturaTipoCambio:"1",
+		facturaTotalServExentos:"0",
+		facturaTotalExento:"0",
+		facturaTotalVenta:"0",
+		facturaTotalVentaNeta:"0",
+		facturaTotalComprobante:"0",
+		facturaTotalImpuestos:"0",
+		emisorNombreComercial:"",
+		facturaCodigoActividad:"0",
+		facturaPlazoCredito:"0",
+		facturaTotalServGravados:"0",
+		facturaTotalServExonerado:"0",
+		facturaTotalMercanciasGravadas:"0",
+		facturaTotalMercanciasExentas:"0",
+		facturaTotalMercExonerada:"0",
+		facturaTotalGravado:"0",
+		facturaTotalExonerado:"0",
+		facturaTotalIVADevuelto:"0",
+		facturaTotalOtrosCargos:"0",
+		facturaTotalDescuentos:"0",
+		version_doc:"4.3",
+		detalles:"",
+		condicionImpuesto:"01",
+	}
+	self.update()
+}
+/**
+*  Crear Factura nueva
+**/
+__crearFactura(){
+	//Se limpian los errores
+	$(".errorServerSideJgrid").remove();
+	self.recepcionFactura.mensaje = $("#mensaje").val();
+	self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
+	self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
+	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
+	var JSONDetalles = JSON.stringify(self.detalleServicio);
+	self.recepcionFactura.detalles = JSONDetalles;
+	self.update();
+    $.ajax({
+        type : "POST",
+        dataType : "json",
+        data : self.recepcionFactura,
+        url : "AgregarRecepcionFacturaAjax.do",
+        success : function(data) {
+            if (data.status != 200) {
+            	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeError(data.message)
+                }
+            } else {
+            	serverMessageJson(data);
+    		    self.mostrarFormulario     = false;
+    		    self.mostrarCargaArchivo   = false;		    		    
+    		    self.mostrarCargaArchivoMensaje   = true;		    		    
+    		    $("#fileUpload").val("");
+    		    $("#fileUploadMensajeArchivo").val("");		    		    
+            	self.update();
+                swal({
+                    title: '',
+                    text: data.message,
+                    type: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',                               	  
+                })		            	
+            }
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}	
+/**
+Se muestra los tipos medio de pago	
+**/
+function __listadoTiposMensajes(){
+    self.tiposMensajes = {data:[]}  // definir el data del datatable
+    self.update()
+    self.tiposMensajes.data.push({
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.mensaje.aceptado")
+    })
+    self.tiposMensajes.data.push({
+        valor:"02",
+        descripcion:$.i18n.prop("tipo.mensaje.aceptado.parcial")
+	 })
+    self.tiposMensajes.data.push({
+        valor:"03",
+        descripcion:$.i18n.prop("tipo.mensaje.aceptado.rechazado")
+    })
+    self.update()
+}
+/**
+Se muestra los tipos medio de pago	
+**/
+function __listadoTiposGasto(){
+    self.tiposGasto = {data:[]}  // definir el data del datatable
+    self.update()
+    self.tiposGasto.data.push({
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.gasto.inventario.mensaje")
+    })
+    self.tiposGasto.data.push({
+        valor:"02",
+        descripcion:$.i18n.prop("tipo.gasto.gasto.mensaje")
+    })
+    self.update()
+}
+/**
+Se muestra los tipos impuestos	
+**/
+function __listadoCondicionImpuesto(){
+    self.tiposCondiciones = {data:[]}  // definir el data del datatable
+    self.update()
+    self.tiposCondiciones.data.push({
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.condicion.impuesto.01")
+    })
+    self.update()
+}
+/**
+*  Lista de las actividades
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+                BuscarActividadComercial()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+/**
+Buscar Actividades Comerciales
+**/
+function BuscarActividadComercial(){
+    var codigo =$('#selectActividadComercial').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+            self.actividadComercial.codigo =  codigo
+            self.factura.codigoActividad = codigo
+            self.update()
+        }
 
-			self.detalleServicio = {data:[]}
-			
-			self.recepcionFactura ={
-				id:null,
-				mensaje:"0",
-				detalleMensaje:"",
-				emisorNombre:"",
-				emisorCedula:"",
-				emisorTipoCedula:"",
-				emisorCorreo:"",
-				emisorTelefono:"0",
-				emisorCodigoProvincia:"0",
-				emisorProvincia:"",
-				emisorCanton:"",
-				emisorCodigoCanton:"",
-				emisorDistrito:"",
-				emisorCodigoDistrito:"",
-				emisorOtraSena:"",
-				receptorNombre:"",
-				receptorCedula:"",
-				receptorTipoCedula:"",
-				receptorCorreo:"",
-				receptorProvincia:"",
-				receptorCodigoProvincia:"",
-				receptorCanton:"",
-				receptorCodigoCanton:"",
-				receptorDistrito:"",
-				receptorCodigoDistrito:"",
-				receptorOtraSena:"",
-				receptorTelefono:"0",
-				receptorNombreComercial:"",
-				facturaConsecutivo:"",
-				facturaClave:"",
-				facturaFechaEmision:"",
-				facturaCondicionVenta:"0",
-				facturaMedioPago:"0",
-				facturaCodigoMoneda:"CRC",
-				facturaTipoCambio:"1",
-				facturaTotalServExentos:"0",
-				facturaTotalExento:"0",
-				facturaTotalVenta:"0",
-				facturaTotalVentaNeta:"0",
-				facturaTotalComprobante:"0",
-				facturaTotalImpuestos:"0",
-				emisorNombreComercial:"",
-				facturaCodigoActividad:"0",
-				facturaPlazoCredito:"0",
-				facturaTotalServGravados:"0",
-				facturaTotalServExonerado:"0",
-				facturaTotalMercanciasGravadas:"0",
-				facturaTotalMercanciasExentas:"0",
-				facturaTotalMercExonerada:"0",
-				facturaTotalGravado:"0",
-				facturaTotalExonerado:"0",
-				facturaTotalIVADevuelto:"0",
-				facturaTotalOtrosCargos:"0",
-				facturaTotalDescuentos:"0",
-				version_doc:"4.3",
-				detalles:"",
-				condicionImpuesto:"01",
-			}
-			
-			self.update()
-		}
-		
-		
-		/**
-		*  Crear Factura nueva
-		**/
-		__crearFactura(){
-			
-			//Se limpian los errores
-			$(".errorServerSideJgrid").remove();
-			self.recepcionFactura.mensaje = $("#mensaje").val();
-			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
-			self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
-			self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
-			self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
-		          
-			var JSONDetalles = JSON.stringify(self.detalleServicio);
-			self.recepcionFactura.detalles = JSONDetalles;
-			self.update();
-		    $.ajax({
-		        type : "POST",
-		        dataType : "json",
-		        data : self.recepcionFactura,
-		        url : "AgregarRecepcionFacturaAjax.do",
-		        success : function(data) {
-		            if (data.status != 200) {
-		            	serverMessageJson(data);
-		                if (data.message != null && data.message.length > 0) {
-		                    mensajeError(data.message)
-		                }
-		            } else {
-		            	serverMessageJson(data);
-		    		    self.mostrarFormulario     = false;
-		    		    self.mostrarCargaArchivo   = false;		    		    
-		    		    self.mostrarCargaArchivoMensaje   = true;		    		    
-		    		    $("#fileUpload").val("");
-		    		    $("#fileUploadMensajeArchivo").val("");		    		    
-
-		            	self.update();
-		            	
-                        swal({
-                          title: '',
-                          text: data.message,
-                          type: 'success',
-                          showCancelButton: false,
-                          confirmButtonText: 'Aceptar',                               	  
-                        })		            	
-		            }
-		        },
-		        error : function(xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
-		}		
-	</script>
+    })
+}	
+</script>
 </recepcion-api>
