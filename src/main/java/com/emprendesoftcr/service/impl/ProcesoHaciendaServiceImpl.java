@@ -473,11 +473,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("correo", cuentaCobrar.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", cuentaCobrar.getEmpresa().getTelefono());
 			String from = "cuentasxcobrar@facturaemprendesoftcr.com";
-//			if (cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!cuentaCobrar.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = "Creditos_" + cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@facturaemprendesoftcr.com";
-//				}
-//			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			Factura factura = facturaBo.findByConsecutivoAndEmpresa(cuentaCobrar.getFactura(), cuentaCobrar.getEmpresa());
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
@@ -496,7 +491,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 				List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
 				facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
-				// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 				ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 				String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
 				Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
@@ -519,7 +513,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/50 23 * * ?")
+	@Scheduled(cron = "0 0/01 23 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -682,8 +676,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-//	@Scheduled(cron = "0 0/20 07 * * ?")
-	@Scheduled(cron = "0 0/35 11 * * ?")
+	@Scheduled(cron = "0 0/35 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -743,19 +736,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				//	recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-			//		recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					//recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-				//	 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Jaco
-					 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
 					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
-					recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1336,13 +1329,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-			//String from = "emprendesoftcr@facturaemprendesoftcr.com";
-//			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@facturaemprendesoftcr.com";
-//					
-//				}
-//			}
 			String from = "factura@facturaemprendesoftcr.com";
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
@@ -1402,7 +1388,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
-			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
 			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, factura.getEmpresa().getCedula(), asText(xmlFactura), factura.getTipoDoc()), PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()), XML_AttachRespuestaHacienda(clave, factura.getEmpresa().getCedula(), asText(xmlRespuesta)));
@@ -1412,12 +1397,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 			String from = "factura@facturaemprendesoftcr.com";
-//			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = factura.getEmpresa().getAbreviaturaEmpresa() +  "_No_Reply@facturaemprendesoftcr.com.com";
-//				}
-//			}
-//			from = "emprendesoftcr@facturaemprendesoftcr.com";
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 			String plantillaEmail = "email/emailHacienda.vm";
@@ -1507,12 +1486,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("consecutivoCompra", recepcionFactura.getFacturaConsecutivo() != null ? recepcionFactura.getFacturaConsecutivo() : Constantes.EMPTY);
 			modelEmail.put("consecutivoGenerado", consecutivoGenerado);
 			String from = "aceptarcompraxproveedor@facturaemprendesoftcr.com";
-
-//			if (hacienda.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = hacienda.getEmpresa().getAbreviaturaEmpresa() + "_" + tipoMensajeTitulo + "_No_Reply@facturaemprendesoftcr.com";
-//				}
-//			}
 
 			String subject = nombreEmpresa + " Aceptando o Rechazando Compras documento Electrónico N° " + recepcionFactura.getNumeroConsecutivoReceptor() + " del emisor con cédula: " + recepcionFactura.getEmpresa().getCedula();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
@@ -1607,7 +1580,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
