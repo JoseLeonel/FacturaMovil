@@ -33,7 +33,8 @@
 									</div>                            
 									<div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
 										<label class="pull-left"> Marcar Todos <span class="requeridoDato">*</span></label>
-										<input name="select_all" class="pull-left" value="1" type="checkbox">
+										
+										<input type="checkbox" id = "marcarDatos" name = "marcarDatos" onclick={_marcarTodos} >
 									</div>
 
 								</div>
@@ -51,7 +52,7 @@
 									</div>
 
 									<div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-        								<button type="button" class="btn-green btn-add pull-left botonAceptar" >Aplicar</button>
+        								<button type="button" class="btn-green btn-add pull-left botonAceptar" onclick={__AplicarCompras}   >Aplicar</button>
 									</div>
 
 
@@ -233,6 +234,50 @@
 			__MostrarAceptarManual()
 		    
 		});
+__AplicarCompras(){
+
+	//mover a un vector las compras marcadas en el listado 
+	moverComprasVector()
+	//enviar al back end el vector
+
+	
+}
+/**
+**  Se va a guardar las compras que fueron chequeadas por el usuario
+**/
+function  moverComprasVector(){
+	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
+	for (var count = 0; count < self.compras.aaData.length; count++) {
+        if (self.compras.aaData[count].estado == "C" ){// 
+        	getXML(self.compras.aaData[count])
+        }
+    }
+    console.log(self.comprasIngresadas)
+}
+
+/**
+Marca todos los ckeckbox
+**/		
+_marcarTodos(){
+	if ($('#marcarDatos').is(':checked')) {
+        $("input[type=checkbox]").prop('checked', true); //todos los check
+		marcarVector("C")
+	}else{
+		$("input[type=checkbox]").prop('checked', false); //todos los check
+		marcarVector("P")
+	}	
+}
+/**
+**  Se va a guardar las compras que fueron chequeadas por el usuario
+**/
+function  marcarVector(valor){
+	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
+	for (var count = 0; count < self.compras.aaData.length; count++) {
+        self.compras.aaData[count].estado = valor 
+    }
+	self.update()
+    
+}
 /**
 *Marcar o desmarcar 
 **/
@@ -251,16 +296,40 @@ function __MarcarCompras() {
          // Este IF es para cuando usuario deschequea el SIM y se debe reversar el estado
 		 if (chk1.checked == false){
              //reversar
-			eliminarVectorFactruasCheckeadasAceptadas(data.id ,1);
-			console.log(self.comprasIngresadas)
+			//eliminarVectorFactruasCheckeadasAceptadas(data.id ,1);
+			//console.log(self.comprasIngresadas)
+			__modificarEstado(data,"C")
+			 __ActualizarTablas()
 		 }
 		else{
-			  getXML(data)
-			  console.log(self.comprasIngresadas)
+			  //getXML(data)
+			  __modificarEstado(data,"D")
+			   __ActualizarTablas()
+			  //console.log(self.comprasIngresadas)
 		}
 			
 	});
 } 
+
+/**
+*  actualiza los data tables cuando se marcan todos los check
+**/
+ function __ActualizarTablas(){
+     __cargarTablaCompras()         
+    
+} 
+/**
+**  Cambia el Valor de estado de solicitud de liberacion del numero 
+**/
+function __modificarEstado(elemento,valorEstado){
+    for (var count = 0; count < self.compras.aaData.length; count++) {
+        if (self.compras.aaData[count].id == elemento.id ){// Si existe actualiza  estado enviado
+        	self.compras.aaData[count].estado = valorEstado;
+            break;
+        }
+    }
+    self.update();
+}
 /**
 * Eliminar del vector de las facturas checkeadas aceptadas si el usuario descheckea
 **/
@@ -387,6 +456,7 @@ check de cuentas por cobrar
 function __checkbox(row) {
     var idCheck = 'check-' + row.id;
     var checked = " ";
+   checked = row.estado == "C" ?"checked ":checked;
     var inputcheck = '<div ><input type="checkbox" id="' + idCheck + '"  "  ' + checked + '></div>'
     return inputcheck;
 }
