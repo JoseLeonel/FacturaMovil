@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,6 +67,7 @@ import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
+import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -203,6 +205,25 @@ public class ComprasController {
 	//	respuestaService.setAaData(null);
 		return respuestaService;
 	}
+	
+	 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/recepcionComprasMasivas.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator agregarComprasMasivas(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaCompras") String listaCompras, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			byte[] decodedBytes = Base64.getDecoder().decode(listaCompras);
+			String decodedString = new String(decodedBytes);
+			
+			System.out.println("decodedString ============================ > " + decodedString);
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", listaCompras);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+		 
+	 }
 
 	/**
 	 * Recibir factura de otro emisor

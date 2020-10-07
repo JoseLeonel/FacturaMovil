@@ -1,5 +1,5 @@
 <recepcion-api>
-
+<input type="hidden" id = "listaCompras" name = "listaCompras"  >
 				<!-- Listado  -->
 				<div id="containerRecepcion">
 					<div class="box">
@@ -239,7 +239,7 @@ __AplicarCompras(){
 	//mover a un vector las compras marcadas en el listado 
 	moverComprasVector()
 	//enviar al back end el vector
-
+    __crearFactura()
 	
 }
 /**
@@ -295,17 +295,13 @@ function __MarcarCompras() {
          var chk1 =  document.getElementById(check1)
          // Este IF es para cuando usuario deschequea el SIM y se debe reversar el estado
 		 if (chk1.checked == false){
-             //reversar
-			//eliminarVectorFactruasCheckeadasAceptadas(data.id ,1);
-			//console.log(self.comprasIngresadas)
-			__modificarEstado(data,"C")
+        	__modificarEstado(data,"C")
 			 __ActualizarTablas()
 		 }
 		else{
-			  //getXML(data)
 			  __modificarEstado(data,"D")
 			   __ActualizarTablas()
-			  //console.log(self.comprasIngresadas)
+		
 		}
 			
 	});
@@ -352,26 +348,7 @@ __MostrarGuia(){
 	}
 	self.update()
 }
-/**
-Rereso a la pantalla para cargar otro archivo
-**/
-__regresarAlListado(){
-	self.mostrarCargaArchivoMensaje = true;
-	self.mostrarCargaArchivo = true;
-    self.mostrarFormulario   = true;
-    self.mostrarDetalle      = false;
-    self.update();
-}
-/**
-Detalles
-**/
-__detalle(){
-	self.mostrarCargaArchivo = false;
-	self.mostrarCargaArchivoMensaje = false;
-    self.mostrarFormulario   = false;
-    self.mostrarDetalle      = true;
-    self.update();			
-}
+
 /**
 Listado de recepcion de compras
 **/		
@@ -661,7 +638,10 @@ function agregarDetalle(impuestos,xmlt){
         impuestoExoneracionMonto                 : __valorFloat($(xmlt).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
      });
 
-	 self.update()	       	            
+	 self.update()	      
+	var JSONDetalles = JSON.stringify(self.detalleServicio);
+	self.recepcionFactura.detalles = JSONDetalles;
+	self.update(); 	            
 
 
 }
@@ -692,7 +672,12 @@ function getResumenFactura(){
     self.recepcionFactura.facturaTotalExonerado = __valorFloat(resumenFactura.find("TotalExonerado").text());
     self.recepcionFactura.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
     self.recepcionFactura.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
-    self.recepcionFactura.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	                    
+    self.recepcionFactura.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	   
+	self.recepcionFactura.mensaje = $("#mensaje").val();
+	self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
+	self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
+	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()                 
 	self.update()		
 }
 /**
@@ -865,22 +850,18 @@ function limpiar(){
 /**
 *  Crear Factura nueva
 **/
-__crearFactura(){
+function __crearFactura(){
 	//Se limpian los errores
-	$(".errorServerSideJgrid").remove();
-	self.recepcionFactura.mensaje = $("#mensaje").val();
-	self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
-	self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
-	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
-	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
-	var JSONDetalles = JSON.stringify(self.detalleServicio);
-	self.recepcionFactura.detalles = JSONDetalles;
-	self.update();
+
+	var JSONDetalles = JSON.stringify( self.comprasIngresadas );
+    var temp = btoa(JSONDetalles)
+
+	
     $.ajax({
         type : "POST",
         dataType : "json",
-        data : self.recepcionFactura,
-        url : "AgregarRecepcionFacturaAjax.do",
+        data : {listaCompras:temp},
+        url : "recepcionComprasMasivas.do",
         success : function(data) {
             if (data.status != 200) {
             	serverMessageJson(data);
