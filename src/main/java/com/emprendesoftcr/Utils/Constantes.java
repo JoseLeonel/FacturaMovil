@@ -173,8 +173,8 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																			= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 10;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 10;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 100;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 30;
 
 	
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;

@@ -70,10 +70,13 @@ public class CorreosBoImpl implements CorreosBo {
 //			   }
 				}
 			});
-			resultado = Boolean.TRUE;
+			
 		} catch (Exception e) {
-
 			log.error("Error al enviar el mail: ", e);
+			throw e;
+		
+		}finally {
+			resultado = Boolean.TRUE;
 		}
 		return resultado;
 	}
