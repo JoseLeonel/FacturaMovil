@@ -1,11 +1,12 @@
 <recepcion-api>
 <input type="hidden" id = "listaCompras" name = "listaCompras"  >
+
 				<!-- Listado  -->
 				<div id="containerRecepcion">
 					<div class="box">
 						<div class="box-body">
 							<div class="planel-body">
-
+ 
 							  	<div class="row">
                         			<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                             			<label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
@@ -72,10 +73,11 @@
 										</section> 
                             		</div>
 								</div>
+								
 							</div>
 						</div>
 					</div>
-
+</form>
 					<div class="row" >
 						<div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 ">
 							<div class="box">
@@ -230,31 +232,126 @@
 			__listadoTiposMensajes();
 			__listadoTiposGasto();
 			__ListaActividadesComercales();
+			__listadoCondicionImpuesto()
 			__MostrarPDF()
 			__MostrarAceptarManual()
 		    
 		});
+
+/**
+Se muestra los tipos impuestos	
+**/
+function __listadoCondicionImpuesto(){
+    self.tiposCondiciones = {data:[]}  // definir el data del datatable
+    self.update()
+    self.tiposCondiciones.data.push({
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.condicion.impuesto.01")
+    })
+    self.update()
+}
+
+/**
+aplicar compras
+**/
 __AplicarCompras(){
 
 	//mover a un vector las compras marcadas en el listado 
-	moverComprasVector()
-	//enviar al back end el vector
-    __crearFactura()
+	enviarComprasCallback()
 	
 }
+
 /**
 **  Se va a guardar las compras que fueron chequeadas por el usuario
 **/
-function  moverComprasVector(){
+function  moverComprasVector(callback){
+
 	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
 	for (var count = 0; count < self.compras.aaData.length; count++) {
         if (self.compras.aaData[count].estado == "C" ){// 
-        	getXML(self.compras.aaData[count])
+        	getXML(self.compras.aaData[count],function(resultado){
+                 console.log(resultado) 
+							
+			})
         }
     }
+	console.log("cargo el vector")
     console.log(self.comprasIngresadas)
+	callback("Se cargo el vector exitosamente")
 }
 
+/**
+EnviarComprasCallback
+**/
+function enviarComprasCallback(){
+	moverComprasVector(function(resultado){
+		//enviar al back end el vector
+		console.log(resultado)
+    
+
+	})
+
+}
+/**
+Cargar el XML
+**/
+function getXML(data,callbackSolicitarXML) {
+    $.ajax({
+        url: "base64",
+        datatype: "json",
+        data: { ruta: data.facturaXml },
+        method: "GET",
+        success: function(resultado) {
+		    self.documentoXML = resultado.xmlString
+			self.recepcionFactura.id = data.id
+			self.update()
+			 __cargarXML(data,function(valor){
+                callbackSolicitarXML(data)
+			 });	
+			
+            
+        },
+        error: function(xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+/**
+Cargar XML de los escoge en el listado
+**/
+function __cargarXML(data,callbackGetXML) {
+	limpiar(function(resultado){
+		console.log(resultado)
+		//Se carga el XML
+		self.xmlDoc = $.parseXML(self.documentoXML);
+		self.recepcionFactura.id = data.id
+		self.update()
+		cargaEmisor(function(resultado){
+            console.log(resultado)
+			cargaReceptor(function(resultado){
+				console.log(resultado)
+				datosGeneralesFactura(function(resultado){
+					console.log(resultado)
+					agregarDetallesFacturaXML(function(resultado){
+						console.log(resultado)
+						getResumenFactura(function(resultado){
+							console.log(resultado)
+							agregarVentorCompras(function(resultado){
+								console.log(resultado)
+									__crearFactura()
+
+							})
+						})
+					})  
+
+				});
+			})
+		})
+		callbackGetXML("Carga Exitosamente en objeto compra")
+
+	})
+}
 /**
 Marca todos los ckeckbox
 **/		
@@ -330,9 +427,9 @@ function __modificarEstado(elemento,valorEstado){
 * Eliminar del vector de las facturas checkeadas aceptadas si el usuario descheckea
 **/
 function eliminarVectorFactruasCheckeadasAceptadas(id){
- 	for (var count = 0; count < self.comprasIngresadas.data.length; count++) {
-        if (self.comprasIngresadas.data[count].recepcionFactura.id == id ){
-             self.comprasIngresadas.data.splice(count, 1);
+ 	for (var count = 0; count < self.comprasIngresadas.dataFactura.length; count++) {
+        if (self.comprasIngresadas.dataFactura[count].recepcionFactura.id == id ){
+             self.comprasIngresadas.dataFactura.splice(count, 1);
              self.update()
         }
     }
@@ -367,6 +464,19 @@ function listadoRecepcionCompras() {
         }
     });
 }
+function agregarInputsCombos() {
+    // Agregar los input de busqueda
+    $('.tableListar tfoot th').each(
+        function(e) {
+            var name = '<input id = "filtroCampos' + e + '"';
+            var title = $('.tableListar thead th').eq($(this).index())
+                .text();
+            // No se toma en cuenta la columna de las acctiones(botones)
+            if ($(this).index() != 8 || $(this).index() != 0) {
+                $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
+            }
+        })
+}
 /**
 Carga Tablas de compras
 **/
@@ -391,6 +501,8 @@ function __cargarTablaCompras() {
     })
     $("#tableListar").dataTable().fnAddData(self.compras.aaData);
 	__MarcarCompras();
+	agregarInputsCombos()
+	ActivarEventoFiltro(".tableListar")
 	
 }
 /**
@@ -470,35 +582,11 @@ function __MostrarPDF() {
 
     });
 }
-/**
-Cargar el XML
-**/
-function getXML(data) {
-    $.ajax({
-        url: "base64",
-        datatype: "json",
-        data: { ruta: data.facturaXml },
-        method: "GET",
-        success: function(resultado) {
-		    self.documentoXML = resultado.xmlString
-			self.recepcionFactura.id = data.id
-			self.mostrarCargaArchivo = false;
-			self.mostrarCargaArchivoMensaje = false;
-		    self.mostrarFormulario   = false;
-		    self.mostrarDetalle      = true;
-			self.update()
-            __cargarXML(data);
-        },
-        error: function(xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 /**
 * Cargar el Emisor
 **/
-function cargaEmisor(){
+function cargaEmisor(callback){
     //Se cargan los datos del emisor
 	var emisor = $(self.xmlDoc).find("Emisor");
 	self.recepcionFactura.emisorNombre = emisor.find("Nombre").text();
@@ -512,11 +600,13 @@ function cargaEmisor(){
 	self.recepcionFactura.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 	self.recepcionFactura.emisorNombreComercial = emisor.find("NombreComercial").text();
 	self.update()
+	callback("Se cargaron los datos del emisor, exitosamente")
+
 }
 /**
 * Cargar el Receptor
 **/
-function cargaReceptor(){
+function cargaReceptor(callback){
     //Se cargan los datos del Receptor
     var receptor = $(self.xmlDoc).find("Receptor");
 	self.recepcionFactura.receptorNombre = __valorString(receptor.find("Nombre").text());
@@ -530,11 +620,12 @@ function cargaReceptor(){
 	self.recepcionFactura.receptorTelefono = __valorString(receptor.find("Telefono").find("NumTelefono").text());
 	self.recepcionFactura.receptorNombreComercial = __valorString(receptor.find("NombreComercial").text());
 	self.update()
+	callback("Receptor cargado")
 }
 /**
 * Datos Generales de la factura
 **/
-function datosGeneralesFactura(){
+function datosGeneralesFactura(callback){
     //Se cargan los datos de la factura
     self.recepcionFactura.facturaConsecutivo = __valorString($(self.xmlDoc).find("NumeroConsecutivo").first().text());
     self.recepcionFactura.facturaClave = __valorString($(self.xmlDoc).find("Clave").first().text());
@@ -544,6 +635,7 @@ function datosGeneralesFactura(){
     self.recepcionFactura.facturaCodigoActividad = __valorString($(self.xmlDoc).find("CodigoActividad").first().text());
     self.recepcionFactura.facturaPlazoCredito = __valorString($(self.xmlDoc).find("PlazoCredito").first().text());
 	self.update()
+	callback("carga datos generales de la factura")
 }
 /**
 Inicializar los impuestos
@@ -585,10 +677,11 @@ function iniImpuestos(){
 /**
 Agregar detalles
 **/
-function agregarDetalle(impuestos,xmlt){
+function agregarDetalle(impuestos,xmlt,numeroLinea){
+	
+	
 	self.detalleServicio.data.push({
-		detalleImpuestos : impuestos,	
-		numeroLinea     : 0,
+		numeroLinea     : __valorFloat(numeroLinea),
 		cantidad        : __valorFloat($(xmlt).find("Cantidad").text()),
 		unidadMedida    : __valorString($(xmlt).find("UnidadMedida").text()),
 		detalle         : __valorString($(xmlt).find("Detalle").text()),
@@ -648,7 +741,7 @@ function agregarDetalle(impuestos,xmlt){
 /**
 Resumen de la factura
 **/
-function getResumenFactura(){
+function getResumenFactura(callback){
 	//Se carga el resumen de la factura
     var resumenFactura = $(self.xmlDoc).find("ResumenFactura");
     self.recepcionFactura.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
@@ -678,34 +771,20 @@ function getResumenFactura(){
 	self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
 	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
 	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()                 
-	self.update()		
+	self.update()	
+	callback("Resumen de la factura")	
 }
-/**
-Cargar XML de los escoge en el listado
-**/
-function __cargarXML(data) {
-	limpiar()
- 	//Se carga el XML
-    self.xmlDoc = $.parseXML(self.documentoXML);
-	self.recepcionFactura.id = data.id
-	self.update()
-	cargaEmisor()
-	cargaReceptor()
-	datosGeneralesFactura();
-    agregarDetallesFacturaXML()  
-	getResumenFactura()
-	agregarVentorCompras()
-	self.update();
-}
+
 /**
 Agregar los detalles de la factura de los que vienen en el xml
 **/
-function agregarDetallesFacturaXML(){
+function agregarDetallesFacturaXML(callback){
     //Se carga el detalle de la factura
 	$("#detalleFactura").find("tr:gt(0)").remove();
         var detallesServicioXml = $(self.xmlDoc).find("DetalleServicio");
         $(detallesServicioXml).each(function () {
 			var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
+			var numeroLinea = __valorString($(this).find("NumeroLinea").text())
            	$(this).children().each(function () {
 				var impuestos = iniImpuestos()
 				var impuestosItems    = this.getElementsByTagName("Impuesto");
@@ -763,28 +842,30 @@ function agregarDetallesFacturaXML(){
 					    impuestos.monto7 = monto
 					}       
 				});
-                agregarDetalle(impuestos,this)
+                agregarDetalle(impuestos,this,numeroLinea)
 				self.update();
              });
        });
-
+      callback("agregarDetallesFacturaXML")
 }
+
+
 /**
 Incluir en el vector de compras
 **/		
-function agregarVentorCompras(){
-	 self.comprasIngresadas.data.push({
-          recepcionFactura:self.recepcionFactura,
-		  detalleServicio:self.detalleServicio
+function agregarVentorCompras(callback){
+	 self.comprasIngresadas.dataFactura.push({
+        recepcionFactura: JSON.stringify(self.recepcionFactura) ,
 	 })
 	 console.log("compras ingresadas al vector")
 	 console.log(self.comprasIngresadas)
+	 callback("Vector de compras")
 }	
 /**
 Limpiar parametros de los objetos
 **/
-function limpiar(){
-    self.comprasIngresadas = {data:[]}
+function limpiar(callback){
+    self.comprasIngresadas = {dataFactura:[]}
 	self.detalleServicio = {data:[]}
 	self.recepcionFactura ={
 		id:null,
@@ -846,17 +927,15 @@ function limpiar(){
 		condicionImpuesto:"01",
 	}
 	self.update()
+	callback("Se inicializo correctamente los atributos")
 }
 /**
 *  Crear Factura nueva
 **/
 function __crearFactura(){
 	//Se limpian los errores
-
-	var JSONDetalles = JSON.stringify( self.comprasIngresadas );
+	var JSONDetalles = JSON.stringify( self.comprasIngresadas);
     var temp = btoa(JSONDetalles)
-
-	
     $.ajax({
         type : "POST",
         dataType : "json",

@@ -12,6 +12,7 @@ import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.RecepcionComprasCommand;
@@ -30,6 +31,7 @@ public interface CompraBo {
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 
 	void crearCompra(CompraCommand compraCommand,Usuario usuario) throws Exception;
+	void crearCompra(RecepcionFactura recepcionFactura,Usuario usuario,Proveedor proveedor,List<RecepcionFacturaDetalle> listDetalles) throws Exception;
 
 	void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo)throws Exception;
 	

@@ -42,6 +42,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
@@ -635,6 +636,21 @@ public class CompraBoImpl implements CompraBo {
 		workbook.write(stream);
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());
+	}
+
+	@Transactional
+	@Override
+	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor,List<RecepcionFacturaDetalle> listDetalles) throws Exception {
+		try {
+			
+			// Agregar el tipo documento de la factura
+//			compra.setTipoDocumento();   recepcionFactura-->articuloProveedor-->Proveedor
+		} catch (Exception e) {
+			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date() );
+
+			throw e;
+		}
+
 	}
 
 }

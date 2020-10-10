@@ -493,6 +493,7 @@ public class Constantes {
 	public static final Integer					COMPRA_ESTADO_INGRESADA_INVENTARIO														= 2;
 	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA															= 3;
 	public static final Integer					COMPRA_ESTADO_ANULADA																					= 4;
+	public static final Integer					COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA									= 6;
 
 	public static final String					COMPRA_ESTADO_PENDIENTE_STR																		= "Pendiente";
 	public static final String					COMPRA_ESTADO_INGRESADA_INVENTARIO_STR												= "Ingresada";

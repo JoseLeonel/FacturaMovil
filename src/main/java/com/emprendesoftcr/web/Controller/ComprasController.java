@@ -65,10 +65,12 @@ import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
+import com.emprendesoftcr.web.command.ComprasReceptorAutomatico;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
+import com.emprendesoftcr.web.command.VectorCompras;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -211,19 +213,61 @@ public class ComprasController {
 	@RequestMapping(value = "/recepcionComprasMasivas.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregarComprasMasivas(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaCompras") String listaCompras, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		RecepcionFactura recepcionFactura = null;
 		try {
 			byte[] decodedBytes = Base64.getDecoder().decode(listaCompras);
 			String decodedString = new String(decodedBytes);
+			List<VectorCompras> lista = new ArrayList<VectorCompras>();
+			Gson gson = new Gson();
 			
-			System.out.println("decodedString ============================ > " + decodedString);
+			JSONArray jsonArrayDetalle = obtenerJsonArray("dataFactura",decodedString);
+		
+			JSONObject json = null;
 			
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", listaCompras);
-
+			VectorCompras comprasReceptorAutomatico = new VectorCompras();
+			
+			//comprasReceptorAutomatico = gson.fromJson(json.toString(), ComprasReceptorAutomatico.class);
+			if (jsonArrayDetalle != null) {
+				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
+					System.out.println(jsonArrayDetalle.get(i).toString());
+					json = (JSONObject) new JSONParser().parse(jsonArrayDetalle.get(i).toString());
+			//		String recepcionFacturasAutomaticas = gson.fromJson(jsonArrayDetalle.get(i).toString(), String.class);
+					comprasReceptorAutomatico = gson.fromJson(json.toString(), VectorCompras.class);
+					recepcionFactura = gson.fromJson(comprasReceptorAutomatico.getRecepcionFactura(), RecepcionFactura.class);
+					recepcionFactura.setId(null);
+					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data",recepcionFactura.getDetalles());
+					respuestaServiceValidator = crearFacturaAutomaticaCompras ( request, recepcionFactura, jsonArrayDetalleCompras,result, status);
+					
+				}
+			} 
+			System.out.println("decodedString ============================ > " + recepcionFactura);
+			return respuestaServiceValidator;
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
 		}
 		 
 	 }
+	
+	private JSONArray obtenerJsonArray(String valor,String jsonString) {
+		
+		JSONObject json = null;
+		JSONArray jsonArrayDetalle =null;
+		
+		try {
+			try {
+				json = (JSONObject) new JSONParser().parse(jsonString);
+			} catch (org.json.simple.parser.ParseException e) {
+				e.printStackTrace();
+			}
+			jsonArrayDetalle = (JSONArray) json.get(valor);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return jsonArrayDetalle;
+	}
 
 	/**
 	 * Recibir factura de otro emisor
@@ -239,19 +283,51 @@ public class ComprasController {
 	@RequestMapping(value = "/AgregarRecepcionFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregarRecepcionFactura(HttpServletRequest request, ModelMap model, @ModelAttribute RecepcionFactura recepcionFactura, BindingResult result, SessionStatus status) throws Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			
+			// Agregar Lineas de Detalle
+			JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data",recepcionFactura.getDetalles());
+			return crearFacturaAutomaticaCompras ( request, recepcionFactura, jsonArrayDetalleCompras,result, status);
 
+		} catch (Exception e) {
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
+		}
+		
+	}
+	/**
+	 * 
+	 * @param request
+	 * @param recepcionFactura
+	 * @param jsonArrayDetalle
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	private RespuestaServiceValidator<?> crearFacturaAutomaticaCompras (HttpServletRequest request, RecepcionFactura recepcionFactura, JSONArray jsonArrayDetalle,BindingResult result, SessionStatus status) throws Exception {
+		@SuppressWarnings("rawtypes")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
+			recepcionFactura.setMensaje(recepcionFactura.getMensaje() !=null && recepcionFactura.getMensaje().equals(Constantes.EMPTY)?"Compra aceptada":recepcionFactura.getMensaje());
 			// Se validan los datos
 			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
 				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.factura.otro.receptor");
 			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getReceptorCedula().trim().toUpperCase())) {
-				result.rejectValue("receptorCedula", "error.recepcionFactura.factura.otro.receptor");
+				
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.factura.otro.receptor");
 			} else {
 				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getEmisorCedula(), recepcionFactura.getFacturaClave());
 				if (resultado != null && resultado.size() > 0) {
-					result.rejectValue("facturaClave", "error.recepcionFactura.ya.exite");
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.ya.exite");
+					
 				}
 			}
 			recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.EMPTY : recepcionFactura.getFacturaCodigoMoneda());
@@ -266,20 +342,7 @@ public class ComprasController {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			}
-
-			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
-			JSONObject json = null;
-			try {
-				json = (JSONObject) new JSONParser().parse(recepcionFactura.getDetalles());
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
-			}
-
-			// Agregar Lineas de Detalle
-			JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
 			Gson gson = new Gson();
-			Gson gson1 = new Gson();
-
 			if (jsonArrayDetalle != null) {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
@@ -455,8 +518,11 @@ public class ComprasController {
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
 		}
+		
 	}
 
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
