@@ -173,6 +173,11 @@ public class RecepcionFacturaDetalle implements Serializable {
 
 	@Column(name = "impuesto_monto6", precision = 18, scale = 5)
 	private Double						impuestoMonto6;
+	
+	@Column(name = "porce_descuento", precision = 18, scale = 5)
+	private Double						procentajeDesc;
+	
+	
 
 	@ManyToOne
 	@JoinColumn(name = "recepcion_factura_id")
@@ -687,5 +692,7 @@ public class RecepcionFacturaDetalle implements Serializable {
 	public void setImpuestoMonto6(Double impuestoMonto6) {
 		this.impuestoMonto6 = impuestoMonto6;
 	}
+	
+	
 
 }

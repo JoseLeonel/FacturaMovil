@@ -115,6 +115,21 @@ public class DetalleCompra implements Serializable {
 
 		this.precio = detalleCompraCommand.getPrecio();
 	}
+	
+	public DetalleCompra(RecepcionFacturaDetalle recepcionFacturaDetalle) {
+		super();
+
+		this.numeroLinea = recepcionFacturaDetalle.getNumeroLinea();
+		this.costo = recepcionFacturaDetalle.getMontoTotal() !=null?recepcionFacturaDetalle.getMontoTotal():Constantes.ZEROS_DOUBLE;
+		this.cantidad = recepcionFacturaDetalle.getCantidad();
+		this.ganancia = Constantes.ZEROS_DOUBLE;
+		this.impuesto = Constantes.ZEROS_DOUBLE;
+		this.descuento = Constantes.ZEROS_DOUBLE;
+		this.totalDescuento = recepcionFacturaDetalle.getDescuentoMonto() != null? recepcionFacturaDetalle.getDescuentoMonto():Constantes.ZEROS_DOUBLE;
+		this.totalImpuesto = Constantes.ZEROS_DOUBLE;
+		this.montoTotalLinea = recepcionFacturaDetalle.getMontoTotalLinea();
+		this.precio = Constantes.ZEROS_DOUBLE;
+	}
 
 	
 	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double ganancia, Double precio, Double cantidad, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
@@ -147,6 +162,8 @@ public class DetalleCompra implements Serializable {
 	public Integer getNumeroLinea() {
 		return numeroLinea;
 	}
+	
+	
 
 	public void setNumeroLinea(Integer numeroLinea) {
 		this.numeroLinea = numeroLinea;

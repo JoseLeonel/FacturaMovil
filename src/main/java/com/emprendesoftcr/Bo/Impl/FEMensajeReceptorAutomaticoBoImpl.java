@@ -39,4 +39,11 @@ public class FEMensajeReceptorAutomaticoBoImpl implements IFEMensajeReceptorAuto
 		ifEMensajeReceptorAutomaticoRepository.updateEstado(estado, id);
 	}
 
+	@Transactional
+	@Override
+	public void updateEstadoPorIdentificion(String estado, String cedulaEmisor) {
+		ifEMensajeReceptorAutomaticoRepository.updateEstadoPorIdentificion(estado, cedulaEmisor);
+		
+	}
+
 }

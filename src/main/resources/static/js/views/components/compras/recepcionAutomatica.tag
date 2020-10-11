@@ -220,6 +220,7 @@
 				facturaTotalOtrosCargos:"0",
 				facturaTotalDescuentos:"0",
 				version_doc:"4.3",
+				tipoDocEmisor:"",
 				detalles:"",
 				condicionImpuesto:"01",			
 			}
@@ -460,7 +461,10 @@ function listadoRecepcionCompras() {
                 console.log(result)
                 self.compras.aaData = result.aaData
                 __cargarTablaCompras()
-            }
+            }else{
+				agregarInputsCombos()
+				ActivarEventoFiltro(".tableListar")
+			}
         }
     });
 }
@@ -599,6 +603,8 @@ function cargaEmisor(callback){
 	self.recepcionFactura.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
 	self.recepcionFactura.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 	self.recepcionFactura.emisorNombreComercial = emisor.find("NombreComercial").text();
+	
+	
 	self.update()
 	callback("Se cargaron los datos del emisor, exitosamente")
 
@@ -627,6 +633,8 @@ function cargaReceptor(callback){
 **/
 function datosGeneralesFactura(callback){
     //Se cargan los datos de la factura
+	
+	
     self.recepcionFactura.facturaConsecutivo = __valorString($(self.xmlDoc).find("NumeroConsecutivo").first().text());
     self.recepcionFactura.facturaClave = __valorString($(self.xmlDoc).find("Clave").first().text());
     self.recepcionFactura.facturaFechaEmision = __valorString(($(self.xmlDoc).find("FechaEmision")).first().text());
@@ -677,7 +685,7 @@ function iniImpuestos(){
 /**
 Agregar detalles
 **/
-function agregarDetalle(impuestos,xmlt,numeroLinea){
+function agregarDetalle(impuestos,xmlt,numeroLinea,codigoComercial,tipoCodigoComercial){
 	
 	
 	self.detalleServicio.data.push({
@@ -691,8 +699,8 @@ function agregarDetalle(impuestos,xmlt,numeroLinea){
 		montoTotalLinea : __valorFloat($(xmlt).find("MontoTotalLinea").text()),
 		impuestoNeto    : __valorFloat($(xmlt).find("ImpuestoNeto").text()),
 		baseImponible   : __valorFloat($(xmlt).find("BaseImponible").text()),
-		codigoComercialTipo   : "",
-		codigoComercialCodigo : "",
+		codigoComercialTipo   : tipoCodigoComercial,
+		codigoComercialCodigo : codigoComercial,
 		descuentoMonto        : __valorFloat($(xmlt).find("Descuento").find("MontoDescuento").text()),
 		descuentoNaturaleza   : __valorString($(xmlt).find("Descuento").find("NaturalezaDescuento").text()),
 		impuestoCodigo        : __valorString(impuestos.codigo1),
@@ -784,6 +792,8 @@ function agregarDetallesFacturaXML(callback){
         var detallesServicioXml = $(self.xmlDoc).find("DetalleServicio");
         $(detallesServicioXml).each(function () {
 			var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
+			var codigoComercial = __valorString($(this).find("CodigoComercial").find("Codigo").text())
+			var tipoCodigoComercial = __valorString($(this).find("CodigoComercial").find("Tipo").text())
 			var numeroLinea = __valorString($(this).find("NumeroLinea").text())
            	$(this).children().each(function () {
 				var impuestos = iniImpuestos()
@@ -842,7 +852,7 @@ function agregarDetallesFacturaXML(callback){
 					    impuestos.monto7 = monto
 					}       
 				});
-                agregarDetalle(impuestos,this,numeroLinea)
+                agregarDetalle(impuestos,this,numeroLinea,codigoComercial,tipoCodigoComercial)
 				self.update();
              });
        });

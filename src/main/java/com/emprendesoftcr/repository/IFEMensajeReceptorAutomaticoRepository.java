@@ -17,5 +17,9 @@ public interface IFEMensajeReceptorAutomaticoRepository extends CrudRepository<F
 	@Query("UPDATE FEMensajeReceptorAutomatico c SET c.estado=?1 WHERE c.id=?2")
 	public void updateEstado(String estado, Long id);
 	
+	@Modifying
+	@Query("UPDATE FEMensajeReceptorAutomatico c SET c.estado=?1 WHERE c.emisorIdentificacion=?2")
+	public void updateEstadoPorIdentificion(String estado, String cedulaEmisor);
+	
 	
 }

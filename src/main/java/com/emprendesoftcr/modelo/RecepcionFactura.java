@@ -236,79 +236,10 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "estado", columnDefinition = "INT default '1'")
 	private Integer						estado;
 
-	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String emisorNombreComercial, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial,
-			String facturaConsecutivo, String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, String facturaCodigoActividad, String facturaPlazoCredito, Double facturaTotalServGravados, Double facturaTotalServExonerado, Double facturaTotalMercanciasGravadas, Double facturaTotalMercanciasExentas, Double facturaTotalMercExonerada, Double facturaTotalGravado, Double facturaTotalExonerado, Double facturaTotalIVADevuelto, Double facturaTotalOtrosCargos, Double facturaTotalDescuentos, String version_doc,
-			Double totalImpuestoAcreditar, Double totalDeGastoAplicable, String condicionImpuesto, Date created_at, Date updated_at, Empresa empresa, String tipoDoc, String codigoActividad, Integer tipoGasto, String detalles, Integer estado) {
-		super();
-		this.id = id;
-		this.mensaje = mensaje;
-		this.detalleMensaje = detalleMensaje;
-		this.numeroConsecutivoReceptor = numeroConsecutivoReceptor;
-		this.estadoFirma = estadoFirma;
-		this.emisorCedula = emisorCedula;
-		this.emisorNombre = emisorNombre;
-		this.emisorTipoCedula = emisorTipoCedula;
-		this.emisorCorreo = emisorCorreo;
-		this.emisorTelefono = emisorTelefono;
-		this.emisorCodigoProvincia = emisorCodigoProvincia;
-		this.emisorProvincia = emisorProvincia;
-		this.emisorCanton = emisorCanton;
-		this.emisorCodigoCanton = emisorCodigoCanton;
-		this.emisorDistrito = emisorDistrito;
-		this.emisorCodigoDistrito = emisorCodigoDistrito;
-		this.emisorOtraSena = emisorOtraSena;
-		this.emisorNombreComercial = emisorNombreComercial;
-		this.receptorNombre = receptorNombre;
-		this.receptorCedula = receptorCedula;
-		this.receptorTipoCedula = receptorTipoCedula;
-		this.receptorCorreo = receptorCorreo;
-		this.receptorProvincia = receptorProvincia;
-		this.receptorCodigoProvincia = receptorCodigoProvincia;
-		this.receptorCanton = receptorCanton;
-		this.receptorCodigoCanton = receptorCodigoCanton;
-		this.receptorDistrito = receptorDistrito;
-		this.receptorCodigoDistrito = receptorCodigoDistrito;
-		this.receptorOtraSena = receptorOtraSena;
-		this.receptorTelefono = receptorTelefono;
-		this.receptorNombreComercial = receptorNombreComercial;
-		this.facturaConsecutivo = facturaConsecutivo;
-		this.facturaClave = facturaClave;
-		this.facturaFechaEmision = facturaFechaEmision;
-		this.facturaCondicionVenta = facturaCondicionVenta;
-		this.facturaMedioPago = facturaMedioPago;
-		this.facturaCodigoMoneda = facturaCodigoMoneda;
-		this.facturaTipoCambio = facturaTipoCambio;
-		this.facturaTotalServExentos = facturaTotalServExentos;
-		this.facturaTotalExento = facturaTotalExento;
-		this.facturaTotalVenta = facturaTotalVenta;
-		this.facturaTotalVentaNeta = facturaTotalVentaNeta;
-		this.facturaTotalComprobante = facturaTotalComprobante;
-		this.facturaTotalImpuestos = facturaTotalImpuestos;
-		this.facturaCodigoActividad = facturaCodigoActividad;
-		this.facturaPlazoCredito = facturaPlazoCredito;
-		this.facturaTotalServGravados = facturaTotalServGravados;
-		this.facturaTotalServExonerado = facturaTotalServExonerado;
-		this.facturaTotalMercanciasGravadas = facturaTotalMercanciasGravadas;
-		this.facturaTotalMercanciasExentas = facturaTotalMercanciasExentas;
-		this.facturaTotalMercExonerada = facturaTotalMercExonerada;
-		this.facturaTotalGravado = facturaTotalGravado;
-		this.facturaTotalExonerado = facturaTotalExonerado;
-		this.facturaTotalIVADevuelto = facturaTotalIVADevuelto;
-		this.facturaTotalOtrosCargos = facturaTotalOtrosCargos;
-		this.facturaTotalDescuentos = facturaTotalDescuentos;
-		this.version_doc = version_doc;
-		this.totalImpuestoAcreditar = totalImpuestoAcreditar;
-		this.totalDeGastoAplicable = totalDeGastoAplicable;
-		this.condicionImpuesto = condicionImpuesto;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.empresa = empresa;
-		this.tipoDoc = Utils.obtenerTipoDocumentoConsecutivo(facturaConsecutivo);
-		this.codigoActividad = codigoActividad;
-		this.tipoGasto = tipoGasto;
-		this.detalles = detalles;
-		this.estado = estado;
-	}
+	@Column(name = "tipo_doc_emisor")
+	private String						tipoDocEmisor;
+	
+	
 
 	public RecepcionFactura() {
 		super();
@@ -370,6 +301,16 @@ public class RecepcionFactura implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getTipoDocEmisor() {
+		return tipoDocEmisor;
+	}
+
+	
+	public void setTipoDocEmisor(String tipoDocEmisor) {
+		this.tipoDocEmisor = tipoDocEmisor;
 	}
 
 	public Integer getEstado() {

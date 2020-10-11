@@ -640,16 +640,88 @@ public class CompraBoImpl implements CompraBo {
 
 	@Transactional
 	@Override
-	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor,List<RecepcionFacturaDetalle> listDetalles) throws Exception {
+	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor, List<RecepcionFacturaDetalle> listDetalles) throws Exception {
 		try {
+
+			Compra compra = new Compra();
+			compra.setConsecutivo(recepcionFactura.getFacturaConsecutivo());
+			compra.setEmpresa(recepcionFactura.getEmpresa());
+			compra.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA);
+			compra.setFormaPago(recepcionFactura.getFacturaCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CONTADO) ? Constantes.COMPRA_FORMA_PAGO_CONTADO : Constantes.COMPRA_FORMA_PAGO_CREDITO);
+			compra.setFechaCompra(recepcionFactura.getFacturaFechaEmision());
+
+			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO) && compra.getFormaPago() != null) {
+				compra.setFechaCredito(recepcionFactura.getFacturaFechaEmision());
+			} else {
+				compra.setFechaCredito(null);
+			}
+			compra.setNota(Constantes.EMPTY);
+			compra.setUsuarioCreacion(usuario);
+			if (recepcionFactura.getTipoDocEmisor().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && recepcionFactura.getTipoDocEmisor() != null) {
+				compra.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA);
+			} else if (recepcionFactura.getTipoDocEmisor().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && recepcionFactura.getTipoDocEmisor() != null) {
+				compra.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO);
+			} else if (recepcionFactura.getTipoDocEmisor().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && recepcionFactura.getTipoDocEmisor() != null) {
+				compra.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO);
+			}
 			
-			// Agregar el tipo documento de la factura
-//			compra.setTipoDocumento();   recepcionFactura-->articuloProveedor-->Proveedor
+			compra.setProveedor(proveedor);
+			compra.setCreated_at(new Date());
+			compra.setUpdated_at(new Date());
+			compra.setUsuarioCreacion(usuario);
+			compra.setUsuarioIngresoInventario(usuario);
+			agregar(compra);
+			RecepcionFacturaDetalle recepcionFacturaDetalle = null;
+			if (listDetalles != null && !listDetalles.isEmpty()) {
+				for (int i = 0; i < listDetalles.size(); i++) {
+					recepcionFacturaDetalle = listDetalles.get(i);
+					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(recepcionFacturaDetalle.getCodigoComercialCodigo(), recepcionFactura.getEmpresa());
+					DetalleCompra detalleCompra = new DetalleCompra(recepcionFacturaDetalle);
+					detalleCompra.setImpuesto(getImpuestoAplicado(recepcionFacturaDetalle));
+
+					detalleCompra.setArticulo(articulo);
+					detalleCompra.setCompra(compra);
+					detalleCompra.setCreated_at(new Date());
+					detalleCompra.setUpdated_at(new Date());
+					detalleCompra.setCompra(compra);
+					detalleCompraDao.agregar(detalleCompra);
+					if (proveedor != null && detalleCompra.getArticulo() != null) {
+						actualizarProveedor(detalleCompra, compra.getProveedor());	
+					}
+					
+				}
+			}
+			compra.setTotalCompra(recepcionFactura.getFacturaTotalComprobante());
+			compra.setTotalDescuento(recepcionFactura.getFacturaTotalDescuentos());
+			compra.setTotalImpuesto(recepcionFactura.getFacturaTotalImpuestos());
+			compraDao.modificar(compra);
+
 		} catch (Exception e) {
-			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date() );
+			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
 
 			throw e;
 		}
+
+	}
+
+	private Double getImpuestoAplicado(RecepcionFacturaDetalle recepcionFacturaDetalle) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (recepcionFacturaDetalle.getImpuestoTarifa() != null && recepcionFacturaDetalle.getImpuestoTarifa() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa1() != null && recepcionFacturaDetalle.getImpuestoTarifa1() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa1();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa2() != null && recepcionFacturaDetalle.getImpuestoTarifa2() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa2();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa3() != null && recepcionFacturaDetalle.getImpuestoTarifa3() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa3();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa4() != null && recepcionFacturaDetalle.getImpuestoTarifa4() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa4();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa5() != null && recepcionFacturaDetalle.getImpuestoTarifa5() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa5();
+		} else if (recepcionFacturaDetalle.getImpuestoTarifa6() != null && recepcionFacturaDetalle.getImpuestoTarifa6() > Constantes.ZEROS_DOUBLE) {
+			resultado = recepcionFacturaDetalle.getImpuestoTarifa6();
+		}
+		return resultado;
 
 	}
 

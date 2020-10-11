@@ -13,5 +13,6 @@ public interface IFEMensajeReceptorAutomaticoBo {
 	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente);
 	
 	public void updateEstado(String estado, Long id);
+	public void updateEstadoPorIdentificion(String estado, String cedulaEmisor);
 	
 }

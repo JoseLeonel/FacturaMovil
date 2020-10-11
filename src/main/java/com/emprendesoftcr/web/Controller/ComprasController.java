@@ -123,7 +123,7 @@ public class ComprasController {
 	private CompraBo																									compraBo;
 
 	@Autowired
-	private IFEMensajeReceptorAutomaticoBo ifEMensajeReceptorAutomaticoBo;
+	private IFEMensajeReceptorAutomaticoBo														ifEMensajeReceptorAutomaticoBo;
 	@Autowired
 	private DetalleCompraBo																						detalleCompraBo;
 
@@ -204,11 +204,10 @@ public class ComprasController {
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
 		}
-	//	respuestaService.setAaData(null);
+		// respuestaService.setAaData(null);
 		return respuestaService;
 	}
-	
-	 
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/recepcionComprasMasivas.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -220,27 +219,29 @@ public class ComprasController {
 			String decodedString = new String(decodedBytes);
 			List<VectorCompras> lista = new ArrayList<VectorCompras>();
 			Gson gson = new Gson();
-			
-			JSONArray jsonArrayDetalle = obtenerJsonArray("dataFactura",decodedString);
-		
+
+			JSONArray jsonArrayDetalle = obtenerJsonArray("dataFactura", decodedString);
+
 			JSONObject json = null;
-			
+
 			VectorCompras comprasReceptorAutomatico = new VectorCompras();
-			
-			//comprasReceptorAutomatico = gson.fromJson(json.toString(), ComprasReceptorAutomatico.class);
-			if (jsonArrayDetalle != null) {
+
+			// comprasReceptorAutomatico = gson.fromJson(json.toString(), ComprasReceptorAutomatico.class);
+			if (jsonArrayDetalle != null &&  !jsonArrayDetalle.isEmpty()) {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					System.out.println(jsonArrayDetalle.get(i).toString());
 					json = (JSONObject) new JSONParser().parse(jsonArrayDetalle.get(i).toString());
-			//		String recepcionFacturasAutomaticas = gson.fromJson(jsonArrayDetalle.get(i).toString(), String.class);
+					// String recepcionFacturasAutomaticas = gson.fromJson(jsonArrayDetalle.get(i).toString(), String.class);
 					comprasReceptorAutomatico = gson.fromJson(json.toString(), VectorCompras.class);
 					recepcionFactura = gson.fromJson(comprasReceptorAutomatico.getRecepcionFactura(), RecepcionFactura.class);
 					recepcionFactura.setId(null);
-					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data",recepcionFactura.getDetalles());
-					respuestaServiceValidator = crearFacturaAutomaticaCompras ( request, recepcionFactura, jsonArrayDetalleCompras,result, status);
+					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
 					
+					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI);
+					ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula());
+
 				}
-			} 
+			}
 			System.out.println("decodedString ============================ > " + recepcionFactura);
 			return respuestaServiceValidator;
 		} catch (Exception e) {
@@ -248,14 +249,14 @@ public class ComprasController {
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
 		}
-		 
-	 }
-	
-	private JSONArray obtenerJsonArray(String valor,String jsonString) {
-		
+
+	}
+
+	private JSONArray obtenerJsonArray(String valor, String jsonString) {
+
 		JSONObject json = null;
-		JSONArray jsonArrayDetalle =null;
-		
+		JSONArray jsonArrayDetalle = null;
+
 		try {
 			try {
 				json = (JSONObject) new JSONParser().parse(jsonString);
@@ -285,20 +286,23 @@ public class ComprasController {
 	public RespuestaServiceValidator agregarRecepcionFactura(HttpServletRequest request, ModelMap model, @ModelAttribute RecepcionFactura recepcionFactura, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			
+
 			// Agregar Lineas de Detalle
-			JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data",recepcionFactura.getDetalles());
-			return crearFacturaAutomaticaCompras ( request, recepcionFactura, jsonArrayDetalleCompras,result, status);
+			if(recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
+				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
+			}
+			JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
+			return crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_NO);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
 		}
-		
+
 	}
+
 	/**
-	 * 
 	 * @param request
 	 * @param recepcionFactura
 	 * @param jsonArrayDetalle
@@ -307,7 +311,7 @@ public class ComprasController {
 	 * @return
 	 * @throws Exception
 	 */
-	private RespuestaServiceValidator<?> crearFacturaAutomaticaCompras (HttpServletRequest request, RecepcionFactura recepcionFactura, JSONArray jsonArrayDetalle,BindingResult result, SessionStatus status) throws Exception {
+	private RespuestaServiceValidator<?> crearFacturaAutomaticaCompras(HttpServletRequest request, RecepcionFactura recepcionFactura, JSONArray jsonArrayDetalle, BindingResult result, SessionStatus status, Integer tipoIngreso) throws Exception {
 		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -315,23 +319,27 @@ public class ComprasController {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
-			recepcionFactura.setMensaje(recepcionFactura.getMensaje() !=null && recepcionFactura.getMensaje().equals(Constantes.EMPTY)?"Compra aceptada":recepcionFactura.getMensaje());
+			if(recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
+				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
+			}
+
+			recepcionFactura.setMensaje(recepcionFactura.getMensaje() != null && recepcionFactura.getMensaje().equals(Constantes.EMPTY) ? "Compra aceptada" : recepcionFactura.getMensaje());
 			// Se validan los datos
 			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
 				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.factura.otro.receptor");
 			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getReceptorCedula().trim().toUpperCase())) {
-				
+
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.factura.otro.receptor");
 			} else {
 				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getEmisorCedula(), recepcionFactura.getFacturaClave());
 				if (resultado != null && resultado.size() > 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.ya.exite");
-					
+
 				}
 			}
 			recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.EMPTY : recepcionFactura.getFacturaCodigoMoneda());
-			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY)) {
+			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) && recepcionFactura.getFacturaCodigoMoneda() != null) {
 				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			}
@@ -343,7 +351,7 @@ public class ComprasController {
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			}
 			Gson gson = new Gson();
-			if (jsonArrayDetalle != null) {
+			if (jsonArrayDetalle != null && !jsonArrayDetalle.isEmpty()) {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
 					RecepcionFacturaDetalle detalleNuevo = new RecepcionFacturaDetalle();
@@ -422,7 +430,7 @@ public class ComprasController {
 			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 
-			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
+			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE) && recepcionFactura.getFacturaTipoCambio() != null) {
 				if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
 					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 				} else {
@@ -453,66 +461,91 @@ public class ComprasController {
 			recepcionFactura.setVersion_doc("4.3");
 
 			recepcionFacturaBo.agregar(recepcionFactura);
-			for (RecepcionFacturaDetalle recepcionFacturaDetalle : detallesCompra) {
-				RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
+			if (detallesCompra != null && !detallesCompra.isEmpty()) {
+				for (RecepcionFacturaDetalle recepcionFacturaDetalle : detallesCompra) {
+					RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
 
-				recepcionFacturaDetalleNueva.setNumeroLinea(recepcionFacturaDetalle.getNumeroLinea());
-				recepcionFacturaDetalleNueva.setCantidad(recepcionFacturaDetalle.getCantidad());
-				recepcionFacturaDetalleNueva.setUnidadMedida(recepcionFacturaDetalle.getUnidadMedida());
-				recepcionFacturaDetalleNueva.setDetalle(recepcionFacturaDetalle.getDetalle());
-				recepcionFacturaDetalleNueva.setPrecioUnitario(recepcionFacturaDetalle.getPrecioUnitario());
-				recepcionFacturaDetalleNueva.setMontoTotal(recepcionFacturaDetalle.getMontoTotal());
-				recepcionFacturaDetalleNueva.setSubTotal(recepcionFacturaDetalle.getSubTotal());
-				recepcionFacturaDetalleNueva.setMontoTotalLinea(recepcionFacturaDetalle.getMontoTotalLinea());
-				recepcionFacturaDetalleNueva.setImpuestoNeto(recepcionFacturaDetalle.getImpuestoNeto());
-				recepcionFacturaDetalleNueva.setCodigoComercialTipo(recepcionFacturaDetalle.getCodigoComercialTipo());
-				recepcionFacturaDetalleNueva.setCodigoComercialCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
-				recepcionFacturaDetalleNueva.setDescuentoMonto(recepcionFacturaDetalle.getDescuentoMonto());
-				recepcionFacturaDetalleNueva.setDescuentoNaturaleza(recepcionFacturaDetalle.getDescuentoNaturaleza());
-				recepcionFacturaDetalleNueva.setImpuestoCodigo(recepcionFacturaDetalle.getImpuestoCodigo());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(recepcionFacturaDetalle.getImpuestoCodigoTarifa());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa(recepcionFacturaDetalle.getImpuestoTarifa());
-				recepcionFacturaDetalleNueva.setImpuestoMonto(recepcionFacturaDetalle.getImpuestoMonto());
+					recepcionFacturaDetalleNueva.setNumeroLinea(recepcionFacturaDetalle.getNumeroLinea());
+					recepcionFacturaDetalleNueva.setCantidad(recepcionFacturaDetalle.getCantidad());
+					recepcionFacturaDetalleNueva.setUnidadMedida(recepcionFacturaDetalle.getUnidadMedida());
+					recepcionFacturaDetalleNueva.setDetalle(recepcionFacturaDetalle.getDetalle());
+					recepcionFacturaDetalleNueva.setPrecioUnitario(recepcionFacturaDetalle.getPrecioUnitario());
+					recepcionFacturaDetalleNueva.setMontoTotal(recepcionFacturaDetalle.getMontoTotal());
+					recepcionFacturaDetalleNueva.setSubTotal(recepcionFacturaDetalle.getSubTotal());
+					recepcionFacturaDetalleNueva.setMontoTotalLinea(recepcionFacturaDetalle.getMontoTotalLinea());
+					recepcionFacturaDetalleNueva.setImpuestoNeto(recepcionFacturaDetalle.getImpuestoNeto());
+					recepcionFacturaDetalleNueva.setCodigoComercialTipo(recepcionFacturaDetalle.getCodigoComercialTipo());
+					recepcionFacturaDetalleNueva.setCodigoComercialCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
+					recepcionFacturaDetalleNueva.setDescuentoMonto(recepcionFacturaDetalle.getDescuentoMonto());
+					recepcionFacturaDetalleNueva.setDescuentoNaturaleza(recepcionFacturaDetalle.getDescuentoNaturaleza());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo(recepcionFacturaDetalle.getImpuestoCodigo());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(recepcionFacturaDetalle.getImpuestoCodigoTarifa());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa(recepcionFacturaDetalle.getImpuestoTarifa());
+					recepcionFacturaDetalleNueva.setImpuestoMonto(recepcionFacturaDetalle.getImpuestoMonto());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo1(recepcionFacturaDetalle.getImpuestoCodigo1());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(recepcionFacturaDetalle.getImpuestoCodigoTarifa1());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa1(recepcionFacturaDetalle.getImpuestoTarifa1());
-				recepcionFacturaDetalleNueva.setImpuestoMonto1(recepcionFacturaDetalle.getImpuestoMonto1());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo1(recepcionFacturaDetalle.getImpuestoCodigo1());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(recepcionFacturaDetalle.getImpuestoCodigoTarifa1());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa1(recepcionFacturaDetalle.getImpuestoTarifa1());
+					recepcionFacturaDetalleNueva.setImpuestoMonto1(recepcionFacturaDetalle.getImpuestoMonto1());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo2(recepcionFacturaDetalle.getImpuestoCodigo2());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(recepcionFacturaDetalle.getImpuestoCodigoTarifa2());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa2(recepcionFacturaDetalle.getImpuestoTarifa2());
-				recepcionFacturaDetalleNueva.setImpuestoMonto2(recepcionFacturaDetalle.getImpuestoMonto2());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo2(recepcionFacturaDetalle.getImpuestoCodigo2());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(recepcionFacturaDetalle.getImpuestoCodigoTarifa2());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa2(recepcionFacturaDetalle.getImpuestoTarifa2());
+					recepcionFacturaDetalleNueva.setImpuestoMonto2(recepcionFacturaDetalle.getImpuestoMonto2());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo3(recepcionFacturaDetalle.getImpuestoCodigo3());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(recepcionFacturaDetalle.getImpuestoCodigoTarifa3());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa3(recepcionFacturaDetalle.getImpuestoTarifa3());
-				recepcionFacturaDetalleNueva.setImpuestoMonto3(recepcionFacturaDetalle.getImpuestoMonto3());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo3(recepcionFacturaDetalle.getImpuestoCodigo3());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(recepcionFacturaDetalle.getImpuestoCodigoTarifa3());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa3(recepcionFacturaDetalle.getImpuestoTarifa3());
+					recepcionFacturaDetalleNueva.setImpuestoMonto3(recepcionFacturaDetalle.getImpuestoMonto3());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo4(recepcionFacturaDetalle.getImpuestoCodigo4());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(recepcionFacturaDetalle.getImpuestoCodigoTarifa4());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa4(recepcionFacturaDetalle.getImpuestoTarifa4());
-				recepcionFacturaDetalleNueva.setImpuestoMonto4(recepcionFacturaDetalle.getImpuestoMonto4());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo4(recepcionFacturaDetalle.getImpuestoCodigo4());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(recepcionFacturaDetalle.getImpuestoCodigoTarifa4());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa4(recepcionFacturaDetalle.getImpuestoTarifa4());
+					recepcionFacturaDetalleNueva.setImpuestoMonto4(recepcionFacturaDetalle.getImpuestoMonto4());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo5(recepcionFacturaDetalle.getImpuestoCodigo5());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(recepcionFacturaDetalle.getImpuestoCodigoTarifa5());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa5(recepcionFacturaDetalle.getImpuestoTarifa5());
-				recepcionFacturaDetalleNueva.setImpuestoMonto5(recepcionFacturaDetalle.getImpuestoMonto5());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo5(recepcionFacturaDetalle.getImpuestoCodigo5());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(recepcionFacturaDetalle.getImpuestoCodigoTarifa5());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa5(recepcionFacturaDetalle.getImpuestoTarifa5());
+					recepcionFacturaDetalleNueva.setImpuestoMonto5(recepcionFacturaDetalle.getImpuestoMonto5());
 
-				recepcionFacturaDetalleNueva.setImpuestoCodigo6(recepcionFacturaDetalle.getImpuestoCodigo6());
-				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(recepcionFacturaDetalle.getImpuestoCodigoTarifa6());
-				recepcionFacturaDetalleNueva.setImpuestoTarifa6(recepcionFacturaDetalle.getImpuestoTarifa6());
-				recepcionFacturaDetalleNueva.setImpuestoMonto6(recepcionFacturaDetalle.getImpuestoMonto6());
+					recepcionFacturaDetalleNueva.setImpuestoCodigo6(recepcionFacturaDetalle.getImpuestoCodigo6());
+					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(recepcionFacturaDetalle.getImpuestoCodigoTarifa6());
+					recepcionFacturaDetalleNueva.setImpuestoTarifa6(recepcionFacturaDetalle.getImpuestoTarifa6());
+					recepcionFacturaDetalleNueva.setImpuestoMonto6(recepcionFacturaDetalle.getImpuestoMonto6());
 
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(recepcionFacturaDetalle.getImpuestoExoneracionFechaEmision());
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(recepcionFacturaDetalle.getImpuestoExoneracionPorcentaje());
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(recepcionFacturaDetalle.getImpuestoExoneracionMonto());
-				recepcionFacturaDetalleNueva.setBaseImponible(recepcionFacturaDetalle.getBaseImponible());
-				recepcionFacturaDetalleNueva.setRecepcionFactura(recepcionFactura);
-				recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(recepcionFacturaDetalle.getImpuestoExoneracionFechaEmision());
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(recepcionFacturaDetalle.getImpuestoExoneracionPorcentaje());
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(recepcionFacturaDetalle.getImpuestoExoneracionMonto());
+					recepcionFacturaDetalleNueva.setBaseImponible(recepcionFacturaDetalle.getBaseImponible());
+					recepcionFacturaDetalleNueva.setRecepcionFactura(recepcionFactura);
+					recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
+				}
+			}
+			if (tipoIngreso.equals(Constantes.APLICADO_RECEPCION_AUTOMATICA_SI)) {
+			Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
+
+			if (proveedor == null) {
+				proveedor = new Proveedor();
+				proveedor.setCedula(recepcionFactura.getReceptorCedula());
+				proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
+				proveedor.setCreated_at(new Date());
+				proveedor.setEstado(Constantes.ESTADO_ACTIVO);
+				proveedor.setEmail(recepcionFactura.getEmisorCorreo());
+				proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
+				proveedor.setMovil(recepcionFactura.getEmisorTelefono());
+				proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
+				proveedor.setRepresentante(Constantes.EMPTY);
+				proveedor.setUpdated_at(new Date());
+				proveedor.setId(null);
+				proveedor.setEmpresa(usuarioSesion.getEmpresa());
+				proveedorBo.agregar(proveedor);
+
+			}
+			
+				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, detallesCompra);
 			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
@@ -522,7 +555,7 @@ public class ComprasController {
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
 		}
-		
+
 	}
 
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

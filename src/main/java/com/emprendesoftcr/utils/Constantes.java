@@ -489,6 +489,8 @@ public class Constantes {
 
 	// Compra
 
+	public static final String					COMPRA_AUTOMATICA_ESTADO_PENDIENTE														= "P";
+	public static final String					COMPRA_AUTOMATICA_ESTADO_APLICADA														= "A";
 	public static final Integer					COMPRA_ESTADO_PENDIENTE																				= 1;
 	public static final Integer					COMPRA_ESTADO_INGRESADA_INVENTARIO														= 2;
 	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA															= 3;
@@ -504,6 +506,9 @@ public class Constantes {
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
+	
+	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_SI															= 1;
+	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_NO															= 2;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";
