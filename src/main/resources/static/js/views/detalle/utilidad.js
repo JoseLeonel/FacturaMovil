@@ -64,6 +64,7 @@ var _Init = function() {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
         $("#idArticulo").val(null);
+        
         $("#numeroFactura").val(null);
         $("#totalVenta").val(null);
         $("#totalCosto").val(null);
@@ -71,6 +72,9 @@ var _Init = function() {
     });
     ocultarDescargaEnvioCorreo();
     listaActividadEconomica();
+    listaUsuarios();
+  //  var advanced_search_section = $('#filtrosAvanzados');
+  //  advanced_search_section.slideToggle(750);
 }
 
 var haciendas = { data: [] };
@@ -79,6 +83,30 @@ function volverListado() {
 
     $('#ModalCorreoAlternativoFactura').modal('hide')
 
+}
+
+/**
+ *  Obtiene la lista de los clientes activos
+ **/
+function listaUsuarios() {
+    $.ajax({
+        url: "ListarUsuariosByEmpresaAjax.do",
+        datatype: "json",
+        global: false,
+        method: "GET",
+        success: function(result) {
+            if (result.aaData.length > 0) {
+                $.each(result.aaData, function(index, modeloTabla) {
+                    $('.selectUsuarios').append('<option value="' + modeloTabla.id + '">' + modeloTabla.nombreUsuario + '</option>');
+                });
+                $('.selectUsuarios').selectpicker();
+            }
+        },
+        error: function(xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    })
 }
 
 
@@ -172,6 +200,7 @@ function __EnviarCorreoAlternativo() {
         actividadEconomica: $('#actividadEconomica').val(),
         idCategoria: $('#idCategoria').val(),
         codigo: $('#idArticulo').val(),
+        idUsuario: $('#usuario').val(),
         correoAlternativo: $('#correoAlternativoUtilidad').val(),
         totalVenta: $('#totalVenta').val(),
         totalCosto: $('#totalCosto').val(),
@@ -224,6 +253,8 @@ function _consulta() {
         idCategoria: $('#idCategoria').val(),
         codigo: $('#idArticulo').val(),
         numeroFactura: $('#numeroFactura').val(),
+        idUsuario: $('#usuario').val(),
+        
 
     }
     __Inicializar_Table('.tableListar')
@@ -413,10 +444,10 @@ function agregarInputsCombos() {
     $('.tableListar tfoot th').each(function(e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ($(this).index() != 8 && $(this).index() != 2) {
+        if ($(this).index() != 9 && $(this).index() != 1) {
             $(this).html('<input id = "filtroCampos" type="text" class="form-control"  placeholder="' + title + '" />');
         }
-        if ($(this).index() == 2) {
+        if ($(this).index() == 1) {
             var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
             // se cargan los valores por defecto que existen en el combo
             select = __listadoCategoriasActivas(select);
@@ -496,10 +527,11 @@ function cargaMantenimientoEmpresas() {
 
 var informacion_tabla = [
     { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
-    { 'data': 'numeroConsecutivo', "name": "numeroConsecutivo", "title": "Factura", "autoWidth": true },
     { 'data': 'nombreCategoria', "name": "nombreCategoria", "title": "Categoria", "autoWidth": true },
+    { 'data': 'numeroConsecutivo', "name": "numeroConsecutivo", "title": "Factura", "autoWidth": true },
     { 'data': 'codigo', "name": "codigo", "title": "Codigo", "autoWidth": true },
     { 'data': 'nombreArticulo', "name": "nombreArticulo", "title": "Descripcion", "autoWidth": true },
+    { 'data': 'cantidad', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
     { 'data': 'totalCostoSTR', "name": "totalCostoSTR", "title": "Costo", "autoWidth": true },
     { 'data': 'ventaSTR', "name": "ventaSTR", "title": "Venta", "autoWidth": true },
     { 'data': 'totalUtilidadSTR', "name": "totalUtilidadSTR", "title": "Util.Bruta", "autoWidth": true },
@@ -541,7 +573,8 @@ function __bajarExcel() {
     var idCategoria = $('#idCategoria').val();
     var codigo = $('#idArticulo').val();
     var numeroFactura = $('#numeroFactura').val();
-    location.href = "DescargarUtilidadAjax.do?fechaInicioParam=" + fechaInicioParam + "&" + "fechaFinParam=" + fechaFinParam + "&" + "idCliente=" + idCliente + "&estado=" + estado + "&tipoDoc=" + tipoDoc + "&actividadEconomica=" + actividadEconomica + "&idCategoria=" + idCategoria + "&codigo=" + codigo + "&numeroFactura=" + numeroFactura;
+    var idUsuario = $('#usuario').val();
+    location.href = "DescargarUtilidadAjax.do?fechaInicioParam=" + fechaInicioParam + "&" + "fechaFinParam=" + fechaFinParam + "&" + "idCliente=" + idCliente + "&estado=" + estado + "&tipoDoc=" + tipoDoc + "&actividadEconomica=" + actividadEconomica + "&idCategoria=" + idCategoria + "&codigo=" + codigo + "&numeroFactura=" + numeroFactura + '&idUsuario='+ idUsuario;
 }
 /**
  * Fecha de emision

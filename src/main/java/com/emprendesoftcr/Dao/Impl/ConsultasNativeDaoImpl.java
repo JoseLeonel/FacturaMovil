@@ -581,7 +581,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	@Override
-	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc,String numeroFactura) {
+	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc,String numeroFactura,Integer idUsuario) {
 		String queryStr = getQueryBase(ConsultaUtilidadNative.class);
 		codigo = codigo == null ? Constantes.EMPTY : codigo;
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
@@ -607,6 +607,12 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 			;
 		} else {
 			queryStr = queryStr.replaceAll("and categorias.id =", "");
+		}
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and fact.usuario_id", " and fact.usuario_id ='" + idUsuario.toString() + "' ");
+			;
+		} else {
+			queryStr = queryStr.replaceAll("and fact.usuario_id", "");
 		}
 		if (estado > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("fact.estado in", " and fact.estado in (" + estado + ") ");
