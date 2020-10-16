@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/compras/recepcionCompras.css?v=2}" />
+</head>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+		<header class="main-header">
+			<div th:replace="administrativo/header"></div>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<div th:replace="administrativo/mainsidebar"></div>
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header" th:fragment="header"></section>
+			<!-- Main content -->
+			<section class="content">
+				<recepcion-compra></recepcion-compra>
+				<view-pdf></view-pdf>
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+	</div>
+	<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript"
+		th:src="@{/js/views/compras/recepcionCompraSinIngresar.js}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/compras/comprasSinIngresarInventario.tag}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/modalPDF/viewPDF.tag}"></script>
+
+</body>
+</html>

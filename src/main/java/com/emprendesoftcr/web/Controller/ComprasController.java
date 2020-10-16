@@ -65,7 +65,6 @@ import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
-import com.emprendesoftcr.web.command.ComprasReceptorAutomatico;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
@@ -178,6 +177,12 @@ public class ComprasController {
 	@RequestMapping(value = "/ListaRecepcionFacturas", method = RequestMethod.GET)
 	public String listaRecepcionFacturas(ModelMap model) {
 		return "views/facturas/listaRecepcionFacturas";
+	}
+	
+	
+	@RequestMapping(value = "/ComprasSinAceptarInventario", method = RequestMethod.GET)
+	public String comprasSinAceptarInventario(ModelMap model) {
+		return "views/compras/comprasPendienteAceptarInventario";
 	}
 
 	/**
