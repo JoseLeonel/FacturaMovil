@@ -22,17 +22,6 @@
 															<th style="width: 4%;" class="table-header">{$.i18n.prop("listado.acciones")} </th>
 														</tr>
 													</thead>
-													<tfoot style="display: table-header-group;">
-														<tr>
-															<th>ID   </th>
-															<th>Fecha Emision </th>
-															<th>Consecutivo </th>
-															<th>Proveedor </th>
-															<th>Impuesto </th>
-															<th>Total </th>
-															<th style="width: 2%"></th>
-														</tr>
-													</tfoot>
 												</table>
 											</div>
 										</div>
@@ -44,40 +33,102 @@
 					<!-- Fin del Listado -->
 				</div>
 				<!-- Fin del Listado -->
+               
+
+    <div class="box">
+	      <div class = "box-body">
+		        <span id="tituloCompra">Factura Compra #: {consecutivo}</span>
+				<table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width:10%;"><div class="tituloFormat">Codigo Proveedor </div></th>
+							<th style="width:10%;"><div class="tituloFormat">Codigo Inventario </div></th>
+                            <th style="width:14%;"><div class="tituloFormat">Descripcion </div></th>
+                            <th style="width:6%;"><div class="tituloFormat">Cant </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Costo </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Ganancia </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Precio </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">IVA Compra </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">IVA Inventario </div></th>
+							<th style="width:10%;"><div class="tituloFormat">Accion  </div></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr each={compras.aaData}>
+                            <td class="text-right" style="width:10%;">
+                                <input  class="campodetalle" type="number" step="any"  value = "{cod_proveedor}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <input  class="campodetalle" type="number" step="any"  value = "{cod_invet}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <span>{descripcion}</span>
+                            </td>
+                            <td class="text-right" style="width:6%;">
+                                <span>{cantidad}</span>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <span>{costo_prove}</span>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <input  class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <input  class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <span>{impuesto}</span>
+                            </td>
+                            <td class="text-right" style="width:10%;">
+                                <span>{imp_art}</span>
+                            </td>
+                            <td><td>
+                        </tr>
+                        </tbody>
+                    </table>  
+		  </div>
+	</div>
+
 <style type="text/css"  >
-.btn-green {
-    background-color: #4cae4c;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 5%!important;
-    margin-right: 15px;
-    border: none;
-    float: right;
-    cursor: pointer;
+ .tituloFormat{
+     text-align: center;
+ }
+ .campodetalle{
+    font-size: 18px;
+ }
+ .box{
+    color: #000000 !important;
+    background: #c2c5c5 !important;
+ }
+ .table-header {
+     background: #c2c5c5 !important;
+     color: #000000!important;
+ }
+ .dataTables_wrapper .dataTables_filter input {
+    margin-left: 1.5em !important;
+    height: 30px !important;
+    border-radius: 10px !important;
+    font-size: 16px !important;
 }
 </style>
 	<script>
 		var self = this;
 	 	self.empresaActividadComercial= {}
 		self.compras              = {aaData:[]}
+        self.consecutivo = null
 		//Se cargan al montar el tag
 		self.on('mount',function(){
 			__InformacionDataTableCuentas(); 
 			listadoRecepcionCompras();
 		});
 
+
 /**
 Listado de recepcion de compras
 **/		
 function listadoRecepcionCompras() {
     $.ajax({
-        url: 'listarRecepcionCompras.do',
+        url: 'ListarComprasSinIngresarInventarioAjax.do',
         datatype: "json",
         method: "GET",
         success: function(result) {
@@ -93,19 +144,7 @@ function listadoRecepcionCompras() {
         }
     });
 }
-function agregarInputsCombos() {
-    // Agregar los input de busqueda
-    $('.tableListar tfoot th').each(
-        function(e) {
-            var name = '<input id = "filtroCampos' + e + '"';
-            var title = $('.tableListar thead th').eq($(this).index())
-                .text();
-            // No se toma en cuenta la columna de las acctiones(botones)
-            if ($(this).index() != 6 || $(this).index() != 5 || $(this).index() != 4) {
-                $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
-            }
-        })
-}
+
 /**
 Carga Tablas de compras
 **/
@@ -129,8 +168,9 @@ function __cargarTablaCompras() {
         "columns": self.formato_tabla ,
     })
     $("#tableListar").dataTable().fnAddData(self.compras.aaData);
-	agregarInputsCombos()
-	ActivarEventoFiltro(".tableListar")
+
+	__MostrarPDF()
+    __MostrarDetalle()
 	
 }
 /**
@@ -140,10 +180,10 @@ function __InformacionDataTableCuentas(){
 	self.formato_tabla = [
 		{ 'data': 'id', "name": "id", "title": "#id", "autoWidth": true },
 		{ 'data': 'consecutivo', "name": "consecutivo", "title": "#Consecutivo", "autoWidth": true },
-		{ 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
-		{ 'data': 'emisorFactura', "name": "emisorFactura", "title": "#Proveedor", "autoWidth": true },
-		{ 'data': 'totalImpuestos', "name": "totalImpuestos", "title": "IVA", "autoWidth": true },
-		{ 'data': 'totalComprobante', "name": "totalComprobante", "title": "Total", "autoWidth": true },
+		{ 'data': 'fechaEmisionSTR', "name": "fechaEmisionSTR", "title": "Fecha Emision", "autoWidth": true },
+		{ 'data': 'nombre_completo', "name": "nombre_completo", "title": "#Proveedor", "autoWidth": true },
+		{ 'data': 'totalImpuestoSTR', "name": "totalImpuestoSTR", "title": "IVA", "autoWidth": true },
+		{ 'data': 'totalCompraSTR', "name": "totalCompraSTR", "title": "Total", "autoWidth": true },
 		{
 			'data': 'id',
 			"name": "id",
@@ -166,13 +206,69 @@ function __Opciones(id, type, row) {
     menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
     menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Aceptar Manual" class="btnAceptarXMLManual  btnBajarXML" >Aceptar Manual</a></li>'
-    menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
+    menu += '<li><a href="#"  title="Mostrar PDF" class="  btnPDF" >Mostrar PDF</a></li>'
+    menu += '<li><a href="#"  title="Aceptar al inventario" class="  btnAceptar" >Ingresar Inventario</a></li>'
     menu += "</ul></div>"
     return menu;
 }
+
+function __MostrarPDF() {
+    $('.tableListar').on('click', '.btnPDF', function(e) {
+        var table = $('#tableListar').DataTable();
+        if (table.row(this).child.isShown()) {
+            //cuando el datatable esta en modo responsive
+            var data = table.row(this).data();
+        } else {
+            var data = table.row($(this).parents("tr")).data();
+        }
+      	var parametros = {
+            direccion: "bajarArchivo.do?filename=" + data.factura_pdf,
+            stylemodal: "modal-xl"
+        }
+        riot.mount('view-pdf', { datos: parametros });
+
+    });
+}
+
+function __MostrarDetalle() {
+    $('.tableListar').on('click', '.btnAceptar', function(e) {
+        var table = $('#tableListar').DataTable();
+        if (table.row(this).child.isShown()) {
+            //cuando el datatable esta en modo responsive
+            var data = table.row(this).data();
+        } else {
+            var data = table.row($(this).parents("tr")).data();
+        }
+        self.consecutivo = data.consecutivo;
+        self.update()
+      listadoDetallesCompras(data)
+    });
+}
+
+/**
+Listado de detalles de Compras
+**/		
+function listadoDetallesCompras(data) {
+    var parametros = {
+        idCompra : data.id
+    }
+    $.ajax({
+        url: 'ListarDetalleComprasSinIngresarInventarioAjax.do',
+        datatype: "json",
+        data:parametros ,
+        method: "GET",
+        success: function(result) {
+            console.log(result);
+            if (result.aaData.length > 0) {
+                console.log(result)
+                self.compras.aaData = result.aaData
+                self.update()
+               
+            }
+        }
+    });
+}
+
 
 
 </script>

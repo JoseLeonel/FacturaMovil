@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -22,10 +24,12 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
@@ -48,8 +52,6 @@ import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
-import com.emprendesoftcr.web.command.RecepcionComprasCommand;
-import com.emprendesoftcr.web.command.RecepcionList;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.google.gson.Gson;
 
@@ -82,6 +84,12 @@ public class CompraBoImpl implements CompraBo {
 	private CuentaPagarDao				cuentaPagarDao;
 
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+  public DataSource dataSource;
+	
+	@Autowired
+  private JdbcTemplate jdbcTemplate;
 
 	@Transactional
 	@Override
@@ -723,6 +731,24 @@ public class CompraBoImpl implements CompraBo {
 		}
 		return resultado;
 
+	}
+
+/**
+ * Compras ingresadas al inventario sin ingresar
+ */
+	@Override
+	public List<Map<String, Object>> comprasSinIngresarInventario(Empresa empresa) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + 
+									"FROM compras as c\n" + 
+											"   inner join proveedores p on p.id = c.proveedor_id\n" + 
+											"   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo"
+											+ " where c.empresa_id = :idEmpresa";
+    parameters.addValue("idEmpresa", empresa.getId());
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		return listaObjetos;
 	}
 
 }

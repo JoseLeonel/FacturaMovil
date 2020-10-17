@@ -71,6 +71,10 @@ public class DetalleCompra implements Serializable {
 
 	@Column(name = "monto_total_linea")
 	private Double						montoTotalLinea;
+	
+
+	@Column(name = "estado")
+	private Integer						estado;
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -132,24 +136,7 @@ public class DetalleCompra implements Serializable {
 	}
 
 	
-	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double ganancia, Double precio, Double cantidad, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.costo = costo;
-		this.ganancia = ganancia;
-		this.precio = precio;
-		this.cantidad = cantidad;
-		this.totalImpuesto = totalImpuesto;
-		this.totalDescuento = totalDescuento;
-		this.impuesto = impuesto;
-		this.descuento = descuento;
-		this.montoTotalLinea = montoTotalLinea;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.compra = compra;
-		this.articulo = articulo;
-	}
+
 
 	public Long getId() {
 		return id;
@@ -179,6 +166,16 @@ public class DetalleCompra implements Serializable {
 	
 	public String getCostoSTR() {
 		return Utils.formateadorMiles(this.costo);
+	}
+
+	
+	public Integer getEstado() {
+		return estado;
+	}
+
+	
+	public void setEstado(Integer estado) {
+		this.estado = estado;
 	}
 
 	public Double getCantidad() {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
@@ -46,5 +47,6 @@ public interface CompraBo {
 	
 	ByteArrayInputStream  createExcelRecepcionCompra(Collection<RecepcionFactura> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
 
+	public List<Map<String, Object>>  comprasSinIngresarInventario(Empresa empresa);
 	
 }

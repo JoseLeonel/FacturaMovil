@@ -65,8 +65,10 @@ import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
+import com.emprendesoftcr.web.command.ComprasSinIngresarInventarioCommand;
 import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
+import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.command.VectorCompras;
@@ -77,6 +79,7 @@ import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -178,8 +181,7 @@ public class ComprasController {
 	public String listaRecepcionFacturas(ModelMap model) {
 		return "views/facturas/listaRecepcionFacturas";
 	}
-	
-	
+
 	@RequestMapping(value = "/ComprasSinAceptarInventario", method = RequestMethod.GET)
 	public String comprasSinAceptarInventario(ModelMap model) {
 		return "views/compras/comprasPendienteAceptarInventario";
@@ -232,7 +234,7 @@ public class ComprasController {
 			VectorCompras comprasReceptorAutomatico = new VectorCompras();
 
 			// comprasReceptorAutomatico = gson.fromJson(json.toString(), ComprasReceptorAutomatico.class);
-			if (jsonArrayDetalle != null &&  !jsonArrayDetalle.isEmpty()) {
+			if (jsonArrayDetalle != null && !jsonArrayDetalle.isEmpty()) {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					System.out.println(jsonArrayDetalle.get(i).toString());
 					json = (JSONObject) new JSONParser().parse(jsonArrayDetalle.get(i).toString());
@@ -241,7 +243,7 @@ public class ComprasController {
 					recepcionFactura = gson.fromJson(comprasReceptorAutomatico.getRecepcionFactura(), RecepcionFactura.class);
 					recepcionFactura.setId(null);
 					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
-					
+
 					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI);
 					ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula());
 
@@ -275,6 +277,74 @@ public class ComprasController {
 		return jsonArrayDetalle;
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarComprasSinIngresarInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarComprasSinIngresarInventario(HttpServletRequest request,  SessionStatus status) throws Exception {
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		List<Map<String, Object>> listaObjetos = compraBo.comprasSinIngresarInventario(usuarioSesion.getEmpresa());
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<ComprasSinIngresarInventarioCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				ComprasSinIngresarInventarioCommand comprasSinIngresarInventarioCommand = gson.fromJson(jsonArray1.get(i).toString(), ComprasSinIngresarInventarioCommand.class);
+				detallesFacturaCommand.add(comprasSinIngresarInventarioCommand);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFacturaCommand);
+		return respuestaService;
+
+	}
+	/**
+	 * retorna los detalles de una compra vrs articulos del proveedor para ingresar el inventario
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param compra
+	 * @param idCompra
+	 * @param result
+	 * @param status
+	 * @return
+	 */
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetalleComprasSinIngresarInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarDetalleComprasSinIngresarInventario(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra,  @RequestParam Long idCompra, BindingResult result, SessionStatus status){
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		List<Map<String, Object>> listaObjetos = detalleCompraBo.detalleCompraSinIngresar(idCompra);
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<DetalleCompraSinIngresaCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				DetalleCompraSinIngresaCommand detalleCompraSinIngresaCommand = gson.fromJson(jsonArray1.get(i).toString(), DetalleCompraSinIngresaCommand.class);
+				detallesFacturaCommand.add(detalleCompraSinIngresaCommand);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFacturaCommand);
+		return respuestaService;
+
+	}
+
 	/**
 	 * Recibir factura de otro emisor
 	 * @param request
@@ -293,7 +363,7 @@ public class ComprasController {
 		try {
 
 			// Agregar Lineas de Detalle
-			if(recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
+			if (recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
 				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
 			}
 			JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
@@ -324,7 +394,7 @@ public class ComprasController {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
-			if(recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
+			if (recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
 				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
 			}
 
@@ -530,26 +600,26 @@ public class ComprasController {
 				}
 			}
 			if (tipoIngreso.equals(Constantes.APLICADO_RECEPCION_AUTOMATICA_SI)) {
-			Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
+				Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
 
-			if (proveedor == null) {
-				proveedor = new Proveedor();
-				proveedor.setCedula(recepcionFactura.getReceptorCedula());
-				proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
-				proveedor.setCreated_at(new Date());
-				proveedor.setEstado(Constantes.ESTADO_ACTIVO);
-				proveedor.setEmail(recepcionFactura.getEmisorCorreo());
-				proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
-				proveedor.setMovil(recepcionFactura.getEmisorTelefono());
-				proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
-				proveedor.setRepresentante(Constantes.EMPTY);
-				proveedor.setUpdated_at(new Date());
-				proveedor.setId(null);
-				proveedor.setEmpresa(usuarioSesion.getEmpresa());
-				proveedorBo.agregar(proveedor);
+				if (proveedor == null) {
+					proveedor = new Proveedor();
+					proveedor.setCedula(recepcionFactura.getReceptorCedula());
+					proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
+					proveedor.setCreated_at(new Date());
+					proveedor.setEstado(Constantes.ESTADO_ACTIVO);
+					proveedor.setEmail(recepcionFactura.getEmisorCorreo());
+					proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
+					proveedor.setMovil(recepcionFactura.getEmisorTelefono());
+					proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
+					proveedor.setRepresentante(Constantes.EMPTY);
+					proveedor.setUpdated_at(new Date());
+					proveedor.setId(null);
+					proveedor.setEmpresa(usuarioSesion.getEmpresa());
+					proveedorBo.agregar(proveedor);
 
-			}
-			
+				}
+
 				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, detallesCompra);
 			}
 

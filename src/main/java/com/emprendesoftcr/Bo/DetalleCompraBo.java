@@ -2,6 +2,8 @@ package com.emprendesoftcr.Bo;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
@@ -20,5 +22,7 @@ public interface DetalleCompraBo {
 	Collection<DetalleCompra> findByCompra(Compra compra);
 	
 	ByteArrayInputStream  createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
+	
+	public List<Map<String, Object>>  detalleCompraSinIngresar(Long idCompra);
 
 }

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -15,6 +17,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +40,13 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 
 	@Autowired
 	private DetalleCompraDao detalleCompraDao;
+	
+
+	@Autowired
+  public DataSource dataSource;
+	
+	@Autowired
+  private JdbcTemplate jdbcTemplate;
 
 	@Transactional
 	@Override
@@ -311,6 +323,32 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 
 		return recepcionFacturaDetalle.getRecepcionFactura().getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? resultado * -1 : resultado;
 
+	}
+
+	/**
+	 * Detalle de las compras sin ingresar en el inventario
+	 */
+	@Override
+	public List<Map<String, Object>> detalleCompraSinIngresar(Long idCompra) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		String sql = "SELECT reDe.detalle as descripcion, d.cantidad ,d.impuesto,\n" + 
+				"	   d.estado ,reDe.codigo_comercial_codigo as cod_proveedor,\n" + 
+				"       art.codigo as cod_invet ,\n" + 
+				"       d.costo as costo_prove,art.costo as costo_inv, \n" + 
+				"       art.ganancia_precio_publico as ganancia,\n" + 
+				"       art.precio_publico, art.cod_tarifa,\n" + 
+				"       art.impuesto  as imp_art FROM pruebas.detalles_compras d\n" + 
+				"inner join compras c on c.id = d.compra_id\n" + 
+				"inner join recepcion_factura re on re.factura_consecutivo = c.consecutivo\n" + 
+				"inner join recepcion_factura_detalle reDe on reDe.recepcion_factura_id = re.id\n" + 
+				"left join articulos art on art.id = d.articulo_id\n" + 
+				"left join proveedor_articulo part on part.codigo = art.codigo"
+				+ " where c.id = :idCompra";
+    parameters.addValue("idCompra", idCompra);
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		return listaObjetos;
 	}
 
 }
