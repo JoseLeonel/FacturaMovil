@@ -141,6 +141,7 @@
     float: right;
     cursor: pointer;
 }
+
 </style>
 	<script>
 		var self = this;
