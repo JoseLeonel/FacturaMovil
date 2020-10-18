@@ -153,7 +153,7 @@ public class LlaveCriptograficaServiceImpl implements LlaveCriptograficaService 
 		String alias = null;
 
 		try {
-			Enumeration nombres = keyStore.aliases();
+			Enumeration<?> nombres = keyStore.aliases();
 			while (nombres.hasMoreElements()) {
 				String tmpAlias = (String) nombres.nextElement();
 				if (keyStore.isKeyEntry(tmpAlias)) {

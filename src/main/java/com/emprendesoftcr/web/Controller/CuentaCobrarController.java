@@ -242,6 +242,7 @@ public class CuentaCobrarController {
 	}
 
 //Enviar Correo de las cuentas por cobrar
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do", method = RequestMethod.GET)
 	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoCuentasXCobrarEstadoAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idClienteParam, @RequestParam String estadoParam, @RequestParam String correoAlternativo, @RequestParam String total, @RequestParam String saldo, @RequestParam String abono) throws IOException, Exception {

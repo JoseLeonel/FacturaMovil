@@ -120,6 +120,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal){
 		Query query = entityManager.createQuery("select obj from Hacienda obj where  obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");

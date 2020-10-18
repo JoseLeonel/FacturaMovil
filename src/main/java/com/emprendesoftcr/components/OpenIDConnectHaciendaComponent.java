@@ -10,6 +10,7 @@ import static com.emprendesoftcr.fisco.Keys.POST_X_ERROR_CAUSE;
 import static com.emprendesoftcr.fisco.Keys.USER_NAME;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class OpenIDConnectHaciendaComponent {
 
 	private TokenInfo getTokenUrlHacienda(Empresa empresa) {
 	
-		MultivaluedMap multivaluedMap = asMap(empresa);
+		MultivaluedMap<String, String> multivaluedMap = asMap(empresa);
 
 		String idp_uri = Constantes.EMPTY;
 
@@ -100,7 +101,7 @@ public class OpenIDConnectHaciendaComponent {
 			}
 		}
 
-		Map response = send(idp_uri + "/token", multivaluedMap, MediaType.APPLICATION_FORM_URLENCODED_TYPE, ImmutableMap.of("Accept", "application/json", "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"));
+		Map<String, Serializable> response = send(idp_uri + "/token", multivaluedMap, MediaType.APPLICATION_FORM_URLENCODED_TYPE, ImmutableMap.of("Accept", "application/json", "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"));
 		String body = (String) response.get(POST_RESPONSE);
 		int statusCode = (int) response.get(POST_STATUS_CODE);
 		if (statusCode < 300) {
@@ -115,7 +116,7 @@ public class OpenIDConnectHaciendaComponent {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Map send(String serviceUrl, MultivaluedMap bodyParams, MediaType contentType, Map<String, String> headers) {
+	public Map<String, Serializable> send(String serviceUrl, MultivaluedMap bodyParams, MediaType contentType, Map<String, String> headers) {
 		try {
 			Client client = Client.create();
 			WebResource webResource = client.resource(serviceUrl);
@@ -141,8 +142,7 @@ public class OpenIDConnectHaciendaComponent {
 	 * @param empresa
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	private MultivaluedMap asMap(Empresa empresa) {
+	private MultivaluedMap<String, String> asMap(Empresa empresa) {
 		MultivaluedMap<String, String> formData = new MultivaluedMapImpl();
 		String idp_client_id = Constantes.EMPTY;
 		if (empresa.getEstadoProduccion() != null) {
@@ -167,12 +167,14 @@ public class OpenIDConnectHaciendaComponent {
 	 * @throws IOException
 	 */
 
+	@SuppressWarnings({ "rawtypes", "unused" })
 	public Map desconectarToken(Empresa empresa, OpenIDConnectHacienda openIDConnectHacienda) throws IOException {
+		String idp_uri = Constantes.EMPTY;
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			MultivaluedMap multivaluedMap = asMap(empresa);
 			Client client = Client.create();
-			String idp_uri = Constantes.EMPTY;
+			
 			if (empresa.getEstadoProduccion() != null) {
 				if (empresa.getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
 					idp_uri = Constantes.IDP_URI_PRODUCCION;

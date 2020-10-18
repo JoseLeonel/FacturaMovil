@@ -453,7 +453,6 @@ public class Proformas {
 		// Sumatorias Totales
 		cb.setColorFill(BaseColor.BLACK);
 		double monto = 0;
-		double descuento = 0;
 		double subTotal = 0;
 		double impuesto = 0;
 		double exento = 0;

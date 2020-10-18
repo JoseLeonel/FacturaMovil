@@ -18,6 +18,7 @@ public class SemaforoDaoImp implements SemaforoDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Semaforo findByEmpresa(Empresa empresa,Integer estado) {
 
@@ -32,6 +33,7 @@ public class SemaforoDaoImp implements SemaforoDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Semaforo findByEstado(Integer estado) {
 		Query query = entityManager.createQuery("select obj from Semaforo obj where obj.estado = :estado");
@@ -50,6 +52,7 @@ public 	void modificar(Semaforo semaforo) {
 		
 	}
 
+@SuppressWarnings("unchecked")
 @Override
 public Semaforo findByEstadoAndID(Integer estado, Integer id) {
 	Query query = entityManager.createQuery("select obj from Semaforo obj where obj.estado = :estado and obj.id = :idSemaforo");

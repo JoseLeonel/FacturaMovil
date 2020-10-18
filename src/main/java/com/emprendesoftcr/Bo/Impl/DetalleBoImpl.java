@@ -549,10 +549,6 @@ public class DetalleBoImpl implements DetalleBo {
 			return new ByteArrayInputStream(stream.toByteArray());
 	}
 
-	private Double getMonto(String tipoDoc, Double tipoCambio, Double monto) {
-		monto = monto == null ? Constantes.ZEROS_DOUBLE : monto;
-		return tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? monto * tipoCambio * -1 : monto * tipoCambio;
-	}
 
 	private Double getMontoImpuestoTotal(Detalle detalle, String tarifa, Double tipoCambio) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
@@ -616,7 +612,7 @@ public class DetalleBoImpl implements DetalleBo {
 		List<Map<String, Object>> lista  = ventasbyCategoria( fechaInicial, fechaFinal, estado,idCategoria, empresa.getId());
 		@SuppressWarnings("rawtypes")
 		ArrayList arrayList = new ArrayList();
-    arrayList = (ArrayList) lista;
+    arrayList = (ArrayList<Map<String, Object>>) lista;
     JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
 		ArrayList<VentasByCategoriasCommand> listaDatos = new ArrayList<>();
 		Gson gson = new Gson();

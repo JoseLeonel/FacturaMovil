@@ -38,7 +38,8 @@ public class OpenIDConnectHaciendaServiceImpl implements OpenIDConnectHaciendaSe
 		               .param("username", usuario)
 		               .param("password", clave)
 		               .param("client_id", IDP_CLIENT_ID);
-		  Response response = target.request().post(Entity.form(form));
+		  @SuppressWarnings("unused")
+			Response response = target.request().post(Entity.form(form));
 			
 		} catch (Exception e) {
 			log.info("** Error  findbyAcceso: " + e.getMessage() + " fecha " + new Date());

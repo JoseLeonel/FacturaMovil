@@ -37,6 +37,7 @@ public class ProveedorArticuloDaoImpl implements ProveedorArticuloDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProveedorArticulo findById(Long id) {
 		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.id = :id");
@@ -49,6 +50,7 @@ public class ProveedorArticuloDaoImpl implements ProveedorArticuloDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor) {
 		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.articulo = :articulo and obj.proveedor = :proveedor");

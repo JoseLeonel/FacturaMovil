@@ -625,8 +625,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			for (Hacienda hacienda : FacturasConProblemas) {
 				log.error("** Error problemas de envio factura: "+ hacienda.getEmpresa().getNombre());
-				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
-				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
+//				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
+//				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
 		//		correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
 		//		correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
 			}

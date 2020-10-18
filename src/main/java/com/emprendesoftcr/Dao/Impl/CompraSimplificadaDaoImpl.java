@@ -44,6 +44,7 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public CompraSimplificada findById(Long id) {
 		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where obj.id = :id");
@@ -61,6 +62,7 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 	 * Busca por consecutivo y empresa
 	 * @see com.emprendesoftcr.Dao.CompraDao#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public CompraSimplificada findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where obj.numeroConsecutivo = :consecutivo and obj.empresa = :empresa");
@@ -74,6 +76,7 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 		}
 
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public CompraSimplificada findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception{
 		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where obj.clave = :clave and obj.empresa = :empresa");
@@ -98,11 +101,8 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
 			Query query = entityManager.createQuery("Delete from DetalleCompra obj where obj.compra = :compra ");
 			query.setParameter("compra", compra);
+			@SuppressWarnings("unused")
 			int deletedCount = query.executeUpdate();
-//			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_COMPRAS);
-//			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
-//			storedProcedure.setParameter(0, compra.getId());
-//			storedProcedure.execute();
 
 			log.info("** Fin de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
 
@@ -112,12 +112,11 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<CompraSimplificada> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
-		//Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado and obj.empresa.id =  :idEmpresa order by obj.empresa.id");
 		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado order by obj.empresa.id");
 		query.setParameter("estadoFirma", estadoFirma);
-	//	query.setParameter("idEmpresa", Constantes.EMPRESA_VIVIANA_MARTINEZ_8085);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
 		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);

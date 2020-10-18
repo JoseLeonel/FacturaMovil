@@ -75,6 +75,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	 * @param empresa
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Proveedor buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Proveedor obj where obj.cedula = :cedula and obj.empresa = :empresa");

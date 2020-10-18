@@ -44,6 +44,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	 * @see com.factura.dao.ClienteDao#buscar(java.lang.Integer)
 	 */
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Cliente buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.id = :id");
@@ -59,6 +60,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	/**
 	 * @see com.factura.dao.ClienteDao#buscarPorNombreCompletoYEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Cliente buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.nombreCompleto = :nombreCompleto and obj.empresa = :empresa");
@@ -77,6 +79,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	 * @param empresa
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Cliente buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.cedula = :cedula and obj.empresa = :empresa");
@@ -95,6 +98,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.identificacionExtranjero = :cedula and obj.empresa = :empresa");
 		query.setParameter("cedula", cedula);
 		query.setParameter("empresa", empresa);
+		@SuppressWarnings("unchecked")
 		List<Cliente> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Cliente) results.get(0);
@@ -103,6 +107,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Cliente> findByEmpresa(Integer idEmpresa) {
 		StringBuilder hql = new StringBuilder();

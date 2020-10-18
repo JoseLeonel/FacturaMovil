@@ -59,6 +59,7 @@ public class CajaDaoImpl implements CajaDao {
 		Query query = entityManager.createQuery("select obj from Caja obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
 		query.setParameter("descripcion", descripcion);
 		query.setParameter("empresa", empresa);
+		@SuppressWarnings("unchecked")
 		List<Caja> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Caja) results.get(0);
@@ -76,6 +77,7 @@ public class CajaDaoImpl implements CajaDao {
 		Query query = entityManager.createQuery("select obj from Caja obj where obj.terminal = :terminal and obj.empresa = :empresa");
 		query.setParameter("terminal", terminal);
 		query.setParameter("empresa", empresa);
+		@SuppressWarnings("unchecked")
 		List<Caja> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Caja) results.get(0);
@@ -89,6 +91,7 @@ public class CajaDaoImpl implements CajaDao {
 		Query query = entityManager.createQuery("select obj from Caja obj where obj.empresa = :empresa and obj.estado = 'Activo' and obj.usuario.id = :idUsuario");
 		query.setParameter("empresa", empresa);
 		query.setParameter("idUsuario", usuario.getId());
+		@SuppressWarnings("unchecked")
 		List<Caja> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Caja) results.get(0);

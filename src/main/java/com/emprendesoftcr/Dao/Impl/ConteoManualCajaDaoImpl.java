@@ -37,6 +37,7 @@ public class ConteoManualCajaDaoImpl implements ConteoManualCajaDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja) {
 		Query query = entityManager.createQuery("select obj from ConteoManualCaja obj where obj.usuarioCaja.id = :idUsuarioCaja ");
@@ -44,6 +45,7 @@ public class ConteoManualCajaDaoImpl implements ConteoManualCajaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ConteoManualCaja buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from ConteoManualCaja obj where obj.id = :id");
@@ -56,6 +58,7 @@ public class ConteoManualCajaDaoImpl implements ConteoManualCajaDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ConteoManualCaja> buscarPorUsuarioCaja(UsuarioCaja usuarioCaja, Integer tipo) {
 		Query query = entityManager.createQuery("select obj from ConteoManualCaja obj where obj.usuarioCaja.id = :idUsuarioCaja and obj.tipo = :tipo  order by obj.moneda desc ");

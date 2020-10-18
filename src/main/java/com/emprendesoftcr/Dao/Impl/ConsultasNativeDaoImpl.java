@@ -522,6 +522,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ArticuloByFechaNative>) query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ListarFacturasTableNativa> findByFacturasTableAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
 		String queryStr = getQueryBase(ListarFacturasTableNativa.class);
@@ -568,6 +569,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ListarFacturasTableNativa>) query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa) {
 		String queryStr = getQueryBase(ListarFacturaMesaNative.class);
@@ -580,6 +582,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ListarFacturaMesaNative>) query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc,String numeroFactura,Integer idUsuario) {
 		String queryStr = getQueryBase(ConsultaUtilidadNative.class);

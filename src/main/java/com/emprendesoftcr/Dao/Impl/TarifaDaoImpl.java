@@ -43,6 +43,7 @@ public class TarifaDaoImpl implements TarifaDao {
 	 * Buscar el objeto tarifa por id
 	 * @see com.factura.dao.TarifaDao#buscar(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Tarifa buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Tarifa obj where obj.id = :id");
@@ -54,6 +55,7 @@ public class TarifaDaoImpl implements TarifaDao {
 			return null;
 		}
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<TarifaCommand> findByTipoImpuesto(String tipoImpuesto){
 		StringBuilder hql = new StringBuilder();

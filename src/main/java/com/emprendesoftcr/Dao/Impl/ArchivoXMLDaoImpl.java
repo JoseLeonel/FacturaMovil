@@ -36,6 +36,7 @@ public class ArchivoXMLDaoImpl implements ArchivoXMLDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArchivoXML findById(Long id) {
 		Query query = entityManager.createQuery("select obj from ArchivoXML obj where obj.id = :id");
@@ -48,6 +49,7 @@ public class ArchivoXMLDaoImpl implements ArchivoXMLDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArchivoXML findByIdFactura(Empresa empresa, Long idFactura) {
 		Query query = entityManager.createQuery("select obj from ArchivoXML obj where obj.numeroFactura = :idFactura and obj.numeroEmpresa = :idEmpresa");
@@ -61,6 +63,7 @@ public class ArchivoXMLDaoImpl implements ArchivoXMLDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArchivoXML findByClave(Empresa empresa, String clave) {
 		Query query = entityManager.createQuery("select obj from ArchivoXML obj where obj.clave = :clave and obj.numeroEmpresa = :idEmpresa");

@@ -84,6 +84,7 @@ public class TipoCambiosController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Cacheable(value="tipoCambioCache")
 	@RequestMapping(value = "/ListarTipoCambioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -138,6 +139,7 @@ public class TipoCambiosController {
 	@ResponseBody
 	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			TipoCambio tipoCambioBd = tipoCambioBo.buscar(tipoCambio.getId());
@@ -162,6 +164,7 @@ public class TipoCambiosController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {
 
+		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			

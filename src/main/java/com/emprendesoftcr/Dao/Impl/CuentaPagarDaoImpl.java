@@ -44,6 +44,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 	 * Busca por id y retorna la cuenta de cobrar
 	 * @see com.factura.dao.CuentaCobrarDao#buscar(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public CuentaPagar buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from CuentaPagar obj where obj.id = :id");
@@ -55,6 +56,7 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			return null;
 		}
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public CuentaPagar findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from CuentaPagar obj where obj.consecutivo = :consecutivo and obj.empresa = :empresa");

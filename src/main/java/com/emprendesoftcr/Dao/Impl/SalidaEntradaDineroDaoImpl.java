@@ -25,6 +25,7 @@ public class SalidaEntradaDineroDaoImpl implements SalidaEntradaDineroDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SalidaEntradaDinero findById(Long id) {
 		Query query = entityManager.createQuery("select obj from SalidaEntradaDinero obj where obj.id = :id");

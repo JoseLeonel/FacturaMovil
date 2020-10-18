@@ -37,6 +37,7 @@ public class ProveedorSimplificadoDaoImpl implements ProveedorSimplificadoDao {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProveedorSimplificado buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from ProveedorSimplificado obj where obj.id = :id");
@@ -49,6 +50,7 @@ public class ProveedorSimplificadoDaoImpl implements ProveedorSimplificadoDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProveedorSimplificado buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from ProveedorSimplificado obj where obj.nombreCompleto = :nombreCompleto and obj.empresa = :empresa");
@@ -61,6 +63,7 @@ public class ProveedorSimplificadoDaoImpl implements ProveedorSimplificadoDao {
 			return null;}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProveedorSimplificado buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from ProveedorSimplificado obj where obj.cedula = :cedula and obj.empresa = :empresa");

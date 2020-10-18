@@ -584,7 +584,8 @@ private String xmlIdentificacion (Factura factura) throws Exception {
 		DocumentBuilder builder;
 		try {
 			 builder = factory.newDocumentBuilder();  
-		   Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+		   @SuppressWarnings("unused")
+			Document document = builder.parse(new InputSource(new StringReader(xmlString)));
 		} catch (Exception e) {
 			log.error("** Error  getFacturaAPDF: " + e.getMessage() + " fecha " + new Date());
 			throw e;

@@ -39,6 +39,7 @@ public class DetalleCompraDaoImpl implements DetalleCompraDao {
 		entityManager.remove(detalleCompra);
 	}
 
+@SuppressWarnings("unchecked")
 @Override
 public Collection<DetalleCompra> findByCompra(Compra compra){
 	StringBuilder hql = new StringBuilder();

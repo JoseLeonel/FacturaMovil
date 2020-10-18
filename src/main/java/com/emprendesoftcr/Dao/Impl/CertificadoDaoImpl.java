@@ -29,6 +29,7 @@ public class CertificadoDaoImpl implements CertificadoDao {
 	public Certificado findById(Integer id) {
 		Query query = entityManager.createQuery("select obj from Certificado obj where obj.id = :id");
 		query.setParameter("id", id);
+		@SuppressWarnings("unchecked")
 		List<Certificado> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Certificado) results.get(0);
@@ -42,6 +43,7 @@ public class CertificadoDaoImpl implements CertificadoDao {
 	public Certificado findByEmpresa(Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Certificado obj where obj.empresa = :empresa");
 		query.setParameter("empresa", empresa);
+		@SuppressWarnings("unchecked")
 		List<Certificado> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Certificado) results.get(0);
@@ -54,6 +56,7 @@ public class CertificadoDaoImpl implements CertificadoDao {
 	 * Todos los certificados activos
 	 * @see com.emprendesoftcr.Dao.CertificadoDao#findByEstado(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Certificado> findByAll(){
 		Query query = entityManager.createQuery("select obj from Certificado obj  ");

@@ -62,6 +62,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return (Empresa) query.getSingleResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Empresa buscar2(Integer id) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -78,6 +79,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @param nombre
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Empresa buscarPorNombre(String nombre) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.nombre = :nombre");
@@ -95,6 +97,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @param nombreComercial
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Empresa buscarPorNombreComercial(String nombreComercial) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.nombreComercial = :nombreComercial");
@@ -112,6 +115,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @param cedula
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Empresa buscarPorCedula(String cedula) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.cedula = :cedula");
@@ -275,6 +279,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * Lista de empresas activas
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#findByEstado(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Empresa> findByEstado(String estado) {
 		StringBuilder hql = new StringBuilder();

@@ -61,10 +61,8 @@ import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
-import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -468,6 +466,7 @@ public class ComprasController {
 		return totalCompras;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator<?> envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, @RequestParam Integer tipoGasto, String actividadEconomica) {
@@ -685,6 +684,7 @@ public class ComprasController {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -722,32 +722,18 @@ public class ComprasController {
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
 		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
-		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-		String inicio1 = dateFormat1.format(fechaInicioP);
-		String fin1 = dateFormat1.format(fechaFinalP);
+			
 		
-		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicioP, fechaFinalP, usuarioSesion.getEmpresa(), Constantes.EMPTY, estado, 0, "0");
-
-		ConsultaComprasIvaCommand tarifa_0 = new ConsultaComprasIvaCommand(); 
-	
 		
 		
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-//		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
-//		List<Object> solicitudList = new ArrayList<Object>();
-//		if (objetos != null) {
-//			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
-//				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
-//			}
-//		}
+//		
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {

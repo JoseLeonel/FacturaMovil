@@ -61,7 +61,8 @@ public class EnvioHaciendaComponent {
 	 * @return
 	 */
 
- public void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
+ @SuppressWarnings("rawtypes")
+public void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			Client client = Client.create();
@@ -79,7 +80,7 @@ public class EnvioHaciendaComponent {
 				resBuilder = resBuilder.header(entry.getKey(), entry.getValue());
 			}
 			ClientResponse response = resBuilder.post(ClientResponse.class, body);
-			ImmutableMap headersResponse = ImmutableMap.copyOf(response.getHeaders());
+			ImmutableMap<?, ?> headersResponse = ImmutableMap.copyOf(response.getHeaders());
 			String strResponse = response.getEntity(String.class);
 			// Problemas de recibido en Hacienda
 			if (response.getStatus() > 299) {
@@ -131,7 +132,8 @@ public class EnvioHaciendaComponent {
 	 * Envia hacia hacienda
 	 * @return
 	 */
- public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
+ @SuppressWarnings("rawtypes")
+public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			String url_doc = Constantes.EMPTY;
