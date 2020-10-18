@@ -571,7 +571,7 @@ function consultaControlPago(){
 
 function mensajeAdvertencia(mensaje){
 	$.toast({
-	    heading: 'Advertencia ',
+	    heading: 'Advertencia 警告 ',
 	    text: mensaje  ,
 	    icon: 'error',
 	    loader: true,        // Change it to false to disable loader
@@ -591,7 +591,7 @@ function mensajeAdvertencia(mensaje){
 
 function mensajeToasExito(mensaje){
 	$.toast({
-	    heading: 'Transaccion Exitomente realizada ',
+	    heading: 'Transaccion Exitomente realizada 成功交易 ',
 	    text: mensaje  ,
 	    icon: 'success',
 	    loader: true,        // Change it to false to disable loader

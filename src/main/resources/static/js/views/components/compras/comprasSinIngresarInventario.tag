@@ -41,12 +41,12 @@
 				<table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:10%;"><div class="tituloFormat">Codigo Proveedor </div></th>
-							<th style="width:10%;"><div class="tituloFormat">Codigo Inventario </div></th>
-                            <th style="width:14%;"><div class="tituloFormat">Descripcion </div></th>
+                            <th style="width:6%;"><div class="tituloFormat">Codigo Proveedor </div></th>
+							<th style="width:6%;"><div class="tituloFormat">Codigo Inventario </div></th>
+                            <th style="width:22%;"><div class="tituloFormat">Descripcion </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cant </div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Costo </div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Ganancia </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Costo/成本 </div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Ganancia/獲得</div></th>
                             <th style="width:10%;"><div class="tituloFormat">Precio </div></th>
                             <th style="width:10%;"><div class="tituloFormat">IVA Compra </div></th>
                             <th style="width:10%;"><div class="tituloFormat">IVA Inventario </div></th>
@@ -54,14 +54,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr each={compras.aaData}>
-                            <td class="text-right" style="width:10%;">
+                        <tr each={detalleCompras.aaData}>
+                            <td class="text-right" style="width:6%;">
                                 <input  class="campodetalle" type="text"   value = "{cod_proveedor}" />
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td class="text-right" style="width:6%;">
                                 <input  onclick={__agregarArticuloInventario}  class="campodetalle" type="text"   value = "{cod_invet}" />
                             </td>
-                            <td class="text-right" style="width:14%;">
+                            <td class="text-right" style="width:22%;">
                                 <span>{descripcion}</span>
                             </td>
                             <td class="text-right" style="width:6%;">
@@ -82,7 +82,9 @@
                             <td class="text-right" style="width:10%;">
                                 <span>{imp_art}</span>
                             </td>
-                            <td><td>
+                            <td>
+                                <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="btn btn-block botonAplicarInventario">Aplicar</button>
+                            <td>
                         </tr>
                         </tbody>
                     </table>  
@@ -144,6 +146,13 @@
 <!--fin del modal-->
 
 <style type="text/css"  >
+.botonAplicarInventario{
+    background-color: #6dca42 !important;
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 14px !important;
+}
  .tituloFormat{
      text-align: center;
      font-weight: 600;
@@ -174,8 +183,9 @@
 	<script>
 		var self = this;
 	 	self.empresaActividadComercial= {}
-		self.compras              = {aaData:[]}
-        self.articulos             = {data:[]}
+		self.compras = {aaData:[]}
+        self.detalleCompras = {aaData:[]}
+        self.articulos = {data:[]}
         self.detalleCompra  = {}
         self.consecutivo = null
 		//Se cargan al montar el tag
@@ -189,6 +199,45 @@
 
 		});
 
+__IngresarAlInventario(e){
+    self.detalleCompra = e.item;
+    self.update()
+     swal({
+           title: '',
+           text: "Desea ingresarlo al inventario?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            //Ajax__inicializarTabla();
+            if(isConfirm){
+                if(validar()){
+
+                }
+            }
+        })    
+}
+
+function validar(){
+   
+    if(self.detalleCompra.cod_invet == null ){
+        mensajeAdvertencia("Error: Ingresar el codigo del articulo. 輸入商品編號")
+        return false
+
+    }
+    if(self.detalleCompra.cod_invet.length == 0 ){
+        mensajeAdvertencia("Error: Ingresar el codigo del articulo 輸入商品編號")
+        return false
+    }
+
+
+}
+
 __agregarArticuloInventario(e){
     self.detalleCompra = e.item;
     self.update()
@@ -196,19 +245,60 @@ __agregarArticuloInventario(e){
     ListarCodigosArticulos();
 }
 
-this.__ConsultarProductosCod = function(e){
+
+
+
+function __agregarArticulos() {
+     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarArticulos').DataTable();
+		if(table.row(this).child.isShown()){
+
+	       var data = table.row(this).data();
+	    }else{
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        if(data !=null){
+            asociarCodigoLineaDetalle(data,function(resultado){
+                console.log(resultado)  
+                listadoDetallesCompras(data.compra_id)
+            })
+            $('#modalInventario').modal('hide')
+            return
+        }
+    });
+}
+
+/**
+* Actualizar el codigo del inventario y precio publico que tiene 
+**/
+function asociarCodigoLineaDetalle(articulo,callback){
+    for (var count = 0; count <  self.detalleCompras.aaData.length; count++) {
+        if ( self.detalleCompras.aaData[count].id == self.detalleCompra.id ){
+            self.detalleCompra.cod_invet = articulo.codigo
+            self.detalleCompra.precio_publico = articulo.precioPublico
+            self.detalleCompra.imp_art = articulo.impuesto
+            self.detalleCompras.aaData[count] = self.detalleCompra
+            self.update();
+         }
+    }
+    callback("asociar exitosamente el articulo del inventario con el detalle de la compra" + articulo.codigo)
+}
+/**
+* consultar producto
+**/
+__ConsultarProductosCod = function(e){
     if (e.keyCode != 13) {
         return;
     }
     __ListaDeArticulosPorDescripcion()
-}.bind(this)
+}
 
-this.__ConsultarProductosDesc = function(e){
+__ConsultarProductosDesc = function(e){
     if (e.keyCode != 13) {
         return;
     }
-__ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)
-}.bind(this)
+__ListaDeArticulosPorDescripcion()
+}
 
 function __ListaDeArticulosPorDescripcion(){
     if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
@@ -225,7 +315,7 @@ function __ListaDeArticulosPorDescripcion(){
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
-                self.articulos.data           = result.aaData
+                self.articulos.data = result.aaData
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
@@ -298,24 +388,7 @@ function ListarCodigosArticulos(){
     })
 
  }
- function __agregarArticulos() {
-     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListarArticulos').DataTable();
-		if(table.row(this).child.isShown()){
-
-	       var data = table.row(this).data();
-	    }else{
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.articulo = data;
-        self.update();
-        if(self.articulo !=null){
-            $('#modalInventario').modal('hide')
-            return
-        }
-
-    });
-}
+ 
 /**
 Listado de recepcion de compras
 **/		
@@ -434,16 +507,16 @@ function __MostrarDetalle() {
         }
         self.consecutivo = data.consecutivo;
         self.update()
-      listadoDetallesCompras(data)
+      listadoDetallesCompras(data.id)
     });
 }
 
 /**
 Listado de detalles de Compras
 **/		
-function listadoDetallesCompras(data) {
+function listadoDetallesCompras(idCompra) {
     var parametros = {
-        idCompra : data.id
+        idCompra : idCompra
     }
     $.ajax({
         url: 'ListarDetalleComprasSinIngresarInventarioAjax.do',
@@ -454,7 +527,7 @@ function listadoDetallesCompras(data) {
             console.log(result);
             if (result.aaData.length > 0) {
                 console.log(result)
-                self.compras.aaData = result.aaData
+                self.detalleCompras.aaData = result.aaData
                 self.update()
                
             }
