@@ -3,6 +3,7 @@ package com.emprendesoftcr.web.command;
 
 public class DetalleCompraSinIngresaCommand {
   private Long id;
+  private Long idCompra;
   private String descripcion;
   private Double cantidad;
   
@@ -123,6 +124,18 @@ public class DetalleCompraSinIngresaCommand {
 	
 	public void setImp_art(Double imp_art) {
 		this.imp_art = imp_art;
+	}
+
+
+	
+	public Long getIdCompra() {
+		return idCompra;
+	}
+
+
+	
+	public void setIdCompra(Long idCompra) {
+		this.idCompra = idCompra;
 	}
   
   

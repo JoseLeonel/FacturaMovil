@@ -24,5 +24,7 @@ public interface DetalleCompraBo {
 	ByteArrayInputStream  createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
 	
 	public List<Map<String, Object>>  detalleCompraSinIngresar(Long idCompra);
+	
+	DetalleCompra findById(Long idDetalleCompra);
 
 }

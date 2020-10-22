@@ -84,12 +84,12 @@ public class CompraBoImpl implements CompraBo {
 	private CuentaPagarDao				cuentaPagarDao;
 
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
-  public DataSource dataSource;
-	
+	public DataSource							dataSource;
+
 	@Autowired
-  private JdbcTemplate jdbcTemplate;
+	private JdbcTemplate					jdbcTemplate;
 
 	@Transactional
 	@Override
@@ -190,7 +190,7 @@ public class CompraBoImpl implements CompraBo {
 
 						}
 
-						actualizarProveedor(detalleCompra, compra.getProveedor());
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null);
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -241,7 +241,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @param detalleCompra
 	 * @param articulo
 	 */
-	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor) {
+	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor) {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
 			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
@@ -250,6 +250,7 @@ public class CompraBoImpl implements CompraBo {
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
+				proveedorArticulo.setCodigo(codigoProveedor != null ? codigoProveedor : detalleCompra.getArticulo().getCodigo());
 				proveedorArticulo.setCosto(costo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
@@ -258,7 +259,7 @@ public class CompraBoImpl implements CompraBo {
 				proveedorArticulo.setCreated_at(new Date());
 				proveedorArticulo.setUpdated_at(new Date());
 				proveedorArticulo.setArticulo(detalleCompra.getArticulo());
-				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo());
+				proveedorArticulo.setCodigo(codigoProveedor != null ? codigoProveedor : detalleCompra.getArticulo().getCodigo());
 				proveedorArticulo.setCosto(costo);
 				proveedorArticulo.setProveedor(proveedor);
 				proveedorArticuloDao.agregar(proveedorArticulo);
@@ -672,7 +673,7 @@ public class CompraBoImpl implements CompraBo {
 			} else if (recepcionFactura.getTipoDocEmisor().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && recepcionFactura.getTipoDocEmisor() != null) {
 				compra.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO);
 			}
-			
+
 			compra.setProveedor(proveedor);
 			compra.setCreated_at(new Date());
 			compra.setUpdated_at(new Date());
@@ -694,9 +695,9 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
-						actualizarProveedor(detalleCompra, compra.getProveedor());	
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null);
 					}
-					
+
 				}
 			}
 			compra.setTotalCompra(recepcionFactura.getFacturaTotalComprobante());
@@ -733,22 +734,69 @@ public class CompraBoImpl implements CompraBo {
 
 	}
 
-/**
- * Compras ingresadas al inventario sin ingresar
- */
+	/**
+	 * Compras ingresadas al inventario sin ingresar
+	 */
 	@Override
 	public List<Map<String, Object>> comprasSinIngresarInventario(Empresa empresa) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + 
-									"FROM compras as c\n" + 
-											"   inner join proveedores p on p.id = c.proveedor_id\n" + 
-											"   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo"
-											+ " where c.empresa_id = :idEmpresa";
-    parameters.addValue("idEmpresa", empresa.getId());
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
-    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" +
+		              "   inner join proveedores p on p.id = c.proveedor_id\n" + 
+				          "   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa";
+		parameters.addValue("idEmpresa", empresa.getId());
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
 		return listaObjetos;
+	}
+
+	/**
+	 * Registrar un inventario de una empresa que esta aceptando la compra que se ingreso automatico
+	 */
+	@Override
+	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor) throws Exception {
+		Integer resultado = 0;
+		try {
+			// 1. Obtener el detalle de la compra
+			Compra compraBD = compraDao.findById(idCompra);
+			DetalleCompra detalleCompra = detalleCompraDao.findById(idDetalleCompra);
+			// 2. Actualizar el inventario
+			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(codigo, empresa);
+			if (articulo != null) {
+
+				if (compraBD != null) {
+					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
+					articulo.setFechaUltimaCompra(compraBD.getFechaIngreso());
+				}
+				if (compraBD.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+					if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+						if(compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
+							disminuirInventario(articulo, compraBD, detalleCompra);	
+						}else {
+							aplicarInventario(compraBD, detalleCompra, articulo);	
+						}
+					}
+				} else {
+					articulo.setUpdated_at(new Date());
+					articulo.setPrecioPublico(precioPublico);
+					articulo.setGananciaPrecioPublico(ganancia);
+					articuloDao.modificar(articulo);
+
+				}
+				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor);
+			}
+			resultado =  1;
+
+		} catch (Exception e) {
+			log.info("** Error  actualizar linea de detalle: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	  return resultado;
+
+		// 3. Crear la asociacion del proveedor con el inventario
+		// 4. Actualizar el detalle cambiando de estado de aplicado
+		// 5. regresar el listar de los detalles no ingresados al inventario.
+
 	}
 
 }

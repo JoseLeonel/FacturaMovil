@@ -54,12 +54,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr each={detalleCompras.aaData}>
+                        <tr each={detail}>
                             <td class="text-right" style="width:6%;">
-                                <input  class="campodetalle" type="text"   value = "{cod_proveedor}" />
+                                <span>{cod_proveedor}</span>
                             </td>
                             <td class="text-right" style="width:6%;">
-                                <input  onclick={__agregarArticuloInventario}  class="campodetalle" type="text"   value = "{cod_invet}" />
+                                <input  onclick={__agregarArticuloInventario}  class="campodetalle" type="text"   value = "{cod_invet}" readonly/>
                             </td>
                             <td class="text-right" style="width:22%;">
                                 <span>{descripcion}</span>
@@ -71,10 +71,10 @@
                                 <span>{costo_prove}</span>
                             </td>
                             <td class="text-right" style="width:10%;">
-                                <input  class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
+                                <input  onkeyup={__actualizarGananciaKeyPress} onBlur={__actualizarGananciaBlur} class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:10%;">
-                                <input  class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
+                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur}  class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:10%;">
                                 <span>{impuesto}</span>
@@ -185,20 +185,22 @@
 	 	self.empresaActividadComercial= {}
 		self.compras = {aaData:[]}
         self.detalleCompras = {aaData:[]}
+        self.detail = []
         self.articulos = {data:[]}
-        self.detalleCompra  = {}
+        self.detalleCompra  = null
         self.consecutivo = null
+        self.item = null;
+        self.articulo = null;
+
 		//Se cargan al montar el tag
 		self.on('mount',function(){
 			__InformacionDataTableCuentas(); 
 			listadoRecepcionCompras();
             __agregarArticulos()
-            window.addEventListener( "click", function(evento){
-                teclamodal(evento);
-            }, false );
+         
 
 		});
-
+var itemDetalle = null;
 __IngresarAlInventario(e){
     self.detalleCompra = e.item;
     self.update()
@@ -218,34 +220,146 @@ __IngresarAlInventario(e){
             if(isConfirm){
                 if(validar()){
 
+                   actualizarDetalleAlInventario()
                 }
             }
         })    
 }
 
 function validar(){
-   
     if(self.detalleCompra.cod_invet == null ){
         mensajeAdvertencia("Error: Ingresar el codigo del articulo. 輸入商品編號")
         return false
-
     }
     if(self.detalleCompra.cod_invet.length == 0 ){
         mensajeAdvertencia("Error: Ingresar el codigo del articulo 輸入商品編號")
         return false
     }
-
+    return true
+}
+/**
+ @param idCompra
+ * @param idDetalleCompra
+ * @param codigoInventario
+ * @param gananciaPrecioPublico
+ * @param precioPublico
+ * @param codigoProveedor
+**/
+function actualizarDetalleAlInventario(){
+   var parametros = {
+        idCompra:detalleCompra.idCompra,
+        idDetalleCompra:self.detalleCompra.id,
+        codigoInventario:self.detalleCompra.cod_invet,
+        gananciaPrecioPublico: self.detalleCompra.ganancia,
+        precioPublico:self.detalleCompra.precio_publico,
+        codigoProveedor:self.detalleCompra.cod_proveedor,
+   }
+    $.ajax({
+        url: 'actualizarDetalleCompraPorAutomatica.do',
+        datatype: "json",
+        method:"GET",
+        data :parametros,
+        success: function (result) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                     mensajeAdvertencia(data.message);
+                }
+            } else {
+                __DeleteArticuloIngresadoInventario()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
 
 }
 
+function __DeleteArticuloIngresadoInventario(){
+     var index = self.detalleCompras.aaData.indexOf(self.detalleCompra);
+     self.detalleCompras.aaData.splice(index,1);
+     self.detail.splice(index,1);
+     self.update()
+     if(self.detail.length == 0){
+         listadoRecepcionCompras()
+     }
+}
+
+
 __agregarArticuloInventario(e){
+    detalleEscogido(e)
+    
+    
+}
+
+/**
+*   Actualizar el costo del codigo y recalcular la compra
+**/
+__actualizarGananciaKeyPress(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    aplicarGananciaCompra(e)
+}
+
+__actualizarGananciaBlur(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    aplicarGananciaCompra(e)
+}
+function aplicarGananciaCompra(e){
+    var ganancia = e.currentTarget.value;
+    self.item = e.item; 
+    var index = self.detalleCompras.aaData.indexOf(self.item);
+    var impuesto  =  __valorNumerico(self.item.imp_art)
+    var costo     =  __valorNumerico(self.item.costo_prove)
+    var precioPublico    =  __valorNumerico(self.item.precio_publico)
+    self.item.ganancia = __valorNumerico(ganancia);
+    self.item.precio_publico =_ObtenerPrecio(self.item.costo_prove,self.item.imp_art * 100,0,self.item.ganancia)
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio_publico =  __valorNumerico(redondeoDecimales(self.item.precio_publico,aplicarRedondeo()))
+    self.detail[index] = self.item
+    self.update()
+
+}
+/**
+*   Actualizar el costo del codigo y recalcular la compra
+**/
+__actualizarPrecioKeyPress(e){
+    
+    __ActualizarPrecioDetalle(e)
+}
+
+__actualizarPrecioBlur(e){
+    
+    __ActualizarPrecioDetalle(e)
+}
+
+function __ActualizarPrecioDetalle(e){
+    var precio = e.currentTarget.value;
+    self.item = e.item; 
+    var index = self.detail.indexOf(self.item);
+    var impuesto  =  __valorNumerico(self.item.impuesto)
+    var costo     =  __valorNumerico(self.item.costo_prove)
+    var precioPublico    =  __valorNumerico(precio)
+    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    self.item.precio_publico = precio
+        self.detail[index] = self.item;
+    self.update()
+}
+function detalleEscogido(e){
     self.detalleCompra = e.item;
+    itemDetalle = e.item
+    self.item = e.item
     self.update()
     console.log(self.detalleCompra)
     ListarCodigosArticulos();
+    
+ 
 }
-
-
 
 
 function __agregarArticulos() {
@@ -258,10 +372,7 @@ function __agregarArticulos() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         if(data !=null){
-            asociarCodigoLineaDetalle(data,function(resultado){
-                console.log(resultado)  
-                listadoDetallesCompras(data.compra_id)
-            })
+            asociarCodigoLineaDetalle(data.codigo,data.impuesto,data.precioPublico)
             $('#modalInventario').modal('hide')
             return
         }
@@ -271,17 +382,15 @@ function __agregarArticulos() {
 /**
 * Actualizar el codigo del inventario y precio publico que tiene 
 **/
-function asociarCodigoLineaDetalle(articulo,callback){
-    for (var count = 0; count <  self.detalleCompras.aaData.length; count++) {
-        if ( self.detalleCompras.aaData[count].id == self.detalleCompra.id ){
-            self.detalleCompra.cod_invet = articulo.codigo
-            self.detalleCompra.precio_publico = articulo.precioPublico
-            self.detalleCompra.imp_art = articulo.impuesto
-            self.detalleCompras.aaData[count] = self.detalleCompra
-            self.update();
-         }
-    }
-    callback("asociar exitosamente el articulo del inventario con el detalle de la compra" + articulo.codigo)
+function asociarCodigoLineaDetalle(codigo,impuesto,precioPublico){
+    var index = self.detalleCompras.aaData.indexOf(self.item);
+    self.item.cod_invet = codigo
+    self.item.precio_publico = precioPublico
+    self.item.imp_art = impuesto
+    self.item.ganancia = _porcentajeGanancia(self.item.costo,self.item.imp_art,self.item.precio_publico)
+    self.detail[index] = self.item
+    self.update();
+    
 }
 /**
 * consultar producto
@@ -374,16 +483,15 @@ function __OpcionesArticulos(){
 
 
 function ListarCodigosArticulos(){
-    self.mostrarListadoArticulos = true
-    self.update()
+  
     $('.descArticulo').val(null)
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
      $('#modalInventario').modal('show')
     $('#modalInventario').on('shown.bs.modal', function () {
-        $('#descArticulo').select()
-        $('#descArticulo').focus()
+        $('.codigoArt').select()
+        $('.codigoArt').focus()
 
     })
 
@@ -515,6 +623,8 @@ function __MostrarDetalle() {
 Listado de detalles de Compras
 **/		
 function listadoDetallesCompras(idCompra) {
+    self.detail = []
+    self.update()
     var parametros = {
         idCompra : idCompra
     }
@@ -527,6 +637,9 @@ function listadoDetallesCompras(idCompra) {
             console.log(result);
             if (result.aaData.length > 0) {
                 console.log(result)
+                $.each(result.aaData, function( index, modeloTabla ) {
+                    self.detail.push(modeloTabla);
+                })
                 self.detalleCompras.aaData = result.aaData
                 self.update()
                

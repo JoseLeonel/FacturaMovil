@@ -15,6 +15,7 @@ public interface DetalleCompraDao {
 	
 	Collection<DetalleCompra> findByCompra(Compra compra);
 	
+	DetalleCompra findById(Long idDetalleCompra);
 
 	
 

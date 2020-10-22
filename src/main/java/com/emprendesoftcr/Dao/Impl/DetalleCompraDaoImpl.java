@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,6 +50,19 @@ public Collection<DetalleCompra> findByCompra(Compra compra){
 	query.setParameter("idCompra", compra.getId());
 	query.setParameter("idEmpresa", compra.getEmpresa().getId());
 	return query.getResultList();
+}
+
+@SuppressWarnings("unchecked")
+@Override
+public DetalleCompra findById(Long idDetalleCompra) {
+	Query query = entityManager.createQuery("select obj from DetalleCompra obj where obj.id = :id");
+	query.setParameter("id", idDetalleCompra);
+	List<DetalleCompra> results = query.getResultList();
+	if (!results.isEmpty()) {
+		return (DetalleCompra) results.get(0);
+	} else {
+		return null;
+	}
 }
 
 }

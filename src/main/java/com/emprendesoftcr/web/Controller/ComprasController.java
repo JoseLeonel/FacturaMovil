@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -131,6 +132,9 @@ public class ComprasController {
 
 	@Autowired
 	private EmpresaBo																									empresaBo;
+	
+	@Autowired
+	private ArticuloBo																									articuloBo;
 
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -344,6 +348,43 @@ public class ComprasController {
 		return respuestaService;
 
 	}
+	
+	
+	
+/**
+ * 
+ * @param request
+ * @param response
+ * @param model
+ * @param compra
+ * @param idCompra
+ * @param idDetalleCompra
+ * @param codigoInventario
+ * @param gananciaPrecioPublico
+ * @param precioPublico
+ * @param codigoProveedor
+ * @param result
+ * @param status
+ * @return
+ * @throws Exception
+ */
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/actualizarDetalleCompraPorAutomatica.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator actualizarDetalleCompraPorAutomatica(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra,  @RequestParam Long idCompra,  @RequestParam Long idDetalleCompra,  @RequestParam String codigoInventario ,  @RequestParam Double gananciaPrecioPublico,  @RequestParam Double precioPublico,@RequestParam String codigoProveedor, BindingResult result, SessionStatus status) throws Exception{
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		try {
+			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico,  codigoInventario, usuarioSesion.getEmpresa(),codigoProveedor);	
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.actualizo.detalle.correctamente", resultado);
+			} catch (Exception e) {
+				return RespuestaServiceValidator.ERROR(e);
+			}
+		
+		
+
+	}
+	
 
 	/**
 	 * Recibir factura de otro emisor
