@@ -332,7 +332,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	public List<Map<String, Object>> detalleCompraSinIngresar(Long idCompra) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT d.id,c.compra_id as idCompra,reDe.detalle as descripcion, d.cantidad ,d.impuesto,\n" + 
+		String sql = "SELECT d.id,c.id as idCompra,reDe.detalle as descripcion, d.cantidad ,d.impuesto,\n" + 
 				"	   d.estado ,reDe.codigo_comercial_codigo as cod_proveedor,\n" + 
 				"       art.codigo as cod_invet ,\n" + 
 				"       d.costo as costo_prove,art.costo as costo_inv, \n" + 
@@ -344,7 +344,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 				"inner join recepcion_factura_detalle reDe on reDe.recepcion_factura_id = re.id\n" + 
 				"left join articulos art on art.id = d.articulo_id\n" + 
 				"left join proveedor_articulo part on part.codigo = art.codigo"
-				+ " where c.id = :idCompra";
+				+ " where c.id = :idCompra and c.estado = 6";
     parameters.addValue("idCompra", idCompra);
     NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
     List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  

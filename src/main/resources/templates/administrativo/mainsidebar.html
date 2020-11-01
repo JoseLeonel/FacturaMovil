@@ -59,7 +59,23 @@
 				<i class="fa fa-angle-left pull-right"></i>
 		</a>
 			<ul class="treeview-menu">
-
+				<li class="treeview"
+					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
+					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Cabys</span>
+						<i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/ListarCabys}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+								class="fa fa-circle-o"></i>Crear Cabys</a></li>
+					</ul>
+				
+						<ul class="treeview-menu">
+						<li><a th:href="@{/asociarCabys}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+								class="fa fa-circle-o"></i>Asociar Cabys con Articulo</a></li>
+					</ul>
+				</li>
 				<li><a th:href="@{/ListarCategorias}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i
 						class="fa fa-circle-o"></i> Categorias </a></li>

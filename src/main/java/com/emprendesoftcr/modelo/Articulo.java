@@ -154,7 +154,8 @@ public class Articulo implements Serializable {
 
 	@Column(name = "base_imponible", columnDefinition = "INT default '0'")
 	private Integer						baseImponible;
-
+	@Column(name = "cod_cabys")
+	private String						codigoCabys;
 
 	public Articulo() {
 		super();
@@ -171,12 +172,18 @@ public class Articulo implements Serializable {
 		this.maximo = Constantes.ZEROS_DOUBLE;
 		this.minimo = Constantes.ZEROS_DOUBLE;
 		this.cantidad = Constantes.ZEROS_DOUBLE;
+		
+		this.codigoCabys = Constantes.EMPTY;
 
 	}
 
 	
 	
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuestoMag, Double impuestoMag, String codigoTarifa, String codigoTarifaMag, Integer baseImponible) {
+	
+
+
+
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuestoMag, Double impuestoMag, String codigoTarifa, String codigoTarifaMag, Integer baseImponible, String codigoCabys) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -214,7 +221,12 @@ public class Articulo implements Serializable {
 		this.codigoTarifa = codigoTarifa;
 		this.codigoTarifaMag = codigoTarifaMag;
 		this.baseImponible = baseImponible;
+		this.codigoCabys = codigoCabys;
 	}
+
+
+
+
 
 
 
@@ -599,6 +611,28 @@ public class Articulo implements Serializable {
 	
 	public void setCodigoTarifaMag(String codigoTarifaMag) {
 		this.codigoTarifaMag = codigoTarifaMag;
+	}
+
+
+
+
+
+
+
+	
+	public String getCodigoCabys() {
+		return codigoCabys;
+	}
+
+
+
+
+
+
+
+	
+	public void setCodigoCabys(String codigoCabys) {
+		this.codigoCabys = codigoCabys;
 	}
 
 

@@ -36,6 +36,7 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
 import com.emprendesoftcr.Dao.DetalleCompraDao;
+import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.ProveedorArticuloDao;
 import com.emprendesoftcr.modelo.Articulo;
@@ -170,7 +171,6 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCompra(compra);
 					detalleCompra.setCreated_at(new Date());
 					detalleCompra.setUpdated_at(new Date());
-					// detalleCompraDao.agregar(detalleCompra);
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
@@ -190,7 +190,7 @@ public class CompraBoImpl implements CompraBo {
 
 						}
 
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null,null);
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -241,10 +241,9 @@ public class CompraBoImpl implements CompraBo {
 	 * @param detalleCompra
 	 * @param articulo
 	 */
-	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor) {
+	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor,Articulo articulo) {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
 			Double costo = totalLinea - descuento;
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
@@ -252,6 +251,7 @@ public class CompraBoImpl implements CompraBo {
 				proveedorArticulo.setUpdated_at(new Date());
 				proveedorArticulo.setCodigo(codigoProveedor != null ? codigoProveedor : detalleCompra.getArticulo().getCodigo());
 				proveedorArticulo.setCosto(costo);
+				proveedorArticulo.setArticulo(articulo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
 			} else {
@@ -282,13 +282,11 @@ public class CompraBoImpl implements CompraBo {
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
 			Double costo = totalLinea - descuento;
 
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entradaCosto(articulo, costo, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-//			articulo.setCosto(costoPromedio);
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
@@ -695,7 +693,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null,null);
 					}
 
 				}
@@ -743,7 +741,7 @@ public class CompraBoImpl implements CompraBo {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" +
 		              "   inner join proveedores p on p.id = c.proveedor_id\n" + 
-				          "   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa";
+				          "   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -753,6 +751,7 @@ public class CompraBoImpl implements CompraBo {
 	/**
 	 * Registrar un inventario de una empresa que esta aceptando la compra que se ingreso automatico
 	 */
+	@Transactional
 	@Override
 	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor) throws Exception {
 		Integer resultado = 0;
@@ -763,12 +762,12 @@ public class CompraBoImpl implements CompraBo {
 			// 2. Actualizar el inventario
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(codigo, empresa);
 			if (articulo != null) {
-
+				detalleCompra.setArticulo(articulo);
+				detalleCompraDao.modificar(detalleCompra);
 				if (compraBD != null) {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
 					articulo.setFechaUltimaCompra(compraBD.getFechaIngreso());
 				}
-				if (compraBD.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 					if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 						if(compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
 							disminuirInventario(articulo, compraBD, detalleCompra);	
@@ -776,15 +775,15 @@ public class CompraBoImpl implements CompraBo {
 							aplicarInventario(compraBD, detalleCompra, articulo);	
 						}
 					}
-				} else {
 					articulo.setUpdated_at(new Date());
 					articulo.setPrecioPublico(precioPublico);
 					articulo.setGananciaPrecioPublico(ganancia);
 					articuloDao.modificar(articulo);
 
-				}
-				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor);
+				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor,articulo);
 			}
+			compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
+			compraDao.modificar(compraBD);
 			resultado =  1;
 
 		} catch (Exception e) {

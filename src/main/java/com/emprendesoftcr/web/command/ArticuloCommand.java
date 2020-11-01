@@ -71,6 +71,7 @@ public class ArticuloCommand {
 	private String			codigoTarifaMag;
 	private Integer						baseImponible;
 	private Double cantidad1;
+	private String						codigoCabys;
 
 	
 	
@@ -138,11 +139,20 @@ public class ArticuloCommand {
 		this.codigoTarifa = articulo.getCodigoTarifa();
 		this.codigoTarifaMag = articulo.getCodigoTarifaMag();
 		this.baseImponible = articulo.getBaseImponible();
+		this.codigoCabys = articulo.getCodigoCabys();
 
 	}
 	
 
 	
+	
+	public String getCodigoCabys() {
+		return codigoCabys;
+	}
+	
+	public void setCodigoCabys(String codigoCabys) {
+		this.codigoCabys = codigoCabys;
+	}
 	public Integer getBaseImponible() {
 		return baseImponible;
 	}

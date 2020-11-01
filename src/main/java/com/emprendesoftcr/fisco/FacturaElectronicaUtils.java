@@ -482,7 +482,7 @@ public final class FacturaElectronicaUtils {
 		String text = null;
 
 		try {
-			bdata = valor.getBytes(1, (int) valor.length());
+			bdata = valor != null ?valor.getBytes(1, (int) valor.length()):null;
 			text = new String(bdata);
 
 		} catch (Exception e) {

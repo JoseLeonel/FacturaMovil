@@ -8,6 +8,9 @@
 								<div class="box-body">
 									<div class="planel-body">
 										<div class="row">
+                                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                                <span>Compras pendiente de ingresar al inventario</span>
+                                            </div>
 											<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
 												<table id="tableListar"
 													class="display table responsive table-hover nowrap table-condensed tableListar ">
@@ -35,7 +38,7 @@
 				<!-- Fin del Listado -->
                
 
-    <div class="box">
+    <div class="box" show = {mostrarDetalles}>
 	      <div class = "box-body">
 		        <span id="tituloCompra">Factura Compra #: {consecutivo}</span>
 				<table class="table table-striped">
@@ -191,6 +194,7 @@
         self.consecutivo = null
         self.item = null;
         self.articulo = null;
+        self.mostrarDetalles = false;
 
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -247,7 +251,7 @@ function validar(){
 **/
 function actualizarDetalleAlInventario(){
    var parametros = {
-        idCompra:detalleCompra.idCompra,
+        idCompra:self.detalleCompra.idCompra,
         idDetalleCompra:self.detalleCompra.id,
         codigoInventario:self.detalleCompra.cod_invet,
         gananciaPrecioPublico: self.detalleCompra.ganancia,
@@ -260,9 +264,9 @@ function actualizarDetalleAlInventario(){
         method:"GET",
         data :parametros,
         success: function (result) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                     mensajeAdvertencia(data.message);
+            if (result.status != 200) {
+                if (result.message != null && result.message.length > 0) {
+                     mensajeAdvertencia(result.message);
                 }
             } else {
                 __DeleteArticuloIngresadoInventario()
@@ -282,15 +286,17 @@ function __DeleteArticuloIngresadoInventario(){
      self.detail.splice(index,1);
      self.update()
      if(self.detail.length == 0){
-         listadoRecepcionCompras()
+         self.update()
+         listadoDetallesCompras(self.detalleCompra.idCompra,function(resultado){
+             
+             console.log(resultado)
+         })
+         
      }
 }
 
-
 __agregarArticuloInventario(e){
     detalleEscogido(e)
-    
-    
 }
 
 /**
@@ -341,13 +347,13 @@ function __ActualizarPrecioDetalle(e){
     var precio = e.currentTarget.value;
     self.item = e.item; 
     var index = self.detail.indexOf(self.item);
-    var impuesto  =  __valorNumerico(self.item.impuesto)
-    var costo     =  __valorNumerico(self.item.costo_prove)
-    var precioPublico    =  __valorNumerico(precio)
-    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    var impuesto = __valorNumerico(self.item.impuesto)
+    var costo = __valorNumerico(self.item.costo_prove)
+    var precioPublico =  __valorNumerico(precio)
+    self.item.ganancia = __CalcularGanancia(impuesto,costo,precioPublico);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.item.precio_publico = precio
-        self.detail[index] = self.item;
+    self.detail[index] = self.item;
     self.update()
 }
 function detalleEscogido(e){
@@ -501,6 +507,7 @@ function ListarCodigosArticulos(){
 Listado de recepcion de compras
 **/		
 function listadoRecepcionCompras() {
+    __InicializarTabla('.tableListar')  
     $.ajax({
         url: 'ListarComprasSinIngresarInventarioAjax.do',
         datatype: "json",
@@ -523,6 +530,7 @@ function listadoRecepcionCompras() {
 Carga Tablas de compras
 **/
 function __cargarTablaCompras() {
+    __InicializarTabla('.tableListar')  
     $("#tableListar").dataTable().fnClearTable();
     __InformacionDataTableCuentas();
     $('#tableListar').DataTable().destroy();
@@ -615,19 +623,25 @@ function __MostrarDetalle() {
         }
         self.consecutivo = data.consecutivo;
         self.update()
-      listadoDetallesCompras(data.id)
+      listadoDetallesCompras(data.id,function(resultado){
+          console.log(resultado)
+      })
     });
 }
 
 /**
 Listado de detalles de Compras
 **/		
-function listadoDetallesCompras(idCompra) {
+function listadoDetallesCompras(idCompra,callback) {
     self.detail = []
+    self.detalleCompra = {}
+    self.mostrarDetalles = false;
+    self.update()
     self.update()
     var parametros = {
         idCompra : idCompra
     }
+    
     $.ajax({
         url: 'ListarDetalleComprasSinIngresarInventarioAjax.do',
         datatype: "json",
@@ -639,13 +653,21 @@ function listadoDetallesCompras(idCompra) {
                 console.log(result)
                 $.each(result.aaData, function( index, modeloTabla ) {
                     self.detail.push(modeloTabla);
+                    
+                    self.mostrarDetalles = true;
                 })
                 self.detalleCompras.aaData = result.aaData
                 self.update()
                
+               
             }
+             if(self.mostrarDetalles == false){
+                    listadoRecepcionCompras()
+                }
+                callback("Consulta de detalles de la compra")
         }
     });
+    
 }
 
 

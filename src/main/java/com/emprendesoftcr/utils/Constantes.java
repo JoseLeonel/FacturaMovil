@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 public class Constantes {
 
+	public static final String					API_LISTA_CABYS_SIN_CANTIDAD																	= "https://api.hacienda.go.cr/fe/cabys?q=";
 	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
 	public static final String					API_RECEPCION_COMPRAS																					= "http://localhost:8083/api-v1/get-all?e=P&i=";
 	public static final String					API_MAG_PESCA																									= "https://api.hacienda.go.cr/fe/pesca?identificacion=";
@@ -177,11 +178,9 @@ public class Constantes {
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 10;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 10;
 
-	
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 5;
 
-	
 	// 48 horas cada 5 minutos
 
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																	= 10;
@@ -490,7 +489,7 @@ public class Constantes {
 	// Compra
 
 	public static final String					COMPRA_AUTOMATICA_ESTADO_PENDIENTE														= "P";
-	public static final String					COMPRA_AUTOMATICA_ESTADO_APLICADA														= "A";
+	public static final String					COMPRA_AUTOMATICA_ESTADO_APLICADA															= "A";
 	public static final Integer					COMPRA_ESTADO_PENDIENTE																				= 1;
 	public static final Integer					COMPRA_ESTADO_INGRESADA_INVENTARIO														= 2;
 	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA															= 3;
@@ -506,7 +505,7 @@ public class Constantes {
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
-	
+
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_SI															= 1;
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_NO															= 2;
 

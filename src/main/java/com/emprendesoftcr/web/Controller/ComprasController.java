@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -133,9 +132,7 @@ public class ComprasController {
 	@Autowired
 	private EmpresaBo																									empresaBo;
 	
-	@Autowired
-	private ArticuloBo																									articuloBo;
-
+	
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
 

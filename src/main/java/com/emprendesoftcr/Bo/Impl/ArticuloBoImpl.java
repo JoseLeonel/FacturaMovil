@@ -142,4 +142,6 @@ public class ArticuloBoImpl implements ArticuloBo {
 	}
 	
 	
+	
+	
 }
