@@ -297,6 +297,10 @@ table {
     width: 189px!important;
     height: 68px !important;
 }
+td{
+    white-space: break-spaces!important;  
+}
+
     </style>
 <script>
     var self = this;
@@ -391,7 +395,7 @@ var reglasDeValidacion = function() {
 		rules : {
 			descripcion : {
 				required : true,
-                maxlength:80,
+                maxlength:255,
                 minlength:1,
 			},
 			codigo : {
@@ -497,19 +501,19 @@ function __modificarRegistro_Listar(){
         self.update()
         $("#descripcion").val(self.cabys.descripcion);
         $("#codigo").val(self.cabys.codigo);
-        __consultar()
+        __consultar(data)
 	});
 }
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
 **/
-function __consultar(){
+function __consultar(data){
     var formulario = $('#formulario').serialize();
     $.ajax({
         url: "MostrarCabysAjax.do",
         datatype: "json",
-        data: formulario,
+        data: {idCabys:data.id},
         method:"GET",
         success: function (data) {
             if (data.status != 200) {
@@ -653,7 +657,7 @@ function __listado(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                                {'data' : 'codigo',"name":"codigo" ,"title" : "Codigo","autoWidth" :false},
-                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :true },
+                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :true },     
                                {'data' :'created_atSTR',"name":"created_atSTR" ,"title" : "Fecha Creacion","autoWidth" :true },
                                {'data' :'origenSTRCorte',"name":"origenSTRCorte" ,"title" : "Origen","autoWidth" :true ,
                                     "render":function(origenSTRCorte,type, row){

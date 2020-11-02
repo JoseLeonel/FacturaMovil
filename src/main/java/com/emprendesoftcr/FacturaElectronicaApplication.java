@@ -20,11 +20,9 @@ import com.ibm.icu.util.TimeZone;
 @EnableTransactionManagement
 @ComponentScan(basePackageClasses = { FacturaElectronicaApplication.class })
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
-	
 
 	@PostConstruct
 	public void init() { 
-		
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Costa_Rica"));
 	}	 
 	

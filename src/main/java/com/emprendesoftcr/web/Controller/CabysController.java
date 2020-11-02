@@ -240,7 +240,7 @@ public class CabysController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AsociarCabysArticulosGrupalAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("caBys") Long cabys, @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("impuestoParametros") Double impuestoParametros, @RequestParam("tipoIVAParametros") String tipoIVAParametros,@RequestParam("tarifaParametros") String tarifaParametros,  @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("caBys") Long cabys, @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		Articulo articuloTemp = new Articulo();
 		try {
@@ -262,8 +262,12 @@ public class CabysController {
 						if (result.hasErrors()) {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 						}
+						
 						Cabys cabysBD = cabysBo.buscar(cabys);
 						articuloBD.setCodigoCabys(cabysBD.getCodigo());
+						articuloBD.setImpuesto(impuestoParametros);
+						articuloBD.setCodigoTarifa(tarifaParametros);
+						articuloBD.setTipoImpuesto(tipoIVAParametros);
 						articuloBD.setUpdated_at(new Date());
 						articuloBo.modificar(articuloBD);
 						articuloTemp = articuloBD;
@@ -273,7 +277,7 @@ public class CabysController {
 				throw e;
 			}
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.cambio.correctamente", articuloTemp);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cabys.cambio.correctamente", articuloTemp);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -285,9 +289,9 @@ public class CabysController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarCabysAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cabys cabys, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cabys cabys, @RequestParam("idCabys") Long idCabys,BindingResult result, SessionStatus status) throws Exception {
 		try {
-			CabysCommand cabysCommand = new CabysCommand(cabysBo.buscar(cabys.getId()));
+			CabysCommand cabysCommand = new CabysCommand(cabysBo.buscar(idCabys));
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", cabysCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

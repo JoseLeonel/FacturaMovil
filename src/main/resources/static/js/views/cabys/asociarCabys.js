@@ -4,6 +4,8 @@ $(document).ready(function() {
    
 } );/*fin document*/
 
+var tarifas    = {aaData:[]};
+
 var _Init = function () {
     // agregarInputsCombos();
     EventoFiltro();
@@ -15,16 +17,106 @@ var _Init = function () {
 
     });
     $('.btncabysAsociar').hide();
-
     $('.btncabysAsociar').click(function () {
       enviarACambiarCategoria();
     })
-    __listadoCategoriasActivas($(".caBys"));
-
-   
+    __listadoCategoriasActivas($(".caBys"),function(resultado){
+    	impuestoCabys();
+    	console.log(resultado);
+    });
+    comboTipoImpuesto(); 
+    $(".tipoIVA").change(function() {
+    	comboTarifa();
+    })
+    $("#caBys").change(function() {
+    	impuestoCabys();
+    })
+    
    
 }
 
+function impuestoCabys(){
+	$('.impuestoCabys').val(0);
+	var cabysTemp = null;
+	$.ajax({
+        url: "MostrarCabysAjax.do",
+       datatype: "json",
+        data: {idCabys:$('#caBys').val()},
+       method:"GET",
+       success: function (data) {
+    	   if (data.status != 200) {
+               if (data.message != null && data.message.length > 0) {
+                   sweetAlert("", data.message, "error");
+               }
+           }else{
+        	   if (data.message != null && data.message.length > 0) {
+        		   $.each(data.listaObjetos, function( index, modeloTabla ) {
+        			   cabysTemp = modeloTabla;
+        			   $('.impuestoCabys').val(cabysTemp.impuesto)
+        			   
+        			   
+        		   })
+        	   }
+           }
+       },
+       error: function (xhr, status) {
+           console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+       }
+   })
+
+}
+
+function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
+    if(tipoImpuesto.length ==0){
+        return 0
+    }
+    if(tipoImpuesto ==null){
+        return 0
+    }
+    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
+    valor = valor !=null?valor[0]:null
+    return valor == null?0:valor.monto
+}
+
+
+
+function comboTipoImpuesto(){
+	 var select = $('.tipoIVA');
+	 select.empty();
+     // se cargan los valores por defecto que existen en el combo
+     select.append( '<option value="">'+'Exento</option>' );
+     select.append( '<option value="'+"01"+'">'+ $.i18n.prop("tipo.impuesto.ventas") +'</option>' );
+     select.append( '<option value="'+"07"+'">'+ $.i18n.prop("tipo.impuesto.servicio") +'</option>' );
+     select.append( '<option value="'+"99"+'">'+ $.i18n.prop("tipo.impuesto.otros") +'</option>' );
+	
+}
+
+
+
+function comboTarifa(){
+	var select = $('.tarifa');
+	select.empty();
+	$.ajax({
+        url: "ListarTarifasByTipoImpuestoAjax.do",
+       datatype: "json",
+        data: {tipoImpuesto:$('.tipoIVA').val()},
+       method:"GET",
+       success: function (result) {
+           if(result.aaData.length > 0){
+        	   tarifas =result.aaData; 
+               $.each(result.aaData, function( index, modeloTabla ) {
+                   select.append( '<option value="'+modeloTabla.tarifaIVAI.codigoTarifa+'">'+modeloTabla.tarifaIVAI.descripcion+"</optiondata-tokens>" );  
+                })
+           }            
+       },
+       error: function (xhr, status) {
+           console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+       }
+   })
+	
+}
 var listaArticulosGrupales      = {data:[]}
 
 
@@ -74,7 +166,12 @@ function enviarACambiarCategoria(){
       
    }
    var json  = JSON.stringify( listaArticulosGrupales)
+   
    $("#listaArticuloGrupales").val(json);
+   $("#tipoIVAParametros").val($("#tipoIVA").val());
+   $("#tarifaParametros").val($("#tarifa").val());
+   $("#impuestoParametros").val(getMontoImpuesto($("#tipoIVAParametros").val(),$("#tarifaParametros").val(),tarifas));
+   
    var formulario = $("#filtros").serialize();
         swal({
            title: '',
@@ -115,6 +212,9 @@ function enviarACambiarCategoria(){
                             })
                            var table = $('#tableListar').DataTable();
                            table.ajax.reload( null, false);
+                           $("#listaArticuloGrupales").val(null); 
+                           $("#impuestoParametros").val(null)
+                           listaArticulosGrupales = {data:[]}
                              
                         }
                     },
@@ -281,62 +381,91 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9 && $(this).index() != 0    ){
+        if ( $(this).index() != 6 && $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
            // Select
-    	if ($(this).index() == 9 ){
+    	if ($(this).index() == 6 ){
     	    var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
             select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
     	   	$(this).html(select);
        }
-       if ($(this).index() == 8 ){
-         var select = $('<select id="combo2" class="form-control"><option value="">Todos</option></select>');
-         // se cargan los valores por defecto que existen en el combo
-           select.append( '<option value="'+$.i18n.prop("boolean.si")+'">'+$.i18n.prop("boolean.si")+'</option>' );
-          select.append( '<option value="'+$.i18n.prop("boolean.no")+'">'+ $.i18n.prop("boolean.no") +'</option>' );
-           $(this).html(select);
-     }
+     
        if ($(this).index() == 1 ){
          var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
-         select = __listadoCategorias(select);
+         select = __listadoCategoriasActivasCombo(select);
          $(this).html(select);
      }
     })
 }
-
 /**
-*  Mostrar listado datatable Categorias activas
-**/
-function __listadoCategorias(select){
-   $.ajax({
-        url: "ListarCategoriasActivasAjax.do",
-       datatype: "json",
-       method:"GET",
-       success: function (result) {
-            if(result.aaData.length > 0){
-             $.each(result.aaData, function( index, modeloTabla ) {
-                select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+"</optiondata-tokens>" );  
-               
-             })
-          }
-       },
-       error: function (xhr, status) {
-           console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-       }
+ * Eventos del filtro
+ */
+function EventoFiltro(){
+   // Busquedas por Inpus
+   var table = $('#tableListar').DataTable();
+   table.columns().every( function () {
+   var dataTableColumns = this
+   $( 'input', this.footer() ).keypress(function (event) {
+        if ( event.which == 13 ) {
+             if ( dataTableColumns.search() !== this.value ) {
+                dataTableColumns.search( this.value ).draw();
+             }
+        }
    });
-   
-   return select;
- }
+   var searchTextBoxes = $(this.header()).find('input');
+     searchTextBoxes.on('keyup change',function(){
+        dataTableColumns.search(this.value).draw();
+   });
+   $( 'select', this.footer() ).click(function (event) {
+      if ( dataTableColumns.search() !== this.value ) {
+         dataTableColumns.search( this.value ).draw();
+      }
+   });
+   var searchTextBoxesSelect = $(this.header()).find('select');
+     searchTextBoxes.on('keyup change',function(){
+        dataTableColumns.search(this.value).draw();
+   });
+   searchTextBoxesSelect.on('click',function(e){
+        e.stopPrapagation();
+   });
+   searchTextBoxes.on('click',function(e){
+        e.stopPrapagation();
+   });
+ } );
+}
+
+
  
 /**
 *  Mostrar listado datatable Categorias activas
 **/
-function __listadoCategoriasActivas(select){
+function __listadoCategoriasActivasCombo(select){
+  $.ajax({
+       url: "ListarCategoriasActivasAjax.do",
+      datatype: "json",
+      method:"GET",
+      success: function (result) {
+           if(result.aaData.length > 0){
+            $.each(result.aaData, function( index, modeloTabla ) {
+               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );       
+            })
+         }
+      },
+      error: function (xhr, status) {
+          console.log(xhr);
+           mensajeErrorServidor(xhr, status);
+      }
+  })
+  return select;
+}
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategoriasActivas(select,callback){
   $.ajax({
        url: "ListarCabysActivasAjax.do",
       datatype: "json",
@@ -344,17 +473,18 @@ function __listadoCategoriasActivas(select){
       success: function (result) {
            if(result.aaData.length > 0){
             $.each(result.aaData, function( index, modeloTabla ) {
-               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+"</option>" );  
+               select.append( '<option value="'+modeloTabla.id+'">'+ modeloTabla.codigo+"-"+modeloTabla.descripcion+"</option>" );  
                
             })
-            $('.caBys').selectpicker(
+            select.selectpicker(
                {
                   style: 'btn-info',
                   size:10,
                   liveSearch: true
                }
            );
-           $('.caBys').selectpicker('refresh');
+            select.selectpicker('refresh');
+            callback("exitoso");
          }
       },
       error: function (xhr, status) {
