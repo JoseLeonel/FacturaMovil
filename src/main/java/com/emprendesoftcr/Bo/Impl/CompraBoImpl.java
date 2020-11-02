@@ -269,13 +269,10 @@ public class CompraBoImpl implements CompraBo {
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			// totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
 			Double costo = totalLinea - descuento;
-
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entradaCosto(articulo, costo, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-//			articulo.setCosto(costoPromedio);
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());

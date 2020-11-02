@@ -175,7 +175,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			costoActual = costoActual == null ? Constantes.ZEROS_DOUBLE : costoActual;
 			costoNuevo = costoNuevo == null ? Constantes.ZEROS_DOUBLE : costoNuevo;
-
+			cantidadActual = cantidadActual == null?Constantes.ZEROS_DOUBLE : cantidadActual;
 			cantidadNueva = cantidadNueva == null ? Constantes.ZEROS_DOUBLE : cantidadNueva;
 			Double totalProductos = cantidadActual + cantidadNueva;
 

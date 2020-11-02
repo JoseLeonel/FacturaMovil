@@ -120,31 +120,40 @@ public class KardexDaoImpl implements KardexDao {
 
 	@Override
 	public void entradaCosto(Articulo articulo, Double costoNuevo, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
-		Double resultado = Utils.roundFactura(cantidadNueva + articulo.getCantidad(),3);
-		Double costoPromedio =articuloDao.costoPromedio(articulo.getCosto(), costoNuevo, articulo.getCantidad(), cantidadNueva); 
+		try {
+			Double cantidadActualProducto = articulo.getCantidad() == null?Constantes.ZEROS_DOUBLE:articulo.getCantidad();
+			Double resultado = Utils.roundFactura(cantidadNueva + articulo.getCantidad(),3);
+			Double costoPromedio =articuloDao.costoPromedio(articulo.getCosto(), costoNuevo, cantidadActualProducto, cantidadNueva); 
+			Double costoArticuloActual = articulo.getCosto() == null? Constantes.ZEROS_DOUBLE:articulo.getCosto();
+			
+			Kardex kardex = new Kardex();
+			Double costoTotalNuevo = resultado * costoPromedio;
+			kardex.setCantidadSolicitada(cantidadNueva);
+			kardex.setCantidadActual(cantidadActualProducto);
+			kardex.setCostoActual(articulo.getCosto());
+			kardex.setTotalCostoActual(articulo.getCosto() !=null?costoArticuloActual * cantidadActualProducto:Constantes.ZEROS_DOUBLE);
+			kardex.setCodigo(articulo.getCodigo());
+			kardex.setObservacion(observacion);
+			kardex.setCantidadNueva(resultado);
+			kardex.setCostoNuevo(costoNuevo);
+			kardex.setTotalCostoNuevo(costoTotalNuevo);
+			kardex.setConsecutivo(consecutivo);
+			kardex.setTipo(tipo);
+			kardex.setMotivo(motivo);
+			kardex.setCreated_at(new Date());
+			kardex.setUpdated_at(new Date());
+			kardex.setUsuario(usuarioSesion);
+			kardex.setArticulo(articulo);
+			articulo.setCantidad(resultado);
+			articulo.setCosto(costoPromedio);
+			articuloDao.modificar(articulo);
+			agregar(kardex);
+			
+		} catch (Exception e) {
+			log.info("** Error  entrada kardex: " + e.getMessage() + " fecha " + new Date()+" Codigo:"+ articulo.getCodigo());
+			throw e;
+		}
 		
-		Kardex kardex = new Kardex();
-		Double costoTotalNuevo = resultado * costoPromedio;
-		kardex.setCantidadSolicitada(cantidadNueva);
-		kardex.setCantidadActual(articulo.getCantidad());
-		kardex.setCostoActual(articulo.getCosto());
-		kardex.setTotalCostoActual(articulo.getCosto() !=null?articulo.getCosto() * articulo.getCantidad():Constantes.ZEROS_DOUBLE);
-		kardex.setCodigo(articulo.getCodigo());
-		kardex.setObservacion(observacion);
-		kardex.setCantidadNueva(resultado);
-		kardex.setCostoNuevo(costoNuevo);
-		kardex.setTotalCostoNuevo(costoTotalNuevo);
-		kardex.setConsecutivo(consecutivo);
-		kardex.setTipo(tipo);
-		kardex.setMotivo(motivo);
-		kardex.setCreated_at(new Date());
-		kardex.setUpdated_at(new Date());
-		kardex.setUsuario(usuarioSesion);
-		kardex.setArticulo(articulo);
-		articulo.setCantidad(resultado);
-		articulo.setCosto(costoPromedio);
-		articuloDao.modificar(articulo);
-		agregar(kardex);
 		
 	}
 
