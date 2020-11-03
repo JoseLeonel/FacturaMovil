@@ -442,7 +442,7 @@ public class HaciendasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarHaciendasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
@@ -814,6 +814,7 @@ public class HaciendasController {
 		try {
 			Hacienda haciendaBD = haciendaBo.findById(idHacienda);
 			Factura factura = facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
+			@SuppressWarnings("unused")
 			String fileName = haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 				fileName = "Tiquete_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();

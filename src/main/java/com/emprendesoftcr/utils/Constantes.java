@@ -175,8 +175,8 @@ public class Constantes {
 	public static final Integer					LIBRE_IMPUESTOS_INACTIVO																			= 0;
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 10;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 10;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 30;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 30;
 
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 5;
@@ -320,7 +320,7 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_ENTRADA																						= "Entrada";
 	public static final String					KARDEX_TIPO_SALIDA																						= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO																= "Nuevo inventario a la sucursal";
-	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA															= "Ingreso del proveedor:";
+	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA															= "Ingreso :";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO												= "Salida por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA																= "Salida por venta:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO													= "Ingreso por Nota de debito:";

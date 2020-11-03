@@ -625,8 +625,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			for (Hacienda hacienda : FacturasConProblemas) {
 				log.error("** Error problemas de envio factura: "+ hacienda.getEmpresa().getNombre());
-				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
-				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
+//				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
+//				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
 		//		correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
 		//		correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
 			}
@@ -676,7 +676,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	@Scheduled(cron = "0 0/35 23 * * ?")
+	@Scheduled(cron = "0 0/25 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -745,7 +745,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// Inventario
-					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 					// Alajuela
 				recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);

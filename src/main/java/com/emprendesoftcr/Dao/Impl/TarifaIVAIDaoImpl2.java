@@ -41,6 +41,7 @@ public class TarifaIVAIDaoImpl2 implements TarifaIVAIDao {
 	 * Buscar el objeto tarifa por id
 	 * @see com.factura.dao.TarifaDao#buscar(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public TarifaIVAI buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from TarifaIVAI obj where obj.id = :id");
@@ -52,6 +53,7 @@ public class TarifaIVAIDaoImpl2 implements TarifaIVAIDao {
 			return null;
 		}
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public TarifaIVAI findByCodigoTarifa(String codigoTarifa) {
 		Query query = entityManager.createQuery("select obj from TarifaIVAI obj where obj.codigoTarifa = :codigoTarifa");

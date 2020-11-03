@@ -43,6 +43,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por codigo de usuario y estado
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.String, java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Usuario buscar(String nombreUsuario, Integer estado) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombreUsuario = :nombreUsuario and usuario.estado = :estado");
@@ -60,6 +61,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por codigo de usuario
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Usuario buscar(String nombreUsuario) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombreUsuario = :nombreUsuario ");
@@ -76,6 +78,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por ID
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.Long)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Usuario buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Usuario obj where obj.id = :id");
@@ -91,6 +94,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	/**
 	 * @see com.factura.dao.UsuarioDao#buscarPorNombreYPrimerApellidoYSegundoApellido(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombre = :nombre and usuario.primerApellido = :primerApellido and usuario.segundoApellido = :segundoApellido");
@@ -104,6 +108,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			return null;
 		}
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public Usuario buscar(String nombreUsuario,Empresa empresa) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.empresa = :empresa ");

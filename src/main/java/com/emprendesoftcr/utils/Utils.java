@@ -337,9 +337,6 @@ public final class Utils {
 	 * @return
 	 */
 	public static File crearDirectorioServidor(String servidor, String cedulaEmpresa, Date fecha) {
-//		String dir = System.getProperty("user.dir");
-//		String dir = Constantes.EMPTY;
-//		dir = Constantes.DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR;
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
 
@@ -353,9 +350,6 @@ public final class Utils {
 		@SuppressWarnings("unused")
 		File directorio_servicio80 = crearDirectorio(servidor);
 
-		File directorio_empresa = crearDirectorio(servidor + cedulaEmpresa);
-		File directorio_anno = crearDirectorio(servidor + cedulaEmpresa + "/" + anno);
-		File directorio_mes = crearDirectorio(servidor + cedulaEmpresa + "/" + anno + "/" + mes);
 
 		File directorio1 = crearDirectorio(direccion);
 		if (!directorio1.exists()) {
@@ -2523,6 +2517,9 @@ public final class Utils {
 	 * @return
 	 */
 	public static double roundFactura(double value, int places) {
+		if (value == 0 ){
+			return 0d;
+		}
 
 		if (places < 0)
 			throw new IllegalArgumentException();

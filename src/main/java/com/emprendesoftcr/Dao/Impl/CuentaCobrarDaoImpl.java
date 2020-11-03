@@ -71,6 +71,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	 * Buscar la letra de cambio retorna la cuenta por cobrar
 	 * @see com.factura.dao.CuentaCobrarDao#buscarByLetraCambio(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	public CuentaCobrar buscarPorLetraCambio(String letraCambio) {
 		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.letraCambio = :letraCambio");
 		query.setParameter("letraCambio", letraCambio);
@@ -87,6 +88,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	 * @param facturaManual
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public CuentaCobrar buscarPorFacturaManual(Integer facturaManual) {
 		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.facturaManual = :facturaManual");
 		query.setParameter("facturaManual", facturaManual);
@@ -150,6 +152,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public CuentaCobrar buscarPorConsecutivo(Empresa empresa, String consecutivo) {
 		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.factura = :consecutivo and obj.empresa = :empresa ");

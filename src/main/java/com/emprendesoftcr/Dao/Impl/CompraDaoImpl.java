@@ -48,6 +48,7 @@ public class CompraDaoImpl implements CompraDao {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Compra findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Compra obj where obj.id = :id");
@@ -65,6 +66,7 @@ public class CompraDaoImpl implements CompraDao {
 	 * Busca por consecutivo y empresa
 	 * @see com.emprendesoftcr.Dao.CompraDao#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Compra obj where obj.consecutivo = :consecutivo and obj.empresa = :empresa");
@@ -99,6 +101,7 @@ public class CompraDaoImpl implements CompraDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		StringBuilder hql = new StringBuilder();

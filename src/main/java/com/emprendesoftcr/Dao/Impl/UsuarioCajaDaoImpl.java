@@ -51,6 +51,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	 * Buscar una UsuarioCaja
 	 * @see com.emprendesoftcr.Dao.UsuarioCajaDao#buscar(java.lang.Long)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public UsuarioCaja buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where obj.id = :id");
@@ -67,6 +68,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	 * Buscar por usuario y estado
 	 * @see com.emprendesoftcr.Dao.UsuarioCajaDao#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario, java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
 
@@ -135,6 +137,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado) {
 		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where  obj.usuario.empresa.id = :idEmpresa and obj.estado = :estado");

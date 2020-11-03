@@ -57,6 +57,7 @@ public class MotivoSalidaDaoImpl implements MotivoSalidaDao {
 	/**
 	 * @see com.factura.dao.MotivoSalidaDao#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Sucursal)
 	 */
+	@SuppressWarnings("unchecked")
 	public MotivoSalida buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from MotivoSalida obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
 		query.setParameter("descripcion", descripcion);

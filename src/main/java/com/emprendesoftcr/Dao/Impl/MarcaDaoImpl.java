@@ -42,6 +42,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	 * Buscar el objeto marca por id
 	 * @see com.factura.dao.MarcaDao#buscar(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Marca buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Marca obj where obj.id = :id");
@@ -58,6 +59,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	 * Buscar por descripcion la marca y empresa
 	 * @see com.factura.dao.MarcaDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Marca buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Marca obj where obj.descripcion = :descripcion and obj.empresa = :empresa");

@@ -299,6 +299,7 @@ public class FacturaDaoImpl implements FacturaDao {
 //
 //	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> findBySinNotificarCorreo() {
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estado in(2,6) and obj.notificacionNoElectronicio != 2 and obj.empresa.noFacturaElectronica = 2");

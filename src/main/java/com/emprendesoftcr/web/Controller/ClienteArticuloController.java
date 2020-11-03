@@ -60,7 +60,7 @@ public class ClienteArticuloController {
 		return "views/clienteArticulo/facturar";
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarClienteArticuloActivos.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute AgregarClienteArticuloCommand agregarClienteArticuloCommand, BindingResult result, SessionStatus status) {

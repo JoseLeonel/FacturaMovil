@@ -200,9 +200,9 @@ public class DetalleController {
 
 	@RequestMapping(value = "/ListaVentasByCategoria.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable eliminarPedido(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Long idCaegoria) {
-		Map<String, Object> response_sp = new HashMap<>();
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+	public RespuestaServiceDataTable<VentasByCategoriasCommand> listaVentasByCategoria(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Long idCaegoria) {
+
+		RespuestaServiceDataTable<VentasByCategoriasCommand> respuestaService = new RespuestaServiceDataTable<VentasByCategoriasCommand>();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
@@ -231,7 +231,7 @@ public class DetalleController {
 
 		@SuppressWarnings("rawtypes")
 		ArrayList arrayList = new ArrayList();
-		arrayList = (ArrayList) listaObjetos;
+		arrayList = (ArrayList<?>) listaObjetos;
 //	      arrayList = (ArrayList) returnSp.get("#result-set-1");
 		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
 		ArrayList<VentasByCategoriasCommand> detallesFacturaCommand = new ArrayList<>();
@@ -420,6 +420,7 @@ public class DetalleController {
 		return respuestaService;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
 	public RespuestaServiceValidator envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
 

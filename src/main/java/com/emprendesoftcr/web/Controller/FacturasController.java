@@ -996,7 +996,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaUtilidadAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura) {
+	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura,@RequestParam Integer idUsuario) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
@@ -1011,7 +1011,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
 
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
@@ -1028,7 +1028,7 @@ public class FacturasController {
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarUtilidadAjax.do", method = RequestMethod.GET)
-	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura) throws IOException, Exception {
+	public void descargarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura, @RequestParam Integer idUsuario) throws IOException, Exception {
 
 		fechaInicioParam = fechaInicioParam == null ? Constantes.EMPTY : fechaInicioParam;
 		fechaFinParam = fechaFinParam == null ? Constantes.EMPTY : fechaFinParam;
@@ -1047,7 +1047,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
 
 		String nombreArchivo = "Utilidad_" + fechaInicioParam + "_al_" + fechaFinParam + ".xls";
 		response.setContentType("application/octet-stream");
@@ -1069,7 +1069,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response, BindingResult result,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura) throws IOException, Exception {
+	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response, BindingResult result,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura, @RequestParam Integer idUsuario) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 
 		try {
@@ -1089,7 +1089,7 @@ public class FacturasController {
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicioP);
 			String fin1 = dateFormat1.format(fechaFinalP);
-			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura);
+			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
 
 			// Se prepara el excell
 			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelUtilidad(facturas, usuarioSesion.getEmpresa(), fechaInicioParam, fechaFinParam));
@@ -1198,7 +1198,7 @@ public class FacturasController {
 		return respuestaService;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "null" })
 	private ArrayList<ProformasSQLNativeCommand> formaDetallesCommand(Collection<ProformasSQLNativeCommand> objetos) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front
 		JSONObject json = null;
@@ -1658,7 +1658,7 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasDelDiaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasDiaAjax(HttpServletRequest request, HttpServletResponse response) {

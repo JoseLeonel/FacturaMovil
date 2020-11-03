@@ -571,8 +571,6 @@ public final class FacturaElectronicaUtils {
 
 		BufferedImage image = ImageIO.read(inputStream);
 
-		int width = image.getWidth();
-		int height = image.getHeight();
 		
 
 		LuminanceSource source = new BufferedImageLuminanceSource(image);

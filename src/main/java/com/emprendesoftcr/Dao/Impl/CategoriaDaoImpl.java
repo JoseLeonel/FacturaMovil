@@ -57,6 +57,7 @@ public class CategoriaDaoImpl implements CategoriaDao {
 	 * @see com.factura.dao.CategoriaDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public Categoria buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Categoria obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
 		query.setParameter("descripcion", descripcion);
@@ -69,6 +70,7 @@ public class CategoriaDaoImpl implements CategoriaDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Categoria> findByEmpresaAll(Integer idEmpresa) {
 		Query query = entityManager.createQuery("select obj from Categoria obj where  obj.empresa.id = :idEmpresa order by obj.id,obj.descripcion");

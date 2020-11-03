@@ -439,6 +439,7 @@ public class UsuarioCajasController {
 			String from = "cierrecaja@facturaemprendesoftcr.com";
 			String subject = "Cierre Caja-" + usuarioCajaBd.getCaja().getEmpresa().getAbreviaturaEmpresa() + " Apertura :" + usuarioCajaCommand.getCreated_atSTR() + " Cierre: " + usuarioCajaCommand.getCierreCajaSTR();
 
+			@SuppressWarnings("unused")
 			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_CIERRE_CAJA, modelEmail);
 		}
 

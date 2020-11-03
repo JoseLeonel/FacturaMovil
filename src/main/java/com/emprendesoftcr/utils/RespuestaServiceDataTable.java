@@ -66,8 +66,10 @@ public class RespuestaServiceDataTable<T extends Object> implements Serializable
 
 	public static class Builder<T extends Object> {
 
+		@SuppressWarnings("rawtypes")
 		private final RespuestaServiceDataTable response;
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Builder(HttpServletRequest request, Collection<T> objs, Long total) {
 			this.response = new RespuestaServiceDataTable();
 			response.setRecordsTotal(total);
@@ -84,6 +86,7 @@ public class RespuestaServiceDataTable<T extends Object> implements Serializable
 			response.setAaData(objs);
 		}
 
+		@SuppressWarnings("rawtypes")
 		public RespuestaServiceDataTable build() {
 			return response;
 		}

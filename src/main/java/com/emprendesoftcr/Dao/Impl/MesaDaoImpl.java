@@ -42,6 +42,7 @@ public class MesaDaoImpl implements MesaDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Mesa buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Mesa obj where obj.id = :id");
@@ -54,6 +55,7 @@ public class MesaDaoImpl implements MesaDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Mesa findByDescripcionAndEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Mesa obj where obj.descripcion = :descripcion and obj.empresa = :empresa");

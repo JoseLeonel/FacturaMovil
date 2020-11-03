@@ -42,6 +42,7 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public TipoCambio buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.id = :id");
@@ -54,6 +55,7 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public TipoCambio findByEstadoAndEmpresa(String estado, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.estado = :estado and obj.empresa = :empresa");

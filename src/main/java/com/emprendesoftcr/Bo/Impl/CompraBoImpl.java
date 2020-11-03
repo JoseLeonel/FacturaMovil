@@ -47,7 +47,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
@@ -204,9 +203,9 @@ public class CompraBoImpl implements CompraBo {
 					}
 				}
 			}
-			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 2));
-			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 2));
-			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 2));
+			compra.setTotalCompra(montoTotalLinea != null && montoTotalLinea > Constantes.ZEROS_DOUBLE ? Utils.roundFactura(montoTotalLinea, 2) : Constantes.ZEROS_DOUBLE);
+			compra.setTotalDescuento(totalDescuento != null && totalDescuento > Constantes.ZEROS_DOUBLE ? Utils.roundFactura(totalDescuento, 2) : Constantes.ZEROS_DOUBLE);
+			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto != null && totalImpuesto > Constantes.ZEROS_DOUBLE ? totalImpuesto : Constantes.ZEROS_DOUBLE, 2));
 			compraDao.modificar(compra);
 
 			// Crear Credito del cliente
@@ -243,26 +242,28 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor,Articulo articulo) {
 		try {
-			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
-			Double costo = totalLinea - descuento;
+			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad()>Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			Double costo  = detalleCompra.getCosto() != null && detalleCompra.getCosto() >Constantes.ZEROS_DOUBLE ? detalleCompra.getCosto():Constantes.ZEROS_DOUBLE;
+			Double totalLinea = costo!= null ? costo : Constantes.ZEROS_DOUBLE;
+			Double totalDescuento = detalleCompra.getTotalDescuento() != null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE?detalleCompra.getTotalDescuento():Constantes.ZEROS_DOUBLE;
+			Double descuento = totalDescuento > Constantes.ZEROS_DOUBLE  ? totalDescuento / cantidad:Constantes.ZEROS_DOUBLE;
+			Double costoNuevo = descuento > Constantes.ZEROS_DOUBLE ?totalLinea - descuento:totalLinea;
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
-				proveedorArticulo.setCodigo(codigoProveedor != null ? codigoProveedor : detalleCompra.getArticulo().getCodigo());
-				proveedorArticulo.setCosto(costo);
-				proveedorArticulo.setArticulo(articulo);
+				proveedorArticulo.setCosto(costoNuevo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
 			} else {
-				proveedorArticulo = new ProveedorArticulo();
-				proveedorArticulo.setCreated_at(new Date());
-				proveedorArticulo.setUpdated_at(new Date());
-				proveedorArticulo.setArticulo(detalleCompra.getArticulo());
-				proveedorArticulo.setCodigo(codigoProveedor != null ? codigoProveedor : detalleCompra.getArticulo().getCodigo());
-				proveedorArticulo.setCosto(costo);
-				proveedorArticulo.setProveedor(proveedor);
-				proveedorArticuloDao.agregar(proveedorArticulo);
+				ProveedorArticulo	proveedorArticuloNuevo = new ProveedorArticulo();
+				proveedorArticuloNuevo.setId(null);
+				proveedorArticuloNuevo.setCreated_at(new Date());
+				proveedorArticuloNuevo.setUpdated_at(new Date());
+				proveedorArticuloNuevo.setArticulo(detalleCompra.getArticulo());
+				proveedorArticuloNuevo.setCodigo(detalleCompra.getArticulo().getCodigo());
+				proveedorArticuloNuevo.setCosto(costoNuevo);
+				proveedorArticuloNuevo.setProveedor(proveedor);
+				proveedorArticuloDao.agregar(proveedorArticuloNuevo);
 			}
 
 		} catch (Exception e) {
@@ -281,12 +282,12 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
+			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
-			Double descuento = detalleCompra.getTotalDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getTotalDescuento() / detalleCompra.getCantidad();
-			Double costo = totalLinea - descuento;
-
-			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
-			kardexDao.entradaCosto(articulo, costo, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			Double descuento = detalleCompra.getTotalDescuento() == null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() / cantidad : Constantes.ZEROS_DOUBLE;
+			Double costo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
+			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
+			kardexDao.entradaCosto(articulo, costo, cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
@@ -295,7 +296,7 @@ public class CompraBoImpl implements CompraBo {
 			articuloDao.modificar(articulo);
 
 		} catch (Exception e) {
-			log.info("** Error  aplicarInventario: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  aplicarInventario: " + e.getMessage() + " fecha " + new Date() + " Codigo " + articulo.getCodigo());
 			throw e;
 
 		}

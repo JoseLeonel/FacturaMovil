@@ -21,7 +21,7 @@ import com.emprendesoftcr.utils.Utils;
 		+ " inner join categorias on categorias.id = articulos.categoria_id " 
 		+ " where fact.empresa_id = :ID_EMPRESA fact.estado in and fact.tipo_doc !='88'  " 
 		+ "and fact.fecha_emision >= :fechaInicial and fact.fecha_emision <= :fechaFinal "
-		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo and fact.numero_consecutivo ")
+		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo and fact.numero_consecutivo and fact.usuario_id")
 @Entity
 public class ConsultaUtilidadNative implements Serializable {
 

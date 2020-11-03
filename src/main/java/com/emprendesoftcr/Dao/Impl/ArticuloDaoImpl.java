@@ -51,6 +51,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * Buscar el objeto articulo por id
 	 * @see com.factura.dao.ArticuloDao#buscar(java.lang.Integer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Articulo buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.id = :id");
@@ -67,6 +68,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * Buscar por descripcion la articulo y empresa
 	 * @see com.factura.dao.ArticuloDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Articulo buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
@@ -84,6 +86,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * Busca por codigo del articulo
 	 * @see com.factura.dao.ArticuloDao#buscarByCodigoAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa) {
 		Query query = entityManager.createQuery("select distinct obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
@@ -107,6 +110,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	public Articulo buscarPorArticulo(Articulo articulo) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.id = :id");
 		query.setParameter("id", articulo.getId());
+		@SuppressWarnings("unchecked")
 		List<Articulo> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Articulo) results.get(0);
@@ -123,6 +127,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	@Override
 	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception {
 		try {
+			costo = costo == null? Constantes.ZEROS_DOUBLE:costo;
+			iva = iva == null? Constantes.ZEROS_DOUBLE :iva;
+			precio = precio == null?Constantes.ZEROS_DOUBLE:precio;
 			if (precio == null || costo == null) {
 				return Constantes.ZEROS_DOUBLE;
 			}
@@ -135,9 +142,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
-			costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;
-			precio = precio == null ? Constantes.ZEROS_DOUBLE : precio;
-			iva = iva == null ? Constantes.ZEROS_DOUBLE : iva;
+			
 			if (iva == 0) {
 				resultado = costo / precio;
 				resultado = 1 - resultado;
@@ -152,7 +157,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double porcentaje = 100d;
 
-			return Utils.roundFactura(resultado * porcentaje, 5);
+			return resultado > Constantes.ZEROS_DOUBLE?Utils.roundFactura(resultado * porcentaje, 5):Constantes.ZEROS_DOUBLE;
 
 		} catch (Exception e) {
 			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
@@ -171,7 +176,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			costoActual = costoActual == null ? Constantes.ZEROS_DOUBLE : costoActual;
 			costoNuevo = costoNuevo == null ? Constantes.ZEROS_DOUBLE : costoNuevo;
-
+			cantidadActual = cantidadActual == null?Constantes.ZEROS_DOUBLE : cantidadActual;
 			cantidadNueva = cantidadNueva == null ? Constantes.ZEROS_DOUBLE : cantidadNueva;
 			Double totalProductos = cantidadActual + cantidadNueva;
 
@@ -179,15 +184,15 @@ public class ArticuloDaoImpl implements ArticuloDao {
 				Double totalCostoActual = costoActual * cantidadActual;
 				Double totalCostoNuevo = costoNuevo * cantidadNueva;
 				resultado = (totalCostoActual + totalCostoNuevo);
-				resultadoFinal = Utils.roundFactura(resultado / totalProductos, 5);
+				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE : Utils.roundFactura(resultado / totalProductos, 5);
 			} else {
-				resultadoFinal =  Utils.roundFactura(costoNuevo,5);
+				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE :   Utils.roundFactura(costoNuevo,5);
 			}
 
 			return resultadoFinal;
 
 		} catch (Exception e) {
-			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date()+ " costoActual:"+costoActual+" cantidadActual:" + cantidadActual+ " costoNuevo:" + costoNuevo + " cantidadNueva:" + cantidadNueva);
 			throw e;
 		}
 
@@ -202,9 +207,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 			Double costo = articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto();
 
-			resultado = costo * cantidad;
+			resultado = costo > Constantes.ZEROS_DOUBLE ? costo * cantidad :Constantes.ZEROS_DOUBLE;
 
-			return Utils.roundFactura(resultado, 5);
+			return resultado >Constantes.ZEROS_DOUBLE ? Utils.roundFactura(resultado, 5):resultado;
 
 		} catch (Exception e) {
 			log.info("** Error  getTotalCosto: " + e.getMessage() + " fecha " + new Date());
@@ -255,6 +260,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa,Long idCategoria) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa.id = :idEmpresa and obj.categoria.id = :idCategoria order by obj.categoria.id,obj.descripcion");
@@ -263,6 +269,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Articulo> articulosOrderCategoria(Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.categoria.id,obj.descripcion");
@@ -270,6 +277,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa, Categoria categoria, String estado, String minimoMaximo) {
 		String sql = Constantes.EMPTY;

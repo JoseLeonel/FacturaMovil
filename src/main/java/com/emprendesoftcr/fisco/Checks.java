@@ -31,18 +31,21 @@ public class Checks {
         return values;
     }
 
-    public static Iterable checkEmpty(Iterable values, boolean nullAllowed) {
+    @SuppressWarnings("rawtypes")
+		public static Iterable checkEmpty(Iterable values, boolean nullAllowed) {
         checkArgument(((nullAllowed && values == null) || !Iterables.isEmpty(values)), "La lista DEBE contener VALORES.");
         return values;
     }
 
-    public static Iterable checkEmpty(Iterable values, boolean nullAllowed, String argName) {
+    @SuppressWarnings("rawtypes")
+		public static Iterable checkEmpty(Iterable values, boolean nullAllowed, String argName) {
         checkArgument(((nullAllowed && values == null) || !Iterables.isEmpty(values)),
                 argName + " la lista DEBE contener VALORES.");
         return values;
     }
 
-    public static Iterable checkEmpty(Iterable values, Object message, boolean nullAllowed) {
+    @SuppressWarnings("rawtypes")
+		public static Iterable checkEmpty(Iterable values, Object message, boolean nullAllowed) {
         checkArgument(((nullAllowed && values == null) || !Iterables.isEmpty(values)), message);
         return values;
     }
@@ -369,19 +372,23 @@ public class Checks {
                 argName + " EXCEDE el valor permitido");
     }
 
-    public static void checkEnum(Map enumValues, String key) {
+    @SuppressWarnings("rawtypes")
+		public static void checkEnum(Map enumValues, String key) {
         checkArgument(enumValues.containsKey(key), "NO es un ENUM permitido");
     }
 
-    public static void checkEnum(Map enumValues, String key, String argName) {
+    @SuppressWarnings("rawtypes")
+		public static void checkEnum(Map enumValues, String key, String argName) {
         checkArgument(enumValues.containsKey(key), argName + " NO es un ENUM permitido");
     }
 
-    public static void checkEnum(Map enumValues, String key, boolean nullAllowed) {
+    @SuppressWarnings("rawtypes")
+		public static void checkEnum(Map enumValues, String key, boolean nullAllowed) {
         checkArgument(((nullAllowed && key == null) || enumValues.containsKey(key)), "NO es un ENUM permitido");
     }
 
-    public static void checkEnum(Map enumValues, String key, boolean nullAllowed, String argName) {
+    @SuppressWarnings("rawtypes")
+		public static void checkEnum(Map enumValues, String key, boolean nullAllowed, String argName) {
         checkArgument(((nullAllowed && key == null) || enumValues.containsKey(key)), argName + " NO es un ENUM permitido");
     }
 

@@ -380,8 +380,8 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 			
 			NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 			List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
-			ArrayList arrayList = new ArrayList();
-			arrayList = (ArrayList) listaObjetos;
+			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
+			arrayList = (ArrayList<Map<String, Object>>) listaObjetos;
 			JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
 			Gson gson = new Gson();
 			if (jsonArray1 != null) {

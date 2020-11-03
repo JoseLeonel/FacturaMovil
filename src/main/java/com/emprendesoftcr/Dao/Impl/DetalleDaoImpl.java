@@ -85,6 +85,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica){
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
@@ -116,6 +117,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Detalle> findByFactura(Factura factura) {
 		StringBuilder hql = new StringBuilder();
@@ -201,6 +203,7 @@ public class DetalleDaoImpl implements DetalleDao {
 				);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Detalle obj where obj.codigo = :codigo and obj.empresa = :empresa");
@@ -214,6 +217,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Detalle findById(Long  idDetalle) {
 			Query query = entityManager.createQuery("select obj from Detalle obj where obj.id = :id");

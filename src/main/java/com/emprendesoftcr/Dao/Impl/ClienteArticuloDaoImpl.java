@@ -65,6 +65,7 @@ public class ClienteArticuloDaoImpl implements ClienteArticuloDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ClienteArticulo> findAll(Cliente cliente) {
 		Query query = entityManager.createQuery("select obj from ClienteArticulo obj where  obj.cliente.id = :idCliente ");

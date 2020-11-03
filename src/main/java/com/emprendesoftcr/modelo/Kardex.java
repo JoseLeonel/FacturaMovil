@@ -292,4 +292,11 @@ public class Kardex implements Serializable {
 		this.usuario = usuario;
 	}
 
+
+
+	@Override
+	public String toString() {
+		return "Kardex [id=" + id + ", cantidadSolicitada=" + cantidadSolicitada + ", cantidadActual=" + cantidadActual + ", costoActual=" + costoActual + ", totalCostoActual=" + totalCostoActual + ", codigo=" + codigo + ", observacion=" + observacion + ", cantidadNueva=" + cantidadNueva + ", costoNuevo=" + costoNuevo + ", totalCostoNuevo=" + totalCostoNuevo + ", consecutivo=" + consecutivo + ", tipo=" + tipo + ", motivo=" + motivo + ", created_at=" + created_at + ", updated_at=" + updated_at + ", articulo=" + articulo + ", usuario=" + usuario + "]";
+	}
+
 }

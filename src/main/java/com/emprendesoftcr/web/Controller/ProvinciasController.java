@@ -175,6 +175,7 @@ public class ProvinciasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarCantonesTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarCatonesTodosAjax(HttpServletRequest request, HttpServletResponse response) {

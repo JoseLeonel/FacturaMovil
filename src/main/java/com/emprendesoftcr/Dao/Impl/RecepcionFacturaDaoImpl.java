@@ -78,6 +78,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave) {
 		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where  obj.facturaClave = :clave and obj.emisorCedula = :cedulaEmisor");
@@ -137,6 +138,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto,String actividadEconocimica) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFacturaDetalle obj ");

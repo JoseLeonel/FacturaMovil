@@ -37,6 +37,7 @@ public class EmpresaActividadComercialDaoImpl implements EmpresaActividadComerci
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public EmpresaActividadComercial buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from EmpresaActividadComercial obj where obj.id = :id");
@@ -49,7 +50,8 @@ public class EmpresaActividadComercialDaoImpl implements EmpresaActividadComerci
 		}
 	}
 
-  @Override
+  @SuppressWarnings("unchecked")
+	@Override
 	public EmpresaActividadComercial findByCodigo(String codigo,Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from EmpresaActividadComercial obj where obj.codigo = :codigo and obj.empresa = :empresa");
 		query.setParameter("codigo", codigo);
@@ -62,7 +64,8 @@ public class EmpresaActividadComercialDaoImpl implements EmpresaActividadComerci
 		}
   	
   }
-  @Override
+  @SuppressWarnings("unchecked")
+	@Override
 	public EmpresaActividadComercial findByPrincipal(Integer principal , Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from EmpresaActividadComercial obj where obj.principal = :principal and obj.empresa = :empresa");
 		query.setParameter("principal", principal);
@@ -75,7 +78,8 @@ public class EmpresaActividadComercialDaoImpl implements EmpresaActividadComerci
 		}
 		
 	}
-  @Override
+  @SuppressWarnings("unchecked")
+	@Override
   public Collection<EmpresaActividadComercial> findAll(Empresa empresa ){
   	StringBuilder hql = new StringBuilder();
 		hql.append("select obj from EmpresaActividadComercial obj");
