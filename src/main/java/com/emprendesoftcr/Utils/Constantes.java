@@ -320,7 +320,7 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_ENTRADA																						= "Entrada";
 	public static final String					KARDEX_TIPO_SALIDA																						= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO																= "Nuevo inventario a la sucursal";
-	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA															= "Ingreso del proveedor:";
+	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA															= "Ingreso :";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO												= "Salida por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA																= "Salida por venta:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO													= "Ingreso por Nota de debito:";

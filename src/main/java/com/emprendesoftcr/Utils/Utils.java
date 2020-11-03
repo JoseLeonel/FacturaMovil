@@ -2489,6 +2489,9 @@ public final class Utils {
 	 * @return
 	 */
 	public static double roundFactura(double value, int places) {
+		if (value == 0 ){
+			return 0d;
+		}
 
 		if (places < 0)
 			throw new IllegalArgumentException();

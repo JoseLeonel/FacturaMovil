@@ -127,6 +127,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	@Override
 	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception {
 		try {
+			costo = costo == null? Constantes.ZEROS_DOUBLE:costo;
+			iva = iva == null? Constantes.ZEROS_DOUBLE :iva;
+			precio = precio == null?Constantes.ZEROS_DOUBLE:precio;
 			if (precio == null || costo == null) {
 				return Constantes.ZEROS_DOUBLE;
 			}
@@ -139,9 +142,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
-			costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;
-			precio = precio == null ? Constantes.ZEROS_DOUBLE : precio;
-			iva = iva == null ? Constantes.ZEROS_DOUBLE : iva;
+			
 			if (iva == 0) {
 				resultado = costo / precio;
 				resultado = 1 - resultado;
@@ -156,7 +157,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double porcentaje = 100d;
 
-			return Utils.roundFactura(resultado * porcentaje, 5);
+			return resultado > Constantes.ZEROS_DOUBLE?Utils.roundFactura(resultado * porcentaje, 5):Constantes.ZEROS_DOUBLE;
 
 		} catch (Exception e) {
 			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
@@ -183,15 +184,15 @@ public class ArticuloDaoImpl implements ArticuloDao {
 				Double totalCostoActual = costoActual * cantidadActual;
 				Double totalCostoNuevo = costoNuevo * cantidadNueva;
 				resultado = (totalCostoActual + totalCostoNuevo);
-				resultadoFinal = Utils.roundFactura(resultado / totalProductos, 5);
+				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE : Utils.roundFactura(resultado / totalProductos, 5);
 			} else {
-				resultadoFinal =  Utils.roundFactura(costoNuevo,5);
+				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE :   Utils.roundFactura(costoNuevo,5);
 			}
 
 			return resultadoFinal;
 
 		} catch (Exception e) {
-			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date()+ " costoActual:"+costoActual+" cantidadActual:" + cantidadActual+ " costoNuevo:" + costoNuevo + " cantidadNueva:" + cantidadNueva);
 			throw e;
 		}
 
@@ -206,9 +207,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 			Double costo = articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto();
 
-			resultado = costo * cantidad;
+			resultado = costo > Constantes.ZEROS_DOUBLE ? costo * cantidad :Constantes.ZEROS_DOUBLE;
 
-			return Utils.roundFactura(resultado, 5);
+			return resultado >Constantes.ZEROS_DOUBLE ? Utils.roundFactura(resultado, 5):resultado;
 
 		} catch (Exception e) {
 			log.info("** Error  getTotalCosto: " + e.getMessage() + " fecha " + new Date());
