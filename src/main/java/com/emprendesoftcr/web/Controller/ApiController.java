@@ -19,14 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.utils.Utils;
@@ -78,7 +75,7 @@ public class ApiController {
 
 	}
 
-	@RequestMapping(value = "/base64", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/base64.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<?> retornaXmlBase64(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam("ruta") String ruta) {
 
 		Map<String, Object> resp = new HashMap<>();

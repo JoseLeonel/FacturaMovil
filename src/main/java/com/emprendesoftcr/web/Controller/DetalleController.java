@@ -59,6 +59,7 @@ import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
+import com.emprendesoftcr.web.command.TotalbyImpuestosCommand;
 import com.emprendesoftcr.web.command.VentasByCategoriasCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -508,13 +509,31 @@ public class DetalleController {
 		if (fechaFinal != null && fechaFinal != null) {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicio);
+		String fin1 = dateFormat1.format(fechaFinal);
+		List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado,  usuario.getEmpresa().getId(),actividadEconomica );
 
-		Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto, actividadEconomica);
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList<?>) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<TotalbyImpuestosCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				TotalbyImpuestosCommand totalbyImpuestosCommand = gson.fromJson(jsonArray1.get(i).toString(), TotalbyImpuestosCommand.class);
+				detallesFacturaCommand.add(totalbyImpuestosCommand);
+			}
+		}
+		
+
+		
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 		// Se prepara el excell
-		ByteArrayInputStream inputStream = detalleBo.createExcelVentasXCodigo(detalles, fechaInicialParam, fechaFinalParam, usuario.getEmpresa(), actividadEconomica);
+		ByteArrayInputStream inputStream = detalleBo.createExcelVentasXCodigo(detallesFacturaCommand, fechaInicialParam, fechaFinalParam, usuario.getEmpresa(), actividadEconomica);
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -523,6 +542,8 @@ public class DetalleController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
+	
+	
 
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell

@@ -57,8 +57,16 @@ import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.DataTableDelimitador;
+import com.emprendesoftcr.utils.JqGridFilter;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
+import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
+import com.emprendesoftcr.web.command.ComprasSinIngresarInventarioCommand;
+import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
@@ -969,17 +977,19 @@ public class ComprasController {
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaFinalP = Utils.parseDate(fechaFin);
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-		String inicio1 = dateFormat1.format(fechaInicioP);
+		String inicio1 = dateFormat1.format(fechaInicio);
 		String fin1 = dateFormat1.format(fechaFinalP);
 
-		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicioP, fechaFinalP, usuarioSesion.getEmpresa(), Constantes.EMPTY, estado, 0, "0");
+		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicioP, fechaFinalP, usuario.getEmpresa(), Constantes.EMPTY, estado, 0, "0");
 
 		ConsultaComprasIvaCommand tarifa_0 = new ConsultaComprasIvaCommand();
 

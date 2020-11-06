@@ -57,6 +57,7 @@ public class CabysDaoImpl implements CabysDao {
 	 * @see com.factura.dao.CategoriaDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public Cabys buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cabys obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
 		query.setParameter("descripcion", descripcion);
@@ -69,6 +70,7 @@ public class CabysDaoImpl implements CabysDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Cabys> findByEmpresaAll(Integer idEmpresa) {
 		Query query = entityManager.createQuery("select obj from Cabys obj where  obj.empresa.id = :idEmpresa order by obj.id,obj.descripcion");
@@ -76,6 +78,7 @@ public class CabysDaoImpl implements CabysDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Cabys findByCodigo(String codigo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cabys obj where obj.codigo = :codigo and obj.empresa = :empresa");

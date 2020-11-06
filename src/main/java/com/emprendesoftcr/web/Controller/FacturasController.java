@@ -114,6 +114,7 @@ import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
+import com.emprendesoftcr.web.command.TotalbyImpuestosCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -122,6 +123,7 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -538,10 +540,26 @@ public class FacturasController {
 			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
 			
 
-			Collection<Detalle> detalles = detalleBo.facturasRango(estado, fechaInicio, fechaFinalP, usuario.getEmpresa(), "0", actividadEconomica);
+			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+			String inicio1 = dateFormat1.format(fechaInicio);
+			String fin1 = dateFormat1.format(fechaFinalP);
+			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado,  usuario.getEmpresa().getId(),actividadEconomica );
+
+			@SuppressWarnings("rawtypes")
+			ArrayList arrayList = new ArrayList();
+			arrayList = (ArrayList<?>) listaObjetos;
+			JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+			ArrayList<TotalbyImpuestosCommand> detallesFacturaCommand = new ArrayList<>();
+			Gson gson = new Gson();
+			if (jsonArray1 != null) {
+				for (int i = 0; i < jsonArray1.size(); i++) {
+					TotalbyImpuestosCommand totalbyImpuestosCommand = gson.fromJson(jsonArray1.get(i).toString(), TotalbyImpuestosCommand.class);
+					detallesFacturaCommand.add(totalbyImpuestosCommand);
+				}
+			}
 
 						// Se prepara el excell
-			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detalles, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detallesFacturaCommand, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
 			Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 
@@ -583,7 +601,7 @@ public class FacturasController {
 			modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS) ? Constantes.EMPTY : "Actividad Economica:" + actividadEconomica);
 			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinalP));
-			modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
+			modelEmail.put("total", facturaCommand.getTotal() != null ? Utils.formateadorMiles(facturaCommand.getTotal()) : Constantes.ZEROS);
 			modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos() != null ? facturaCommand.getTotalDescuentosSTR() : Constantes.ZEROS);
 			modelEmail.put("totalOtrosCargos", facturaCommand.getTotalOtrosCargos() != null ? facturaCommand.getTotalOtrosCargosSTR() : Constantes.ZEROS);
 			modelEmail.put("totalEfectivo", facturaCommand.getTotalEfectivo() != null ? facturaCommand.getTotalEfectivoSTR() : Constantes.ZEROS);
@@ -595,7 +613,7 @@ public class FacturasController {
 			modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
 			modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
 			modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() != null ? facturaCommand.getTotalVentasGravadasSTR() : Constantes.ZEROS);
-			modelEmail.put("totalMenosNotas", facturaCommand.getTotal() + facturaCommand.getTotal_n());
+			modelEmail.put("totalMenosNotas", Utils.formateadorMiles(facturaCommand.getTotal() + facturaCommand.getTotal_n()));
 
 			modelEmail.put("total_n", facturaCommand.getTotal_n() != null ? facturaCommand.getTotalNC() : Constantes.ZEROS);
 			modelEmail.put("totalDescuentos_n", facturaCommand.getTotalDescuentos_n() != null ? facturaCommand.getTotalDescuentosNC() : Constantes.ZEROS);

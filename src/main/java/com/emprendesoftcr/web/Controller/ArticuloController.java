@@ -74,6 +74,7 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 
@@ -273,13 +274,13 @@ public class ArticuloController {
 			}
 				 catch (org.json.simple.parser.ParseException e) {
 					throw e;
-				}
+				} 
 		  // jasper
 			
 			
 			//JasperReport report = (JasperReport) JRLoader.loadObject(new File( "/data/reportes/articulos/reporte_etiquetas.jasper" ));
-			
-			InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/reporte_etiquetas.jasper");			
+			//JasperCompileManager.compileReport("/reportes/articulos/MyReports/reporte_etiquetas.jrxml");
+			InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");			
 			ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( new Gson().toJson(lista).getBytes());
 			JsonDataSource ds = new JsonDataSource(jsonDataStream);
 			//Map parameters = new HashMap();
@@ -873,13 +874,7 @@ public class ArticuloController {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = null;
 			
-			if(!usuarioSesion.getEmpresa().getCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA)) {
-				articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
-				if (articuloBd != null) {
-					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
-				}
-				
-			}
+
 
 			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
@@ -1059,16 +1054,7 @@ public class ArticuloController {
 			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
-			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion().trim())) {
-				if(!usuarioSesion.getEmpresa().getCedula().equals(Constantes.CONDOMINIO_MONTANA_SANTA_ANA)) {
-					articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
-					if (articuloValidar != null) {
-						result.rejectValue("descripcion", "error.articulo.descripcion.existe");
-					}
-					
-				}
-
-			}
+			
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 				if (articuloValidar != null) {
@@ -1272,12 +1258,7 @@ public class ArticuloController {
 			}
 
 			Articulo articuloValidar = null;
-			if (!articuloBD.getDescripcion().equals(descripcion)) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(descripcion, usuario.getEmpresa());
-				if (articuloValidar != null) {
-					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
-				}
-			}
+	
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}

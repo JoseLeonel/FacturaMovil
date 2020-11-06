@@ -119,7 +119,7 @@
     <div class="modal-dialog modal-lg" style="display:flex!important;">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Costa Rica </h4>
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central Costa Rica </h4>
             </div>
             <div class="modal-body">
                     <div class= "container">  
@@ -297,9 +297,19 @@ table {
     width: 189px!important;
     height: 68px !important;
 }
-td{
-    white-space: break-spaces!important;  
-}
+	table td {
+		text-align: left !important;
+		font-size: 12px !important;
+	}
+	
+	table th {
+		text-align: !important;
+		font-size: 12px !important;
+	}
+	
+	th, td {
+		white-space: break-spaces !important;;
+	}
 
     </style>
 <script>
@@ -766,7 +776,10 @@ function agregarInputsCombos(){
 /*******************************Lista de cabys de hacienda ***************/
 
 __ConsultaHaciendaCabys(e){
-    ListarCodigosCabysModal()
+    if(self.botonModificar == false){
+        ListarCodigosCabysModal()
+    }
+    
 }
 
 function ListarCodigosCabysModal(){

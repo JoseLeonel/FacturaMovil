@@ -1,6 +1,8 @@
 
 package com.emprendesoftcr;
 
+import java.util.TimeZone;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
@@ -12,7 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.ibm.icu.util.TimeZone;
+
+
 
 @SpringBootApplication 
 @Configuration
@@ -21,6 +24,7 @@ import com.ibm.icu.util.TimeZone;
 @ComponentScan(basePackageClasses = { FacturaElectronicaApplication.class })
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
 
+	
 	@PostConstruct
 	public void init() { 
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Costa_Rica"));

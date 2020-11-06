@@ -299,7 +299,7 @@ Cargar el XML
 **/
 function getXML(data,callbackSolicitarXML) {
     $.ajax({
-        url: "base64",
+        url: "base64.do",
         datatype: "json",
         data: { ruta: data.facturaXml },
         method: "GET",
@@ -562,10 +562,7 @@ function __Opciones(id, type, row) {
     menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
     menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Aceptar Manual" class="btnAceptarXMLManual  btnBajarXML" >Aceptar Manual</a></li>'
-    menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
     menu += "</ul></div>"
     return menu;
 }

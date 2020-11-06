@@ -98,8 +98,9 @@ public class MensajeReceptorAutomatico {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	@Scheduled(fixedDelay = 60000)
-	public void downloadEmailAttachments() throws ParserConfigurationException, SAXException, SQLException, ParseException {
+//	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "0 0/01 * * * ?")
+		public void downloadEmailAttachments() throws ParserConfigurationException, SAXException, SQLException, ParseException {
 
 		String saveDirectory = this.pathUploadFilesApi + "/mr-automatico";
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

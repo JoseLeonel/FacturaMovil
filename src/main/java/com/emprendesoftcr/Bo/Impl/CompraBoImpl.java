@@ -36,7 +36,6 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
 import com.emprendesoftcr.Dao.DetalleCompraDao;
-import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.ProveedorArticuloDao;
 import com.emprendesoftcr.modelo.Articulo;
@@ -47,6 +46,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
@@ -672,7 +672,6 @@ public class CompraBoImpl implements CompraBo {
 			} else if (recepcionFactura.getTipoDocEmisor().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && recepcionFactura.getTipoDocEmisor() != null) {
 				compra.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO);
 			}
-
 			compra.setProveedor(proveedor);
 			compra.setCreated_at(new Date());
 			compra.setUpdated_at(new Date());

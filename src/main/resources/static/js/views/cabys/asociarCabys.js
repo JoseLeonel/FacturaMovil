@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	ListarArticulos(" ");
+	__ListaArticulos(" ");
    _Init();
    
 } );/*fin document*/
@@ -12,7 +12,7 @@ var _Init = function () {
     $('#codigoArt').keypress(function (e) {
       if (e.keyCode == 13) {
          var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
-            ListarArticulos(valor)
+         __ListaArticulos(valor)
       }
 
     });
@@ -32,7 +32,7 @@ var _Init = function () {
     	impuestoCabys();
     })
     
-   
+  
 }
 
 function impuestoCabys(){
@@ -122,37 +122,58 @@ var listaArticulosGrupales      = {data:[]}
 
 var selecciono = false;
 
-var ListarArticulos = function(codigo){
-     var table  =  $('#tableListar').DataTable( {
-     "responsive": true,
-      "bAutoWidth" : true,
-     "destroy":true,
-     "order": [ 0, 'asc' ],
-             "bInfo": true,
-             "bPaginate": true,
-             "bFilter" : true,
-             "bDeferRender": true ,
-             "sDom": 'lrtip',
-             "searching":true,
-     "processing": false,
-     "serverSide": true,
-     "sort" : "position",
-     "lengthChange": true,
-     "ajax" : {
-             "url":"ListarArticuloAjax.do?codigoArt="+codigo,
-             "deferRender": true,
-             "type":"POST",
-                     "dataType": 'json',
-                     
-               },
-     "columns" : informacion_tabla,
-     "language" : idioma_espanol,
- } );//fin del table
- agregarInputsCombos();
- EventoFiltro();
- __MarcarArticulo();
 
-}  
+
+
+function __ListaArticulos(codigo){
+  
+
+    $.ajax({
+        url: 'ListarArticuloAjax.do',
+        datatype: "json",
+        method:"POST",
+        data :{codigoArt:codigo},
+        success: function (result) {
+            if(result.aaData.length > 0){
+               
+            	__cargarTablaArticulos(result)
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+function __cargarTablaArticulos(data) {
+    __InicializarTabla('.tableListar')  
+    $("#tableListar").dataTable().fnClearTable();
+    $('#tableListar').DataTable().destroy();
+    $("#tableListar").DataTable({
+        destroy: true,
+        "aLengthMenu": [
+            [5, 10, 15, 25, -1],
+            [5, 10, 15, 25, "All"]
+        ],
+        "language": idioma_espanol,
+        "sDom": 'lfrtip',
+        "order": [],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        "columns": informacion_tabla ,
+    })
+    $("#tableListar").dataTable().fnAddData(data.aaData);
+    
+    agregarInputsCombos();
+    EventoFiltro();
+    __MarcarArticulo();
+
+
+}
+
 
 function enviarACambiarCategoria(){
    if(listaArticulosGrupales.data.length == 0 ){
@@ -210,8 +231,7 @@ function enviarACambiarCategoria(){
 	                           showCancelButton: false,
 	                           confirmButtonText: 'Aceptar',
                             })
-                           var table = $('#tableListar').DataTable();
-                           table.ajax.reload( null, false);
+                          __ListaArticulos("")
                            $("#listaArticuloGrupales").val(null); 
                            $("#impuestoParametros").val(null)
                            listaArticulosGrupales = {data:[]}
@@ -410,11 +430,11 @@ function EventoFiltro(){
    table.columns().every( function () {
    var dataTableColumns = this
    $( 'input', this.footer() ).keypress(function (event) {
-        if ( event.which == 13 ) {
+  //      if ( event.which == 13 ) {
              if ( dataTableColumns.search() !== this.value ) {
                 dataTableColumns.search( this.value ).draw();
              }
-        }
+  //      }
    });
    var searchTextBoxes = $(this.header()).find('input');
      searchTextBoxes.on('keyup change',function(){
@@ -451,7 +471,7 @@ function __listadoCategoriasActivasCombo(select){
       success: function (result) {
            if(result.aaData.length > 0){
             $.each(result.aaData, function( index, modeloTabla ) {
-               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );       
+               select.append( '<option value="'+modeloTabla.descripcion+'">'+modeloTabla.descripcion+'</option>' );       
             })
          }
       },
