@@ -66,8 +66,17 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 	@Column(length = 50)
 	private String clave;
 	
-	@Column(length = 25)
+	@Column(name = "consecutivo",length = 25)
 	private String consecutivo;
+
+	@Column(name = "tipo_doc")
+	private String						tipoDoc;
+	
+	
+	@Column(name = "condicion_venta")
+	private String						condicionVenta;
+
+
 
 	@Column(name = "factura_xml", length = 250)
 	private String facturaXml;
@@ -243,6 +252,28 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 	public void setConsecutivo(String consecutivo) {
 		this.consecutivo = consecutivo;
 	}
+
+	
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+
+	
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
+	}
+
+	
+	public String getCondicionVenta() {
+		return condicionVenta;
+	}
+
+	
+	public void setCondicionVenta(String condicionVenta) {
+		this.condicionVenta = condicionVenta;
+	}
+	
+	
 //	
 //	public String getFechaCreditoSTR() {
 //		if (this.fechaEmision != null) {

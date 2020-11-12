@@ -113,6 +113,9 @@ public class Compra implements Serializable {
 	@JoinColumn(name = "usuario_ingreso_id", nullable = false)
 	private Usuario						usuarioIngresoInventario;
 
+	
+	@Column(name = "clave")
+	private String						clave;
 	public Compra() {
 		super();
 		this.created_at = new Date();
@@ -335,6 +338,34 @@ public class Compra implements Serializable {
 
 	public void setUsuarioIngresoInventario(Usuario usuarioIngresoInventario) {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
+	}
+
+
+
+
+
+
+
+
+
+
+	
+	public String getClave() {
+		return clave;
+	}
+
+
+
+
+
+
+
+
+
+
+	
+	public void setClave(String clave) {
+		this.clave = clave;
 	}
 
 

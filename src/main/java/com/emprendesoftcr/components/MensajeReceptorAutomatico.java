@@ -51,6 +51,7 @@ import org.xml.sax.SAXException;
 import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 import com.emprendesoftcr.utils.UnzipFiles;
+import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.utils.XmlHelper;
 
 
@@ -121,6 +122,8 @@ public class MensajeReceptorAutomatico {
 		String receptorIdentificacion = "";
 		String claveFactura = "";
 		String consecutivoFactura = "";
+		String condicionVenta = "";
+		String tipo_doc = "";
 		String facturaXml = "";
 		String facturaXmlZip = "";
 		String facturaPdfZip = "";
@@ -222,11 +225,15 @@ public class MensajeReceptorAutomatico {
 												}
 												
 												claveFactura  = getNameFieldXml( xPath, xml, "Clave" );
+												consecutivoFactura = getNameFieldXml( xPath, xml, "NumeroConsecutivo" );
+												condicionVenta = getNameFieldXml( xPath, xml, "CondicionVenta" );
+												tipo_doc = Utils.obtenerTipoDocumentoConsecutivo(consecutivoFactura);
+												
 												if( claveFactura.length() > 30) {												
 												
 													fechaEmision  = getNameFieldXml( xPath, xml, "FechaEmision" );
 													emisorFactura = getNameFieldXml( xPath, xml, "Emisor/Nombre" );
-													consecutivoFactura = getNameFieldXml( xPath, xml, "NumeroConsecutivo" );
+													
 													
 													emisorTipoIdentificacion = getNameFieldXml( xPath, xml, "Emisor/Identificacion/Tipo" );
 													emisorIdentificacion = getNameFieldXml( xPath, xml, "Emisor/Identificacion/Numero" );
@@ -256,8 +263,12 @@ public class MensajeReceptorAutomatico {
 													facturaXmlZip = nameFile;
 													
 													try {
+
 														FEMensajeReceptorAutomatico mr = new FEMensajeReceptorAutomatico();
 														mr.setClave(claveFactura);
+														mr.setTipoDoc(tipo_doc);
+														mr.setConsecutivo(consecutivoFactura);
+														mr.setCondicionVenta(condicionVenta);
 														mr.setCorreoFrom(enviarA);
 														mr.setEmisorFactura(emisorFactura);
 														mr.setEmisorTipoIdentificacion(emisorTipoIdentificacion);
@@ -316,6 +327,10 @@ public class MensajeReceptorAutomatico {
 										 * Datos del emisor del comprobante
 										 */
 										claveFactura             = getNameFieldXml( xPath, xml, "Clave" );
+										consecutivoFactura = getNameFieldXml( xPath, xml, "NumeroConsecutivo" );
+										condicionVenta = getNameFieldXml( xPath, xml, "CondicionVenta" );
+										tipo_doc = Utils.obtenerTipoDocumentoConsecutivo(consecutivoFactura);
+
 										fechaEmision             = getNameFieldXml( xPath, xml, "FechaEmision" );
 										emisorFactura            = getNameFieldXml( xPath, xml, "Emisor/Nombre" );
 										emisorTipoIdentificacion = getNameFieldXml( xPath, xml, "Emisor/Identificacion/Tipo" );
@@ -367,8 +382,12 @@ public class MensajeReceptorAutomatico {
 											facturaXml = nameFe;
 											
 											try {
+
 												FEMensajeReceptorAutomatico mr = new FEMensajeReceptorAutomatico();
 												mr.setClave(claveFactura);
+												mr.setTipoDoc(tipo_doc);
+												mr.setConsecutivo(consecutivoFactura);
+												mr.setCondicionVenta(condicionVenta);
 												mr.setCorreoFrom(enviarA);
 												mr.setEmisorFactura(emisorFactura);
 												mr.setEmisorTipoIdentificacion(emisorTipoIdentificacion);
@@ -390,7 +409,7 @@ public class MensajeReceptorAutomatico {
 												
 												log.info("Notifico a " + enviarA + " que ya la factura existe " + claveFactura + emisorFactura);
 
-												String empresaSaluda = "Soluciones Informáticas Mata";
+												String empresaSaluda = "Soluciones Informáticas Emprendesoftcr";
 												String asunto = "Notificación del sistema de recepción automático - La Factura Electrónica generada por "
 														+ emisorFactura + ", ya fue recibida anteriormente.";
 												Date _fechaEmision_ = formato.parse(fechaEmision);

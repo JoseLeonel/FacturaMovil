@@ -522,6 +522,7 @@ function __BajarPDF() {
             direccion: "generaFacturaPDF?idFactura=" + data.id,
             stylemodal: "modal-xl"
         }
+
         riot.mount('view-pdf', { datos: parametros });
 
         // location.href = "generaFacturaPDF?idFactura=" + data.id///

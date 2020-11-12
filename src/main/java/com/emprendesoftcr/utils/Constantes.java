@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final String					API_LISTA_CABYS_SIN_CANTIDAD																	= "https://api.hacienda.go.cr/fe/cabys?q=";
+	public static final String					API_LISTA_CABYS_SIN_CODIGO																	= "https://api.hacienda.go.cr/fe/cabys?codigo=";
 	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
 	public static final String					API_RECEPCION_COMPRAS																					= "http://localhost:8083/api-v1/get-all?e=P&i=";
 	public static final String					API_MAG_PESCA																									= "https://api.hacienda.go.cr/fe/pesca?identificacion=";

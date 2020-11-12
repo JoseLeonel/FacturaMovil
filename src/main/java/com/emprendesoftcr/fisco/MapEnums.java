@@ -26,7 +26,10 @@ public class MapEnums {
   		.put(1, "Efectivo").
        put(2, "Transferencia")
        .build();
-	
+	public static final Map<String, String> ENUM_MONEDA = ImmutableMap.<String, String>builder()
+  		.put("CRC", "CRC-Colones Costa Rica").
+       put("USD", "USD-Dolares")
+       .build();
    public static final Map<Integer, String> ENUM_ESTADO_HACIENTA = ImmutableMap.<Integer, String>builder()
   		.put(1, "Pendiente Firmar xml").
        put(2, "Firmado XML").
@@ -163,6 +166,19 @@ public class MapEnums {
             put("08", "Compra Simplificada").
             put(" ", "Compras").
             put("99", "Otros").build();
+    public static final Map<String, String> ENUM_TIPO_DOC_4_3 = ImmutableMap.<String, String>builder().put("01", "Factura electrónica v 4.3").
+        put("02", "Nota de debido electrónica v 4.3").
+        put("03", "Nota de crédito electrónica v 4.3").
+        put("04", "Tiquete electrónico v 4.3").
+        put("86", "Nota de crédito interna v 4.3").
+        put("87", "Tiquete").
+        put("05", "Nota de despacho").
+        put("06", "Contrato").
+        put("07", "Procedimiento").
+        put("88", "Proforma").
+        put("08", "Compra Simplificada").
+        put(" ", "Compras").
+        put("99", "Otros").build();
     public static final Map<String, String> ENUM_TIPO_GASTO = ImmutableMap.<String, String>builder().put("1", "Gasto por inventario").
         put("2", "Gasto por operación").
         put("", "Otros").build();

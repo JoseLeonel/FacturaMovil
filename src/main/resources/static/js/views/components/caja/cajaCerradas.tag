@@ -497,7 +497,7 @@
         width:100%;
     }
     body {
-        overflow: hidden;
+      
         background:white;
         font-size: 14px !important;
         margin:0; 

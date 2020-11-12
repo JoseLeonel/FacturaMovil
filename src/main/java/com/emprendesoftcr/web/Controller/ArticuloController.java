@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,7 @@ import com.emprendesoftcr.utils.JqGridFilter;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.utils.Utils;
+import com.emprendesoftcr.web.command.ArticuloCabysCommand;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
@@ -72,9 +74,9 @@ import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 
@@ -320,6 +322,8 @@ public class ArticuloController {
 //		}
 		
 	}
+	
+	
 
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -538,6 +542,41 @@ public class ArticuloController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticuloCabysAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCabysAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigo", required = false) String codigo, @RequestParam(value = "descripcion", required = false) String descripcion,@RequestParam(value = "tipo", required = false) Integer tipo,@RequestParam(value = "cantidad", required = false) Integer cantidad) {
+		RespuestaServiceDataTable<ArticuloCabysCommand> respuestaService = new RespuestaServiceDataTable<ArticuloCabysCommand>();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		
+		List<Map<String, Object>> listaObjetos = articuloBo.articulosByCabys(descripcion, codigo, tipo, usuarioSesion.getEmpresa().getId(),cantidad);
+
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList<?>) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<ArticuloCabysCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				ArticuloCabysCommand articuloCabysCommand = gson.fromJson(jsonArray1.get(i).toString(), ArticuloCabysCommand.class);
+				detallesFacturaCommand.add(articuloCabysCommand);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFacturaCommand);
+		return respuestaService;
+
+	}
+	
 	/**
 	 * Listar Ajax de los articulos de una empresa
 	 * @param request

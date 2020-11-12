@@ -1,7 +1,7 @@
 <cuenta-pagar> 
     <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+    <div  class="titulo-encabezado"  >
+        <div  >
             <h1 ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("cuentaPagar.titulo")}  </h1>
         </div>
           <div id="totalsGenerales" >
@@ -303,6 +303,10 @@
 <!-- Fin del Listado -->
 <imprimir-abonoPagar></imprimir-abonoPagar>
 <style type ="text/css">
+        .titulo-encabezado{
+           display: flex;
+            justify-content: space-between; 
+        }
         .scrollerT {
             width: 100% !important;
             height: 300px;

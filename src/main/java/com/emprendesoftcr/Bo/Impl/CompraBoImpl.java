@@ -652,6 +652,7 @@ public class CompraBoImpl implements CompraBo {
 		try {
 
 			Compra compra = new Compra();
+			compra.setClave(recepcionFactura.getFacturaClave());
 			compra.setConsecutivo(recepcionFactura.getFacturaConsecutivo());
 			compra.setEmpresa(recepcionFactura.getEmpresa());
 			compra.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA);
@@ -702,6 +703,23 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalDescuento(recepcionFactura.getFacturaTotalDescuentos());
 			compra.setTotalImpuesto(recepcionFactura.getFacturaTotalImpuestos());
 			compraDao.modificar(compra);
+			// Crear Credito del cliente
+				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+					CuentaPagar cuentaPagar = new CuentaPagar();
+					cuentaPagar.setConsecutivo(compra.getConsecutivo());
+					cuentaPagar.setCreated_at(new Date());
+					cuentaPagar.setUpdated_at(new Date());
+					cuentaPagar.setEmpresa(compra.getEmpresa());
+					cuentaPagar.setTotal(Utils.roundFactura(compra.getTotalCompra(), 2));
+					cuentaPagar.setFechaCredito(compra.getFechaCredito());
+					cuentaPagar.setTotalSaldo(Utils.roundFactura(compra.getTotalCompra(), 2));
+					cuentaPagar.setProveedor(compra.getProveedor());
+					cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
+					cuentaPagar.setUsuarioCreacion(usuario);
+					cuentaPagar.setEstado(Constantes.CUENTA_POR_PAGAR_ESTADO_PENDIENTE);
+					cuentaPagarDao.agregar(cuentaPagar);
+
+				}
 
 		} catch (Exception e) {
 			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
@@ -741,7 +759,7 @@ public class CompraBoImpl implements CompraBo {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" +
 		              "   inner join proveedores p on p.id = c.proveedor_id\n" + 
-				          "   inner join fe_mensaje_receptor_automatico fe on fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6";
+		              "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -774,6 +792,8 @@ public class CompraBoImpl implements CompraBo {
 						}else {
 							aplicarInventario(compraBD, detalleCompra, articulo);	
 						}
+					}else {
+						articulo.setCosto(detalleCompra.getCosto());
 					}
 					articulo.setUpdated_at(new Date());
 					articulo.setPrecioPublico(precioPublico);

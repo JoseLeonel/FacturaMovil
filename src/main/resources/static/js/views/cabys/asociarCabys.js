@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	__ListaArticulos(" ");
+	//__ListaArticulos(" ");
    _Init();
    
 } );/*fin document*/
@@ -9,13 +9,25 @@ var tarifas    = {aaData:[]};
 var _Init = function () {
     // agregarInputsCombos();
     EventoFiltro();
-    $('#codigoArt').keypress(function (e) {
+    $('#codigo').keypress(function (e) {
       if (e.keyCode == 13) {
-         var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
-         __ListaArticulos(valor)
+         __ListaArticulos()
       }
 
     });
+    $('#descripcion').keypress(function (e) {
+        if (e.keyCode == 13) {
+           __ListaArticulos()
+        }
+
+      });
+    
+
+    
+    $('.btn-consulta').click(function () {
+    	__ListaArticulos();
+      })
+
     $('.btncabysAsociar').hide();
     $('.btncabysAsociar').click(function () {
       enviarACambiarCategoria();
@@ -32,8 +44,10 @@ var _Init = function () {
     	impuestoCabys();
     })
     
+    
   
 }
+
 
 function impuestoCabys(){
 	$('.impuestoCabys').val(0);
@@ -52,7 +66,8 @@ function impuestoCabys(){
         	   if (data.message != null && data.message.length > 0) {
         		   $.each(data.listaObjetos, function( index, modeloTabla ) {
         			   cabysTemp = modeloTabla;
-        			   $('.impuestoCabys').val(cabysTemp.impuesto)
+        			   $('.impuestoCabys').val(cabysTemp.impuesto);
+        			   actualizarComboTarifaConCabys(cabysTemp.impuesto);
         			   
         			   
         		   })
@@ -89,10 +104,26 @@ function comboTipoImpuesto(){
      select.append( '<option value="'+"01"+'">'+ $.i18n.prop("tipo.impuesto.ventas") +'</option>' );
      select.append( '<option value="'+"07"+'">'+ $.i18n.prop("tipo.impuesto.servicio") +'</option>' );
      select.append( '<option value="'+"99"+'">'+ $.i18n.prop("tipo.impuesto.otros") +'</option>' );
-	
+     $('.tipoIVA').val("01")
+     comboTarifa();
 }
 
+function actualizarComboTarifaConCabys(valor){
 
+	if(valor == 0){
+		$('.tarifa').val("01")
+	}else if(valor == 1){
+		$('.tarifa').val("02");
+	}else if(valor == 2){
+		$('.tarifa').val("03");
+	}else if(valor == 4){
+		$('.tarifa').val("04")
+	}else if(valor == 8){
+		$('.tarifa').val("07")
+	}else if(valor == 13){
+		$('.tarifa').val("08")
+	}
+}
 
 function comboTarifa(){
 	var select = $('.tarifa');
@@ -125,17 +156,21 @@ var selecciono = false;
 
 
 
-function __ListaArticulos(codigo){
-  
+function __ListaArticulos(){
+    var parametros = {
+    		codigo:$('.codigo').val(),
+    		descripcion:$('.descripcion').val(),
+    		tipo:$('.tipo').val(),
+    		cantidad:$('.cantidadLista').val()
+    }  
 
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticuloCabysAjax.do',
         datatype: "json",
         method:"POST",
-        data :{codigoArt:codigo},
+        data :parametros,
         success: function (result) {
             if(result.aaData.length > 0){
-               
             	__cargarTablaArticulos(result)
             }
         },
@@ -157,7 +192,7 @@ function __cargarTablaArticulos(data) {
             [5, 10, 15, 25, "All"]
         ],
         "language": idioma_espanol,
-        "sDom": 'lfrtip',
+        "sDom": 'lrtip',
         "order": [],
         "bPaginate": true,
         'responsive': true,
@@ -290,12 +325,12 @@ var informacion_tabla = [ {'data' :'id'             ,"name":"id" ,"bSortable" : 
                            return  __checkbox(row);
                            }
                            },
-                               {'data' :'categoria'               ,"name":"categoria"              ,"title" : "Categoria"        ,"autoWidth" :true,
-                               "render":function(categoria,type, row){
-                                     return categoria ==null?"Sin Cantegoria":row.categoria.descripcion;
+                               {'data' :'nomb_cate'               ,"name":"nomb_cate"              ,"title" : "Categoria"        ,"autoWidth" :true,
+                               "render":function(nomb_cate,type, row){
+                                     return nomb_cate ==null?"Sin Cantegoria":row.nomb_cate;
                                 }},
                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
-                               {'data' :'codigoCabys'                  ,"name":"codigoCabys"                 ,"title" : "Cabys"           ,"autoWidth" :true },
+                               {'data' :'cod_cabys'                  ,"name":"cod_cabys"                 ,"title" : "Cabys"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
                                {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
                                {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false,
@@ -309,7 +344,7 @@ check de cuentas por cobrar
 function __checkbox(row){
    var idCheck = 'check-'+row.id ;
    var checked = " ";
-   var inputcheck = '<div ><input type="checkbox" id="'+idCheck+'"  "  '+checked+'></div>'
+   var inputcheck = '<div ><input class = "checkFormato" type="checkbox" id="'+idCheck+'"  "  '+checked+'></div>'
    return  inputcheck ;
 } 
 

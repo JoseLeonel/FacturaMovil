@@ -44,12 +44,12 @@
 				<table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:6%;"><div class="tituloFormat">Codigo Proveedor </div></th>
-							<th style="width:6%;"><div class="tituloFormat">Codigo Inventario </div></th>
-                            <th style="width:22%;"><div class="tituloFormat">Descripcion </div></th>
+                            <th style="width:6%;"><div class="tituloFormat">Cod.Proveedor </div></th>
+							<th style="width:3%;"><div class="tituloFormat">Cod.Inventario </div></th>
+                            <th style="width:30%;"><div class="tituloFormat">Descripcion </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cant </div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Costo/成本 </div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Ganancia/獲得</div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Costo</div></th>
+                            <th style="width:10%;"><div class="tituloFormat">Ganancia</div></th>
                             <th style="width:10%;"><div class="tituloFormat">Precio </div></th>
                             <th style="width:10%;"><div class="tituloFormat">IVA Compra </div></th>
                             <th style="width:10%;"><div class="tituloFormat">IVA Inventario </div></th>
@@ -74,10 +74,10 @@
                                 <span>{costo_prove}</span>
                             </td>
                             <td class="text-right" style="width:10%;">
-                                <input  onkeyup={__actualizarGananciaKeyPress} onBlur={__actualizarGananciaBlur} class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
+                                <input  onkeyup={__actualizarGananciaKeyPress}  class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:10%;">
-                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur}  class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
+                                <input  onkeyup={__actualizarPrecioKeyPress}   class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:10%;">
                                 <span>{impuesto}</span>

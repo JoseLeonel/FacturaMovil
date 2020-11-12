@@ -280,7 +280,7 @@ Listado  -->
             width:100%;
         }
         body {
-            overflow: hidden;
+         
             background:white;
             font-size: 12px !important;
         }

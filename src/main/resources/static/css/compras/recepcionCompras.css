@@ -30,6 +30,13 @@ style type ="text/css">
 .botonAceptar {
 	margin-top: 24px;
 }
-</
-style
->
+.formatocheck{
+	width: 30px;
+    height: 30px;
+}
+.formatocheckFiltroListado{
+	width: 24px;
+    height: 24px;	
+}
+
+</style>

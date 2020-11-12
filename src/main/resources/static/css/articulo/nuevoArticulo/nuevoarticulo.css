@@ -110,7 +110,7 @@
         width:100%;
     }
     body {
-        overflow: hidden;
+/*         overflow: hidden; */
         background:white;
         font-size: 12px !important;
     }

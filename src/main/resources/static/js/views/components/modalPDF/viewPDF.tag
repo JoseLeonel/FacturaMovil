@@ -40,6 +40,7 @@
     width: 60% !important;
 }
 
+
 </style>
 <script>
 var selfView = this;
@@ -50,6 +51,7 @@ selfView.on('mount',function(){
        mostarModal()
     }
 })
+
 
 deleteModalViewPDF(){
    // $( '#mostrarPDF' ).remove();
@@ -73,7 +75,12 @@ function mostarModal(){
     selfView.stylemodal = 	selfView.datos.stylemodal
     selfView.update()	
 	$('#loadPdf').attr("src", href );	
-	$("#mostrarPDFVIEW").modal("show");
+    $("#mostrarPDFVIEW").modal("show");
+   
+     
+	
 }
+
+
 </script>
 </view-pdf>

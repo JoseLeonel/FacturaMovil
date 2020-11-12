@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,10 @@ import com.emprendesoftcr.Dao.CabysDao;
 import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.web.command.CabysHaciendaCommand;
+import com.emprendesoftcr.web.command.ListCabysCodigo;
 import com.emprendesoftcr.web.command.ListCabysHacienda;
+import com.google.gson.Gson;
 
 /**
  * categorias se va dividir los articulos de una empresa CategoriaBoImpl.
@@ -68,17 +72,51 @@ public class CabysBoImpl implements CabysBo {
 	}
 	
 	@Override
-	public ListCabysHacienda obtieneListaCabysHacienda(String descripcion, Integer cantidad) {
+	public ListCabysHacienda obtieneListaCabysHacienda(String descripcion,String codigo, Integer cantidad) {
 	ListCabysHacienda lista = new ListCabysHacienda();
-
+	List<CabysHaciendaCommand> listaCodigos = new  ArrayList<CabysHaciendaCommand>();
 		try {
-			cantidad = cantidad != null ? cantidad:Constantes.ZEROS; 
-				String url = cantidad.equals(Constantes.ZEROS)  ? Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion : Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion + "&top="+cantidad;
-
+			descripcion = descripcion == null?Constantes.EMPTY : descripcion;
+			codigo = codigo == null? Constantes.EMPTY:codigo;
+			Boolean aplicarURLPorDescripcion = Boolean.FALSE;
+			if(!descripcion.equals(Constantes.EMPTY)) {
+				aplicarURLPorDescripcion = Boolean.TRUE;
+			}
+			String url = Constantes.EMPTY;
+			cantidad = cantidad != null ? cantidad:Constantes.ZEROS;
+			if(aplicarURLPorDescripcion) {
+				 url = cantidad.equals(Constantes.ZEROS)  ? Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion : Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion + "&top="+cantidad;
+			}else {
+				 url = cantidad.equals(Constantes.ZEROS)  ? Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo : Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo + "&top="+cantidad;
+			}
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
 			// make an HTTP GET request
-			lista = restTemplate.getForObject(url, ListCabysHacienda.class);
+			Object[] forNow;
+			if(aplicarURLPorDescripcion) {
+				lista = restTemplate.getForObject(url, ListCabysHacienda.class);	
+			}else {
+				Gson gson = new Gson();
+				forNow = restTemplate.getForObject(url, Object[].class);
+				Double total = 0d;
+				for (int i = 0; i < forNow.length; i++) {
+					Object object = forNow[i];
+					String JSON = gson.toJson(object);
+					total ++;
+					
+					CabysHaciendaCommand listCabysCodigo = gson.fromJson(JSON, CabysHaciendaCommand.class);
+					listaCodigos.add(listCabysCodigo);
+					
+				}
+				lista.setCabys(listaCodigos);
+				lista.setTotal(total);
+				
+			
+				
+				
+			//	listaPorCodigo = restTemplate.getForObject(url, ListCabysCodigo[].class);
+			}
+			
 			System.out.println(lista.toString());
 
 		} catch (Exception e) {

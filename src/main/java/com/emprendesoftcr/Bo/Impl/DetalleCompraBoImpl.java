@@ -337,9 +337,9 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 				"       d.costo as costo_prove,art.costo as costo_inv, \n" + 
 				"       art.ganancia_precio_publico as ganancia,\n" + 
 				"       art.precio_publico, art.cod_tarifa,\n" + 
-				"       art.impuesto  as imp_art FROM pruebas.detalles_compras d\n" + 
+				"       art.impuesto  as imp_art FROM detalles_compras d\n" + 
 				"inner join compras c on c.id = d.compra_id\n" + 
-				"inner join recepcion_factura re on re.factura_consecutivo = c.consecutivo\n" + 
+				"inner join recepcion_factura re on re.clave = c.clave\n" + 
 				"inner join recepcion_factura_detalle reDe on reDe.recepcion_factura_id = re.id\n" + 
 				"left join articulos art on art.id = d.articulo_id\n" + 
 				"left join proveedor_articulo part on part.codigo = art.codigo"

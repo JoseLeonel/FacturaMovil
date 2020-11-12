@@ -7,15 +7,7 @@ public class DetalleCompraSinIngresaCommand {
   private String descripcion;
   private Double cantidad;
   
-	public Double getCantidad() {
-		return cantidad;
-	}
-
 	
-	public void setCantidad(Double cantidad) {
-		this.cantidad = cantidad;
-	}
-
 	private Double impuesto;
   private Integer estado;
   private String cod_invet;
@@ -24,10 +16,18 @@ public class DetalleCompraSinIngresaCommand {
   private Double costo_inv;
   private Double ganancia;
   private Double precio_publico;
-  private Double cod_tarifa;
+  private String cod_tarifa;
   private Double imp_art;
   
+  public Double getCantidad() {
+		return cantidad;
+	}
+
 	
+	public void setCantidad(Double cantidad) {
+		this.cantidad = cantidad;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -110,14 +110,20 @@ public class DetalleCompraSinIngresaCommand {
 		this.precio_publico = precio_publico;
 	}
 	
-	public Double getCod_tarifa() {
+
+	
+	
+	public String getCod_tarifa() {
 		return cod_tarifa;
 	}
+
+
 	
-	public void setCod_tarifa(Double cod_tarifa) {
+	public void setCod_tarifa(String cod_tarifa) {
 		this.cod_tarifa = cod_tarifa;
 	}
-	
+
+
 	public Double getImp_art() {
 		return imp_art;
 	}

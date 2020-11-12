@@ -2,24 +2,24 @@
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-cog"></i>Cabys  </h1>
+            <h1 ><i class="fa fa-cog"></i>Catalogo Cabys  </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
     
 <!-- Listado  -->
-<div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
+<div classs="contenedor " show={mostrarListado}  >
         <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " >
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >Codigo</th>
-                                <th class="table-header" >Descripcion</th>
-                                <th class="table-header" >Fecha Creacion</th>
-                                <th class="table-header" >Origen </th>
-                                <th class="table-header" >{$.i18n.prop("categoria.estado")}</th>
-                                <th class="table-header" >{$.i18n.prop("listado.acciones")}</th>
+                                <th class="table-header" style="width: 10%;">Codigo</th>
+                                <th class="table-header" style="width: 60%;">Descripcion</th>
+                                <th class="table-header" style="width: 10%;">Fecha Creacion</th>
+                                <th class="table-header" style="width: 10%;">Origen </th>
+                                <th class="table-header" style="width: 10%;">{$.i18n.prop("categoria.estado")}</th>
+                                <th class="table-header" style="width: 10%;">{$.i18n.prop("listado.acciones")}</th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
@@ -116,18 +116,22 @@
 </div>
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalHaciendaCabys' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-lg" style="display:flex!important;">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content" style="width:1395px;">
             <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central Costa Rica </h4>
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central de Costa Rica(cabys@hacienda.go.cr) </h4>
             </div>
             <div class="modal-body">
                     <div class= "container">  
                         <form id="formularioParametros" name ="formularioParametros" >
                             <div class="row">
-                                <div class= "col-md-8 col-sx-12 col-sm-8 col-lg-8">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                     <label  >Digite la descripcion del producto a buscar</label>
                                     <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                </div>
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <label  >Digite el codigo</label>
+                                    <input type="text" class="form-control codigoCabys "   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <label>cantidad</label>
@@ -141,29 +145,27 @@
                             </div> 
                         </form>    
                         <br>    
-                         <div class="row container">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                         <div class = "tablaDiseno">
                            
-                                <table id="tableListarHaciendaCabys" class="table table-hover  table-condensed tableListarHaciendaCabys " cellpadding="5" cellspacing="0" border="0" >
+                                <table id="tableListarHaciendaCabys" class="table table-hover  tableListarHaciendaCabys "  >
                                     <thead>
-                                        <th class="table-header"  >{$.i18n.prop("listado.acciones")}</th>
-                                        <th class="table-header"  >{$.i18n.prop("articulo.codigo")}</th>
-                                        <th class="table-header"  >{$.i18n.prop("articulo.descripcion")}</th>
-                                        <th class="table-header"  >Impuesto</th>
+                                        <th class="table-header colum1"  >{$.i18n.prop("listado.acciones")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.codigo")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.descripcion")}</th>
+                                        <th class="table-header colum2"  >Impuesto</th>
                                         
                                     </thead>
                                     <tfoot style="display: table-header-group;">
                                         <tr class="headt">
-                                            <th></th>
-                                            <th>{$.i18n.prop("articulo.codigo")}</th>
-                                            <th>{$.i18n.prop("articulo.descripcion")}</th>
+                                            <th class="colum1"></th>
+                                            <th class="colum2">{$.i18n.prop("articulo.codigo")}</th>
+                                            <th class="colum2">{$.i18n.prop("articulo.descripcion")}</th>
                                            
-                                            <th>Impuesto</th>
+                                            <th class="colum2">Impuesto</th>
                                             
                                         </tr>
                                     </tfoot>
                         </table>
-                        </div>
                     </div>    
                     </div>
             </div>        
@@ -203,12 +205,31 @@
 </div>
 <!--fin del modal-->
 <style type ="text/css">
-table { 
-        
-        table-layout:fixed!important;
-     } 
+table {
+    table-layout: unset!important;
+}
+.tablaDiseno{
+    position: relative;
+}
+.colum1{
+    width: 54px!important;
+    
+    }
+    .colum2{
+    width: 140px!important;
+    
+    }
+
+     .container {
+    display: flex!important;
+    width: 100%!important;
+    padding: 10px 0px 20px;
+    min-height: 350px;
+    flex-direction: column!important;
+    flex-wrap: nowrap!important;
+}
 .contenedor{
-    width: 900px!important;
+    display:flex;
 }
     #filtroBotonCabys{
         margin-top: 25px;
@@ -235,7 +256,7 @@ table {
             width:100%;
         }
         body {
-            overflow: hidden;
+           
             background:white;
             font-size: 12px !important;
         }
@@ -264,7 +285,7 @@ table {
             padding-top: 5px;
             padding-left: 10px;
             padding-right: 10px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             /* margin-right: 15px; */
             border: none;
@@ -310,6 +331,12 @@ table {
 	th, td {
 		white-space: break-spaces !important;;
 	}
+    .formCabys{
+        width: 100%;
+    height: 30px;
+    font-size: 16px;
+    font-weight: 800;
+    }
 
     </style>
 <script>
@@ -376,6 +403,10 @@ function __ComboCantidades(){
     self.cantidades =[]
     self.update()
     self.cantidades.push({
+        codigo: null,
+        descripcion: "Todos"
+     });
+    self.cantidades.push({
         codigo: 5,
         descripcion: 5
      });
@@ -387,10 +418,7 @@ function __ComboCantidades(){
         codigo: 20,
         descripcion: 20
      });
-    self.cantidades.push({
-        codigo: null,
-        descripcion: "Todos"
-     });
+    
 
 
 
@@ -757,7 +785,7 @@ function agregarInputsCombos(){
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-input"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="formCabys"  placeholder="'+title+'" />' );
 	    }
 
         // Select
@@ -798,7 +826,7 @@ __ConsultaCodigoCabys(e){
 
 
 function __ListaDeHaciendaCabys(){
-    if( $('#descArticulo').val() =='' ){
+    if( $('#descArticulo').val() =='' && $('#codigoCabys').val() =='' ){
         return
     }
     var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
@@ -807,7 +835,8 @@ function __ListaDeHaciendaCabys(){
     $(".tableListarArticulos").DataTable().destroy();
     var parametros = {
         descArticulo :$('#descArticulo').val(),
-        cantidad: cantidadTemp
+        cantidad: cantidadTemp,
+        codigo: $('#codigoCabys').val()
     };
 
     $.ajax({
@@ -864,6 +893,7 @@ function __cargarTablaCompras() {
     agregarInputsCombosCabys()
     ActivarEventoFiltro(".tableListarHaciendaCabys")
     __SeleccionarCabys()
+    
 
 }
 
@@ -879,13 +909,13 @@ function __InformacionDataTable_cabys(){
                                  }
 	      		            },
                                {'data' : 'codigo',"name":"codigo" ,"title" : "Codigo","autoWidth" :false},
-                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :true ,
+                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :false ,
                                 "render":function(descripcion,type, row){
                                       return __DescripcionCabys(descripcion,type,row);
                                  }
 
                                },
-                               {'data' :'impuesto',"name":"impuesto" ,"title" : "Impuesto","autoWidth" :true }, 
+                               {'data' :'impuesto',"name":"impuesto" ,"title" : "Impuesto","autoWidth" :false }, 
 ];
     self.update();
 /*                                   {'data' : 'categorias',"name":"categorias" ,"title" : "Origen del Articulo","bSortable" : false, "bSearchable" : false, "autoWidth" : true,

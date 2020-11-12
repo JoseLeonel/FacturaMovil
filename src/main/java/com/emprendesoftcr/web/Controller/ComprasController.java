@@ -246,7 +246,8 @@ public class ComprasController {
 					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
 
 					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI);
-					ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula());
+				
+					
 
 				}
 			}
@@ -659,6 +660,8 @@ public class ComprasController {
 				}
 
 				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, detallesCompra);
+				ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula());
+				
 			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);

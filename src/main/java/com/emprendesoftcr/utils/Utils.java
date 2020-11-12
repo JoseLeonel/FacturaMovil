@@ -2561,10 +2561,11 @@ public final class Utils {
 
 	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {
 		// 001 + 00004 + 01 + 0000003888
-		return consecutivo.substring(8, 10); // Se retorna 01
+		return consecutivo == null?"ne":consecutivo.substring(8, 10); // Se retorna 01
 	}
 
 	public static String obtenerDescripcionTipoDocumento(String tipoDocumento) {
+		tipoDocumento = tipoDocumento == null?Constantes.EMPTY:tipoDocumento;
 		String descripcion = " ";
 		switch (tipoDocumento) {
 			case Constantes.FACTURA_TIPO_DOC_TIQUETE:

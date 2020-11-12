@@ -519,15 +519,19 @@ function __BajarPDF() {
             var data = table.row($(this).parents("tr")).data();
         }
         var parametros = {
-            direccion: "generaFacturaPDF?idFactura=" + data.id,
-            stylemodal: "modal-xl"
-        }
+                direccion: "generaFacturaPDF?idFactura=" + data.id,
+                stylemodal: "modal-xl"
+            }
+            // var parametros = {
+            //         direccion: "GenerarTikect.do?idFactura=" + data.id,
+            //         stylemodal: "modal-xl"
+            //     }
         riot.mount('view-pdf', { datos: parametros });
 
         // location.href = "generaFacturaPDF?idFactura=" + data.id///
-      });        
-   }
- 
+    });
+}
+
 /**
  *  imprimir impresora punto de venta
  **/

@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -113,6 +113,7 @@ import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
+import com.emprendesoftcr.web.command.TikectImprimir;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.command.TotalbyImpuestosCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -125,6 +126,9 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
+
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JsonDataSource;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -361,7 +365,7 @@ public class FacturasController {
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
 
-	private Logger																						log =  LoggerFactory.getLogger(this.getClass());
+	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public DataSource																									dataSource;
@@ -413,21 +417,89 @@ public class FacturasController {
 		return "views/facturas/ventaDolares";
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GenerarTikect.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
+		List<TikectImprimir> lista = new ArrayList<>();
+		Factura factura = facturaBo.findById(idFactura);
+		Collection<Detalle> detalles = detalleBo.findbyIdFactura(idFactura);
+		for (Detalle detalle : detalles) {
+			TikectImprimir tikectImprimir = new TikectImprimir();
+			tikectImprimir.setId(detalle.getId());
+			tikectImprimir.setDescripcion(detalle.getDescripcion());
+			tikectImprimir.setCantidad(detalle.getCantidadSTR());
+			tikectImprimir.setPrecio(detalle.getPrecioUnitario().toString());
+			tikectImprimir.setTotal(detalle.getMontoTotalLineaSTR());
+			lista.add(tikectImprimir);
+
+		}
+		// jasper
+		Map<String, Object> parametros;
+		parametros = new HashMap<>();
+		Integer nofactura_elec = factura.getEmpresa().getNoFacturaElectronica() != null ? factura.getEmpresa().getNoFacturaElectronica() : Constantes.ZEROS;
+
+		parametros.put("P_documento_electronico", MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc()));
+		parametros.put("P_regimen", nofactura_elec.equals(Constantes.ZEROS) ? "Régimen Simplificado" : "Régimen Tradicional");
+		parametros.put("P_actividad", "Codigo Actividad : " + factura.getCodigoActividad());
+		parametros.put("P_comercial", factura.getEmpresa().getNombreComercial() == null ? Constantes.EMPTY : factura.getEmpresa().getNombreComercial());
+		parametros.put("P_nombre", factura.getEmpresa().getNombre());
+		parametros.put("P_cedula", factura.getEmpresa().getCedula() + " Telef:" + factura.getEmpresa().getTelefono());
+		parametros.put("P_otra_sena", factura.getEmpresa().getOtraSenas());
+		parametros.put("P_fecha_emision", "Fecha Emision:" + factura.getFechaEmisionSTR());
+		parametros.put("P_cond_venta", "Cond.venta: " + factura.getCondicionVentaSTR());
+		String medioPago = factura.getMedioEfectivo() != null && !factura.getMedioEfectivo().equals(Constantes.EMPTY) ? factura.getMedioEfectivo() : Constantes.EMPTY;
+		if (medioPago.equals(Constantes.EMPTY)) {
+			medioPago = factura.getMedioTarjeta() != null && !factura.getMedioTarjeta().equals(Constantes.EMPTY) ? factura.getMedioTarjeta() : Constantes.EMPTY;
+		}
+		if (medioPago.equals(Constantes.EMPTY)) {
+			medioPago = factura.getMedioBanco() != null && !factura.getMedioBanco().equals(Constantes.EMPTY) ? factura.getMedioBanco() : Constantes.EMPTY;
+		}
+		parametros.put("P_medio_pago", "Medio Pago: " + MapEnums.ENUM_MEDIO_PAGO.get(medioPago));
+		parametros.put("P_usuario", "Usuario: " + factura.getUsuarioCreacion().getNombreUsuario());
+		parametros.put("P_moneda", "Moneda: " + MapEnums.ENUM_MONEDA.get(factura.getCodigoMoneda()));
+		parametros.put("P_documento", "Documento: " + factura.getNumeroConsecutivo());
+		String clave1 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave(): Constantes.EMPTY;
+		String clave2 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave().substring(26, 50) : Constantes.EMPTY;
+		parametros.put("P_clave1", clave1);
+		parametros.put("P_nota", factura.getNota() != null && !factura.getNota().equals(Constantes.EMPTY)? factura.getNota():Constantes.EMPTY);
+		parametros.put("P_total_impuesto", factura.getTotalImpuestoSTR());
+		parametros.put("P_descuento", factura.getTotalDescuentoSTR());
+		parametros.put("P_total_general", factura.getTotalComprobanteSTR());
+		parametros.put("P_cambio", factura.getTipoCambioSTR());
+
+		InputStream reportfile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");
+		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
+		JsonDataSource ds = new JsonDataSource(jsonDataStream);
+		byte[] bytes = JasperRunManager.runReportToPdf(reportfile, parametros, ds);
+		if (bytes != null && bytes.length > 0) {
+			response.setContentType("application/pdf");
+			// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+			ServletOutputStream outputstream = response.getOutputStream();
+			outputstream.write(bytes, 0, bytes.length);
+			outputstream.flush();
+			outputstream.close();
+
+		} else {
+			System.out.println("NO trae nada");
+		}
+
+	}
+
 	/**
 	 * Ventas por Mini super
 	 * @param model
 	 * @return
 	 */
 //
-	@Autowired
-	private CertificadoBo certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -512,7 +584,7 @@ public class FacturasController {
 	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
 
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-	
+
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
@@ -525,7 +597,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) throws IOException {
+	public RespuestaServiceValidator<?> envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) throws IOException {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator<Object>();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -538,12 +610,11 @@ public class FacturasController {
 				}
 			}
 			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
-			
 
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicio);
 			String fin1 = dateFormat1.format(fechaFinalP);
-			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado,  usuario.getEmpresa().getId(),actividadEconomica );
+			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado, usuario.getEmpresa().getId(), actividadEconomica);
 
 			@SuppressWarnings("rawtypes")
 			ArrayList arrayList = new ArrayList();
@@ -558,10 +629,9 @@ public class FacturasController {
 				}
 			}
 
-						// Se prepara el excell
+			// Se prepara el excell
 			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detallesFacturaCommand, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
 			Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-
 
 			// Se prepara el correo
 			String from = "factura@facturaemprendesoftcr.com";
@@ -571,7 +641,7 @@ public class FacturasController {
 //				}
 //			}
 			String nombre = usuario.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuario.getEmpresa().getNombre() : usuario.getEmpresa().getNombreComercial();
-			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			nombre = nombre.length() > 50 ? nombre.substring(0, 50) : nombre;
 			String subject = nombre + " Facturas Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();
@@ -636,17 +706,17 @@ public class FacturasController {
 				log.error("** Error  Enviado correo: " + " fecha " + new Date());
 				System.out.println("No enviado correctamente el correo");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
-				
+
 			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
-			respuestaServiceValidator.setStatus(HttpStatus.OK.value());			
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 
 		return respuestaServiceValidator;
-		
+
 	}
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
@@ -680,7 +750,6 @@ public class FacturasController {
 		}
 	}
 
-
 	@RequestMapping(value = "/DescargarPorDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
 	public void descargarPorDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException, Exception {
 
@@ -688,7 +757,7 @@ public class FacturasController {
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		
+
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
@@ -713,8 +782,8 @@ public class FacturasController {
 		}
 	}
 
-	/**i
-	 * Enviar coreo de la consulta listar factura
+	/**
+	 * i Enviar coreo de la consulta listar factura
 	 * @param request
 	 * @param response
 	 * @param correoAlternativo
@@ -744,7 +813,7 @@ public class FacturasController {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			byte[] bytes  =  namePDF.toByteArray();
+			byte[] bytes = namePDF.toByteArray();
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
 				ServletOutputStream outputstream = response.getOutputStream();
@@ -783,7 +852,7 @@ public class FacturasController {
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-			byte[] bytes  =  namePDF.toByteArray();
+			byte[] bytes = namePDF.toByteArray();
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
 				ServletOutputStream outputstream = response.getOutputStream();
@@ -794,7 +863,6 @@ public class FacturasController {
 			} else {
 				System.out.println("NO trae nada");
 			}
-			
 
 		} catch (DocumentException e) {
 			e.printStackTrace();
@@ -923,14 +991,14 @@ public class FacturasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
-		
+
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
-		
+
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
@@ -998,8 +1066,8 @@ public class FacturasController {
 		return respuestaService;
 	}
 
-	/**EnvioUtilidadXCCorreoAjax
-	 * Utilidad de ventas
+	/**
+	 * EnvioUtilidadXCCorreoAjax Utilidad de ventas
 	 * @param request
 	 * @param response
 	 * @param fechaInicioParam
@@ -1014,7 +1082,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListaUtilidadAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura,@RequestParam Integer idUsuario) {
+	public RespuestaServiceDataTable listarUtilidadAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String numeroFactura, @RequestParam Integer idUsuario) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		idCategoria = idCategoria == null ? Constantes.ZEROS : idCategoria;
@@ -1029,7 +1097,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura, idUsuario);
 
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaUtilidadNative consultaUtilidadNative : facturas) {
@@ -1065,7 +1133,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
+		Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura, idUsuario);
 
 		String nombreArchivo = "Utilidad_" + fechaInicioParam + "_al_" + fechaFinParam + ".xls";
 		response.setContentType("application/octet-stream");
@@ -1087,7 +1155,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnvioUtilidadXCCorreoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response, BindingResult result,ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura, @RequestParam Integer idUsuario) throws IOException, Exception {
+	public RespuestaServiceValidator envioUtilidadXCorreoAjax(HttpServletRequest request, HttpServletResponse response, BindingResult result, ModelMap model, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica, @RequestParam Long idCliente, @RequestParam Integer idCategoria, @RequestParam String codigo, @RequestParam String tipoDoc, @RequestParam String correoAlternativo, @RequestParam String totalVenta, @RequestParam String totalCosto, @RequestParam String totalUtilidad, @RequestParam String numeroFactura, @RequestParam Integer idUsuario) throws IOException, Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 
 		try {
@@ -1107,7 +1175,7 @@ public class FacturasController {
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicioP);
 			String fin1 = dateFormat1.format(fechaFinalP);
-			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura,idUsuario);
+			Collection<ConsultaUtilidadNative> facturas = consultasNativeBo.findByUtilidad(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria, codigo, tipoDoc, numeroFactura, idUsuario);
 
 			// Se prepara el excell
 			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelUtilidad(facturas, usuarioSesion.getEmpresa(), fechaInicioParam, fechaFinParam));
@@ -1122,8 +1190,8 @@ public class FacturasController {
 //				}
 //			}
 			String nombre = usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuarioSesion.getEmpresa().getNombre() : usuarioSesion.getEmpresa().getNombreComercial();
-			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
-			
+			nombre = nombre.length() > 50 ? nombre.substring(0, 50) : nombre;
+
 			String subject = nombre + " Utilidad Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 			ArrayList<String> listaCorreos = new ArrayList<>();
 			listaCorreos.add(correoAlternativo);
@@ -1404,7 +1472,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/envioCorreoListarFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> envioCorreoListarFacturasAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam String correoAlternativo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) throws IOException {
+	public RespuestaServiceValidator<?> envioCorreoListarFacturasAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String correoAlternativo, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado, Integer idUsuario) throws IOException {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator<Object>();
 		try {
 			Cliente cliente = clienteBo.buscar(idCliente);
@@ -1434,7 +1502,7 @@ public class FacturasController {
 //				}
 //			}
 			String nombre = usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuarioSesion.getEmpresa().getNombre() : usuarioSesion.getEmpresa().getNombreComercial();
-			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			nombre = nombre.length() > 50 ? nombre.substring(0, 50) : nombre;
 			String subject = nombre + " Facturas Rango de fechas: " + fechaInicio + " al " + fechaFin;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();
@@ -1500,7 +1568,7 @@ public class FacturasController {
 			modelEmail.put("totalOtrosCargos_n", Utils.formateadorMiles(totalOtrosCargos_n));
 			modelEmail.put("total_n", Utils.formateadorMiles(total_n));
 
-			Boolean resultado =  correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_LISTAR_FACTURAS, modelEmail);
+			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_LISTAR_FACTURAS, modelEmail);
 			if (resultado.equals(Boolean.TRUE)) {
 				log.info("Enviado correctamente el correo {}", new Date());
 				System.out.println("Enviado correctamente el correo");
@@ -1516,7 +1584,6 @@ public class FacturasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 
-		
 		return respuestaServiceValidator;
 	}
 
@@ -1589,7 +1656,6 @@ public class FacturasController {
 	 * @return
 	 */
 
-	
 	/**
 	 * Facturas sin notas de creditos de anulacion completa
 	 * @param request
@@ -1615,7 +1681,7 @@ public class FacturasController {
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-		
+
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Collection<ConsultaIVANative> objetos = consultasNativeBo.findByEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
 		List<Object> solicitudList = new ArrayList<Object>();
@@ -1958,8 +2024,8 @@ public class FacturasController {
 						}
 					}
 					if (facturaCommand.getCliente() != null) {
-						Double limite  = facturaCommand.getCliente().getLimiteCredito() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getCliente().getLimiteCredito();
-						if(limite > Constantes.ZEROS_DOUBLE) {
+						Double limite = facturaCommand.getCliente().getLimiteCredito() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getCliente().getLimiteCredito();
+						if (limite > Constantes.ZEROS_DOUBLE) {
 							// validar si tiene disponible
 							Double saldo = cuentaCobrarBo.getDisponible(usuario.getEmpresa().getId(), facturaCommand.getCliente());
 							saldo = saldo == null ? Constantes.ZEROS_DOUBLE : saldo;
@@ -1967,7 +2033,7 @@ public class FacturasController {
 							if (comprobante > saldo) {
 								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.sinlimiteCredito", result.getAllErrors());
 							}
-							
+
 						}
 					}
 				}
@@ -2331,7 +2397,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoProformaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam Long idFactura, @RequestParam String correo) {
+	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam Long idFactura, @RequestParam String correo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2412,7 +2478,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoAlternativoFactura(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
+	public RespuestaServiceValidator enviarCorreoAlternativoFactura(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2480,7 +2546,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoClienteAsociadosFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoClienteAsociadosFacturaAjax(HttpServletRequest request, HttpServletResponse response,ModelMap model, @ModelAttribute String datos,BindingResult result, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam(value = "correo", required = false) String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
+	public RespuestaServiceValidator enviarCorreoClienteAsociadosFacturaAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "idFactura", required = false) Long idFactura, @RequestParam(value = "correo", required = false) String correo, @RequestParam(value = "consecutivo", required = false) String consecutivo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2565,7 +2631,7 @@ public class FacturasController {
 				resultado = procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			} else {
-				resultado =procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
+				resultado = procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
 			}
 			//
 			if (resultado.equals(Boolean.TRUE)) {

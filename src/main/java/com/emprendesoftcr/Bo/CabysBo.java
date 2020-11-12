@@ -20,7 +20,7 @@ public interface CabysBo {
 	
 	Collection<Cabys> findByEmpresaAll(Integer idEmpresa);
 	
-	ListCabysHacienda  obtieneListaCabysHacienda(String descripcion, Integer cantidad);
+	ListCabysHacienda  obtieneListaCabysHacienda(String descripcion,String codigo, Integer cantidad);
 	
 	Cabys findByCodigo(String codigo, Empresa empresa);
 

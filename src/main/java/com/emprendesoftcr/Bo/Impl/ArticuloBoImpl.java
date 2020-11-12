@@ -2,10 +2,17 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +22,7 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 /**
@@ -31,7 +39,11 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 	@Autowired
 	ArticuloDao			articuloDao;
-
+	@Autowired
+  public DataSource dataSource;
+	
+  private JdbcTemplate jdbcTemplate;
+  
 	@Transactional
 	public void agregar(Articulo articulo) {
 
@@ -141,6 +153,52 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return articuloDao.articulosByCategoriaAndEmpresa(idEmpresa, idCategoria);
 	}
 	
+	
+	@Override
+	public List<Map<String, Object>>  articulosByCabys(String descripcion ,String codigo,Integer tipo,Integer idEmpresa,Integer cantidad){
+		jdbcTemplate = new JdbcTemplate(dataSource);
+    String sql = "SELECT a.id,c.descripcion nomb_cate,a.codigo,a.cod_cabys,a.descripcion,a.impuesto,a.estado FROM articulos a\n" + 
+    		"              inner join categorias c on c.id = a.categoria_id\n" + 
+    		"              where a.empresa_id = :idEmpresa and a.descripcion like and a.codigo like and a.cod_cabys = '' "
+    		+ " limit cantidad";
+    
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("idEmpresa", idEmpresa);
+    descripcion = descripcion == null ? Constantes.EMPTY:descripcion;
+    tipo = tipo == null?Constantes.ZEROS:tipo;
+    codigo = codigo == null? Constantes.EMPTY:codigo;
+  	if ( descripcion.equals(Constantes.EMPTY)) {
+  		sql = sql.replaceAll(" and a.descripcion like", "");
+		} else {
+			sql = sql.replaceAll(" and a.descripcion like", " and a.descripcion like '%" +descripcion +  "%'");
+		}
+  	if (codigo.equals(Constantes.EMPTY)) {
+  		sql = sql.replaceAll(" and a.codigo like", "");
+		} else {
+			sql = sql.replaceAll(" and a.codigo like", " and a.codigo like '%" +codigo +  "%'");
+		}
+  	if(tipo.equals(1)) {
+  		sql = sql.replaceAll(" and a.cod_cabys = ''", " and a.cod_cabys =''");
+  	}
+  	if(tipo.equals(2)) {
+  		sql = sql.replaceAll(" and a.cod_cabys = ''", " and a.cod_cabys !=''");
+  	}
+  	if(tipo.equals(0)) {
+  		sql = sql.replaceAll(" and a.cod_cabys = ''", "");
+  	}
+  	cantidad = cantidad == null?Constantes.ZEROS:cantidad;
+  	if(cantidad.equals(Constantes.ZEROS)) {
+  		sql = sql.replaceAll(" limit cantidad", "");
+  	}else {
+  		sql = sql.replaceAll(" limit cantidad", " limit " + cantidad);
+  	}
+  	
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		
+		return listaObjetos;
+	}
+
 	
 	
 	

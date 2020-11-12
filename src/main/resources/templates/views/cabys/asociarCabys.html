@@ -26,11 +26,11 @@
 		width: 100%;
 	}
 	
-	body {
-		overflow: hidden!important;
-		background: white!important;
-		font-size: 12px !important;
-	}
+/* 	body { */
+/* 		overflow: hidden!important; */
+/* 		background: white!important; */
+/* 		font-size: 12px !important; */
+/* 	} */
 	
 	.contenedor-listar {
 		width: 100%;
@@ -62,9 +62,143 @@
 	
 	.scroller {
 		width: 200px;
-		height: 600px;
+		height: 350px;
 		overflow-y: scroll;
 	}
+	.btn-consulta {
+	    background-color: #4cae4c;
+	    color: #FFF;
+	    border-radius: 5px;
+	    padding-bottom: 10px;
+	    padding-top: 5px;
+	    padding-left: 8px;
+	    padding-right: 8px;
+	    font-size: 14px;
+	    font-weight: bold;
+	    border: none;
+	    float: right;
+	     margin-top: 20px;
+	    cursor: pointer;
+	}
+	.tituloFiltro{
+		font-size: 14px;
+    	font-weight: 500;
+    }
+    .titulo{
+    	padding-bottom: 5px;
+    }
+    .checkFormato{
+    	width: 25px;
+    	height: 25px;
+    }
+    .panelControl {
+    padding-top: 8px;
+    position: relative;
+    border-radius: 3px;
+    background:#3c8dbc;
+    border-top: 3px solid #d2d6de;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    padding-bottom: 8px;
+    margin-left: 3px;
+    margin-right: 3px;
+	}
+	.titulosLabel{
+		display: inline-block;
+    	max-width: 100%;
+    	margin-bottom: 5px;
+    	font-weight: bold;
+    	color: white;
+    	font-size: 14px;
+	}
+	
+	.titulosLabel1{
+		display: inline-block;
+    	max-width: 100%;
+    	margin-bottom: 5px;
+    	font-weight: bold;
+    	color: black;
+    	font-size: 14px;
+	}
+	.impuestoTitulo{
+		font-size: 38px;
+    	text-align: center;
+    	font-weight: 800;
+    	    color: #cc2121;
+	}
+	.tituloCombos{
+	font-size: 17px;
+    font-weight: 800;
+        color: black;
+	}
+
+/* ----------- Non-Retina Screens ----------- */
+@media screen 
+  and (min-device-width: 1200px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+  .titulosLabel{
+    font-size: 12px;
+  }
+    .tituloCombos{
+    font-size: 12px;
+  }
+  .titulosLabel1{
+		display: inline-block;
+    	max-width: 100%;
+    	margin-bottom: 5px;
+    	font-weight: bold;
+    	color: black;
+    	font-size: 14px;
+	}
+  
+}
+
+/* ----------- Retina Screens ----------- */
+@media screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (min-resolution: 100dpi) {
+  .titulosLabel{
+    font-size: 12px;
+  }
+    .tituloCombos{
+    font-size: 12px;
+  }
+  .titulosLabel1{
+		display: inline-block;
+    	max-width: 100%;
+    	margin-bottom: 5px;
+    	font-weight: bold;
+    	color: black;
+    	font-size: 14px;
+	}
+}
+
+/* ----------- Retina Screens ----------- */
+@media screen 
+  and (min-device-width: 1200px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (min-resolution: 192dpi) {
+  .titulosLabel{
+    font-size: 12px;
+  }
+    .tituloCombos{
+    font-size: 12px;
+  }
+  .titulosLabel1{
+		display: inline-block;
+    	max-width: 100%;
+    	margin-bottom: 5px;
+    	font-weight: bold;
+    	color: black;
+    	font-size: 14px;
+	}
+}
+
 </style>
 </head>
 <body class="hold-transition skin-blue  sidebar-mini">
@@ -85,9 +219,9 @@
 	        	<div id="mostrarListado" class="mostrarListado" >	 
 				    <div  class="row titulo-encabezado "  >
 				        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-				            <h1><i class="fa fa-cog"></i> Asociar cabys con el Articulo  </h1>
+				            <h1><i class="fa fa-cog"></i> Categorizar articulos con codigo cabys.  </h1>
 				        </div>
-				        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
+				       
 				    </div>
 				    <!-- Listado  -->
 				       <form id = "filtros" name ="filtros" >
@@ -95,35 +229,83 @@
 					        <input type="hidden" name="tipoIVAParametros" id="tipoIVAParametros" >
 					        <input type="hidden" name="tarifaParametros" id="tarifaParametros" >
 					        <input type="hidden" name="impuestoParametros" id="impuestoParametros" >
-							  <div class= "row">
+					       
+<!-- 					        	<div class= "row"> -->
+<!-- 					        		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"> -->
+
+<!-- 					        		</div> -->
+<!-- 					        	</div> -->
+
+					            	
+							  <div class= "row panelControl ">
 					               	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 					                     <div class="form-group">
-					                         <label th:text="#{titulo.cabys.cambio}"> </label>  
+					                         <label class="titulosLabel" th:text="#{titulo.cabys.cambio}"> </label>  
 					                         <select  class="form-control caBys" id="caBys" name="caBys" data-live-search="true" >
-					                             
 					                         </select>
 					                     </div>
 					                     <button type="button" class="btn btn-warning btncabysAsociar " title ="Aplicar asociar el cabys a los articulos" name="button" th:text="#{aplicar.cabys.nueva}" ><i class="fa fa-pencil-square-o" ></i></button>  
 					                 </div>
 					                  <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-					                  	<label th:text="#{titulo.cabys.impuesto.sugerido}"> </label>
-					                 	 <input type="text" class="form-control impuestoCabys" id="impuestoCabys" name="impuestoCabys" placeholder="Impuesto Cabys" readonly>
+					                  	<label class="titulosLabel" th:text="#{titulo.cabys.impuesto.sugerido}"> </label>
+					                 	 <input type="text" class="form-control impuestoCabys impuestoTitulo" id="impuestoCabys" name="impuestoCabys" placeholder="Impuesto Cabys" readonly>
 					                 </div>
 
 					                 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-					                  	<label th:text="#{titulo.cabys.tipoImpuesto}"> </label>
-					                 	 <select  class="form-control tipoIVA" id="tipoIVA" name="tipoIVA" data-live-search="true" ></select>
+					                  	<label class="titulosLabel" th:text="#{titulo.cabys.tipoImpuesto}"> </label>
+					                 	 <select  class="form-control tituloCombos tipoIVA" id="tipoIVA" name="tipoIVA" data-live-search="true" ></select>
 					                 </div>
 					                 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-					                  	<label th:text="#{titulo.cabys.tarifa}"> </label>
-					                 	 <select  class="form-control tarifa" id="tarifa" name="tarifa" data-live-search="true" >
-					                 	 	
+					                  	<label class="titulosLabel" th:text="#{titulo.cabys.tarifa}"> </label>
+					                 	 <select  class="form-control tituloCombos tarifa" id="tarifa" name="tarifa" data-live-search="true" >
 					                 	 </select>
 					                 </div>
-
 					          </div>    
 					          <br>     
 				        </form>
+				        <div class="box">
+				            <div class="row">
+					          <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 titulo " >
+					          		<span class = "tituloFiltro">Filtros para el listado del inventario.</span>
+					          </div>
+					        </div> 
+					        <div class="row titulo">
+					        	<div class="col-md-2 col-sx-2 col-sm-2 col-lg-2 " >
+	    		                      <label class="titulosLabel1" >Cantidad a Consultar </label>  
+				                      <select  class="form-control cantidadLista" id="cantidadLista" name="cantidadLista"  >
+				                         <option  value="200"  >200</option>
+				                         <option  value="300"  >300</option>
+				                         <option  value="400"  >400</option>
+				                         <option  value="500"  >500</option>
+				                         <option  value="1000"  >1000</option>
+				                         <option  value="2000"  >2000</option>
+				                         <option  value="3000"  >3000</option>
+				                         <option  value="0"  >Todos</option>
+				                      </select>				        	
+					        	</div>
+					        	<div class="col-md-2 col-sx-2 col-sm-2 col-lg-2 " >
+	    		                      <label class="titulosLabel1" th:text="#{titulo.cabys.tipo}"> </label>  
+				                      <select  class="form-control tipo" id="tipo" name="tipo"  >
+				                	     <option  value="1"  >Sin Cabys</option>
+				                         <option  value="2"  >Con Cabys</option>
+				                         <option  value="0"  >Todos</option>
+				                      </select>				        	
+					        	</div>
+					        	<div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 " >
+					   		       <label class="titulosLabel1">Digete el Codigo</label>
+							       <input type="text" class="form-control codigo" id="codigo" name="codigo" placeholder="XXXXXXXXXXXXXXXXXXXXXXX" autofocus="autofocus"   autocomplete="off">
+					        	</div>
+					        	<div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 " >
+					   		       <label class="titulosLabel1"> Digete la descripcion</label>
+							       <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" placeholder="XXXXXXXXXXXXXXXXXXXXXXX" autocomplete="off">
+							       
+					        	</div>
+					        	<div class="col-md-2 col-sx-2 col-sm-2 col-lg-2 " >
+					        		<button  class=" btn-consulta pull-left buscar" > buscar </button>
+					        	</div>
+
+					        </div>	
+				      
   			            <div class="row">
 				          <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
 				                 <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"  >
@@ -134,9 +316,7 @@
 				                                <th class="table-header" style ="width:5%" >Codigo   </th>
 				                                <th class="table-header" style ="width:5%" >Codigo Cabys  </th>
 				                                <th style="width:35%"  class="table-header" >Descripcion</th>
-				                                
 				                                <th style="width:7%"  class="table-header" >Impuesto</th>
-				                                
 				                                <th style="width:8%"  class="table-header" >Estado</th>
 				                            </tr>
 				                        </thead>
@@ -147,17 +327,15 @@
 				                                <th>Codigo</th>
 				                                <th>Codigo Cabys</th>
 				                                <th style="width:35%"  >Descripcion</th>
-				                                
 				                                <th style="width:7%" >Impuesto        </th>
-				                                
-				                                
-				                                
 				                                <th style="width:8%" >Estado          </th>
 				                            </tr>
 				                        </tfoot>
 				                 </table>
 				          </div>
 			            </div>    
+			            </div>
+			             
 				 </div>
             </section>    
  		</div>
@@ -167,7 +345,7 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/cabys/asociarCabys.js}"></script>
+<script type="text/javascript" th:src="@{/js/views/cabys/asociarCabys.js?v=5}"></script>
 
 </body>
 </html>

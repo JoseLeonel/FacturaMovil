@@ -110,11 +110,11 @@ public class CabysController {
 	@Cacheable(value = "cabysCache")
 	@RequestMapping(value = "/ListarCabysDeHaciendaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "descArticulo", required = false) String descArticulo,@RequestParam(value = "cantidad", required = false) Integer cantidad) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "descArticulo", required = false) String descArticulo,@RequestParam(value = "codigo", required = false) String codigo,@RequestParam(value = "cantidad", required = false) Integer cantidad) {
     cantidad = cantidad != null? cantidad:null;
     cantidad = cantidad != null && cantidad > Constantes.ZEROS? cantidad:null;
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		ListCabysHacienda objetos =  cabysBo.obtieneListaCabysHacienda(descArticulo, cantidad);
+		ListCabysHacienda objetos =  cabysBo.obtieneListaCabysHacienda(descArticulo,codigo, cantidad);
 		List<Object> solicitudList = new ArrayList<Object>();
 	  solicitudList.add(objetos);
     Long total = Constantes.ZEROS_LONG;

@@ -6,8 +6,7 @@
 					<div class="box">
 						<div class="box-body">
 							<div class="planel-body">
- 
-							  	<div class="row">
+ 							  	<div class="row">
                         			<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                             			<label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                         			</div>
@@ -35,7 +34,7 @@
 									<div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
 										<label class="pull-left"> Marcar Todos <span class="requeridoDato">*</span></label>
 										
-										<input type="checkbox" id = "marcarDatos" name = "marcarDatos" onclick={_marcarTodos} >
+										<input type="checkbox" id = "marcarDatos" class= "formatocheck" name = "marcarDatos" onclick={_marcarTodos} >
 									</div>
 
 								</div>
@@ -64,11 +63,8 @@
 											<a class="pull-left" href="#"    onclick = {__MostrarGuia} title="Guia para aceptar compra de un proveedor"> <span style="color:red;font-weight:bold"><u>Guia de aceptacion de compras</u></span></a><br>
 											<div show="{verAyuda ==true}">
 											<h1>Como aceptar la compra electronica: </h1>
-											<p>1. Le llegara un correo electronico con tres archivos.</p>
-											<p>2. Descargue el documento cuyo nombre es "XML".</p>
-											<p>3. Verificar el xml de respuesta se encuentre Aceptado por hacienda </p>
-											<p>3. Clic Seleccionar XML de Factura </p>
-											<p>4. Si todo esta bien presionar aceptar compra </p>
+											<p>1. Marque las facturas que desea aceptar.</p>
+											<p>2. Presionar el boton aplicar".</p>
 											</div> 
 										</section> 
                             		</div>
@@ -226,7 +222,7 @@
 				condicionImpuesto:"01",			
 			}
 			self.xmlDoc = null
-		
+		self.comprasIngresadas = {dataFactura:[]}
 		//Se cargan al montar el tag
 		self.on('mount',function(){
 			__InformacionDataTableCuentas(); 
@@ -236,7 +232,6 @@
 			__ListaActividadesComercales();
 			__listadoCondicionImpuesto()
 			__MostrarPDF()
-			__MostrarAceptarManual()
 		    
 		});
 
@@ -257,9 +252,37 @@ function __listadoCondicionImpuesto(){
 aplicar compras
 **/
 __AplicarCompras(){
+    var isAplicar = false;
+ 	for (var count = 0; count < self.compras.aaData.length; count++) {
+        if (self.compras.aaData[count].estado == 'C' ){// Si existe actualiza  estado enviado
+            isAplicar = true;
+			break;
+        }
+    }
+
 
 	//mover a un vector las compras marcadas en el listado 
-	enviarComprasCallback()
+	if(isAplicar){
+		 swal({
+           title: '',
+           text: "Aceptar las compras / 接受購買",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            if(isConfirm){
+				enviarComprasCallback()
+			}})
+       
+	}else{
+		sweetAlert("No hay compras seleccionadas / 沒有選擇的購買","error")
+	}
+	
 	
 }
 
@@ -267,7 +290,8 @@ __AplicarCompras(){
 **  Se va a guardar las compras que fueron chequeadas por el usuario
 **/
 function  moverComprasVector(callback){
-
+ 	self.comprasIngresadas = {dataFactura:[]}
+	 self.update()
 	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
 	for (var count = 0; count < self.compras.aaData.length; count++) {
         if (self.compras.aaData[count].estado == "C" ){// 
@@ -381,7 +405,7 @@ function  marcarVector(valor){
 *Marcar o desmarcar 
 **/
 function __MarcarCompras() {
-	$('.tableListar tbody').on('change','input[type="checkbox"]', function (e) {
+	$('.tableListar tbody').on('click','input[type="checkbox"]', function (e) {
 	//	$("#marcarDatos").prop('checked', false);
         var check1 =  ($(this).attr('id'));
 		var table = $('#tableListar').DataTable();
@@ -393,14 +417,12 @@ function __MarcarCompras() {
 	     }
          var chk1 =  document.getElementById(check1)
          // Este IF es para cuando usuario deschequea el SIM y se debe reversar el estado
+		 //return
 		 if (chk1.checked == false){
-        	__modificarEstado(data,"C")
-			 __ActualizarTablas()
+        	__modificarEstado(data,"D")
 		 }
 		else{
-			  __modificarEstado(data,"D")
-			   __ActualizarTablas()
-		
+			__modificarEstado(data,"C")
 		}
 			
 	});
@@ -452,14 +474,17 @@ __MostrarGuia(){
 Listado de recepcion de compras
 **/		
 function listadoRecepcionCompras() {
+	inicializarlista(function(resultado){
+       listaRecepcionCompras()
+	})
+}
+function listaRecepcionCompras(){
     $.ajax({
         url: 'listarRecepcionCompras.do',
         datatype: "json",
         method: "GET",
         success: function(result) {
-            console.log(result);
             if (result.aaData.length > 0) {
-                console.log(result)
                 self.compras.aaData = result.aaData
                 __cargarTablaCompras()
             }else{
@@ -468,6 +493,7 @@ function listadoRecepcionCompras() {
 			}
         }
     });
+    
 }
 function agregarInputsCombos() {
     // Agregar los input de busqueda
@@ -477,7 +503,7 @@ function agregarInputsCombos() {
             var title = $('.tableListar thead th').eq($(this).index())
                 .text();
             // No se toma en cuenta la columna de las acctiones(botones)
-            if ($(this).index() != 8 || $(this).index() != 0) {
+            if ($(this).index() != 8 && $(this).index() != 0) {
                 $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
             }
         })
@@ -486,7 +512,18 @@ function agregarInputsCombos() {
 Carga Tablas de compras
 **/
 function __cargarTablaCompras() {
-    $("#tableListar").dataTable().fnClearTable();
+   inicializarlista(function(resultado){
+    $("#tableListar").dataTable().fnAddData(self.compras.aaData);
+	__MarcarCompras();
+	agregarInputsCombos()
+	ActivarEventoFiltro(".tableListar")
+
+   })
+	
+}
+
+function inicializarlista(callback){
+ $("#tableListar").dataTable().fnClearTable();
     __InformacionDataTableCuentas();
     $('#tableListar').DataTable().destroy();
     $("#tableListar").DataTable({
@@ -496,7 +533,7 @@ function __cargarTablaCompras() {
             [5, 10, 15, 25, "All"]
         ],
         "language": idioma_espanol,
-        "sDom": 'lfrtip',
+        "sDom": 'lrtip',
         "order": [],
         "bPaginate": true,
         'responsive': true,
@@ -504,11 +541,7 @@ function __cargarTablaCompras() {
         "lengthChange": true,
         "columns": self.formato_tabla ,
     })
-    $("#tableListar").dataTable().fnAddData(self.compras.aaData);
-	__MarcarCompras();
-	agregarInputsCombos()
-	ActivarEventoFiltro(".tableListar")
-	
+    callback("listo")
 }
 /**
  * Formato del listado
@@ -551,7 +584,7 @@ function __checkbox(row) {
     var idCheck = 'check-' + row.id;
     var checked = " ";
    checked = row.estado == "C" ?"checked ":checked;
-    var inputcheck = '<div ><input type="checkbox" id="' + idCheck + '"  "  ' + checked + '></div>'
+    var inputcheck = '<div ><input type="checkbox" class="formatocheckFiltroListado" id="' + idCheck + '"  "  ' + checked + '></div>'
     return inputcheck;
 }
 /**
@@ -969,7 +1002,8 @@ function __crearFactura(){
                     type: 'success',
                     showCancelButton: false,
                     confirmButtonText: 'Aceptar',                               	  
-                })		            	
+                })	
+                listadoRecepcionCompras()	            	
             }
         },
         error : function(xhr, status) {
