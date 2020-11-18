@@ -331,19 +331,18 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	public List<Map<String, Object>> detalleCompraSinIngresar(Long idCompra) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT d.id,c.id as idCompra,reDe.detalle as descripcion, d.cantidad ,d.impuesto,\n" + 
-				"	   d.estado ,reDe.codigo_comercial_codigo as cod_proveedor,\n" + 
-				"       art.codigo as cod_invet ,\n" + 
-				"       d.costo as costo_prove,art.costo as costo_inv, \n" + 
-				"       art.ganancia_precio_publico as ganancia,\n" + 
-				"       art.precio_publico, art.cod_tarifa,\n" + 
-				"       art.impuesto  as imp_art FROM detalles_compras d\n" + 
+		String sql = "SELECT d.numero_linea,d.id,c.id as idCompra,d.descripcion, d.cantidad ,d.impuesto,\n" + 
+				"d.estado ,d.codigo as cod_proveedor,\n" + 
+				"       part.codigo as cod_invet ,\n" + 
+				"       d.costo as costo_prove,a.costo as costo_inv, \n" + 
+				"       a.ganancia_precio_publico as ganancia,\n" + 
+				"       a.precio_publico, a.cod_tarifa,\n" + 
+				"       a.impuesto  as imp_art\n" + 
+				"FROM detalles_compras d\n" + 
 				"inner join compras c on c.id = d.compra_id\n" + 
-				"inner join recepcion_factura re on re.clave = c.clave\n" + 
-				"inner join recepcion_factura_detalle reDe on reDe.recepcion_factura_id = re.id\n" + 
-				"left join articulos art on art.id = d.articulo_id\n" + 
-				"left join proveedor_articulo part on part.codigo = art.codigo"
-				+ " where c.id = :idCompra and c.estado = 6";
+				"left JOIN proveedor_articulo part ON part.cod_provee = d.CODIGO \n" + 
+				"left join articulos a on a.id = part.articulo_id and c.proveedor_id = part.proveedor_id\n" + 
+				"where c.estado = 6 and c.id = :idCompra and d.estado = 1";
     parameters.addValue("idCompra", idCompra);
     NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
     List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
@@ -354,6 +353,12 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	public DetalleCompra findById(Long idDetalleCompra) {
 	
 		return detalleCompraDao.findById(idDetalleCompra);
+	}
+
+	@Override
+	public Integer ContarDetalleCompraSinIngresar(Long idCompra) {
+		// TODO Auto-generated method stub
+		return detalleCompraDao.ContarDetalleCompraSinIngresar(idCompra);
 	}
 
 }

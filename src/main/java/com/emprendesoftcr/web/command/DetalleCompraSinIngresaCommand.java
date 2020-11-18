@@ -10,6 +10,7 @@ public class DetalleCompraSinIngresaCommand {
 	
 	private Double impuesto;
   private Integer estado;
+  private Integer numero_linea;
   private String cod_invet;
   private String cod_proveedor;
   private Double costo_prove;
@@ -142,6 +143,18 @@ public class DetalleCompraSinIngresaCommand {
 	
 	public void setIdCompra(Long idCompra) {
 		this.idCompra = idCompra;
+	}
+
+
+	
+	public Integer getNumero_linea() {
+		return numero_linea;
+	}
+
+
+	
+	public void setNumero_linea(Integer numero_linea) {
+		this.numero_linea = numero_linea;
 	}
   
   

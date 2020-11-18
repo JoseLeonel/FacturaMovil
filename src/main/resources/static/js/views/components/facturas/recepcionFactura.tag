@@ -838,111 +838,61 @@ function BuscarActividadComercial(){
 		                    self.archivo.facturaFechaEmision = __valorString(($(xmlDoc).find("FechaEmision")).first().text());
 		                    self.archivo.facturaCondicionVenta = __valorString($(xmlDoc).find("CondicionVenta").first().text());
 		                    self.archivo.facturaMedioPago = __valorString($(xmlDoc).find("MedioPago").first().text());
-
 		                    self.archivo.facturaCodigoActividad = __valorString($(xmlDoc).find("CodigoActividad").first().text());
 		                    self.archivo.facturaPlazoCredito = __valorString($(xmlDoc).find("PlazoCredito").first().text());
-							
-		                    
 		                    //Se carga el detalle de la factura
 							$("#detalleFactura").find("tr:gt(0)").remove();
-						
 		                    var detallesServicioXml = $(xmlDoc).find("DetalleServicio");
-		                    $(detallesServicioXml).each(function () {
-								var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
-		                    	$(this).children().each(function () {
-									var impuestosItems    = this.getElementsByTagName("Impuesto");
-									var impuestos ={
-										    codigo1 :'',
-											codigoTarifa1:'',
-											tarifa1:'',
-											monto1:0,
-										    codigo2 :'',
-											codigoTarifa2:'',
-											tarifa2:'',
-											monto2:0,
-										    codigo3 :'',
-											codigoTarifa3:'',
-											tarifa3:'',
-											monto3:0,
-										    codigo4 :'',
-											codigoTarifa4:'',
-											tarifa4:'',
-											monto4:0,
-										    codigo5 :'',
-											codigoTarifa5:'',
-											tarifa5:'',
-											monto5:0,
-										    codigo6 :'',
-											codigoTarifa6:'',
-											tarifa6:'',
-											monto6:0,
-					        			    codigo7 :'',
-											codigoTarifa7:'',
-											tarifa7:'',
-											monto7:0
-					
-					
-					
-										}
-									$.each(impuestosItems, function(i, impuesto){
-									    var codigo = ''
-										var codigoTarifa = ''
-										var tarifa = 0 
-										var monto = 0
-										$(this).children().each(function () {
-											var name = $(this).get(0).nodeName               
-											if(name.indexOf('Codigo') != -1){
-												codigo = $(this).text()
-											} 
-											if(name.indexOf('CodigoTarifa') != -1){
-												codigoTarifa = $(this).text()
-											} 
-											if(name.indexOf('Tarifa') != -1){
-												tarifa = $(this).text()
-											} 
-											if(name.indexOf('Monto') != -1){
-												monto = $(this).text()
-											} 
-										});
-										if(impuestos.codigo1.length ==0){
-											impuestos.codigo1 = codigo;
-											impuestos.codigoTarifa1 = codigoTarifa
-											impuestos.tarifa1 = tarifa
-											impuestos.monto1 = monto
-										} else if(impuestos.codigo2.length ==0){
-											impuestos.codigo2 = codigo;
-											impuestos.codigoTarifa2 = codigoTarifa
-											impuestos.tarifa2 = tarifa
-											impuestos.monto2 = monto
-										} else if(impuestos.codigo3.length ==0){
-											impuestos.codigo3 = codigo;
-											impuestos.codigoTarifa3 = codigoTarifa
-											impuestos.tarifa3 = tarifa
-											impuestos.monto3 = monto
-										} else if(impuestos.codigo4.length ==0){
-											impuestos.codigo4 = codigo;
-											impuestos.codigoTarifa4 = codigoTarifa
-											impuestos.tarifa4 = tarifa
-											impuestos.monto4 = monto
-										} else if(impuestos.codigo5.length ==0){
-											impuestos.codigo5 = codigo;
-											impuestos.codigoTarifa5 = codigoTarifa
-											impuestos.tarifa5 = tarifa
-											impuestos.monto5 = monto
-										} else if(impuestos.codigo6.length ==0){
-											impuestos.codigo6 = codigo;
-											impuestos.codigoTarifa6 = codigoTarifa
-											impuestos.tarifa6 = tarifa
-											impuestos.monto6 = monto
-										} else if(impuestos.codigo7.length ==0){
-											impuestos.codigo7 = codigo;
-											impuestos.codigoTarifa7 = codigoTarifa
-											impuestos.tarifa7 = tarifa
-											impuestos.monto7 = monto
-										}       
+		                    $(detallesServicioXml).find("LineaDetalle").each(function () {
+								var impuestos = iniImpuestos()
+								var codigoComercial = __valorString($(this).find("CodigoComercial").find("Codigo").text())
+								var tipoCodigoComercial = __valorString($(this).find("CodigoComercial").find("Tipo").text())
+								var numeroLinea = __valorString($(this).find("NumeroLinea").text())
+		                    	$(this).find("Impuesto").each(function () {
+									var codigo = __valorString($(this).find("Codigo").text())
+									var codigoTarifa = __valorString($(this).find("CodigoTarifa").text())
+									var tarifa = __valorString($(this).find("Tarifa").text()) 
+									var monto = __valorFloat($(this).find("Monto").text()) 
+									if(impuestos.codigo1.length ==0){
+										impuestos.codigo1 = codigo;
+										impuestos.codigoTarifa1 = codigoTarifa
+										impuestos.tarifa1 = tarifa
+										impuestos.monto1 = monto
+									} else if(impuestos.codigo2.length ==0){
+										impuestos.codigo2 = codigo;
+										impuestos.codigoTarifa2 = codigoTarifa
+										impuestos.tarifa2 = tarifa
+										impuestos.monto2 = monto
+									} else if(impuestos.codigo3.length ==0){
+										impuestos.codigo3 = codigo;
+										impuestos.codigoTarifa3 = codigoTarifa
+										impuestos.tarifa3 = tarifa
+										impuestos.monto3 = monto
+									} else if(impuestos.codigo4.length ==0){
+										impuestos.codigo4 = codigo;
+										impuestos.codigoTarifa4 = codigoTarifa
+										impuestos.tarifa4 = tarifa
+										impuestos.monto4 = monto
+									} else if(impuestos.codigo5.length ==0){
+										impuestos.codigo5 = codigo;
+										impuestos.codigoTarifa5 = codigoTarifa
+										impuestos.tarifa5 = tarifa
+										impuestos.monto5 = monto
+									} else if(impuestos.codigo6.length ==0){
+										impuestos.codigo6 = codigo;
+									    impuestos.codigoTarifa6 = codigoTarifa
+										impuestos.tarifa6 = tarifa
+										impuestos.monto6 = monto
+									} else if(impuestos.codigo7.length ==0){
+										impuestos.codigo7 = codigo;
+										impuestos.codigoTarifa7 = codigoTarifa
+										impuestos.tarifa7 = tarifa
+										impuestos.monto7 = monto
+									}       
+				      
 									    
-									});
-
+								});
+								agregarDetalle(impuestos,this,numeroLinea,codigoComercial,tipoCodigoComercial)
 				                    var row = "<tr>" + 
 												  "<td>" + __valorFloat($(this).find("Cantidad").text()) + "</td>" + 
 					                    		  "<td>" + __valorString($(this).find("UnidadMedida").text()) + "</td>" + 
@@ -952,62 +902,9 @@ function BuscarActividadComercial(){
 					                    		  "<td>" + __valorFloat($(this).find("SubTotal").text()) + "</td>" + 
 					                    		  "<td>" + __valorFloat($(this).find("MontoTotalLinea").text()) + "</td>" +
 				                    		  "</tr>";
-				      	            $('#detalleFactura tr:last').after(row);
-				      	            
-				      	          	self.detalleServicio.data.push({
-										detalleImpuestos : impuestos,	
-					      	            numeroLinea     : 0,
-					      	            cantidad        : __valorFloat($(this).find("Cantidad").text()),
-					      	            unidadMedida    : __valorString($(this).find("UnidadMedida").text()),
-					      	            detalle         : __valorString($(this).find("Detalle").text()),
-					      	            precioUnitario  : __valorFloat($(this).find("PrecioUnitario").text()),
-					      	            montoTotal      : __valorFloat($(this).find("MontoTotal").text()),
-					      	            subTotal        : __valorFloat($(this).find("SubTotal").text()),
-					      	            montoTotalLinea : __valorFloat($(this).find("MontoTotalLinea").text()),
-					      	            impuestoNeto    : __valorFloat($(this).find("ImpuestoNeto").text()),
-					      	            baseImponible   : __valorFloat($(this).find("BaseImponible").text()),
-					      	            codigoComercialTipo   : "",
-					      	            codigoComercialCodigo : "",
-					      	            descuentoMonto        : __valorFloat($(this).find("Descuento").find("MontoDescuento").text()),
-					      	            descuentoNaturaleza   : __valorString($(this).find("Descuento").find("NaturalezaDescuento").text()),
-					      	            impuestoCodigo        : __valorString(impuestos.codigo1),
-					      	            impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
-					      	            impuestoTarifa        : __valorFloat(impuestos.tarifa1),
-     				      	            impuestoMonto         : __valorFloat(impuestos.monto1),
-					      	            impuestoCodigo1        : __valorString(impuestos.codigo2),
-					      	            impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
-					      	            impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
-     				      	            impuestoMonto1         : __valorFloat(impuestos.monto2),
-					      	            impuestoCodigo2        : __valorString(impuestos.codigo3),
-					      	            impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
-					      	            impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
-     				      	            impuestoMonto2         : __valorFloat(impuestos.monto3),
-					      	            impuestoCodigo3        : __valorString(impuestos.codigo4),
-					      	            impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
-					      	            impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
-     				      	            impuestoMonto3         : __valorFloat(impuestos.monto4),
-					      	            impuestoCodigo4        : __valorString(impuestos.codigo5),
-					      	            impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
-					      	            impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
-     				      	            impuestoMonto4         : __valorFloat(impuestos.monto5),
-					      	            impuestoCodigo5        : __valorString(impuestos.codigo6),
-					      	            impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
-					      	            impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
-     				      	            impuestoMonto5         : __valorFloat(impuestos.monto6),
-					      	            impuestoCodigo6        : __valorString(impuestos.codigo7),
-					      	            impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
-					      	            impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
-     				      	            impuestoMonto6         : __valorFloat(impuestos.monto7),
-
-					      	            impuestoExoneracionTipoDocumento         : __valorString($(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
-					      	            impuestoExoneracionNumeroDocumento       : __valorString($(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
-					      	            impuestoExoneracionNombreInstitucion     : __valorString($(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),
-					      	            impuestoExoneracionFechaEmision          : __valorString($(this).find("Impuesto").find("Exoneracion").find("FechaEmision").text()),
-					      	            impuestoExoneracionPorcentaje            : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text()),
-					      	            impuestoExoneracionMonto                 : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
-					      	        });	       	            
-		                        });
+				      	        $('#detalleFactura tr:last').after(row);
 		                    });
+		                    
 
 		                    //Se carga el resumen de la factura
 		                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
@@ -1116,7 +1013,98 @@ function BuscarActividadComercial(){
 	   		 	sweetAlert("", "Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5", "error");
             }
 		}
-		
+function agregarDetalle(impuestos,xmlt,numeroLinea,codigoComercial,tipoCodigoComercial){
+   	self.detalleServicio.data.push({
+		detalleImpuestos : impuestos,	
+        numeroLinea     : numeroLinea,
+        cantidad        : __valorFloat($(this).find("Cantidad").text()),
+        unidadMedida    : __valorString($(this).find("UnidadMedida").text()),
+        detalle         : __valorString($(this).find("Detalle").text()),
+        precioUnitario  : __valorFloat($(this).find("PrecioUnitario").text()),
+        montoTotal      : __valorFloat($(this).find("MontoTotal").text()),
+        subTotal        : __valorFloat($(this).find("SubTotal").text()),
+        montoTotalLinea : __valorFloat($(this).find("MontoTotalLinea").text()),
+        impuestoNeto    : __valorFloat($(this).find("ImpuestoNeto").text()),
+        baseImponible   : __valorFloat($(this).find("BaseImponible").text()),
+        codigoComercialTipo   : tipoCodigoComercial,
+        codigoComercialCodigo : codigoComercial,
+        descuentoMonto        : __valorFloat($(this).find("Descuento").find("MontoDescuento").text()),
+        descuentoNaturaleza   : __valorString($(this).find("Descuento").find("NaturalezaDescuento").text()),
+        impuestoCodigo        : __valorString(impuestos.codigo1),
+        impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
+        impuestoTarifa        : __valorFloat(impuestos.tarifa1),
+        impuestoMonto         : __valorFloat(impuestos.monto1),
+        impuestoCodigo1        : __valorString(impuestos.codigo2),
+        impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
+        impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
+        impuestoMonto1         : __valorFloat(impuestos.monto2),
+        impuestoCodigo2        : __valorString(impuestos.codigo3),
+        impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
+        impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
+        impuestoMonto2         : __valorFloat(impuestos.monto3),
+        impuestoCodigo3        : __valorString(impuestos.codigo4),
+        impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
+        impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
+        impuestoMonto3         : __valorFloat(impuestos.monto4),
+        impuestoCodigo4        : __valorString(impuestos.codigo5),
+        impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
+        impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
+        impuestoMonto4         : __valorFloat(impuestos.monto5),
+        impuestoCodigo5        : __valorString(impuestos.codigo6),
+        impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
+        impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
+        impuestoMonto5         : __valorFloat(impuestos.monto6),
+        impuestoCodigo6        : __valorString(impuestos.codigo7),
+        impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
+        impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
+        impuestoMonto6         : __valorFloat(impuestos.monto7),
+        impuestoExoneracionTipoDocumento         : __valorString($(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
+        impuestoExoneracionNumeroDocumento       : __valorString($(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
+        impuestoExoneracionNombreInstitucion     : __valorString($(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),
+        impuestoExoneracionFechaEmision          : __valorString($(this).find("Impuesto").find("Exoneracion").find("FechaEmision").text()),
+        impuestoExoneracionPorcentaje            : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text()),
+        impuestoExoneracionMonto                 : __valorFloat($(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
+     });	       	            
+
+}
+
+/**
+Inicializar los impuestos
+**/
+function iniImpuestos(){
+	var impuestos ={
+		    codigo1 :'',
+			codigoTarifa1:'',
+			tarifa1:'',
+			monto1:0,
+		    codigo2 :'',
+			codigoTarifa2:'',
+			tarifa2:'',
+			monto2:0,
+		    codigo3 :'',
+			codigoTarifa3:'',
+			tarifa3:'',
+			monto3:0,
+		    codigo4 :'',
+			codigoTarifa4:'',
+			tarifa4:'',
+			monto4:0,
+		    codigo5 :'',
+			codigoTarifa5:'',
+			tarifa5:'',
+			monto5:0,
+		    codigo6 :'',
+			codigoTarifa6:'',
+	    	tarifa6:'',
+			monto6:0,
+		    codigo7 :'',
+			codigoTarifa7:'',
+			tarifa7:'',
+			monto7:0
+    }
+	return impuestos
+
+}		
 		function __cargarXMLMensaje(xml) {
 	        if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
@@ -1405,7 +1393,7 @@ function BuscarActividadComercial(){
 		*  Crear Factura nueva
 		**/
 		__crearFactura(){
-			
+			self.comprasIngresadas = {dataFactura:[]}
 			//Se limpian los errores
 			$(".errorServerSideJgrid").remove();
 			self.recepcionFactura.mensaje = $("#mensaje").val();

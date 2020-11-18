@@ -44,6 +44,7 @@
 				<table class="table table-striped">
                         <thead>
                         <tr>
+                            <th style="width:6%;"><div class="tituloFormat">Num.linea </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cod.Proveedor </div></th>
 							<th style="width:3%;"><div class="tituloFormat">Cod.Inventario </div></th>
                             <th style="width:30%;"><div class="tituloFormat">Descripcion </div></th>
@@ -58,6 +59,10 @@
                         </thead>
                         <tbody>
                         <tr each={detail}>
+                            <td class="text-right" style="width:6%;">
+                                <span>{numero_linea}</span>
+                            </td>
+
                             <td class="text-right" style="width:6%;">
                                 <span>{cod_proveedor}</span>
                             </td>
@@ -232,11 +237,12 @@ __IngresarAlInventario(e){
 
 function validar(){
     if(self.detalleCompra.cod_invet == null ){
-        mensajeAdvertencia("Error: Ingresar el codigo del articulo. 輸入商品編號")
+        mensajeAlertErrorOConfirmacion('error',"Error: Ingresar el codigo del articulo. 輸入商品編號")
         return false
     }
     if(self.detalleCompra.cod_invet.length == 0 ){
-        mensajeAdvertencia("Error: Ingresar el codigo del articulo 輸入商品編號")
+        mensajeAlertErrorOConfirmacion('error',"Error: Ingresar el codigo del articulo 輸入商品編號")
+        
         return false
     }
     return true
@@ -266,7 +272,7 @@ function actualizarDetalleAlInventario(){
         success: function (result) {
             if (result.status != 200) {
                 if (result.message != null && result.message.length > 0) {
-                     mensajeAdvertencia(result.message);
+                     mensajeAlertErrorOConfirmacion('error',result.message)
                 }
             } else {
                 __DeleteArticuloIngresadoInventario()

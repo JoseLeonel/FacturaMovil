@@ -629,7 +629,7 @@ public class DetalleBoImpl implements DetalleBo {
     		"		t.nombre_completo,t.nombre_factura,t.total_exo ,t.total_otros_cargos,\n" + 
     		"        t.total_serv_gravados,t.total_serv_exentos,t.total_impuesto,\n" + 
     		"        t.total_mercancias_gravadas,t.total_mercancias_exentas,\n" + 
-    		"        t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo,  \n" + 
+    		"        t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo, t.tipo_cambio, \n" + 
     		"        sum(if(t.cod_tarifa = '01', t.total_tarifa,0)) imp_01,\n" + 
     		"        sum(if(t.cod_tarifa = '02', t.total_tarifa,0)) imp_02,\n" + 
     		"        sum(if(t.cod_tarifa = '03', t.total_tarifa,0)) imp_03,\n" + 
@@ -643,7 +643,7 @@ public class DetalleBoImpl implements DetalleBo {
     		"select f.fecha_emision,f.tipo_doc,f.numero_consecutivo,f.consecutivo_proforma ,f.clave,c.cedula,c.identificacion_extranjero,\n" + 
     		"		c.nombre_completo,f.nombre_factura,d.tipo_impuesto,f.total_exo ,f.total_otros_cargos,f.total_serv_gravados,f.total_serv_exentos,f.total_mercancias_gravadas,f.total_mercancias_exentas,f.total_impuesto,f.total_exento,"
     		+ "  f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, \n" + 
-    		"        d.cod_tarifa,d.impuesto,\n" + 
+    		"        d.cod_tarifa,d.impuesto,f.tipo_cambio,\n" + 
     		"        sum(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio)) as total_tarifa \n" + 
     		"         from detalles d\n" + 
     		"       inner join facturas f on f.id = d.factura_id\n" + 
@@ -659,14 +659,14 @@ public class DetalleBoImpl implements DetalleBo {
     		"                f.total_serv_exentos,f.total_mercancias_gravadas,\n" + 
     		"                f.total_mercancias_exentas,f.total_impuesto,\n" + 
     		"                f.total_exento,f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, \n" + 
-    		"				d.cod_tarifa,d.impuesto\n" + 
+    		"				d.cod_tarifa,d.impuesto,f.tipo_cambio\n" + 
     		"	   order by f.fecha_emision,d.tipo_impuesto,d.cod_tarifa,d.impuesto) t\n" + 
     		"       GROUP by t.fecha_emision,t.tipo_doc,t.clave,t.numero_consecutivo,t.consecutivo_proforma,t.cedula,t.identificacion_extranjero,\n" + 
     		"				t.nombre_completo,t.nombre_factura,t.total_exo ,\n" + 
     		"                t.total_otros_cargos,t.total_serv_gravados,\n" + 
     		"                t.total_serv_exentos,t.total_impuesto,\n" + 
     		"                t.total_mercancias_gravadas,t.total_mercancias_exentas,\n" + 
-    		"                t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo";
+    		"                t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo,t.tipo_cambio";
     
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("fecha_inicial", fechaInicial);

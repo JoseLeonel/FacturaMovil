@@ -509,6 +509,9 @@ public class Constantes {
 
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_SI															= 1;
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_NO															= 2;
+	
+	public static final Integer					DETALLE_APLICADO_NO															= 1;
+	public static final Integer					DETALLE_APLICADO_SI															= 2;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";

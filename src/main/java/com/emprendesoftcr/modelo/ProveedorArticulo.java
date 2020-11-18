@@ -34,6 +34,9 @@ public class ProveedorArticulo implements Serializable {
 	
 	@Column(name = "costo")
 	private Double						costo;
+	
+	@Column(name = "cod_provee")
+	private String						codigoProveedor;
 
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -151,6 +154,22 @@ public class ProveedorArticulo implements Serializable {
 	
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+
+
+
+
+	
+	public String getCodigoProveedor() {
+		return codigoProveedor;
+	}
+
+
+
+
+	
+	public void setCodigoProveedor(String codigoProveedor) {
+		this.codigoProveedor = codigoProveedor;
 	}
 	
 	

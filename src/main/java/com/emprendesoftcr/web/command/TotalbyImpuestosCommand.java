@@ -10,6 +10,7 @@ public class TotalbyImpuestosCommand {
 
 	 private Date fecha_emision;
 	 private String tipo_doc;
+	 private Double tipo_cambio;
 	 private String numero_consecutivo;
 	 private String clave;
 	 private String consecutivo_proforma;
@@ -52,22 +53,39 @@ public class TotalbyImpuestosCommand {
 	
 	
 	public Double getTotal_merc_exo() {
-		return total_merc_exo;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_merc_exo != null ? this.total_merc_exo * -1 * this.tipo_cambio : this.total_merc_exo * this.tipo_cambio;
+		} else {
+			return this.total_merc_exo;
+		}
+	
 	}
 	
 	public void setTotal_merc_exo(Double total_merc_exo) {
+		
 		this.total_merc_exo = total_merc_exo;
 	}
 	
 	public Double getTotal_serv_exo() {
-		return total_serv_exo;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_serv_exo != null ? this.total_serv_exo * -1 * this.tipo_cambio : this.total_serv_exo * this.tipo_cambio;
+		} else {
+			return this.total_serv_exo;
+		}
+	
 	}
 	
 	public void setTotal_serv_exo(Double total_serv_exo) {
 		this.total_serv_exo = total_serv_exo;
 	}
 	public Double getTotal_exento() {
-		return total_exento;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_exento != null ? this.total_exento * -1 * this.tipo_cambio : this.total_exento * this.tipo_cambio;
+		} else {
+			return this.total_exento;
+		}
+
+	
 	}
 
 	
@@ -143,7 +161,13 @@ public class TotalbyImpuestosCommand {
 	
 	
 	public Double getTotal_impuesto() {
-		return total_impuesto;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_impuesto != null ? this.total_impuesto * -1 * this.tipo_cambio : this.total_impuesto * this.tipo_cambio;
+		} else {
+			return this.total_impuesto;
+		}
+
+		
 	}
 	
 	public void setTotal_impuesto(Double total_impuesto) {
@@ -151,7 +175,12 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_gravado() {
-		return total_gravado;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_gravado != null ? this.total_impuesto * -1 * this.tipo_cambio : this.total_gravado * this.tipo_cambio;
+		} else {
+			return this.total_gravado;
+		}
+
 	}
 	
 	public void setTotal_gravado(Double total_gravado) {
@@ -167,7 +196,12 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_exo() {
-		return total_exo;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_exo != null ? this.total_impuesto * -1 * this.tipo_cambio : this.total_exo * this.tipo_cambio;
+		} else {
+			return this.total_exo;
+		}
+
 	}
 	
 	public void setTotal_exo(Double total_exo) {
@@ -175,7 +209,11 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_otros_cargos() {
-		return total_otros_cargos;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_otros_cargos != null ? this.total_otros_cargos * -1 * this.tipo_cambio : this.total_otros_cargos * this.tipo_cambio;
+		} else {
+			return this.total_otros_cargos;
+		}
 	}
 	
 	public void setTotal_otros_cargos(Double total_otros_cargos) {
@@ -183,7 +221,12 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_serv_gravados() {
-		return total_serv_gravados;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_serv_gravados != null ? this.total_serv_gravados * -1 * this.tipo_cambio : this.total_serv_gravados * this.tipo_cambio;
+		} else {
+			return this.total_serv_gravados;
+		}
+		
 	}
 	
 	public void setTotal_serv_gravados(Double total_serv_gravados) {
@@ -191,7 +234,12 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_serv_exentos() {
-		return total_serv_exentos;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_serv_exentos != null ? this.total_serv_exentos * -1 * this.tipo_cambio : this.total_serv_exentos * this.tipo_cambio;
+		} else {
+			return this.total_serv_exentos;
+		}
+		
 	}
 	
 	public void setTotal_serv_exentos(Double total_serv_exentos) {
@@ -199,7 +247,13 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_mercancias_gravadas() {
-		return total_mercancias_gravadas;
+		
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_mercancias_gravadas != null ? this.total_mercancias_gravadas * -1 * this.tipo_cambio : this.total_mercancias_gravadas * this.tipo_cambio;
+		} else {
+			return this.total_mercancias_gravadas;
+		}
+		
 	}
 	
 	public void setTotal_mercancias_gravadas(Double total_mercancias_gravadas) {
@@ -207,7 +261,13 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_mercancias_exentas() {
-		return total_mercancias_exentas;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_mercancias_exentas != null ? this.total_mercancias_exentas * -1 * this.tipo_cambio : this.total_mercancias_exentas * this.tipo_cambio;
+		} else {
+			return this.total_mercancias_exentas;
+		}
+
+	
 	}
 	
 	public void setTotal_mercancias_exentas(Double total_mercancias_exentas) {
@@ -215,7 +275,12 @@ public class TotalbyImpuestosCommand {
 	}
 	
 	public Double getTotal_comprobante() {
-		return total_comprobante;
+		if (tipo_doc != null && tipo_doc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.total_comprobante != null ? this.total_comprobante * -1 * this.tipo_cambio : this.total_comprobante * this.tipo_cambio;
+		} else {
+			return this.total_comprobante;
+		}
+
 	}
 	
 	public void setTotal_comprobante(Double total_comprobante) {
@@ -285,6 +350,16 @@ public class TotalbyImpuestosCommand {
 	public void setImp_08(Double imp_08) {
 		this.imp_08 = imp_08;
 	}
+	
+	public Double getTipo_cambio() {
+		return tipo_cambio;
+	}
+	
+	public void setTipo_cambio(Double tipo_cambio) {
+		this.tipo_cambio = tipo_cambio;
+	}
+	
+	
 	
 	
 	 

@@ -75,6 +75,8 @@ public class DetalleCompra implements Serializable {
 
 	@Column(name = "estado")
 	private Integer						estado;
+	
+	
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -98,6 +100,13 @@ public class DetalleCompra implements Serializable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
+	
+	@Column(name = "descripcion")
+	private String						descripcion;
+	
+	@Column(name = "codigo")
+	private String					codigo;
+
 
 	public DetalleCompra() {
 		super();
@@ -115,6 +124,8 @@ public class DetalleCompra implements Serializable {
 		this.totalDescuento = Utils.roundFactura(detalleCompraCommand.getTotalDescuento() !=null?detalleCompraCommand.getTotalDescuento():Constantes.ZEROS_DOUBLE,5);
 		this.totalImpuesto = Utils.roundFactura(detalleCompraCommand.getTotalImpuesto() !=null?detalleCompraCommand.getTotalImpuesto():Constantes.ZEROS_DOUBLE,5);
 		this.montoTotalLinea = Utils.roundFactura(detalleCompraCommand.getMontoTotalLinea() !=null?detalleCompraCommand.getMontoTotalLinea():Constantes.ZEROS_DOUBLE,5);
+		this.descripcion = detalleCompraCommand.getDescripcion();
+		this.codigo = detalleCompraCommand.getCodigo();
 		
 
 		this.precio = detalleCompraCommand.getPrecio();
@@ -124,8 +135,10 @@ public class DetalleCompra implements Serializable {
 		super();
 
 		this.numeroLinea = recepcionFacturaDetalle.getNumeroLinea();
+		this.cantidad = recepcionFacturaDetalle.getCantidad() != null && !recepcionFacturaDetalle.getCantidad().equals(Constantes.ZEROS_DOUBLE)?  recepcionFacturaDetalle.getCantidad(): Constantes.ZEROS_DOUBLE;
 		this.costo = recepcionFacturaDetalle.getMontoTotal() !=null?recepcionFacturaDetalle.getMontoTotal():Constantes.ZEROS_DOUBLE;
-		this.cantidad = recepcionFacturaDetalle.getCantidad();
+		this.costo = this.cantidad > Constantes.ZEROS_DOUBLE ?this.costo/this.cantidad:this.costo;
+		this.costo = Utils.round(this.costo,2);
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.impuesto = Constantes.ZEROS_DOUBLE;
 		this.descuento = Constantes.ZEROS_DOUBLE;
@@ -133,6 +146,7 @@ public class DetalleCompra implements Serializable {
 		this.totalImpuesto = Constantes.ZEROS_DOUBLE;
 		this.montoTotalLinea = recepcionFacturaDetalle.getMontoTotalLinea();
 		this.precio = Constantes.ZEROS_DOUBLE;
+
 	}
 
 	
@@ -298,6 +312,26 @@ public class DetalleCompra implements Serializable {
 	
 	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
+	}
+
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	
+	public String getCodigo() {
+		return codigo;
+	}
+
+	
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 	
 	

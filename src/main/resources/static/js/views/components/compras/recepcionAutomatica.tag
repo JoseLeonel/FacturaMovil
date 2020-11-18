@@ -48,7 +48,7 @@
 														
 									<div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
 										<label  >{$.i18n.prop("receptor.detalleMensaje")}</label>
-										<textarea maxlength="250" placeHolder ="{$.i18n.prop("receptor.detalleMensaje")}" class="form-control recepcionDetalleMensaje" id="detalleMensaje" name="detalleMensaje" value="{recepcionFactura.detalleMensaje}" ></textarea> 
+										<textarea maxlength="250" placeHolder ="{$.i18n.prop("receptor.detalleMensaje")}" class="form-control  detalleMensaje" id="detalleMensaje" name="detalleMensaje" value="{recepcionFactura.detalleMensaje}" ></textarea> 
 									</div>
 
 									<div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -295,6 +295,8 @@ function  moverComprasVector(callback){
 	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
 	for (var count = 0; count < self.compras.aaData.length; count++) {
         if (self.compras.aaData[count].estado == "C" ){// 
+		    self.compraIDAutomatica =  self.compras.aaData[count].id
+			self.update()    
         	getXML(self.compras.aaData[count],function(resultado){
                  console.log(resultado) 
 							
@@ -821,31 +823,17 @@ function agregarDetallesFacturaXML(callback){
     //Se carga el detalle de la factura
 	$("#detalleFactura").find("tr:gt(0)").remove();
         var detallesServicioXml = $(self.xmlDoc).find("DetalleServicio");
-        $(detallesServicioXml).each(function () {
-			var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
+        $(detallesServicioXml).find("LineaDetalle").each(function () {
+			var impuestos = iniImpuestos()
 			var codigoComercial = __valorString($(this).find("CodigoComercial").find("Codigo").text())
 			var tipoCodigoComercial = __valorString($(this).find("CodigoComercial").find("Tipo").text())
 			var numeroLinea = __valorString($(this).find("NumeroLinea").text())
-           	$(this).children().each(function () {
-				var impuestos = iniImpuestos()
-				var impuestosItems    = this.getElementsByTagName("Impuesto");
-				$.each(impuestosItems, function(i, impuesto){
-				    var codigo = ''
-					var codigoTarifa = ''
-					var tarifa = 0 
-					var monto = 0
-					$(this).children().each(function () {
-						var name = $(this).get(0).nodeName               
-						if(name.indexOf('Codigo') != -1){
-							codigo = $(this).text()
-						}else if(name.indexOf('CodigoTarifa') != -1){
-							codigoTarifa = $(this).text()
-						}else if(name.indexOf('Tarifa') != -1){
-							tarifa = $(this).text()
-						}else if(name.indexOf('Monto') != -1){
-							monto = $(this).text()
-						} 
-					});
+           	$(this).find("Impuesto").each(function () {
+				
+				   var codigo = __valorString($(this).find("Codigo").text())
+					var codigoTarifa = __valorString($(this).find("CodigoTarifa").text())
+					var tarifa = __valorString($(this).find("Tarifa").text()) 
+					var monto = __valorFloat($(this).find("Monto").text()) 
 					if(impuestos.codigo1.length ==0){
 						impuestos.codigo1 = codigo;
 						impuestos.codigoTarifa1 = codigoTarifa
@@ -882,11 +870,13 @@ function agregarDetallesFacturaXML(callback){
 						impuestos.tarifa7 = tarifa
 					    impuestos.monto7 = monto
 					}       
+				
+				    
 				});
                 agregarDetalle(impuestos,this,numeroLinea,codigoComercial,tipoCodigoComercial)
 				self.update();
              });
-       });
+       
       callback("agregarDetallesFacturaXML")
 }
 
@@ -897,6 +887,7 @@ Incluir en el vector de compras
 function agregarVentorCompras(callback){
 	 self.comprasIngresadas.dataFactura.push({
         recepcionFactura: JSON.stringify(self.recepcionFactura) ,
+		id: self.compraIDAutomatica
 	 })
 	 console.log("compras ingresadas al vector")
 	 console.log(self.comprasIngresadas)
@@ -977,10 +968,18 @@ function __crearFactura(){
 	//Se limpian los errores
 	var JSONDetalles = JSON.stringify( self.comprasIngresadas);
     var temp = btoa(JSONDetalles)
+	var parametros = {
+		condicionImpuesto: $("#condicionImpuesto").val(),
+		tipoGasto:$("#tipoGasto").val(),
+		codigoActividad:$("#codigoActividad").val(),
+		mensaje:$("#mensaje").val(),
+		detalleMensaje:$("#detalleMensaje").val(),
+		listaCompras:temp
+	}
     $.ajax({
         type : "POST",
         dataType : "json",
-        data : {listaCompras:temp},
+        data : parametros,
         url : "recepcionComprasMasivas.do",
         success : function(data) {
             if (data.status != 200) {
@@ -993,8 +992,8 @@ function __crearFactura(){
     		    self.mostrarFormulario     = false;
     		    self.mostrarCargaArchivo   = false;		    		    
     		    self.mostrarCargaArchivoMensaje   = true;		    		    
-    		    $("#fileUpload").val("");
-    		    $("#fileUploadMensajeArchivo").val("");		    		    
+    		  //  $("#fileUpload").val("");
+    		  //  $("#fileUploadMensajeArchivo").val("");		    		    
             	self.update();
                 swal({
                     title: '',

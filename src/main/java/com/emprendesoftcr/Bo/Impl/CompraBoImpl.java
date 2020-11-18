@@ -170,6 +170,8 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCompra(compra);
 					detalleCompra.setCreated_at(new Date());
 					detalleCompra.setUpdated_at(new Date());
+					detalleCompra.setCodigo(detalleCompraCommand.getCodigo());
+					detalleCompra.setDescripcion(detalleCompraCommand.getDescripcion());
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
@@ -251,12 +253,15 @@ public class CompraBoImpl implements CompraBo {
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
+				proveedorArticulo.setCodigoProveedor(detalleCompra.getCodigo()== null?Constantes.EMPTY:detalleCompra.getCodigo());
+				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo() );
 				proveedorArticulo.setCosto(costoNuevo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
 			} else {
 				ProveedorArticulo	proveedorArticuloNuevo = new ProveedorArticulo();
 				proveedorArticuloNuevo.setId(null);
+				proveedorArticuloNuevo.setCodigoProveedor(detalleCompra.getCodigo()== null?Constantes.EMPTY:detalleCompra.getCodigo());
 				proveedorArticuloNuevo.setCreated_at(new Date());
 				proveedorArticuloNuevo.setUpdated_at(new Date());
 				proveedorArticuloNuevo.setArticulo(detalleCompra.getArticulo());
@@ -686,11 +691,13 @@ public class CompraBoImpl implements CompraBo {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(recepcionFacturaDetalle.getCodigoComercialCodigo(), recepcionFactura.getEmpresa());
 					DetalleCompra detalleCompra = new DetalleCompra(recepcionFacturaDetalle);
 					detalleCompra.setImpuesto(getImpuestoAplicado(recepcionFacturaDetalle));
-
+          detalleCompra.setCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
+          detalleCompra.setDescripcion(recepcionFacturaDetalle.getDetalle());
 					detalleCompra.setArticulo(articulo);
 					detalleCompra.setCompra(compra);
 					detalleCompra.setCreated_at(new Date());
 					detalleCompra.setUpdated_at(new Date());
+					detalleCompra.setEstado(Constantes.DETALLE_APLICADO_NO);
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
@@ -759,7 +766,7 @@ public class CompraBoImpl implements CompraBo {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" +
 		              "   inner join proveedores p on p.id = c.proveedor_id\n" + 
-		              "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6";
+		              "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -786,15 +793,17 @@ public class CompraBoImpl implements CompraBo {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
 					articulo.setFechaUltimaCompra(compraBD.getFechaIngreso());
 				}
-					if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+				//	if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 						if(compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
 							disminuirInventario(articulo, compraBD, detalleCompra);	
 						}else {
 							aplicarInventario(compraBD, detalleCompra, articulo);	
 						}
-					}else {
-						articulo.setCosto(detalleCompra.getCosto());
-					}
+					//}else {
+					//	articulo.setCosto(detalleCompra.getCosto());
+				//	}
+					detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);	
+					articulo.setContable(Constantes.CONTABLE_SI);
 					articulo.setUpdated_at(new Date());
 					articulo.setPrecioPublico(precioPublico);
 					articulo.setGananciaPrecioPublico(ganancia);
@@ -802,8 +811,12 @@ public class CompraBoImpl implements CompraBo {
 
 				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor,articulo);
 			}
-			compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
-			compraDao.modificar(compraBD);
+			Integer contador = detalleCompraDao.ContarDetalleCompraSinIngresar(compraBD.getId());
+			if(contador != null && contador.equals(Constantes.ZEROS)) {
+				compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
+				compraDao.modificar(compraBD);
+				
+			}
 			resultado =  1;
 
 		} catch (Exception e) {

@@ -42,6 +42,7 @@ import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleCompraBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
+import com.emprendesoftcr.Bo.FEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
@@ -132,6 +133,8 @@ public class ComprasController {
 	@Autowired
 	private EmpresaBo																									empresaBo;
 	
+	@Autowired
+	private FEMensajeReceptorAutomaticoBo fEMensajeReceptorAutomaticoBo;
 	
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -219,7 +222,7 @@ public class ComprasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/recepcionComprasMasivas.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregarComprasMasivas(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaCompras") String listaCompras, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarComprasMasivas(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaCompras") String listaCompras, @ModelAttribute EtiquetasCommand EtiquetasCommand1,@RequestParam("condicionImpuesto") String condicionImpuesto,@RequestParam("tipoGasto") Integer tipoGasto,@RequestParam("codigoActividad") String codigoActividad,@RequestParam("mensaje") String mensaje, @RequestParam("detalleMensaje") String detalleMensaje,BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		RecepcionFactura recepcionFactura = null;
 		try {
@@ -243,9 +246,16 @@ public class ComprasController {
 					comprasReceptorAutomatico = gson.fromJson(json.toString(), VectorCompras.class);
 					recepcionFactura = gson.fromJson(comprasReceptorAutomatico.getRecepcionFactura(), RecepcionFactura.class);
 					recepcionFactura.setId(null);
+					recepcionFactura.setMensaje(mensaje);
+					recepcionFactura.setTipoGasto(tipoGasto);
+					recepcionFactura.setDetalleMensaje(detalleMensaje == null?"Aceptacion automatica de la compra":detalleMensaje);
+					recepcionFactura.setCondicionImpuesto(condicionImpuesto);
+					recepcionFactura.setCodigoActividad(codigoActividad);
 					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
 
-					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI);
+					FEMensajeReceptorAutomatico fEMensajeReceptorAutomatico= fEMensajeReceptorAutomaticoBo.buscar(comprasReceptorAutomatico.getId());
+					
+					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI,fEMensajeReceptorAutomatico);
 				
 					
 
@@ -373,7 +383,18 @@ public class ComprasController {
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		try {
-			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico,  codigoInventario, usuarioSesion.getEmpresa(),codigoProveedor);	
+			precioPublico = precioPublico == null?Constantes.ZEROS_DOUBLE:precioPublico;
+			gananciaPrecioPublico = gananciaPrecioPublico == null?Constantes.ZEROS_DOUBLE:gananciaPrecioPublico;
+			codigoInventario = codigoInventario == null?Constantes.EMPTY : codigoInventario;
+			if(precioPublico.equals(Constantes.ZEROS_DOUBLE)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico");	
+			}
+			if(codigoInventario.equals(Constantes.EMPTY)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.codigo.publico");	
+			}
+			
+			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico,  codigoInventario, usuarioSesion.getEmpresa(),codigoProveedor);
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.actualizo.detalle.correctamente", resultado);
 			} catch (Exception e) {
 				return RespuestaServiceValidator.ERROR(e);
@@ -406,7 +427,7 @@ public class ComprasController {
 				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
 			}
 			JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
-			return crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_NO);
+			return crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_NO,null);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -425,7 +446,7 @@ public class ComprasController {
 	 * @return
 	 * @throws Exception
 	 */
-	private RespuestaServiceValidator<?> crearFacturaAutomaticaCompras(HttpServletRequest request, RecepcionFactura recepcionFactura, JSONArray jsonArrayDetalle, BindingResult result, SessionStatus status, Integer tipoIngreso) throws Exception {
+	private RespuestaServiceValidator<?> crearFacturaAutomaticaCompras(HttpServletRequest request, RecepcionFactura recepcionFactura, JSONArray jsonArrayDetalle, BindingResult result, SessionStatus status, Integer tipoIngreso,FEMensajeReceptorAutomatico fEMensajeReceptorAutomatico) throws Exception {
 		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -440,7 +461,7 @@ public class ComprasController {
 			recepcionFactura.setMensaje(recepcionFactura.getMensaje() != null && recepcionFactura.getMensaje().equals(Constantes.EMPTY) ? "Compra aceptada" : recepcionFactura.getMensaje());
 			// Se validan los datos
 			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
-				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
+				result.rejectValue("detalleMensaje", "error.recepcionFactura.mensaje.requerido");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.recepcionFactura.factura.otro.receptor");
 			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getReceptorCedula().trim().toUpperCase())) {
 
@@ -469,7 +490,7 @@ public class ComprasController {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
 					RecepcionFacturaDetalle detalleNuevo = new RecepcionFacturaDetalle();
-
+					//detalleNuevo.setDetalle(detalle);
 					detalleNuevo.setNumeroLinea(detalle.getNumeroLinea() == null ? Constantes.ZEROS : detalle.getNumeroLinea());
 					detalleNuevo.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidad());
 					detalleNuevo.setUnidadMedida(detalle.getUnidadMedida() == null ? Constantes.EMPTY : detalle.getUnidadMedida());
@@ -588,8 +609,8 @@ public class ComprasController {
 					recepcionFacturaDetalleNueva.setSubTotal(recepcionFacturaDetalle.getSubTotal());
 					recepcionFacturaDetalleNueva.setMontoTotalLinea(recepcionFacturaDetalle.getMontoTotalLinea());
 					recepcionFacturaDetalleNueva.setImpuestoNeto(recepcionFacturaDetalle.getImpuestoNeto());
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo(recepcionFacturaDetalle.getCodigoComercialTipo());
-					recepcionFacturaDetalleNueva.setCodigoComercialCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
+					recepcionFacturaDetalleNueva.setCodigoComercialTipo(recepcionFacturaDetalle.getCodigoComercialTipo() != null && recepcionFacturaDetalle.getCodigoComercialTipo().length() > 2?recepcionFacturaDetalle.getCodigoComercialTipo().substring(0,1):recepcionFacturaDetalle.getCodigoComercialTipo());
+					recepcionFacturaDetalleNueva.setCodigoComercialCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo() != null && recepcionFacturaDetalle.getCodigoComercialCodigo().length() > 25?recepcionFacturaDetalle.getCodigoComercialCodigo().substring(0,25):recepcionFacturaDetalle.getCodigoComercialCodigo() );
 					recepcionFacturaDetalleNueva.setDescuentoMonto(recepcionFacturaDetalle.getDescuentoMonto());
 					recepcionFacturaDetalleNueva.setDescuentoNaturaleza(recepcionFacturaDetalle.getDescuentoNaturaleza());
 					recepcionFacturaDetalleNueva.setImpuestoCodigo(recepcionFacturaDetalle.getImpuestoCodigo());
@@ -638,12 +659,12 @@ public class ComprasController {
 					recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
 				}
 			}
-			if (tipoIngreso.equals(Constantes.APLICADO_RECEPCION_AUTOMATICA_SI)) {
+			if (tipoIngreso.equals(Constantes.APLICADO_RECEPCION_AUTOMATICA_SI) && recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO) ) {
 				Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
 
 				if (proveedor == null) {
 					proveedor = new Proveedor();
-					proveedor.setCedula(recepcionFactura.getReceptorCedula());
+					proveedor.setCedula(recepcionFactura.getEmisorCedula());
 					proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
 					proveedor.setCreated_at(new Date());
 					proveedor.setEstado(Constantes.ESTADO_ACTIVO);
@@ -658,12 +679,16 @@ public class ComprasController {
 					proveedorBo.agregar(proveedor);
 
 				}
-
+				
 				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, detallesCompra);
-				ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula());
+			//	ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula().trim());
 				
 			}
-
+			if(fEMensajeReceptorAutomatico !=null) {
+				fEMensajeReceptorAutomatico.setEstado(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA);
+				fEMensajeReceptorAutomaticoBo.modificar(fEMensajeReceptorAutomatico);
+				
+			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
 		} catch (Exception e) {

@@ -17,7 +17,7 @@ public interface DetalleCompraDao {
 	
 	DetalleCompra findById(Long idDetalleCompra);
 
-	
+	Integer ContarDetalleCompraSinIngresar(Long idCompra);
 
 
 }

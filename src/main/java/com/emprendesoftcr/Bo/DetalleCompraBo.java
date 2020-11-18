@@ -26,5 +26,6 @@ public interface DetalleCompraBo {
 	public List<Map<String, Object>>  detalleCompraSinIngresar(Long idCompra);
 	
 	DetalleCompra findById(Long idDetalleCompra);
+	Integer ContarDetalleCompraSinIngresar(Long idCompra);
 
 }

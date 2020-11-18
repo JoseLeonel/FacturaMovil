@@ -317,6 +317,8 @@ table {
     margin: 2px 0px !important;
     width: 189px!important;
     height: 68px !important;
+    font-size: 11px!important;
+    font-weight: 900!important;
 }
 	table td {
 		text-align: left !important;
@@ -433,7 +435,7 @@ var reglasDeValidacion = function() {
 		rules : {
 			descripcion : {
 				required : true,
-                maxlength:255,
+                maxlength:501,
                 minlength:1,
 			},
 			codigo : {
