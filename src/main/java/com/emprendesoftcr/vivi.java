@@ -17,7 +17,7 @@ public class vivi {
 		Double lado1 = 4d;
 		Double resultado = lado1 * lado;
 		
-		
+		String t = parseTime("2020-11-13T10:22:27"); 
 		
 		
 		System.out.println("Yo naci:" + resultado);
@@ -45,7 +45,17 @@ public class vivi {
 //		System.out.println( "mes" + month);
 	}
 	
-	
+  public static String parseTime(String date){
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+    try {
+        Date date1 = format.parse(date);
+        String d= new SimpleDateFormat("yyyy/dd/MM HH:mm:ss").format(date1);
+        return d;
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    return "";
+}
 
 }
 

@@ -177,6 +177,28 @@ public class RecepcionFacturaDetalle implements Serializable {
 	@Column(name = "porce_descuento", precision = 18, scale = 5)
 	private Double						procentajeDesc;
 	
+	@Column(name = "codigo_comercial_tipo1")
+	private String						codigoComercialTipo1;
+	
+	@Column(name = "codigo_comercial_codigo1")
+	private String						codigoComercial1;
+	
+	@Column(name = "codigo_comercial_tipo2")
+	private String						codigoComercialTipo2;
+	
+	@Column(name = "codigo_comercial_codigo2")
+	private String						codigoComercial2;
+	
+	
+	@Column(name = "codigo_comercial_tipo3")
+	private String						codigoComercialTipo3;
+	
+	@Column(name = "codigo_comercial_codigo3")
+	private String						codigoComercial3;
+	
+	
+	@Column(name = "codigo_cabys")
+	private String						codigoCabys;
 	
 
 	@ManyToOne
@@ -691,6 +713,86 @@ public class RecepcionFacturaDetalle implements Serializable {
 
 	public void setImpuestoMonto6(Double impuestoMonto6) {
 		this.impuestoMonto6 = impuestoMonto6;
+	}
+
+	
+	public Double getProcentajeDesc() {
+		return procentajeDesc;
+	}
+
+	
+	public void setProcentajeDesc(Double procentajeDesc) {
+		this.procentajeDesc = procentajeDesc;
+	}
+
+	
+	public String getCodigoComercialTipo1() {
+		return codigoComercialTipo1;
+	}
+
+	
+	public void setCodigoComercialTipo1(String codigoComercialTipo1) {
+		this.codigoComercialTipo1 = codigoComercialTipo1;
+	}
+
+	
+	public String getCodigoComercial1() {
+		return codigoComercial1;
+	}
+
+	
+	public void setCodigoComercial1(String codigoComercial1) {
+		this.codigoComercial1 = codigoComercial1;
+	}
+
+	
+	public String getCodigoComercialTipo2() {
+		return codigoComercialTipo2;
+	}
+
+	
+	public void setCodigoComercialTipo2(String codigoComercialTipo2) {
+		this.codigoComercialTipo2 = codigoComercialTipo2;
+	}
+
+	
+	public String getCodigoComercial2() {
+		return codigoComercial2;
+	}
+
+	
+	public void setCodigoComercial2(String codigoComercial2) {
+		this.codigoComercial2 = codigoComercial2;
+	}
+
+	
+	public String getCodigoComercialTipo3() {
+		return codigoComercialTipo3;
+	}
+
+	
+	public void setCodigoComercialTipo3(String codigoComercialTipo3) {
+		this.codigoComercialTipo3 = codigoComercialTipo3;
+	}
+
+	
+	public String getCodigoComercial3() {
+		return codigoComercial3;
+	}
+
+	
+	public void setCodigoComercial3(String codigoComercial3) {
+		this.codigoComercial3 = codigoComercial3;
+	}
+
+	
+	public String getCodigoCabys() {
+		return codigoCabys;
+	}
+
+	
+	public void setCodigoCabys(String codigoCabys) {
+		this.codigoCabys = codigoCabys;
 	}
 	
 	

@@ -254,6 +254,7 @@ public class ComprasController {
 					JSONArray jsonArrayDetalleCompras = obtenerJsonArray("data", recepcionFactura.getDetalles());
 
 					FEMensajeReceptorAutomatico fEMensajeReceptorAutomatico= fEMensajeReceptorAutomaticoBo.buscar(comprasReceptorAutomatico.getId());
+					recepcionFactura.setFacturaFechaEmision(Utils.parseDate(fEMensajeReceptorAutomatico.getFechaEmision()));
 					
 					respuestaServiceValidator = crearFacturaAutomaticaCompras(request, recepcionFactura, jsonArrayDetalleCompras, result, status, Constantes.APLICADO_RECEPCION_AUTOMATICA_SI,fEMensajeReceptorAutomatico);
 				
@@ -546,7 +547,19 @@ public class ComprasController {
 					detalleNuevo.setImpuestoCodigoTarifa6(detalle.getImpuestoCodigoTarifa6() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa6());
 					detalleNuevo.setImpuestoTarifa6(detalle.getImpuestoTarifa6() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa6());
 					detalleNuevo.setImpuestoMonto6(detalle.getImpuestoMonto6() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto6());
+					
+					detalleNuevo.setCodigoComercialTipo1(detalle.getCodigoComercialTipo1() == null?Constantes.EMPTY:detalle.getCodigoComercialTipo1());
+					detalleNuevo.setCodigoComercial1(detalle.getCodigoComercial1() == null?Constantes.EMPTY:detalle.getCodigoComercial1());
 
+					detalleNuevo.setCodigoComercialTipo2(detalle.getCodigoComercialTipo2() == null?Constantes.EMPTY:detalle.getCodigoComercialTipo2());
+					detalleNuevo.setCodigoComercial2(detalle.getCodigoComercial2() == null?Constantes.EMPTY:detalle.getCodigoComercial2());
+
+					detalleNuevo.setCodigoComercialTipo3(detalle.getCodigoComercialTipo3() == null?Constantes.EMPTY:detalle.getCodigoComercialTipo3());
+					detalleNuevo.setCodigoComercial3(detalle.getCodigoComercial3() == null?Constantes.EMPTY:detalle.getCodigoComercial3());
+					
+					detalleNuevo.setCodigoCabys(detalle.getCodigoCabys() == null?Constantes.EMPTY:detalle.getCodigoCabys());
+
+					
 					detallesCompra.add(detalleNuevo);
 				}
 			}
@@ -656,6 +669,18 @@ public class ComprasController {
 					recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(recepcionFacturaDetalle.getImpuestoExoneracionMonto());
 					recepcionFacturaDetalleNueva.setBaseImponible(recepcionFacturaDetalle.getBaseImponible());
 					recepcionFacturaDetalleNueva.setRecepcionFactura(recepcionFactura);
+					
+					recepcionFacturaDetalleNueva.setCodigoComercialTipo1(recepcionFacturaDetalle.getCodigoComercialTipo1() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercialTipo1());
+					recepcionFacturaDetalleNueva.setCodigoComercial1(recepcionFacturaDetalle.getCodigoComercial1() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercial1());
+
+					recepcionFacturaDetalleNueva.setCodigoComercialTipo2(recepcionFacturaDetalle.getCodigoComercialTipo2() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercialTipo2());
+					recepcionFacturaDetalleNueva.setCodigoComercial2(recepcionFacturaDetalle.getCodigoComercial2() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercial2());
+
+					recepcionFacturaDetalleNueva.setCodigoComercialTipo3(recepcionFacturaDetalle.getCodigoComercialTipo3() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercialTipo3());
+					recepcionFacturaDetalleNueva.setCodigoComercial3(recepcionFacturaDetalle.getCodigoComercial3() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoComercial3());
+					
+					recepcionFacturaDetalleNueva.setCodigoCabys(recepcionFacturaDetalle.getCodigoCabys() == null?Constantes.EMPTY:recepcionFacturaDetalle.getCodigoCabys());
+
 					recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
 				}
 			}
@@ -834,11 +859,6 @@ public class ComprasController {
 
 			// Se prepara el correo
 			String from = "aceptarCompraXProveedor@facturaemprendesoftcr.com";
-//			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
-//				}
-//			}
 			String subject = "Compras Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 			ArrayList<String> listaCorreos = new ArrayList<>();

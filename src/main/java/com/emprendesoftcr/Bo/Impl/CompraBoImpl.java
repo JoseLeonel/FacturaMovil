@@ -172,6 +172,18 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setUpdated_at(new Date());
 					detalleCompra.setCodigo(detalleCompraCommand.getCodigo());
 					detalleCompra.setDescripcion(detalleCompraCommand.getDescripcion());
+
+					detalleCompra.setCodigoComercialTipo1(detalleCompraCommand.getCodigoComercialTipo1() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercialTipo1());
+					detalleCompra.setCodigoComercial1(detalleCompraCommand.getCodigoComercial1() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercial1());
+
+					detalleCompra.setCodigoComercialTipo2(detalleCompraCommand.getCodigoComercialTipo2() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercialTipo2());
+					detalleCompra.setCodigoComercial2(detalleCompraCommand.getCodigoComercial2() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercial2());
+
+					detalleCompra.setCodigoComercialTipo3(detalleCompraCommand.getCodigoComercialTipo3() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercialTipo3());
+					detalleCompra.setCodigoComercial3(detalleCompraCommand.getCodigoComercial3() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercial3());
+
+					detalleCompra.setCodigoCabys(detalleCompraCommand.getCodigoCabys() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoCabys());
+
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
@@ -191,7 +203,7 @@ public class CompraBoImpl implements CompraBo {
 
 						}
 
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null,null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -242,32 +254,55 @@ public class CompraBoImpl implements CompraBo {
 	 * @param detalleCompra
 	 * @param articulo
 	 */
-	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor,Articulo articulo) {
+	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor, Articulo articulo) {
 		try {
-			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad()>Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
-			Double costo  = detalleCompra.getCosto() != null && detalleCompra.getCosto() >Constantes.ZEROS_DOUBLE ? detalleCompra.getCosto():Constantes.ZEROS_DOUBLE;
-			Double totalLinea = costo!= null ? costo : Constantes.ZEROS_DOUBLE;
-			Double totalDescuento = detalleCompra.getTotalDescuento() != null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE?detalleCompra.getTotalDescuento():Constantes.ZEROS_DOUBLE;
-			Double descuento = totalDescuento > Constantes.ZEROS_DOUBLE  ? totalDescuento / cantidad:Constantes.ZEROS_DOUBLE;
-			Double costoNuevo = descuento > Constantes.ZEROS_DOUBLE ?totalLinea - descuento:totalLinea;
+			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double costo = detalleCompra.getCosto() != null && detalleCompra.getCosto() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
+			Double totalLinea = costo != null ? costo : Constantes.ZEROS_DOUBLE;
+			Double totalDescuento = detalleCompra.getTotalDescuento() != null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() : Constantes.ZEROS_DOUBLE;
+			Double descuento = totalDescuento > Constantes.ZEROS_DOUBLE ? totalDescuento / cantidad : Constantes.ZEROS_DOUBLE;
+			Double costoNuevo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
-				proveedorArticulo.setCodigoProveedor(detalleCompra.getCodigo()== null?Constantes.EMPTY:detalleCompra.getCodigo());
-				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo() );
+				proveedorArticulo.setCodigoProveedor(detalleCompra.getCodigo() == null ? Constantes.EMPTY : detalleCompra.getCodigo());
+				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo());
+
+				proveedorArticulo.setCodigoComercialTipo1(detalleCompra.getCodigoComercialTipo1() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo1());
+				proveedorArticulo.setCodigoComercial1(detalleCompra.getCodigoComercial1() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial1());
+
+				proveedorArticulo.setCodigoComercialTipo2(detalleCompra.getCodigoComercialTipo2() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo2());
+				proveedorArticulo.setCodigoComercial2(detalleCompra.getCodigoComercial2() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial2());
+
+				proveedorArticulo.setCodigoComercialTipo3(detalleCompra.getCodigoComercialTipo3() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo3());
+				proveedorArticulo.setCodigoComercial3(detalleCompra.getCodigoComercial3() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial3());
+
+				proveedorArticulo.setCodigoCabys(detalleCompra.getCodigoCabys() == null ? Constantes.EMPTY : detalleCompra.getCodigoCabys());
+
 				proveedorArticulo.setCosto(costoNuevo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
 			} else {
-				ProveedorArticulo	proveedorArticuloNuevo = new ProveedorArticulo();
+				ProveedorArticulo proveedorArticuloNuevo = new ProveedorArticulo();
 				proveedorArticuloNuevo.setId(null);
-				proveedorArticuloNuevo.setCodigoProveedor(detalleCompra.getCodigo()== null?Constantes.EMPTY:detalleCompra.getCodigo());
+				proveedorArticuloNuevo.setCodigoProveedor(detalleCompra.getCodigo() == null ? Constantes.EMPTY : detalleCompra.getCodigo());
 				proveedorArticuloNuevo.setCreated_at(new Date());
 				proveedorArticuloNuevo.setUpdated_at(new Date());
 				proveedorArticuloNuevo.setArticulo(detalleCompra.getArticulo());
 				proveedorArticuloNuevo.setCodigo(detalleCompra.getArticulo().getCodigo());
 				proveedorArticuloNuevo.setCosto(costoNuevo);
 				proveedorArticuloNuevo.setProveedor(proveedor);
+				proveedorArticuloNuevo.setCodigoComercialTipo1(detalleCompra.getCodigoComercialTipo1() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo1());
+				proveedorArticuloNuevo.setCodigoComercial1(detalleCompra.getCodigoComercial1() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial1());
+
+				proveedorArticuloNuevo.setCodigoComercialTipo2(detalleCompra.getCodigoComercialTipo2() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo2());
+				proveedorArticuloNuevo.setCodigoComercial2(detalleCompra.getCodigoComercial2() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial2());
+
+				proveedorArticuloNuevo.setCodigoComercialTipo3(detalleCompra.getCodigoComercialTipo3() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercialTipo3());
+				proveedorArticuloNuevo.setCodigoComercial3(detalleCompra.getCodigoComercial3() == null ? Constantes.EMPTY : detalleCompra.getCodigoComercial3());
+
+				proveedorArticuloNuevo.setCodigoCabys(detalleCompra.getCodigoCabys() == null ? Constantes.EMPTY : detalleCompra.getCodigoCabys());
+
 				proveedorArticuloDao.agregar(proveedorArticuloNuevo);
 			}
 
@@ -691,8 +726,13 @@ public class CompraBoImpl implements CompraBo {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(recepcionFacturaDetalle.getCodigoComercialCodigo(), recepcionFactura.getEmpresa());
 					DetalleCompra detalleCompra = new DetalleCompra(recepcionFacturaDetalle);
 					detalleCompra.setImpuesto(getImpuestoAplicado(recepcionFacturaDetalle));
-          detalleCompra.setCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
-          detalleCompra.setDescripcion(recepcionFacturaDetalle.getDetalle());
+					detalleCompra.setCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
+					detalleCompra.setCodigoComercial1(recepcionFacturaDetalle.getCodigoComercial1());
+					detalleCompra.setCodigoComercial2(recepcionFacturaDetalle.getCodigoComercial2());
+					detalleCompra.setCodigoComercial3(recepcionFacturaDetalle.getCodigoComercial3());
+					detalleCompra.setCodigoCabys(recepcionFacturaDetalle.getCodigoCabys());
+
+					detalleCompra.setDescripcion(recepcionFacturaDetalle.getDetalle());
 					detalleCompra.setArticulo(articulo);
 					detalleCompra.setCompra(compra);
 					detalleCompra.setCreated_at(new Date());
@@ -701,7 +741,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null,null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
 					}
 
 				}
@@ -711,22 +751,22 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalImpuesto(recepcionFactura.getFacturaTotalImpuestos());
 			compraDao.modificar(compra);
 			// Crear Credito del cliente
-				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
-					CuentaPagar cuentaPagar = new CuentaPagar();
-					cuentaPagar.setConsecutivo(compra.getConsecutivo());
-					cuentaPagar.setCreated_at(new Date());
-					cuentaPagar.setUpdated_at(new Date());
-					cuentaPagar.setEmpresa(compra.getEmpresa());
-					cuentaPagar.setTotal(Utils.roundFactura(compra.getTotalCompra(), 2));
-					cuentaPagar.setFechaCredito(compra.getFechaCredito());
-					cuentaPagar.setTotalSaldo(Utils.roundFactura(compra.getTotalCompra(), 2));
-					cuentaPagar.setProveedor(compra.getProveedor());
-					cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
-					cuentaPagar.setUsuarioCreacion(usuario);
-					cuentaPagar.setEstado(Constantes.CUENTA_POR_PAGAR_ESTADO_PENDIENTE);
-					cuentaPagarDao.agregar(cuentaPagar);
+			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+				CuentaPagar cuentaPagar = new CuentaPagar();
+				cuentaPagar.setConsecutivo(compra.getConsecutivo());
+				cuentaPagar.setCreated_at(new Date());
+				cuentaPagar.setUpdated_at(new Date());
+				cuentaPagar.setEmpresa(compra.getEmpresa());
+				cuentaPagar.setTotal(Utils.roundFactura(compra.getTotalCompra(), 2));
+				cuentaPagar.setFechaCredito(compra.getFechaCredito());
+				cuentaPagar.setTotalSaldo(Utils.roundFactura(compra.getTotalCompra(), 2));
+				cuentaPagar.setProveedor(compra.getProveedor());
+				cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
+				cuentaPagar.setUsuarioCreacion(usuario);
+				cuentaPagar.setEstado(Constantes.CUENTA_POR_PAGAR_ESTADO_PENDIENTE);
+				cuentaPagarDao.agregar(cuentaPagar);
 
-				}
+			}
 
 		} catch (Exception e) {
 			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
@@ -764,9 +804,7 @@ public class CompraBoImpl implements CompraBo {
 	public List<Map<String, Object>> comprasSinIngresarInventario(Empresa empresa) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" +
-		              "   inner join proveedores p on p.id = c.proveedor_id\n" + 
-		              "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
+		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" + "   inner join proveedores p on p.id = c.proveedor_id\n" + "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -793,37 +831,44 @@ public class CompraBoImpl implements CompraBo {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
 					articulo.setFechaUltimaCompra(compraBD.getFechaIngreso());
 				}
-				//	if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
-						if(compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
-							disminuirInventario(articulo, compraBD, detalleCompra);	
-						}else {
-							aplicarInventario(compraBD, detalleCompra, articulo);	
-						}
-					//}else {
-					//	articulo.setCosto(detalleCompra.getCosto());
-				//	}
-					detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);	
-					articulo.setContable(Constantes.CONTABLE_SI);
-					articulo.setUpdated_at(new Date());
-					articulo.setPrecioPublico(precioPublico);
-					articulo.setGananciaPrecioPublico(ganancia);
-					articuloDao.modificar(articulo);
+				// if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+				if (compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
+					disminuirInventario(articulo, compraBD, detalleCompra);
+				} else {
+					aplicarInventario(compraBD, detalleCompra, articulo);
+				}
+				// }else {
+				// articulo.setCosto(detalleCompra.getCosto());
+				// }
+				detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);
+				if (detalleCompra.getTarifaImpuesto() != null && detalleCompra.getImpuesto() != null && detalleCompra.getCodigoTipoImpuesto() != null) {
+					if (!detalleCompra.getTarifaImpuesto().equals(Constantes.EMPTY) && !detalleCompra.getCodigoTipoImpuesto().equals(Constantes.EMPTY)) {
+						articulo.setCodigoTarifa(detalleCompra.getTarifaImpuesto());
+						articulo.setImpuesto(detalleCompra.getImpuesto());
+						articulo.setTipoImpuesto(detalleCompra.getCodigoTipoImpuesto());
+					}
+				}
+				articulo.setContable(Constantes.CONTABLE_SI);
+				articulo.setUpdated_at(new Date());
+				articulo.setPrecioPublico(precioPublico);
+				articulo.setGananciaPrecioPublico(ganancia);
+				articuloDao.modificar(articulo);
 
-				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor,articulo);
+				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor, articulo);
 			}
 			Integer contador = detalleCompraDao.ContarDetalleCompraSinIngresar(compraBD.getId());
-			if(contador != null && contador.equals(Constantes.ZEROS)) {
+			if (contador != null && contador.equals(Constantes.ZEROS)) {
 				compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
 				compraDao.modificar(compraBD);
-				
+
 			}
-			resultado =  1;
+			resultado = 1;
 
 		} catch (Exception e) {
 			log.info("** Error  actualizar linea de detalle: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
-	  return resultado;
+		return resultado;
 
 		// 3. Crear la asociacion del proveedor con el inventario
 		// 4. Actualizar el detalle cambiando de estado de aplicado

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.command;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.modelo.Articulo;
 
 public class DetalleCompraCommand {
@@ -19,6 +21,23 @@ public class DetalleCompraCommand {
 	private Double		descuento;
 	private Double		montoTotalLinea;
 	private Articulo	articulo;
+
+	private String		codigoComercialTipo1;
+
+	private String		codigoComercial1;
+
+	private String		codigoComercialTipo2;
+
+	private String		codigoComercial2;
+
+	private String		codigoComercialTipo3;
+
+	private String		codigoComercial3;
+
+	private String		codigoCabys;
+	private String						codigoTipoImpuesto;
+	
+	private String						tarifaImpuesto;
 
 	public DetalleCompraCommand() {
 		super();
@@ -142,6 +161,82 @@ public class DetalleCompraCommand {
 
 	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
+	}
+
+	public String getCodigoComercialTipo1() {
+		return codigoComercialTipo1;
+	}
+
+	public void setCodigoComercialTipo1(String codigoComercialTipo1) {
+		this.codigoComercialTipo1 = codigoComercialTipo1;
+	}
+
+	public String getCodigoComercial1() {
+		return codigoComercial1;
+	}
+
+	public void setCodigoComercial1(String codigoComercial1) {
+		this.codigoComercial1 = codigoComercial1;
+	}
+
+	public String getCodigoComercialTipo2() {
+		return codigoComercialTipo2;
+	}
+
+	public void setCodigoComercialTipo2(String codigoComercialTipo2) {
+		this.codigoComercialTipo2 = codigoComercialTipo2;
+	}
+
+	public String getCodigoComercial2() {
+		return codigoComercial2;
+	}
+
+	public void setCodigoComercial2(String codigoComercial2) {
+		this.codigoComercial2 = codigoComercial2;
+	}
+
+	public String getCodigoComercialTipo3() {
+		return codigoComercialTipo3;
+	}
+
+	public void setCodigoComercialTipo3(String codigoComercialTipo3) {
+		this.codigoComercialTipo3 = codigoComercialTipo3;
+	}
+
+	public String getCodigoComercial3() {
+		return codigoComercial3;
+	}
+
+	public void setCodigoComercial3(String codigoComercial3) {
+		this.codigoComercial3 = codigoComercial3;
+	}
+
+	public String getCodigoCabys() {
+		return codigoCabys;
+	}
+
+	public void setCodigoCabys(String codigoCabys) {
+		this.codigoCabys = codigoCabys;
+	}
+
+	
+	public String getCodigoTipoImpuesto() {
+		return codigoTipoImpuesto;
+	}
+
+	
+	public void setCodigoTipoImpuesto(String codigoTipoImpuesto) {
+		this.codigoTipoImpuesto = codigoTipoImpuesto;
+	}
+
+	
+	public String getTarifaImpuesto() {
+		return tarifaImpuesto;
+	}
+
+	
+	public void setTarifaImpuesto(String tarifaImpuesto) {
+		this.tarifaImpuesto = tarifaImpuesto;
 	}
 
 }
