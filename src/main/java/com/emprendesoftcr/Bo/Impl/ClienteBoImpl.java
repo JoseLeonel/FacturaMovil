@@ -31,7 +31,6 @@ import com.emprendesoftcr.web.command.ClienteMagList;
 @Service("clienteBo")
 public class ClienteBoImpl implements ClienteBo {
 
-	
 	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -134,31 +133,26 @@ public class ClienteBoImpl implements ClienteBo {
 	@Override
 	public ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand) {
 		ClienteMag clienteMag = new ClienteMag();
-		
-		String cedula  = clienteCommand.getCedula() !=null && !clienteCommand.getCedula().equals(Constantes.EMPTY)? clienteCommand.getCedula():clienteCommand.getIdentificacionExtranjero();
-		
-		
-		
+
+		String cedula = clienteCommand.getCedula() != null && !clienteCommand.getCedula().equals(Constantes.EMPTY) ? clienteCommand.getCedula() : clienteCommand.getIdentificacionExtranjero();
 
 		try {
 			// request url
-
 			clienteCommand.setTipoMag(clienteCommand.getTipoMag() == null ? Constantes.CLIENTE_MAG_INACTIVO : clienteCommand.getTipoMag());
-			//String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + "204050862" : Constantes.API_MAG_PESCA + "3101050217";
-			
 			String url = clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_AGRO) ? Constantes.API_MAG_AGRO + cedula : Constantes.API_MAG_PESCA + cedula;
-
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
 			// make an HTTP GET request
 			ClienteMagList response = restTemplate.getForObject(url, ClienteMagList.class);
 			System.out.println(response.toString());
 			List<ClienteMag> employees = response.getListaDatosMAG();
-			for (int i = 0; i < employees.size(); i++) {
-				clienteMag = employees.get(i);
-
+			if (employees != null && !employees.isEmpty()) {
+				for (int i = 0; i < employees.size(); i++) {
+					if (employees.get(i).getIndicadorActivoMAG().equals(Constantes.INDICADOR_ACTIVO_MAG)) {
+						clienteMag = employees.get(i);
+					}
+				}
 			}
-			
 
 		} catch (Exception e) {
 			log.error(String.format("--error consultar APi de hacienda de agro o pesca :" + e.getMessage() + new Date()));
