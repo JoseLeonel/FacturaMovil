@@ -3,23 +3,24 @@
 <div id="imprimirModal" class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="imprimirModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
+        <h2 class="tituloPrincipal" >{titulo}</h2>
       <div  class= "wrap">
         <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                <h2 class="tituloPrincipal" >{titulo}</h2>
-                <div class="pantalla-imprimir">
-                    <div class="botones-imprimir">
-                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
-                                <div class="row">
-                                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                        <button type="button" class="btn btn-danger boton-imprimirCelular" onclick="printJS('imprimeme', 'html')" show={mostrarImprimiCelular == true}>Imprimir desde el <br>Celular</button>    
-                                    </div>
-                                </div>     
-                                 <div class="modal-footer">
-              <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-    </div>   
-                    
+                <div class="row">
+                    <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                        <a href="#" class="botonImprimir "  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                        <button type="button" class="btn btn-danger boton-imprimirCelular " onclick="printJS('imprimeme', 'html')" show={mostrarImprimiCelular == true}>Imprimir desde el <br>Celular</button>    
                     </div>
+                    <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                        <button type="button" class="btn-dark-gray btn-back  botonregreso"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                    </div>
+                </div>     
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-4 col-sx-12 col-sm-12 col-lg-4"></div>
+            <div class="col-md-4 col-sx-12 col-sm-12 col-lg-4">
                     <section class="">
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
@@ -161,9 +162,8 @@
                             </div>
                         </div>
                     </section>
-                    
                 </div>
-                </div>
+                <div class="col-md-4 col-sx-12 col-sm-12 col-lg-4"></div>
                 </div>
     </div>    
    
@@ -171,6 +171,43 @@
   </div>
 </div>
 <style type="text/css"  >
+* {
+    font-size: 12px !important;
+    font-family: 'Times New Roman' !important;
+}
+
+.modal-content{
+    overflow: scroll !important;
+}
+@media (min-width: 992px){
+.modal-lg {
+    width: 600px !important;
+}
+
+}
+
+.botonregreso{
+   margin-left: 15px !important;
+   padding-right: 65px!important;
+}
+.botonImprimir{
+    background-color: #66b12f;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px !important;
+    font-weight: 800;
+    margin-right: 15px;
+    border: none;
+    float: left;
+    margin-left: 15px;
+    cursor: pointer;
+
+}
     .tituloPrincipal{
         text-align: center;
     }

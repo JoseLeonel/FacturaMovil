@@ -221,7 +221,7 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
             "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
             "<Codigo>" +
             "<Tipo>" + tipoCodigo + "</Tipo>" +
-            "<Codigo>" + tipoCodigo + "</Codigo>" +
+            "<Codigo>" + detalle + "</Codigo>" +
             "</Codigo>" +
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
             "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
@@ -234,6 +234,9 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
             xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
                "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
+      	
+      	
+      	
       }
   	} catch (Exception e) {
   		log.info("** Error  xmlDetalleServicio: " + e.getMessage() + " fecha " + new Date());

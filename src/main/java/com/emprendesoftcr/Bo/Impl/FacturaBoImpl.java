@@ -826,9 +826,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			
+
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13  ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
@@ -844,21 +845,21 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuestoMag(detalleFacturaCommand.getImpuestoMag() != null ? detalleFacturaCommand.getImpuestoMag() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
-			
+
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
 			detalle.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
-			 
+
 			detalle.setPorcentajeExoneracion(Utils.getPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion(), detalle.getImpuesto()));
-			
+
 			detalle.setMontoTotal(Utils.getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
 			detalle.setMontoDescuento(Utils.getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
 			detalle.setSubTotal(Utils.getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
 			detalle.setMontoImpuestoMag(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoImpuesto()));
-      
+
 			detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
 
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
@@ -956,8 +957,6 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalComprobante(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante));
 
 	}
-	
-	
 
 	/**
 	 * Actualiza inventari

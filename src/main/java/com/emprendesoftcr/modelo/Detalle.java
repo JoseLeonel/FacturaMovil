@@ -166,6 +166,9 @@ public class Detalle implements Serializable {
 
 	@Column(name = "cant_notaC", precision = 18, scale = 5)
 	private Double						cantidadAplicadaNotaCredito;
+	
+	@Column(name = "cod_cabys", precision = 18, scale = 5)
+	private String						codigoCabys;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -755,5 +758,17 @@ public class Detalle implements Serializable {
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
+
+	
+	public String getCodigoCabys() {
+		return codigoCabys;
+	}
+
+	
+	public void setCodigoCabys(String codigoCabys) {
+		this.codigoCabys = codigoCabys;
+	}
+	
+	
 
 }

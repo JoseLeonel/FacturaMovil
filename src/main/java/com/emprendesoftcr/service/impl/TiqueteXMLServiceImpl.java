@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -37,6 +39,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	@Autowired
 	private DetalleBo							detalleBo;
 
+	@Autowired
+	private ArticuloBo							articuloBo;
 
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception {
@@ -95,7 +99,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}
 		
 	
-		
+		       String detalllesFactura = xmlDetalleServicio(factura);
+		       if(detalllesFactura.equals(Constantes.EMPTY)&& detalllesFactura != null) {
+		      	 return Constantes.EMPTY;
+		       }
 					 String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE_4_3 + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -123,7 +130,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		        "<CondicionVenta>" +  FacturaElectronicaUtils.procesarTexto(factura.getCondicionVenta()) + "</CondicionVenta>" +
 		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 		         + getMedioPago(factura) +
-		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
+		        "<DetalleServicio>" + detalllesFactura + "</DetalleServicio>" 
 		        + getOtrosCargos(factura) +"<ResumenFactura>" +
 		            getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
 		            "<TotalServGravados>" +  FacturaElectronicaUtils.truncateDecimal(factura.getTotalServGravados(),5) + "</TotalServGravados>" +
@@ -344,7 +351,9 @@ private String informacionFerencia(Factura factura) {
 	private String xmlDetalleServicio(Factura factura) throws Exception{
 	 String lineas = Constantes.EMPTY;
 	String tipoCodigo = Constantes.EMPTY;
+	Boolean noaplicaFacturaNotieneCodigoCabys = Boolean.TRUE;
 	try {
+		
     Collection<Detalle> detalles = detalleBo.findByFactura(factura);
     for(Detalle detalle : detalles) {
     	tipoCodigo = Constantes.EMPTY; 
@@ -378,8 +387,16 @@ private String informacionFerencia(Factura factura) {
     			unidadMedida = detalle.getUnidadMedida();
     		}
     	}
+    	Articulo articulo = articuloBo.buscarPorCodigoYEmpresa(detalle.getCodigo(), factura.getEmpresa());
+    	if(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
+    		noaplicaFacturaNotieneCodigoCabys = Boolean.FALSE;
+    	}
+    	
+    	String codigoCabys = articulo.getCodigoCabys() != null && !articulo.getCodigoCabys().equals(Constantes.EMPTY)?articulo.getCodigoCabys().trim():Constantes.EMPTY; 
+    	codigoCabys =articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ?articulo.getCodigoCabys().trim():Constantes.EMPTY;
     	lineas += "<LineaDetalle>" +
           "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
+          "<Codigo>" + codigoCabys + "</Codigo>" +
           "<CodigoComercial>" +
               "<Tipo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoCodigo,2)) + "</Tipo>" +
               "<Codigo>" + FacturaElectronicaUtils.procesarTexto(detalle.getCodigo()) + "</Codigo>" +
@@ -400,6 +417,10 @@ private String informacionFerencia(Factura factura) {
 	} catch (Exception e) {
 		log.error("** Error  xmlDetalleServicio: " + e.getMessage() + " fecha " + new Date());
 		throw e;
+	}finally {
+		if(noaplicaFacturaNotieneCodigoCabys.equals(Boolean.FALSE)) {
+			lineas = Constantes.EMPTY;
+		}
 	}
     
    

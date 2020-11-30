@@ -279,6 +279,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_ERROR																					= 10;
 	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE										= 99;
 	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO													= 98;
+	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS												= 60;
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str													= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR													= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR								= "aceptado";
