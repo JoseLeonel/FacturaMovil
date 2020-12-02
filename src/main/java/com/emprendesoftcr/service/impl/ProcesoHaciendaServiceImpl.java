@@ -548,7 +548,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/04 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -1186,7 +1186,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/03 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		Boolean resultado = Boolean.FALSE;
@@ -1583,7 +1583,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/02 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1635,7 +1635,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 														}
 													} else {
 														comprobanteXML = notaCreditoXMLIVAServices.getCrearXMLSinFirma(factura);
-														comprobanteXML = notaCreditoXMLIVAServices.getFirmarXML(comprobanteXML, factura.getEmpresa(), factura.getFechaEmision());
+														if (comprobanteXML != null && !comprobanteXML.equals(Constantes.EMPTY)) {
+															comprobanteXML = notaCreditoXMLIVAServices.getFirmarXML(comprobanteXML, factura.getEmpresa(), factura.getFechaEmision());
+														}
 													}
 
 												} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
