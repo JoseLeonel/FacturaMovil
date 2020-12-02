@@ -1406,7 +1406,7 @@ public class ArticuloController {
 	 * Buscar Articulo por id del inventario
 	 * @param request
 	 * @param model
-	 * @param articulo
+	 * @param articulo findArticuloByCodigojax
 	 * @param result
 	 * @param status
 	 * @return
@@ -1421,8 +1421,16 @@ public class ArticuloController {
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
 			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
 
+			
+			
 			if (articuloCommand == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
+			}
+			if(articuloCommand.getCodigoCabys() == null ) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
+			}
+			if(articuloCommand.getCodigoCabys().equals(Constantes.EMPTY)){
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {

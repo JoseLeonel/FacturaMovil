@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -44,6 +46,9 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	@Autowired
 	private DetalleBo							detalleBo;
 	
+	@Autowired
+	private ArticuloBo							articuloBo;
+
 	
 	/**
    * Firma de la Factura electronica
@@ -100,7 +105,10 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 			}else {
 				observacion = factura.getNota();
 			}
-			
+			String detalllesFactura = xmlDetalleServicio(factura);
+      if(detalllesFactura.equals(Constantes.EMPTY)&& detalllesFactura != null) {
+     	 return Constantes.EMPTY;
+      }
 			  String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
 			String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
 		  
@@ -128,7 +136,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	        "<CondicionVenta>" + FacturaElectronicaUtils.procesarTexto(factura.getCondicionVenta()) + "</CondicionVenta>" +
 	        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 	         + getMedioPago(factura) +
-	        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
+	        "<DetalleServicio>" + detalllesFactura + "</DetalleServicio>" 
 	        + getOtrosCargos(factura) +
 	        "<ResumenFactura>" +
 	            getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
@@ -246,6 +254,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   private String xmlDetalleServicio(Factura factura)  throws Exception {
     String tipoCodigo = Constantes.EMPTY;
     String lineas = "";
+    Boolean noaplicaFacturaNotieneCodigoCabys = Boolean.TRUE;
     try {
     	Collection<Detalle> detalles = detalleBo.findByFactura(factura);
       for(Detalle detalle : detalles) {
@@ -281,8 +290,18 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
       		}
       	}
       	
+      	Articulo articulo = articuloBo.buscarPorCodigoYEmpresa(detalle.getCodigo(), factura.getEmpresa());
+      	if(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
+      		noaplicaFacturaNotieneCodigoCabys = Boolean.FALSE;
+      	}
+      	
+      	String codigoCabys = articulo.getCodigoCabys() != null && !articulo.getCodigoCabys().equals(Constantes.EMPTY)?articulo.getCodigoCabys().trim():Constantes.EMPTY; 
+      	codigoCabys =articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ?articulo.getCodigoCabys().trim():Constantes.EMPTY;
+      	
+      	
       	lineas += "<LineaDetalle>" +
             "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
+            "<Codigo>" + codigoCabys + "</Codigo>" +
             "<CodigoComercial>" +
                 "<Tipo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoCodigo),2) + "</Tipo>" +
                 "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
@@ -303,6 +322,10 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   	} catch (Exception e) {
   		log.info("** Error  xmlDetalleServicio: " + e.getMessage() + " fecha " + new Date());
   		throw e;
+  	}finally {
+  		if(noaplicaFacturaNotieneCodigoCabys.equals(Boolean.FALSE)) {
+  			lineas = Constantes.EMPTY;
+  		}
   	}
     
     
