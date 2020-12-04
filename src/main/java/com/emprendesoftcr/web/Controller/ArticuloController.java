@@ -1423,7 +1423,7 @@ public class ArticuloController {
 
 			
 			
-			if (articuloCommand == null) {
+			if (articuloCommand == null ) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
 			if(articuloCommand.getCodigoCabys() == null ) {
