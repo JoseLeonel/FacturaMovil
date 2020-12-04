@@ -16,6 +16,7 @@
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
+                <input type="hidden" name="codigoCabys" id="codigoCabys" value="{articulo.codigoCabys}">
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >

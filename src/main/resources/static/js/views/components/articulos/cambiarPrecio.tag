@@ -1,14 +1,15 @@
 <cambiar-precio>
 
-    <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo</button>
-    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+    <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo 新</button>
+    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")} 修改</button>
     <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimirCambioPrecio btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
     <div class="row">
             <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                 <div id="divFormulario" >
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
-                            <input type="hidden" name="id" id="id" value="{articulo.id}">
+                            <input type="hidden" name="id" id="id" >
+                            <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
                             <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
                             <input type="hidden"  id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  >
@@ -34,15 +35,20 @@
                                     <div id="collapse1" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <div class="row">
-                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
                                                     <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
                                                 </div>
-                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
+                                                    <input type="text" class="campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys} autofocus="autofocus">
+                                                </div>
+
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
                                                     <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
                                                 </div>
-                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                                     <select  class="campo selectCategoria"   name="categoria"  data-live-search="true">
                                                         <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
@@ -159,12 +165,211 @@
     </div>
 
 
-
+<!--Modal mostrar Articulos de la empresa -->
+<div id='modalHaciendaCabys' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content" style="width:100%;">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central de Costa Rica(cabys@hacienda.go.cr) </h4>
+            </div>
+            <div class="modal-body aplicarScroll">
+                    <div class= "container">  
+                        <form id="formularioParametros" name ="formularioParametros" >
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <label  >Digite la descripcion del producto a buscar</label>
+                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                </div>
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <label  >Digite el codigo 碼</label>
+                                    <input type="text" class="form-control codigoCabys "   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                </div>
+                                <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
+                                    <label>cantidad</label>
+                                    <select  class="form-control" id="cantidad" name="cantidad" >
+                                        <option  each={cantidades}  value="{codigo}" selected="{cabys.estado ==codigo?true:false}" >{descripcion}</option>
+                                    </select>
+                                </div>
+                                <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
+                                    <button  onclick={__ConsultaCodigoCabys} id = "filtroBotonCabys" type="button" class="btn-green pull-right"  >Consultar</button>
+                                </div>                    
+                            </div> 
+                        </form>    
+                        <br>    
+                         <div class = "tablaDiseno">
+                           
+                                <table id="tableListarHaciendaCabys" class="table table-hover  tableListarHaciendaCabys "  >
+                                    <thead>
+                                        <th class="table-header colum1"  >{$.i18n.prop("listado.acciones")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.codigo")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.descripcion")}</th>
+                                        <th class="table-header colum2"  >Impuesto</th>
+                                        
+                                    </thead>
+                                    <tfoot style="display: table-header-group;">
+                                        <tr class="headt">
+                                            <th class="colum1"></th>
+                                            <th class="colum2">{$.i18n.prop("articulo.codigo")}</th>
+                                            <th class="colum2">{$.i18n.prop("articulo.descripcion")}</th>
+                                           
+                                            <th class="colum2">Impuesto</th>
+                                            
+                                        </tr>
+                                    </tfoot>
+                        </table>
+                    </div>    
+                    </div>
+            </div>        
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <style type ="text/css">
-  
+
+.aplicarScroll{
+   overflow: scroll;
+}
+
+table {
+    table-layout: unset!important;
+}
+.tablaDiseno{
+    position: relative;
+}
+.colum1{
+    width: 54px!important;
+    
+    }
+    .colum2{
+    width: 140px!important;
+    
+    }
+
+     .container {
+    display: flex!important;
+    width: 100%!important;
+    padding: 10px 0px 20px;
+    min-height: 350px;
+    flex-direction: column!important;
+    flex-wrap: nowrap!important;
+}
+.contenedor{
+    display:flex;
+}
+    #filtroBotonCabys{
+        margin-top: 25px;
+    }
+    
+    .fondoEncabezado {
+        background: #00539B;
+        color: #f9fafc;
+    }
+  .requeridoDato {
+            color: red;
+            text-align: left;
+            font-weight: 500;
+            font-size: 13px;
+        }
+    .fondoFacturacion {
+    background: rgb(247, 244, 244);
+    color: #f9fafc;
+    border-style: solid;
+    border-width: 5px;
+    }
+        .wrap{
+            max-width:1100px;
+            width:100%;
+        }
+        body {
+           
+            background:white;
+            font-size: 12px !important;
+        }
+        .contenedor-listar{
+            width:100%;
+        }
+        .input-table-search{
+            margin-left: 15px;
+            margin-right: 15px;
+            width:100%;
+        }
+        .botonConsulta{
+            margin-top:28px;
+        }
+        
+        
+        
+        .formatoTitulo{
+                color: white!important;
+        }
+        .btn-mostrar {
+            background-color: #4cae4c;
+            color: #FFF;
+            border-radius: 5px;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            /* margin-right: 15px; */
+            border: none;
+            float: right;
+            cursor: pointer;
+        }
+.form-input {
+    display: block;
+   
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.selectLeo{
+    width: 60px;
+}
+.textAreaLeo{
+    margin: 2px 0px !important;
+    width: 189px!important;
+    height: 68px !important;
+    font-size: 11px!important;
+    font-weight: 900!important;
+}
+	table td {
+		text-align: left !important;
+		font-size: 12px !important;
+	}
+	
+	table th {
+		text-align: !important;
+		font-size: 12px !important;
+	}
+	
+	th, td {
+		white-space: break-spaces !important;;
+	}
+    .formCabys{
+        width: 100%;
+    height: 30px;
+    font-size: 16px;
+    font-weight: 800;
+    }
+
    
     </style>
 <script>
@@ -220,6 +425,22 @@
     self.tarifas1    = {aaData:[]}
     self.tarifas2    = {aaData:[]}
      self.baseImponibles =[]
+      self.listaCabys  = {aaData:[]}
+    self.origen = ""
+    self.cabys = {
+        id:null,
+        descripcion:"",
+        estado:"",
+        codigo:""
+    }
+
+    cabysHacienda = {
+        codigo:"",
+        descripcion:"",
+        categorias:[],
+        impuesto:0,
+        uri:"",
+    }  
 self.on('mount',function(){
     __Eventos()
     __ComboEstados()
@@ -231,7 +452,7 @@ self.on('mount',function(){
     self.update() 
     LimpiarArticulo()
     __ComboBaseImponibles()
-    
+    __ComboCantidades();
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
         $(".errorServerSideJgrid").remove();
@@ -239,6 +460,263 @@ self.on('mount',function(){
 
         }, false );
 })
+/**
+*  Crear el combo de estados
+**/
+function __ComboCantidades(){
+    self.cantidades =[]
+    self.update()
+    self.cantidades.push({
+        codigo: null,
+        descripcion: "Todos"
+     });
+    self.cantidades.push({
+        codigo: 5,
+        descripcion: 5
+     });
+    self.cantidades.push({
+        codigo: 10,
+        descripcion: 10
+     });
+    self.cantidades.push({
+        codigo: 20,
+        descripcion: 20
+     });
+     self.update();
+}
+
+__ConsultaCodigoCabysEnter(e){
+    if (e.keyCode != 13) {
+        return;
+    }
+    __ListaDeHaciendaCabys()
+}
+/*******************************Lista de cabys de hacienda ***************/
+
+__ConsultaHaciendaCabys(e){
+        ListarCodigosCabysModal()
+    
+    
+}
+
+function ListarCodigosCabysModal(){
+    $(".tableListarHaciendaCabys").dataTable().fnClearTable();
+    $(".tableListarHaciendaCabys").DataTable().destroy();
+    $('#modalHaciendaCabys').modal('show')
+    $('#modalHaciendaCabys').on('shown.bs.modal', function () {
+        $('.descArticulo').select()
+        $('.descArticulo').focus()
+    })
+ }
+ 
+__ConsultaCodigoCabys(e){
+    __ListaDeHaciendaCabys()
+}
+
+
+function __ListaDeHaciendaCabys(){
+    if( $('#descArticulo').val() =='' && $('#codigoCabys').val() =='' ){
+        return
+    }
+    var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
+    var  encontro = false
+    $(".tableListarHaciendaCabys").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var parametros = {
+        descArticulo :$('#descArticulo').val(),
+        cantidad: cantidadTemp,
+        codigo: $('#codigoCabys').val()
+    };
+
+    $.ajax({
+        url: 'ListarCabysDeHaciendaAjax.do',
+        datatype: "json",
+        method:"GET",
+        data :parametros,
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __InformacionDataTable_cabys()
+                $.each(result.aaData, function( index, modeloTabla ) {
+                   if(modeloTabla.cabys.length){
+                      self.listaCabys.aaData =modeloTabla.cabys    
+                      encontro = true 
+                   } 
+                   
+                })
+                self.update()
+                if(encontro == true){
+                   __cargarTablaCompras()
+                }
+                
+
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+function __cargarTablaCompras() {
+    __InicializarTabla('.tableListarHaciendaCabys')  
+    $("#tableListarHaciendaCabys").dataTable().fnClearTable();
+    __InformacionDataTable_cabys();
+    $('#tableListarHaciendaCabys').DataTable().destroy();
+    $("#tableListarHaciendaCabys").DataTable({
+        destroy: true,
+        "aLengthMenu": [
+            [5, 10, 15, 25, -1],
+            [5, 10, 15, 25, "All"]
+        ],
+        "language": idioma_espanol,
+        "sDom": 'lfrtip',
+        "order": [],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        "columns": self.informacion_tabla_cabys ,
+    })
+    $("#tableListarHaciendaCabys").dataTable().fnAddData(self.listaCabys.aaData);
+    agregarInputsCombosCabys()
+    ActivarEventoFiltro(".tableListarHaciendaCabys")
+    __SeleccionarCabys()
+    
+
+}
+
+
+/**
+*Formato del listado de los cambios
+**/
+function __InformacionDataTable_cabys(){
+    self.informacion_tabla_cabys = [ 
+                               {'data' : 'id',"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
+                                "render":function(id,type, row){
+                                      return __OpcionesCabys(id,type,row);
+                                 }
+	      		            },
+                               {'data' : 'codigo',"name":"codigo" ,"title" : "Codigo","autoWidth" :false},
+                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :false ,
+                                "render":function(descripcion,type, row){
+                                      return __DescripcionCabys(descripcion,type,row);
+                                 }
+
+                               },
+                               {'data' :'impuesto',"name":"impuesto" ,"title" : "Impuesto","autoWidth" :false }, 
+];
+    self.update();
+/*                                   {'data' : 'categorias',"name":"categorias" ,"title" : "Origen del Articulo","bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(categorias,type, row){
+                                      return __CategoriasCabys(categorias,type,row);
+                                 }},
+*/
+   
+}
+function __CategoriasCabys(categorias,type,row){
+    var categoriasString =  ""
+    $.each(categorias, function( index, modeloTabla ) {
+        categoriasString = categoriasString + modeloTabla ;
+        categoriasString =  categoriasString +" \n"
+    })
+    return "<div class= 'categoriasdesc'>"+"<span>"+"<pre>"+categoriasString +"</pre>"+"</span>"+"</div>";
+
+}
+function __DescripcionCabys(descripcion,type,row){
+   
+    return "<div class= 'categoriasdesc'>"+"<textarea class='textAreaLeo' rows='2' readonly>"+descripcion +"</textarea>"+"</div>";
+
+}
+
+/**
+* Opciones listado de los cabys
+*/
+function __OpcionesCabys(){
+  var agregar  = '<a href="#"  class="btn btnAgregar btn-success selectLeo" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar ;
+}
+function __SeleccionarCabys() {
+     $('#tableListarHaciendaCabys').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarHaciendaCabys').DataTable();
+		if(table.row(this).child.isShown()){
+
+	       var data = table.row(this).data();
+	    }else{
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        if(data !=null){
+            moverDatos(data,function(resultado){
+                console.log(resultado)
+                $('#modalHaciendaCabys').modal('hide')
+            })
+            
+            return
+        }
+    });
+}
+function moverDatos(data,callback){
+   self.cabys.codigo = data.codigo
+   self.cabys.descripcion = data.descripcion
+   self.cabys.impuesto = data.impuesto
+   self.cabys.uri = data.uri
+    var categoriasString =  ""
+    $.each(data.categorias, function( index, modeloTabla ) {
+        categoriasString = categoriasString + modeloTabla ;
+        categoriasString = categoriasString +" \n"
+    })
+    self.cabys.origen = categoriasString
+    self.cabys.origenSTR = categoriasString
+    
+    self.cabys.estado = data.estado
+    self.articulo.codigoCabys = self.cabys.codigo
+    $('#codigoCabys').val(self.cabys.codigo)
+    self.update()
+    actualizarComboTarifaConCabys(self.cabys.impuesto,function(resultado){
+        console.log(resultado);
+        asigImpuestos()
+    })
+    
+    callback("Datos movidos")
+}
+
+function actualizarComboTarifaConCabys(valor,callback){
+     $('.selectTipoImpuesto').val("01")
+     self.articulo.tipoImpuesto = "01"
+	if(valor == 0){
+        self.articulo.codigoTarifa = "01"
+		$('.selectCodigoTarifa1').val("01")
+	}else if(valor == 1){
+        self.articulo.codigoTarifa = "02"
+		$('.selectCodigoTarifa1').val("02");
+	}else if(valor == 2){
+        self.articulo.codigoTarifa = "03"
+		$('.selectCodigoTarifa1').val("03");
+	}else if(valor == 4){
+        self.articulo.codigoTarifa = "04"
+		$('.selectCodigoTarifa1').val("04")
+	}else if(valor == 8){
+        self.articulo.codigoTarifa = "07"
+		$('.selectCodigoTarifa1').val("07")
+	}else if(valor == 13){
+        self.articulo.codigoTarifa = "08"
+		$('.selectCodigoTarifa1').val("08")
+	}
+    self.articulo.impuesto = valor
+    self.update()
+      callback("Datos movidos")
+}
+
+function agregarInputsCombosCabys(){
+    $('.tableListarHaciendaCabys tfoot th').each( function (e) {
+        var title = $('.tableListarHaciendaCabys thead th').eq($(this).index()).text();
+
+        if ( $(this).index() != 0    ){
+	      	$(this).html( '<input  type="text" class="form-input"  placeholder="'+title+'" />' );
+	    }
+    })
+}
+
 
 /**
 **/
@@ -250,14 +728,9 @@ __ActualizarPreciosCosto(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico =  __valorNumerico($('#precioPublico').val())
     var gananciaPublica = _porcentajeGanancia(costo,impuesto,0,precioPublico)
-
-
-   
     self.articulo.costo = costo
     self.articulo.precioPublico = precioPublico > 0 ? precioPublico : _ObtenerPrecio(costo,impuesto,0,gananciaPublica)
     self.articulo.gananciaPublica = gananciaPublica
-
-
     self.update()     
     $('#precioPublico').val(self.articulo.precioPublico)
     $('#gananciaPrecioPublico').val(self.articulo.gananciaPublica)
@@ -453,8 +926,6 @@ function actualizarPreciosImpuestosMayorista(){
     }
     var impuesto   = __valorNumerico($('#impuesto').val())/100
     impuesto = impuesto > 0 ? 1+impuesto:0
-    
-    
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioMayorista  = ganancia
     self.update()
@@ -672,6 +1143,10 @@ var reglasDeValidacion = function() {
 			},                                                
             marca : {
 				required : true,
+			},     
+                                                      
+            codigoCabys : {
+				required : true,
 			},                                                
             categoria : {
 				required : true,
@@ -748,7 +1223,11 @@ function getPublico(){
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
 __asignarImpuesto(){
-    if($('.selectTipoImpuesto').val()=="01"){
+  
+ asigImpuestos()
+}
+function asigImpuestos(){
+  if($('.selectTipoImpuesto').val()=="01"){
         self.articulo.tipoImpuesto ="01"
          self.articulo.impuesto = 0
         self.update()
@@ -763,7 +1242,6 @@ __asignarImpuesto(){
     self.tarifas1  = {aaData:[]}
     self.update()
     getPublico()
- 
 }
 /**
 *  Actimpuestor validaciones del formulario
@@ -935,6 +1413,10 @@ __agregar(){
         }
         self.articulo.id = null
         self.update()    
+
+        var JSONDetalles = JSON.stringify( self.cabys );
+         $('#datosCabys').val(JSONDetalles)
+        
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
                 $.ajax({
@@ -1014,6 +1496,8 @@ __Modificar(){
     self.update();
     if ($("#formulario").valid()) {
         var formulario = $("#formulario").serialize();
+        var JSONDetalles = JSON.stringify( self.cabys );
+         $('#datosCabys').val(JSONDetalles)
         $.ajax({
             type : "POST",
             dataType : "json",
