@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
+import com.emprendesoftcr.Bo.CabysBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -47,7 +48,9 @@ import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
@@ -64,6 +67,7 @@ import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.ArticuloCabysCommand;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
+import com.emprendesoftcr.web.command.CabysAct;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
@@ -103,6 +107,12 @@ public class ArticuloController {
 	@Autowired
 	private ArticuloBo																			articuloBo;
 
+	@Autowired
+	private CabysBo																			cabysBo;
+
+	
+	
+	
 	@Autowired
 	ConsultasNativeBo																				consultasNativeBo;
 
@@ -909,9 +919,12 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
 
 			}
-
+			
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = null;
+			
+
+			
 			
 
 
@@ -1013,6 +1026,26 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			Gson gson = new Gson();
+			if(articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				JSONObject json  = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
+				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
+				if(cabysBD == null) {
+					Cabys cabys = new Cabys();
+					cabys.setId(null);
+					cabys.setCodigo(cabysAct.getCodigo());
+					cabys.setCreated_at(new Date());
+					cabys.setUpdated_at(new Date());
+					cabys.setDescripcion(cabysAct.getDescripcion());
+					cabys.setEmpresa(usuarioSesion.getEmpresa());
+					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()) );
+					cabys.setUri(cabysAct.getUri());
+					cabysBo.agregar(cabys);
+					
+				}
+			}
+
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
@@ -1040,6 +1073,7 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
+			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -1058,6 +1092,9 @@ public class ArticuloController {
 		}
 	}
 
+
+
+	
 	/**
 	 * Modificar Articulo
 	 * @param request
@@ -1177,6 +1214,25 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			Gson gson = new Gson();
+			if(articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				JSONObject json  = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
+				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
+				if(cabysBD == null) {
+					Cabys cabys = new Cabys();
+					cabys.setId(null);
+					cabys.setCodigo(cabysAct.getCodigo());
+					cabys.setCreated_at(new Date());
+					cabys.setUpdated_at(new Date());
+					cabys.setDescripcion(cabysAct.getDescripcion());
+					cabys.setEmpresa(usuarioSesion.getEmpresa());
+					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()) );
+					cabys.setUri(cabysAct.getUri());
+					cabysBo.agregar(cabys);
+					
+				}
+			}
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setUpdated_at(new Date());
@@ -1208,6 +1264,7 @@ public class ArticuloController {
 			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articuloBd.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
@@ -1426,10 +1483,10 @@ public class ArticuloController {
 			if (articuloCommand == null ) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
-			if(articuloCommand.getCodigoCabys() == null ) {
+			if(articuloCommand.getCodigoCabys() == null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
-			if(articuloCommand.getCodigoCabys().equals(Constantes.EMPTY)){
+			if(articuloCommand.getCodigoCabys().equals(Constantes.EMPTY) && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);

@@ -1,7 +1,7 @@
 <cambiar-precio>
 
-    <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo</button>
-    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+    <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo 新</button>
+    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")} 修改</button>
     <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimirCambioPrecio btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
     <div class="row">
             <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
@@ -9,7 +9,7 @@
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
                             <input type="hidden" name="id" id="id" >
-                            <input type="hidden" name="datosCabys" id="datosCabys" value="{articulo.id}">
+                            <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
                             <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
                             <input type="hidden"  id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  >
@@ -181,7 +181,7 @@
                                     <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                    <label  >Digite el codigo</label>
+                                    <label  >Digite el codigo 碼</label>
                                     <input type="text" class="form-control codigoCabys "   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
@@ -1413,6 +1413,10 @@ __agregar(){
         }
         self.articulo.id = null
         self.update()    
+
+        var JSONDetalles = JSON.stringify( self.cabys );
+         $('#datosCabys').val(JSONDetalles)
+        
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
                 $.ajax({
@@ -1492,6 +1496,8 @@ __Modificar(){
     self.update();
     if ($("#formulario").valid()) {
         var formulario = $("#formulario").serialize();
+        var JSONDetalles = JSON.stringify( self.cabys );
+         $('#datosCabys').val(JSONDetalles)
         $.ajax({
             type : "POST",
             dataType : "json",

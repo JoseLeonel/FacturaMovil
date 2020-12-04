@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -111,7 +112,9 @@ public class Articulo implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
-	
+
+	@Transient
+	private String						datosCabys;
 	
 
 	@ManyToOne
@@ -222,6 +225,28 @@ public class Articulo implements Serializable {
 		this.codigoTarifaMag = codigoTarifaMag;
 		this.baseImponible = baseImponible;
 		this.codigoCabys = codigoCabys;
+	}
+
+
+
+
+
+
+
+	
+	public String getDatosCabys() {
+		return datosCabys;
+	}
+
+
+
+
+
+
+
+	
+	public void setDatosCabys(String datosCabys) {
+		this.datosCabys = datosCabys;
 	}
 
 
