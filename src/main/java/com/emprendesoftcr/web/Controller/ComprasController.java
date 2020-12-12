@@ -709,18 +709,30 @@ public class ComprasController {
 			//	ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula().trim());
 				
 			}
-			if(fEMensajeReceptorAutomatico !=null) {
-				fEMensajeReceptorAutomatico.setEstado(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA);
-				fEMensajeReceptorAutomaticoBo.modificar(fEMensajeReceptorAutomatico);
-				
-			}
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
+		
+			
 
 		} catch (Exception e) {
+			log.error("**crearFacturaAutomaticaCompras: " + e.getMessage() + " fecha " + new Date());
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
+		}finally {
+			if(fEMensajeReceptorAutomatico !=null) {
+				FEMensajeReceptorAutomatico fEMensajeReceptorAutomaticoBD = fEMensajeReceptorAutomaticoBo.buscar(fEMensajeReceptorAutomatico.getId());
+				if(fEMensajeReceptorAutomaticoBD != null) {
+					fEMensajeReceptorAutomaticoBD.setEstado(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA);
+					fEMensajeReceptorAutomaticoBo.modificar(fEMensajeReceptorAutomaticoBD);
+					log.info("** Compra automatica aplicada:" + fEMensajeReceptorAutomaticoBD.getConsecutivo());
+					
+				}else {
+					log.info("** Compra automatica aplicada");
+				}
+				
+			}
+			
 		}
+		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);		
 
 	}
 

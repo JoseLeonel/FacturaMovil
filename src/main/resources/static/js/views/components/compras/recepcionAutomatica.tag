@@ -21,7 +21,8 @@
 		                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 		<label> Tipo Gasto  <span class="requeridoDato">*</span></label>
                                 		<select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
-                                    		<option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
+                                    		<option value="3">No aplica Inventario</option>
+											<option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
                                     		<option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
                                 		</select>
                             		</div>                            

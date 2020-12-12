@@ -861,9 +861,17 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoImpuesto()));
 
-			detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
-
+			//detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
+			if( detalle.getPorcentajeExoneracion() != null &&  detalle.getImpuesto() != null &&  detalle.getPorcentajeExoneracion().equals(detalle.getImpuesto())) {
+				detalle.setMontoExoneracion(detalle.getMontoImpuesto());
+			}else {
+				detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(),detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal(),detalle.getMontoImpuesto()));				
+			}
+			
+			
+			
+			
 
 			detalle.setImpuestoNeto(Utils.getImpuestoNetoTotal(detalle.getMontoImpuesto(), detalle.getMontoExoneracion()));
 			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
@@ -942,7 +950,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 		factura.setTotalServExonerado(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalServExonerado) ? Utils.roundFactura(totalServExonerado, 5) : totalServExonerado));
 		factura.setTotalMercExonerada(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalMercExonerada) ? Utils.roundFactura(totalMercExonerada, 5) : totalMercExonerada));
-		factura.setTotalExonerado(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalExonerado) ? Utils.roundFactura(totalExonerado, 6) : totalExonerado));
+		factura.setTotalExonerado(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalExonerado) ? Utils.roundFactura(totalExonerado, 5) : totalExonerado));
 		factura.setTotalIVADevuelto(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalIVADevuelto) ? Utils.roundFactura(totalIVADevuelto, 5) : totalIVADevuelto));
 		factura.setTotalMercanciasGravadas(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalMercanciasGravadas) ? Utils.roundFactura(totalMercanciasGravadas, 5) : totalMercanciasGravadas));
 		factura.setTotalMercanciasExentas(Utils.Maximo5Decimales(Utils.aplicarRedondeo(totalMercanciasExentas) ? Utils.roundFactura(totalMercanciasExentas, 5) : totalMercanciasExentas));
