@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+import com.emprendesoftcr.utils.Utils;
 import com.itextpdf.text.DocumentException;
 
 
@@ -19,9 +20,9 @@ public class vivi {
 		
 		String t = parseTime("2020-11-13T10:22:27"); 
 		
-		
-		System.out.println("Yo naci:" + resultado);
-		
+//		float  total  = Utils.getTotalExonerado(0f,42384.0708); 
+//		System.out.println("Yo naci:" + total);
+//		
 		
 		
 //		
