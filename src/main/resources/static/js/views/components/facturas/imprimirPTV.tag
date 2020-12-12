@@ -1043,5 +1043,94 @@ function imprimirElemento(elemento){
   
   return true;
 }
+
+
+function mostarModal(){
+    
+    if($('#mostrarPDFVIEW').is(':visible')){
+        return
+    }
+    var href =  selfView.datos.direccion + '&t=' + $.now() 
+    //location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
+    selfView.stylemodal = 	selfView.datos.stylemodal
+    selfView.update()	
+   
+	$('#loadPdf').attr("src", href );	
+
+    //$("#mostrarPDFVIEW").modal("show");
+
+     // Set iframe src with pdf document url
+    printFrame =  $('#loadPdf')
+ 
+
+  Print.send(printFrame)
+    
+     
+	
+}
+
+
+const Print = {
+    send: (printFrame) => {
+        // Get iframe element
+        const iframeElement = document.getElementById("loadPdf")
+
+         // Append iframe element to document body
+     //   document.getElementsByTagName('body')[0].appendChild(printFrame)
+         // Wait for iframe to load all content
+        iframeElement.onload = () => {
+            if (Browser.isFirefox()) {
+              setTimeout(() => performPrint(iframeElement), 1000)
+            } else {
+              performPrint(iframeElement)
+            }
+            return
+
+        }
+
+    }
+}
+function performPrint(iframeElement){
+     try {
+        
+        iframeElement.focus()
+        iframeElement.contentWindow.print()
+
+     } catch (error) {
+        console.log(error)
+  } finally {
+
+  }
+}
+
+const Browser = {
+  // Firefox 1.0+
+  isFirefox: () => {
+    return typeof InstallTrigger !== 'undefined'
+  },
+  // Internet Explorer 6-11
+  isIE: () => {
+    return navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode
+  },
+  // Edge 20+
+  isEdge: () => {
+    return !Browser.isIE() && !!window.StyleMedia
+  },
+  // Chrome 1+
+  isChrome: (context = window) => {
+    return !!context.chrome
+  },
+  // At least Safari 3+: "[object HTMLElementConstructor]"
+  isSafari: () => {
+    return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
+        navigator.userAgent.toLowerCase().indexOf('safari') !== -1
+  },
+  // IOS Chrome
+  isIOSChrome: () => {
+    return navigator.userAgent.toLowerCase().indexOf('crios') !== -1
+  }
+}
+
+
 </script>
 </ptv-imprimir>

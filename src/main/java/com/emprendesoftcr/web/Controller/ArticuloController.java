@@ -312,24 +312,65 @@ public class ArticuloController {
 			}
 			
 			
-//			response.setContentType("application/octet-stream");
-//			String fileName = Constantes.EMPTY;
-//
-//			int BUFFER_SIZE = 4096;
-//			String headerKey = "Content-Disposition";
-//			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-//			response.setHeader(headerKey, headerValue);
-//			OutputStream outStream = response.getOutputStream();
-//			byte[] buffer = new byte[BUFFER_SIZE];
-//			int bytesRead = -1;
-////			while ((bytesRead = inputStream.read(buffer)) != -1) {
-////				outStream.write(buffer, 0, bytesRead);
-////			}
-//			inputStream.close();
-//			outStream.close();
-//		} catch (DocumentException e) {
-//			e.printStackTrace();
-//		}
+
+	}
+	
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GenerarTikect.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
+		List<EtiquetasCommand> lista = new ArrayList<>();
+		
+		
+		byte[] decodedBytes = Base64.getDecoder().decode(listaArticuloEtiquetas);
+		String decodedString = new String(decodedBytes);
+		
+		System.out.println("decodedString ============================ > " + decodedString);
+		
+		
+		
+//		try {
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(decodedString);
+				// Agregar Lineas de Detalle
+				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+				Gson gson = new Gson();
+				
+				if (jsonArrayDetalleFactura != null) {
+					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+						EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
+						for (int e = 0; e < etiquetasCommand.getCantidadEtiqueta(); e++) {
+							lista.add(etiquetasCommand);	
+						}
+						
+					}
+				}
+			}
+				 catch (org.json.simple.parser.ParseException e) {
+					throw e;
+				} 
+		  // jasper
+			
+			
+			InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");			
+			ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( new Gson().toJson(lista).getBytes());
+			JsonDataSource ds = new JsonDataSource(jsonDataStream);
+			
+			byte[] bytes = JasperRunManager.runReportToPdf(reportfile, null, ds);
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
+
+			} else {
+				System.out.println("NO trae nada");
+			}
+			
+			
+
 		
 	}
 	
