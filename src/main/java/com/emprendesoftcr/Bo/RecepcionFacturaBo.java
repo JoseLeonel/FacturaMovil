@@ -26,4 +26,7 @@ public interface RecepcionFacturaBo {
 	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado,Integer tipoGasto,String actividadEconocimica);
 	
 	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado,Integer tipoGasto,String actividadEconocimica);
+	
+	RecepcionFactura getPasarXMLAFactura(String ruta);
+	
 }

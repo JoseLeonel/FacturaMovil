@@ -3,6 +3,8 @@ package com.emprendesoftcr.web.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -150,6 +153,10 @@ public class ComprasController {
 
 	@Autowired
 	private ClientePropertyEditor																			clientePropertyEditor;
+	
+	@Value("${path.upload.files.api}")
+	private String													pathUploadFilesApi;
+
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -209,6 +216,12 @@ public class ComprasController {
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<FEMensajeReceptorAutomatico> solicitudList = ifEMensajeReceptorAutomaticoBo.getAll("P", usuarioSesion.getEmpresa().getCedula());
+		for(FEMensajeReceptorAutomatico fEMensajeReceptorAutomatico :  solicitudList) {
+			
+			
+		}
+		
+		
 		respuestaService.setAaData(solicitudList);
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
@@ -217,6 +230,36 @@ public class ComprasController {
 		}
 		// respuestaService.setAaData(null);
 		return respuestaService;
+	}
+	
+	/**
+	 * Extrae la xml 
+	 * @param ruta
+	 * @return
+	 */
+	private String getXMLFactura(String ruta) {
+		String facturaXmlFinal = "";
+		try {
+
+			String filePath = this.pathUploadFilesApi + "mr-automatico/" + ruta;
+			
+
+			try {
+				facturaXmlFinal = new String(Files.readAllBytes(Paths.get(filePath)));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				facturaXmlFinal = "";
+			}
+
+			
+
+		} catch (Exception e2) {
+			
+		}finally {
+			return facturaXmlFinal;
+		}
+		
 	}
 
 	@SuppressWarnings("all")
