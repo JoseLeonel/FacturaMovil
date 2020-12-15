@@ -157,6 +157,9 @@ var selecciono = false;
 
 
 function __ListaArticulos(){
+	__InicializarTabla('.tableListar');  
+	$("#tableListar").dataTable().fnClearTable();
+	$('#tableListar').DataTable().destroy();
     var parametros = {
     		codigo:$('.codigo').val(),
     		descripcion:$('.descripcion').val(),
