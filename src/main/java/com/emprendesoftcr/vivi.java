@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.XmlHelper;
 import com.itextpdf.text.DocumentException;
 
 public class vivi {
@@ -180,6 +181,7 @@ public class vivi {
 									System.out.println("CodigoComercial -> Codigo:" + valorString(nodeTemp,"Codigo",0));
 								}
 					   }
+					   
 						nodeList = eElement.getElementsByTagName("Impuesto");
 						if (nodeList.getLength() >= 0 && nodeList != null) {
 							Node nodeTemp1 = nodeList.item(0);
@@ -193,6 +195,22 @@ public class vivi {
 							}
 							
 						}
+						nodeList = eElement.getElementsByTagName("Exoneracion");
+						if (nodeList.getLength() >= 0 && nodeList != null) {
+							Node nodeTemp1 = nodeList.item(0);
+							if(nodeTemp1 != null) {
+								//	System.out.println("\nCurrent Element :" + nodeTemp1.getNodeName());
+								System.out.println("Impuesto -> TipoDocumento:" + valorString(nodeTemp1,"TipoDocumento",0));		
+								System.out.println("Impuesto -> NumeroDocumento:" + valorString(nodeTemp1,"NumeroDocumento",0));
+								System.out.println("Impuesto -> NombreInstitucion:" + valorString(nodeTemp1,"NombreInstitucion",0));
+								System.out.println("Impuesto -> FechaEmision:" + valorString(nodeTemp1,"FechaEmision",0));
+								System.out.println("Impuesto -> PorcentajeExoneracion:" + valorString(nodeTemp1,"PorcentajeExoneracion",0));
+								System.out.println("Impuesto -> MontoExoneracion:" + valorString(nodeTemp1,"MontoExoneracion",0));
+								
+							}
+							
+						}
+						
 						System.out.println("NumeroLinea:" + valorString(node,"NumeroLinea",i));
 					System.out.println("Codigo:" + valorString(node,"Codigo",i));
 					System.out.println("Cantidad :" + valorString(node,"Cantidad",i));
@@ -285,7 +303,8 @@ public class vivi {
 			builder = factory.newDocumentBuilder();
 
 			// Parse the content to Document object
-			Document doc = builder.parse(new File(filePath));
+		//	Document doc = builder.parse(new File(filePath));
+			Document doc = XmlHelper.getDocument(filePath);
 			return doc;
 		} catch (Exception e) {
 			e.printStackTrace();
