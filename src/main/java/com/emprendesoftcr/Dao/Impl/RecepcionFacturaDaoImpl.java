@@ -191,5 +191,15 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	public Collection<RecepcionFacturaDetalle> findByIdRecepcionFactura(Long id) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from RecepcionFacturaDetalle obj ");
+		hql.append(" where obj.recepcionFactura.id = :id ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("id", id);
+		return query.getResultList();
+	}
+
 
 }

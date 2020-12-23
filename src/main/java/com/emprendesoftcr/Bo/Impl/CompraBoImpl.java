@@ -688,7 +688,7 @@ public class CompraBoImpl implements CompraBo {
 
 	@Transactional
 	@Override
-	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor, List<RecepcionFacturaDetalle> listDetalles) throws Exception {
+	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor, Collection<RecepcionFacturaDetalle> listDetalles) throws Exception {
 		try {
 
 			Compra compra = new Compra();
@@ -719,10 +719,10 @@ public class CompraBoImpl implements CompraBo {
 			compra.setUsuarioCreacion(usuario);
 			compra.setUsuarioIngresoInventario(usuario);
 			agregar(compra);
-			RecepcionFacturaDetalle recepcionFacturaDetalle = null;
+			
 			if (listDetalles != null && !listDetalles.isEmpty()) {
-				for (int i = 0; i < listDetalles.size(); i++) {
-					recepcionFacturaDetalle = listDetalles.get(i);
+			
+				for (RecepcionFacturaDetalle recepcionFacturaDetalle :listDetalles) {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(recepcionFacturaDetalle.getCodigoComercialCodigo(), recepcionFactura.getEmpresa());
 					DetalleCompra detalleCompra = new DetalleCompra(recepcionFacturaDetalle);
 					detalleCompra.setImpuesto(getImpuestoAplicado(recepcionFacturaDetalle));
@@ -831,15 +831,11 @@ public class CompraBoImpl implements CompraBo {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
 					articulo.setFechaUltimaCompra(compraBD.getFechaIngreso());
 				}
-				// if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 				if (compraBD.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO)) {
 					disminuirInventario(articulo, compraBD, detalleCompra);
 				} else {
 					aplicarInventario(compraBD, detalleCompra, articulo);
 				}
-				// }else {
-				// articulo.setCosto(detalleCompra.getCosto());
-				// }
 				detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);
 				if (detalleCompra.getTarifaImpuesto() != null && detalleCompra.getImpuesto() != null && detalleCompra.getCodigoTipoImpuesto() != null) {
 					if (!detalleCompra.getTarifaImpuesto().equals(Constantes.EMPTY) && !detalleCompra.getCodigoTipoImpuesto().equals(Constantes.EMPTY)) {
@@ -847,6 +843,9 @@ public class CompraBoImpl implements CompraBo {
 						articulo.setImpuesto(detalleCompra.getImpuesto());
 						articulo.setTipoImpuesto(detalleCompra.getCodigoTipoImpuesto());
 					}
+				}
+				if(detalleCompra.getCodigoCabys() != null && !detalleCompra.getCodigoCabys().equals(Constantes.EMPTY)) {
+					articulo.setCodigoCabys(detalleCompra.getCodigoCabys());
 				}
 				articulo.setContable(Constantes.CONTABLE_SI);
 				articulo.setUpdated_at(new Date());
@@ -870,9 +869,7 @@ public class CompraBoImpl implements CompraBo {
 		}
 		return resultado;
 
-		// 3. Crear la asociacion del proveedor con el inventario
-		// 4. Actualizar el detalle cambiando de estado de aplicado
-		// 5. regresar el listar de los detalles no ingresados al inventario.
+	
 
 	}
 

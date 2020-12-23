@@ -28,6 +28,6 @@ public interface RecepcionFacturaBo {
 	
 	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado,Integer tipoGasto,String actividadEconocimica);
 	
-	RecepcionFactura getPasarXMLAFactura(String ruta, Empresa empresa,Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje,  String detalleMensaje) ;
+	void getPasarXMLAFactura(String ruta, Empresa empresa,Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje,  String detalleMensaje)  throws Exception;
 	
 }

@@ -1528,6 +1528,9 @@ public final class Utils {
 		if(monto == null) {
 			return Constantes.ZEROS_DOUBLE;
 		}
+		if(monto.equals(Constantes.EMPTY)) {
+			return Constantes.ZEROS_DOUBLE;
+		}
 		return Double.parseDouble(monto);
 	}
 	

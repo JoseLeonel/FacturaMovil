@@ -789,6 +789,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
 				// Listado de los documentos Pendientes de aceptar por hacienda
 				Collection<HaciendaComprobarNative> listaHacienda = consultasNativeBo.findByComprabarDocumentoPendienteaceptar();
+				
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
 						for (HaciendaComprobarNative hacienda : listaHacienda) {

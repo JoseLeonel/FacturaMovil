@@ -431,6 +431,7 @@ public class FacturasController {
 			tikectImprimir.setCantidad(detalle.getCantidadSTR());
 			tikectImprimir.setPrecio(detalle.getPrecioUnitario().toString());
 			tikectImprimir.setTotal(detalle.getMontoTotalLineaSTR());
+			tikectImprimir.setImpuesto(detalle.getImpuestoSTR()+"%");
 			lista.add(tikectImprimir);
 
 		}
@@ -438,13 +439,12 @@ public class FacturasController {
 		Map<String, Object> parametros;
 		parametros = new HashMap<>();
 		Integer nofactura_elec = factura.getEmpresa().getNoFacturaElectronica() != null ? factura.getEmpresa().getNoFacturaElectronica() : Constantes.ZEROS;
-
 		parametros.put("P_documento_electronico", MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc()));
 		parametros.put("P_regimen", nofactura_elec.equals(Constantes.ZEROS) ? "Régimen Simplificado" : "Régimen Tradicional");
 		parametros.put("P_actividad", "Codigo Actividad : " + factura.getCodigoActividad());
 		parametros.put("P_comercial", factura.getEmpresa().getNombreComercial() == null ? Constantes.EMPTY : factura.getEmpresa().getNombreComercial());
 		parametros.put("P_nombre", factura.getEmpresa().getNombre());
-		parametros.put("P_cedula", factura.getEmpresa().getCedula() + " Telef:" + factura.getEmpresa().getTelefono());
+		parametros.put("P_cedula","Cedula:"+ factura.getEmpresa().getCedula() + " Telefono(506):" + factura.getEmpresa().getTelefono());
 		parametros.put("P_otra_sena", factura.getEmpresa().getOtraSenas());
 		parametros.put("P_fecha_emision", "Fecha Emision:" + factura.getFechaEmisionSTR());
 		parametros.put("P_cond_venta", "Cond.venta: " + factura.getCondicionVentaSTR());
@@ -466,6 +466,7 @@ public class FacturasController {
 		parametros.put("P_total_impuesto", factura.getTotalImpuestoSTR());
 		parametros.put("P_descuento", factura.getTotalDescuentoSTR());
 		parametros.put("P_total_general", factura.getTotalComprobanteSTR());
+		parametros.put("P_subTotal", factura.getSubTotalSTR());
 		parametros.put("P_cambio", factura.getTipoCambioSTR());
 
 		InputStream reportfile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");

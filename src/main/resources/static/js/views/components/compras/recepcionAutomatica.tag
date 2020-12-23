@@ -160,68 +160,7 @@
 				facturaClave:"",
 				mensaje:"",
 		}		
-		self.recepcionFactura ={
-				id:null,
-				mensaje:"0",
-				detalleMensaje:"",
-				emisorNombre:"",
-				emisorCedula:"",
-				emisorTipoCedula:"",
-				emisorCodigoProvincia:"0",
-				emisorProvincia:"",
-				emisorCanton:"",
-				emisorCodigoCanton:"",
-				emisorDistrito:"",
-				emisorCodigoDistrito:"",
-				emisorCorreo:"",
-				emisorTelefono:"0",
-				emisorOtraSena:"",
-				receptorNombre:"",
-				receptorCedula:"",
-				receptorTipoCedula:"",
-				receptorCorreo:"",
-				receptorProvincia:"",
-				receptorCodigoProvincia:"",
-				receptorCanton:"",
-				receptorCodigoCanton:"",
-				receptorDistrito:"",
-				receptorCodigoDistrito:"",
-				receptorOtraSena:"",
-				receptorTelefono:"0",
-				receptorNombreComercial:"",
-				facturaConsecutivo:"",
-				facturaClave:"",
-				facturaFechaEmision:"",
-				facturaCondicionVenta:"0",
-				facturaMedioPago:"0",
-				facturaCodigoMoneda:"CRC",
-				facturaTipoCambio:"1",
-				facturaTotalServExentos:"0",
-				facturaTotalExento:"0",
-				facturaTotalVenta:"0",
-				facturaTotalVentaNeta:"0",
-				facturaTotalComprobante:"0",
-				facturaTotalImpuestos:"0",
-				
-				emisorNombreComercial:"",
-				facturaCodigoActividad:"0",
-				facturaPlazoCredito:"0",
-				facturaTotalServGravados:"0",
-				facturaTotalServExonerado:"0",
-				facturaTotalMercanciasGravadas:"0",
-				facturaTotalMercanciasExentas:"0",
-				facturaTotalMercExonerada:"0",
-				facturaTotalGravado:"0",
-				facturaTotalExonerado:"0",
-				facturaTotalIVADevuelto:"0",
-				facturaTotalOtrosCargos:"0",
-				facturaTotalDescuentos:"0",
-				version_doc:"4.3",
-				tipoDocEmisor:"",
-				detalles:"",
-				condicionImpuesto:"01",			
-			}
-			self.xmlDoc = null
+		
 		self.comprasIngresadas = {dataFactura:[]}
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -276,7 +215,9 @@ __AplicarCompras(){
             cancelButtonClass: 'btn btn-danger',
         }).then(function (isConfirm) {
             if(isConfirm){
-				enviarComprasCallback()
+				moverComprasVector(function(resultado){
+					__crearFactura();
+				})
 			}})
        
 	}else{
@@ -285,7 +226,7 @@ __AplicarCompras(){
 	
 	
 }
-
+//********************************************************************************************
 /**
 **  Se va a guardar las compras que fueron chequeadas por el usuario
 **/
@@ -295,91 +236,79 @@ function  moverComprasVector(callback){
 	//recorrido de las compras y verificar cuales estan chequedas con estado igual "C"
 	for (var count = 0; count < self.compras.aaData.length; count++) {
         if (self.compras.aaData[count].estado == "C" ){// 
-		    self.compraIDAutomatica =  self.compras.aaData[count].id
-			self.update()    
-        	getXML(self.compras.aaData[count],function(resultado){
-                 console.log(resultado) 
-							
+		    agregarVentorCompras(self.compras.aaData[count].id,function(resultado){
+				console.log("resultado de cargar las checkeadas")
 			})
+        	
         }
     }
 	console.log("cargo el vector")
     console.log(self.comprasIngresadas)
 	callback("Se cargo el vector exitosamente")
 }
+/**
+Incluir en el vector de compras
+**/		
+function agregarVentorCompras(id,callback){
+	 self.comprasIngresadas.dataFactura.push({
+        id: id
+	 })
+	 console.log("compras ingresadas al vector")
+	 console.log(self.comprasIngresadas)
+	 callback("Vector de compras")
+}	
 
 /**
-EnviarComprasCallback
+*  Crear Factura nueva
 **/
-function enviarComprasCallback(){
-	moverComprasVector(function(resultado){
-		//enviar al back end el vector
-		console.log(resultado)
-    
-
-	})
-
-}
-/**
-Cargar el XML
-**/
-function getXML(data,callbackSolicitarXML) {
+function __crearFactura(){
+	//Se limpian los errores
+	var JSONDetalles = JSON.stringify( self.comprasIngresadas);
+    var temp = btoa(JSONDetalles)
+	var parametros = {
+		condicionImpuesto: $("#condicionImpuesto").val(),
+		tipoGasto:$("#tipoGasto").val(),
+		codigoActividad:$("#codigoActividad").val(),
+		mensaje:$("#mensaje").val(),
+		detalleMensaje:$("#detalleMensaje").val(),
+		listaCompras:temp
+	}
     $.ajax({
-        url: "base64.do",
-        datatype: "json",
-        data: { ruta: data.facturaXml },
-        method: "GET",
-        success: function(resultado) {
-		    self.documentoXML = resultado.xmlString
-			self.recepcionFactura.id = data.id
-			self.update()
-			 __cargarXML(data,function(valor){
-                callbackSolicitarXML(data)
-			 });	
-			
-            
+        type : "POST",
+        dataType : "json",
+        data : parametros,
+        url : "recepcionComprasMasivas.do",
+        success : function(data) {
+            if (data.status != 200) {
+            	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeError(data.message)
+                }
+            } else {
+            	serverMessageJson(data);
+    		    self.mostrarFormulario     = false;
+    		    self.mostrarCargaArchivo   = false;		    		    
+    		    self.mostrarCargaArchivoMensaje   = true;		    		    
+    		  //  $("#fileUpload").val("");
+    		  //  $("#fileUploadMensajeArchivo").val("");		    		    
+            	self.update();
+                swal({
+                    title: '',
+                    text: data.message,
+                    type: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',                               	  
+                })	
+                listadoRecepcionCompras()	            	
+            }
         },
-        error: function(xhr, status) {
-            mensajeErrorServidor(xhr, status);
+        error : function(xhr, status) {
             console.log(xhr);
+            mensajeErrorServidor(xhr, status);
         }
     });
-}
-/**
-Cargar XML de los escoge en el listado
-**/
-function __cargarXML(data,callbackGetXML) {
-	limpiar(function(resultado){
-		console.log(resultado)
-		//Se carga el XML
-		self.xmlDoc = $.parseXML(self.documentoXML);
-		self.recepcionFactura.id = data.id
-		self.update()
-		cargaEmisor(function(resultado){
-            console.log(resultado)
-			cargaReceptor(function(resultado){
-				console.log(resultado)
-				datosGeneralesFactura(function(resultado){
-					console.log(resultado)
-					agregarDetallesFacturaXML(function(resultado){
-						console.log(resultado)
-						getResumenFactura(function(resultado){
-							console.log(resultado)
-							agregarVentorCompras(function(resultado){
-								console.log(resultado)
-									__crearFactura()
+}	
 
-							})
-						})
-					})  
-
-				});
-			})
-		})
-		callbackGetXML("Carga Exitosamente en objeto compra")
-
-	})
-}
 /**
 Marca todos los ckeckbox
 **/		
@@ -430,13 +359,7 @@ function __MarcarCompras() {
 	});
 } 
 
-/**
-*  actualiza los data tables cuando se marcan todos los check
-**/
- function __ActualizarTablas(){
-     __cargarTablaCompras()         
-    
-} 
+
 /**
 **  Cambia el Valor de estado de solicitud de liberacion del numero 
 **/
@@ -621,445 +544,11 @@ function __MostrarPDF() {
 }
 
 /**
-* Cargar el Emisor
-**/
-function cargaEmisor(callback){
-    //Se cargan los datos del emisor
-	var emisor = $(self.xmlDoc).find("Emisor");
-	self.recepcionFactura.emisorNombre = emisor.find("Nombre").text();
-	self.recepcionFactura.emisorCedula = emisor.find("Identificacion").find("Numero").text();
-	self.recepcionFactura.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-	self.recepcionFactura.emisorCorreo = emisor.find("CorreoElectronico").text();
-	self.recepcionFactura.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
-	self.recepcionFactura.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
-	self.recepcionFactura.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
-	self.recepcionFactura.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
-	self.recepcionFactura.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
-	self.recepcionFactura.emisorNombreComercial = emisor.find("NombreComercial").text();
-	
-	
-	self.update()
-	callback("Se cargaron los datos del emisor, exitosamente")
-
-}
-/**
-* Cargar el Receptor
-**/
-function cargaReceptor(callback){
-    //Se cargan los datos del Receptor
-    var receptor = $(self.xmlDoc).find("Receptor");
-	self.recepcionFactura.receptorNombre = __valorString(receptor.find("Nombre").text());
-	self.recepcionFactura.receptorCedula = __valorString(receptor.find("Identificacion").find("Numero").text());
-	self.recepcionFactura.receptorTipoCedula = __valorString(receptor.find("Identificacion").find("Tipo").text());
-	self.recepcionFactura.receptorCorreo = __valorString(receptor.find("CorreoElectronico").text());
-	self.recepcionFactura.receptorCodigoProvincia = __valorString(receptor.find("Ubicacion").find("Provincia").text());
-	self.recepcionFactura.receptorCodigoCanton = __valorString(receptor.find("Ubicacion").find("Canton").text());
-	self.recepcionFactura.receptorCodigoDistrito = __valorString(receptor.find("Ubicacion").find("Distrito").text());
-	self.recepcionFactura.receptorOtraSena = __valorString(receptor.find("Ubicacion").find("OtrasSenas").text());
-	self.recepcionFactura.receptorTelefono = __valorString(receptor.find("Telefono").find("NumTelefono").text());
-	self.recepcionFactura.receptorNombreComercial = __valorString(receptor.find("NombreComercial").text());
-	self.update()
-	callback("Receptor cargado")
-}
-/**
-* Datos Generales de la factura
-**/
-function datosGeneralesFactura(callback){
-    //Se cargan los datos de la factura
-	
-	
-    self.recepcionFactura.facturaConsecutivo = __valorString($(self.xmlDoc).find("NumeroConsecutivo").first().text());
-    self.recepcionFactura.facturaClave = __valorString($(self.xmlDoc).find("Clave").first().text());
-    self.recepcionFactura.facturaFechaEmision = $(self.xmlDoc).find("FechaEmision").first().text();
-	self.recepcionFactura.facturaFechaEmision = self.recepcionFactura.facturaFechaEmision == null?null:new Date(self.recepcionFactura.facturaFechaEmision);
-	self.recepcionFactura.facturaFechaEmision = self.recepcionFactura.facturaFechaEmision == null?null:self.recepcionFactura.facturaFechaEmision.toISOString();
-	
-
-    self.recepcionFactura.facturaCondicionVenta = __valorString($(self.xmlDoc).find("CondicionVenta").first().text());
-    self.recepcionFactura.facturaMedioPago = __valorString($(self.xmlDoc).find("MedioPago").first().text());
-    self.recepcionFactura.facturaCodigoActividad = __valorString($(self.xmlDoc).find("CodigoActividad").first().text());
-    self.recepcionFactura.facturaPlazoCredito = __valorString($(self.xmlDoc).find("PlazoCredito").first().text());
-	self.update()
-	callback("carga datos generales de la factura")
-}
-/**
-Inicializar los impuestos
-**/
-function iniImpuestos(){
-	var impuestos ={
-		    codigo1 :'',
-			codigoTarifa1:'',
-			tarifa1:'',
-			monto1:0,
-		    codigo2 :'',
-			codigoTarifa2:'',
-			tarifa2:'',
-			monto2:0,
-		    codigo3 :'',
-			codigoTarifa3:'',
-			tarifa3:'',
-			monto3:0,
-		    codigo4 :'',
-			codigoTarifa4:'',
-			tarifa4:'',
-			monto4:0,
-		    codigo5 :'',
-			codigoTarifa5:'',
-			tarifa5:'',
-			monto5:0,
-		    codigo6 :'',
-			codigoTarifa6:'',
-	    	tarifa6:'',
-			monto6:0,
-		    codigo7 :'',
-			codigoTarifa7:'',
-			tarifa7:'',
-			monto7:0
-    }
-	return impuestos
-
-}
-
-function initCodigosComerciales(){
-	var codigosComerciales ={
-		    codigoComercialTipo:'',
-			codigoComercial:'',
-		    codigoComercialTipo1 :'',
-			codigoComercial1:'',
-		    codigoComercialTipo1 :'',
-			codigoComercial2:'',
-		    codigoComercialTipo2 :'',
-			codigoComercial3:'',
-		    codigoComercialTipo3 :'',
-
-    }
-	return codigosComerciales
-
-}
-/**
 Agregar detalles
 **/
-function agregarDetalle(impuestos,xmlt,numeroLinea,codigoCabys,codigosComerciales){
-	
-	
-	self.detalleServicio.data.push({
-		numeroLinea     : __valorFloat(numeroLinea),
-		cantidad        : __valorFloat($(xmlt).find("Cantidad").text()),
-		unidadMedida    : __valorString($(xmlt).find("UnidadMedida").text()),
-		detalle         : __valorString($(xmlt).find("Detalle").text()),
-		precioUnitario  : __valorFloat($(xmlt).find("PrecioUnitario").text()),
-		montoTotal      : __valorFloat($(xmlt).find("MontoTotal").text()),
-		subTotal        : __valorFloat($(xmlt).find("SubTotal").text()),
-		montoTotalLinea : __valorFloat($(xmlt).find("MontoTotalLinea").text()),
-		impuestoNeto    : __valorFloat($(xmlt).find("ImpuestoNeto").text()),
-		baseImponible   : __valorFloat($(xmlt).find("BaseImponible").text()),
-		codigoComercialTipo   : __valorString(codigosComerciales.codigoComercialTipo),
-		codigoComercialCodigo : __valorString(codigosComerciales.codigoComercial),
-		codigoComercialTipo1   : __valorString(codigosComerciales.codigoComercialTipo1),
-		codigoComercial1 : __valorString(codigosComerciales.codigoComercial1),
-		codigoComercialTipo2   : __valorString(codigosComerciales.codigoComercialTipo2),
-		codigoComercial2 : __valorString(codigosComerciales.codigoComercial2),
-		codigoComercialTipo3   : __valorString(codigosComerciales.codigoComercialTipo3),
-		codigoComercial3 : __valorString(codigosComerciales.codigoComercial3),
-        codigoCabys:__valorString(codigoCabys),
-		descuentoMonto        : __valorFloat($(xmlt).find("Descuento").find("MontoDescuento").text()),
-		descuentoNaturaleza   : __valorString($(xmlt).find("Descuento").find("NaturalezaDescuento").text()),
-		impuestoCodigo        : __valorString(impuestos.codigo1),
-		impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
-		impuestoTarifa        : __valorFloat(impuestos.tarifa1),
-     	impuestoMonto         : __valorFloat(impuestos.monto1),
-		impuestoCodigo1        : __valorString(impuestos.codigo2),
-		impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
-		impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
-     	impuestoMonto1         : __valorFloat(impuestos.monto2),
-		impuestoCodigo2        : __valorString(impuestos.codigo3),
-		impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
-		impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
-     	impuestoMonto2         : __valorFloat(impuestos.monto3),
-		impuestoCodigo3        : __valorString(impuestos.codigo4),
-		impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
-		impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
-     	impuestoMonto3         : __valorFloat(impuestos.monto4),
-		impuestoCodigo4        : __valorString(impuestos.codigo5),
-		impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
-		impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
-     	impuestoMonto4         : __valorFloat(impuestos.monto5),
-		impuestoCodigo5        : __valorString(impuestos.codigo6),
-		impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
-		impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
-     	impuestoMonto5         : __valorFloat(impuestos.monto6),
-		impuestoCodigo6        : __valorString(impuestos.codigo7),
-		impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
-		impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
-     	impuestoMonto6         : __valorFloat(impuestos.monto7),
-        impuestoExoneracionTipoDocumento         : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
-        impuestoExoneracionNumeroDocumento       : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
-        impuestoExoneracionNombreInstitucion     : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),
-        impuestoExoneracionFechaEmision          : __valorString($(xmlt).find("Impuesto").find("Exoneracion").find("FechaEmision").text()),
-        impuestoExoneracionPorcentaje            : __valorFloat($(xmlt).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text()),
-        impuestoExoneracionMonto                 : __valorFloat($(xmlt).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text()),
-     });
-
-	 self.update()	      
-	var JSONDetalles = JSON.stringify(self.detalleServicio);
-	self.recepcionFactura.detalles = JSONDetalles;
-	self.update(); 	            
-
-
-}
-/**
-Resumen de la factura
-**/
-function getResumenFactura(callback){
-	//Se carga el resumen de la factura
-    var resumenFactura = $(self.xmlDoc).find("ResumenFactura");
-    self.recepcionFactura.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
-	self.recepcionFactura.facturaTipoCambio = __valorFloat(resumenFactura.find("CodigoTipoMoneda").find("TipoCambio").text());
-	if(self.recepcionFactura.facturaCodigoMoneda != 'CRC' && self.recepcionFactura.facturaCodigoMoneda != 'USD' ){
-        self.recepcionFactura.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoMoneda").text());
-        self.recepcionFactura.facturaTipoCambio = __valorFloat(resumenFactura.find("TipoCambio").text());
-	}
-    self.recepcionFactura.facturaTotalServExentos = __valorFloat(resumenFactura.find("TotalServExentos").text());
-    self.recepcionFactura.facturaTotalExento = __valorFloat(resumenFactura.find("TotalExento").text());
-    self.recepcionFactura.facturaTotalVenta = __valorFloat(resumenFactura.find("TotalVenta").text());
-    self.recepcionFactura.facturaTotalVentaNeta = __valorFloat(resumenFactura.find("TotalVentaNeta").text());
-    self.recepcionFactura.facturaTotalComprobante = __valorFloat(resumenFactura.find("TotalComprobante").text());
-    self.recepcionFactura.facturaTotalImpuestos = __valorFloat(resumenFactura.find("TotalImpuesto").text());
-    self.recepcionFactura.facturaTotalServGravados = __valorFloat(resumenFactura.find("TotalServGravados").text());
-    self.recepcionFactura.facturaTotalServExonerado = __valorFloat(resumenFactura.find("TotalServExonerado").text());
-    self.recepcionFactura.facturaTotalMercanciasGravadas = __valorFloat(resumenFactura.find("TotalMercanciasGravadas").text());
-    self.recepcionFactura.facturaTotalMercanciasExentas = __valorFloat(resumenFactura.find("TotalMercanciasExentas").text());
-    self.recepcionFactura.facturaTotalMercExonerada =__valorFloat(resumenFactura.find("TotalMercExonerada").text());
-    self.recepcionFactura.facturaTotalGravado = __valorFloat(resumenFactura.find("TotalGravado").text());
-    self.recepcionFactura.facturaTotalExonerado = __valorFloat(resumenFactura.find("TotalExonerado").text());
-    self.recepcionFactura.facturaTotalIVADevuelto = __valorFloat(resumenFactura.find("IVADevuelto").text());
-    self.recepcionFactura.facturaTotalOtrosCargos = __valorFloat(resumenFactura.find("TotalOtrosCargos").text());	                    
-    self.recepcionFactura.facturaTotalDescuentos = __valorFloat(resumenFactura.find("TotalDescuentos").text());	   
-	self.recepcionFactura.mensaje = $("#mensaje").val();
-	self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
-	self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
-	self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
-	self.recepcionFactura.codigoActividad = $("#codigoActividad").val()                 
-	self.update()	
-	callback("Resumen de la factura")	
-}
-
-/**
-Agregar los detalles de la factura de los que vienen en el xml
-**/
-function agregarDetallesFacturaXML(callback){
-    //Se carga el detalle de la factura
-	var  codigoCabys = ""
-	$("#detalleFactura").find("tr:gt(0)").remove();
-        var detallesServicioXml = $(self.xmlDoc).find("DetalleServicio");
-        $(detallesServicioXml).find("LineaDetalle").each(function () {
-			var impuestos = iniImpuestos()
-			var codigosComerciales = initCodigosComerciales()
-			codigoCabys = __valorString($(this).children("Codigo").text())
-			$(this).find("CodigoComercial").each(function () {
-			   var  codigoComercial = __valorString($(this).find("Codigo").text())
-			   var  tipoCodigoComercial = __valorString($(this).find("Tipo").text())
-			   if(codigosComerciales.codigoComercialTipo.length ==0){
-                  codigosComerciales.codigoComercialTipo = tipoCodigoComercial;
-				  codigosComerciales.codigoComercial = codigoComercial;
-			   }else if(codigosComerciales.codigoComercialTipo1.length ==0){
-                  codigosComerciales.codigoComercialTipo1 = tipoCodigoComercial;
-				  codigosComerciales.codigoComercial1 = codigoComercial;
-			   }else if(codigosComerciales.codigoComercialTipo2.length ==0){
-                  codigosComerciales.codigoComercialTipo2 = tipoCodigoComercial;
-				  codigosComerciales.codigoComercial2 = codigoComercial;
-			   }else if(codigosComerciales.codigoComercialTipo3.length ==0){
-                  codigosComerciales.codigoComercialTipo3 = tipoCodigoComercial;
-				  codigosComerciales.codigoComercial3 = codigoComercial;
-			   }
 
 
 
-			})
-			var numeroLinea = __valorString($(this).find("NumeroLinea").text())
-           	$(this).find("Impuesto").each(function () {
-				
-				   var codigo = __valorString($(this).find("Codigo").text())
-					var codigoTarifa = __valorString($(this).find("CodigoTarifa").text())
-					var tarifa = __valorString($(this).find("Tarifa").text()) 
-					var monto = __valorFloat($(this).find("Monto").text()) 
-					if(impuestos.codigo1.length ==0){
-						impuestos.codigo1 = codigo;
-						impuestos.codigoTarifa1 = codigoTarifa
-						impuestos.tarifa1 = tarifa
-						impuestos.monto1 = monto
-					} else if(impuestos.codigo2.length ==0){
-						impuestos.codigo2 = codigo;
-						impuestos.codigoTarifa2 = codigoTarifa
-						impuestos.tarifa2 = tarifa
-						impuestos.monto2 = monto
-					} else if(impuestos.codigo3.length ==0){
-						impuestos.codigo3 = codigo;
-						impuestos.codigoTarifa3 = codigoTarifa
-						impuestos.tarifa3 = tarifa
-						impuestos.monto3 = monto
-					} else if(impuestos.codigo4.length ==0){
-						impuestos.codigo4 = codigo;
-						impuestos.codigoTarifa4 = codigoTarifa
-						impuestos.tarifa4 = tarifa
-						impuestos.monto4 = monto
-					} else if(impuestos.codigo5.length ==0){
-						impuestos.codigo5 = codigo;
-						impuestos.codigoTarifa5 = codigoTarifa
-						impuestos.tarifa5 = tarifa
-						impuestos.monto5 = monto
-					} else if(impuestos.codigo6.length ==0){
-						impuestos.codigo6 = codigo;
-						impuestos.codigoTarifa6 = codigoTarifa
-						impuestos.tarifa6 = tarifa
-						impuestos.monto6 = monto
-					} else if(impuestos.codigo7.length ==0){
-						impuestos.codigo7 = codigo;
-						impuestos.codigoTarifa7 = codigoTarifa
-						impuestos.tarifa7 = tarifa
-					    impuestos.monto7 = monto
-					}       
-				
-				    
-				});
-                agregarDetalle(impuestos,this,numeroLinea,codigoCabys,codigosComerciales)
-				self.update();
-             });
-       
-      callback("agregarDetallesFacturaXML")
-}
-
-
-/**
-Incluir en el vector de compras
-**/		
-function agregarVentorCompras(callback){
-	 self.comprasIngresadas.dataFactura.push({
-        recepcionFactura: JSON.stringify(self.recepcionFactura) ,
-		id: self.compraIDAutomatica
-	 })
-	 console.log("compras ingresadas al vector")
-	 console.log(self.comprasIngresadas)
-	 callback("Vector de compras")
-}	
-/**
-Limpiar parametros de los objetos
-**/
-function limpiar(callback){
-    self.comprasIngresadas = {dataFactura:[]}
-	self.detalleServicio = {data:[]}
-	self.recepcionFactura ={
-		id:null,
-		mensaje:"0",
-		detalleMensaje:"",
-		emisorNombre:"",
-		emisorCedula:"",
-		emisorTipoCedula:"",
-		emisorCorreo:"",
-		emisorTelefono:"0",
-		emisorCodigoProvincia:"0",
-		emisorProvincia:"",
-		emisorCanton:"",
-		emisorCodigoCanton:"",
-		emisorDistrito:"",
-		emisorCodigoDistrito:"",
-		emisorOtraSena:"",
-		receptorNombre:"",
-		receptorCedula:"",
-		receptorTipoCedula:"",
-		receptorCorreo:"",
-		receptorProvincia:"",
-    	receptorCodigoProvincia:"",
-		receptorCanton:"",
-		receptorCodigoCanton:"",
-		receptorDistrito:"",
-		receptorCodigoDistrito:"",
-		receptorOtraSena:"",
-		receptorTelefono:"0",
-		receptorNombreComercial:"",
-		facturaConsecutivo:"",
-		facturaClave:"",
-		facturaFechaEmision:"",
-		facturaCondicionVenta:"0",
-		facturaMedioPago:"0",
-		facturaCodigoMoneda:"CRC",
-		facturaTipoCambio:"1",
-		facturaTotalServExentos:"0",
-		facturaTotalExento:"0",
-		facturaTotalVenta:"0",
-		facturaTotalVentaNeta:"0",
-		facturaTotalComprobante:"0",
-		facturaTotalImpuestos:"0",
-		emisorNombreComercial:"",
-		facturaCodigoActividad:"0",
-		facturaPlazoCredito:"0",
-		facturaTotalServGravados:"0",
-		facturaTotalServExonerado:"0",
-		facturaTotalMercanciasGravadas:"0",
-		facturaTotalMercanciasExentas:"0",
-		facturaTotalMercExonerada:"0",
-		facturaTotalGravado:"0",
-		facturaTotalExonerado:"0",
-		facturaTotalIVADevuelto:"0",
-		facturaTotalOtrosCargos:"0",
-		facturaTotalDescuentos:"0",
-		version_doc:"4.3",
-		detalles:"",
-		condicionImpuesto:"01",
-	}
-	self.update()
-	callback("Se inicializo correctamente los atributos")
-}
-/**
-*  Crear Factura nueva
-**/
-function __crearFactura(){
-	//Se limpian los errores
-	var JSONDetalles = JSON.stringify( self.comprasIngresadas);
-    var temp = btoa(JSONDetalles)
-	var parametros = {
-		condicionImpuesto: $("#condicionImpuesto").val(),
-		tipoGasto:$("#tipoGasto").val(),
-		codigoActividad:$("#codigoActividad").val(),
-		mensaje:$("#mensaje").val(),
-		detalleMensaje:$("#detalleMensaje").val(),
-		listaCompras:temp
-	}
-    $.ajax({
-        type : "POST",
-        dataType : "json",
-        data : parametros,
-        url : "recepcionComprasMasivas.do",
-        success : function(data) {
-            if (data.status != 200) {
-            	serverMessageJson(data);
-                if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
-                }
-            } else {
-            	serverMessageJson(data);
-    		    self.mostrarFormulario     = false;
-    		    self.mostrarCargaArchivo   = false;		    		    
-    		    self.mostrarCargaArchivoMensaje   = true;		    		    
-    		  //  $("#fileUpload").val("");
-    		  //  $("#fileUploadMensajeArchivo").val("");		    		    
-            	self.update();
-                swal({
-                    title: '',
-                    text: data.message,
-                    type: 'success',
-                    showCancelButton: false,
-                    confirmButtonText: 'Aceptar',                               	  
-                })	
-                listadoRecepcionCompras()	            	
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}	
 /**
 Se muestra los tipos medio de pago	
 **/

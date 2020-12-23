@@ -7,6 +7,7 @@ public class TikectImprimir {
 	private String descripcion;
 	private String cantidad;
 	private String precio;
+	private String impuesto;
 	private String total;
 	
 
@@ -54,6 +55,20 @@ public class TikectImprimir {
 	
 	public void setTotal(String total) {
 		this.total = total;
+	}
+
+
+
+	
+	public String getImpuesto() {
+		return impuesto;
+	}
+
+
+
+	
+	public void setImpuesto(String impuesto) {
+		this.impuesto = impuesto;
 	}
 	
 	

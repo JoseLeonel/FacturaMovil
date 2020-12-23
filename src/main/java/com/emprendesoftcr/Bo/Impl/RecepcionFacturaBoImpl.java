@@ -10,20 +10,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
+import com.emprendesoftcr.Dao.ProveedorDao;
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
@@ -35,12 +38,21 @@ import com.emprendesoftcr.utils.Utils;
 public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 
 	@Autowired
-	RecepcionFacturaDao	recepcionFacturaDao;
+	RecepcionFacturaDao		recepcionFacturaDao;
 
 	@Autowired
-	private EmpresaBo		empresaBo;
+	private EmpresaBo			empresaBo;
 
-	private Logger			log	= LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	private ProveedorDao	proveedorDao;
+
+	@Autowired
+	private CompraBo			compraBo;
+
+	@Value("${path.upload.files.api}")
+	private String				pathFacturaXML;
+
+	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	@Transactional
@@ -93,14 +105,15 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 
 	/**
 	 * Pasa del xml a la factura
+	 * @throws Exception
 	 */
 	@Transactional
 	@Override
-	public RecepcionFactura getPasarXMLAFactura(String ruta, Empresa empresa, Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje, String detalleMensaje) {
+	public void getPasarXMLAFactura(String ruta, Empresa empresa, Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje, String detalleMensaje) throws Exception {
 		RecepcionFactura recepcionFactura = new RecepcionFactura();
 		try {
 
-			Document document = convertXMLFileToXMLDocument(ruta);
+			Document document = convertXMLFileToXMLDocument(pathFacturaXML + "mr-automatico/" + ruta);
 			// Normalize the XML Structure; It's just too important !!
 			document.getDocumentElement().normalize();
 			// Here comes the root node
@@ -109,8 +122,11 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			// Get all employees
 			NodeList nList = document.getElementsByTagName("FacturaElectronica");
 			Node node = nList.item(0);
+
 			// Encabezado
 			recepcionFactura.setId(null);
+			// Agregar Lineas de Detalle
+			
 			recepcionFactura.setMensaje(mensaje);
 			recepcionFactura.setTipoGasto(tipoGasto);
 			recepcionFactura.setDetalleMensaje(detalleMensaje == null ? "Aceptacion automatica de la compra" : detalleMensaje);
@@ -123,6 +139,15 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFactura.setEmpresa(empresa);
+			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+			recepcionFactura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
+			recepcionFactura = resumenFacturaTotal(document, recepcionFactura);
+			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
+			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
+			if (recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
+				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
+			}
 			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE) && recepcionFactura.getFacturaTipoCambio() != null) {
 				if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
 					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
@@ -136,49 +161,68 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 
 			}
-			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			recepcionFactura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
-			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
-			recepcionFactura.setId(null);
-			recepcionFactura.setMensaje(mensaje);
-			recepcionFactura.setTipoGasto(tipoGasto);
-			recepcionFactura.setDetalleMensaje(detalleMensaje == null ? "Aceptacion automatica de la compra" : detalleMensaje);
-			recepcionFactura.setCondicionImpuesto(condicionImpuesto);
-			recepcionFactura.setCodigoActividad(codigoActividad);
-			recepcionFactura = resumenFacturaTotal(document, recepcionFactura);
-			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
-			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
+			
 			recepcionFacturaDao.agregar(recepcionFactura);
+			Proveedor proveedor = proveedorDao.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
+
+			if (proveedor == null) {
+				proveedor = new Proveedor();
+				proveedor.setCedula(recepcionFactura.getEmisorCedula());
+				proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
+				proveedor.setCreated_at(new Date());
+				proveedor.setEstado(Constantes.ESTADO_ACTIVO);
+				proveedor.setEmail(recepcionFactura.getEmisorCorreo());
+				proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
+				proveedor.setMovil(recepcionFactura.getEmisorTelefono());
+				proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
+				proveedor.setRepresentante(Constantes.EMPTY);
+				proveedor.setUpdated_at(new Date());
+				proveedor.setId(null);
+				proveedor.setEmpresa(usuarioSesion.getEmpresa());
+				proveedorDao.agregar(proveedor);
+
+			}
+
 			obtenerDetalle(document, recepcionFactura);
+			if (recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO)) {
+				Collection<RecepcionFacturaDetalle> lista = recepcionFacturaDao.findByIdRecepcionFactura(recepcionFactura.getId());
+				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, lista);
+				// ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula().trim());
+
+			}
+
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.error(String.format("--error Compra formateda del xml :" + e.getMessage() + new Date()));
+			throw e;
 		}
-		return recepcionFactura;
+
 	}
 
-	private RecepcionFactura getEncabezado(Node node, RecepcionFactura recepcionFactura) {
+	private RecepcionFactura getEncabezado(Node node, RecepcionFactura recepcionFactura) throws Exception {
 
 		try {
 
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) node;
 				Node node1 = eElement.getElementsByTagName("Clave").item(0);
-				recepcionFactura.setFacturaClave(node1.getTextContent());
+				recepcionFactura.setFacturaClave(node1 != null ?node1.getTextContent(): Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("CodigoActividad").item(0);
-				recepcionFactura.setFacturaCodigoActividad(node1.getTextContent());
+				recepcionFactura.setFacturaCodigoActividad(node1 != null ?node1.getTextContent(): Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("NumeroConsecutivo").item(0);
-				recepcionFactura.setFacturaConsecutivo(node1.getTextContent());
+				recepcionFactura.setFacturaConsecutivo(node1 != null ?node1.getTextContent(): Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("FechaEmision").item(0);
-				recepcionFactura.setFacturaFechaEmision(FacturaElectronicaUtils.parseStringtoISO8601Date(node1.getTextContent()));
+				recepcionFactura.setFacturaFechaEmision(node1 != null ?FacturaElectronicaUtils.parseStringtoISO8601Date(node1.getTextContent()): null);
 				node1 = eElement.getElementsByTagName("CondicionVenta").item(0);
-				recepcionFactura.setFacturaCondicionVenta(node1.getTextContent());
+				recepcionFactura.setFacturaCondicionVenta(node1 != null ?node1.getTextContent() : Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("PlazoCredito").item(0);
-				recepcionFactura.setFacturaPlazoCredito(node1.getTextContent());
+				recepcionFactura.setFacturaPlazoCredito(node1 != null ?node1.getTextContent(): Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("MedioPago").item(0);
-				recepcionFactura.setFacturaMedioPago(node1.getTextContent());
+				recepcionFactura.setFacturaMedioPago(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 			}
 
 		} catch (Exception e) {
+			log.error(String.format("--error Compra formateda del xml->getEncabezado :" + e.getMessage() + new Date()));
+			throw e;
 
 		}
 		return recepcionFactura;
@@ -189,36 +233,37 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) node;
 				Node node1 = eElement.getElementsByTagName("Nombre").item(0);
-				recepcionFactura.setEmisorNombre(node1.getTextContent());
-
+				recepcionFactura.setEmisorNombre(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
+				node1 = eElement.getElementsByTagName("NombreComercial").item(0);
+				recepcionFactura.setEmisorNombreComercial(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("CorreoElectronico").item(0);
-				recepcionFactura.setEmisorCorreo(node1.getTextContent());
+				recepcionFactura.setEmisorCorreo(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 
 				NodeList nListEmisor = document.getElementsByTagName("Identificacion");
 				if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
 					node1 = eElement.getElementsByTagName("Tipo").item(0);
-					recepcionFactura.setEmisorTipoCedula(node1.getTextContent());
-
+					recepcionFactura.setEmisorTipoCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElement.getElementsByTagName("Numero").item(0);
-					recepcionFactura.setEmisorCedula(node1.getTextContent());
+					recepcionFactura.setEmisorCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					NodeList nListEmisorUbicacion = document.getElementsByTagName("Ubicacion");
 					Element eElementUbicacion = (Element) nListEmisorUbicacion.item(0);
 					node1 = eElementUbicacion.getElementsByTagName("Provincia").item(0);
-					recepcionFactura.setEmisorCodigoProvincia(node1.getTextContent());
+					recepcionFactura.setEmisorCodigoProvincia(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("Canton").item(0);
-					recepcionFactura.setEmisorCanton(node1.getTextContent());
+					recepcionFactura.setEmisorCanton(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("Distrito").item(0);
-					recepcionFactura.setEmisorDistrito(node1.getTextContent());
-					;
+					recepcionFactura.setEmisorDistrito(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("OtrasSenas").item(0);
-					recepcionFactura.setEmisorOtraSena(node1.getTextContent());
+					recepcionFactura.setEmisorOtraSena(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 
 				}
 
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.error(String.format("--error Compra formateda del xml->obtenerEmisor :" + e.getMessage() + new Date()));
+			throw e;
+
 		}
 		return recepcionFactura;
 	}
@@ -234,32 +279,35 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) node;
 				Node node1 = eElement.getElementsByTagName("Nombre").item(0);
-				recepcionFactura.setReceptorNombre(node1.getTextContent());
-
+				recepcionFactura.setReceptorNombre(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
+				node1 = eElement.getElementsByTagName("NombreComercial").item(0);
+				recepcionFactura.setReceptorNombreComercial(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 				node1 = eElement.getElementsByTagName("CorreoElectronico").item(0);
-				recepcionFactura.setReceptorCorreo(node1.getTextContent());
+				recepcionFactura.setReceptorCorreo(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 
 				NodeList nListEmisor = document.getElementsByTagName("Emisor");
 				if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
 					node1 = eElement.getElementsByTagName("Tipo").item(0);
-					recepcionFactura.setReceptorTipoCedula(node1.getTextContent());
+					recepcionFactura.setReceptorTipoCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElement.getElementsByTagName("Numero").item(0);
-					recepcionFactura.setReceptorCedula(node1.getTextContent());
+					recepcionFactura.setReceptorCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					NodeList nListEmisorUbicacion = document.getElementsByTagName("Ubicacion");
 					Element eElementUbicacion = (Element) nListEmisorUbicacion.item(0);
 					node1 = eElementUbicacion.getElementsByTagName("Provincia").item(0);
-					recepcionFactura.setReceptorProvincia(node1.getTextContent());
+					recepcionFactura.setReceptorProvincia(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("Canton").item(0);
-					recepcionFactura.setReceptorCanton(node1.getTextContent());
+					recepcionFactura.setReceptorCanton(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("Distrito").item(0);
-					recepcionFactura.setReceptorDistrito(node1.getTextContent());
+					recepcionFactura.setReceptorDistrito(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 					node1 = eElementUbicacion.getElementsByTagName("OtrasSenas").item(0);
-					recepcionFactura.setReceptorOtraSena(node1.getTextContent());
+					recepcionFactura.setReceptorOtraSena(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
 
 				}
 
 			}
 		} catch (Exception e) {
+			log.error(String.format("--error Compra formateda del xml->obtenerReceptor :" + e.getMessage() + new Date()));
+			throw e;
 
 		}
 		return recepcionFactura;
@@ -282,59 +330,73 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 						recepcionFacturaDetalleNueva.setDetalle(valorString(node, "Detalle", i));
 						recepcionFacturaDetalleNueva.setPrecioUnitario(Utils.stringToDouble(valorString(node, "PrecioUnitario", i)));
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
-							Element eElement = (Element) node;
+ 							Element eElement = (Element) node;
 							NodeList nodeList = eElement.getElementsByTagName("CodigoComercial");
 							if (nodeList.getLength() >= 0 && nodeList != null) {
 								Node nodeTemp = nodeList.item(0);
-								if (nodeTemp != null) {
+								if(recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null ) {
 									recepcionFacturaDetalleNueva.setCodigoComercialTipo(valorString(nodeTemp, "Tipo", 0));
 									recepcionFacturaDetalleNueva.setCodigoComercialCodigo(valorString(nodeTemp, "Codigo", 0));
+								}
+									
+								}
+							
+							nodeList = eElement.getElementsByTagName("Descuento");
+							if (nodeList.getLength() >= 0 && nodeList != null) { 
+								Node nodeTemp = nodeList.item(0);
+								if (nodeTemp != null) {
+									
+										recepcionFacturaDetalleNueva.setDescuentoMonto(Utils.stringToDouble(valorString(nodeTemp, "MontoDescuento", 0)));
+										recepcionFacturaDetalleNueva.setDescuentoNaturaleza(valorString(nodeTemp, "NaturalezaDescuento", 0));
+										
+									
 								}
 							}
 							nodeList = eElement.getElementsByTagName("Impuesto");
 							if (nodeList.getLength() >= 0 && nodeList != null) {
+
 								Node nodeTemp1 = nodeList.item(0);
 								if (nodeTemp1 != null) {
 									// System.out.println("\nCurrent Element :" + nodeTemp1.getNodeName());
-									if (recepcionFacturaDetalleNueva.getImpuestoCodigo() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo().equals(Constantes.EMPTY)) {
+									if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo1().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo1(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa1(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa1(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto1(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo2().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo2(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa2(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa2(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto2(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo3().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo3(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa3(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa3(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto3(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo4().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo4(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa4(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa4(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto4(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo5().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo5(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa5(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa5(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto5(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() != null && recepcionFacturaDetalleNueva.getImpuestoCodigo6().equals(Constantes.EMPTY)) {
+									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null ) {
 										recepcionFacturaDetalleNueva.setImpuestoCodigo6(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa6(Utils.stringToDouble(valorString(nodeTemp1, "CodigoTarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(valorString(nodeTemp1, "Tarifa", 0));
+										recepcionFacturaDetalleNueva.setImpuestoTarifa6(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(valorString(nodeTemp1, "CodigoTarifa", 0));
 										recepcionFacturaDetalleNueva.setImpuestoMonto6(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
 									}
@@ -367,7 +429,9 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.error(String.format("--error Compra formateda del xml->obtenerDetalle :" + e.getMessage() + new Date()));
+			throw e;
+
 		}
 
 	}
@@ -375,7 +439,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 	private RecepcionFactura resumenFacturaTotal(Document document, RecepcionFactura recepcionFactura) {
 		try {
 			NodeList nListResumenFactura = document.getElementsByTagName("ResumenFactura");
-			Node node = nListResumenFactura != null?nListResumenFactura.item(0) : null;
+			Node node = nListResumenFactura != null ? nListResumenFactura.item(0) : null;
 			if (node.getNodeType() == Node.ELEMENT_NODE && node != null) {
 				Element eElement = (Element) node;
 				NodeList nodeList = eElement.getElementsByTagName("CodigoTipoMoneda");
@@ -385,51 +449,62 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 					recepcionFactura.setFacturaTipoCambio(Utils.stringToDouble(valorString(nodeTemp, "TipoCambio", j)));
 				}
 				node = eElement.getElementsByTagName("TotalServGravados").item(0);
-				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalServExentos").item(0);
-				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalServExonerado").item(0);
-				recepcionFactura.setFacturaTotalServExonerado(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalServExonerado(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalMercanciasGravadas").item(0);
-				recepcionFactura.setFacturaTotalMercanciasGravadas(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalMercanciasGravadas(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalMercanciasExentas").item(0);
-				recepcionFactura.setFacturaTotalMercanciasExentas(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalMercanciasExentas(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalMercExonerada").item(0);
-				recepcionFactura.setFacturaTotalMercanciasExentas(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalMercanciasExentas(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalGravado").item(0);
-				recepcionFactura.setFacturaTotalGravado(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalGravado(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalExento").item(0);
-				recepcionFactura.setFacturaTotalExento(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalExento(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalExonerado").item(0);
-				recepcionFactura.setFacturaTotalExonerado(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalExonerado(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalVenta").item(0);
-				recepcionFactura.setFacturaTotalVenta(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalVenta(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalDescuentos").item(0);
-				recepcionFactura.setFacturaTotalDescuentos(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalDescuentos(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalVentaNeta").item(0);
-				recepcionFactura.setFacturaTotalVentaNeta(Utils.stringToDouble(node.getTextContent()));
+				
+				recepcionFactura.setFacturaTotalVentaNeta(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalImpuesto").item(0);
-				recepcionFactura.setFacturaTotalImpuestos(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalImpuestos(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalIVADevuelto").item(0);
-				recepcionFactura.setFacturaTotalIVADevuelto(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalIVADevuelto(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalComprobante").item(0);
-				recepcionFactura.setFacturaTotalComprobante(Utils.stringToDouble(node.getTextContent()));
+				recepcionFactura.setFacturaTotalComprobante(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
+				node = eElement.getElementsByTagName("TotalOtrosCargos").item(0);
+				recepcionFactura.setFacturaTotalOtrosCargos(Utils.stringToDouble(node != null?node.getTextContent():Constantes.EMPTY));
+				
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.error(String.format("--error Compra formateda del xml->resumenFacturaTotal :" + e.getMessage() + new Date()));
+			throw e;
 		}
 
 		return recepcionFactura;
 	}
 
-	private static String valorString(Node node, String name, Integer index) {
-		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-			Element eElement = (Element) node;
-			Node node1 = eElement.getElementsByTagName(name).item(0);
+	private String valorString(Node node, String name, Integer index) {
+		try {
+			if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) node;
+				Node node1 = eElement.getElementsByTagName(name).item(0);
 
-			if (node1 == null)
-				return Constantes.EMPTY;
-			return node1.getTextContent().toString();
+				if (node1 == null)
+					return Constantes.EMPTY;
+				return node1.getTextContent().toString();
+			}
+
+		} catch (Exception e) {
+			log.error(String.format("--error Compra formateda del xml->valorString :" + e.getMessage() + new Date()));
+			throw e;
 		}
 
 		return Constantes.EMPTY;

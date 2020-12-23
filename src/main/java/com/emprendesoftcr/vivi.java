@@ -1,6 +1,5 @@
 package com.emprendesoftcr;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,36 +41,77 @@ public class vivi {
 			try {
 				facturaXmlFinal = new String(Files.readAllBytes(Paths.get(filePath)));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 				facturaXmlFinal = "";
 			}
+			
+//			JAXBContext context = JAXBContext.newInstance(FacturaTemp.class);
+//			Unmarshaller unmarshaller = context.createUnmarshaller();
+//			
+//			FacturaTemp facturaTemp = (FacturaTemp) unmarshaller.unmarshal(new File(filePath));
+//			
+			
+			
 			Document document = convertXMLFileToXMLDocument(filePath);
+		
 			// Normalize the XML Structure; It's just too important !!
+			
 			document.getDocumentElement().normalize();
 			// Here comes the root node
 			Element root = document.getDocumentElement();
 			System.out.println(root.getNodeName());
+			
 			// Get all employees
-			NodeList nList = document.getElementsByTagName("FacturaElectronica");
+			NodeList nList = getFacturaOrNotaCreditoOrNotaDebito(document);
 			Node node = nList.item(0);
+			
 			// Encabezado
 			getEncabezado(node);
 			System.out.println(document.getFirstChild().getNodeName());
+			
 			// Emisor
 			NodeList nListEmisor = document.getElementsByTagName("Emisor");
 			if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
 				obtenerEmisor(nListEmisor.item(0), document);
 			}
+			
 			NodeList nListReceptor = document.getElementsByTagName("Receptor");
 			if (nListReceptor.getLength() >= 0 && nListReceptor != null) {
 				obtenerReceptor(nListReceptor.item(0), document);
 			}
+			
 			obtenerDetalle(document);
 			resumenFacturaTotal(document);
 		} catch (Exception e2) {
 
 		}
+	}
+	
+	
+	
+	private static NodeList getFacturaOrNotaCreditoOrNotaDebito(Document document) {
+		NodeList nList = null;
+		try {
+			 nList = document.getElementsByTagName("FacturaElectronica");
+			if(nList == null) {
+				nList = document.getElementsByTagName("TiqueteElectronico");
+			}
+			if(nList == null) {
+				nList = document.getElementsByTagName("NotaDebitoElectronica");
+			}
+			if(nList == null) {
+				nList = document.getElementsByTagName("NotaDebitoElectronica");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return nList;
+		
+		
+		
 	}
 
 	private static void getEncabezado(Node node) {
@@ -186,6 +226,10 @@ public class vivi {
 						if (nodeList.getLength() >= 0 && nodeList != null) {
 							Node nodeTemp1 = nodeList.item(0);
 							if(nodeTemp1 != null) {
+								for (int j = 0; j < nodeList.getLength(); j++) {
+									nodeTemp1 = nodeList.item(i);
+									System.out.println("Impuesto:" + valorString(nodeTemp1, "Codigo", 0));
+								}
 								//	System.out.println("\nCurrent Element :" + nodeTemp1.getNodeName());
 								System.out.println("Impuesto -> Codigo:" + valorString(nodeTemp1,"Codigo",0));		
 								System.out.println("Impuesto -> CodigoTarifa:" + valorString(nodeTemp1,"CodigoTarifa",0));

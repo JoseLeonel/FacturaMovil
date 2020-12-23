@@ -370,10 +370,16 @@ function __BajarPDFHacienda() {
             var data = table.row($(this).parents("tr")).data();
         }
         // BajarArchivos("bajarPDFComprobanteAjax", data)
+
         var parametros = {
             direccion: "bajarPDFComprobanteAjax?idHacienda=" + data.id,
             stylemodal: "modal-xl"
         }
+        var parametros = {
+            direccion: "GenerarTikect1.do?idFactura=228",
+            stylemodal: "modal-xl"
+        }
+
         riot.mount('view-pdf', { datos: parametros });
     });
 }
