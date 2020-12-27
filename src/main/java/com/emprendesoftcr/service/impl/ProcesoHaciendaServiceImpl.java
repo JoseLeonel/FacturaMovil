@@ -548,7 +548,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/02 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -676,7 +676,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	@Scheduled(cron = "0 0/25 23 * * ?")
+	@Scheduled(cron = "0 0/00 07 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -731,6 +731,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (semaforoCallback != null) {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+					// Alajuela
+					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// San Ana
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -744,11 +746,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Jaco
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
-					// Inventario
-					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// San Ana
+					//			recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+								
+				// Guanacaste
+						// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
-					// Alajuela
-			//		 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					// JacoDos
+					 //recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+
+					
+					// Inventario
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -778,7 +788,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/45 * * * ?")
+	@Scheduled(cron = "0 0/05 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1187,7 +1197,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		Boolean resultado = Boolean.FALSE;
@@ -1584,7 +1594,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/03 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1602,7 +1612,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("Inicio el proceso de firmado - {}", formatter.format(LocalDateTime.now()));
 
 								log.info("Factura id	:  {}", factura.getId() + " Rescate de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
-
 								if (factura != null) {
 									Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 									if (detalles != null) {
@@ -1662,6 +1671,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 												}
 												Boolean procesoCompleto = Boolean.FALSE;
+												if(!comprobanteXML.equals(Constantes.EMPTY) && comprobanteXML != null) {
+													procesoCompleto = Boolean.TRUE;
+												}
 												if (comprobanteXML != null) {
 													if (!comprobanteXML.equals(Constantes.EMPTY)) {
 														Hacienda haciendaVerificar = haciendaBo.findByEmpresaAndClave(factura.getEmpresa(), factura.getClave());
@@ -1695,17 +1707,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
 															hacienda.setTotalReceptor(factura.getTotalComprobante());
 															hacienda.setNotificacion(siEnviarCorreo(factura) ? Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE : Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-															hacienda.setPathMigracion(Constantes.EMPTY);
-															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
-															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+//															hacienda.setPathMigracion(Constantes.EMPTY);
+//															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+//															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+//															
 															haciendaBo.agregar(hacienda);
 
 														}
 														/** si el proceso se lleva correctamente se aplica el firmado sino quedan en un estado temporal el firmado 77 **/
-														if (factura != null) {
+														if (factura != null && procesoCompleto) {
 															Factura facturaBD = facturaBo.findById(factura.getId());
 															if (facturaBD != null) {
-																facturaBD.setEstadoFirma(procesoCompleto ? Constantes.FACTURA_ESTADO_FIRMA_COMPLETO : Constantes.HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS);
+																
+																facturaBD.setEstadoFirma(procesoCompleto.equals(Boolean.TRUE) ? Constantes.FACTURA_ESTADO_FIRMA_COMPLETO : Constantes.HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS);
 																if (factura.getNoAplicarEnCaja() == null) {
 																	factura.setAnuladaCompleta(Constantes.SI_APLICA_EN_CAJA);
 																}
@@ -1713,6 +1727,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 															}
 														}
+													}else {
+														Factura facturaBD = facturaBo.findById(factura.getId());
+														if (facturaBD != null) {
+															facturaBD.setEstadoFirma(Constantes.HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS);
+															facturaBo.modificar(facturaBD);
+														}
+														
 													}
 
 												}
@@ -1826,9 +1847,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									hacienda.setCorreoReceptor(compraSimplificada.getProveedorSimplificado().getCorreoElectronico());
 									hacienda.setTotalReceptor(compraSimplificada.getTotalComprobante());
 									hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-									hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-									hacienda.setPathMigracion(Constantes.EMPTY);
-									hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+//									hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+//									hacienda.setPathMigracion(Constantes.EMPTY);
+//									hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 
 									haciendaBo.agregar(hacienda);
 									if (compraSimplificada != null) {
@@ -1915,9 +1936,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setCorreoReceptor(recepcionFactura.getEmpresa().getCorreoElectronico());
 								hacienda.setTotalReceptor(recepcionFactura.getFacturaTotalComprobante());
 								hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-								hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-								hacienda.setPathMigracion(Constantes.EMPTY);
-								hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+//								hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+//								hacienda.setPathMigracion(Constantes.EMPTY);
+//								hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 								haciendaBo.agregar(hacienda);
 
 								recepcionFactura = recepcionFactura.getId() == null || recepcionFactura.getId() == Constantes.ZEROS_LONG ? null : recepcionFacturaBo.findById(recepcionFactura.getId());

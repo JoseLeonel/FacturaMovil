@@ -100,7 +100,7 @@ public class MensajeReceptorAutomatico {
 	 * @throws ParseException
 	 */
 //	@Scheduled(fixedDelay = 60000)
-	  @Scheduled(cron = "0 0/01 * * * ?")
+	  @Scheduled(cron = "0 0/05 * * * ?")
 		public void downloadEmailAttachments() throws ParserConfigurationException, SAXException, SQLException, ParseException {
 
 		String saveDirectory = this.pathUploadFilesApi + "/mr-automatico";

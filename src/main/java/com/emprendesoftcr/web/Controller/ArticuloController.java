@@ -70,9 +70,11 @@ import com.emprendesoftcr.web.command.ArticuloCabysCommand;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CabysAct;
+import com.emprendesoftcr.web.command.CabysHaciendaCommand;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
+import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
@@ -1078,7 +1080,7 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
-			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
+			articulo.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -1221,7 +1223,7 @@ public class ArticuloController {
 				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
-				if (cabysBD == null) {
+				if(cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
 					Cabys cabys = new Cabys();
 					cabys.setId(null);
 					cabys.setCodigo(cabysAct.getCodigo());

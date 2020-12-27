@@ -74,9 +74,11 @@ function mostarModal(){
     //location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
     selfView.stylemodal = 	selfView.datos.stylemodal
     selfView.update()	
-	$('#loadPdf').attr("src", href );	
-    $("#mostrarPDFVIEW").modal("show");
    
+	$('#loadPdf').attr("src", href );	
+
+    $("#mostrarPDFVIEW").modal("show");
+    //document.getElementById('loadPdf').contentWindow.print();
      
 	
 }

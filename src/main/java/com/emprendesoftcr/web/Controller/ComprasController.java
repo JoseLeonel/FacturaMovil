@@ -690,14 +690,55 @@ public class ComprasController {
 					recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
 				}
 			}
+			if (tipoIngreso.equals(Constantes.APLICADO_RECEPCION_AUTOMATICA_SI) && recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO) ) {
+				Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
+
+				if (proveedor == null) {
+					proveedor = new Proveedor();
+					proveedor.setCedula(recepcionFactura.getEmisorCedula());
+					proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
+					proveedor.setCreated_at(new Date());
+					proveedor.setEstado(Constantes.ESTADO_ACTIVO);
+					proveedor.setEmail(recepcionFactura.getEmisorCorreo());
+					proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
+					proveedor.setMovil(recepcionFactura.getEmisorTelefono());
+					proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
+					proveedor.setRepresentante(Constantes.EMPTY);
+					proveedor.setUpdated_at(new Date());
+					proveedor.setId(null);
+					proveedor.setEmpresa(usuarioSesion.getEmpresa());
+					proveedorBo.agregar(proveedor);
+
+				}
+				
+				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, detallesCompra);
+			//	ifEMensajeReceptorAutomaticoBo.updateEstadoPorIdentificion(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA, recepcionFactura.getReceptorCedula().trim());
+				
+			}
 		
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
+			
 
 		} catch (Exception e) {
+			log.error("**crearFacturaAutomaticaCompras: " + e.getMessage() + " fecha " + new Date());
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
+		}finally {
+			if(fEMensajeReceptorAutomatico !=null) {
+				FEMensajeReceptorAutomatico fEMensajeReceptorAutomaticoBD = fEMensajeReceptorAutomaticoBo.buscar(fEMensajeReceptorAutomatico.getId());
+				if(fEMensajeReceptorAutomaticoBD != null) {
+					fEMensajeReceptorAutomaticoBD.setEstado(Constantes.COMPRA_AUTOMATICA_ESTADO_APLICADA);
+					fEMensajeReceptorAutomaticoBo.modificar(fEMensajeReceptorAutomaticoBD);
+					log.info("** Compra automatica aplicada:" + fEMensajeReceptorAutomaticoBD.getConsecutivo());
+					
+				}else {
+					log.info("** Compra automatica aplicada");
+				}
+				
+			}
+			
 		}
+		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);		
 
 	}
 

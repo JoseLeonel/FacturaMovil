@@ -230,11 +230,6 @@
 					        <input type="hidden" name="tarifaParametros" id="tarifaParametros" >
 					        <input type="hidden" name="impuestoParametros" id="impuestoParametros" >
 					       
-<!-- 					        	<div class= "row"> -->
-<!-- 					        		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"> -->
-
-<!-- 					        		</div> -->
-<!-- 					        	</div> -->
 
 					            	
 							  <div class= "row panelControl ">
@@ -273,6 +268,8 @@
 					        	<div class="col-md-2 col-sx-2 col-sm-2 col-lg-2 " >
 	    		                      <label class="titulosLabel1" >Cantidad a Consultar </label>  
 				                      <select  class="form-control cantidadLista" id="cantidadLista" name="cantidadLista"  >
+				                         <option  value="50"  >200</option>
+				                         <option  value="100"  >200</option>
 				                         <option  value="200"  >200</option>
 				                         <option  value="300"  >300</option>
 				                         <option  value="400"  >400</option>
@@ -286,9 +283,10 @@
 					        	<div class="col-md-2 col-sx-2 col-sm-2 col-lg-2 " >
 	    		                      <label class="titulosLabel1" th:text="#{titulo.cabys.tipo}"> </label>  
 				                      <select  class="form-control tipo" id="tipo" name="tipo"  >
+				                	     <option  value="0"  >Todos</option>
 				                	     <option  value="1"  >Sin Cabys</option>
 				                         <option  value="2"  >Con Cabys</option>
-				                         <option  value="0"  >Todos</option>
+				                         
 				                      </select>				        	
 					        	</div>
 					        	<div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 " >

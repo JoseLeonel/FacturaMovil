@@ -584,6 +584,7 @@ public final class Utils {
 		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
 		montoExonerado = montoExonerado == null ? Constantes.ZEROS_DOUBLE : montoExonerado;
 		resultado = montoImpuesto - montoExonerado;
+		resultado = resultado < Constantes.ZEROS_DOUBLE ? Constantes.ZEROS_DOUBLE : resultado;
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : Utils.Maximo5Decimales(resultado);
 
 	}
@@ -595,6 +596,8 @@ public final class Utils {
 	 * @param montoImpuesto
 	 * @return
 	 */
+	
+	
 	public static Double getMontoExoneracion(String tipoDocumentoExonerado, Integer porcentajeExoneracion, Double montoImpuesto) {
 		montoImpuesto = montoImpuesto == null ? Constantes.ZEROS_DOUBLE : montoImpuesto;
 		tipoDocumentoExonerado = tipoDocumentoExonerado == null ? Constantes.EMPTY : tipoDocumentoExonerado;

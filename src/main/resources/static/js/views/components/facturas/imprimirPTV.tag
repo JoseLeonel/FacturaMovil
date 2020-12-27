@@ -9,7 +9,7 @@
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                 <div class="row">
                     <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                        <a href="#" class="botonImprimir "  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                        <a href="#" class="botonImprimir "  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                         <button type="button" class="btn btn-danger boton-imprimirCelular " onclick="printJS('imprimeme', 'html')" show={mostrarImprimiCelular == true}>Imprimir desde el <br>Celular</button>    
                     </div>
                     <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
@@ -76,7 +76,7 @@
                                 <tbody>
                                     <tr  each={detalles} class="detalleTables">
                                         <td class="cantidad" show={codigo !='8888'}>{cantidadSTR}</td>
-                                        <td class="producto" show={codigo !='8888'}>{descripcion.length>40?descripcion.substring(0, 50):descripcion}</td>
+                                        <td class="producto" show={codigo !='8888'}>{descripcion.length>22?descripcion.substring(0, 22):descripcion}</td>
                                         <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} {montoImpuesto>0?"G":"E"}</td>
                                     </tr>
                                     <tr>
@@ -130,7 +130,7 @@
                                         <td></td>
                                         <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
                                         <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
-                                        <br>
+                                        
                                     </tr>
                                      <tr>
                                     <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
@@ -359,25 +359,7 @@
     {
         margin: 0;
     }
-    .zona-impresion
-    {
-        display: flex;
-        flex-wrap: wrap;
-        
-    }
-    .zona-impresion .forma-impresion
-    {
-        align-items: center;
-        align-self: flex-start;
-        background-color: white !important;
-        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 45px;
-        margin-left: 1%;
-        transition: all .4s;
-       
-    }
+    
     .encabezado
     {
         align-content: left;
@@ -387,25 +369,7 @@
     {
         margin: 0;
     }
-    .zona-impresion
-    {
-        display: flex;
-        flex-wrap: wrap;
-        width: 80%;
-    }
-    .zona-impresion .forma-impresion
-    {
-        align-items: center;
-        align-self: flex-start;
-        background-color: white !important;
-        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 45px;
-        margin-left: 1%;
-        transition: all .4s;
-        width: 80%;
-    }
+   
     
   @media print {
 * {
@@ -425,9 +389,9 @@
 
 #imprimeme {
     height: 100%;
-    width: 400px;
+    width: 100%;
     background: white;
-    padding-top: 10px;
+   
 }
 </style>    
 <script>

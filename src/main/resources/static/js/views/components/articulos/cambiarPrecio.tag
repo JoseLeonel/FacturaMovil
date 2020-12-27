@@ -8,7 +8,7 @@
                 <div id="divFormulario" >
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
-                            <input type="hidden" name="id" id="id" >
+                            <input type="hidden" name="id" id="id" value="{articulo.id}" >
                             <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
                             <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
@@ -37,16 +37,16 @@
                                             <div class="row">
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
+                                                    <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus" autocomplete="off">
                                                 </div>
                                                  <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
-                                                    <input type="text" class="campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys} autofocus="autofocus">
+                                                    <input type="text" class="campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys} autofocus="autofocus" autocomplete="off">
                                                 </div>
 
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
+                                                    <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}" autocomplete="off" >
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
@@ -58,15 +58,15 @@
                                             <div class="row">
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales"  >{$.i18n.prop("articulo.costo")} </label>
-                                                    <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                                    <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto} autocomplete="off">
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
-                                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaPublico}>
+                                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaPublico} autocomplete="off">
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoPrecioPublico} value="{articulo.precioPublico}"  >
+                                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoPrecioPublico} value="{articulo.precioPublico}"  autocomplete="off">
                                                 </div>
                                             </div>    
                                             <div class="row">
@@ -85,7 +85,7 @@
 
                                                 <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
-                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
+                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos} autocomplete="off">
                                                 </div>
                                             </div>    
                                         </div>
@@ -122,7 +122,7 @@
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
-                                                    <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                                                    <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}" autocomplete="off" >
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -182,7 +182,7 @@
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                     <label  >Digite el codigo 碼</label>
-                                    <input type="text" class="form-control codigoCabys "   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                    <input type="text" class="form-control codigoCabys  codigoCabysMod"   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <label>cantidad</label>
@@ -192,6 +192,7 @@
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <button  onclick={__ConsultaCodigoCabys} id = "filtroBotonCabys" type="button" class="btn-green pull-right"  >Consultar</button>
+                                    
                                 </div>                    
                             </div> 
                         </form>    
@@ -500,14 +501,34 @@ __ConsultaHaciendaCabys(e){
 }
 
 function ListarCodigosCabysModal(){
+    $("#formularioParametros").validate(reglasDeValidacionParametroCabys());
     $(".tableListarHaciendaCabys").dataTable().fnClearTable();
     $(".tableListarHaciendaCabys").DataTable().destroy();
     $('#modalHaciendaCabys').modal('show')
     $('#modalHaciendaCabys').on('shown.bs.modal', function () {
-        $('.descArticulo').select()
+        $('.codigoCabysMod').select()
         $('.descArticulo').focus()
+        $('#descArticulo').val('')
+        $('.codigoCabysMod').val('')
     })
  }
+ 
+var reglasDeValidacionParametroCabys = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			codigoCabys : {
+                maxlength:13,
+			},
+            descArticulo : {
+				maxlength : 100,
+			},                                                
+ 		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
  
 __ConsultaCodigoCabys(e){
     __ListaDeHaciendaCabys()
@@ -515,9 +536,9 @@ __ConsultaCodigoCabys(e){
 
 
 function __ListaDeHaciendaCabys(){
-    if( $('#descArticulo').val() =='' && $('#codigoCabys').val() =='' ){
-        return
-    }
+   // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
+   //     return
+   // }
     var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
     var  encontro = false
     $(".tableListarHaciendaCabys").dataTable().fnClearTable();
@@ -525,9 +546,9 @@ function __ListaDeHaciendaCabys(){
     var parametros = {
         descArticulo :$('#descArticulo').val(),
         cantidad: cantidadTemp,
-        codigo: $('#codigoCabys').val()
+        codigo: $('.codigoCabysMod').val()
     };
-
+  if ($("#formularioParametros").valid()) {
     $.ajax({
         url: 'ListarCabysDeHaciendaAjax.do',
         datatype: "json",
@@ -556,6 +577,7 @@ function __ListaDeHaciendaCabys(){
             mensajeErrorServidor(xhr, status);
         }
     });
+  }
 }
 
 function __cargarTablaCompras() {
