@@ -498,7 +498,7 @@ public class FacturasController {
 			parametros.put("P_cedula","Cedula:"+ factura.getEmpresa().getCedula() + " Telefono(506):" + factura.getEmpresa().getTelefono());
 			parametros.put("P_otra_sena", factura.getEmpresa().getOtraSenas());
 			parametros.put("P_fecha_emision", "Fecha Emision:" + factura.getFechaEmisionSTR());
-			parametros.put("P_cond_venta", "Cond.venta: " + factura.getCondicionVentaSTR());
+			parametros.put("P_cond_venta", "C.venta: " + factura.getCondicionVentaSTR().trim());
 			String medioPago = factura.getMedioEfectivo() != null && !factura.getMedioEfectivo().equals(Constantes.EMPTY) ? factura.getMedioEfectivo() : Constantes.EMPTY;
 			if (medioPago.equals(Constantes.EMPTY)) {
 				medioPago = factura.getMedioTarjeta() != null && !factura.getMedioTarjeta().equals(Constantes.EMPTY) ? factura.getMedioTarjeta() : Constantes.EMPTY;

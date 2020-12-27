@@ -170,6 +170,10 @@
     </div>
   </div>
 </div>
+<div>
+ <iframe style="width: 100%; height: 500px" id="loadPdf" src="">
+ </iframe>
+</div>
 <style type="text/css"  >
 * {
     font-size: 12px !important;
@@ -477,25 +481,45 @@ self.impuestoTransitorio0 = 0
 self.impuestoTransitorio4 = 0
 self.impuestoTransitorio8 = 0
 self.totalesIVAI    = []
+self.pdf = false;
   
 self.on('mount',function(){
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
     self.update()
+    self.pdf = false;
+    if (typeof self.parametro.factura.noFacturaElectronica != 'undefined' )  {
+        if (self.parametro.factura.noFacturaElectronica ==0) {
+            if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3){
+                if(self.parametro.factura.id > 0){
+                  if(self.parametro.factura.tipoDoc =='04' && typeof self.parametro.factura.tipoDoc != 'undefined' ) {
+                      self.pdf = true;
+                      self.update()
+                      imprimirPFD()
+
+                  }
+                }
+            }    
+           
+        }
+     }
    // document.getElementById('divQR').innerHTML = '';
-    if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3){
+    if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3 &&  self.pdf == false){
         if(self.parametro.factura.id > 0){
            consultaFactura(self.parametro.factura.id) 
         }
        
-    }else if(typeof self.parametro.factura.consecutivo != 'undefined' && self.parametro.facturaDia !=3){
+    }else if(typeof self.parametro.factura.consecutivo != 'undefined' && self.parametro.facturaDia !=3 &&  self.pdf == false){
         if(self.parametro.factura.consecutivo.length > 0){
            consultaFacturaPorConsecutivo(self.parametro.factura.consecutivo)
         }
        
     }
-    llamarQR()
-    if(self.parametro.facturaDia == 3){
+    if(self.pdf == false){
+      llamarQR()
+    }
+    
+    if(self.parametro.facturaDia == 3 &&  self.pdf == false){
         consultaDetalles(self.parametro.factura)
     }
     
@@ -1022,7 +1046,10 @@ function __ComboTipoDocumentos(){
 function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
    // var div = document.querySelector("#imprimeme");
+
     imprimirElemento(objeto)
+
+   
 }
 function imprimirElemento(elemento){
  // var originalContents = document.body.innerHTML;
@@ -1045,15 +1072,11 @@ function imprimirElemento(elemento){
 }
 
 
-function mostarModal(){
+function imprimirPFD(){
     
-    if($('#mostrarPDFVIEW').is(':visible')){
-        return
-    }
-    var href =  selfView.datos.direccion + '&t=' + $.now() 
-    //location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
-    selfView.stylemodal = 	selfView.datos.stylemodal
-    selfView.update()	
+   
+    var href =  'GenerarTikect1.do?idFactura='+self.parametro.factura.id + '&t=' + $.now() 
+  
    
 	$('#loadPdf').attr("src", href );	
 
