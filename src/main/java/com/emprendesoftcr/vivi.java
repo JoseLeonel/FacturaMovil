@@ -8,8 +8,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.emprendesoftcr.utils.Utils;
-import com.itextpdf.text.DocumentException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.XmlHelper;
@@ -102,6 +107,7 @@ public class vivi {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		return nList;
 		
 //		float  total  = Utils.getTotalExonerado(0f,42384.0708); 
 //		System.out.println("Yo naci:" + total);
