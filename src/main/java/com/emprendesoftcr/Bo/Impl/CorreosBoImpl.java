@@ -38,11 +38,12 @@ public class CorreosBoImpl implements CorreosBo {
 	@Override
 	public Boolean enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
 		Boolean resultado = Boolean.FALSE;
+		
 		try {
 			mailSender.send(new MimeMessagePreparator() {
 
 				public void prepare(MimeMessage mimeMessage) throws MessagingException {
-
+					Integer cantidadDocumentos = 1;
 					MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
 					for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
@@ -51,9 +52,13 @@ public class CorreosBoImpl implements CorreosBo {
 							message.addTo(new InternetAddress(correo));
 						}
 						if (attachments != null) {
-							for (Iterator<Attachment> iterator1 = attachments.iterator(); iterator1.hasNext();) {
-								Attachment attachment = iterator1.next();
-								message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+							cantidadDocumentos = 1;
+							for (Attachment attachment : attachments) {
+								if(cantidadDocumentos <= 3 ) {
+									message.addAttachment(attachment.getNombre(), attachment.getAttachment());	
+								}
+								cantidadDocumentos ++;
+								
 							}
 						}
 
@@ -65,9 +70,7 @@ public class CorreosBoImpl implements CorreosBo {
 					String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
 					message.setText(text, true);
 
-//			     message.addInline("myLogo", new ClassPathResource("img/mylogo.gif"));
-					// message.addAttachment("myDocument.pdf", new ClassPathResource("doc/myDocument.pdf"));
-//			   }
+
 				}
 			});
 			

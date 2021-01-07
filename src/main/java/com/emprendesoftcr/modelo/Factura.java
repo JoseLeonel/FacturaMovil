@@ -1207,6 +1207,10 @@ public class Factura implements Serializable {
 		return totalExonerado;
 	}
 
+	public String getTotalExoneradoSTR() {
+		return Utils.formateadorMiles(this.totalExonerado);
+	}
+
 	public void setTotalExonerado(Double totalExonerado) {
 		this.totalExonerado = totalExonerado;
 	}

@@ -323,7 +323,12 @@ public class CompraBoImpl implements CompraBo {
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
 			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double costoIventario = detalleCompra.getCostoIventario() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getCostoIventario();
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
+			if(costoIventario > Constantes.ZEROS_DOUBLE) {
+				totalLinea = costoIventario;
+			}
+			
 			Double descuento = detalleCompra.getTotalDescuento() == null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() / cantidad : Constantes.ZEROS_DOUBLE;
 			Double costo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
@@ -816,7 +821,7 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	@Transactional
 	@Override
-	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor) throws Exception {
+	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv) throws Exception {
 		Integer resultado = 0;
 		try {
 			// 1. Obtener el detalle de la compra
@@ -826,6 +831,8 @@ public class CompraBoImpl implements CompraBo {
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(codigo, empresa);
 			if (articulo != null) {
 				detalleCompra.setArticulo(articulo);
+				//detalleCompra.setCosto(costo_inv);
+				detalleCompra.setCostoIventario(costo_inv);
 				detalleCompraDao.modificar(detalleCompra);
 				if (compraBD != null) {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
@@ -850,6 +857,7 @@ public class CompraBoImpl implements CompraBo {
 				articulo.setContable(Constantes.CONTABLE_SI);
 				articulo.setUpdated_at(new Date());
 				articulo.setPrecioPublico(precioPublico);
+				
 				articulo.setGananciaPrecioPublico(ganancia);
 				articuloDao.modificar(articulo);
 

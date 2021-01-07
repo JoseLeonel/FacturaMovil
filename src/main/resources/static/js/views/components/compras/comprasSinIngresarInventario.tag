@@ -44,12 +44,13 @@
 				<table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:6%;"><div class="tituloFormat">Num.linea </div></th>
+                            <th style="width:4%;"><div class="tituloFormat">Num.linea </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cod.Proveedor </div></th>
 							<th style="width:3%;"><div class="tituloFormat">Cod.Inventario </div></th>
-                            <th style="width:30%;"><div class="tituloFormat">Descripcion </div></th>
+                            <th style="width:22%;"><div class="tituloFormat">Descripcion </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cant </div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Costo</div></th>
+                            <th style="width:7%;"><div class="tituloFormat">Costo Compra</div></th>
+                            <th style="width:7%;"><div class="tituloFormat">Costo Inv</div></th>
                             <th style="width:10%;"><div class="tituloFormat">Ganancia</div></th>
                             <th style="width:10%;"><div class="tituloFormat">Precio </div></th>
                             <th style="width:10%;"><div class="tituloFormat">IVA Compra </div></th>
@@ -59,35 +60,39 @@
                         </thead>
                         <tbody>
                         <tr each={detail}>
-                            <td class="text-right" style="width:6%;">
+                            <td  style="width:6%;">
                                 <span>{numero_linea}</span>
                             </td>
 
-                            <td class="text-right" style="width:6%;">
+                            <td  style="width:6%;">
                                 <span>{cod_proveedor}</span>
                             </td>
-                            <td class="text-right" style="width:6%;">
+                            <td  style="width:6%;">
                                 <input  onclick={__agregarArticuloInventario}  class="campodetalle" type="text"   value = "{cod_invet}" readonly/>
                             </td>
-                            <td class="text-right" style="width:22%;">
+                            <td style="width:22%;">
                                 <span>{descripcion}</span>
                             </td>
-                            <td class="text-right" style="width:6%;">
+                            <td style="width:6%;">
                                 <span>{cantidad}</span>
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td  style="width:7%;">
                                 <span>{costo_prove}</span>
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td  style="width:7%;">
+                                
+                                <input  onkeyup={__actualizarCostoInventario}  class="campodetalle" type="number" step="any"  value = "{costo_inv}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td  style="width:10%;">
                                 <input  onkeyup={__actualizarGananciaKeyPress}  class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td  style="width:10%;">
                                 <input  onkeyup={__actualizarPrecioKeyPress}   class="campodetalle" type="number" step="any"  value = "{precio_publico}" min="0" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td  style="width:10%;">
                                 <span>{impuesto}</span>
                             </td>
-                            <td class="text-right" style="width:10%;">
+                            <td  style="width:10%;">
                                 <span>{imp_art}</span>
                             </td>
                             <td>
@@ -166,7 +171,8 @@
      font-weight: 600;
  }
  .campodetalle{
-    font-size: 18px;
+    font-size: 14px;
+    width: 125px!important;
  }
  .box{
     color: #000000 !important;
@@ -262,6 +268,7 @@ function actualizarDetalleAlInventario(){
         codigoInventario:self.detalleCompra.cod_invet,
         gananciaPrecioPublico: self.detalleCompra.ganancia,
         precioPublico:self.detalleCompra.precio_publico,
+        costo_inv:self.detalleCompra.costo_inv,
         codigoProveedor:self.detalleCompra.cod_proveedor,
    }
     $.ajax({
@@ -315,6 +322,28 @@ __actualizarGananciaKeyPress(e){
     aplicarGananciaCompra(e)
 }
 
+__actualizarCostoInventario(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var costo_inv = __valorNumerico(e.currentTarget.value);
+    self.item = e.item; 
+    var index = self.detalleCompras.aaData.indexOf(self.item);
+    var impuesto  =  __valorNumerico(self.item.imp_art)
+    var precioPublico    =  __valorNumerico(self.item.precio_publico)
+    self.item.costo_inv = costo_inv
+    self.item.ganancia = __CalcularGanancia(impuesto,costo_inv,precioPublico);
+    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
+    if(self.item.precioPublico == 0){
+        self.item.precio_publico =_ObtenerPrecio(self.item.costo_inv,self.item.imp_art * 100,0,self.item.ganancia)
+        self.item.precio_publico =  __valorNumerico(redondeoDecimales(self.item.precio_publico,aplicarRedondeo()))
+    }
+    
+    self.detail[index] = self.item
+    self.update()
+}
+
+
 __actualizarGananciaBlur(e){
     if (e.keyCode == 8 || e.keyCode == 46){
         return
@@ -326,10 +355,11 @@ function aplicarGananciaCompra(e){
     self.item = e.item; 
     var index = self.detalleCompras.aaData.indexOf(self.item);
     var impuesto  =  __valorNumerico(self.item.imp_art)
-    var costo     =  __valorNumerico(self.item.costo_prove)
+    var costo     =  __valorNumerico(self.item.costo_inv)
     var precioPublico    =  __valorNumerico(self.item.precio_publico)
+    self.item.costo_inv = costo
     self.item.ganancia = __valorNumerico(ganancia);
-    self.item.precio_publico =_ObtenerPrecio(self.item.costo_prove,self.item.imp_art * 100,0,self.item.ganancia)
+    self.item.precio_publico =_ObtenerPrecio(self.item.costo_inv,self.item.imp_art ,0,self.item.ganancia)
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.item.precio_publico =  __valorNumerico(redondeoDecimales(self.item.precio_publico,aplicarRedondeo()))
     self.detail[index] = self.item
@@ -354,7 +384,7 @@ function __ActualizarPrecioDetalle(e){
     self.item = e.item; 
     var index = self.detail.indexOf(self.item);
     var impuesto = __valorNumerico(self.item.impuesto)
-    var costo = __valorNumerico(self.item.costo_prove)
+    var costo = __valorNumerico(self.item.costo_inv)
     var precioPublico =  __valorNumerico(precio)
     self.item.ganancia = __CalcularGanancia(impuesto,costo,precioPublico);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
@@ -384,7 +414,7 @@ function __agregarArticulos() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         if(data !=null){
-            asociarCodigoLineaDetalle(data.codigo,data.impuesto,data.precioPublico)
+            asociarCodigoLineaDetalle(data.codigo,data.impuesto,data.precioPublico,data.costo,data.gananciaPrecioPublico)
             $('#modalInventario').modal('hide')
             return
         }
@@ -394,12 +424,15 @@ function __agregarArticulos() {
 /**
 * Actualizar el codigo del inventario y precio publico que tiene 
 **/
-function asociarCodigoLineaDetalle(codigo,impuesto,precioPublico){
+function asociarCodigoLineaDetalle(codigo,impuesto,precioPublico,costo,ganancia){
     var index = self.detalleCompras.aaData.indexOf(self.item);
     self.item.cod_invet = codigo
+    self.item.costo = costo
+    self.item.costo_inv = costo
+    
     self.item.precio_publico = precioPublico
     self.item.imp_art = impuesto
-    self.item.ganancia = _porcentajeGanancia(self.item.costo,self.item.imp_art,self.item.precio_publico)
+    self.item.ganancia = __valorNumerico(redondeoDecimales(ganancia,aplicarRedondeo()))
     self.detail[index] = self.item
     self.update();
     

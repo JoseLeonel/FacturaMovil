@@ -127,6 +127,10 @@ public class DetalleCompra implements Serializable {
 	private String						codigoTipoImpuesto;
 	@Column(name = "tari_impuesto")
 	private String						tarifaImpuesto;
+	@Column(name = "costo_inventario")
+	private Double costoIventario;
+	
+	
 
 	public DetalleCompra() {
 		super();
@@ -436,5 +440,17 @@ public class DetalleCompra implements Serializable {
 	public void setTarifaImpuesto(String tarifaImpuesto) {
 		this.tarifaImpuesto = tarifaImpuesto;
 	}
+
+	
+	public Double getCostoIventario() {
+		return costoIventario;
+	}
+
+	
+	public void setCostoIventario(Double costoIventario) {
+		this.costoIventario = costoIventario;
+	}
+	
+	
 
 }

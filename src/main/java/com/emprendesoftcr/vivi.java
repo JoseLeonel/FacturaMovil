@@ -1,7 +1,12 @@
 package com.emprendesoftcr;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -10,11 +15,17 @@ import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.XmlHelper;
@@ -45,6 +56,7 @@ public class vivi {
 				e.printStackTrace();
 				facturaXmlFinal = "";
 			}
+      
 			
 //			JAXBContext context = JAXBContext.newInstance(FacturaTemp.class);
 //			Unmarshaller unmarshaller = context.createUnmarshaller();
