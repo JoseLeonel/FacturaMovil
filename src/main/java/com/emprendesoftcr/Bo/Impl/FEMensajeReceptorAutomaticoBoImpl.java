@@ -45,5 +45,7 @@ public class FEMensajeReceptorAutomaticoBoImpl implements IFEMensajeReceptorAuto
 		ifEMensajeReceptorAutomaticoRepository.updateEstadoPorIdentificion(estado, cedulaEmisor);
 		
 	}
+	
+	
 
 }

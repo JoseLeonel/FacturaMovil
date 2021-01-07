@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proformaRestaurante" pageWidth="226" pageHeight="600" columnWidth="222" leftMargin="2" rightMargin="2" topMargin="2" bottomMargin="2" isIgnorePagination="true" uuid="4761ca36-4417-4f1c-9460-788a99b60f53">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="P_subTotal" class="java.lang.String"/>
+	<parameter name="P_total_impuesto" class="java.lang.String"/>
+	<parameter name="P_impuesto_servicio" class="java.lang.String"/>
+	<parameter name="P_total_general" class="java.lang.String"/>
+	<parameter name="P_Mesa" class="java.lang.String"/>
+	<parameter name="P_PROFORMA" class="java.lang.String"/>
+	<parameter name="P_NOMBRE_FACTURA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[descripcion]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.String">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<field name="total" class="java.lang.String">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="222" height="20" uuid="2ee21451-bade-454e-bbfa-c3f5af4e293a"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proforma]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="21" width="222" height="30" isRemoveLineWhenBlank="true" uuid="f3f1d970-bbae-4ee4-9188-86b543287b0b"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_Mesa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="51" width="220" height="18" isRemoveLineWhenBlank="true" uuid="bec05386-aad1-451b-adff-2d5f4ad656d6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_PROFORMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="69" width="220" height="18" isRemoveLineWhenBlank="true" uuid="24417589-4bbc-4a7c-8409-c7330990ab19">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_NOMBRE_FACTURA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="30" height="13" uuid="62f2969a-364d-4ba9-a138-9898ff6caad6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26cb1c91-a77f-4734-84ac-d7b78cfbe908"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom"/>
+				<text><![CDATA[Cant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="0" width="136" height="13" uuid="9705b438-0690-4857-96d7-247c522eb220">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f592985a-2f71-4eec-9c97-4f0bd2bdf873"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="0" width="56" height="14" uuid="cd98d23f-6a6e-4e70-9772-0ce127b3ff2f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b138292e-2347-4940-bf9c-871c21cdf1db"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="30" height="13" uuid="f44da21e-bf85-410a-b1de-0400c5b5cf3b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26cb1c91-a77f-4734-84ac-d7b78cfbe908"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="136" height="13" uuid="ba880a58-03f2-4e7e-8beb-8135b98dfec3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f592985a-2f71-4eec-9c97-4f0bd2bdf873"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="0" width="56" height="13" uuid="a94fe11e-6d55-47f9-98b0-b4e0b513711f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b138292e-2347-4940-bf9c-871c21cdf1db"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="90" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="4" width="222" height="20" uuid="b03e233d-f195-4d66-8a2d-b64558749e87">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_subTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="24" width="222" height="20" uuid="3568f8ed-199e-4cdc-a93d-4ccb5b33ca0f">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_total_impuesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="45" width="222" height="20" uuid="6f4fcea9-350c-451e-9b82-7580ab973b2e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_impuesto_servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="65" width="222" height="20" uuid="69a94019-4ced-486b-911d-b046441a975a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_total_general}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="2" width="222" height="1" uuid="ecdfb006-5351-4be8-ac36-8c0af50f3b19"/>
+			</line>
+			<line>
+				<reportElement x="1" y="-18" width="222" height="1" uuid="ec4fa4f6-bd9e-4e54-b0f7-4927bae29672"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

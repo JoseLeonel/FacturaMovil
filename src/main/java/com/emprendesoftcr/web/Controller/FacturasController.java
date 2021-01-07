@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -126,6 +127,8 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
@@ -418,8 +421,8 @@ public class FacturasController {
 	}
 
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/GenerarTikect.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
+	@RequestMapping(value = "/GenerarTikect1.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam(value="subTotalGeneralSTR", required = false) String subTotalGeneralSTR,@RequestParam(value="totalImpuestoRestSTR", required = false) String totalImpuestoRestSTR,  @RequestParam("idFactura") Long idFactura,@RequestParam(value="impServicioTotalSTR", required = false) String impServicioTotalSTR,@RequestParam(value="totalComprobanteSTR", required = false) String totalComprobanteSTR,@RequestParam(value="totalDescuentosProformaREstSTR", required = false) String totalDescuentosProformaREstSTR,@RequestParam("tipoFactura") Integer tipoFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
 		List<TikectImprimir> lista = new ArrayList<>();
 		Factura factura = facturaBo.findById(idFactura);
 		Collection<Detalle> detalles = detalleBo.findbyIdFactura(idFactura);
@@ -428,49 +431,21 @@ public class FacturasController {
 			tikectImprimir.setId(detalle.getId());
 			tikectImprimir.setDescripcion(detalle.getDescripcion());
 			tikectImprimir.setCantidad(detalle.getCantidadSTR());
-			tikectImprimir.setPrecio(detalle.getPrecioUnitario().toString());
+			tikectImprimir.setPrecio(detalle.getPrecioUnitarioSTR());
 			tikectImprimir.setTotal(detalle.getMontoTotalLineaSTR());
+			tikectImprimir.setImpuesto(detalle.getImpuestoSTR() + "%");
 			lista.add(tikectImprimir);
 
 		}
-		// jasper
-		Map<String, Object> parametros;
-		parametros = new HashMap<>();
-		Integer nofactura_elec = factura.getEmpresa().getNoFacturaElectronica() != null ? factura.getEmpresa().getNoFacturaElectronica() : Constantes.ZEROS;
+		Map<String, Object> parametros = getParametroReportes(factura,tipoFactura,subTotalGeneralSTR,totalImpuestoRestSTR,
+				impServicioTotalSTR,
+				totalComprobanteSTR,
+				totalDescuentosProformaREstSTR);
 
-		parametros.put("P_documento_electronico", MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc()));
-		parametros.put("P_regimen", nofactura_elec.equals(Constantes.ZEROS) ? "Régimen Simplificado" : "Régimen Tradicional");
-		parametros.put("P_actividad", "Codigo Actividad : " + factura.getCodigoActividad());
-		parametros.put("P_comercial", factura.getEmpresa().getNombreComercial() == null ? Constantes.EMPTY : factura.getEmpresa().getNombreComercial());
-		parametros.put("P_nombre", factura.getEmpresa().getNombre());
-		parametros.put("P_cedula", factura.getEmpresa().getCedula() + " Telef:" + factura.getEmpresa().getTelefono());
-		parametros.put("P_otra_sena", factura.getEmpresa().getOtraSenas());
-		parametros.put("P_fecha_emision", "Fecha Emision:" + factura.getFechaEmisionSTR());
-		parametros.put("P_cond_venta", "Cond.venta: " + factura.getCondicionVentaSTR());
-		String medioPago = factura.getMedioEfectivo() != null && !factura.getMedioEfectivo().equals(Constantes.EMPTY) ? factura.getMedioEfectivo() : Constantes.EMPTY;
-		if (medioPago.equals(Constantes.EMPTY)) {
-			medioPago = factura.getMedioTarjeta() != null && !factura.getMedioTarjeta().equals(Constantes.EMPTY) ? factura.getMedioTarjeta() : Constantes.EMPTY;
-		}
-		if (medioPago.equals(Constantes.EMPTY)) {
-			medioPago = factura.getMedioBanco() != null && !factura.getMedioBanco().equals(Constantes.EMPTY) ? factura.getMedioBanco() : Constantes.EMPTY;
-		}
-		parametros.put("P_medio_pago", "Medio Pago: " + MapEnums.ENUM_MEDIO_PAGO.get(medioPago));
-		parametros.put("P_usuario", "Usuario: " + factura.getUsuarioCreacion().getNombreUsuario());
-		parametros.put("P_moneda", "Moneda: " + MapEnums.ENUM_MONEDA.get(factura.getCodigoMoneda()));
-		parametros.put("P_documento", "Documento: " + factura.getNumeroConsecutivo());
-		String clave1 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave(): Constantes.EMPTY;
-		String clave2 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave().substring(26, 50) : Constantes.EMPTY;
-		parametros.put("P_clave1", clave1);
-		parametros.put("P_nota", factura.getNota() != null && !factura.getNota().equals(Constantes.EMPTY)? factura.getNota():Constantes.EMPTY);
-		parametros.put("P_total_impuesto", factura.getTotalImpuestoSTR());
-		parametros.put("P_descuento", factura.getTotalDescuentoSTR());
-		parametros.put("P_total_general", factura.getTotalComprobanteSTR());
-		parametros.put("P_cambio", factura.getTipoCambioSTR());
-
-		InputStream reportfile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");
+		InputStream reportFile = getObtienePDF(factura,tipoFactura);
 		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
 		JsonDataSource ds = new JsonDataSource(jsonDataStream);
-		byte[] bytes = JasperRunManager.runReportToPdf(reportfile, parametros, ds);
+		byte[] bytes = JasperRunManager.runReportToPdf(reportFile, parametros, ds);
 		if (bytes != null && bytes.length > 0) {
 			response.setContentType("application/pdf");
 			// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
@@ -483,6 +458,203 @@ public class FacturasController {
 			System.out.println("NO trae nada");
 		}
 
+	}
+
+	private InputStream getObtienePDF(Factura factura,Integer tipoFactura) {
+		InputStream reportFile = null;
+		try {
+		    if(tipoFactura.equals(1)) {
+		    	reportFile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");	
+		    }
+		    if(tipoFactura.equals(2)) {
+		    	reportFile = getClass().getResourceAsStream("/reportes/factura/proformaRestaurante.jasper");	
+		    }
+		    
+		
+		} catch (Exception e) {
+			log.info("** Error  getObtienePDF: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return reportFile;
+	}
+	private String obtenerTipoDocumento(Factura factura ) {
+		String resultado = Constantes.EMPTY;
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+			resultado = "Factura Electronica 4.3";
+		}
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+			resultado = "Tiquete Electronico 4.3";
+		}
+		
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+			resultado = "Nota credito";
+		}
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)) {
+			resultado = "Nota debito";
+		}
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+			resultado = "Nota debito Electronico 4.3";
+		}
+		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			resultado = "Nota credito Electronico 4.3";
+		}
+		if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+			resultado = "Tiquete";
+		}
+		
+		
+		return resultado;
+	}
+
+	private Map<String, Object> getParametroReportes(Factura factura,Integer tipoFactura,String subTotalGeneralSTR,String totalImpuestoRestSTR
+			,String impServicioTotalSTR,String	totalComprobanteSTR,String totalDescuentosProformaREstSTR) {
+		Map<String, Object> parametros;
+		parametros = new HashMap<>();
+		try {
+
+			Integer nofactura_elec = factura.getEmpresa().getNoFacturaElectronica() != null ? factura.getEmpresa().getNoFacturaElectronica() : Constantes.ZEROS;
+			
+			parametros.put("P_titulo_electronico", obtenerTipoDocumento(factura));
+			parametros.put("P_documento_electronico", MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc()));
+			parametros.put("P_regimen", nofactura_elec.equals(Constantes.ZEROS) ? "Régimen Simplificado" : "Régimen Tradicional");
+			parametros.put("P_actividad", "Codigo Actividad : " + factura.getCodigoActividad());
+			parametros.put("P_comercial", factura.getEmpresa().getNombreComercial() == null ? Constantes.EMPTY : factura.getEmpresa().getNombreComercial());
+			parametros.put("P_nombre", factura.getEmpresa().getNombre());
+
+			parametros.put("P_cedula", "Cedula:" + factura.getEmpresa().getCedula() + " Telefono(506):" + factura.getEmpresa().getTelefono());
+			parametros.put("P_otra_sena", factura.getEmpresa().getOtraSenas());
+			parametros.put("P_fecha_emision", "Fecha Emision:" + factura.getFechaEmisionSTR());
+			parametros.put("P_cond_venta", "C.venta: " + factura.getCondicionVentaSTR().trim());
+			String medioPago = factura.getMedioEfectivo() != null && !factura.getMedioEfectivo().equals(Constantes.EMPTY) ? factura.getMedioEfectivo() : Constantes.EMPTY;
+			if (medioPago.equals(Constantes.EMPTY)) {
+				medioPago = factura.getMedioTarjeta() != null && !factura.getMedioTarjeta().equals(Constantes.EMPTY) ? factura.getMedioTarjeta() : Constantes.EMPTY;
+			}
+			if (medioPago.equals(Constantes.EMPTY)) {
+				medioPago = factura.getMedioBanco() != null && !factura.getMedioBanco().equals(Constantes.EMPTY) ? factura.getMedioBanco() : Constantes.EMPTY;
+			}
+			parametros.put("P_medio_pago", "Medio Pago: " + MapEnums.ENUM_MEDIO_PAGO.get(medioPago));
+			parametros.put("P_usuario", "Usuario: " + factura.getUsuarioCreacion().getNombreUsuario());
+			parametros.put("P_moneda", "Moneda: " + MapEnums.ENUM_MONEDA.get(factura.getCodigoMoneda()));
+			parametros.put("P_documento", factura.getNumeroConsecutivo());
+			String clave1 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave() : Constantes.EMPTY;
+			parametros.put("P_clave1", clave1);
+			parametros.put("P_nota", factura.getNota() != null && !factura.getNota().equals(Constantes.EMPTY) ? factura.getNota() : Constantes.EMPTY);
+			
+			if(tipoFactura.equals(2)) {
+				
+				parametros.put("P_NOMBRE_FACTURA",factura.getNombreFactura() != null?factura.getNombreFactura():Constantes.EMPTY);
+				parametros.put("P_PROFORMA","#"+factura.getId());
+				
+				parametros.put("P_total_general", "Total:" + totalComprobanteSTR);
+				parametros.put("P_total_impuesto","              IVA:"+ totalImpuestoRestSTR);
+				parametros.put("P_impuesto_servicio","	Servicio(10%):"+ impServicioTotalSTR);
+				parametros.put("P_descuento","                Desc:"+ totalDescuentosProformaREstSTR);
+				parametros.put("P_subTotal", "         SubTotal:" +subTotalGeneralSTR);
+			}else {
+				parametros.put("P_subTotal", "         SubTotal:" + factura.getSubTotalSTR());
+				parametros.put("P_total_general", "               Total:" + factura.getTotalComprobanteSTR());
+				String impuesto = factura.getTotalImpuesto() != null && factura.getTotalImpuesto() > Constantes.ZEROS_DOUBLE ? "              IVA:" + factura.getTotalImpuestoSTR() : Constantes.EMPTY;
+				parametros.put("P_total_impuesto", impuesto);
+				parametros.put("P_impuesto_servicio", factura.getTotalImpuestoServicio() != null && factura.getTotalImpuestoServicio() > Constantes.ZEROS_DOUBLE?"	Servicio(10%):"+factura.getTotalImpuestoServicioSTR():Constantes.EMPTY);
+				String descuento = factura.getTotalDescuentos() != null && factura.getTotalDescuentos() > Constantes.ZEROS_DOUBLE ? "                Desc:" + factura.getTotalDescuentoSTR() : Constantes.EMPTY;
+				parametros.put("P_descuento", descuento);
+
+			}
+			
+			
+			parametros.put("P_cambio","           Cambio:"+ factura.getMontoCambioSTR());
+			parametros.put("P_correo", factura.getEmpresa().getCorreoElectronico());
+			parametros.put("P_telefono", factura.getEmpresa().getTelefono().toString());
+			parametros.put("P_nombreFactura", obtenerNombreCliente(factura));
+
+			parametros.put("P_cedula_cliente", obtenerCedulaCliente(factura));
+			parametros.put("P_correoCliente", factura.getCliente().getCorreoElectronico() != null ? factura.getCliente().getCorreoElectronico() : Constantes.EMPTY);
+			String exoneracion = factura.getTotalExonerado() != null && factura.getTotalExonerado() > Constantes.ZEROS_DOUBLE ? "Exoneracion(-):" + factura.getTotalExoneradoSTR() : Constantes.EMPTY;
+			parametros.put("P_total_exoneracion", exoneracion);
+			parametros.put("P_ref_documento", obtenerReferenciaDocumento(factura));
+			
+			parametros.put("P_parrafoOficialHacienda", obtenerParrafoOficial(factura));
+			
+			parametros.put("P_cuenta_titulo",factura.getEmpresa().getCuenta1() != null && !factura.getEmpresa().getCuenta1().equals(Constantes.EMPTY)? "---Transferencias Bancarias---":Constantes.EMPTY);
+			parametros.put("P_cuenta_uno", factura.getEmpresa().getCuenta1() != null ?factura.getEmpresa().getCuenta1():Constantes.EMPTY);
+			parametros.put("P_cuenta_dos", factura.getEmpresa().getCuenta2() != null ?factura.getEmpresa().getCuenta2():Constantes.EMPTY);
+			parametros.put("P_cuenta_tres", factura.getEmpresa().getCuenta3() != null ?factura.getEmpresa().getCuenta3():Constantes.EMPTY);
+			parametros.put("P_cuenta_cuatro", factura.getEmpresa().getCuenta4() != null ?factura.getEmpresa().getCuenta4():Constantes.EMPTY);
+			parametros.put("P_cuenta_cinco", factura.getEmpresa().getCuenta5() != null ?factura.getEmpresa().getCuenta5():Constantes.EMPTY);
+			parametros.put("P_cuenta_seis", factura.getEmpresa().getCuenta6() != null ?factura.getEmpresa().getCuenta6():Constantes.EMPTY);
+			parametros.put("P_cuenta_siete", factura.getEmpresa().getCuenta7() != null ?factura.getEmpresa().getCuenta7():Constantes.EMPTY);
+			parametros.put("P_titulo_clave", factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY)?"Clave":Constantes.EMPTY);
+			
+			
+			parametros.put("P_Mesa",factura.getMesa() != null?factura.getMesa().getDescripcion():Constantes.EMPTY);
+			
+			
+		} catch (Exception e) {
+			log.info("** Error  getParametroReportes: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return parametros;
+
+	}
+private String obtenerParrafoOficial(Factura factura) {
+	
+	StringBuilder parrafoOficialHacienda = new StringBuilder();
+	if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+		parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución");
+		parrafoOficialHacienda.append(" de Facturación Electrónica,");
+		parrafoOficialHacienda.append("No DGT-R-033-2019 del 20-06-2019 ");
+		parrafoOficialHacienda.append("de la Direccion General de Tributación  ");
+	}else {
+		parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución de Facturación Electrónica,");
+		parrafoOficialHacienda.append(" No DGT-R-033-2019 del 20-06-2019 de la Direccion General de Tributación.");
+		
+	}
+	
+	
+	return parrafoOficialHacienda.toString();
+	
+	
+}	
+ private String obtenerReferenciaDocumento(Factura factura) {
+	 String resultado = Constantes.EMPTY;
+	 if(factura.getReferenciaNumero() != null && !factura.getReferenciaNumero().equals(Constantes.EMPTY)) {
+		 resultado = factura.getReferenciaNumero();
+	 }
+	 return resultado;
+ }
+	
+	private String obtenerNombreCliente(Factura factura) {
+		String nombreFactura = Constantes.EMPTY;
+		if (factura.getCliente().getCedula() != null) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+        nombreFactura = factura.getCliente().getNombreCompleto();
+			}
+		}
+		if(nombreFactura.equals(Constantes.EMPTY)) {
+			nombreFactura = factura.getNombreFactura() != null && !factura.getNombreFactura().equals(Constantes.EMPTY)? factura.getNombreFactura():Constantes.EMPTY;
+			
+		}
+		
+		return nombreFactura;
+
+	}
+
+	private String obtenerCedulaCliente(Factura factura) {
+		String cedula = Constantes.EMPTY;
+		if (factura.getCliente().getCedula() != null) {
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				cedula = "Cedula:"+factura.getCliente().getCedula();
+			}
+
+		}
+		if (cedula.equals(Constantes.EMPTY)) {
+			if (factura.getCliente().getIdentificacionExtranjero() != null && !factura.getCliente().getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
+				cedula = "Cedula:"+factura.getCliente().getIdentificacionExtranjero();
+			}
+		}
+		return cedula;
 	}
 
 	/**

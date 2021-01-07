@@ -6,6 +6,7 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
+import com.emprendesoftcr.modelo.Usuario;
 
 public interface RecepcionFacturaBo {
 
@@ -26,4 +27,7 @@ public interface RecepcionFacturaBo {
 	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado,Integer tipoGasto,String actividadEconocimica);
 	
 	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado,Integer tipoGasto,String actividadEconocimica);
+	
+	void getPasarXMLAFactura(String ruta, Empresa empresa,Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje,  String detalleMensaje)  throws Exception;
+	
 }

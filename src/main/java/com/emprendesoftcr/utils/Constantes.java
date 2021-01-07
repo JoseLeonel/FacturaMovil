@@ -466,6 +466,7 @@ public class Constantes {
 	public static final String					DATE_FORMAT6																									= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																									= "yyyyMMdd";
 	public static final String					DATE_FORMAT7																									= "yyyy-MM-dd";
+	
 
 	public static final String					ANULACION_AUTOMATICA_PROFORMAS																= "Se completo los 30 dias, se procedio anular";
 

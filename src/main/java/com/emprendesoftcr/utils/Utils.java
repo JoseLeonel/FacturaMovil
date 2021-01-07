@@ -53,6 +53,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -1312,6 +1314,33 @@ public final class Utils {
 		return date;
 	}
 
+	public  static String getNameFieldXml(XPath xPath, Document xml, String field) {
+		String j = "";
+		NodeList fe = null, nc = null;
+		try {
+			
+			try {
+				fe = (NodeList) xPath.evaluate("/FacturaElectronica/" +     field, xml.getDocumentElement(), XPathConstants.NODESET);	
+				j = fe.item(0).getTextContent();	
+					
+			} catch (Exception e) {
+				//log.info("NO ES FE");
+			}
+			
+			try {
+				nc = (NodeList) xPath.evaluate("/NotaCreditoElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);	
+				j = nc.item(0).getTextContent();
+				
+			} catch (Exception e) {
+				//log.info("NO ES NC");
+			}
+			
+		} catch (Exception e) {
+			j = "";
+		}
+		return j;
+	}
+	
 	public static Date parseDate2(String dateString) {
 		Date date = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT6);
@@ -1498,6 +1527,23 @@ public final class Utils {
 		return strNumber;
 	}
 
+	public static Double stringToDouble(String monto) {
+		if(monto == null) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		if(monto.equals(Constantes.EMPTY)) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		return Double.parseDouble(monto);
+	}
+	
+	public static Integer stringToInteger(String monto) {
+		if(monto == null) {
+			return Constantes.ZEROS;
+		}
+		
+		return Integer.parseInt(monto);
+	}
 	public static String formatearNumeroListados2(double number, int digits) {
 		NumberFormat formater = NumberFormat.getCurrencyInstance(Locale.US);
 		formater.setMaximumFractionDigits(digits);

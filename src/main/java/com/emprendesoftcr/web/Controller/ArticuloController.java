@@ -12,8 +12,10 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
@@ -70,6 +72,7 @@ import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CabysAct;
 import com.emprendesoftcr.web.command.CabysHaciendaCommand;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
 import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
@@ -83,6 +86,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
 
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 
@@ -110,11 +114,8 @@ public class ArticuloController {
 	private ArticuloBo																			articuloBo;
 
 	@Autowired
-	private CabysBo																			cabysBo;
+	private CabysBo																					cabysBo;
 
-	
-	
-	
 	@Autowired
 	ConsultasNativeBo																				consultasNativeBo;
 
@@ -159,7 +160,7 @@ public class ArticuloController {
 	public String listarXCambioCategoria(ModelMap model) {
 		return "views/articulos/ListarArticulosCambiarCategoria";
 	}
-	
+
 	@RequestMapping(value = "/Etiquetas.do", method = RequestMethod.GET)
 	public String etiquetas(ModelMap model) {
 		return "views/articulos/etiquetas";
@@ -175,11 +176,11 @@ public class ArticuloController {
 	 * @param model
 	 * @return
 	 */
-		@RequestMapping(value = "/ListarArticulos", method = RequestMethod.GET)
+	@RequestMapping(value = "/ListarArticulos", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
 		return "views/articulos/ListarArticulos";
 	}
-	
+
 	@RequestMapping(value = "/ListarArticulosMinimos", method = RequestMethod.GET)
 	public String listarArticulosMinimos(ModelMap model) {
 		return "views/articulos/ListarArticulosMinimos";
@@ -254,88 +255,97 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarEtiquetasPrecios.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void GenerarEtiquetasPrecios(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
 		List<EtiquetasCommand> lista = new ArrayList<>();
-		
-		
+
 		byte[] decodedBytes = Base64.getDecoder().decode(listaArticuloEtiquetas);
 		String decodedString = new String(decodedBytes);
-		
+
 		System.out.println("decodedString ============================ > " + decodedString);
-		
-		
-		
+
 //		try {
-			JSONObject json = null;
-			try {
-				json = (JSONObject) new JSONParser().parse(decodedString);
-				// Agregar Lineas de Detalle
-				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
-				Gson gson = new Gson();
-				
-				if (jsonArrayDetalleFactura != null) {
-					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
-						EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
-						for (int e = 0; e < etiquetasCommand.getCantidadEtiqueta(); e++) {
-							lista.add(etiquetasCommand);	
-						}
-						
+		JSONObject json = null;
+		try {
+			json = (JSONObject) new JSONParser().parse(decodedString);
+			// Agregar Lineas de Detalle
+			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+			Gson gson = new Gson();
+
+			if (jsonArrayDetalleFactura != null) {
+				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+					EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
+					for (int e = 0; e < etiquetasCommand.getCantidadEtiqueta(); e++) {
+						lista.add(etiquetasCommand);
 					}
+
 				}
 			}
-				 catch (org.json.simple.parser.ParseException e) {
-					throw e;
-				} 
-		  // jasper
-			
-			
-			//JasperReport report = (JasperReport) JRLoader.loadObject(new File( "/data/reportes/articulos/reporte_etiquetas.jasper" ));
-			//JasperCompileManager.compileReport("/reportes/articulos/MyReports/reporte_etiquetas.jrxml");
-			InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");			
-			ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( new Gson().toJson(lista).getBytes());
-			JsonDataSource ds = new JsonDataSource(jsonDataStream);
-			//Map parameters = new HashMap();
-			//JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, ds);
-			
-			byte[] bytes = JasperRunManager.runReportToPdf(reportfile, null, ds);
-			if (bytes != null && bytes.length > 0) {
-				response.setContentType("application/pdf");
-				//response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
-				ServletOutputStream outputstream = response.getOutputStream();
-				outputstream.write(bytes, 0, bytes.length);
-				outputstream.flush();
-				outputstream.close();
+		} catch (org.json.simple.parser.ParseException e) {
+			throw e;
+		}
+		// jasper
 
-			} else {
-				System.out.println("NO trae nada");
-			}
-			
-			
-//			response.setContentType("application/octet-stream");
-//			String fileName = Constantes.EMPTY;
-//
-//			int BUFFER_SIZE = 4096;
-//			String headerKey = "Content-Disposition";
-//			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-//			response.setHeader(headerKey, headerValue);
-//			OutputStream outStream = response.getOutputStream();
-//			byte[] buffer = new byte[BUFFER_SIZE];
-//			int bytesRead = -1;
-////			while ((bytesRead = inputStream.read(buffer)) != -1) {
-////				outStream.write(buffer, 0, bytesRead);
-////			}
-//			inputStream.close();
-//			outStream.close();
-//		} catch (DocumentException e) {
-//			e.printStackTrace();
-//		}
-		
+		// JasperReport report = (JasperReport) JRLoader.loadObject(new File( "/data/reportes/articulos/reporte_etiquetas.jasper" ));
+		// JasperCompileManager.compileReport("/reportes/articulos/MyReports/reporte_etiquetas.jrxml");
+		InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");
+		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
+		JsonDataSource ds = new JsonDataSource(jsonDataStream);
+		// Map parameters = new HashMap();
+		// JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, ds);
+
+		byte[] bytes = JasperRunManager.runReportToPdf(reportfile, null, ds);
+		if (bytes != null && bytes.length > 0) {
+			response.setContentType("application/pdf");
+			// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+			ServletOutputStream outputstream = response.getOutputStream();
+			outputstream.write(bytes, 0, bytes.length);
+			outputstream.flush();
+			outputstream.close();
+
+		} else {
+			System.out.println("NO trae nada");
+		}
+
 	}
-	
-	
+
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GenerarTikectFactura.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, BindingResult result, SessionStatus status) throws Exception {
+		List<DetalleFacturaCommand> lista = new ArrayList<>();
+
+
+		Collection<Detalle> listaDetalles = detalleBo.findbyIdFactura(idFactura);
+		for (Detalle detalle : listaDetalles) {
+			DetalleFacturaCommand detalleFacturaCommand = new DetalleFacturaCommand(detalle);
+			lista.add(detalleFacturaCommand);
+		}
+
+		// jasper
+		Map<String, Object> parametros = new HashMap();
+		Locale locale = new Locale("es");
+		parametros.put(JRParameter.REPORT_LOCALE, locale);
+		parametros.put("P_documento_electronico", "Factura Electronica");
+
+		InputStream reportfile = getClass().getResourceAsStream("/reportes/factura/reporte_etiquetas.jasper");
+		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
+		JsonDataSource ds = new JsonDataSource(jsonDataStream);
+
+		byte[] bytes = JasperRunManager.runReportToPdf(reportfile, parametros, ds);
+		if (bytes != null && bytes.length > 0) {
+			response.setContentType("application/pdf");
+			ServletOutputStream outputstream = response.getOutputStream();
+			outputstream.write(bytes, 0, bytes.length);
+			outputstream.flush();
+			outputstream.close();
+
+		} else {
+			System.out.println("NO trae nada");
+		}
+
+	}
 
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -557,13 +567,13 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloCabysAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarCabysAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigo", required = false) String codigo, @RequestParam(value = "descripcion", required = false) String descripcion,@RequestParam(value = "tipo", required = false) Integer tipo,@RequestParam(value = "cantidad", required = false) Integer cantidad) {
+	public RespuestaServiceDataTable listarCabysAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigo", required = false) String codigo, @RequestParam(value = "descripcion", required = false) String descripcion, @RequestParam(value = "tipo", required = false) Integer tipo, @RequestParam(value = "cantidad", required = false) Integer cantidad) {
 		RespuestaServiceDataTable<ArticuloCabysCommand> respuestaService = new RespuestaServiceDataTable<ArticuloCabysCommand>();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
-		
-		List<Map<String, Object>> listaObjetos = articuloBo.articulosByCabys(descripcion, codigo, tipo, usuarioSesion.getEmpresa().getId(),cantidad);
+
+		List<Map<String, Object>> listaObjetos = articuloBo.articulosByCabys(descripcion, codigo, tipo, usuarioSesion.getEmpresa().getId(), cantidad);
 
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
@@ -588,7 +598,7 @@ public class ArticuloController {
 		return respuestaService;
 
 	}
-	
+
 	/**
 	 * Listar Ajax de los articulos de una empresa
 	 * @param request
@@ -636,7 +646,7 @@ public class ArticuloController {
 		return respuestaService;
 
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloMinimosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -658,9 +668,9 @@ public class ArticuloController {
 		}
 		categoriaFilter = new JqGridFilter("obj.cantidad <= obj.minimo ");
 		delimitadores.addFiltro(categoriaFilter);
-	  categoriaFilter = new JqGridFilter("obj.contable = 'Si' ");
+		categoriaFilter = new JqGridFilter("obj.contable = 'Si' ");
 		delimitadores.addFiltro(categoriaFilter);
-		
+
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
@@ -910,9 +920,9 @@ public class ArticuloController {
 			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
-			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null?Constantes.EMPTY:articulo.getTipoImpuestoMag());
-			articulo.setImpuestoMag(articulo.getImpuestoMag() == null? Constantes.ZEROS_DOUBLE:articulo.getImpuestoMag());
-			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null?Constantes.EMPTY:articulo.getCodigoTarifaMag());
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
 
@@ -921,14 +931,9 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
 
 			}
-			
+
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = null;
-			
-
-			
-			
-
 
 			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
@@ -1029,11 +1034,11 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Gson gson = new Gson();
-			if(articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json  = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
-				if(cabysBD == null) {
+				if (cabysBD == null) {
 					Cabys cabys = new Cabys();
 					cabys.setId(null);
 					cabys.setCodigo(cabysAct.getCodigo());
@@ -1041,10 +1046,10 @@ public class ArticuloController {
 					cabys.setUpdated_at(new Date());
 					cabys.setDescripcion(cabysAct.getDescripcion());
 					cabys.setEmpresa(usuarioSesion.getEmpresa());
-					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()) );
+					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
 					cabys.setUri(cabysAct.getUri());
 					cabysBo.agregar(cabys);
-					
+
 				}
 			}
 
@@ -1094,9 +1099,6 @@ public class ArticuloController {
 		}
 	}
 
-
-
-	
 	/**
 	 * Modificar Articulo
 	 * @param request
@@ -1116,9 +1118,9 @@ public class ArticuloController {
 
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
-			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null?Constantes.EMPTY:articulo.getTipoImpuestoMag());
-			articulo.setImpuestoMag(articulo.getImpuestoMag() == null? Constantes.ZEROS_DOUBLE:articulo.getImpuestoMag());
-			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null?Constantes.EMPTY:articulo.getCodigoTarifaMag());
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
@@ -1132,14 +1134,14 @@ public class ArticuloController {
 			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
-			
+
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
 				result.rejectValue("codigo", "error.articulo.codigo.no.modificarse");
-				
+
 			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
@@ -1217,8 +1219,8 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Gson gson = new Gson();
-			if(articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json  = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
 				if(cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
@@ -1229,10 +1231,10 @@ public class ArticuloController {
 					cabys.setUpdated_at(new Date());
 					cabys.setDescripcion(cabysAct.getDescripcion());
 					cabys.setEmpresa(usuarioSesion.getEmpresa());
-					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()) );
+					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
 					cabys.setUri(cabysAct.getUri());
 					cabysBo.agregar(cabys);
-					
+
 				}
 			}
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
@@ -1266,7 +1268,7 @@ public class ArticuloController {
 			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articuloBd.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
-			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
+			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
@@ -1356,7 +1358,7 @@ public class ArticuloController {
 			}
 
 			Articulo articuloValidar = null;
-	
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -1419,7 +1421,7 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null? Constantes.EMPTY:cambiarPrecioArticuloCommand.getDescripcion();
+			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null ? Constantes.EMPTY : cambiarPrecioArticuloCommand.getDescripcion();
 			articuloBD.setUpdated_at(new Date());
 			articuloBD.setDescripcion(descripcion.length() > 0 ? descripcion : articuloBD.getDescripcion());
 			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(), cambiarPrecioArticuloCommand.getPrecioPublico(), articuloBD.getImpuesto()));
@@ -1480,15 +1482,13 @@ public class ArticuloController {
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
 			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
 
-			
-			
-			if (articuloCommand == null ) {
+			if (articuloCommand == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
-			if(articuloCommand.getCodigoCabys() == null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+			if (articuloCommand.getCodigoCabys() == null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
-			if(articuloCommand.getCodigoCabys().equals(Constantes.EMPTY) && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+			if (articuloCommand.getCodigoCabys().equals(Constantes.EMPTY) && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);

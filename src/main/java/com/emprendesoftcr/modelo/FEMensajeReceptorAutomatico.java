@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -92,6 +93,9 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 
 	@Column(length = 1)
 	private String estado;
+	
+	@Transient
+	private String facturaXML;
 	
 	
 
@@ -271,6 +275,16 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 	
 	public void setCondicionVenta(String condicionVenta) {
 		this.condicionVenta = condicionVenta;
+	}
+
+	
+	public String getFacturaXML() {
+		return facturaXML;
+	}
+
+	
+	public void setFacturaXML(String facturaXML) {
+		this.facturaXML = facturaXML;
 	}
 	
 	

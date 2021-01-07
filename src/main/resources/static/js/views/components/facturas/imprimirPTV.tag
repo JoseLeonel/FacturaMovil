@@ -170,6 +170,10 @@
     </div>
   </div>
 </div>
+<div show="{mostrarPDF == true}">
+ <iframe style="width: 100%; height: 500px" id="loadPdfFactura" src="">
+ </iframe>
+</div>
 <style type="text/css"  >
 * {
     font-size: 12px !important;
@@ -441,25 +445,31 @@ self.impuestoTransitorio0 = 0
 self.impuestoTransitorio4 = 0
 self.impuestoTransitorio8 = 0
 self.totalesIVAI    = []
-  
+self.pdf = false;
+self.mostrarPDF = false  
 self.on('mount',function(){
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
     self.update()
+    self.pdf = false;
+
    // document.getElementById('divQR').innerHTML = '';
-    if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3){
+    if(typeof self.parametro.factura.id != 'undefined' && self.parametro.facturaDia !=3 &&  self.pdf == false){
         if(self.parametro.factura.id > 0){
            consultaFactura(self.parametro.factura.id) 
         }
        
-    }else if(typeof self.parametro.factura.consecutivo != 'undefined' && self.parametro.facturaDia !=3){
+    }else if(typeof self.parametro.factura.consecutivo != 'undefined' && self.parametro.facturaDia !=3 &&  self.pdf == false){
         if(self.parametro.factura.consecutivo.length > 0){
            consultaFacturaPorConsecutivo(self.parametro.factura.consecutivo)
         }
        
     }
-    llamarQR()
-    if(self.parametro.facturaDia == 3){
+    if(self.pdf == false){
+      llamarQR()
+    }
+    
+    if(self.parametro.facturaDia == 3 &&  self.pdf == false){
         consultaDetalles(self.parametro.factura)
     }
     
@@ -984,9 +994,54 @@ function __ComboTipoDocumentos(){
 *imprimir
 **/
 function __imprimir(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-   // var div = document.querySelector("#imprimeme");
-    imprimirElemento(objeto)
+
+   // if (typeof self.parametro.factura.imprimirCelular != 'undefined') {
+   //         if(typeof self.parametro.factura.id != 'undefined' && self.parametro.factura.imprimirCelular ==0){
+   //             if(self.parametro.factura.id > 0){
+   //               //if(self.parametro.factura.tipoDoc =='04' && typeof self.parametro.factura.tipoDoc != 'undefined' ) {
+   //                   self.pdf = true;
+   //                   self.mostrarPDF = true
+   //                   self.update()
+                      
+    //                  imprimirPFD(function(resultado){
+    //                       self.mostrarPDF = false
+    //                        self.update()
+    //                        console.log(resultado)
+    //                  })
+
+                 // }
+    //            }
+    //        }    
+    //       
+    //    }
+     //   if (typeof self.parametro.factura.empresa.imprimirCelular != 'undefined') {
+      //      if(typeof self.parametro.factura.id != 'undefined' && self.parametro.factura.empresa.imprimirCelular ==0){
+      //          if(self.parametro.factura.id > 0){
+                  //if(self.parametro.factura.tipoDoc =='04' && typeof self.parametro.factura.tipoDoc != 'undefined' ) {
+        //              self.pdf = true;
+          //            self.mostrarPDF = true
+            //          self.update()
+                      
+                       
+              //        imprimirPFD(function(resultado){
+                //           self.mostrarPDF = false
+                  //          self.update()
+                    //        console.log(resultado)
+                    //  })
+
+                 // }
+             //   }
+          //  }    
+           
+       // }
+    //if(self.mostrarPDF == false){
+        var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+        // var div = document.querySelector("#imprimeme");
+        imprimirElemento(objeto)
+   // }
+   
+
+   
 }
 function imprimirElemento(elemento){
  // var originalContents = document.body.innerHTML;
@@ -1007,5 +1062,91 @@ function imprimirElemento(elemento){
   
   return true;
 }
+
+
+function imprimirPFD(callback){
+    var href =  'GenerarTikect1.do?idFactura='+self.parametro.factura.id + '&t=' + $.now() +'&tipoFactura=1'+'&subTotalGeneralSTR='+"" + '&totalImpuestoRestSTR='+""+'&impServicioTotalSTR='+""+'&totalComprobanteSTR='+ ""+'&totalDescuentosProformaREstSTR='+""
+	$('#loadPdfFactura').attr("src", href );	
+    printFrame =  $('#loadPdfFactura')
+    Print.send(printFrame)
+    callback("exitoso")
+}
+
+function cargarFrame(){
+   // CREATE iFrame 
+    let iframe = document.createElement("iframe"); 
+    iframe.setAttribute('id', 'printerIFrame'); 
+    iframe.setAttribute('name', 'printerIFrame'); 
+    iframe.setAttribute('style', 'display: hidden;');
+    
+}
+
+
+const Print = {
+    send: (printFrame) => {
+        // Get iframe element
+        const iframeElement = document.getElementById("loadPdfFactura")
+
+         // Append iframe element to document body
+     //   document.getElementsByTagName('body')[0].appendChild(printFrame)
+         // Wait for iframe to load all content
+        iframeElement.onload = () => {
+            if (Browser.isFirefox()) {
+                
+              setTimeout(() => performPrint(iframeElement),1000)
+            } else {
+              performPrint(iframeElement)
+            }
+            return
+
+        }
+       
+
+    }
+}
+function performPrint(iframeElement){
+     
+     try {
+        
+        iframeElement.focus()
+        iframeElement.contentWindow.print()
+       
+
+     } catch (error) {
+        console.log(error)
+  } finally {
+
+  }
+}
+
+const Browser = {
+  // Firefox 1.0+
+  isFirefox: () => {
+    return typeof InstallTrigger !== 'undefined'
+  },
+  // Internet Explorer 6-11
+  isIE: () => {
+    return navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode
+  },
+  // Edge 20+
+  isEdge: () => {
+    return !Browser.isIE() && !!window.StyleMedia
+  },
+  // Chrome 1+
+  isChrome: (context = window) => {
+    return !!context.chrome
+  },
+  // At least Safari 3+: "[object HTMLElementConstructor]"
+  isSafari: () => {
+    return Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 ||
+        navigator.userAgent.toLowerCase().indexOf('safari') !== -1
+  },
+  // IOS Chrome
+  isIOSChrome: () => {
+    return navigator.userAgent.toLowerCase().indexOf('crios') !== -1
+  }
+}
+
+
 </script>
 </ptv-imprimir>

@@ -31,7 +31,7 @@ public interface CompraBo {
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 
 	void crearCompra(CompraCommand compraCommand,Usuario usuario) throws Exception;
-	void crearCompra(RecepcionFactura recepcionFactura,Usuario usuario,Proveedor proveedor,List<RecepcionFacturaDetalle> listDetalles) throws Exception;
+	void crearCompra(RecepcionFactura recepcionFactura,Usuario usuario,Proveedor proveedor,Collection<RecepcionFacturaDetalle> listDetalles) throws Exception;
 
 	void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo)throws Exception;
 	
@@ -49,6 +49,6 @@ public interface CompraBo {
 
 	public List<Map<String, Object>>  comprasSinIngresarInventario(Empresa empresa);
 	
-	Integer  actualizarCompraAutomaticaPorDetallle(Long idCompra , Long idDetalleCompra,Double precioPublico , Double ganancia, String codigo,Empresa empresa,String codigoProveedor)throws Exception;;
+	Integer  actualizarCompraAutomaticaPorDetallle(Long idCompra , Long idDetalleCompra,Double precioPublico , Double ganancia, String codigo,Empresa empresa,String codigoProveedor,Double costo_inv)throws Exception;;
 	
 }

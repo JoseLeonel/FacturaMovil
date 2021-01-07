@@ -526,6 +526,7 @@ function __BajarPDF() {
             //         direccion: "GenerarTikect.do?idFactura=" + data.id,
             //         stylemodal: "modal-xl"
             //     }
+
         riot.mount('view-pdf', { datos: parametros });
 
         // location.href = "generaFacturaPDF?idFactura=" + data.id///
