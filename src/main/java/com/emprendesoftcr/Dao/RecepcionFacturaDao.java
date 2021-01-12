@@ -16,6 +16,7 @@ public interface RecepcionFacturaDao {
 	void modificar(RecepcionFactura recepcionFactura);
 	
 	RecepcionFactura findById(Long id);
+	RecepcionFactura findByClaveAndCedulaEmisor(String clave, String cedula) throws Exception;
 
 	RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 
