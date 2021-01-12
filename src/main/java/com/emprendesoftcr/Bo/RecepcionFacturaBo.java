@@ -19,6 +19,7 @@ public interface RecepcionFacturaBo {
 	RecepcionFactura findById(Long id);
 
 	RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
+	RecepcionFactura findByClaveAndCedulaEmisor(String clave, String cedula) throws Exception;
 
 	Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	

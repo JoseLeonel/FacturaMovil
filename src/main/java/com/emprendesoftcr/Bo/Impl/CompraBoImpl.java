@@ -809,7 +809,8 @@ public class CompraBoImpl implements CompraBo {
 	public List<Map<String, Object>> comprasSinIngresarInventario(Empresa empresa) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" + "   inner join proveedores p on p.id = c.proveedor_id\n" + "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
+		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" + 
+		"   inner join proveedores p on p.id = c.proveedor_id\n" + "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);

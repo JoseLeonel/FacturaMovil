@@ -549,4 +549,10 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 		return null;
 	}
 
+	@Override
+	public RecepcionFactura findByClaveAndCedulaEmisor(String clave, String cedula) throws Exception {
+
+		return recepcionFacturaDao.findByClaveAndCedulaEmisor(clave, cedula);
+	}
+
 }

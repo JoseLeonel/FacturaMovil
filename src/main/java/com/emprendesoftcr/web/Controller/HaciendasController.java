@@ -322,7 +322,7 @@ public class HaciendasController {
 		RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 		try {
 			long id = Thread.currentThread().getId();
-			System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
+	//		System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 			String body = httpEntity.getBody();
 			// body= FacturaElectronicaUtils.procesarTexto(body);
@@ -331,12 +331,12 @@ public class HaciendasController {
 				Hacienda hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
 
-				log.info("** Estado hacienda: " + estadoHacienda.toString());
+		//		log.info("** Estado hacienda: " + estadoHacienda.toString());
 
 				if (hacienda != null) {
 					String resputaStatusHacienda = getHaciendaStatus(respuestaHacienda.indEstado());
-					log.info("** Status dentro: " + resputaStatusHacienda);
-					log.info("** Estado hacienda dentro: " + estadoHacienda.toString());
+				//	log.info("** Status dentro: " + resputaStatusHacienda);
+					//log.info("** Estado hacienda dentro: " + estadoHacienda.toString());
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -351,12 +351,12 @@ public class HaciendasController {
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 					log.info("** Respuesta Estado-->: " + resputaStatusHacienda);
-					log.info("** Status dentro 1: " + resputaStatusHacienda);
+				//	log.info("** Status dentro 1: " + resputaStatusHacienda);
 					Factura facturaConsultada = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 					if (!resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta, facturaConsultada);
 						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa(), facturaConsultada);
-						log.info("** Status firmado 1: " + resputaStatusHacienda);
+					//	log.info("** Status firmado 1: " + resputaStatusHacienda);
 					} else {
 						if (respuestaHacienda.mensajeHacienda() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
@@ -398,27 +398,28 @@ public class HaciendasController {
 					}
 
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
-					log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
+					//log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
 
 					if (xmlFirmado != null) {
 						if (xmlFirmado.length() > 0) {
-							log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
+					//		log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
 							haciendaBo.findByClaveSP(hacienda.getId(), hacienda.getNumeroFactura() == null ? Constantes.ZEROS_LONG : hacienda.getNumeroFactura(), respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {
-							log.info("No llamado procedimiento callback: {}", estadoHacienda);
+					//		log.info("No llamado procedimiento callback: {}", estadoHacienda);
 						}
 
 					}
 
 				}
 			}
-			log.info("Estado para actualizar Factura: {}", estadoHacienda);
-			log.info("Finaliza callBack {}", new Date());
+	//		log.info("Estado para actualizar Factura: {}", estadoHacienda);
+			
 		} catch (Exception e) {
 
 			log.info("** Error  callBack: " + e.getMessage() + " fecha " + new Date());
 			return RespuestaServiceValidator.ERROR(e);
 		} finally {
+			log.info("Finaliza callBack {}", new Date());
 			lock.unlock();
 		}
 		respuestaServiceValidator.setStatus(HttpStatus.OK.value());
