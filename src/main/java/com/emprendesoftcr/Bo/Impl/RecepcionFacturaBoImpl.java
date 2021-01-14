@@ -470,6 +470,18 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 					recepcionFactura.setFacturaCodigoMoneda(valorString(nodeTemp, "CodigoMoneda", j));
 					recepcionFactura.setFacturaTipoCambio(Utils.stringToDouble(valorString(nodeTemp, "TipoCambio", j)));
 				}
+				recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.EMPTY : recepcionFactura.getFacturaCodigoMoneda());
+				if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) && recepcionFactura.getFacturaCodigoMoneda() != null) {
+					recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+				}
+
+				recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTipoCambio());
+
+				if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
+					recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+				}
 				node = eElement.getElementsByTagName("TotalServGravados").item(0);
 				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node != null ? node.getTextContent() : Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalServExentos").item(0);

@@ -546,6 +546,9 @@ function ListarCodigosArticulos(){
 Listado de recepcion de compras
 **/		
 function listadoRecepcionCompras() {
+    self.compras = {aaData:[]}
+    self.detalleCompras = {aaData:[]}
+    self.update()
     __InicializarTabla('.tableListar')  
     $.ajax({
         url: 'ListarComprasSinIngresarInventarioAjax.do',
@@ -661,6 +664,8 @@ function __MostrarDetalle() {
             var data = table.row($(this).parents("tr")).data();
         }
         self.consecutivo = data.consecutivo;
+        self.detail = []
+       self.detalleCompra = {}
         self.update()
       listadoDetallesCompras(data.id,function(resultado){
           console.log(resultado)
@@ -675,7 +680,6 @@ function listadoDetallesCompras(idCompra,callback) {
     self.detail = []
     self.detalleCompra = {}
     self.mostrarDetalles = false;
-    self.update()
     self.update()
     var parametros = {
         idCompra : idCompra
