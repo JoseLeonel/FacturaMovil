@@ -3,6 +3,7 @@ package com.emprendesoftcr.web.Controller;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,13 +52,16 @@ import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Compra;
+import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
@@ -74,6 +79,7 @@ import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
+import com.emprendesoftcr.web.command.TikectImprimir;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.command.VectorCompras;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -84,6 +90,9 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JsonDataSource;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -229,6 +238,82 @@ public class ComprasController {
 		return respuestaService;
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/GenerarCompraProveedores.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam(value="fechaInicial", required = false) String fechaInicial,@RequestParam(value="fechaFinal", required = false) String fechaFinal, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
+		List<TikectImprimir> lista = new ArrayList<>();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+//		Factura factura = facturaBo.findById(idFactura);
+//		Collection<Detalle> detalles = detalleBo.findbyIdFactura(idFactura);
+//		for (Detalle detalle : detalles) {
+//			TikectImprimir tikectImprimir = new TikectImprimir();
+//			tikectImprimir.setId(detalle.getId());
+//			tikectImprimir.setDescripcion(detalle.getDescripcion());
+//			tikectImprimir.setCantidad(detalle.getCantidadSTR());
+//			tikectImprimir.setPrecio(detalle.getPrecioUnitarioSTR());
+//			tikectImprimir.setTotal(detalle.getMontoTotalLineaSTR());
+//			tikectImprimir.setImpuesto(detalle.getImpuestoSTR() + "%");
+//			lista.add(tikectImprimir);
+//
+//		}
+		Map<String, Object> parametros = getParametroReportes(null,usuarioSesion);
+		parametros.put("p_rando_fechas",fechaInicial +" al " + fechaFinal);
+		
+		InputStream reportFile = getObtienePDF();
+		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
+		JsonDataSource ds = new JsonDataSource(jsonDataStream);
+		byte[] bytes = JasperRunManager.runReportToPdf(reportFile, parametros, ds);
+		if (bytes != null && bytes.length > 0) {
+			response.setContentType("application/pdf");
+			// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+			ServletOutputStream outputstream = response.getOutputStream();
+			outputstream.write(bytes, 0, bytes.length);
+			outputstream.flush();
+			outputstream.close();
+
+		} else {
+			System.out.println("NO trae nada");
+		}
+
+	}
+	private InputStream getObtienePDF() {
+		InputStream reportFile = null;
+		try {
+		    	reportFile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");	
+		    
+		    
+		
+		} catch (Exception e) {
+			log.info("** Error  getObtienePDF: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return reportFile;
+	}
+	
+	private Map<String, Object> getParametroReportes(RecepcionFactura recepcionFactura, Usuario usuarioSesion) {
+		Map<String, Object> parametros;
+		parametros = new HashMap<>();
+		try {
+
+			
+			parametros.put("p_nombre_proveedor", recepcionFactura.getEmisorNombre());
+			parametros.put("p_cedula_proveedor", recepcionFactura.getEmisorCedula());
+			parametros.put("p_cedula_empresa", usuarioSesion.getEmpresa().getCedula());
+			parametros.put("p_nombre_empresa", usuarioSesion.getEmpresa().getNombre());
+		
+			
+			
+			
+		} catch (Exception e) {
+			log.info("** Error  getParametroReportes: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return parametros;
+
+	}
+	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/recepcionComprasMasivas.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
