@@ -102,7 +102,7 @@ public class MensajeReceptorAutomatico {
 	 * @throws ParseException
 	 */
 //	@Scheduled(fixedDelay = 60000)
-	@Scheduled(cron = "0 0/08 * * * ?")
+	//@Scheduled(cron = "0 0/08 * * * ?")
 	public void downloadEmailAttachments() throws ParserConfigurationException, SAXException, SQLException, ParseException {
 		log.info("Inicio del proceso de revision de correos  " +this.apiUserName);
 		String saveDirectory = this.pathUploadFilesApi + "/mr-automatico";
