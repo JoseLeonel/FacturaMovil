@@ -94,6 +94,11 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 	@Column(length = 1)
 	private String estado;
 	
+	@Column(name = "correo_compra", length = 250)
+	private String correoCompras;
+
+	
+	
 	@Transient
 	private String facturaXML;
 	
@@ -285,6 +290,16 @@ public class FEMensajeReceptorAutomatico implements Serializable{
 	
 	public void setFacturaXML(String facturaXML) {
 		this.facturaXML = facturaXML;
+	}
+
+	
+	public String getCorreoCompras() {
+		return correoCompras;
+	}
+
+	
+	public void setCorreoCompras(String correoCompras) {
+		this.correoCompras = correoCompras;
 	}
 	
 	

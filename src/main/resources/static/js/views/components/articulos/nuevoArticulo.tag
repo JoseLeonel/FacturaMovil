@@ -18,7 +18,7 @@
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
-                <input type="hidden" name="codigoCabys" id="codigoCabys" value="{articulo.codigoCabys}">
+                
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -44,15 +44,20 @@
 
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}" onkeypress = {__ConsultarCodigo} autocomplete="off" >
+                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}" onkeypress = {__ConsultarCodigo} autocomplete="off" autofocus="autofocus">
                                     </div>
                                   
                                 </div> 
                                 <div class="row">   
-                                  <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
+                                  <div class= "col-md-8 col-sx-8 col-sm-8 col-lg-8 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
                                         <input type="text" class="form-control descripcion campoNumerico" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
                                     </div>
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys}  autocomplete="off">
+                                    </div>
+
                                 </div>    
                                 <div class="row">   
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
@@ -379,7 +384,212 @@
     </div>
 </div>
 <!-- Fin Formulario -->   
+<!--Modal mostrar Articulos de la empresa -->
+<div id='modalHaciendaCabys' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content" style="width:100%;">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central de Costa Rica(cabys@hacienda.go.cr) </h4>
+            </div>
+            <div class="modal-body aplicarScroll">
+                    <div class= "container">  
+                        <form id="formularioParametros" name ="formularioParametros" >
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <label  >Digite la descripcion del producto a buscar</label>
+                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                </div>
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <label  >Digite el codigo 碼</label>
+                                    <input type="text" class="form-control codigoCabys  codigoCabysMod"   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                </div>
+                                <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
+                                    <label>cantidad</label>
+                                    <select  class="form-control" id="cantidad" name="cantidad" >
+                                        <option  each={cantidades}  value="{codigo}" selected="{cabys.estado ==codigo?true:false}" >{descripcion}</option>
+                                    </select>
+                                </div>
+                                <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
+                                    <button  onclick={__ConsultaCodigoCabys} id = "filtroBotonCabys" type="button" class="btn-green pull-right"  >Consultar</button>
+                                    
+                                </div>                    
+                            </div> 
+                        </form>    
+                        <br>    
+                         <div class = "tablaDiseno">
+                           
+                                <table id="tableListarHaciendaCabys" class="table table-hover  tableListarHaciendaCabys "  >
+                                    <thead>
+                                        <th class="table-header colum1"  >{$.i18n.prop("listado.acciones")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.codigo")}</th>
+                                        <th class="table-header colum2"  >{$.i18n.prop("articulo.descripcion")}</th>
+                                        <th class="table-header colum2"  >Impuesto</th>
+                                        
+                                    </thead>
+                                    <tfoot style="display: table-header-group;">
+                                        <tr class="headt">
+                                            <th class="colum1"></th>
+                                            <th class="colum2">{$.i18n.prop("articulo.codigo")}</th>
+                                            <th class="colum2">{$.i18n.prop("articulo.descripcion")}</th>
+                                           
+                                            <th class="colum2">Impuesto</th>
+                                            
+                                        </tr>
+                                    </tfoot>
+                        </table>
+                    </div>    
+                    </div>
+            </div>        
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style type ="text/css">
+
+.aplicarScroll{
+   overflow: scroll;
+}
+
+table {
+    table-layout: unset!important;
+}
+.tablaDiseno{
+    position: relative;
+}
+.colum1{
+    width: 54px!important;
+    
+    }
+    .colum2{
+    width: 140px!important;
+    
+    }
+
+     .container {
+    display: flex!important;
+    width: 100%!important;
+    padding: 10px 0px 20px;
+    min-height: 350px;
+    flex-direction: column!important;
+    flex-wrap: nowrap!important;
+}
+.contenedor{
+    display:flex;
+}
+    #filtroBotonCabys{
+        margin-top: 25px;
+    }
+    
+    .fondoEncabezado {
+        background: #00539B;
+        color: #f9fafc;
+    }
+  .requeridoDato {
+            color: red;
+            text-align: left;
+            font-weight: 500;
+            font-size: 13px;
+        }
+    .fondoFacturacion {
+    background: rgb(247, 244, 244);
+    color: #f9fafc;
+    border-style: solid;
+    border-width: 5px;
+    }
+        .wrap{
+            max-width:1100px;
+            width:100%;
+        }
+        body {
+           
+            background:white;
+            font-size: 12px !important;
+        }
+        .contenedor-listar{
+            width:100%;
+        }
+        .input-table-search{
+            margin-left: 15px;
+            margin-right: 15px;
+            width:100%;
+        }
+        .botonConsulta{
+            margin-top:28px;
+        }
+        
+        
+        
+        .formatoTitulo{
+                color: white!important;
+        }
+        .btn-mostrar {
+            background-color: #4cae4c;
+            color: #FFF;
+            border-radius: 5px;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            /* margin-right: 15px; */
+            border: none;
+            float: right;
+            cursor: pointer;
+        }
+.form-input {
+    display: block;
+   
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.selectLeo{
+    width: 60px;
+}
+.textAreaLeo{
+    margin: 2px 0px !important;
+    width: 189px!important;
+    height: 68px !important;
+    font-size: 11px!important;
+    font-weight: 900!important;
+}
+	table td {
+		text-align: left !important;
+		font-size: 12px !important;
+	}
+	
+	table th {
+		text-align: !important;
+		font-size: 12px !important;
+	}
+	
+	th, td {
+		white-space: break-spaces !important;;
+	}
+    .formCabys{
+        width: 100%;
+    height: 30px;
+    font-size: 16px;
+    font-weight: 800;
+    }
+
+   
+    </style>
 <script>
     var self = this;
     self.parametros   = opts.parametros;  
@@ -444,7 +654,22 @@
     self.botonSalida = false
     self.botonEntrada = false
     self.mostrarFormularioPrincipal = true
-   
+   self.listaCabys  = {aaData:[]}
+    self.origen = ""
+    self.cabys = {
+        id:null,
+        descripcion:"",
+        estado:"",
+        codigo:""
+    }
+
+    cabysHacienda = {
+        codigo:"",
+        descripcion:"",
+        categorias:[],
+        impuesto:0,
+        uri:"",
+    }  
 
 self.on('mount',function(){
     __Eventos()
@@ -473,6 +698,271 @@ self.on('mount',function(){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+
+__ConsultaCodigoCabysEnter(e){
+    if (e.keyCode != 13) {
+        return;
+    }
+    __ListaDeHaciendaCabys()
+}
+/*******************************Lista de cabys de hacienda ***************/
+
+__ConsultaHaciendaCabys(e){
+        ListarCodigosCabysModal()
+    
+    
+}
+
+function ListarCodigosCabysModal(){
+    $("#formularioParametros").validate(reglasDeValidacionParametroCabys());
+    $(".tableListarHaciendaCabys").dataTable().fnClearTable();
+    $(".tableListarHaciendaCabys").DataTable().destroy();
+    $('#modalHaciendaCabys').modal('show')
+    $('#modalHaciendaCabys').on('shown.bs.modal', function () {
+        $('.codigoCabysMod').select()
+        $('.descArticulo').focus()
+        $('#descArticulo').val('')
+        $('.codigoCabysMod').val('')
+    })
+ }
+
+ __ConsultaCodigoCabys(e){
+    __ListaDeHaciendaCabys()
+}
+
+
+function __ListaDeHaciendaCabys(){
+   // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
+   //     return
+   // }
+    var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
+    var  encontro = false
+    $(".tableListarHaciendaCabys").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var parametros = {
+        descArticulo :$('#descArticulo').val(),
+        cantidad: cantidadTemp,
+        codigo: $('.codigoCabysMod').val()
+    };
+  if ($("#formularioParametros").valid()) {
+    $.ajax({
+        url: 'ListarCabysDeHaciendaAjax.do',
+        datatype: "json",
+        method:"GET",
+        data :parametros,
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __InformacionDataTable_cabys()
+                $.each(result.aaData, function( index, modeloTabla ) {
+                   if(modeloTabla.cabys.length){
+                      self.listaCabys.aaData =modeloTabla.cabys    
+                      encontro = true 
+                   } 
+                   
+                })
+                self.update()
+                if(encontro == true){
+                   __cargarTablaCompras()
+                }
+                
+
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+  }
+}
+
+function __cargarTablaCompras() {
+    __InicializarTabla('.tableListarHaciendaCabys')  
+    $("#tableListarHaciendaCabys").dataTable().fnClearTable();
+    __InformacionDataTable_cabys();
+    $('#tableListarHaciendaCabys').DataTable().destroy();
+    $("#tableListarHaciendaCabys").DataTable({
+        destroy: true,
+        "aLengthMenu": [
+            [5, 10, 15, 25, -1],
+            [5, 10, 15, 25, "All"]
+        ],
+        "language": idioma_espanol,
+        "sDom": 'lfrtip',
+        "order": [],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        "columns": self.informacion_tabla_cabys ,
+    })
+    $("#tableListarHaciendaCabys").dataTable().fnAddData(self.listaCabys.aaData);
+    agregarInputsCombosCabys()
+    ActivarEventoFiltro(".tableListarHaciendaCabys")
+    __SeleccionarCabys()
+    
+
+}
+
+
+/**
+*Formato del listado de los cambios
+**/
+function __InformacionDataTable_cabys(){
+    self.informacion_tabla_cabys = [ 
+                               {'data' : 'id',"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
+                                "render":function(id,type, row){
+                                      return __OpcionesCabys(id,type,row);
+                                 }
+	      		            },
+                               {'data' : 'codigo',"name":"codigo" ,"title" : "Codigo","autoWidth" :false},
+                               {'data' :'descripcion',"name":"descripcion" ,"title" : "Descripcion","autoWidth" :false ,
+                                "render":function(descripcion,type, row){
+                                      return __DescripcionCabys(descripcion,type,row);
+                                 }
+
+                               },
+                               {'data' :'impuesto',"name":"impuesto" ,"title" : "Impuesto","autoWidth" :false }, 
+];
+    self.update();
+/*                                   {'data' : 'categorias',"name":"categorias" ,"title" : "Origen del Articulo","bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(categorias,type, row){
+                                      return __CategoriasCabys(categorias,type,row);
+                                 }},
+*/
+   
+}
+function __CategoriasCabys(categorias,type,row){
+    var categoriasString =  ""
+    $.each(categorias, function( index, modeloTabla ) {
+        categoriasString = categoriasString + modeloTabla ;
+        categoriasString =  categoriasString +" \n"
+    })
+    return "<div class= 'categoriasdesc'>"+"<span>"+"<pre>"+categoriasString +"</pre>"+"</span>"+"</div>";
+
+}
+function __DescripcionCabys(descripcion,type,row){
+   
+    return "<div class= 'categoriasdesc'>"+"<textarea class='textAreaLeo' rows='2' readonly>"+descripcion +"</textarea>"+"</div>";
+
+}
+
+/**
+* Opciones listado de los cabys
+*/
+function __OpcionesCabys(){
+  var agregar  = '<a href="#"  class="btn btnAgregar btn-success selectLeo" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar ;
+}
+function __SeleccionarCabys() {
+     $('#tableListarHaciendaCabys').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarHaciendaCabys').DataTable();
+		if(table.row(this).child.isShown()){
+
+	       var data = table.row(this).data();
+	    }else{
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        if(data !=null){
+            moverDatos(data,function(resultado){
+                console.log(resultado)
+                $('#modalHaciendaCabys').modal('hide')
+            })
+            
+            return
+        }
+    });
+}
+function moverDatos(data,callback){
+   self.cabys.codigo = data.codigo
+   self.cabys.descripcion = data.descripcion
+   self.cabys.impuesto = data.impuesto
+   self.cabys.uri = data.uri
+    var categoriasString =  ""
+    $.each(data.categorias, function( index, modeloTabla ) {
+        categoriasString = categoriasString + modeloTabla ;
+        categoriasString = categoriasString +" \n"
+    })
+    self.cabys.origen = categoriasString
+    self.cabys.origenSTR = categoriasString
+    
+    self.cabys.estado = data.estado
+    self.articulo.codigoCabys = self.cabys.codigo
+    $('#codigoCabys').val(self.cabys.codigo)
+    self.update()
+    actualizarComboTarifaConCabys(self.cabys.impuesto,function(resultado){
+        console.log(resultado);
+        asigImpuestos()
+    })
+    
+    callback("Datos movidos")
+}
+/**
+* Asigna el impuesto 13 cuando es valor igual 01
+**/
+/**
+* Asigna el impuesto 13 cuando es valor igual 01
+**/
+__asignarImpuesto(){
+  
+ asigImpuestos()
+}
+function asigImpuestos(){
+  if($('.selectTipoImpuesto').val()=="01"){
+        self.articulo.tipoImpuesto ="01"
+         self.articulo.impuesto = 0
+        self.update()
+    }else{
+        $('.impuesto').val(null)
+        self.articulo.impuesto = 0  
+        self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
+        self.update()
+        $('#impuesto').val(self.articulo.impuesto)
+    } 
+     __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+    self.tarifas1  = {aaData:[]}
+    self.update()
+    getPublico()
+}
+
+
+function actualizarComboTarifaConCabys(valor,callback){
+     $('.selectTipoImpuesto').val("01")
+     self.articulo.tipoImpuesto = "01"
+	if(valor == 0){
+        self.articulo.codigoTarifa = "01"
+		$('.selectCodigoTarifa1').val("01")
+	}else if(valor == 1){
+        self.articulo.codigoTarifa = "02"
+		$('.selectCodigoTarifa1').val("02");
+	}else if(valor == 2){
+        self.articulo.codigoTarifa = "03"
+		$('.selectCodigoTarifa1').val("03");
+	}else if(valor == 4){
+        self.articulo.codigoTarifa = "04"
+		$('.selectCodigoTarifa1').val("04")
+	}else if(valor == 8){
+        self.articulo.codigoTarifa = "07"
+		$('.selectCodigoTarifa1').val("07")
+	}else if(valor == 13){
+        self.articulo.codigoTarifa = "08"
+		$('.selectCodigoTarifa1').val("08")
+	}
+    self.articulo.impuesto = valor
+    self.update()
+      callback("Datos movidos")
+}
+
+function agregarInputsCombosCabys(){
+    $('.tableListarHaciendaCabys tfoot th').each( function (e) {
+        var title = $('.tableListarHaciendaCabys thead th').eq($(this).index()).text();
+
+        if ( $(this).index() != 0    ){
+	      	$(this).html( '<input  type="text" class="form-input"  placeholder="'+title+'" />' );
+	    }
+    })
+}
+
 
 __LimpiarPantalla(){
    __InicializarDatos()
@@ -674,13 +1164,29 @@ function __InicializarDatos(){
    $('.gananciaPrecioEspecial').val(null)
    $('.prioridad').val(null)
    $('.pesoTransporte').val(null)
+   $('.codigoCabys').val(null)
+   
    $(".errorServerSideJgrid").remove();
    $("#formulario").validate(reglasDeValidacion());
    enviarCargarCombos()
    enviarCargarCombos()
    inicializarCursorCodigo()
 }
+var reglasDeValidacionParametroCabys = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			codigoCabys : {
+                maxlength:13,
+			},
+            descArticulo : {
+				maxlength : 100,
+			},                                                
+ 		},
+		ignore : []
 
+	});
+	return validationOptions;
+};
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -715,6 +1221,10 @@ function enviarCargarCombos(){
 var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
+            codigoCabys : {
+                maxlength:13,
+                required : true,
+			},
 			descripcion : {
 				required : true,
                 maxlength:80,

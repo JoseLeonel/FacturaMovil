@@ -259,6 +259,9 @@ public class Empresa implements Serializable {
 	private Integer				enviarCredito		;
 
 
+	@Column(name = "correo_compra" )
+	private String			correoAceptacionCompra;
+
 	
 	
 	
@@ -883,5 +886,17 @@ public class Empresa implements Serializable {
 	public void setEnviarCredito(Integer enviarCredito) {
 		this.enviarCredito = enviarCredito;
 	}
+
+	
+	public String getCorreoAceptacionCompra() {
+		return correoAceptacionCompra;
+	}
+
+	
+	public void setCorreoAceptacionCompra(String correoAceptacionCompra) {
+		this.correoAceptacionCompra = correoAceptacionCompra;
+	}
+	
+	
 
 }

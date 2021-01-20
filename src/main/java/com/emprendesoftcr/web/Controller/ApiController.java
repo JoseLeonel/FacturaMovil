@@ -43,13 +43,13 @@ public class ApiController {
 	@GetMapping("/get-all")
 	public ResponseEntity<?> findAll(@RequestParam("e") String e, @RequestParam("i") String i, @RequestParam("t") String t) {
 		Map<String, Object> resp = new HashMap<>();
-		if (t != null && t.equalsIgnoreCase("R24.asd24fg")) {
-			resp.put("listRecepcionCompras", _mrService.getAll(e, i));
-			resp.put("response", 200);
-		} else {
-			resp.put("listRecepcionCompras", null);
-			resp.put("response", 400);
-		}
+//		if (t != null && t.equalsIgnoreCase("R24.asd24fg")) {
+//			resp.put("listRecepcionCompras", _mrService.getAll(e, i));
+//			resp.put("response", 200);
+//		} else {
+//			resp.put("listRecepcionCompras", null);
+//			resp.put("response", 400);
+//		}
 		return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.OK);
 	}
 

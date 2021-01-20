@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -48,8 +49,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.emprendesoftcr.Bo.CorreoAutomaticoBo;
 import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
+import com.emprendesoftcr.modelo.CorreoAutomatico;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.utils.UnzipFiles;
@@ -77,11 +80,6 @@ public class MensajeReceptorAutomatico {
 	@Value("${api.host}")
 	private String													apiHost;
 
-	@Value("${api.userName}")
-	private String													apiUserName;
-
-	@Value("${api.password}")
-	private String													apiPassword;
 
 	@Value("${api.tipo.gasto}")
 	private String													apiTipoGasto;
@@ -89,6 +87,8 @@ public class MensajeReceptorAutomatico {
 	private final Logger										log	= LoggerFactory.getLogger(getClass());
 
 	private ZipFile													zipFile;
+	@Autowired
+	private CorreoAutomaticoBo							correoAutomaticoBo;
 
 	/**
 	 * Downloads new messages and saves attachments to disk if any.
@@ -103,14 +103,34 @@ public class MensajeReceptorAutomatico {
 	 */
 //	@Scheduled(fixedDelay = 60000)
 	@Scheduled(cron = "0 0/08 * * * ?")
-	public void downloadEmailAttachments() throws ParserConfigurationException, SAXException, SQLException, ParseException {
-		log.info("Inicio del proceso de revision de correos  " +this.apiUserName);
-		String saveDirectory = this.pathUploadFilesApi + "/mr-automatico";
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public void verifyEmails() {
+		try {
+			log.info("Inicio del proceso de revision de correos  ");
+			Properties properties = new Properties();
+			properties.put("mail.store.protocol", "imaps");
+			Session session = Session.getDefaultInstance(properties, null);
+			Collection<CorreoAutomatico> lista = correoAutomaticoBo.allEmails();
+			if(!lista.isEmpty() && lista != null) {
+				for (CorreoAutomatico correoAutomatico : lista) {
+					log.info("Correo:  " + correoAutomatico.getCorreoAceptacion());
+					Store store = session.getStore("imaps");
+					store.connect(this.apiHost, correoAutomatico.getCorreoAceptacion(), correoAutomatico.getClave());
+					downloadEmailAttachments(store,correoAutomatico.getDirecionDirectorio(),correoAutomatico.getCorreoAceptacion());
+				}
+			}
+		} catch (Exception e) {
+			log.info("** Error  ejecutar la reccion de compras automaticas: " + e.getMessage() + " fecha " + new Date() );
 
-		Properties properties = new Properties();
-		properties.put("mail.store.protocol", "imaps");
-		Session session = Session.getDefaultInstance(properties, null);
+			
+		}finally {
+			log.info("fin del proceso de revision de correos  ");
+		}
+	}
+
+	private void downloadEmailAttachments(Store store,String direccion,String correoCompras) throws ParserConfigurationException, SAXException, SQLException, ParseException {
+		
+		String saveDirectory = direccion + "mr-automatico";
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 		String emisorFactura = "";
 		String emisorTipoIdentificacion = "";
@@ -131,9 +151,6 @@ public class MensajeReceptorAutomatico {
 		String facturaPdfZip = "";
 
 		try {
-
-			Store store = session.getStore("imaps");
-			store.connect(this.apiHost, this.apiUserName, this.apiPassword);
 
 			XPath xPath = XPathFactory.newInstance().newXPath();
 
@@ -267,6 +284,7 @@ public class MensajeReceptorAutomatico {
 													try {
 														if (recepcionFactura == null) {
 															FEMensajeReceptorAutomatico mr = new FEMensajeReceptorAutomatico();
+															mr.setCorreoCompras(correoCompras);
 															mr.setClave(claveFactura);
 															mr.setTipoDoc(tipo_doc);
 															mr.setConsecutivo(consecutivoFactura);
@@ -303,7 +321,7 @@ public class MensajeReceptorAutomatico {
 
 														log.info("Se enviara una notificación a :" + enviarA);
 
-													//	this.enviaNotificacionMR(claveFactura, emisorFactura, empresaSaluda, null, totalComprobante, enviarA, asunto);
+														// this.enviaNotificacionMR(claveFactura, emisorFactura, empresaSaluda, null, totalComprobante, enviarA, asunto);
 
 													}
 
@@ -382,13 +400,14 @@ public class MensajeReceptorAutomatico {
 											}
 
 											facturaXml = nameFe;
-											
+
 											RecepcionFactura recepcionFactura = recepcionFacturaBo.findByClaveAndCedulaEmisor(claveFactura, emisorIdentificacion);
 
 											try {
 
-												if(recepcionFactura == null) {
+												if (recepcionFactura == null) {
 													FEMensajeReceptorAutomatico mr = new FEMensajeReceptorAutomatico();
+													mr.setCorreoCompras(correoCompras);
 													mr.setClave(claveFactura);
 													mr.setTipoDoc(tipo_doc);
 													mr.setConsecutivo(consecutivoFactura);
@@ -410,8 +429,8 @@ public class MensajeReceptorAutomatico {
 													mr.setEstado("P");
 													mr.setTipoGasto(this.apiTipoGasto);
 													_mrService.save(mr);
-													
-												} 
+
+												}
 											} catch (Exception e) {
 
 												log.info("Notifico a " + enviarA + " que ya la factura existe " + claveFactura + emisorFactura);
@@ -422,7 +441,7 @@ public class MensajeReceptorAutomatico {
 
 												log.info("Se enviara una notificación a :" + enviarA);
 
-											//	this.enviaNotificacionMR(claveFactura, emisorFactura, empresaSaluda, null, totalComprobante, enviarA, asunto);
+												// this.enviaNotificacionMR(claveFactura, emisorFactura, empresaSaluda, null, totalComprobante, enviarA, asunto);
 
 											}
 
@@ -432,6 +451,7 @@ public class MensajeReceptorAutomatico {
 
 								} catch (Exception e) {
 									log.info("No corresponde la compra al cliente");
+									
 								}
 							}
 						} else {
@@ -483,7 +503,7 @@ public class MensajeReceptorAutomatico {
 
 			log.info("Otro error generado por el MR inbox " + ex.getMessage());
 
-		}finally {
+		} finally {
 			log.info("Fin  del proceso de revision de correos  ");
 		}
 	}
@@ -510,7 +530,7 @@ public class MensajeReceptorAutomatico {
 			String msj = "";
 			String consecutivo = clave.substring(21, 41);
 			msj += "<p style=\"font-family: Arial;\">Estimado cliente,</p>";
-			msj += "<p style=\"font-family: Arial;\">El comprobante de Factura Electrónica con la consecutivo: <b>" + consecutivo + "</b>, generada por <b>" + emisorFactura  + "</b> por un monto de <b>" + totalComprobante + "</b> ya fue recibida anteriormente.</b></p>";
+			msj += "<p style=\"font-family: Arial;\">El comprobante de Factura Electrónica con la consecutivo: <b>" + consecutivo + "</b>, generada por <b>" + emisorFactura + "</b> por un monto de <b>" + totalComprobante + "</b> ya fue recibida anteriormente.</b></p>";
 			msj += "<p style=\"font-family: Arial;\">Este correo se genero de forma automática, por favor no responder.</b></p>";
 			msj += "<p style=\"font-family: Arial;\">Saludos,</p>";
 			msj += "<p style=\"font-family: Arial;\"><b>" + empresaSaluda + "</b></p>";

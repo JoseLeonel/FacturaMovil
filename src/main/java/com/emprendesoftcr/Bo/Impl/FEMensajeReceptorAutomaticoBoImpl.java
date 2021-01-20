@@ -29,8 +29,8 @@ public class FEMensajeReceptorAutomaticoBoImpl implements IFEMensajeReceptorAuto
 	}
 
 	@Override
-	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente) {
-		return ifEMensajeReceptorAutomaticoRepository.getAll(estado, identifiacionCliente);
+	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente,String correoCompra) {
+		return ifEMensajeReceptorAutomaticoRepository.getAll(estado, identifiacionCliente,correoCompra);
 	}
 
 	@Override

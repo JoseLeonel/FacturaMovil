@@ -225,7 +225,7 @@ public class ComprasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		List<FEMensajeReceptorAutomatico> solicitudList = ifEMensajeReceptorAutomaticoBo.getAll("P", usuarioSesion.getEmpresa().getCedula());
+		List<FEMensajeReceptorAutomatico> solicitudList = ifEMensajeReceptorAutomaticoBo.getAll("P", usuarioSesion.getEmpresa().getCedula(), usuarioSesion.getEmpresa().getCorreoAceptacionCompra());
 		
 		
 		
