@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -127,8 +126,6 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.BarcodeQRCode;
 
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JsonDataSource;
@@ -420,6 +417,10 @@ public class FacturasController {
 		return "views/facturas/ventaDolares";
 	}
 
+	
+	
+	
+	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarTikect1.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam(value="subTotalGeneralSTR", required = false) String subTotalGeneralSTR,@RequestParam(value="totalImpuestoRestSTR", required = false) String totalImpuestoRestSTR,  @RequestParam("idFactura") Long idFactura,@RequestParam(value="impServicioTotalSTR", required = false) String impServicioTotalSTR,@RequestParam(value="totalComprobanteSTR", required = false) String totalComprobanteSTR,@RequestParam(value="totalDescuentosProformaREstSTR", required = false) String totalDescuentosProformaREstSTR,@RequestParam("tipoFactura") Integer tipoFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {

@@ -10,8 +10,8 @@ import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 
 public interface IFEMensajeReceptorAutomaticoRepository extends CrudRepository<FEMensajeReceptorAutomatico, Long> {
 	
-	@Query("SELECT c FROM FEMensajeReceptorAutomatico c WHERE c.estado = ?1 AND c.receptorIdentificacion = ?2")
-	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente);
+	@Query("SELECT c FROM FEMensajeReceptorAutomatico c WHERE c.estado = ?1 AND c.receptorIdentificacion = ?2  AND c.correoCompras = ?3")
+	public List<FEMensajeReceptorAutomatico> getAll(String estado, String identifiacionCliente,String correoCompra);
 	
 	@Modifying
 	@Query("UPDATE FEMensajeReceptorAutomatico c SET c.estado=?1 WHERE c.id=?2")

@@ -439,11 +439,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
-
+			log.info("Inicio Proceso de cuentas por cobrar de empresas con criterio de dias  {}", new Date());
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Collection<CuentaCobrar> objetoCuentasPorCobrar = cuentaCobrarBo.cuentasPorCobrarbyEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
 			for (CuentaCobrar cuentaCobrar : objetoCuentasPorCobrar) {
-				log.info("Inicio Proceso de cuentas por cobrar de empresas con criterio de dias  {}", new Date());
+				
 				DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 				Date fecha = new Date();
 				String inicio = dateFormat1.format(cuentaCobrar.getFechaPlazo());
@@ -457,12 +457,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						enviarCorreoCuentasPorCobrar(cuentaCobrar, dias);
 					}
 				}
-				log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
+				
 			}
 
 		} catch (Exception e) {
 			log.error("** Error2  Proceso cuentas por cobrar: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
 		}
 	}
 
@@ -536,12 +538,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						facturaBo.modificar(factura);
 					}
 				}
-				log.info("Fin Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
+				
 
 			}
 		} catch (Exception e) {
 			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Fin Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
 		}
 	}
 
@@ -587,9 +591,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 						}
 
-					} else {
-						log.info("Finaliza Proceso de Envio de documentos - {}", formatter.format(LocalDateTime.now()));
-
 					}
 
 				}
@@ -601,6 +602,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.error("** Error2  taskHaciendaEnvio: " + e.getMessage() + " hora " + formatter.format(LocalDateTime.now()));
 			throw e;
 		} finally {
+			log.info("Finaliza Proceso de Envio de documentos - {}", formatter.format(LocalDateTime.now()));
 			// Desconectar token de hacienda anterior
 			if (openIDConnectHacienda != null) {
 				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
@@ -735,7 +737,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				//	 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -744,7 +746,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				//	 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					 //recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					
 					
@@ -833,7 +835,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						log.info("Fin Comprobacion de documentos - {}", formatter.format(LocalDateTime.now()));
+						
 
 					}
 				}
@@ -846,6 +848,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.error("** Error2  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		} finally {
+			log.info("Fin Comprobacion de documentos - {}", formatter.format(LocalDateTime.now()));
 			// Desconectar token de hacienda anterior
 			if (openIDConnectHacienda != null) {
 				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
@@ -1260,7 +1263,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
+						
 
 					}
 				}
@@ -1271,6 +1274,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
 
@@ -1306,7 +1311,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
+						
 
 					}
 				}
@@ -1317,6 +1322,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
 
@@ -1742,7 +1749,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						log.info("Fin  proceso de firmado - {}", formatter.format(LocalDateTime.now()));
+					
 
 					}
 				}
@@ -1754,6 +1761,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Fin  proceso de firmado - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
 
@@ -1857,12 +1866,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 							}
 						}
-						log.info("Finaliza proceso de firmado compra Simplificado - {}", formatter.format(LocalDateTime.now()));
+						
 
 					} catch (Exception e) {
 						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
 						compraSimplificadaBo.modificar(compraSimplificada);
 						log.error("** Error1 proceso de firmado compra simplificada: " + e.getMessage() + " fecha " + new Date());
+					}finally {
+						log.info("Finaliza proceso de firmado compra Simplificado - {}", formatter.format(LocalDateTime.now()));
 					}
 
 				}
@@ -1941,7 +1952,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 
 							}
-							log.info(" Fin el proceso de firmado compras- {}", formatter.format(LocalDateTime.now()));
+							
 
 						} catch (Exception e) {
 							recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
@@ -1959,6 +1970,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info(" Fin el proceso de firmado compras- {}", formatter.format(LocalDateTime.now()));
 		}
 	}
 
@@ -2024,7 +2037,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 					}
 				}
-				log.info("Finalizando la migracion de archivos {}", new Date());
+				
 			}
 
 		} catch (Exception e) {
@@ -2032,6 +2045,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			semaforoBo.modificar(semaforoMigracion);
 			log.error("** Error2  guardado de xmls: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			log.info("Finalizando la migracion de archivos {}", new Date());
 		}
 
 	}
