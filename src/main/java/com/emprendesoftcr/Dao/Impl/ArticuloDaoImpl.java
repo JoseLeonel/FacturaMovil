@@ -186,6 +186,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 				resultado = (totalCostoActual + totalCostoNuevo);
 				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE : Utils.roundFactura(resultado / totalProductos, 5);
 			} else {
+				resultado = costoNuevo;
 				resultadoFinal =resultado.equals(Constantes.ZEROS_DOUBLE)? Constantes.ZEROS_DOUBLE :   Utils.roundFactura(costoNuevo,5);
 			}
 

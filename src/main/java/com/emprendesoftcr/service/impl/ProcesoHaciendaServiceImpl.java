@@ -515,7 +515,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/01 07 * * ?")
+	@Scheduled(cron = "0 0/01 23 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -552,7 +552,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/05 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -734,10 +734,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-				//	 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -751,7 +751,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					
 					
 					// Inventario
-					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 
 				} else {
@@ -782,7 +782,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/05 * * * ?")
+	@Scheduled(cron = "0 0/45 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1439,25 +1439,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			String xmlFactura = Constantes.EMPTY;
 			String xmlRespuesta = Constantes.EMPTY;
-//			if(hacienda.getMigradoADisco().equals(Constantes.MIGRADO_XMLS_A_DISCO_SI)) {
-//				xmlFactura = Utils.leerXMLServidor(hacienda.getPathMigracion());
-//				xmlRespuesta = Utils.leerXMLServidor(hacienda.getPathMigracionRespuesta());
-//
-//			}else {
 			xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
 
-//			}
-//			ArchivoXML archivoXMLCorreos = archivoXMLBo.findByIdFactura(factura.getEmpresa(), factura.getId());
-//			if (archivoXMLCorreos != null) {
-//				xmlFactura = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracion());
-//				xmlRespuesta = Utils.leerXMLServidor(archivoXMLCorreos.getPathMigracionRespuesta());
-//
-//			} else {
-//				xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-//				xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
-//
-//			}
 			String tipoDoc = "compra";
 			if (hacienda != null) {
 				if (!hacienda.getTipoDoc().equals(Constantes.EMPTY)) {
@@ -1594,7 +1578,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/04 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1710,7 +1694,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //															hacienda.setPathMigracion(Constantes.EMPTY);
 //															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 //															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-															
+//															
 															haciendaBo.agregar(hacienda);
 
 														}

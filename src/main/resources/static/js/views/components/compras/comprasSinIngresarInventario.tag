@@ -40,15 +40,18 @@
 
     <div class="box" show = {mostrarDetalles}>
 	      <div class = "box-body">
+           <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 ol-lg-12">
 		        <span id="tituloCompra">Factura Compra #: {consecutivo}</span>
 				<table class="table table-striped">
                         <thead>
                         <tr>
                             <th style="width:4%;"><div class="tituloFormat">Num.linea </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cod.Proveedor </div></th>
-							<th style="width:3%;"><div class="tituloFormat">Cod.Inventario </div></th>
-                            <th style="width:22%;"><div class="tituloFormat">Descripcion </div></th>
+							<th style="width:3%;"><div class="tituloFormat">Cod.Inv </div></th>
+                            <th style="width:22%;"><div class="tituloFormat">Desc </div></th>
                             <th style="width:6%;"><div class="tituloFormat">Cant </div></th>
+                             <th style="width:6%;"><div class="tituloFormat">Cant Inv </div></th>
                             <th style="width:7%;"><div class="tituloFormat">Costo Compra</div></th>
                             <th style="width:7%;"><div class="tituloFormat">Costo Inv</div></th>
                             <th style="width:10%;"><div class="tituloFormat">Ganancia</div></th>
@@ -76,6 +79,10 @@
                             <td style="width:6%;">
                                 <span>{cantidad}</span>
                             </td>
+                             <td  style="width:7%;">
+                                
+                                <input  onkeyup={__actualizarCantidadInventario}  class="campodetalle" type="number" step="any"  value = "{cant_inv}" min="0" pattern="^[0-9]+"/>
+                            </td>
                             <td  style="width:7%;">
                                 <span>{costo_prove}</span>
                             </td>
@@ -102,6 +109,8 @@
                         </tbody>
                     </table>  
 		  </div>
+          </div>
+          </div>
 	</div>
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
@@ -269,6 +278,7 @@ function actualizarDetalleAlInventario(){
         gananciaPrecioPublico: self.detalleCompra.ganancia,
         precioPublico:self.detalleCompra.precio_publico,
         costo_inv:self.detalleCompra.costo_inv,
+        cant_inv:self.detalleCompra.cant_inv,
         codigoProveedor:self.detalleCompra.cod_proveedor,
    }
     $.ajax({
@@ -343,6 +353,18 @@ __actualizarCostoInventario(e){
     self.update()
 }
 
+__actualizarCantidadInventario(e){
+    if (e.keyCode == 8 || e.keyCode == 46){
+        return
+    }
+    var cant_inv = __valorNumerico(e.currentTarget.value);
+    self.item = e.item; 
+    var index = self.detalleCompras.aaData.indexOf(self.item);
+    self.item.cant_inv = cant_inv
+    
+    self.detail[index] = self.item
+    self.update()
+}
 
 __actualizarGananciaBlur(e){
     if (e.keyCode == 8 || e.keyCode == 46){

@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,16 +50,13 @@ import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Compra;
-import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
@@ -468,13 +463,14 @@ public class ComprasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/actualizarDetalleCompraPorAutomatica.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator actualizarDetalleCompraPorAutomatica(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra,  @RequestParam Double costo_inv,@RequestParam Long idCompra,  @RequestParam Long idDetalleCompra,  @RequestParam String codigoInventario ,  @RequestParam Double gananciaPrecioPublico,  @RequestParam Double precioPublico,@RequestParam String codigoProveedor, BindingResult result, SessionStatus status) throws Exception{
+	public RespuestaServiceValidator actualizarDetalleCompraPorAutomatica(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra,  @RequestParam Double costo_inv,@RequestParam Long idCompra,  @RequestParam Long idDetalleCompra,  @RequestParam String codigoInventario ,  @RequestParam Double gananciaPrecioPublico,  @RequestParam Double precioPublico,@RequestParam String codigoProveedor,Double cant_inv,BindingResult result, SessionStatus status) throws Exception{
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		try {
 			precioPublico = precioPublico == null?Constantes.ZEROS_DOUBLE:precioPublico;
 			gananciaPrecioPublico = gananciaPrecioPublico == null?Constantes.ZEROS_DOUBLE:gananciaPrecioPublico;
 			costo_inv = costo_inv == null?Constantes.ZEROS_DOUBLE:costo_inv;
+			cant_inv = cant_inv == null?Constantes.ZEROS_DOUBLE:cant_inv;
 			codigoInventario = codigoInventario == null?Constantes.EMPTY : codigoInventario;
 			if(precioPublico.equals(Constantes.ZEROS_DOUBLE)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico");	
@@ -483,7 +479,12 @@ public class ComprasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.codigo.publico");	
 			}
 			
-			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico,  codigoInventario, usuarioSesion.getEmpresa(),codigoProveedor,costo_inv);
+			if(cant_inv.equals(Constantes.ZEROS_DOUBLE)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.cantidad.inventario");	
+			}
+
+			
+			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico,  codigoInventario, usuarioSesion.getEmpresa(),codigoProveedor,costo_inv,cant_inv);
 			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.actualizo.detalle.correctamente", resultado);
 			} catch (Exception e) {

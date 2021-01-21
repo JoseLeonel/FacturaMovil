@@ -322,15 +322,23 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null? detalleCompra.getCantidadIventario():Constantes.ZEROS_DOUBLE;
+			if(cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
+				cantidadAplicar = detalleCompra.getCantidad() != null ? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			}
+			Double cantidad = cantidadAplicar;
 			Double costoIventario = detalleCompra.getCostoIventario() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getCostoIventario();
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
+			Double costo = Constantes.ZEROS_DOUBLE;
 			if(costoIventario > Constantes.ZEROS_DOUBLE) {
 				totalLinea = costoIventario;
+				costo = costoIventario;
+			}else {
+				Double descuento = detalleCompra.getTotalDescuento() == null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() / cantidad : Constantes.ZEROS_DOUBLE;
+				costo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
+				
 			}
 			
-			Double descuento = detalleCompra.getTotalDescuento() == null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() / cantidad : Constantes.ZEROS_DOUBLE;
-			Double costo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
 			kardexDao.entradaCosto(articulo, costo, cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
@@ -435,10 +443,14 @@ public class CompraBoImpl implements CompraBo {
 
 	private void disminuirInventario(Articulo articulo, Compra compra, DetalleCompra detalleCompra) throws Exception {
 		try {
+			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null?detalleCompra.getCantidadIventario():Constantes.ZEROS_DOUBLE;
+			if(cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
+				cantidadAplicar = detalleCompra.getCantidad() != null? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			}
 			if (articulo.getContable() != null) {
 				if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
 					String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION + compra.getConsecutivo();
-					kardexDao.salida(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), Constantes.EMPTY, compra.getConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, compra.getUsuarioIngresoInventario());
+					kardexDao.salida(articulo, articulo.getCantidad(), cantidadAplicar, Constantes.EMPTY, compra.getConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, compra.getUsuarioIngresoInventario());
 				}
 			}
 
@@ -822,7 +834,7 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	@Transactional
 	@Override
-	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv) throws Exception {
+	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv,Double cant_inv) throws Exception {
 		Integer resultado = 0;
 		try {
 			// 1. Obtener el detalle de la compra
@@ -834,6 +846,7 @@ public class CompraBoImpl implements CompraBo {
 				detalleCompra.setArticulo(articulo);
 				//detalleCompra.setCosto(costo_inv);
 				detalleCompra.setCostoIventario(costo_inv);
+				detalleCompra.setCantidadIventario(cant_inv);
 				detalleCompraDao.modificar(detalleCompra);
 				if (compraBD != null) {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());

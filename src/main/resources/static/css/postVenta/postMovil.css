@@ -1,458 +1,425 @@
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 900px)
-{
+@media only screen and (min-device-width: 320px)and (max-device-width: 768px or max-device-width: 900px){
 	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    padding: 0px !important;
-    line-height: 1.42857143;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-}
-	
-		.lista-articulos .product-item {
-    width: 26%;
-    margin-left: 2%;
-    margin-bottom: 2%;
-    margin-left: 20px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-		
-		#tipo-busqueda li h3 {
-    margin: 0px !important;
-    padding: 0px !important;
-    font-size: 10px !important;
-    transition: color 0.1s linear !important;
-}
-	
+		padding: 0px !important;
+		line-height: 1.42857143;
+		vertical-align: top;
+		border-top: 1px solid #ddd;
+	}
+	.lista-articulos .product-item {
+		width: 26%;
+		margin-left: 2%;
+		margin-bottom: 2%;
+		margin-left: 20px;
+		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+	}
+	#tipo-busqueda li h3 {
+		margin: 0px !important;
+		padding: 0px !important;
+		font-size: 10px !important;
+		transition: color 0.1s linear !important;
+	}
 	#tipo-busqueda img {
-    display: none;
-}
+		display: none;
+	}
 	#buscalo{
-	    margin-bottom: 8px!important;
-	    
+		margin-bottom: 8px!important;
 	}
 	#codificalo{
-	 margin-bottom: 8px!important;
+		margin-bottom: 8px!important;
 	}
 	#navegador{
-	margin-bottom: 8px!important;
+		margin-bottom: 8px!important;
 	}
 	#tipo-busqueda{
-	 display:flex;
+		display:flex;
 	}
-	
 	h1 {
-    color: #222D32;
-    font-size: 20px !important;
-    font-weight: bold;
-}
-	.modalCambioPrecioBotones {
-    border-radius: 16px !important;
-    font-size: 12px !important;
-}
-	.botonesFuncionalContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.botonesFuncionalContainer .botonesFuncional {
-    margin-left: 5px;
-    /* flex: 1; */
-    /* padding-right: 3px; */
-    /* padding-bottom: 2%; */
-}
-
-
-
-
-.labelBotones {
-    font-weight: 400 !important;
-    font-size: 10px !important; 
-    font-family: Roboto,sans-serif !important;
-    color: #0a0909 !important;
-    /* text-shadow: 0px 0px 1px #ffffff; */
-    /* font-style: italic; */
-    text-align: left;
-    line-height: 20px !important;
-    width: 100px !important;
-    margin-bottom: 5px !important;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    text-align: center !important;
-    background-color: #f9fafc !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.contenedor-opciones .opciones-menu {
-    width: 30%;
-    margin-left: 1%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-    font-weight: 400;
-    font-size: 10px !important;
-    float: left !important;
-    color: #5eaf38;
-}
-	
-	td, th {
-    font: 7px verdana, arial, helvetica, sans-serif;
-    line-height: 13px;
-    text-align: left;
-    vertical-align: middle;
-}
-	img{
-	width: 50px;
+		color: #222D32;
+		font-size: 20px !important;
+		font-weight: bold;
 	}
-.label-titulos-articulo {
-    font-weight: 400 !important;
-    font-size: calc(0.5em + 0.5vw) !important;
-    color: #040404 !important;
-    font-family: Roboto, sans-serif !important;
-    text-align: left;
-    padding-left: 3px;
-    line-height: 11px;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px;
-    margin: 6px;
-    border: none;
-    text-align: center !important;
-    background-color: white !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
+	.modalCambioPrecioBotones {
+		border-radius: 16px !important;
+		font-size: 12px !important;
+	}
+	.botonesFuncionalContainer {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.botonesFuncionalContainer .botonesFuncional {
+		margin-left: 5px;
+		/* flex: 1;
+		*/
+		/* padding-right: 3px;
+		*/
+		/* padding-bottom: 2%;
+		*/
+	}
+	.labelBotones {
+		font-weight: 400 !important;
+		font-size: 10px !important;
+		font-family: Roboto,sans-serif !important;
+		color: #0a0909 !important;
+		/* text-shadow: 0px 0px 1px #ffffff;
+		*/
+		/* font-style: italic;
+		*/
+		text-align: left;
+		line-height: 20px !important;
+		width: 100px !important;
+		margin-bottom: 5px !important;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		text-align: center !important;
+		background-color: #f9fafc !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
+	.contenedor-opciones .opciones-menu {
+		width: 30%;
+		margin-left: 1%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+		font-weight: 400;
+		font-size: 10px !important;
+		float: left !important;
+		color: #5eaf38;
+	}
+	td, th {
+		font: 7px verdana, arial, helvetica, sans-serif;
+		line-height: 13px;
+		text-align: left;
+		vertical-align: middle;
+	}
+	img{
+		width: 50px;
+	}
+	.label-titulos-articulo {
+		font-weight: 400 !important;
+		font-size: calc(0.5em + 0.5vw) !important;
+		color: #040404 !important;
+		font-family: Roboto, sans-serif !important;
+		text-align: left;
+		padding-left: 3px;
+		line-height: 11px;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		padding: 5px;
+		margin: 6px;
+		border: none;
+		text-align: center !important;
+		background-color: white !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
 }
 /* cambios css solo para modo vertical */
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 900px)
-and (orientation: portrait)
-
-{
+@media only screen and (min-device-width: 320px) and (max-device-width: 900px)and (orientation: portrait){
 	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    padding: 0px !important;
-    line-height: 1.42857143;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-}
-	
+		padding: 0px !important;
+		line-height: 1.42857143;
+		vertical-align: top;
+		border-top: 1px solid #ddd;
+	}
 	.lista-articulos .product-item {
-    width: 26%;
-    margin-left: 2%;
-    margin-bottom: 2%;
-    margin-left: 20px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-		#tipo-busqueda li h3 {
-    margin: 0px !important;
-    padding: 0px !important;
-    font-size: 10px !important;
-    transition: color 0.1s linear !important;
-}
-	
-	#tipo-busqueda img {
-    display: none;
-}
-	#buscalo{
-	    margin-bottom: 8px!important;
-	    
+		width: 26%;
+		margin-left: 2%;
+		margin-bottom: 2%;
+		margin-left: 20px;
+		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
 	}
-	#codificalo{
-	 margin-bottom: 8px!important;
-	}
-	#navegador{
-	margin-bottom: 8px!important;
-	}
-	#tipo-busqueda{
-	 display:flex;
-	}
-	
-	h1 {
-    color: #222D32;
-    font-size: 20px !important;
-    font-weight: bold;
-}
-	.modalCambioPrecioBotones {
-    border-radius: 16px !important;
-    font-size: 12px !important;
-}
-	.botonesFuncionalContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.botonesFuncionalContainer .botonesFuncional {
-    margin-left: 5px;
-    /* flex: 1; */
-    /* padding-right: 3px; */
-    /* padding-bottom: 2%; */
-}
-
-
-
-
-.labelBotones {
-    font-weight: 400 !important;
-    font-size: 10px !important; 
-    font-family: Roboto,sans-serif !important;
-    color: #0a0909 !important;
-    /* text-shadow: 0px 0px 1px #ffffff; */
-    /* font-style: italic; */
-    text-align: left;
-    line-height: 16px !important;
-    width: 100px !important;
-    margin-bottom: 5px !important;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    text-align: center !important;
-    background-color: #f9fafc !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-		.contenedor-opciones .opciones-menu {
-    width: 30%;
-    margin-left: 1%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-    font-weight: 400;
-    font-size: 10px !important;
-    float: left !important;
-    color: #5eaf38;
-}
-	
-	td, th {
-    font: 7px verdana, arial, helvetica, sans-serif;
-    line-height: 13px;
-    text-align: left;
-    vertical-align: middle;
-}
-	img{
-	width: 50px;
-	}
-.label-titulos-articulo {
-    font-weight: 400 !important;
-    font-size: calc(0.5em + 0.5vw) !important;
-    color: #040404 !important;
-    font-family: Roboto, sans-serif !important;
-    text-align: left;
-    padding-left: 3px;
-    line-height: 11px;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px;
-    margin: 6px;
-    border: none;
-    text-align: center !important;
-    background-color: white !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-}
-
-/* cambios css solo para modo horizontal */
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 900px)
-and (orientation: landscape)
-{
-	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    padding: 0px !important;
-    line-height: 1.42857143;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-}
-	
-	.lista-articulos .product-item {
-    width: 26%;
-    margin-left: 2%;
-    margin-bottom: 2%;
-    margin-left: 20px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-}
-	
 	#tipo-busqueda li h3 {
-    margin: 0px !important;
-    padding: 0px !important;
-    font-size: 10px !important;
-    transition: color 0.1s linear !important;
-}
-	
+		margin: 0px !important;
+		padding: 0px !important;
+		font-size: 10px !important;
+		transition: color 0.1s linear !important;
+	}
 	#tipo-busqueda img {
-    display: none;
-}
+		display: none;
+	}
 	#buscalo{
-	    margin-bottom: 8px!important;
-	    
+		margin-bottom: 8px!important;
 	}
 	#codificalo{
-	 margin-bottom: 8px!important;
+		margin-bottom: 8px!important;
 	}
 	#navegador{
-	margin-bottom: 8px!important;
+		margin-bottom: 8px!important;
 	}
 	#tipo-busqueda{
-	 display:flex;
-	}
-	
-	
-	#tipo-busqueda li h3 {
-    margin: 0px !important;
-    padding: 0px !important;
-    font-size: 10px !important;
-    transition: color 0.1s linear !important;
-}
-	
-	#tipo-busqueda img {
-    display: none;
-}
-	#buscalo{
-	    margin-bottom: 8px!important;
-	    
-	}
-	#codificalo{
-	 margin-bottom: 8px!important;
-	}
-	#navegador{
-	margin-bottom: 8px!important;
-	}
-	#tipo-busqueda{
-	 display:flex;
+		display:flex;
 	}
 	h1 {
-    color: #222D32;
-    font-size: 20px !important;
-    font-weight: bold;
-}
+		color: #222D32;
+		font-size: 20px !important;
+		font-weight: bold;
+	}
 	.modalCambioPrecioBotones {
-    border-radius: 16px !important;
-    font-size: 12px !important;
-}
+		border-radius: 16px !important;
+		font-size: 12px !important;
+	}
 	.botonesFuncionalContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.botonesFuncionalContainer .botonesFuncional {
-    margin-left: 5px;
-    /* flex: 1; */
-    /* padding-right: 3px; */
-    /* padding-bottom: 2%; */
-}
-
-
-
-
-.labelBotones {
-    font-weight: 400 !important;
-    font-size: 10px !important; 
-    font-family: Roboto,sans-serif !important;
-    color: #0a0909 !important;
-    /* text-shadow: 0px 0px 1px #ffffff; */
-    /* font-style: italic; */
-    text-align: left;
-    line-height: 16px !important;
-    width: 100px !important;
-    margin-bottom: 5px !important;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    text-align: center !important;
-    background-color: #f9fafc !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.botonesFuncionalContainer .botonesFuncional {
+		margin-left: 5px;
+		/* flex: 1;
+		*/
+		/* padding-right: 3px;
+		*/
+		/* padding-bottom: 2%;
+		*/
+	}
+	.labelBotones {
+		font-weight: 400 !important;
+		font-size: 10px !important;
+		font-family: Roboto,sans-serif !important;
+		color: #0a0909 !important;
+		/* text-shadow: 0px 0px 1px #ffffff;
+		*/
+		/* font-style: italic;
+		*/
+		text-align: left;
+		line-height: 16px !important;
+		width: 100px !important;
+		margin-bottom: 5px !important;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		text-align: center !important;
+		background-color: #f9fafc !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
 	.contenedor-opciones .opciones-menu {
-    width: 30%;
-    margin-left: 1%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-start;
-    font-weight: 400;
-    font-size: 10px !important;
-    float: left !important;
-    color: #5eaf38;
-}
-	
-	td, th {
-    font: 7px verdana, arial, helvetica, sans-serif;
-    line-height: 13px;
-    text-align: left;
-    vertical-align: middle;
-}
-	img{
-	width: 50px;
+		width: 30%;
+		margin-left: 1%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+		font-weight: 400;
+		font-size: 10px !important;
+		float: left !important;
+		color: #5eaf38;
 	}
-.label-titulos-articulo {
-    font-weight: 400 !important;
-    font-size: calc(0.5em + 0.5vw) !important;
-    color: #040404 !important;
-    font-family: Roboto, sans-serif !important;
-    text-align: left;
-    padding-left: 3px;
-    line-height: 11px;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px;
-    margin: 6px;
-    border: none;
-    text-align: center !important;
-    background-color: white !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+	td, th {
+		font: 7px verdana, arial, helvetica, sans-serif;
+		line-height: 13px;
+		text-align: left;
+		vertical-align: middle;
+	}
+	img{
+		width: 50px;
+	}
+	.label-titulos-articulo {
+		font-weight: 400 !important;
+		font-size: calc(0.5em + 0.5vw) !important;
+		color: #040404 !important;
+		font-family: Roboto, sans-serif !important;
+		text-align: left;
+		padding-left: 3px;
+		line-height: 11px;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		padding: 5px;
+		margin: 6px;
+		border: none;
+		text-align: center !important;
+		background-color: white !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
 }
+/* cambios css solo para modo horizontal */
+@media only screen and (min-device-width: 320px)and (max-device-width: 900px)and (orientation: landscape){
+	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+		padding: 0px !important;
+		line-height: 1.42857143;
+		vertical-align: top;
+		border-top: 1px solid #ddd;
+	}
+	.lista-articulos .product-item {
+		width: 26%;
+		margin-left: 2%;
+		margin-bottom: 2%;
+		margin-left: 20px;
+		box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+	}
+	#tipo-busqueda li h3 {
+		margin: 0px !important;
+		padding: 0px !important;
+		font-size: 10px !important;
+		transition: color 0.1s linear !important;
+	}
+	#tipo-busqueda img {
+		display: none;
+	}
+	#buscalo{
+		margin-bottom: 8px!important;
+	}
+	#codificalo{
+		margin-bottom: 8px!important;
+	}
+	#navegador{
+		margin-bottom: 8px!important;
+	}
+	#tipo-busqueda{
+		display:flex;
+	}
+	#tipo-busqueda li h3 {
+		margin: 0px !important;
+		padding: 0px !important;
+		font-size: 10px !important;
+		transition: color 0.1s linear !important;
+	}
+	#tipo-busqueda img {
+		display: none;
+	}
+	#buscalo{
+		margin-bottom: 8px!important;
+	}
+	#codificalo{
+		margin-bottom: 8px!important;
+	}
+	#navegador{
+		margin-bottom: 8px!important;
+	}
+	#tipo-busqueda{
+		display:flex;
+	}
+	h1 {
+		color: #222D32;
+		font-size: 20px !important;
+		font-weight: bold;
+	}
+	.modalCambioPrecioBotones {
+		border-radius: 16px !important;
+		font-size: 12px !important;
+	}
+	.botonesFuncionalContainer {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.botonesFuncionalContainer .botonesFuncional {
+		margin-left: 5px;
+		/* flex: 1;
+		*/
+		/* padding-right: 3px;
+		*/
+		/* padding-bottom: 2%;
+		*/
+	}
+	.labelBotones {
+		font-weight: 400 !important;
+		font-size: 10px !important;
+		font-family: Roboto,sans-serif !important;
+		color: #0a0909 !important;
+		/* text-shadow: 0px 0px 1px #ffffff;
+		*/
+		/* font-style: italic;
+		*/
+		text-align: left;
+		line-height: 16px !important;
+		width: 100px !important;
+		margin-bottom: 5px !important;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		text-align: center !important;
+		background-color: #f9fafc !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
+	.contenedor-opciones .opciones-menu {
+		width: 30%;
+		margin-left: 1%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		align-self: flex-start;
+		font-weight: 400;
+		font-size: 10px !important;
+		float: left !important;
+		color: #5eaf38;
+	}
+	td, th {
+		font: 7px verdana, arial, helvetica, sans-serif;
+		line-height: 13px;
+		text-align: left;
+		vertical-align: middle;
+	}
+	img{
+		width: 50px;
+	}
+	.label-titulos-articulo {
+		font-weight: 400 !important;
+		font-size: calc(0.5em + 0.5vw) !important;
+		color: #040404 !important;
+		font-family: Roboto, sans-serif !important;
+		text-align: left;
+		padding-left: 3px;
+		line-height: 11px;
+		border-collapse: separate;
+		text-align: center;
+		cursor: pointer;
+		padding: 5px;
+		margin: 6px;
+		border: none;
+		text-align: center !important;
+		background-color: white !important;
+		box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+		border-radius: 5px;
+		-webkit-transition: background-color 100ms linear;
+		-moz-transition: background-color 100ms linear;
+		-o-transition: background-color 100ms linear;
+		-ms-transition: background-color 100ms linear;
+		transition: background-color 100ms linear;
+	}
 }

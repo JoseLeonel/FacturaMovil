@@ -1052,9 +1052,14 @@
         __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-        _Empresa()
-        __comboCondicionPago()
-        __RolAdministrador()
+        _Empresa(function(resultado){
+            __comboCondicionPago()
+            __ComboTipoDocumentos(0)
+            __RolAdministrador()
+            console.log("resultado exitoso")
+        })
+        
+        
       //  __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
@@ -3845,14 +3850,40 @@ function __aplicarExoneracionPorCliente(){
 function __comboCondicionPago(){
     self.comboCondicionPagos = []
     self.update()
-    self.comboCondicionPagos.push({
-        estado:"01",
-        descripcion:$.i18n.prop("factura.codicion.venta.contado")
-    })
-    self.comboCondicionPagos.push({
-        estado:"02",
-        descripcion:$.i18n.prop("factura.codicion.venta.credito")
-    })
+    if(typeof self.empresa != 'undefined'){
+        if(self.empresa.cedula == '3101641333') {
+            self.comboCondicionPagos.push({
+                estado:"02",
+                descripcion:$.i18n.prop("factura.codicion.venta.credito")
+            })
+            self.mostrarCamposIngresoContado = false
+            self.comboCondicionPagos.push({
+                estado:"01",
+                descripcion:$.i18n.prop("factura.codicion.venta.contado")
+            })
+
+        }else {
+            self.comboCondicionPagos.push({
+                estado:"01",
+                descripcion:$.i18n.prop("factura.codicion.venta.contado")
+            })
+            self.comboCondicionPagos.push({
+                estado:"02",
+                descripcion:$.i18n.prop("factura.codicion.venta.credito")
+            })
+
+        }  
+    }else{
+        self.comboCondicionPagos.push({
+          estado:"01",
+            descripcion:$.i18n.prop("factura.codicion.venta.contado")
+        })
+        self.comboCondicionPagos.push({
+            estado:"02",
+            descripcion:$.i18n.prop("factura.codicion.venta.credito")
+        })
+
+    }
     self.update()
 }
 /**
@@ -4179,7 +4210,7 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
 /**
 * Consultar la empresa
 **/
-function _Empresa(){
+function _Empresa(callback){
      $.ajax({
         url: "ParametrosEmpresaAjax.do",
         datatype: "json",
@@ -4202,7 +4233,8 @@ function _Empresa(){
                        }
                        self.update()
                     });
-                    __ComboTipoDocumentos(0)
+                    
+                    callback("Exitoso")
                 }
             }
         },

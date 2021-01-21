@@ -130,6 +130,9 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "costo_inventario")
 	private Double costoIventario;
 	
+	@Column(name = "cant_inventario")
+	private Double cantidadIventario;
+	
 	
 
 	public DetalleCompra() {
@@ -449,6 +452,16 @@ public class DetalleCompra implements Serializable {
 	
 	public void setCostoIventario(Double costoIventario) {
 		this.costoIventario = costoIventario;
+	}
+
+	
+	public Double getCantidadIventario() {
+		return cantidadIventario;
+	}
+
+	
+	public void setCantidadIventario(Double cantidadIventario) {
+		this.cantidadIventario = cantidadIventario;
 	}
 	
 	

@@ -339,17 +339,18 @@ div.fondoVentaEspera:hover{
 
 
     }
-    .labelDetalleVenta {
-        display: inline;
-        padding: .2em .6em .3em;
-        font-weight: 700;
-        line-height: 1;
-        color: black;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: baseline;
-        border-radius: .25em;
-    }
+  .labelDetalleVenta {
+    margin: 1px;
+    display: inline;
+    padding: 0.6em .6em .3em;
+    font-weight: 700;
+    line-height: 1;
+    color: black;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
         .clickable {
             cursor: pointer;
         }

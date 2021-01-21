@@ -57,9 +57,7 @@
 
 <!--Fin Cambiar descripcion-->
 <div id="pagina1" style="padding-bottom:15px" show={mostarParaCrearNuevaVentas}>
-   <div class="row">
-        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-            <div class="box-tools ">
+            <div class="botonContainer ">
                 
                 <a class="botones-funcionales" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                 <a class="botones-funcionales" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
@@ -73,8 +71,6 @@
                 <a class="botones-funcionales" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
 
             </div>
-        </div>      
-    </div>              
 </div>
  <div>
      <form id="FormPaginacion">
