@@ -340,7 +340,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 				"       a.impuesto  as imp_art\n" + 
 				"FROM detalles_compras d\n" + 
 				"inner join compras c on c.id = d.compra_id\n" + 
-				"left JOIN proveedor_articulo part ON part.cod_provee in( d.CODIGO,d.codigo_comercial_codigo1,d.codigo_comercial_codigo2,d.codigo_comercial_codigo3) and part.proveedor_id = c.proveedor_id \n" + 
+				"left JOIN proveedor_articulo part ON part.cod_provee in( d.CODIGO,d.codigo_comercial_codigo1,d.codigo_comercial_codigo2,d.codigo_comercial_codigo3) and part.proveedor_id = c.proveedor_id "+
 				"left join articulos a on a.id = part.articulo_id and c.proveedor_id = part.proveedor_id\n" + 
 				"where c.estado = 6 and c.id = :idCompra and d.estado = 1 order by d.numero_linea asc ";
     parameters.addValue("idCompra", idCompra);

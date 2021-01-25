@@ -1,5 +1,34 @@
 <punto-venta>
 
+
+<!--Modal Cambiar precio-->
+<div id='modalCambiarPrecioDetalle' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambio de Precio en la Factura(no cambia el inventario)</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >Digite el nuevo Precio  </label>
+                        <input type="number" class="form-control cambiarprecioArticulo tamanoClienteNuevo cambiarprecioArticuloDetalle"  id="cambiarprecioArticuloDetalle" name="cambiarprecioArticuloDetalle"   autofocus="autofocus" min="0" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarElPrecioDetalle}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -351,7 +380,8 @@
                                     <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campoDetalle " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                                 </td>
                                 <td class="campoLabel">
-                                    <label >{precioUnitario.toFixed(2)}</label>
+                                    <a class="botones-funcionales" href="#"    onclick = {__CambiarPrecioFactura} title="Cambiar Precio: {precioUnitario.toFixed(2)}"> <label  class= "lineaPrecioPuntoVenta">{precioUnitario.toFixed(2)}</label></a>
+                                    
                                 </td>
                                 <td class="text-right" style="width:8%">
                                     <input  onclick={__CambiarDescuento} class="campoDetalle" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
@@ -1040,6 +1070,14 @@
             }
         });
 
+    $( "#cambiarprecioArticuloDetalle" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               __cambiarElPrecioModalDetalle()
+           }
+        });
         $( "#claveSistema" ).keyup(function( event ) {
             xTriggered++;
             var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
@@ -1116,6 +1154,51 @@
     }, false );
 
     })
+
+/**
+*Cambiar precio del producto
+**/
+__CambiarPrecioFactura(e){
+   self.item = e.item; 
+   if(self.item.codigo =="8888"){
+        return true
+    } 
+   self.update()
+   $('#modalCambiarPrecioDetalle').modal({backdrop: 'static', keyboard: true}) 
+   $('#modalCambiarPrecioDetalle').on('shown.bs.modal', function () {
+       $( "#cambiarprecioArticuloDetalle" ).val( e.item.precioUnitario)
+       $( "#cambiarprecioArticuloDetalle" ).focus()
+       $( "#cambiarprecioArticuloDetalle" ).select()
+   })
+
+}
+
+/**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarElPrecioDetalle(){
+    __cambiarElPrecioModalDetalle()
+}
+
+function __cambiarElPrecioModalDetalle(){
+    var precio = $(".cambiarprecioArticuloDetalle").val();
+     self.item.precioUnitario = __valorNumerico(precio);
+     self.update()
+    agregarPrecioAlDetalleFactura(precio)
+
+}
+
+/**
+* Cambiar el precio en el detalle
+**/
+function agregarPrecioAlDetalleFactura(precio){
+       //factura.js
+    self.item = ActualizarLineaDEtalle(self.item) 
+    self.update()
+    aplicarCambioLineaDetalle() 
+    $(".cambiarprecioArticuloDetalle").val(null);
+    $('#modalCambiarPrecioDetalle').modal('hide') 
+}
 
 __EntradaDinero(){
   modalEntradaSalidaDinero(1)
@@ -2484,6 +2567,11 @@ function crearFactura(estado){
     }
       if (self.transaccion == true ){
         return false
+    }
+    if(self.factura.totalComprobante >= 20000000){
+      mensajeAdvertencia("Error el monto mayor a 20000000, corregir  ")
+      return
+
     }
     self.transaccion = true
     self.update()

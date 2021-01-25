@@ -163,7 +163,7 @@ public class ProveedorArticuloController {
 			}
 
 			ProveedorArticulo proveedorArticuloBd = null;
-			proveedorArticuloBd = proveedorArticuloBo.findByCodigo(proveedorArticulo.getArticulo(), proveedorArticulo.getProveedor());
+			proveedorArticuloBd = proveedorArticuloBo.findByCodigo(proveedorArticulo.getArticulo().getCodigo(), proveedorArticulo.getProveedor());
 			if (proveedorArticuloBd != null) {
 				result.rejectValue("codigo", "error.proveedorArticulo.codigo.existe");
 			}
@@ -226,7 +226,7 @@ public class ProveedorArticuloController {
 			}
 
 			ProveedorArticulo proveedorArticuloBd = null;
-			proveedorArticuloBd = proveedorArticuloBo.findByCodigo(proveedorArticulo.getArticulo(), proveedorArticulo.getProveedor());
+			proveedorArticuloBd = proveedorArticuloBo.findByCodigo(proveedorArticulo.getArticulo().getCodigo(), proveedorArticulo.getProveedor());
 			if (proveedorArticuloBd == null) {
 				result.rejectValue("codigo", "error.proveedorArticulo.codigo.no.existe");
 			}
@@ -288,7 +288,7 @@ public class ProveedorArticuloController {
 			Proveedor proveedor = proveedorBo.buscar(idProveedor);
 			ProveedorArticulo proveedorArticuloBD =null;
 			if(proveedor !=null && articuloBD !=null) {
-				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD, proveedor);	
+				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD.getCodigo(), proveedor);	
 			}
 			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
 			if (articuloCommand == null) {

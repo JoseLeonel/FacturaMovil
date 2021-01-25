@@ -52,10 +52,10 @@ public class ProveedorArticuloDaoImpl implements ProveedorArticuloDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor) {
-		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.articulo = :articulo and obj.proveedor = :proveedor");
+	public ProveedorArticulo findByCodigo(String codigo, Proveedor proveedor) {
+		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.codigoProveedor = :codigo and obj.proveedor = :proveedor");
 		query.setParameter("proveedor", proveedor);
-		query.setParameter("articulo", articulo);
+		query.setParameter("codigo",codigo);
 		List<ProveedorArticulo> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (ProveedorArticulo) results.get(0);

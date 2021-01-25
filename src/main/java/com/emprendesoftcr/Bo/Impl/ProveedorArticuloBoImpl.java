@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.ProveedorArticuloBo;
 import com.emprendesoftcr.Dao.ProveedorArticuloDao;
-import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 
@@ -43,8 +42,8 @@ public class ProveedorArticuloBoImpl implements ProveedorArticuloBo {
 		return proveedorArticuloDao.findById(id);
 	}
 
-	public ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor) {
-		return proveedorArticuloDao.findByCodigo(articulo, proveedor);
+	public ProveedorArticulo findByCodigo(String codigo, Proveedor proveedor) {
+		return proveedorArticuloDao.findByCodigo(codigo, proveedor);
 	}
 
 }

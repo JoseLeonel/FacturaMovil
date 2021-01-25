@@ -14,6 +14,6 @@ public interface ProveedorArticuloBo {
 
 	ProveedorArticulo findById(Long id);
 
-	ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor);
+	ProveedorArticulo findByCodigo(String codigo, Proveedor proveedor);
 
 }

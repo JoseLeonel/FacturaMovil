@@ -55,6 +55,7 @@ import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.modelo.CorreoAutomatico;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.UnzipFiles;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.utils.XmlHelper;
@@ -102,8 +103,9 @@ public class MensajeReceptorAutomatico {
 	 * @throws ParseException
 	 */
 //	@Scheduled(fixedDelay = 60000)
-	@Scheduled(cron = "0 0/08 * * * ?")
+	@Scheduled(cron = "0 0/04 * * * ?")
 	public void verifyEmails() {
+		String correoProblemas = Constantes.EMPTY;
 		try {
 			log.info("Inicio del proceso de revision de correos  ");
 			Properties properties = new Properties();
@@ -112,6 +114,7 @@ public class MensajeReceptorAutomatico {
 			Collection<CorreoAutomatico> lista = correoAutomaticoBo.allEmails();
 			if(!lista.isEmpty() && lista != null) {
 				for (CorreoAutomatico correoAutomatico : lista) {
+					correoProblemas = correoAutomatico.getCorreoAceptacion();
 					log.info("Correo:  " + correoAutomatico.getCorreoAceptacion());
 					Store store = session.getStore("imaps");
 					store.connect(this.apiHost, correoAutomatico.getCorreoAceptacion(), correoAutomatico.getClave());
@@ -119,7 +122,8 @@ public class MensajeReceptorAutomatico {
 				}
 			}
 		} catch (Exception e) {
-			log.info("** Error  ejecutar la reccion de compras automaticas: " + e.getMessage() + " fecha " + new Date() );
+			log.error("** Error  ejecutar la reccion de compras automaticas: " + e.getMessage() + " fecha " + new Date() );
+			log.error("** Error  correo con problemas: " + correoProblemas );
 
 			
 		}finally {
