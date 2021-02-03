@@ -51,6 +51,7 @@ public class CorreosBoImpl implements CorreosBo {
 						if (Utils.validarCorreo(correo)) {
 							message.addTo(new InternetAddress(correo));
 						}
+					}	
 						if (attachments != null) {
 							cantidadDocumentos = 1;
 							for (Attachment attachment : attachments) {
@@ -62,7 +63,7 @@ public class CorreosBoImpl implements CorreosBo {
 							}
 						}
 
-					}
+					
 
 					message.setSubject(subjet);
 					message.setFrom(from);

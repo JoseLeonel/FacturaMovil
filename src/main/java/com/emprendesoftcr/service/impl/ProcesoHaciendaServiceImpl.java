@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.mail.util.ByteArrayDataSource;
 
@@ -443,7 +444,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Collection<CuentaCobrar> objetoCuentasPorCobrar = cuentaCobrarBo.cuentasPorCobrarbyEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
 			for (CuentaCobrar cuentaCobrar : objetoCuentasPorCobrar) {
-				
+
 				DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 				Date fecha = new Date();
 				String inicio = dateFormat1.format(cuentaCobrar.getFechaPlazo());
@@ -457,13 +458,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						enviarCorreoCuentasPorCobrar(cuentaCobrar, dias);
 					}
 				}
-				
+
 			}
 
 		} catch (Exception e) {
 			log.error("** Error2  Proceso cuentas por cobrar: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
 		}
 	}
@@ -538,13 +539,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						facturaBo.modificar(factura);
 					}
 				}
-				
 
 			}
 		} catch (Exception e) {
 			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Fin Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
 		}
 	}
@@ -737,7 +737,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -746,13 +746,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
-					
-					
 					// Inventario
 					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
-
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -782,7 +779,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/45 * * * ?")
+	@Scheduled(cron = "0 0/55 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -793,7 +790,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
 				// Listado de los documentos Pendientes de aceptar por hacienda
 				Collection<HaciendaComprobarNative> listaHacienda = consultasNativeBo.findByComprabarDocumentoPendienteaceptar();
-				
+
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
 						for (HaciendaComprobarNative hacienda : listaHacienda) {
@@ -835,7 +832,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						
 
 					}
 				}
@@ -935,7 +931,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						/**
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
-						log.info("*status: " + status);
+			//			log.info("*status: " + status);
 						if (haciendaBD.getNumeroFactura() == null) {
 							Factura facturaAplicar = haciendaBD.getNumeroFactura() != null ? facturaBo.findById(haciendaBD.getNumeroFactura()) : null;
 							if (facturaAplicar == null) {
@@ -1192,7 +1188,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		Boolean resultado = Boolean.FALSE;
@@ -1235,19 +1231,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									if (factura != null) {
 										listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
 									}
-									if (listaCorreos != null) {
-										if (!listaCorreos.isEmpty()) {
-											resultado = enviarCorreos(factura, haciendaBD, listaCorreos);
-											resultado = Boolean.TRUE;
-										}
-									}
+									resultado = listaCorreos != null && !listaCorreos.isEmpty() ? enviarCorreos(factura, haciendaBD, listaCorreos) : Boolean.TRUE;
 
 								}
-								if (resultado.equals(Boolean.TRUE)) {
-									haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-									haciendaBo.modificar(haciendaBD);
-
-								}
+								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+								haciendaBo.modificar(haciendaBD);
 
 							} catch (Exception e) {
 								// Se modifica el registros
@@ -1263,7 +1251,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						
 
 					}
 				}
@@ -1274,12 +1261,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
 		try {
@@ -1311,7 +1298,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-						
 
 					}
 				}
@@ -1322,7 +1308,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Fin Envios de correos - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
@@ -1655,7 +1641,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 												}
 												Boolean procesoCompleto = Boolean.FALSE;
-												if(!comprobanteXML.equals(Constantes.EMPTY) && comprobanteXML != null) {
+												if (!comprobanteXML.equals(Constantes.EMPTY) && comprobanteXML != null) {
 													procesoCompleto = Boolean.TRUE;
 												}
 												if (comprobanteXML != null) {
@@ -1694,7 +1680,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //															hacienda.setPathMigracion(Constantes.EMPTY);
 //															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 //															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-															
+
 															haciendaBo.agregar(hacienda);
 
 														}
@@ -1702,7 +1688,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 														if (factura != null && procesoCompleto) {
 															Factura facturaBD = facturaBo.findById(factura.getId());
 															if (facturaBD != null) {
-																
+
 																facturaBD.setEstadoFirma(procesoCompleto.equals(Boolean.TRUE) ? Constantes.FACTURA_ESTADO_FIRMA_COMPLETO : Constantes.HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS);
 																if (factura.getNoAplicarEnCaja() == null) {
 																	factura.setAnuladaCompleta(Constantes.SI_APLICA_EN_CAJA);
@@ -1711,13 +1697,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 															}
 														}
-													}else {
+													} else {
 														Factura facturaBD = facturaBo.findById(factura.getId());
 														if (facturaBD != null) {
 															facturaBD.setEstadoFirma(Constantes.HACIENDA_ESTADO_FIRMARDO_XML_SIN_CABYS);
 															facturaBo.modificar(facturaBD);
 														}
-														
+
 													}
 
 												}
@@ -1733,7 +1719,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								log.info("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 							}
 						}
-					
 
 					}
 				}
@@ -1745,7 +1730,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Fin  proceso de firmado - {}", formatter.format(LocalDateTime.now()));
 		}
 	}
@@ -1850,13 +1835,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 							}
 						}
-						
 
 					} catch (Exception e) {
 						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
 						compraSimplificadaBo.modificar(compraSimplificada);
 						log.error("** Error1 proceso de firmado compra simplificada: " + e.getMessage() + " fecha " + new Date());
-					}finally {
+					} finally {
 						log.info("Finaliza proceso de firmado compra Simplificado - {}", formatter.format(LocalDateTime.now()));
 					}
 
@@ -1875,7 +1859,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/20 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -1936,7 +1920,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 
 							}
-							
 
 						} catch (Exception e) {
 							recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
@@ -1954,7 +1937,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info(" Fin el proceso de firmado compras- {}", formatter.format(LocalDateTime.now()));
 		}
 	}
@@ -2021,7 +2004,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 					}
 				}
-				
+
 			}
 
 		} catch (Exception e) {
@@ -2029,7 +2012,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			semaforoBo.modificar(semaforoMigracion);
 			log.error("** Error2  guardado de xmls: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		}finally {
+		} finally {
 			log.info("Finalizando la migracion de archivos {}", new Date());
 		}
 

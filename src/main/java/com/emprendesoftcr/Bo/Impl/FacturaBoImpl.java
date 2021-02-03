@@ -203,7 +203,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
 			}
-			
+
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
@@ -830,7 +830,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
-			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13  ? articulo.getCodigoCabys() : Constantes.EMPTY);
+			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
@@ -861,17 +861,13 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoImpuesto()));
 
-			//detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
+			// detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			if( detalle.getPorcentajeExoneracion() != null &&  detalle.getImpuesto() != null &&  detalle.getPorcentajeExoneracion().equals(detalle.getImpuesto())) {
+			if (detalle.getPorcentajeExoneracion() != null && detalle.getImpuesto() != null && detalle.getPorcentajeExoneracion().equals(detalle.getImpuesto())) {
 				detalle.setMontoExoneracion(detalle.getMontoImpuesto());
-			}else {
-				detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(),detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal(),detalle.getMontoImpuesto()));				
+			} else {
+				detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(), detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal(), detalle.getMontoImpuesto()));
 			}
-			
-			
-			
-			
 
 			detalle.setImpuestoNeto(Utils.getImpuestoNetoTotal(detalle.getMontoImpuesto(), detalle.getMontoExoneracion()));
 			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
@@ -1089,51 +1085,36 @@ public class FacturaBoImpl implements FacturaBo {
 	@Override
 	public ArrayList<String> listaCorreosAsociadosFactura(Factura factura) {
 		ArrayList<String> listaCorreos = new ArrayList<String>();
-		if (factura.getCorreoAlternativo() != null) {
-			if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
-				listaCorreos.add(factura.getCorreoAlternativo());
-			}
+		if (factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) || factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
+			return listaCorreos;
 		}
-		if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
-			if (factura.getCliente().getCorreoElectronico() != null) {
-				if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico());
-				}
-			}
-			if (factura.getCliente().getCorreoElectronico1() != null) {
-				if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico1());
-				}
-			}
-			if (factura.getCliente().getCorreoElectronico2() != null) {
-				if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico2());
-				}
-
-			}
-			if (factura.getCliente().getCorreoElectronico3() != null) {
-				if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico3());
-				}
-			}
-			String correo = Constantes.EMPTY;
-
-			if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-				if (factura.getEmpresa().getCorreoCredito() != null) {
-					if (!factura.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
-						correo = factura.getEmpresa().getCorreoCredito();
-					}
-				}
-			}
-			if (correo.equals(Constantes.EMPTY)) {
-				listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-			} else {
-				listaCorreos.add(correo);
-			}
-		}
+		listaCorreos = agregarCorreos(factura.getCliente().getCorreoElectronico(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getCorreoAlternativo(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getCliente().getCorreoElectronico1(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getCliente().getCorreoElectronico2(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getCliente().getCorreoElectronico3(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getEmpresa().getCorreoCredito(), listaCorreos);
+		listaCorreos = agregarCorreos(factura.getEmpresa().getCorreoElectronico(), listaCorreos);
 
 		return listaCorreos;
 
+	}
+
+	/**
+	 * Es true existe false no existe
+	 * @param correoNuevo
+	 * @param listaCorreos
+	 * @return
+	 */
+
+	private ArrayList<String> agregarCorreos(String correoNuevo, ArrayList<String> listaCorreos) {
+		String correo = correoNuevo != null && !correoNuevo.equals(Constantes.EMPTY) ? correoNuevo : Constantes.EMPTY;
+
+		Boolean existe = listaCorreos.stream().anyMatch(s -> s.startsWith(correo.trim()));
+		if (existe.equals(Boolean.FALSE)) {
+			listaCorreos.add(correoNuevo);
+		}
+		return listaCorreos;
 	}
 
 	@Override
