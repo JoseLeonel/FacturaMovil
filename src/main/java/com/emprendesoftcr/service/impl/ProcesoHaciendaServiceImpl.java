@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.mail.util.ByteArrayDataSource;
 
@@ -367,7 +366,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public void envioFacturasCredito() {
 		try {
@@ -436,7 +435,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-//	@Scheduled(cron = "0 0/50 22 * 6 ?")
+	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
@@ -552,7 +551,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -677,7 +676,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 		return openIDConnectHacienda;
 	}
-
 	@Scheduled(cron = "0 0/59 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
@@ -734,13 +732,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
-					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+			//		 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
@@ -749,7 +747,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
-					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -886,7 +884,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					@SuppressWarnings("rawtypes")
 					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, hacienda.getClave(), openIDConnectHacienda);
 					String body = (String) response.get(POST_RESPONSE);
-
+			//		log.info("Body---------------->" + body);
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 						String status = getHaciendaStatus(respuestaHacienda.indEstado());
@@ -1191,7 +1189,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
-		Boolean resultado = Boolean.FALSE;
 		try {
 			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS);
 			if (semaforoEnvioCorreo != null) {
@@ -1231,7 +1228,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									if (factura != null) {
 										listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
 									}
-									resultado = listaCorreos != null && !listaCorreos.isEmpty() ? enviarCorreos(factura, haciendaBD, listaCorreos) : Boolean.TRUE;
+								Boolean	resultado = listaCorreos != null && !listaCorreos.isEmpty() ? enviarCorreos(factura, haciendaBD, listaCorreos) : Boolean.TRUE;
 
 								}
 								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
@@ -1564,18 +1561,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
 			Semaforo semaforoFirmado = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIO);
 			if (semaforoFirmado != null) {
+				procesoFirmadoComprasSimplificadas();
 				Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 
 				if (listaHacienda != null) {
 					if (!listaHacienda.isEmpty()) {
 
-						procesoFirmadoComprasSimplificadas();
+						
 
 						for (Factura factura : listaHacienda) {
 							try {
@@ -1859,7 +1857,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/11 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -1942,7 +1940,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-//	@Scheduled(cron = "0 0/01 * * * ?")
+	@Scheduled(cron = "0 0/05 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);
@@ -1969,13 +1967,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 						if (facturaMigrada != null) {
 							nombreDocumento = getTipoDocMigrado(haciendaMigrada.getTipoDoc());
-							pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + haciendaMigrada.getConsecutivo(), haciendaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
-							pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + haciendaMigrada.getConsecutivo(), haciendaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+							pathXMLDocumento = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlFactura, nombreDocumento + haciendaMigrada.getClave(), haciendaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
+							pathMigracionRespuesta = Utils.agregarXMLServidor(semaforoMigracion.getDireccionRespaldo(), xmlRespuesta, nombreDocumento + "resp_" + haciendaMigrada.getClave(), haciendaMigrada.getEmpresa().getCedula(), haciendaMigrada.getFechaEmisor());
 //  						haciendaMigrada.setPathMigracion(pathXMLDocumento);
-
 							contador++;
 							contador1++;
-
 							if (contador1 >= 1000) {
 								log.info("Direccion: " + pathXMLDocumento);
 								log.info("Cantidad Leida: " + contador);

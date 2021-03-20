@@ -463,6 +463,7 @@ public class Constantes {
 	public static final String					DATE_FORMAT2																									= "dd/MM/yyyy";
 	public static final String					DATE_FORMAT3																									= "dd-MM-yyyy";
 	public static final String					DATE_FORMAT5																									= "yyyy-MM-dd 00:00:00";
+	public static final String					DATE_FORMAT8																									= "yyyy-MM-dd 23:59:59";
 	public static final String					DATE_FORMAT6																									= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																									= "yyyyMMdd";
 	public static final String					DATE_FORMAT7																									= "yyyy-MM-dd";
@@ -514,6 +515,7 @@ public class Constantes {
 	
 	public static final Integer					DETALLE_APLICADO_NO															= 1;
 	public static final Integer					DETALLE_APLICADO_SI															= 2;
+	public static final Integer					DETALLE_APLICADO_ANULADA															= 3;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";

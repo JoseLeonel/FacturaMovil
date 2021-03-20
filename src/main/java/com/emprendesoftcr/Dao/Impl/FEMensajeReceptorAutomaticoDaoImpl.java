@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.FEMensajeReceptorAutomaticoDao;
 import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
-import com.emprendesoftcr.modelo.Factura;
 
 @Repository("fEMensajeReceptorAutomaticoDao")
 public class FEMensajeReceptorAutomaticoDaoImpl implements FEMensajeReceptorAutomaticoDao {

@@ -822,7 +822,7 @@ public class CompraBoImpl implements CompraBo {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" + 
-		"   inner join proveedores p on p.id = c.proveedor_id\n" + "   inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave and fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
+		"   inner join proveedores p on p.id = c.proveedor_id\n" + " inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave and fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -834,7 +834,7 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	@Transactional
 	@Override
-	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv,Double cant_inv) throws Exception {
+	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv,Double cant_inv,Usuario usuarioIngresoInventario) throws Exception {
 		Integer resultado = 0;
 		try {
 			// 1. Obtener el detalle de la compra
@@ -847,6 +847,7 @@ public class CompraBoImpl implements CompraBo {
 				//detalleCompra.setCosto(costo_inv);
 				detalleCompra.setCostoIventario(costo_inv);
 				detalleCompra.setCantidadIventario(cant_inv);
+				detalleCompra.setUpdated_at(new Date());
 				detalleCompraDao.modificar(detalleCompra);
 				if (compraBD != null) {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
@@ -880,6 +881,39 @@ public class CompraBoImpl implements CompraBo {
 			Integer contador = detalleCompraDao.ContarDetalleCompraSinIngresar(compraBD.getId());
 			if (contador != null && contador.equals(Constantes.ZEROS)) {
 				compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
+				compraBD.setUpdated_at(new Date());
+				compraBD.setUsuarioIngresoInventario(usuarioIngresoInventario);
+				compraDao.modificar(compraBD);
+
+			}
+			resultado = 1;
+
+		} catch (Exception e) {
+			log.info("** Error  actualizar linea de detalle: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return resultado;
+
+	
+
+	}
+	
+	@Transactional
+	@Override
+	public Integer anularCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra,Usuario usuarioIngresoInventario) throws Exception {
+		Integer resultado = 0;
+		try {
+			// 1. Obtener el detalle de la compra
+			Compra compraBD = compraDao.findById(idCompra);
+			DetalleCompra detalleCompra = detalleCompraDao.findById(idDetalleCompra);
+			detalleCompra.setEstado(Constantes.DETALLE_APLICADO_ANULADA);
+			detalleCompra.setUpdated_at(new Date());
+			detalleCompraDao.modificar(detalleCompra);
+			Integer contador = detalleCompraDao.ContarDetalleCompraSinIngresar(compraBD.getId());
+			if (contador != null && contador.equals(Constantes.ZEROS)) {
+				compraBD.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
+				compraBD.setUpdated_at(new Date());
+				compraBD.setUsuarioIngresoInventario(usuarioIngresoInventario);
 				compraDao.modificar(compraBD);
 
 			}

@@ -322,7 +322,7 @@ public class HaciendasController {
 		RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 		try {
 			long id = Thread.currentThread().getId();
-	//		System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
+			System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 			String body = httpEntity.getBody();
 			// body= FacturaElectronicaUtils.procesarTexto(body);

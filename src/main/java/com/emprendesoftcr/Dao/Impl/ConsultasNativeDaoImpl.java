@@ -16,6 +16,7 @@ import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
@@ -639,5 +640,15 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ConsultaUtilidadNative>) query.getResultList();
 	}
 
+	
+	@Override
+	public Collection<CompraIVA> findBySumComprasIVAResumen(Empresa empresa, String fechaInicial, String fechaFinal) {
+		String queryStr = getQueryBase(CompraIVA.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
+		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
+		Query query = entityManager.createNativeQuery(queryStr, CompraIVA.class);
+		return (Collection<CompraIVA>) query.getResultList();
+	}
 	
 }

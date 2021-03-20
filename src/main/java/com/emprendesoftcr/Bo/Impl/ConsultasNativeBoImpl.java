@@ -14,6 +14,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
@@ -206,6 +207,11 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	public Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial, Integer idCategoria, String codigo,String tipoDoc,String numeroFactura, Integer idUsuario) {
 
 		return consultasNativeDao.findByUtilidad(empresa, cliente, estado, fechaInicial, fechaFinal, actividadComercial, idCategoria, codigo,tipoDoc,numeroFactura,idUsuario);
+	}
+
+	@Override
+	public Collection<CompraIVA> findBySumComprasIVAResumen(Empresa empresa, String fechaInicial, String fechaFinal) {
+		return consultasNativeDao.findBySumComprasIVAResumen(empresa, fechaInicial, fechaFinal);
 	}
 
 	

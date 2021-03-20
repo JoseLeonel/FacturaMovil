@@ -9,6 +9,7 @@ import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 
 public interface DetalleCompraBo {
 	
@@ -27,5 +28,7 @@ public interface DetalleCompraBo {
 	
 	DetalleCompra findById(Long idDetalleCompra);
 	Integer ContarDetalleCompraSinIngresar(Long idCompra);
+	ByteArrayInputStream createExcelDetalleCompraResumen(Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa)throws Exception;;
 
+	
 }

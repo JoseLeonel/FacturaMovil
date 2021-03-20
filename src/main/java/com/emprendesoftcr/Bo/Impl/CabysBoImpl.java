@@ -19,7 +19,6 @@ import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.CabysHaciendaCommand;
-import com.emprendesoftcr.web.command.ListCabysCodigo;
 import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.google.gson.Gson;
 

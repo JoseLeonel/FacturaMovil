@@ -2,29 +2,51 @@
 
 			
 
-					<div class="row" >
+					<div class="row"  style="overflow-y: scroll;height: 260px;">
 						<div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 ">
 							<div class="box">
-								<div class="box-body">
+								<div class="box-body" >
 									<div class="planel-body">
 										<div class="row">
                                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                                 <span>Compras pendiente de ingresar al inventario</span>
                                             </div>
-											<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-												<table id="tableListar"
+											<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+												<table id="tableListar" 
 													class="display table responsive table-hover nowrap table-condensed tableListar ">
 													<thead>
 														<tr>
-   															<th style="width: 4%;" class="table-header">Id </th>
-															<th style="width: 4%;" class="table-header">Fecha Emision </th>
+   															<th style="width: 4%;" class="table-header">Fecha Emision </th>
 															<th style="width: 4%;" class="table-header">Consecutivo </th>
 															<th style="width: 4%;" class="table-header">Proveedor </th>
-															<th style="width: 4%;" class="table-header">Impuesto </th>
 															<th style="width: 4%;" class="table-header">Total </th>
 															<th style="width: 4%;" class="table-header">{$.i18n.prop("listado.acciones")} </th>
 														</tr>
 													</thead>
+                                                     <tbody>
+                                                           <tr each={compras.aaData}>
+                                                                 <td  style="width:20%;">
+                                                                    <span>{consecutivo}</span>
+                                                                </td>
+                                                                 <td  style="width:20%;">
+                                                                    <span>{fechaEmisionSTR}</span>
+                                                                </td>
+                                                                 <td  style="width:20%;">
+                                                                    <span>{nombre_completo}</span>
+                                                                </td>
+                                                                 <td  style="width:20%;">
+                                                                    <span>{totalCompraSTR}</span>
+                                                                </td>
+                                                                <td  style="width:20%;">
+                                                                   <div class = "botoneras">
+                                                                     <div onclick={__MostrarDetalle} class="botonCompra"> <span>Ver detalles</span></div>
+                                                                     <div onclick={__MostrarPDF} class="botonCompra"> PDF</div>
+                                                                    
+                                                                    <div>
+                                                                </td>
+
+                                                            </tr>    
+                                                     </tbody>      
 												</table>
 											</div>
 										</div>
@@ -38,12 +60,18 @@
 				<!-- Fin del Listado -->
                
 
-    <div class="box" show = {mostrarDetalles}>
+
+
+
+
+
+    <div class="box" show = {mostrarDetalles }>
 	      <div class = "box-body">
-           <div class="row">
+           <div class="row" >
                     <div class= "col-md-12 col-sx-12 col-sm-12 ol-lg-12">
 		        <span id="tituloCompra">Factura Compra #: {consecutivo}</span>
-				<table class="table table-striped">
+                <div style="overflow: scroll;height: 500px;">
+				<table class="table table-striped" style="width:100%">
                         <thead>
                         <tr>
                             <th style="width:4%;"><div class="tituloFormat">Num.linea </div></th>
@@ -64,7 +92,8 @@
                         <tbody>
                         <tr each={detail}>
                             <td  style="width:6%;">
-                                <span>{numero_linea}</span>
+                                <button onclick={_AnularAlInventario} class="btn btn-danger btn-xs btn-block" id="{numero_linea}" name="{numero_linea}">{numero_linea}</button>
+                                
                             </td>
 
                             <td  style="width:6%;">
@@ -107,7 +136,8 @@
                             <td>
                         </tr>
                         </tbody>
-                    </table>  
+                    </table>
+                    </div>
 		  </div>
           </div>
           </div>
@@ -136,7 +166,7 @@
                         </form>    
                         <br>      
 
-                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" style="width:100%">
                             <thead>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
                                 <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -168,6 +198,24 @@
 <!--fin del modal-->
 
 <style type="text/css"  >
+.botoneras{
+    display:flex;
+
+}
+.botonCompra{
+        cursor: pointer;
+    background-color: #3c8dbc!important;
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 14px !important;
+    flex: 1;
+    padding-top: 5px;
+    margin-right: 5px;
+    height: 32px;
+    text-align: center;
+        margin-top: 5px;
+}
 .botonAplicarInventario{
     background-color: #6dca42 !important;
     color: white !important;
@@ -218,7 +266,6 @@
 
 		//Se cargan al montar el tag
 		self.on('mount',function(){
-			__InformacionDataTableCuentas(); 
 			listadoRecepcionCompras();
             __agregarArticulos()
          
@@ -300,6 +347,62 @@ function actualizarDetalleAlInventario(){
             mensajeErrorServidor(xhr, status);
         }
     });
+
+}
+
+_AnularAlInventario(e){
+    self.detalleCompra = e.item;
+    self.update()
+     swal({
+           title: '',
+           text: "Desea Anular el ingresarlo al inventario?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            //Ajax__inicializarTabla();
+            if(isConfirm){
+
+                   anularDetalle(function(resultado){
+                       console.log(resultado)
+                       
+                   })
+            }
+        })    
+}
+
+
+function anularDetalle(callback){
+    
+   var parametros = {
+        idDetalleCompra:self.detalleCompra.id,
+        idCompra:self.detalleCompra.idCompra,
+   }
+    $.ajax({
+        url: 'anularDetalleCompra.do',
+        datatype: "json",
+        method:"GET",
+        data :parametros,
+        success: function (result) {
+            if (result.status != 200) {
+                if (result.message != null && result.message.length > 0) {
+                     mensajeAlertErrorOConfirmacion('error',result.message)
+                }
+            } else {
+                __DeleteArticuloIngresadoInventario()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+   callback("Resultado exitoso")
 
 }
 
@@ -571,7 +674,18 @@ function listadoRecepcionCompras() {
     self.compras = {aaData:[]}
     self.detalleCompras = {aaData:[]}
     self.update()
-    __InicializarTabla('.tableListar')  
+
+    cargarComprasBackEnd(function(resultado){
+
+        console.log(resultado)
+
+
+    })
+}
+
+function cargarComprasBackEnd(callback){
+    self.compras = {aaData:[]}
+    self.update();
     $.ajax({
         url: 'ListarComprasSinIngresarInventarioAjax.do',
         datatype: "json",
@@ -580,119 +694,45 @@ function listadoRecepcionCompras() {
             console.log(result);
             if (result.aaData.length > 0) {
                 console.log(result)
+                self.compras = {aaData:[]}
                 self.compras.aaData = result.aaData
-                __cargarTablaCompras()
-            }else{
-				agregarInputsCombos()
-				ActivarEventoFiltro(".tableListar")
-			}
+                self.update()
+            }
         }
     });
+    callback("exitosa la consulta")
+
 }
 
-/**
-Carga Tablas de compras
-**/
-function __cargarTablaCompras() {
-    __InicializarTabla('.tableListar')  
-    $("#tableListar").dataTable().fnClearTable();
-    __InformacionDataTableCuentas();
-    $('#tableListar').DataTable().destroy();
-    $("#tableListar").DataTable({
-        destroy: true,
-        "aLengthMenu": [
-            [5, 10, 15, 25, -1],
-            [5, 10, 15, 25, "All"]
-        ],
-        "language": idioma_espanol,
-        "sDom": 'lfrtip',
-        "order": [],
-        "bPaginate": true,
-        'responsive': true,
-        "bAutoWidth": true,
-        "lengthChange": true,
-        "columns": self.formato_tabla ,
-    })
-    $("#tableListar").dataTable().fnAddData(self.compras.aaData);
 
-	__MostrarPDF()
-    __MostrarDetalle()
-	
-}
-/**
- * Formato del listado
- */
-function __InformacionDataTableCuentas(){
-	self.formato_tabla = [
-		{ 'data': 'id', "name": "id", "title": "#id", "autoWidth": true },
-		{ 'data': 'consecutivo', "name": "consecutivo", "title": "#Consecutivo", "autoWidth": true },
-		{ 'data': 'fechaEmisionSTR', "name": "fechaEmisionSTR", "title": "Fecha Emision", "autoWidth": true },
-		{ 'data': 'nombre_completo', "name": "nombre_completo", "title": "#Proveedor", "autoWidth": true },
-		{ 'data': 'totalImpuestoSTR', "name": "totalImpuestoSTR", "title": "IVA", "autoWidth": true },
-		{ 'data': 'totalCompraSTR', "name": "totalCompraSTR", "title": "Total", "autoWidth": true },
-		{
-			'data': 'id',
-			"name": "id",
-			"bSortable": false,
-			"bSearchable": false,
-			"autoWidth": true,
-			"render": function(id, type, row) {
-				return __Opciones(id, type, row);
-			}
-		}
-	];
-	self.update()
-}
 
-/**
- * Opciones listado de los clientes
- */
-function __Opciones(id, type, row) {
-    let menu = '<div class="dropdown">'
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
-    menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Mostrar PDF" class="  btnPDF" >Mostrar PDF</a></li>'
-    menu += '<li><a href="#"  title="Aceptar al inventario" class="  btnAceptar" >Ingresar Inventario</a></li>'
-    menu += "</ul></div>"
-    return menu;
-}
 
-function __MostrarPDF() {
-    $('.tableListar').on('click', '.btnPDF', function(e) {
-        var table = $('#tableListar').DataTable();
-        if (table.row(this).child.isShown()) {
-            //cuando el datatable esta en modo responsive
-            var data = table.row(this).data();
-        } else {
-            var data = table.row($(this).parents("tr")).data();
-        }
+
+   
+
+
+__MostrarPDF(e) {
+     var data = e.item;
       	var parametros = {
             direccion: "bajarArchivo.do?filename=" + data.factura_pdf,
             stylemodal: "modal-xl"
         }
         riot.mount('view-pdf', { datos: parametros });
-
-    });
 }
 
-function __MostrarDetalle() {
-    $('.tableListar').on('click', '.btnAceptar', function(e) {
-        var table = $('#tableListar').DataTable();
-        if (table.row(this).child.isShown()) {
-            //cuando el datatable esta en modo responsive
-            var data = table.row(this).data();
-        } else {
-            var data = table.row($(this).parents("tr")).data();
-        }
+ __MostrarDetalle(e) {
+     var data = e.item;
         self.consecutivo = data.consecutivo;
         self.detail = []
        self.detalleCompra = {}
         self.update()
       listadoDetallesCompras(data.id,function(resultado){
           console.log(resultado)
+          if(self.mostrarDetalles == false){
+             listadoRecepcionCompras()
+           }
+
       })
-    });
 }
 
 /**
@@ -715,20 +755,21 @@ function listadoDetallesCompras(idCompra,callback) {
         success: function(result) {
             console.log(result);
             if (result.aaData.length > 0) {
+                self.detail = []
+                self.detalleCompra = {}
+                self.mostrarDetalles = false;
+                self.detalleCompras = {aaData:[]}
+                self.update()
                 console.log(result)
                 $.each(result.aaData, function( index, modeloTabla ) {
                     self.detail.push(modeloTabla);
-                    
                     self.mostrarDetalles = true;
                 })
                 self.detalleCompras.aaData = result.aaData
                 self.update()
-               
-               
+            }else{
+                listadoRecepcionCompras()
             }
-             if(self.mostrarDetalles == false){
-                    listadoRecepcionCompras()
-                }
                 callback("Consulta de detalles de la compra")
         }
     });

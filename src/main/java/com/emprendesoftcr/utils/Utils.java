@@ -342,7 +342,7 @@ public final class Utils {
 		String mes = Utils.getDirectorioMes(fecha);
 		String anno = Utils.getDirectorioAnno(fecha);
 
-		String direccion = servidor + cedulaEmpresa + "/" + anno + "/" + mes;
+		String direccion = servidor+"/" + cedulaEmpresa + "/" + anno + "/" + mes;
 		// log.info("directorio: {}",direccion);
 		File directorio = new File(direccion);
 		if (directorio.exists()) {
@@ -2579,7 +2579,7 @@ public final class Utils {
 	}
 
 	public static Date dateToDate(Date fecha, boolean fechaMax) {
-		Calendar calendar = new GregorianCalendar();
+ 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(fecha);
 		if (fechaMax) {
 			calendar.set(Calendar.HOUR_OF_DAY, 23);

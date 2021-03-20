@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.emprendesoftcr.Bo.CabysBo;
-import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.modelo.Cabys;
-import com.emprendesoftcr.modelo.Categoria;
 
 @Component
 public class CabysPropertyEditor extends PropertyEditorSupport {

@@ -339,7 +339,8 @@ function agregarInputsCombos_Articulo_Mas_Vendido(){
     $('.tableListarArticulosMasVendidos tfoot th').each( function (e) {
         var title = $('.tableListarArticulosMasVendidos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	  var name = '<input id = "filtroCampos' + e + '"';
+            $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
     })
 } 
 
@@ -406,7 +407,8 @@ function agregarInputsCombos_Minimo_Stock(){
     $('.tableListarDebajoMinimo tfoot th').each( function (e) {
         var title = $('.tableListarDebajoMinimo thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	        var name = '<input id = "filtroCampos' + e + '"';
+            $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
     })
 } 
 

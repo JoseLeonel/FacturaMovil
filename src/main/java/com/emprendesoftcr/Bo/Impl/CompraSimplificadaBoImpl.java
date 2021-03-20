@@ -314,7 +314,9 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			subTotal = subTotal + detalleCompraSimplificada.getSubTotal();
 			detalleCompraSimplificada.setNumeroLinea(numeroLinea);
 			numeroLinea += 1;
+			detalleCompraSimplificada.setCodCabys(detalleCompraSimplificadaCommand.getCodCabys());
 			detalleCompraSimplificada.setCompraSimplificada(compraSimplificada);
+			
 			detalleCompraSimplificadaDao.agregar(detalleCompraSimplificada);
 
 		}

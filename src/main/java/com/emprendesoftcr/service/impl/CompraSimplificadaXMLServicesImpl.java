@@ -284,13 +284,18 @@ public class CompraSimplificadaXMLServicesImpl implements CompraSimplificadaXMLS
 						unidadMedida = detalle.getUnidadMedida();
 					}
 				}
+		  	
+
+				String codigoCabys = detalle.getCodCabys() != null? detalle.getCodCabys():"2399999009900";
 				lineas += "<LineaDetalle>" 
 				           + "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" 
-						       + "<CodigoComercial>" + "<Tipo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoCodigo, 2)) + "</Tipo>" 
-				           + "<Codigo>" + FacturaElectronicaUtils.procesarTexto(detalle.getCodigo()) + "</Codigo>" 
+				          		 +"<Codigo>" + codigoCabys + "</Codigo>" 
+						       + "<CodigoComercial>" + 
+				          		 "<Tipo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoCodigo, 2)) + "</Tipo>" 
+				          		 + "<Codigo>" + FacturaElectronicaUtils.procesarTexto(detalle.getCodigo()) + "</Codigo>" 
 						       + "</CodigoComercial>" 
-				           				+ "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato3Decimales(detalle.getCantidad()) + "</Cantidad>" 
-						              + "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
+				           		+ "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato3Decimales(detalle.getCantidad()) + "</Cantidad>" 
+						          + "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
 						       "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" 
 				           + "<PrecioUnitario>" + FacturaElectronicaUtils.truncateDecimal(detalle.getPrecioUnitario(), 5) + "</PrecioUnitario>" 
 						       + "<MontoTotal>" + FacturaElectronicaUtils.truncateDecimal(detalle.getMontoTotal(), 5) + "</MontoTotal>" 

@@ -48,6 +48,7 @@ public class DetalleCompraSimplificadaCommand {
 	private String	tipoDoc;
 
 	private String	nombreUsuario;
+	private String codCabys;
 
 
 	private CompraSimplificada	compraSimplificada;
@@ -67,6 +68,7 @@ public class DetalleCompraSimplificadaCommand {
 	public DetalleCompraSimplificadaCommand(DetalleCompraSimplificada detalleCompraSimplificada) {
 
 		this.id = detalleCompraSimplificada.getId();
+		this.codCabys = detalleCompraSimplificada.getCodCabys();
 		this.numeroLinea = detalleCompraSimplificada.getNumeroLinea();
 		this.precioUnitario = detalleCompraSimplificada.getPrecioUnitario() == null?Constantes.ZEROS_DOUBLE:detalleCompraSimplificada.getPrecioUnitario();
 		this.cantidad = detalleCompraSimplificada.getCantidad() != null?detalleCompraSimplificada.getCantidad():Constantes.ZEROS_DOUBLE;
@@ -89,7 +91,7 @@ public class DetalleCompraSimplificadaCommand {
 		this.nombreUsuario = detalleCompraSimplificada.getCompraSimplificada().getUsuarioCreacion().getNombreUsuario() !=null?detalleCompraSimplificada.getCompraSimplificada().getUsuarioCreacion().getNombreUsuario():Constantes.EMPTY;
 		this.compraSimplificada = detalleCompraSimplificada.getCompraSimplificada();
 		this.unidadMedida = Constantes.UNIDAD_MEDIDA;
-		
+		this.codCabys = detalleCompraSimplificada.getCodCabys();
 	}
 
 	public Long getId() {
@@ -315,6 +317,16 @@ public class DetalleCompraSimplificadaCommand {
 	
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
+	}
+
+	
+	public String getCodCabys() {
+		return codCabys;
+	}
+
+	
+	public void setCodCabys(String codCabys) {
+		this.codCabys = codCabys;
 	}
 
 	

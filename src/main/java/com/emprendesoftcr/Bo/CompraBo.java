@@ -49,6 +49,8 @@ public interface CompraBo {
 
 	public List<Map<String, Object>>  comprasSinIngresarInventario(Empresa empresa);
 	
-	Integer  actualizarCompraAutomaticaPorDetallle(Long idCompra , Long idDetalleCompra,Double precioPublico , Double ganancia, String codigo,Empresa empresa,String codigoProveedor,Double costo_inv,Double cant_inv)throws Exception;;
+	Integer  actualizarCompraAutomaticaPorDetallle(Long idCompra , Long idDetalleCompra,Double precioPublico , Double ganancia, String codigo,Empresa empresa,String codigoProveedor,Double costo_inv,Double cant_inv,Usuario usuarioIngresoInventario)throws Exception;;
+	
+	Integer anularCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra,Usuario usuarioIngresoInventario) throws Exception;
 	
 }

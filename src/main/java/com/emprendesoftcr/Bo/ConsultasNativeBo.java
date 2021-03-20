@@ -7,6 +7,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
@@ -91,6 +92,6 @@ public interface ConsultasNativeBo {
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa, Mesa mesa);
 
 	Collection<ConsultaUtilidadNative> findByUtilidad(Empresa empresa, Cliente cliente, Integer estado, String inicio1, String fin1, String actividadComercial, Integer idCategoria, String codigo, String tipoDoc, String numeroFactura,Integer idUsuario);
-	
+	Collection<CompraIVA> findBySumComprasIVAResumen(Empresa empresa, String fechaInicial, String fechaFinal);
 	
 }

@@ -127,7 +127,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "id_factura")
 	private Long							numeroFactura;
-////////
+//////
 //	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
 //	private Integer						migradoADisco;
 //
@@ -166,11 +166,11 @@ public class Hacienda implements Serializable {
 //	public String getPathMigracionRespuesta() {
 //		return pathMigracionRespuesta;
 //	}
-//
+
 //	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
 //		this.pathMigracionRespuesta = pathMigracionRespuesta;
 //	}
-
+//
 	public Long getId() {
 		return id;
 	}

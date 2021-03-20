@@ -256,7 +256,9 @@ function agregarInputsCombos() {
         var title = $('.tableListar thead th').eq($(this).index()).text();
         //No se toma en cuenta la columna de las acctiones(botones)
         if ($(this).index() != 10) {
-            $(this).html('<input id = "filtroCampos" type="text" class="form-control"  placeholder="' + title + '" />');
+            var name = '<input id = "filtroCampos' + e + '"';
+            $(this).html(name + 'type="text" class="form-control"  placeholder="' + title + '" />');
+
         }
     })
 }

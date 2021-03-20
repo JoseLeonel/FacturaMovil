@@ -7,6 +7,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloByFechaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ArticuloMinimoNative;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
@@ -90,6 +91,9 @@ public interface ConsultasNativeDao {
 	Collection<ArticuloByFechaNative> findByInventario(Empresa empresa,String fechaInicial, String fechaFinal);
 	
 	Collection<ListarFacturaMesaNative> findByFacturaPorMesas(Empresa empresa,Mesa mesa);
+	
+	Collection<CompraIVA> findBySumComprasIVAResumen(Empresa empresa,String fechaInicial, String fechaFinal);
+	
 	
 	
 }

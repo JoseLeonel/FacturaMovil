@@ -102,6 +102,8 @@ public class DetalleCompraSimplificada implements Serializable {
 
 	@Column(name = "cod_tarifa", length = 2)
 	private String							codigoTarifa;
+	@Column(name = "cod_cbys")
+	private String							codCabys;
 
 	@ManyToOne
 	@JoinColumn(name = "comp_simpl_id")
@@ -401,4 +403,26 @@ public class DetalleCompraSimplificada implements Serializable {
 		this.baseImponible = baseImponible;
 	}
 
+
+
+
+
+
+	
+	public String getCodCabys() {
+		return codCabys;
+	}
+
+
+
+
+
+
+	
+	public void setCodCabys(String codCabys) {
+		this.codCabys = codCabys;
+	}
+
+	
+	
 }

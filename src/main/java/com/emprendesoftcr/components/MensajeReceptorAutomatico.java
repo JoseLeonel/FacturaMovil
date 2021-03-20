@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -102,7 +101,6 @@ public class MensajeReceptorAutomatico {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-//	@Scheduled(fixedDelay = 60000)
 	@Scheduled(cron = "0 0/04 * * * ?")
 	public void verifyEmails() {
 		String correoProblemas = Constantes.EMPTY;
@@ -115,7 +113,7 @@ public class MensajeReceptorAutomatico {
 			if(!lista.isEmpty() && lista != null) {
 				for (CorreoAutomatico correoAutomatico : lista) {
 					correoProblemas = correoAutomatico.getCorreoAceptacion();
-					log.info("Correo:  " + correoAutomatico.getCorreoAceptacion());
+					log.info("Correo----------------------->:  " + correoAutomatico.getCorreoAceptacion());
 					Store store = session.getStore("imaps");
 					store.connect(this.apiHost, correoAutomatico.getCorreoAceptacion(), correoAutomatico.getClave());
 					downloadEmailAttachments(store,correoAutomatico.getDirecionDirectorio(),correoAutomatico.getCorreoAceptacion());
@@ -134,7 +132,6 @@ public class MensajeReceptorAutomatico {
 	private void downloadEmailAttachments(Store store,String direccion,String correoCompras) throws ParserConfigurationException, SAXException, SQLException, ParseException {
 		
 		String saveDirectory = direccion + "mr-automatico";
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 		String emisorFactura = "";
 		String emisorTipoIdentificacion = "";
@@ -171,9 +168,10 @@ public class MensajeReceptorAutomatico {
 				Message message = arrayMessages[i];
 
 				Address[] fromAddress = message.getFrom();
-
+			//	log.info("fromAddress[0].toString()" + fromAddress[0].toString());
 				String from = fromAddress[0].toString();
-
+			//	log.info("fromAddress[0].toString() 1" + fromAddress[0].toString());
+				
 				Pattern pattern = Pattern.compile("<(.*?)>");
 				Matcher matcher = pattern.matcher(from);
 
@@ -192,7 +190,7 @@ public class MensajeReceptorAutomatico {
 				String attachFiles = "";
 
 				if (contentType.contains("multipart")) {
-
+				//	log.info("multipart");
 					// content may contain attachments
 					Multipart multiPart = (Multipart) message.getContent();
 					int numberOfParts = multiPart.getCount();
@@ -204,18 +202,36 @@ public class MensajeReceptorAutomatico {
 						if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
 
 							// this part is attachment
-							String fileName = prefijo + "sinmata" + this.getFileName(part).substring(this.getFileName(part).toString().lastIndexOf("."));
+						//	log.info("this.getFileName(part) :" + this.getFileName(part));
+						//	log.info("par) :" + part);
+							String fileNameSTR = this.getFileName(part);
+							if(!fileNameSTR.equals(Constantes.EMPTY)) {
+						//		log.info("xxxx :" + this.getFileName(part).substring(this.getFileName(part).toString().lastIndexOf(".")));
+								fileNameSTR = prefijo + "sinmata" + fileNameSTR.substring(fileNameSTR.toString().lastIndexOf("."));	
+							}
+							
+							
+					//		log.info("this.getFileName(part)1 : " + fileName);
+							String rutaAchivoGuardado = Constantes.EMPTY;
+							String rutaAchivoGuardado2 = Constantes.EMPTY;
 
-							String rutaAchivoGuardado = saveDirectory + File.separator + fileName;
-							String rutaAchivoGuardado2 = saveDirectory + File.separator;
+							int n = 0;
 
-							int n = fileName.lastIndexOf('.');
-							extension = fileName.substring(n + 1);
+							if( !fileNameSTR.equals(Constantes.EMPTY)) {
+								 rutaAchivoGuardado = saveDirectory + File.separator + fileNameSTR;
+								 rutaAchivoGuardado2 = saveDirectory + File.separator;
+
+								 n = fileNameSTR.lastIndexOf('.');
+						//		log.info("fileName.lastIndexOf('.') :" + n);
+								extension = fileNameSTR.substring(n + 1);
+								
+							}							
 
 							/**
 							 * Solo descargo los guardo los archivos si son XML o PDF
 							 */
 							if (extension.equalsIgnoreCase("xml") || extension.equalsIgnoreCase("pdf") || extension.equalsIgnoreCase("zip")) {
+
 								part.saveFile(rutaAchivoGuardado);
 								try {
 
@@ -231,9 +247,10 @@ public class MensajeReceptorAutomatico {
 											String nameFile = entry.getName();
 
 											int n2 = nameFile.lastIndexOf('.');
+											log.info("nameFile :" + nameFile != null?nameFile.toString():"error");
 											extension = nameFile.substring(n2 + 1);
 											if (extension.equalsIgnoreCase("xml")) {
-
+												//log.info("entro:" );
 												/**
 												 * Ruta donde se encuentra el XML para poder leerlo
 												 */
@@ -245,12 +262,15 @@ public class MensajeReceptorAutomatico {
 												if (extension.equalsIgnoreCase("pdf")) {
 													facturaPdfZip = facturaPdfZip + nameFile;
 												}
-
+										//		log.info("entro:1" );
 												claveFactura = getNameFieldXml(xPath, xml, "Clave");
-
+												log.info("-->Clave Factura: " + claveFactura);
 												consecutivoFactura = getNameFieldXml(xPath, xml, "NumeroConsecutivo");
 												condicionVenta = getNameFieldXml(xPath, xml, "CondicionVenta");
 												tipo_doc = Utils.obtenerTipoDocumentoConsecutivo(consecutivoFactura);
+												
+												log.info("-->Consecutivo: " + consecutivoFactura);
+
 
 												if (claveFactura.length() > 30) {
 
@@ -288,8 +308,12 @@ public class MensajeReceptorAutomatico {
 													try {
 														if (recepcionFactura == null) {
 															FEMensajeReceptorAutomatico mr = new FEMensajeReceptorAutomatico();
+															log.info("-->Correo Compra: " + correoCompras);
+															log.info("-->Emisor: " + emisorFactura);
 															mr.setCorreoCompras(correoCompras);
+															
 															mr.setClave(claveFactura);
+															
 															mr.setTipoDoc(tipo_doc);
 															mr.setConsecutivo(consecutivoFactura);
 															mr.setCondicionVenta(condicionVenta);
@@ -303,7 +327,7 @@ public class MensajeReceptorAutomatico {
 															mr.setReceptorTipoIdentificacion(receptorTipoIdentificacion);
 															mr.setReceptorIdentificacion(receptorIdentificacion);
 															mr.setFechaCreacion(new Date());
-															mr.setFacturaPdf(fileName);
+															mr.setFacturaPdf(fileNameSTR);
 															mr.setFacturaXml(facturaXmlZip);
 															mr.setMoneda(moneda);
 															mr.setTipoCambio(tipoCambio);
@@ -319,10 +343,10 @@ public class MensajeReceptorAutomatico {
 
 														log.info("Notifico a " + enviarA + " que ya la factura existe " + claveFactura + emisorFactura);
 
-														String empresaSaluda = "Soluciones Informáticas Mata";
-														String asunto = "Notificación del sistema de recepción automático - La Factura Electrónica generada por " + emisorFactura + ", ya fue recibida anteriormente.";
-														Date _fechaEmision_ = formato.parse(fechaEmision);
-
+//														String empresaSaluda = "Soluciones Informáticas Mata";
+//														String asunto = "Notificación del sistema de recepción automático - La Factura Electrónica generada por " + emisorFactura + ", ya fue recibida anteriormente.";
+//														Date _fechaEmision_ = formato.parse(fechaEmision);
+//
 														log.info("Se enviara una notificación a :" + enviarA);
 
 														// this.enviaNotificacionMR(claveFactura, emisorFactura, empresaSaluda, null, totalComprobante, enviarA, asunto);
@@ -391,7 +415,7 @@ public class MensajeReceptorAutomatico {
 											File file = new File(rutaAchivoGuardado);
 
 											// File (or directory) with new name
-											String nameFe = "fe" + fileName;
+											String nameFe = "fe" + fileNameSTR;
 
 											File file2 = new File(saveDirectory + File.separator + nameFe);
 
@@ -439,9 +463,9 @@ public class MensajeReceptorAutomatico {
 
 												log.info("Notifico a " + enviarA + " que ya la factura existe " + claveFactura + emisorFactura);
 
-												String empresaSaluda = "Soluciones Informáticas Emprendesoftcr";
-												String asunto = "Notificación del sistema de recepción automático - La Factura Electrónica generada por " + emisorFactura + ", ya fue recibida anteriormente.";
-												Date _fechaEmision_ = formato.parse(fechaEmision);
+//												String empresaSaluda = "Soluciones Informáticas Emprendesoftcr";
+//												String asunto = "Notificación del sistema de recepción automático - La Factura Electrónica generada por " + emisorFactura + ", ya fue recibida anteriormente.";
+//												Date _fechaEmision_ = formato.parse(fechaEmision);
 
 												log.info("Se enviara una notificación a :" + enviarA);
 
@@ -468,7 +492,7 @@ public class MensajeReceptorAutomatico {
 					 * Aquí termina el FROM
 					 */
 
-					if (attachFiles.length() > 1) {
+					if (attachFiles != null && attachFiles.length() > 1) {
 						attachFiles = attachFiles.substring(0, attachFiles.length() - 2);
 					}
 
@@ -598,6 +622,7 @@ public class MensajeReceptorAutomatico {
 
 			try {
 				fe = (NodeList) xPath.evaluate("/FacturaElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);
+			//	log.info("fe.item(0).getTextContent() " + fe.item(0).getTextContent());
 				j = fe.item(0).getTextContent();
 				log.info("FE _______________________________ " + j);
 			} catch (Exception e) {
@@ -606,6 +631,7 @@ public class MensajeReceptorAutomatico {
 
 			try {
 				nc = (NodeList) xPath.evaluate("/NotaCreditoElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);
+				//log.info("fe.item(0).getTextContent() 1" + fe.item(0).getTextContent());
 				j = nc.item(0).getTextContent();
 				log.info("NC _______________________________ " + j);
 			} catch (Exception e) {

@@ -88,7 +88,7 @@ public class ApiController {
 			try {
 				facturaXmlFinal = new String(Files.readAllBytes(Paths.get(filePath)));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				facturaXmlFinal = "";
 			}

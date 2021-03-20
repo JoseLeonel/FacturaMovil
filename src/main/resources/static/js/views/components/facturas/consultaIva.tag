@@ -983,12 +983,12 @@
 
 								/*----7----*/
 								if (modeloTabla.tipoImpuesto =='01') {
-									if(modeloTabla.codTarifa == '01'){
+									if(modeloTabla.codTarifa == '01' && modeloTabla.impuesto == 0){
 										self.totales.uno_iva_01.montoImpuestoUno01  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),2),2)
 										self.totales.uno_iva_01.montoVentaUno01     = formatoDecimales(redondeoDecimales(__valorNumerico(totalVentaSinImpuesto),2),2) 
 										tarifa_1                                   += totalVentaSinImpuesto
 									}
-									if(modeloTabla.codTarifa == '02'){
+									if(modeloTabla.codTarifa == '02' && modeloTabla.impuesto == 1){
 										self.totales.uno_iva_01.montoImpuestoUno02  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),2),2)
 										self.totales.uno_iva_01.montoVentaUno02     = formatoDecimales(redondeoDecimales(__valorNumerico(totalVentaSinImpuesto),2),2) 
 										tarifa_2                                      += totalVentaSinImpuesto
@@ -1018,7 +1018,7 @@
 										self.totales.uno_iva_01.montoVentaUno07        = formatoDecimales(redondeoDecimales(__valorNumerico(totalVentaSinImpuesto),2),2) 
 										tarifa_7                                       += totalVentaSinImpuesto
 									}
-									if(modeloTabla.codTarifa == '08'){
+									if(modeloTabla.codTarifa == '08' && modeloTabla.impuesto == 13){
 										self.totales.uno_iva_01.montoImpuestoUno08     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),2),2)
 										self.totales.uno_iva_01.montoVentaUno08        = formatoDecimales(redondeoDecimales(__valorNumerico(totalVentaSinImpuesto),2),2) 
 										tarifa_8                                       += totalVentaSinImpuesto

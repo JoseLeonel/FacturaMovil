@@ -147,7 +147,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 			recepcionFactura.setCondicionImpuesto(condicionImpuesto);
 			recepcionFactura.setCodigoActividad(codigoActividad);
 			recepcionFactura = getEncabezado(node, recepcionFactura);
-			recepcionFactura = obtenerEmisor(node, document, recepcionFactura);
+			recepcionFactura = obtenerEmisor(node, document, recepcionFactura,xPath);
 			recepcionFactura = obtenerReceptor(nombreXMLEtiqueta, xPath, node, document, recepcionFactura);
 			recepcionFactura.setVersion_doc("4.3");
 			recepcionFactura.setCreated_at(new Date());
@@ -243,37 +243,22 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 		return recepcionFactura;
 	}
 
-	private RecepcionFactura obtenerEmisor(Node node, Document document, RecepcionFactura recepcionFactura) {
+	private RecepcionFactura obtenerEmisor(Node node, Document document, RecepcionFactura recepcionFactura,XPath xPath) {
 		try {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element eElement = (Element) node;
-				Node node1 = eElement.getElementsByTagName("Nombre").item(0);
-				recepcionFactura.setEmisorNombre(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-				node1 = eElement.getElementsByTagName("NombreComercial").item(0);
-				recepcionFactura.setEmisorNombreComercial(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-				node1 = eElement.getElementsByTagName("CorreoElectronico").item(0);
-				recepcionFactura.setEmisorCorreo(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-
-				NodeList nListEmisor = document.getElementsByTagName("Identificacion");
-				if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
-					node1 = eElement.getElementsByTagName("Tipo").item(0);
-					recepcionFactura.setEmisorTipoCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElement.getElementsByTagName("Numero").item(0);
-					recepcionFactura.setEmisorCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					NodeList nListEmisorUbicacion = document.getElementsByTagName("Ubicacion");
-					Element eElementUbicacion = (Element) nListEmisorUbicacion.item(0);
-					node1 = eElementUbicacion.getElementsByTagName("Provincia").item(0);
-					recepcionFactura.setEmisorCodigoProvincia(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("Canton").item(0);
-					recepcionFactura.setEmisorCanton(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("Distrito").item(0);
-					recepcionFactura.setEmisorDistrito(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("OtrasSenas").item(0);
-					recepcionFactura.setEmisorOtraSena(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
+				recepcionFactura.setEmisorNombre(getNameFieldXml(xPath, document, "Emisor/Nombre"));
+				recepcionFactura.setEmisorNombreComercial( getNameFieldXml(xPath, document, "Emisor/NombreComercial"));
+				recepcionFactura.setEmisorCorreo(getNameFieldXml(xPath, document, "Emisor/CorreoElectronico"));
+				
+					recepcionFactura.setEmisorTipoCedula(getNameFieldXml(xPath, document, "Emisor/Identificacion/Tipo"));
+					recepcionFactura.setEmisorCedula(getNameFieldXml(xPath, document, "Emisor/Identificacion/Numero"));
+					recepcionFactura.setEmisorProvincia(getNameFieldXml(xPath, document, "Emisor/Ubicacion/Provincia"));
+					recepcionFactura.setEmisorCanton(getNameFieldXml(xPath, document, "Emisor/Ubicacion/Canton"));
+					recepcionFactura.setEmisorDistrito(getNameFieldXml(xPath, document, "Emisor/Ubicacion/Distrito"));
+					recepcionFactura.setEmisorOtraSena(getNameFieldXml(xPath, document, "Emisor/Ubicacion/OtrasSenas"));
 
 				}
 
-			}
 
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->obtenerEmisor :" + e.getMessage() + new Date()));
@@ -283,6 +268,42 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 		return recepcionFactura;
 	}
 
+	private String getNameFieldXml(XPath xPath, Document xml, String field) {
+		String j = "";
+		NodeList fe = null, nc = null;
+		try {
+
+			try {
+				fe = (NodeList) xPath.evaluate("/FacturaElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);
+			//	log.info("fe.item(0).getTextContent() " + fe.item(0).getTextContent());
+				j = fe.item(0).getTextContent();
+				log.info("FE _______________________________ " + j);
+			} catch (Exception e) {
+				// log.info("NO ES FE");
+			}
+
+			try {
+				nc = (NodeList) xPath.evaluate("/NotaCreditoElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);
+				//log.info("fe.item(0).getTextContent() 1" + fe.item(0).getTextContent());
+				j = nc.item(0).getTextContent();
+				log.info("NC _______________________________ " + j);
+			} catch (Exception e) {
+				// log.info("NO ES NC");
+			}
+			try {
+				nc = (NodeList) xPath.evaluate("/NotaDebitoElectronica/" + field, xml.getDocumentElement(), XPathConstants.NODESET);
+				//log.info("fe.item(0).getTextContent() 1" + fe.item(0).getTextContent());
+				j = nc.item(0).getTextContent();
+				log.info("ND _______________________________ " + j);
+			} catch (Exception e) {
+				// log.info("NO ES NC");
+			}
+
+		} catch (Exception e) {
+			j = "";
+		}
+		return j;
+	}
 	/**
 	 * @param node
 	 * @param document
@@ -293,33 +314,16 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 	private RecepcionFactura obtenerReceptor(String nombreXMLEtiqueta, XPath xPath, Node node, Document document, RecepcionFactura recepcionFactura) throws Exception {
 		try {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element eElement = (Element) node;
-				Node node1 = eElement.getElementsByTagName("Nombre").item(0);
-				recepcionFactura.setReceptorNombre(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-				node1 = eElement.getElementsByTagName("NombreComercial").item(0);
-				recepcionFactura.setReceptorNombreComercial(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-				node1 = eElement.getElementsByTagName("CorreoElectronico").item(0);
-				recepcionFactura.setReceptorCorreo(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
+				recepcionFactura.setReceptorNombre(getNameFieldXml(xPath, document, "Receptor/Nombre"));
+				recepcionFactura.setReceptorNombreComercial(getNameFieldXml(xPath, document, "Receptor/NombreComercial"));
+				recepcionFactura.setReceptorCorreo(getNameFieldXml(xPath, document, "Receptor/CorreoElectronico"));
+				recepcionFactura.setReceptorTipoCedula(getNameFieldXml(xPath, document, "Receptor/Identificacion/Tipo"));
+				recepcionFactura.setReceptorCedula(getNameFieldXml(xPath, document, "Receptor/Identificacion/Numero"));
+				recepcionFactura.setReceptorProvincia(getNameFieldXml(xPath, document, "Receptor/Ubicacion/Provincia"));
+				recepcionFactura.setReceptorCanton(getNameFieldXml(xPath, document, "Receptor/Ubicacion/Canton"));
+				recepcionFactura.setReceptorDistrito(getNameFieldXml(xPath, document, "Receptor/Ubicacion/Distrito"));
+				recepcionFactura.setReceptorOtraSena(getNameFieldXml(xPath, document, "Receptor/Ubicacion/OtrasSenas"));
 
-				// NodeList nListEmisor = document.getElementsByTagName("Emisor");
-				NodeList nListEmisor = (NodeList) xPath.evaluate("/" + nombreXMLEtiqueta + "/Emisor", document.getDocumentElement(), XPathConstants.NODESET);
-				if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
-					node1 = eElement.getElementsByTagName("Tipo").item(0);
-					recepcionFactura.setReceptorTipoCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElement.getElementsByTagName("Numero").item(0);
-					recepcionFactura.setReceptorCedula(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					NodeList nListEmisorUbicacion = document.getElementsByTagName("Ubicacion");
-					Element eElementUbicacion = (Element) nListEmisorUbicacion.item(0);
-					node1 = eElementUbicacion.getElementsByTagName("Provincia").item(0);
-					recepcionFactura.setReceptorProvincia(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("Canton").item(0);
-					recepcionFactura.setReceptorCanton(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("Distrito").item(0);
-					recepcionFactura.setReceptorDistrito(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-					node1 = eElementUbicacion.getElementsByTagName("OtrasSenas").item(0);
-					recepcionFactura.setReceptorOtraSena(node1 != null ? node1.getTextContent() : Constantes.EMPTY);
-
-				}
 
 			}
 		} catch (Exception e) {
@@ -482,7 +486,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 					recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 				}
-				node = eElement.getElementsByTagName("TotalServGravados").item(0);
+				node = eElement.getElementsByTagName("TotalServExentos").item(0);
 				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node != null ? node.getTextContent() : Constantes.EMPTY));
 				node = eElement.getElementsByTagName("TotalServExentos").item(0);
 				recepcionFactura.setFacturaTotalServExentos(Utils.stringToDouble(node != null ? node.getTextContent() : Constantes.EMPTY));
