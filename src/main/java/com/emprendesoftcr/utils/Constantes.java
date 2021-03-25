@@ -184,7 +184,7 @@ public class Constantes {
 
 	// 48 horas cada 5 minutos
 
-	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																	= 10;
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION																	= 05;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR															= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_ACTIVO																				= 1;
