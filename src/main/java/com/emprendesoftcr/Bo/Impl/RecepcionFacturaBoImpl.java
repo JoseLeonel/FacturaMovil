@@ -338,15 +338,14 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 		try {
 			// NodeList nListDetalleServicio = document.getElementsByTagName("DetalleServicio");
 
-			NodeList nListDetalleServicio = (NodeList) xPath.evaluate("/" + nombreXMLEtiqueta + "/DetalleServicio/LineaDetalle", document.getDocumentElement(), XPathConstants.NODESET);
+//			NodeList nListDetalleServicio = (NodeList) xPath.evaluate("/" + nombreXMLEtiqueta + "/DetalleServicio", document.getDocumentElement(), XPathConstants.NODESET);
 
-		//	NodeList nLineaDetalle = nListDetalleServicio.getLength() > Constantes.ZEROS ? nListDetalleServicio.item(0).getChildNodes() : nListDetalleServicio;
-	//		Node node1 = nListDetalleServicio != null ? nListDetalleServicio.item(0):null;
-		//	nLineaDetalle = node1 != null && node1.getAttributes() == null ? nListDetalleServicio : nListDetalleServicio.item(0).getChildNodes() ;
+			NodeList nListDetalleServicio = (NodeList) xPath.evaluate("/" + nombreXMLEtiqueta + "/DetalleServicio/LineaDetalle", document.getDocumentElement(), XPathConstants.NODESET);
+			//https://www.youtube.com/watch?v=Se5SuYrn0Ac
 			if (nListDetalleServicio.getLength() >= 0 && nListDetalleServicio != null) {
 				for (int i = 0; i < nListDetalleServicio.getLength(); i++) {
 					Node node = nListDetalleServicio.item(i);
-					if (node != null) {
+					if (node != null && node.getNodeType() == Node.ELEMENT_NODE)  {
 						RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
 						recepcionFacturaDetalleNueva.setRecepcionFactura(recepcionFactura);
 						recepcionFacturaDetalleNueva.setNumeroLinea(Utils.stringToInteger(valorString(node, "NumeroLinea", i)));
@@ -355,14 +354,17 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 						recepcionFacturaDetalleNueva.setUnidadMedida(valorString(node, "UnidadMedida", i));
 						recepcionFacturaDetalleNueva.setDetalle(valorString(node, "Detalle", i));
 						recepcionFacturaDetalleNueva.setPrecioUnitario(Utils.stringToDouble(valorString(node, "PrecioUnitario", i)));
-						if (node.getNodeType() == Node.ELEMENT_NODE) {
+						
 							Element eElement = (Element) node;
 							NodeList nodeList = eElement.getElementsByTagName("CodigoComercial");
 							if (nodeList.getLength() >= 0 && nodeList != null) {
 								Node nodeTemp = nodeList.item(0);
-								if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
-									recepcionFacturaDetalleNueva.setCodigoComercialTipo(valorString(nodeTemp, "Tipo", 0));
-									recepcionFacturaDetalleNueva.setCodigoComercialCodigo(valorString(nodeTemp, "Codigo", 0));
+								if (nodeTemp.getNodeType() == Node.ELEMENT_NODE) {
+									if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
+										recepcionFacturaDetalleNueva.setCodigoComercialTipo(valorString(nodeTemp, "Tipo", 0));
+										recepcionFacturaDetalleNueva.setCodigoComercialCodigo(valorString(nodeTemp, "Codigo", 0));
+									}
+									
 								}
 
 							}
@@ -371,61 +373,65 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 							if (nodeList.getLength() >= 0 && nodeList != null) {
 								Node nodeTemp = nodeList.item(0);
 								if (nodeTemp != null) {
-
+									if (nodeTemp.getNodeType() == Node.ELEMENT_NODE) {
 									recepcionFacturaDetalleNueva.setDescuentoMonto(Utils.stringToDouble(valorString(nodeTemp, "MontoDescuento", 0)));
 									recepcionFacturaDetalleNueva.setDescuentoNaturaleza(valorString(nodeTemp, "NaturalezaDescuento", 0));
+									}
 
 								}
 							}
 							nodeList = eElement.getElementsByTagName("Impuesto");
 							if (nodeList.getLength() >= 0 && nodeList != null) {
+								for (int e = 0; e < nodeList.getLength(); e++) {
+									Node nodeTemp1 = nodeList.item(0);
+									if (nodeTemp1 != null) {
+										if (nodeTemp1.getNodeType() == Node.ELEMENT_NODE) {
+										// System.out.println("\nCurrent Element :" + nodeTemp1.getNodeName());
+										if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo1(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa1(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto1(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-								Node nodeTemp1 = nodeList.item(0);
-								if (nodeTemp1 != null) {
-									// System.out.println("\nCurrent Element :" + nodeTemp1.getNodeName());
-									if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo1(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa1(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto1(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo2(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa2(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto2(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo2(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa2(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto2(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo3(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa3(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto3(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo3(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa3(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto3(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo4(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa4(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto4(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo4(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa4(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto4(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo5(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa5(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto5(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo5(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa5(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto5(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
+										} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
+											recepcionFacturaDetalleNueva.setImpuestoCodigo6(valorString(nodeTemp1, "Codigo", 0));
+											recepcionFacturaDetalleNueva.setImpuestoTarifa6(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
+											recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(valorString(nodeTemp1, "CodigoTarifa", 0));
+											recepcionFacturaDetalleNueva.setImpuestoMonto6(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
 
-									} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
-										recepcionFacturaDetalleNueva.setImpuestoCodigo6(valorString(nodeTemp1, "Codigo", 0));
-										recepcionFacturaDetalleNueva.setImpuestoTarifa6(Utils.stringToDouble(valorString(nodeTemp1, "Tarifa", 0)));
-										recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(valorString(nodeTemp1, "CodigoTarifa", 0));
-										recepcionFacturaDetalleNueva.setImpuestoMonto6(Utils.stringToDouble(valorString(nodeTemp1, "Monto", 0)));
-
+										}
+										}
 									}
-
+										
 								}
 							}
 
@@ -433,6 +439,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 							if (nodeList.getLength() >= 0 && nodeList != null) {
 								Node nodeTemp1 = nodeList.item(0);
 								if (nodeTemp1 != null) {
+									if (nodeTemp1.getNodeType() == Node.ELEMENT_NODE) {
 									recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(valorString(nodeTemp1, "TipoDocumento", 0));
 									recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(valorString(nodeTemp1, "NumeroDocumento", 0));
 									recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(valorString(nodeTemp1, "NombreInstitucion", 0));
@@ -440,6 +447,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 									recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(Utils.stringToDouble(valorString(nodeTemp1, "PorcentajeExoneracion", 0)));
 									recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(Utils.stringToDouble(valorString(nodeTemp1, "MontoExoneracion", 0)));
 									recepcionFacturaDetalleNueva.setBaseImponible(Constantes.ZEROS_DOUBLE);
+									}
 								}
 							}
 							recepcionFacturaDetalleNueva.setMontoTotal(Utils.stringToDouble(valorString(node, "MontoTotal", i)));
@@ -451,7 +459,7 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 
 					}
 				}
-			}
+			
 
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->obtenerDetalle :" + e.getMessage() + new Date()));

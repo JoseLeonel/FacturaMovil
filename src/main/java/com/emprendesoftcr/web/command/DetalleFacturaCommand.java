@@ -85,17 +85,15 @@ public class DetalleFacturaCommand {
 	private Double	montoExoneracion1;
 
 	private Double	cantidadAplicadaNotaCredito;
-	private String						codigoTarifa;
-  private Double precio;
-
-	
+	private String	codigoTarifa;
+	private Double	precio;
 
 	public DetalleFacturaCommand() {
 		super();
 	}
 
 	public DetalleFacturaCommand(Detalle detalle) {
-		
+
 		this.id = detalle.getId();
 		this.numeroLinea = detalle.getNumeroLinea();
 		this.precioUnitario = detalle.getPrecioUnitario();
@@ -148,16 +146,11 @@ public class DetalleFacturaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
-	
-	
 	public Double getPrecio() {
 		return precio;
 	}
 
-	
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
@@ -166,7 +159,6 @@ public class DetalleFacturaCommand {
 		return codigoTarifa;
 	}
 
-	
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
 	}
@@ -296,7 +288,7 @@ public class DetalleFacturaCommand {
 	}
 
 	public String getCantidadSTR() {
-		return Utils.formateadorMiles(this.cantidad);
+		return this.cantidad > 1d ? Utils.formateadorMiles(this.cantidad) : this.cantidad+"";
 	}
 
 	public Double getMontoTotal() {

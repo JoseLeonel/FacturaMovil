@@ -1,5 +1,8 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -44,6 +47,23 @@ public class ProveedorArticuloBoImpl implements ProveedorArticuloBo {
 
 	public ProveedorArticulo findByCodigo(String codigo, Proveedor proveedor) {
 		return proveedorArticuloDao.findByCodigo(codigo, proveedor);
+	}
+
+	@Override
+	public List<Map<String, Object>> articuloPorProveedor(Integer idProveedor) {
+		return proveedorArticuloDao.articuloPorProveedor(idProveedor);
+	}
+
+	@Override
+	public List<Map<String, Object>> articuloPorProveedor(Integer idProveedor, String codigo, Integer idEmpresa) {
+		
+		return proveedorArticuloDao.articuloPorProveedor(idProveedor, codigo, idEmpresa);
+	}
+
+	@Override
+	public List<Map<String, Object>> articuloCantidadVendido(String idCodigo, Integer idEmpresa, String fechaInicial, String fechaFinal) {
+		
+		return proveedorArticuloDao.articuloCantidadVendido(idCodigo, idEmpresa, fechaInicial, fechaFinal);
 	}
 
 }

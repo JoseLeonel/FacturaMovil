@@ -148,6 +148,11 @@ public final class FacturaElectronicaUtils {
 	    }
 	}
 	
+	public static Double BigDecimalToDouble(BigDecimal valor)
+	{
+	 return valor != null? valor.doubleValue():Constantes.ZEROS_DOUBLE;
+	}
+	
 	/**
 	 * Convertir a 5 decimales para la factura
 	 * @param valor

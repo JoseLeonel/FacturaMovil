@@ -589,6 +589,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	}
 	private Boolean getVerificaCodigoImpuestoOtros(String codigo) {
 		Boolean resultado = Boolean.FALSE;
+		codigo = codigo == null?Constantes.EMPTY:codigo;
 		if( codigo.equals("02") || codigo.equals("03") || codigo.equals("04")|| codigo.equals("05")|| codigo.equals("06")|| codigo.equals("08") || codigo.equals("12") || codigo.equals("99")  ) {
 			resultado = Boolean.TRUE;
 		}

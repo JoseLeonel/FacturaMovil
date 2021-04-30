@@ -1,9 +1,6 @@
 package com.emprendesoftcr;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,73 +17,97 @@ import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.XmlHelper;
 import com.itextpdf.text.DocumentException;
 
+class Product {
+ double price;	
+	
+}
 public class vivi {
+	
+	public void updatePrice(Product product,double price) {
+		price = price * 2;
+		product.price = product.price + price;
+	}
 
 	public static void main(String[] args) throws ParseException, FileNotFoundException, DocumentException {
-
-		Double lado = 4d;
-		Double lado1 = 4d;
-		Double resultado = lado1 * lado;
-
-//		String t = parseTime("2020-11-13T10:22:27"); 
-
-		System.out.println("Yo naci:" + resultado);
-
-		try {
-
-			String filePath = "/home/jose/" + "mr-automatico/" + "fe1605721320379-sinmata.xml";
-
-			String facturaXmlFinal = "";
-
-			try {
-				facturaXmlFinal = new String(Files.readAllBytes(Paths.get(filePath)));
-			} catch (IOException e) {
-			
-				e.printStackTrace();
-				facturaXmlFinal = "";
-			}
-      
-			
-//			JAXBContext context = JAXBContext.newInstance(FacturaTemp.class);
-//			Unmarshaller unmarshaller = context.createUnmarshaller();
-//			
-//			FacturaTemp facturaTemp = (FacturaTemp) unmarshaller.unmarshal(new File(filePath));
-//			
-			
-			
-			Document document = convertXMLFileToXMLDocument(filePath);
+    
+//		Product produc = new Product();
+//		produc.price  = 200;
+//		double newPrice = 100;
+//		vivi t = new vivi();
+//		t.updatePrice(produc, newPrice);
 		
-			// Normalize the XML Structure; It's just too important !!
-			
-			document.getDocumentElement().normalize();
-			// Here comes the root node
-			Element root = document.getDocumentElement();
-			System.out.println(root.getNodeName());
-			
-			// Get all employees
-			NodeList nList = getFacturaOrNotaCreditoOrNotaDebito(document);
-			Node node = nList.item(0);
-			
-			// Encabezado
-			getEncabezado(node);
-			System.out.println(document.getFirstChild().getNodeName());
-			
-			// Emisor
-			NodeList nListEmisor = document.getElementsByTagName("Emisor");
-			if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
-				obtenerEmisor(nListEmisor.item(0), document);
-			}
-			
-			NodeList nListReceptor = document.getElementsByTagName("Receptor");
-			if (nListReceptor.getLength() >= 0 && nListReceptor != null) {
-				obtenerReceptor(nListReceptor.item(0), document);
-			}
-			
-			obtenerDetalle(document);
-			resumenFacturaTotal(document);
-		} catch (Exception e2) {
-
+		Integer aVar = 9;
+		if(aVar++ <10) {
+			System.out.println(aVar +" hello1");	
+		}else {
+			System.out.println(aVar +" hello1");
 		}
+		
+		
+		
+//		Double lado = 4d;
+//		Double lado1 = 4d;
+//		Double resultado = lado1 * lado;
+//
+////		String t = parseTime("2020-11-13T10:22:27"); 
+//
+//		System.out.println("Yo naci:" + resultado);
+//
+//		try {
+//
+//			String filePath = "/home/jose/" + "mr-automatico/" + "fe1605721320379-sinmata.xml";
+//
+//			String facturaXmlFinal = "";
+//
+//			try {
+//				facturaXmlFinal = new String(Files.readAllBytes(Paths.get(filePath)));
+//			} catch (IOException e) {
+//			
+//				e.printStackTrace();
+//				facturaXmlFinal = "";
+//			}
+//      
+//			
+////			JAXBContext context = JAXBContext.newInstance(FacturaTemp.class);
+////			Unmarshaller unmarshaller = context.createUnmarshaller();
+////			
+////			FacturaTemp facturaTemp = (FacturaTemp) unmarshaller.unmarshal(new File(filePath));
+////			
+//			
+//			
+//			Document document = convertXMLFileToXMLDocument(filePath);
+//		
+//			// Normalize the XML Structure; It's just too important !!
+//			
+//			document.getDocumentElement().normalize();
+//			// Here comes the root node
+//			Element root = document.getDocumentElement();
+//			System.out.println(root.getNodeName());
+//			
+//			// Get all employees
+//			NodeList nList = getFacturaOrNotaCreditoOrNotaDebito(document);
+//			Node node = nList.item(0);
+//			
+//			// Encabezado
+//			getEncabezado(node);
+//			System.out.println(document.getFirstChild().getNodeName());
+//			
+//			// Emisor
+//			NodeList nListEmisor = document.getElementsByTagName("Emisor");
+//			if (nListEmisor.getLength() >= 0 && nListEmisor != null) {
+//				obtenerEmisor(nListEmisor.item(0), document);
+//			}
+//			
+//			NodeList nListReceptor = document.getElementsByTagName("Receptor");
+//			if (nListReceptor.getLength() >= 0 && nListReceptor != null) {
+//				obtenerReceptor(nListReceptor.item(0), document);
+//			}
+//			
+//			obtenerDetalle(document);
+//			resumenFacturaTotal(document);
+//		} catch (Exception e2) {
+//
+//		}
 	}
 	
 	

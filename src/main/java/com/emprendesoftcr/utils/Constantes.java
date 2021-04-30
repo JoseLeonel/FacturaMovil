@@ -31,7 +31,11 @@ public class Constantes {
 
 	public static final Integer					COCINA_ACTIVO																									= 1;
 	public static final Integer					COCINA_INACTIVO																								= 2;
+	
+	public static final Integer					ES_SIMPLIFICADO_SI																									= 1;
+	public static final Integer					ES_SIMPLIFICADO_NO																								= 0;
 
+	
 	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO													= 1;
 	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO												= 2;
 

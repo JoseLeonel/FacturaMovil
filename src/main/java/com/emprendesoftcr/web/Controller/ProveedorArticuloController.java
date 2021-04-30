@@ -1,6 +1,11 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +38,10 @@ import com.emprendesoftcr.utils.DataTableDelimitador;
 import com.emprendesoftcr.utils.JqGridFilter;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
+import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.ArticuloCommand;
+import com.emprendesoftcr.web.command.ArticuloProveedorCommand;
+import com.emprendesoftcr.web.command.ArticuloVendidoCommand;
 import com.emprendesoftcr.web.command.ProveedorArticuloCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -41,6 +49,8 @@ import com.emprendesoftcr.web.propertyEditor.ProveedorArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 /**
  * Control de los departamentos de cada articulo CategoriasController.
@@ -102,6 +112,138 @@ public class ProveedorArticuloController {
 	@RequestMapping(value = "/ListarProveedorArticulo.do", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
 		return "views/proveedorArticulo/ListarProveedorArticulo";
+	}
+
+	@RequestMapping(value = "/ArticuloPorProveedores", method = RequestMethod.GET)
+	public String articuloPorProveedores(ModelMap model) {
+		return "views/articulos/ArticulosXProveedor";
+	}
+
+	/**
+	 * Lista de articulos de un proveedor
+	 * @param request
+	 * @param response
+	 * @param idProveedor
+	 * @return
+	 */
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/ArticulosPorOtrosProveedorCodigo.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable ArticulosPorProveedorCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam("idProveedor") Integer idProveedor, @RequestParam("codigo") String codigo) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		@SuppressWarnings("unused")
+		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Map<String, Object>> listaObjetos = proveedorArticuloBo.articuloPorProveedor(idProveedor, codigo, usuarioSesion.getEmpresa().getId());
+
+		ArrayList<?> arrayList = new ArrayList<Object>();
+		arrayList = (ArrayList<?>) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<ArticuloProveedorCommand> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				ArticuloProveedorCommand articuloProveedorCommand = gson.fromJson(jsonArray1.get(i).toString(), ArticuloProveedorCommand.class);
+				lista.add(articuloProveedorCommand);
+			}
+		}
+
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(lista);
+		return respuestaService;
+
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/ArticulosCantidadVendido.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable ArticulosCantidadVendido(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicial") String fechaInicial, @RequestParam("fechaFinal") String fechaFinal, @RequestParam("idCodigo") String idCodigo) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		@SuppressWarnings("unused")
+		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicial);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinal), true);
+		if (fechaInicio != null) {
+			if (fechaFin != null) {
+				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
+		fechaInicial = dateFormat1.format(fechaInicio);
+		fechaFinal = dateFormat2.format(fechaFin);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Map<String, Object>> listaObjetos = proveedorArticuloBo.articuloCantidadVendido(idCodigo, usuarioSesion.getEmpresa().getId(), fechaInicial, fechaFinal);
+
+		ArrayList<?> arrayList = new ArrayList<Object>();
+		arrayList = (ArrayList<?>) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<ArticuloVendidoCommand> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				ArticuloVendidoCommand articuloVendidoCommand = gson.fromJson(jsonArray1.get(i).toString(), ArticuloVendidoCommand.class);
+				lista.add(articuloVendidoCommand);
+			}
+		}
+
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(lista);
+		return respuestaService;
+
+	}
+
+	/**
+	 * Lista de los archivos que no son del proveedor
+	 * @param request
+	 * @param response
+	 * @param idProveedor
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/ListarArticulosPorProveedor.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable ListarArticulosPorProveedor(HttpServletRequest request, HttpServletResponse response, @RequestParam("idProveedor") Integer idProveedor) {
+
+		@SuppressWarnings("unused")
+		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Map<String, Object>> listaObjetos = proveedorArticuloBo.articuloPorProveedor(idProveedor);
+
+		ArrayList<?> arrayList = new ArrayList<Object>();
+		arrayList = (ArrayList<?>) listaObjetos;
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<ArticuloProveedorCommand> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				ArticuloProveedorCommand articuloProveedorCommand = gson.fromJson(jsonArray1.get(i).toString(), ArticuloProveedorCommand.class);
+				lista.add(articuloProveedorCommand);
+			}
+		}
+
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(lista);
+		return respuestaService;
+
 	}
 
 	/**
@@ -281,23 +423,22 @@ public class ProveedorArticuloController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/findArticuloProveedorByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo,@RequestParam Long idProveedor, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo, @RequestParam Long idProveedor, BindingResult result, SessionStatus status) {
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
 			Proveedor proveedor = proveedorBo.buscar(idProveedor);
-			ProveedorArticulo proveedorArticuloBD =null;
-			if(proveedor !=null && articuloBD !=null) {
-				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD.getCodigo(), proveedor);	
+			ProveedorArticulo proveedorArticuloBD = null;
+			if (proveedor != null && articuloBD != null) {
+				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD.getCodigo(), proveedor);
 			}
 			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
 			if (articuloCommand == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
-			if(proveedorArticuloBD !=null) {
-				articuloCommand.setCosto(proveedorArticuloBD.getCosto() !=null?proveedorArticuloBD.getCosto():articuloBD.getCosto());	
+			if (proveedorArticuloBD != null) {
+				articuloCommand.setCosto(proveedorArticuloBD.getCosto() != null ? proveedorArticuloBD.getCosto() : articuloBD.getCosto());
 			}
-			
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {

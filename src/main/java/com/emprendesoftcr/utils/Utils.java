@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -1165,7 +1166,7 @@ public final class Utils {
 
 		}
 
-		DecimalFormat formateador = new DecimalFormat("#,##0.0");
+		DecimalFormat formateador = new DecimalFormat("#,##0.00");
 		resultado = formateador.format(valor);
 
 		return resultado;
@@ -2642,6 +2643,13 @@ public final class Utils {
 				break;
 		}
 		return descripcion;
+	}
+	
+	public static String bigIntegerToStrig(BigInteger valor) {
+		
+		return valor != null ? valor.toString():Constantes.EMPTY;
+		
+		
 	}
 
 }

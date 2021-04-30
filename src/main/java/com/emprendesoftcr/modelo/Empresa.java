@@ -262,7 +262,8 @@ public class Empresa implements Serializable {
 	@Column(name = "correo_compra" )
 	private String			correoAceptacionCompra;
 
-	
+	@Column(name = "es_simpli" )
+	private Integer			esSimplificado; //0 = No 1 = Si  
 	
 	
 	
@@ -895,6 +896,16 @@ public class Empresa implements Serializable {
 	
 	public void setCorreoAceptacionCompra(String correoAceptacionCompra) {
 		this.correoAceptacionCompra = correoAceptacionCompra;
+	}
+
+	
+	public Integer getEsSimplificado() {
+		return esSimplificado;
+	}
+
+	
+	public void setEsSimplificado(Integer esSimplificado) {
+		this.esSimplificado = esSimplificado;
 	}
 	
 	

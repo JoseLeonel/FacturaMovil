@@ -184,6 +184,7 @@ public class ArticuloController {
 		return "views/articulos/ListarArticulosMinimos";
 	}
 
+	
 	/**
 	 * Listar JSP de los articulos
 	 * @param model

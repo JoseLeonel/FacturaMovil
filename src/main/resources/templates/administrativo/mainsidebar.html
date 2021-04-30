@@ -85,12 +85,6 @@
 				<li><a th:href="@{/ListarMarcas}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i> Marcas </a></li>
-				<li><a th:href="@{/ListarMotivoSalidas}"
-					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
-						class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
-				<li><a th:href="@{/ListarMotivoEntradas}"
-					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
-						class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
 				<li class="treeview"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
 					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Articulos</span>
@@ -109,12 +103,17 @@
 						<li><a th:href="@{/Etiquetas.do}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Etiquetas</a></li>
+						<li><a th:href="@{/ListarMotivoSalidas}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
+								class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
+						<li><a th:href="@{/ListarMotivoEntradas}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
+								class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
+
 					</ul>
 				</li>
 
-				<li><a th:href="@{/ListarProveedorArticulo.do}"
-					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
-						class="fa fa-circle-o"></i> ArticulosXProveedor </a></li>
+						
 				<li><a th:href="@{/ListarKardex}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
 						class="fa fa-circle-o"></i> Kardex </a></li>
@@ -147,6 +146,13 @@
 						class="fa fa-circle-o"></i> Compras sin ingresar</a></li>						
 				<li><a th:href="@{/ListaComprasAnular}"><i
 						class="fa fa-circle-o"></i> Anular Compra</a></li>
+				<li><a th:href="@{/ListarProveedorArticulo.do}"
+					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+						class="fa fa-circle-o"></i> ArticulosXProveedor </a></li>
+				<li><a th:href="@{/ArticuloPorProveedores}"
+					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+						class="fa fa-circle-o"></i> Analisis de compra </a></li>
+						
 			</ul>
 		</li>
 
@@ -226,7 +232,7 @@
 		</li>
 
 		<li class="treeview"
-			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_notas','administrador_Cocodrillos','Administrador_Cajero','Usuario_Cajero','Administrador_Empresa')">
+			sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_notas','administrador_Cocodrillos','Administrador_Cajero','Usuario_Cajero','Administrador_Empresa')">
 			<a th:href="@{#}"> <i class="fa fa-unlock"></i> <span>Notas</span>
 				<i class="fa fa-angle-left pull-right"></i>
 		</a>

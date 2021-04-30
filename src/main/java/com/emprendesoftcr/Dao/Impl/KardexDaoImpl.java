@@ -113,6 +113,7 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setUsuario(usuarioSesion);
 			kardex.setArticulo(articulo);
 			articulo.setCantidad(resultado);
+			
 			articuloDao.modificar(articulo);
 			agregar(kardex);
 			

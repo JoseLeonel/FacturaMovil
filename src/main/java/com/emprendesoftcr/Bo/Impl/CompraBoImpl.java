@@ -861,9 +861,16 @@ public class CompraBoImpl implements CompraBo {
 				detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);
 				if (detalleCompra.getTarifaImpuesto() != null && detalleCompra.getImpuesto() != null && detalleCompra.getCodigoTipoImpuesto() != null) {
 					if (!detalleCompra.getTarifaImpuesto().equals(Constantes.EMPTY) && !detalleCompra.getCodigoTipoImpuesto().equals(Constantes.EMPTY)) {
-						articulo.setCodigoTarifa(detalleCompra.getTarifaImpuesto());
-						articulo.setImpuesto(detalleCompra.getImpuesto());
-						articulo.setTipoImpuesto(detalleCompra.getCodigoTipoImpuesto());
+						if(articulo.getEmpresa().getEsSimplificado().equals(Constantes.ES_SIMPLIFICADO_NO)) {
+							articulo.setCodigoTarifa(detalleCompra.getTarifaImpuesto());
+							articulo.setImpuesto(detalleCompra.getImpuesto());
+							articulo.setTipoImpuesto(detalleCompra.getCodigoTipoImpuesto());
+						}else {
+							articulo.setCodigoTarifa(Constantes.EMPTY);
+							articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+							articulo.setTipoImpuesto(Constantes.EMPTY);
+							
+						}
 					}
 				}
 				if(detalleCompra.getCodigoCabys() != null && !detalleCompra.getCodigoCabys().equals(Constantes.EMPTY)) {
