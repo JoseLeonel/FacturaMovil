@@ -8,6 +8,7 @@ import com.emprendesoftcr.utils.Utils;
 public class ComprasSinIngresarInventarioCommand {
 private Long id;
 private String consecutivo;
+private Integer tipo_documento;
 private Date fecha_compra;
 private Double total_impuesto;
 private Double total_compra;
@@ -83,6 +84,16 @@ public String getFactura_pdf() {
 
 public void setFactura_pdf(String factura_pdf) {
 	this.factura_pdf = factura_pdf;
+}
+
+
+public Integer getTipo_documento() {
+	return tipo_documento;
+}
+
+
+public void setTipo_documento(Integer tipo_documento) {
+	this.tipo_documento = tipo_documento;
 }
 
 

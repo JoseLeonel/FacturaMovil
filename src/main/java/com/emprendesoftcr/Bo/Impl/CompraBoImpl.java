@@ -322,23 +322,23 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null? detalleCompra.getCantidadIventario():Constantes.ZEROS_DOUBLE;
-			if(cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
-				cantidadAplicar = detalleCompra.getCantidad() != null ? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null ? detalleCompra.getCantidadIventario() : Constantes.ZEROS_DOUBLE;
+			if (cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
+				cantidadAplicar = detalleCompra.getCantidad() != null ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			}
 			Double cantidad = cantidadAplicar;
-			Double costoIventario = detalleCompra.getCostoIventario() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getCostoIventario();
+			Double costoIventario = detalleCompra.getCostoIventario() == null ? Constantes.ZEROS_DOUBLE : detalleCompra.getCostoIventario();
 			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
 			Double costo = Constantes.ZEROS_DOUBLE;
-			if(costoIventario > Constantes.ZEROS_DOUBLE) {
+			if (costoIventario > Constantes.ZEROS_DOUBLE) {
 				totalLinea = costoIventario;
 				costo = costoIventario;
-			}else {
+			} else {
 				Double descuento = detalleCompra.getTotalDescuento() == null && detalleCompra.getTotalDescuento() > Constantes.ZEROS_DOUBLE ? detalleCompra.getTotalDescuento() / cantidad : Constantes.ZEROS_DOUBLE;
 				costo = descuento > Constantes.ZEROS_DOUBLE ? totalLinea - descuento : totalLinea;
-				
+
 			}
-			
+
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
 			kardexDao.entradaCosto(articulo, costo, cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
@@ -443,9 +443,9 @@ public class CompraBoImpl implements CompraBo {
 
 	private void disminuirInventario(Articulo articulo, Compra compra, DetalleCompra detalleCompra) throws Exception {
 		try {
-			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null?detalleCompra.getCantidadIventario():Constantes.ZEROS_DOUBLE;
-			if(cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
-				cantidadAplicar = detalleCompra.getCantidad() != null? detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			Double cantidadAplicar = detalleCompra.getCantidadIventario() != null ? detalleCompra.getCantidadIventario() : Constantes.ZEROS_DOUBLE;
+			if (cantidadAplicar.equals(Constantes.ZEROS_DOUBLE)) {
+				cantidadAplicar = detalleCompra.getCantidad() != null ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			}
 			if (articulo.getContable() != null) {
 				if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
@@ -703,6 +703,9 @@ public class CompraBoImpl implements CompraBo {
 		return new ByteArrayInputStream(stream.toByteArray());
 	}
 
+	
+
+	
 	@Transactional
 	@Override
 	public void crearCompra(RecepcionFactura recepcionFactura, Usuario usuario, Proveedor proveedor, Collection<RecepcionFacturaDetalle> listDetalles) throws Exception {
@@ -734,12 +737,13 @@ public class CompraBoImpl implements CompraBo {
 			compra.setCreated_at(new Date());
 			compra.setUpdated_at(new Date());
 			compra.setUsuarioCreacion(usuario);
+			compra.setFechaIngreso(new Date());
 			compra.setUsuarioIngresoInventario(usuario);
 			agregar(compra);
-			
+
 			if (listDetalles != null && !listDetalles.isEmpty()) {
-			
-				for (RecepcionFacturaDetalle recepcionFacturaDetalle :listDetalles) {
+
+				for (RecepcionFacturaDetalle recepcionFacturaDetalle : listDetalles) {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(recepcionFacturaDetalle.getCodigoComercialCodigo(), recepcionFactura.getEmpresa());
 					DetalleCompra detalleCompra = new DetalleCompra(recepcionFacturaDetalle);
 					detalleCompra.setImpuesto(getImpuestoAplicado(recepcionFacturaDetalle));
@@ -756,6 +760,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setUpdated_at(new Date());
 					detalleCompra.setEstado(Constantes.DETALLE_APLICADO_NO);
 					detalleCompra.setCompra(compra);
+					detalleCompra.setUsuarioCreacion(usuario);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
 						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
@@ -795,6 +800,7 @@ public class CompraBoImpl implements CompraBo {
 
 	private Double getImpuestoAplicado(RecepcionFacturaDetalle recepcionFacturaDetalle) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
+
 		if (recepcionFacturaDetalle.getImpuestoTarifa() != null && recepcionFacturaDetalle.getImpuestoTarifa() > Constantes.ZEROS_DOUBLE) {
 			resultado = recepcionFacturaDetalle.getImpuestoTarifa();
 		} else if (recepcionFacturaDetalle.getImpuestoTarifa1() != null && recepcionFacturaDetalle.getImpuestoTarifa1() > Constantes.ZEROS_DOUBLE) {
@@ -810,7 +816,8 @@ public class CompraBoImpl implements CompraBo {
 		} else if (recepcionFacturaDetalle.getImpuestoTarifa6() != null && recepcionFacturaDetalle.getImpuestoTarifa6() > Constantes.ZEROS_DOUBLE) {
 			resultado = recepcionFacturaDetalle.getImpuestoTarifa6();
 		}
-		return resultado;
+		return resultado.equals(Constantes.CODIGO_TARIFA_13_IMPUESTO_99) ? 13d : resultado;
+		
 
 	}
 
@@ -821,8 +828,7 @@ public class CompraBoImpl implements CompraBo {
 	public List<Map<String, Object>> comprasSinIngresarInventario(Empresa empresa) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf\n" + "FROM compras as c\n" + 
-		"   inner join proveedores p on p.id = c.proveedor_id\n" + " inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave and fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
+		String sql = "SELECT c.id,c.consecutivo,c.fecha_compra,c.total_impuesto,c.total_compra , p.nombre_completo ,fe.factura_pdf,c.tipo_documento\n" + "FROM compras as c\n" + "   inner join proveedores p on p.id = c.proveedor_id\n" + " inner join fe_mensaje_receptor_automatico fe on fe.clave = c.clave and fe.consecutivo = c.consecutivo" + " where c.empresa_id = :idEmpresa and c.estado = 6 ";
 		parameters.addValue("idEmpresa", empresa.getId());
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
@@ -834,7 +840,7 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	@Transactional
 	@Override
-	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor,Double costo_inv,Double cant_inv,Usuario usuarioIngresoInventario) throws Exception {
+	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor, Double costo_inv, Double cant_inv, Usuario usuarioIngresoInventario) throws Exception {
 		Integer resultado = 0;
 		try {
 			// 1. Obtener el detalle de la compra
@@ -844,10 +850,11 @@ public class CompraBoImpl implements CompraBo {
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(codigo, empresa);
 			if (articulo != null) {
 				detalleCompra.setArticulo(articulo);
-				//detalleCompra.setCosto(costo_inv);
+				// detalleCompra.setCosto(costo_inv);
 				detalleCompra.setCostoIventario(costo_inv);
 				detalleCompra.setCantidadIventario(cant_inv);
 				detalleCompra.setUpdated_at(new Date());
+				detalleCompra.setUsuarioActualizacion(usuarioIngresoInventario);
 				detalleCompraDao.modificar(detalleCompra);
 				if (compraBD != null) {
 					articulo.setConsecutivoCompra(compraBD.getConsecutivo());
@@ -861,25 +868,27 @@ public class CompraBoImpl implements CompraBo {
 				detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);
 				if (detalleCompra.getTarifaImpuesto() != null && detalleCompra.getImpuesto() != null && detalleCompra.getCodigoTipoImpuesto() != null) {
 					if (!detalleCompra.getTarifaImpuesto().equals(Constantes.EMPTY) && !detalleCompra.getCodigoTipoImpuesto().equals(Constantes.EMPTY)) {
-						if(articulo.getEmpresa().getEsSimplificado().equals(Constantes.ES_SIMPLIFICADO_NO)) {
+						if (articulo.getEmpresa().getEsSimplificado().equals(Constantes.ES_SIMPLIFICADO_NO)) {
 							articulo.setCodigoTarifa(detalleCompra.getTarifaImpuesto());
 							articulo.setImpuesto(detalleCompra.getImpuesto());
 							articulo.setTipoImpuesto(detalleCompra.getCodigoTipoImpuesto());
-						}else {
+						} else {
 							articulo.setCodigoTarifa(Constantes.EMPTY);
 							articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
 							articulo.setTipoImpuesto(Constantes.EMPTY);
-							
+
 						}
 					}
 				}
-				if(detalleCompra.getCodigoCabys() != null && !detalleCompra.getCodigoCabys().equals(Constantes.EMPTY)) {
+				if (detalleCompra.getCodigoCabys() != null && !detalleCompra.getCodigoCabys().equals(Constantes.EMPTY)) {
 					articulo.setCodigoCabys(detalleCompra.getCodigoCabys());
 				}
 				articulo.setContable(Constantes.CONTABLE_SI);
 				articulo.setUpdated_at(new Date());
 				articulo.setPrecioPublico(precioPublico);
-				
+        if(empresa != null && empresa.getCedula().equals(Constantes.CEDULA_MINI_SUPER_DARIO)) {
+        	articulo.setDescripcion(detalleCompra.getDescripcion());
+        }
 				articulo.setGananciaPrecioPublico(ganancia);
 				articuloDao.modificar(articulo);
 
@@ -901,13 +910,11 @@ public class CompraBoImpl implements CompraBo {
 		}
 		return resultado;
 
-	
-
 	}
-	
+
 	@Transactional
 	@Override
-	public Integer anularCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra,Usuario usuarioIngresoInventario) throws Exception {
+	public Integer anularCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Usuario usuarioIngresoInventario) throws Exception {
 		Integer resultado = 0;
 		try {
 			// 1. Obtener el detalle de la compra
@@ -931,8 +938,6 @@ public class CompraBoImpl implements CompraBo {
 			throw e;
 		}
 		return resultado;
-
-	
 
 	}
 

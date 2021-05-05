@@ -53,4 +53,5 @@ public interface CompraBo {
 	
 	Integer anularCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra,Usuario usuarioIngresoInventario) throws Exception;
 	
+	
 }

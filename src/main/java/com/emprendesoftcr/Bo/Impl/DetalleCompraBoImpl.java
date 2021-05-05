@@ -2,10 +2,13 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -15,6 +18,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,12 +31,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.DetalleCompraBo;
 import com.emprendesoftcr.Dao.DetalleCompraDao;
 import com.emprendesoftcr.modelo.Compra;
+import com.emprendesoftcr.modelo.ConteoManualCaja;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
+import com.emprendesoftcr.web.command.CompraVentasResumenCommand;
 
 @EnableTransactionManagement
 @Service("detalleCompraBo")
@@ -72,6 +78,29 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	public Collection<DetalleCompra> findByCompra(Compra compra) {
 		return detalleCompraDao.findByCompra(compra);
 	}
+	
+	/**
+	 * Formulario de contadores
+	 */
+	@Override
+	public ByteArrayInputStream createExcelResumen(	Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {
+		
+		Workbook workbook = WorkbookFactory.create(new File("")); 
+		
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Sheet sheet = workbook.getSheetAt(0);
+		CompraVentasResumenCommand compraVentasResumenCommand = new CompraVentasResumenCommand();
+		DoubleSummaryStatistics doubleSummaryStatistics = lista.stream().collect(Collectors.summarizingDouble(CompraIVA::getMontoIva0));
+		compraVentasResumenCommand.setTreceVentaPorciento(doubleSummaryStatistics.getSum());
+		doubleSummaryStatistics = lista.stream().collect(Collectors.summarizingDouble(CompraIVA::getMontoIva0));
+		
+		
+				
+		workbook.write(stream);
+		workbook.close();
+		return new ByteArrayInputStream(stream.toByteArray());
+	}
+
 
 	@Override
 	public ByteArrayInputStream createExcelDetalleCompra(Collection<RecepcionFacturaDetalle> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {

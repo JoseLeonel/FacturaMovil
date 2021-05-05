@@ -27,19 +27,19 @@ import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.schma.Bo.FacturaElectronicaSchemaBo;
+import com.emprendesoftcr.schma.Bo.NotaCreditoElectronicaSchemaBo;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
-import com.emprendesoftcr.xml.schema.factura.electronica.CodigoType;
-import com.emprendesoftcr.xml.schema.factura.electronica.DescuentoType;
-import com.emprendesoftcr.xml.schema.factura.electronica.EmisorType;
-import com.emprendesoftcr.xml.schema.factura.electronica.FacturaElectronicaSchema;
-import com.emprendesoftcr.xml.schema.factura.electronica.ImpuestoType;
-import com.emprendesoftcr.xml.schema.factura.electronica.ReceptorType;
+import com.emprendesoftcr.xml.schema.notaCredito.CodigoType;
+import com.emprendesoftcr.xml.schema.notaCredito.DescuentoType;
+import com.emprendesoftcr.xml.schema.notaCredito.EmisorType;
+import com.emprendesoftcr.xml.schema.notaCredito.ImpuestoType;
+import com.emprendesoftcr.xml.schema.notaCredito.ReceptorType;
+import com.emprendesoftcr.xml.schema.notaCredito.NotaCreditoElectronicaSchema;
 
 @EnableTransactionManagement
-@Service("facturaElectronicaSchemaBo")
-public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaBo {
+@Service("notaCreditoElectronicaSchemaBo")
+public class NotaCreditoElectronicaSchemaBoImpl implements NotaCreditoElectronicaSchemaBo {
 
 	@Autowired
 	RecepcionFacturaDao		recepcionFacturaDao;
@@ -66,10 +66,10 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 		try {
 			File file = new File(pathFacturaXML + "mr-automatico/" + ruta);
 
-			JAXBContext jAXBContext = JAXBContext.newInstance(FacturaElectronicaSchema.class);
+			JAXBContext jAXBContext = JAXBContext.newInstance(NotaCreditoElectronicaSchema.class);
 
 			Unmarshaller jaxbUnmarshaller = jAXBContext.createUnmarshaller();
-			FacturaElectronicaSchema facturaElectronica = (FacturaElectronicaSchema) jaxbUnmarshaller.unmarshal(file);
+			NotaCreditoElectronicaSchema notaCreditoElectronicaSchema = (NotaCreditoElectronicaSchema) jaxbUnmarshaller.unmarshal(file);
 
 			recepcionFactura.setMensaje(mensaje);
 			recepcionFactura.setTipoGasto(tipoGasto);
@@ -77,10 +77,10 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFactura.setCondicionImpuesto(condicionImpuesto);
 			recepcionFactura.setCodigoActividad(codigoActividad);
 
-			recepcionFactura = getEncabezado(facturaElectronica, recepcionFactura);
-			recepcionFactura = obtenerEmisor(facturaElectronica.getEmisor(), recepcionFactura);
-			recepcionFactura = obtenerReceptor(facturaElectronica.getReceptor(), recepcionFactura);
-			recepcionFactura = resumenFacturaTotal(facturaElectronica.getResumenFactura(), recepcionFactura);
+			recepcionFactura = getEncabezado(notaCreditoElectronicaSchema, recepcionFactura);
+			recepcionFactura = obtenerEmisor(notaCreditoElectronicaSchema.getEmisor(), recepcionFactura);
+			recepcionFactura = obtenerReceptor(notaCreditoElectronicaSchema.getReceptor(), recepcionFactura);
+			recepcionFactura = resumenFacturaTotal(notaCreditoElectronicaSchema.getResumenFactura(), recepcionFactura);
 			recepcionFactura.setVersion_doc("4.3");
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
@@ -108,6 +108,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 
+
 			recepcionFacturaDao.agregar(recepcionFactura);
 			Proveedor proveedor = proveedorDao.buscarPorCedulaYEmpresa(recepcionFactura.getEmisorCedula(), usuarioSesion.getEmpresa());
 
@@ -134,10 +135,11 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 				proveedor.setMovil(recepcionFactura.getEmisorTelefono());
 				proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
 				proveedorDao.modificar(proveedor);
-			}
+		}
+
 
 			// Agregar las linea de detalle de la factura electronica
-			List<RecepcionFacturaDetalle> list = obtenerDetalle(facturaElectronica.getDetalleServicio());
+			List<RecepcionFacturaDetalle> list = obtenerDetalle(notaCreditoElectronicaSchema.getDetalleServicio());
 			for (RecepcionFacturaDetalle recepcionFacturaDetalle : list) {
 				recepcionFacturaDetalle.setRecepcionFactura(recepcionFactura);
 				recepcionFacturaDao.agregar(recepcionFacturaDetalle);
@@ -151,18 +153,19 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			log.error(String.format("--error Compra aplicarFacturaXMLToModelo del xml :" + e.getMessage() + new Date()));
 			throw e;
 		}
-	}
+		
 
+	}
 	/**
 	 * Detalles de la factura
 	 * @param detalles
 	 * @return
 	 * @throws Exception
 	 */
-	private List<RecepcionFacturaDetalle> obtenerDetalle(FacturaElectronicaSchema.DetalleServicio detalles) throws Exception {
+	private List<RecepcionFacturaDetalle> obtenerDetalle(NotaCreditoElectronicaSchema.DetalleServicio detalles) throws Exception {
 		List<RecepcionFacturaDetalle> lista = new ArrayList<RecepcionFacturaDetalle>();
 		try {
-			for (FacturaElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
+			for (NotaCreditoElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
 				RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
 				// codigos comerciales
 				recepcionFacturaDetalleNueva = getCodigosComerciales(detalle, recepcionFacturaDetalleNueva);
@@ -281,7 +284,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 * @param recepcionFacturaDetalleNueva
 	 * @return
 	 */
-	private RecepcionFacturaDetalle getCodigosComerciales(FacturaElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
+	private RecepcionFacturaDetalle getCodigosComerciales(NotaCreditoElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
 			for (CodigoType codigoType : lineaDetalle.getCodigoComercial()) {
 				if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
@@ -312,7 +315,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 * @param recepcionFacturaDetalleNueva
 	 * @return
 	 */
-	private  RecepcionFacturaDetalle getDetalleResumen(FacturaElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
+	private  RecepcionFacturaDetalle getDetalleResumen(NotaCreditoElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
 			recepcionFacturaDetalleNueva.setNumeroLinea(lineaDetalle.getNumeroLinea() != null ? lineaDetalle.getNumeroLinea().intValue() : Constantes.ZEROS);
 			recepcionFacturaDetalleNueva.setCodigoCabys(lineaDetalle.getCodigo());
@@ -342,17 +345,17 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 * @return
 	 * @throws Exception
 	 */
-	private  RecepcionFactura getEncabezado(FacturaElectronicaSchema facturaElectronica, RecepcionFactura recepcionFactura) throws Exception {
+	private  RecepcionFactura getEncabezado(NotaCreditoElectronicaSchema notaCredito, RecepcionFactura recepcionFactura) throws Exception {
 
 		try {
 
-			recepcionFactura.setFacturaClave(facturaElectronica.getClave() != null ? facturaElectronica.getClave() : Constantes.EMPTY);
-			recepcionFactura.setFacturaCodigoActividad(facturaElectronica.getCodigoActividad() != null ? facturaElectronica.getCodigoActividad() : Constantes.EMPTY);
-			recepcionFactura.setFacturaConsecutivo(facturaElectronica.getNumeroConsecutivo() != null ? facturaElectronica.getNumeroConsecutivo() : Constantes.EMPTY);
-			recepcionFactura.setFacturaFechaEmision(FacturaElectronicaUtils.parseStringtoISO8601Date(facturaElectronica.getFechaEmision().toString()));
-			recepcionFactura.setFacturaCondicionVenta(facturaElectronica.getCondicionVenta() != null ? facturaElectronica.getCondicionVenta() : Constantes.EMPTY);
-			recepcionFactura.setFacturaPlazoCredito(facturaElectronica.getPlazoCredito() != null ? facturaElectronica.getPlazoCredito() : Constantes.EMPTY);
-			recepcionFactura.setFacturaMedioPago(facturaElectronica.getMedioPago().get(0));
+			recepcionFactura.setFacturaClave(notaCredito.getClave() != null ? notaCredito.getClave() : Constantes.EMPTY);
+			recepcionFactura.setFacturaCodigoActividad(notaCredito.getCodigoActividad() != null ? notaCredito.getCodigoActividad() : Constantes.EMPTY);
+			recepcionFactura.setFacturaConsecutivo(notaCredito.getNumeroConsecutivo() != null ? notaCredito.getNumeroConsecutivo() : Constantes.EMPTY);
+			recepcionFactura.setFacturaFechaEmision(FacturaElectronicaUtils.parseStringtoISO8601Date(notaCredito.getFechaEmision().toString()));
+			recepcionFactura.setFacturaCondicionVenta(notaCredito.getCondicionVenta() != null ? notaCredito.getCondicionVenta() : Constantes.EMPTY);
+			recepcionFactura.setFacturaPlazoCredito(notaCredito.getPlazoCredito() != null ? notaCredito.getPlazoCredito() : Constantes.EMPTY);
+			recepcionFactura.setFacturaMedioPago(notaCredito.getMedioPago().get(0));
 
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->getEncabezado :" + e.getMessage() + new Date()));
@@ -408,6 +411,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 		return recepcionFactura;
 	}
 
+
 	/**
 	 * Resumen de la factura
 	 * @param resumenFactura
@@ -415,7 +419,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 * @return
 	 * @throws Exception
 	 */
-	private RecepcionFactura resumenFacturaTotal(FacturaElectronicaSchema.ResumenFactura resumenFactura, RecepcionFactura recepcionFactura) throws Exception {
+	private RecepcionFactura resumenFacturaTotal(NotaCreditoElectronicaSchema.ResumenFactura resumenFactura, RecepcionFactura recepcionFactura) throws Exception {
 		try {
 
 			recepcionFactura.setFacturaCodigoMoneda(resumenFactura.getCodigoTipoMoneda().getCodigoMoneda());

@@ -17,6 +17,7 @@ public class Constantes {
 
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA																	= "3109177612";
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD												= "3102767133";
+	public static final String					CEDULA_MINI_SUPER_DARIO               												= "110010978";
 	public static final ResourceBundle	RESOURCE_BUNDLE																								= ResourceBundle.getBundle("factura");
 	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR													= "/home/jose/dev/archivosXMLs";
 
@@ -745,5 +746,6 @@ public class Constantes {
 	public static final String					CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO													= "06";
 	public static final String					CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO													= "07";
 	public static final String					CODIGO_TARIFA_13_GENERAL_PORCIENTO														= "08";
+	public static final Double					CODIGO_TARIFA_13_IMPUESTO_99														= 99d;
 
 }

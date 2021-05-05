@@ -5,15 +5,19 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
+import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
 
 public class DetalleCompraEsperaCommand {
 
 	private Long			id;
-
+private String codigo;
+private String descripcion;
 	private Integer		numeroLinea;
 
 	private Double		costo;
+	private Double		costoInventario;
 	private Double		ganancia;
 
 	private Double		precio;
@@ -35,9 +39,11 @@ public class DetalleCompraEsperaCommand {
 	private Date			updated_at;
 
 	private Compra		compra;
+	
+	
 
-	private Articulo	articulo;
-
+private Articulo	articulo;
+private Usuario usuarioActualizacion;
 	public DetalleCompraEsperaCommand(DetalleCompra detalleCompra) {
 		super();
 		this.id = detalleCompra.getId();
@@ -55,6 +61,10 @@ public class DetalleCompraEsperaCommand {
 		this.compra = detalleCompra.getCompra();
 		this.articulo = detalleCompra.getArticulo();
 		this.ganancia = detalleCompra.getGanancia();
+		this.codigo = detalleCompra.getCodigo();
+		this.descripcion = detalleCompra.getDescripcion();
+		this.usuarioActualizacion = detalleCompra.getUsuarioActualizacion();
+		this.costoInventario = detalleCompra.getCostoIventario() != null?detalleCompra.getCostoIventario():Constantes.ZEROS_DOUBLE;
 	}
 
 	public Long getId() {
@@ -205,6 +215,50 @@ public class DetalleCompraEsperaCommand {
 	
 	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
+	}
+
+	
+	public String getCodigo() {
+		return codigo;
+	}
+
+	
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	
+	public Usuario getUsuarioActualizacion() {
+		return usuarioActualizacion;
+	}
+
+	
+	public void setUsuarioActualizacion(Usuario usuarioActualizacion) {
+		this.usuarioActualizacion = usuarioActualizacion;
+	}
+
+	
+	public Double getCostoInventario() {
+		return costoInventario;
+	}
+	public String getCostoInventarioSTR() {
+		return Utils.formateadorMiles(this.costoInventario);
+	}
+
+
+	
+	public void setCostoInventario(Double costoInventario) {
+		this.costoInventario = costoInventario;
 	}
 	
 	

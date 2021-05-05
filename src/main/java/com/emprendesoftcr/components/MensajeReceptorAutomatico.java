@@ -101,7 +101,7 @@ public class MensajeReceptorAutomatico {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	@Scheduled(cron = "0 0/01 * * * ?")
+	@Scheduled(cron = "0 0/04 * * * ?")
 	public void verifyEmails() {
 		String correoProblemas = Constantes.EMPTY;
 		try {
@@ -199,15 +199,18 @@ public class MensajeReceptorAutomatico {
 
 						MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
 
-						if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+ 						if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
 
 							// this part is attachment
 						//	log.info("this.getFileName(part) :" + this.getFileName(part));
 						//	log.info("par) :" + part);
 							String fileNameSTR = this.getFileName(part);
-							if(!fileNameSTR.equals(Constantes.EMPTY)) {
-						//		log.info("xxxx :" + this.getFileName(part).substring(this.getFileName(part).toString().lastIndexOf(".")));
-								fileNameSTR = prefijo + "sinmata" + fileNameSTR.substring(fileNameSTR.toString().lastIndexOf("."));	
+							if(!fileNameSTR.equals(Constantes.EMPTY) && extension != null) {
+								//log.info("xxxx :" + this.getFileName(part).substring(this.getFileName(part).toString().lastIndexOf(".")));
+								 if(fileNameSTR.toString().lastIndexOf(".") != -1) {
+									 fileNameSTR = prefijo + "sinmata" + fileNameSTR.substring(fileNameSTR.toString().lastIndexOf("."));	 
+								 }
+									
 							}
 							
 							
@@ -217,13 +220,15 @@ public class MensajeReceptorAutomatico {
 
 							int n = 0;
 
-							if( !fileNameSTR.equals(Constantes.EMPTY)) {
+							if( !fileNameSTR.equals(Constantes.EMPTY) && extension != null) {
 								 rutaAchivoGuardado = saveDirectory + File.separator + fileNameSTR;
 								 rutaAchivoGuardado2 = saveDirectory + File.separator;
-
-								 n = fileNameSTR.lastIndexOf('.');
-						//		log.info("fileName.lastIndexOf('.') :" + n);
-								extension = fileNameSTR.substring(n + 1);
+								 if(fileNameSTR.toString().lastIndexOf(".") != -1) {
+									 n = fileNameSTR.lastIndexOf('.');
+										//		log.info("fileName.lastIndexOf('.') :" + n);
+												extension =  fileNameSTR.substring(n + 1);
+									 
+								 }
 								
 							}							
 

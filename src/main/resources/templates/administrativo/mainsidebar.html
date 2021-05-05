@@ -347,6 +347,12 @@
 								class="fa fa-circle-o"></i>Categoria por Articulo</a></li>
 					</ul>
 				</li>
+<!-- 				<li class="treeview" -->
+<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"> -->
+<!-- 					<a th:href="@{/ventaComprasTotal}"> <i class="fa  fa-circle-o"></i> <span>Ventas/Compras Total</span> -->
+<!-- 						<i class="fa fa-angle-left pull-right"></i> -->
+<!-- 				</a> -->
+<!-- 				</li> -->
 				<li class="treeview"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Contador','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
 					<a th:href="@{#}"> <i class="fa fa-circle-o"></i> <span>Cuentas</span>

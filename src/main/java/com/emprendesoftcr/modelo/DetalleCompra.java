@@ -133,6 +133,14 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "cant_inventario")
 	private Double cantidadIventario;
 	
+	@ManyToOne
+	@JoinColumn(name = "usuario_act_id", nullable = false)
+	private Usuario						usuarioActualizacion;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", nullable = false)
+	private Usuario						usuarioCreacion;
 	
 
 	public DetalleCompra() {
@@ -195,8 +203,15 @@ public class DetalleCompra implements Serializable {
 		this.codigoComercial3 = recepcionFacturaDetalle.getCodigoComercial3() == null ? Constantes.EMPTY : recepcionFacturaDetalle.getCodigoComercial3();
 
 		this.codigoCabys = recepcionFacturaDetalle.getCodigoCabys() == null ? Constantes.EMPTY : recepcionFacturaDetalle.getCodigoCabys();
-		this.tarifaImpuesto = recepcionFacturaDetalle.getImpuestoCodigoTarifa() == null ? Constantes.EMPTY : recepcionFacturaDetalle.getImpuestoCodigoTarifa();
-		this.codigoTipoImpuesto = recepcionFacturaDetalle.getImpuestoCodigo() == null ? Constantes.EMPTY : recepcionFacturaDetalle.getImpuestoCodigo();
+		if(recepcionFacturaDetalle.getImpuestoCodigoTarifa() != null &&  recepcionFacturaDetalle.getImpuestoCodigo().equals("99")) {
+				this.tarifaImpuesto = recepcionFacturaDetalle.getImpuestoCodigoTarifa1() != null  ? recepcionFacturaDetalle.getImpuestoCodigoTarifa1():Constantes.EMPTY  ;
+				this.codigoTipoImpuesto = recepcionFacturaDetalle.getImpuestoCodigo1() != null  ?  recepcionFacturaDetalle.getImpuestoCodigo1() :Constantes.EMPTY ;
+
+		}else {
+			this.tarifaImpuesto = recepcionFacturaDetalle.getImpuestoCodigoTarifa() != null  ? recepcionFacturaDetalle.getImpuestoCodigoTarifa():Constantes.EMPTY  ;
+			this.codigoTipoImpuesto = recepcionFacturaDetalle.getImpuestoCodigo() != null  ?  recepcionFacturaDetalle.getImpuestoCodigo() :Constantes.EMPTY ;
+			
+		}
 
 	}
 
@@ -462,6 +477,26 @@ public class DetalleCompra implements Serializable {
 	
 	public void setCantidadIventario(Double cantidadIventario) {
 		this.cantidadIventario = cantidadIventario;
+	}
+
+	
+	public Usuario getUsuarioActualizacion() {
+		return usuarioActualizacion;
+	}
+
+	
+	public void setUsuarioActualizacion(Usuario usuarioActualizacion) {
+		this.usuarioActualizacion = usuarioActualizacion;
+	}
+
+	
+	public Usuario getUsuarioCreacion() {
+		return usuarioCreacion;
+	}
+
+	
+	public void setUsuarioCreacion(Usuario usuarioCreacion) {
+		this.usuarioCreacion = usuarioCreacion;
 	}
 	
 	

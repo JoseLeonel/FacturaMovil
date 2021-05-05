@@ -417,6 +417,12 @@ public class FacturasController {
 		return "views/facturas/ventaDolares";
 	}
 
+
+	@RequestMapping(value = "/ventaComprasTotal", method = RequestMethod.GET)
+	public String ventaComprasTotal(ModelMap model) {
+		return "views/facturas/VentasComprasTotal";
+	}
+
 	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarTikect1.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -805,11 +811,6 @@ private String obtenerParrafoOficial(Factura factura) {
 
 			// Se prepara el correo
 			String from = "factura@facturaemprendesoftcr.com";
-//			if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
-//				if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-//					from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@facturaemprendesoftcr.com";
-//				}
-//			}
 			String nombre = usuario.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuario.getEmpresa().getNombre() : usuario.getEmpresa().getNombreComercial();
 			nombre = nombre.length() > 50 ? nombre.substring(0, 50) : nombre;
 			String subject = nombre + " Facturas Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;

@@ -841,7 +841,7 @@
     var self = this;
     self.colorVentaEspera = 'green'
     self.parametros   = opts.parametros;
-
+    
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false

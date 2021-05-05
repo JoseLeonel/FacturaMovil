@@ -9,7 +9,7 @@
 									<div class="planel-body">
 										<div class="row">
                                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                                <span>Compras pendiente de ingresar al inventario</span>
+                                                <span>Pendiente de ingresar al inventario</span>
                                             </div>
 											<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12" >
 												<table id="tableListar" 
@@ -69,7 +69,7 @@
 	      <div class = "box-body">
            <div class="row" >
                     <div class= "col-md-12 col-sx-12 col-sm-12 ol-lg-12">
-		        <span id="tituloCompra">Factura Compra #: {consecutivo}</span>
+		        <span id="tituloCompra">{tituloCompra} {consecutivo}</span>
                 <div style="overflow: scroll;height: 500px;">
 				<table class="table table-striped" style="width:100%">
                         <thead>
@@ -260,6 +260,7 @@
         self.articulos = {data:[]}
         self.detalleCompra  = null
         self.consecutivo = null
+        self.tituloCompra = "Factura Electronica"
         self.item = null;
         self.articulo = null;
         self.mostrarDetalles = false;
@@ -725,6 +726,14 @@ __MostrarPDF(e) {
         self.consecutivo = data.consecutivo;
         self.detail = []
        self.detalleCompra = {}
+       self.tituloCompra = "Factura Electronica :"
+       if(data.tipo_documento == 3){
+           self.tituloCompra = "Nota Credito :"
+       }
+       if(data.tipo_documento == 4 ){
+           self.tituloCompra = "Nota Debito :"
+       }
+
         self.update()
       listadoDetallesCompras(data.id,function(resultado){
           console.log(resultado)

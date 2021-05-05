@@ -3851,7 +3851,7 @@ function __comboCondicionPago(){
     self.comboCondicionPagos = []
     self.update()
     if(typeof self.empresa != 'undefined'){
-        if(self.empresa.cedula == '3101641333') {
+        if(self.empresa.cedula == '3102798618') {
             self.comboCondicionPagos.push({
                 estado:"02",
                 descripcion:$.i18n.prop("factura.codicion.venta.credito")

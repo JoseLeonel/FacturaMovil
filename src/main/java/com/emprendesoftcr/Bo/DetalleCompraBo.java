@@ -29,6 +29,6 @@ public interface DetalleCompraBo {
 	DetalleCompra findById(Long idDetalleCompra);
 	Integer ContarDetalleCompraSinIngresar(Long idCompra);
 	ByteArrayInputStream createExcelDetalleCompraResumen(Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa)throws Exception;;
-
+	ByteArrayInputStream createExcelResumen(	Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception ;
 	
 }

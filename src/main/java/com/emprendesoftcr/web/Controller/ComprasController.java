@@ -467,6 +467,10 @@ public class ComprasController {
 			if (precioPublico.equals(Constantes.ZEROS_DOUBLE)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico");
 			}
+			
+			if (precioPublico <=  costo_inv) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico.menor");
+			}
 			if (codigoInventario.equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.codigo.publico");
 			}
@@ -1061,6 +1065,43 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
+	
+	@RequestMapping(value = "/DescargarComprasVentasResumenAjax.do", method = RequestMethod.GET)
+	public void DescargarComprasVentasResumenAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws Exception {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		if (fechaInicio != null ) {
+			if (fechaFin != null) {
+				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
+		String inicio1 = dateFormat1.format(fechaInicio);
+		String fin1 = dateFormat2.format(fechaFin);
+
+		Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+
+		String nombreArchivo = "ResumenIVAcompras.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayInputStream inputStream = detalleCompraBo.createExcelDetalleCompraResumen(recepcionFacturas, fechaInicioParam, fechaFinParam, usuario.getEmpresa());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+	
+	
 
 	/**
 	 * Modulo de compras

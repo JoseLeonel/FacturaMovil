@@ -13,12 +13,12 @@ import com.emprendesoftcr.utils.Utils;
 		+ " DATE_FORMAT(fact.fecha_emision, \"%d-%c-%Y\") as fecha,"
 		+ "categorias.descripcion as nomb_categ ,"
 		+ "det.codigo,det.descripcion as nomb_product,"
-		+ "IFNULL(det.monto_total_linea,0) as venta,"
+		+ "IFNULL(det.sub_total,0) as venta,"
 		+ " IFNULL(det.costo,0) as costo"
 		+ " FROM detalles det" + " inner join facturas fact on fact.id =det.factura_id " 
 		+ " inner join clientes on clientes.id =fact.cliente_id " 
-		+ " left join articulos on articulos.codigo =det.codigo " 
-		+ " inner join categorias on categorias.id = articulos.categoria_id " 
+		+ " left join articulos  on articulos.codigo =det.codigo and articulos.empresa_id = fact.empresa_id " 
+		+ " inner join categorias on categorias.id = articulos.categoria_id  and categorias.empresa_id = fact.empresa_id " 
 		+ " where fact.empresa_id = :ID_EMPRESA fact.estado in and fact.tipo_doc !='88'  " 
 		+ "and fact.fecha_emision >= :fechaInicial and fact.fecha_emision <= :fechaFinal "
 		+ "and categorias.id = and fact.cliente_id and fact.act_comercial and det.codigo and fact.numero_consecutivo and fact.usuario_id")
@@ -106,19 +106,35 @@ public class ConsultaUtilidadNative implements Serializable {
 	}
 
 	public Double getTotalCosto() {
+    Double resultado = this.costo != null && this.costo > Constantes.ZEROS_DOUBLE? this.costo:Constantes.ZEROS_DOUBLE;
+		
 		Double valor = this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? -1d : 1d;
-		return this.tipoCodigo.equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO) ? Constantes.ZEROS_DOUBLE : (costo * this.cantidad) * valor;
+		Double finalTotal = Constantes.ZEROS_DOUBLE;
+		if(this.tipoCodigo != null && this.tipoCodigo.equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
+			finalTotal =Constantes.ZEROS_DOUBLE; 
+		}else {
+			finalTotal =resultado > Constantes.ZEROS_DOUBLE? (resultado * this.cantidad) * valor:Constantes.ZEROS_DOUBLE;
+		}
+		return  finalTotal;
 	}
 
 	public String getTotalCostoSTR() {
-		return Utils.formateadorMiles(getTotalCosto());
+		return Utils.formateadorMiles(this.getTotalCosto());
 	}
 
 	public Double getTotalUtilidad() {
 
 		Double valor = this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? -1d : 1d;
-
-		return (this.venta - getTotalCosto()) * valor;
+      
+		Double totalCostoFinal = getTotalCosto();
+		totalCostoFinal = totalCostoFinal > Constantes.ZEROS_DOUBLE ?totalCostoFinal:Constantes.ZEROS_DOUBLE;
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Double ventaFinal = this.venta != null? this.venta:Constantes.ZEROS_DOUBLE;
+		if(ventaFinal >= totalCostoFinal && !ventaFinal.equals(Constantes.ZEROS_DOUBLE)  ) {
+			resultado = (ventaFinal - totalCostoFinal) ;
+			resultado = resultado > Constantes.ZEROS_DOUBLE ?resultado * valor:Constantes.ZEROS_DOUBLE;
+		}
+		return resultado;
 	}
 
 	public String getTotalUtilidadSTR() {
@@ -138,7 +154,7 @@ public class ConsultaUtilidadNative implements Serializable {
 
 	public Double getVenta() {
 		Double valor = this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? -1d : 1d;
-		return this.venta  * valor;
+		return this.venta != null? this.venta * valor :Constantes.ZEROS_DOUBLE;
 	}
 
 	public void setVenta(Double venta) {

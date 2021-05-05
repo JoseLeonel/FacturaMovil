@@ -564,31 +564,31 @@
 					<jvmArguments>-Xmx2048m</jvmArguments>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>2.5.0</version>
-				<executions>
-					<execution>
-						<id>xjc</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- Set the package of the generated code -->
-					<packageName>com.emprendesoftcr.xml.schema.NotaDebitoschema</packageName>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>jaxb2-maven-plugin</artifactId> -->
+<!-- 				<version>2.5.0</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>xjc</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>xjc</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					Set the package of the generated code -->
+<!-- 					<packageName>com.emprendesoftcr.xml.schema.NotaDebitoschema</packageName> -->
 
-					<!-- Indicate that we should use DTD input instead of XSDs -->
-					<sourceType>xmlschema</sourceType>
+<!-- 					Indicate that we should use DTD input instead of XSDs -->
+<!-- 					<sourceType>xmlschema</sourceType> -->
 
-					<!-- Define the directory where we should find the DTD files -->
-					<sources>
-						<source>src/main/resources/templates/notadebitoschema</source>
-					</sources>
-				</configuration>
-			</plugin>
+<!-- 					Define the directory where we should find the DTD files -->
+<!-- 					<sources> -->
+<!-- 						<source>src/main/resources/templates/notadebitoschema</source> -->
+<!-- 					</sources> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 
 	</build>
