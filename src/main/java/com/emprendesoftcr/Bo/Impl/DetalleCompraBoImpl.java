@@ -337,7 +337,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	}
 	@Override
 	public ByteArrayInputStream createExcelDetalleCompraResumen(Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {
-		List<String> headers = Arrays.asList("Fecha Emision","Clave", "# Documento ", "Cedula Emisor", "Nombre Emisor", "Nombre Comercial","Correo Electronico", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "Total Exento 0%", "Total Tarifa reducida 1%", "Total Tarifa reducida 2%", "Total Tarifa reducida 4%", "Total Transitorio 0%", "Total Transitorio 4%", "Total Transitorio 8%", "Total Tarifa General 13%","Total Otros impuestos(Tipo impuesto=99)", "Total Descuentos", "Total Impuesto","Total Comprobante","Otros Cargos(10% para restaurantes)","Total Gravada","Total Exentas","Tipo Gasto");
+		List<String> headers = Arrays.asList("Fecha Emision","Clave", "# Documento ", "Cedula Emisor", "Nombre Emisor", "Nombre Comercial","Correo Electronico", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "Total Exento 0%", "Total Tarifa reducida 1%", "Total Tarifa reducida 2%", "Total Tarifa reducida 4%", "Total Transitorio 0%", "Total Transitorio 4%", "Total Transitorio 8%", "Total Tarifa General 13%","Total Otros impuestos(Tipo impuesto=99)", "Total Descuentos", "Total Impuesto","Total Comprobante","Otros Cargos","Total Gravada","Total Exentas","Tipo Gasto");
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Map<String, CellStyle> styles = Utils.createStyles(workbook);

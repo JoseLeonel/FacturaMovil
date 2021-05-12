@@ -142,7 +142,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 				recepcionFacturaDetalle.setRecepcionFactura(recepcionFactura);
 				recepcionFacturaDao.agregar(recepcionFacturaDetalle);
 			}
-			if (recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO)) {
+			if (recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO) && !list.isEmpty() && list != null) {
 				Collection<RecepcionFacturaDetalle> lista = recepcionFacturaDao.findByIdRecepcionFactura(recepcionFactura.getId());
 				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, lista);
 			}
@@ -162,18 +162,20 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	private List<RecepcionFacturaDetalle> obtenerDetalle(FacturaElectronicaSchema.DetalleServicio detalles) throws Exception {
 		List<RecepcionFacturaDetalle> lista = new ArrayList<RecepcionFacturaDetalle>();
 		try {
-			for (FacturaElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
-				RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
-				// codigos comerciales
-				recepcionFacturaDetalleNueva = getCodigosComerciales(detalle, recepcionFacturaDetalleNueva);
-				// ** Descuentos
-				recepcionFacturaDetalleNueva = getDescuentosFactura(detalle.getDescuento(), recepcionFacturaDetalleNueva);
-				// Impuestos
-				recepcionFacturaDetalleNueva = getImpuestosFactura(detalle.getImpuesto(), recepcionFacturaDetalleNueva);
-				// resumen final
-				recepcionFacturaDetalleNueva = getDetalleResumen(detalle, recepcionFacturaDetalleNueva);
+			if(detalles != null && !detalles.getLineaDetalle().isEmpty()) {
+				for (FacturaElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
+					RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
+					// codigos comerciales
+					recepcionFacturaDetalleNueva = getCodigosComerciales(detalle, recepcionFacturaDetalleNueva);
+					// ** Descuentos
+					recepcionFacturaDetalleNueva = getDescuentosFactura(detalle.getDescuento(), recepcionFacturaDetalleNueva);
+					// Impuestos
+					recepcionFacturaDetalleNueva = getImpuestosFactura(detalle.getImpuesto(), recepcionFacturaDetalleNueva);
+					// resumen final
+					recepcionFacturaDetalleNueva = getDetalleResumen(detalle, recepcionFacturaDetalleNueva);
 
-				lista.add(recepcionFacturaDetalleNueva);
+					lista.add(recepcionFacturaDetalleNueva);
+				}
 			}
 		} catch (
 
@@ -194,55 +196,58 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 */
 	private RecepcionFacturaDetalle getImpuestosFactura(List<ImpuestoType> impuestos, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (ImpuestoType impuestoType : impuestos) {
-				if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo1(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa1(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto1(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+			if(impuestos != null && !impuestos.isEmpty()) {
+				for (ImpuestoType impuestoType : impuestos) {
+					if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo1(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa1(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto1(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo2(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa2(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto2(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo2(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa2(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto2(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo3(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa3(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto3(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo3(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa3(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto3(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo4(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa4(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto4(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo4(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa4(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto4(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo5(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa5(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto5(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo5(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa5(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto5(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo6(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa6(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto6(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo6(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa6(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto6(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
+					}
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getTipoDocumento() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNumeroDocumento() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNombreInstitucion() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getFechaEmision().toString() : null);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(impuestoType.getExoneracion() != null ? (double) impuestoType.getExoneracion().getPorcentajeExoneracion().intValue() : Constantes.ZEROS);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getMontoExoneracion().doubleValue() : Constantes.ZEROS_DOUBLE);
 				}
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getTipoDocumento() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNumeroDocumento() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNombreInstitucion() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getFechaEmision().toString() : null);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(impuestoType.getExoneracion() != null ? (double) impuestoType.getExoneracion().getPorcentajeExoneracion().intValue() : Constantes.ZEROS);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getMontoExoneracion().doubleValue() : Constantes.ZEROS_DOUBLE);
+				
 			}
 
 		} catch (Exception e) {
@@ -260,12 +265,15 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 */
 	private RecepcionFacturaDetalle getDescuentosFactura(List<DescuentoType> descuentos, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (DescuentoType descuentoType : descuentos) {
-				if (recepcionFacturaDetalleNueva.getDescuentoMonto() != null && recepcionFacturaDetalleNueva.getDescuentoMonto().equals(Constantes.ZEROS_DOUBLE)) {
-					recepcionFacturaDetalleNueva.setDescuentoMonto(descuentoType.getMontoDescuento() != null ? descuentoType.getMontoDescuento().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setDescuentoNaturaleza(descuentoType.getNaturalezaDescuento() != null ? descuentoType.getNaturalezaDescuento() : Constantes.EMPTY);
+			if(descuentos != null && !descuentos.isEmpty()) {
+				for (DescuentoType descuentoType : descuentos) {
+					if (recepcionFacturaDetalleNueva.getDescuentoMonto() != null && recepcionFacturaDetalleNueva.getDescuentoMonto().equals(Constantes.ZEROS_DOUBLE)) {
+						recepcionFacturaDetalleNueva.setDescuentoMonto(descuentoType.getMontoDescuento() != null ? descuentoType.getMontoDescuento().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setDescuentoNaturaleza(descuentoType.getNaturalezaDescuento() != null ? descuentoType.getNaturalezaDescuento() : Constantes.EMPTY);
 
+					}
 				}
+				
 			}
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->getDescuentosFactura :" + e.getMessage() + new Date()));
@@ -283,19 +291,22 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	 */
 	private RecepcionFacturaDetalle getCodigosComerciales(FacturaElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (CodigoType codigoType : lineaDetalle.getCodigoComercial()) {
-				if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercialCodigo(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
-				} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo1() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo1(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercial1(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
-				} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo2() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo2(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercial2(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+			if(lineaDetalle != null && !lineaDetalle.getCodigoComercial().isEmpty()) {
+				for (CodigoType codigoType : lineaDetalle.getCodigoComercial()) {
+					if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercialCodigo(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+					} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo1() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo1(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercial1(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+					} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo2() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo2(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercial2(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+
+					}
 
 				}
-
+				
 			}
 
 		} catch (Exception e) {
@@ -418,7 +429,7 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 	private RecepcionFactura resumenFacturaTotal(FacturaElectronicaSchema.ResumenFactura resumenFactura, RecepcionFactura recepcionFactura) throws Exception {
 		try {
 
-			recepcionFactura.setFacturaCodigoMoneda(resumenFactura.getCodigoTipoMoneda().getCodigoMoneda());
+			recepcionFactura.setFacturaCodigoMoneda(resumenFactura.getCodigoTipoMoneda() != null?resumenFactura.getCodigoTipoMoneda().getCodigoMoneda():Constantes.EMPTY);
 			recepcionFactura.setFacturaTipoCambio(resumenFactura.getCodigoTipoMoneda() != null ? resumenFactura.getCodigoTipoMoneda().getTipoCambio().doubleValue() : Constantes.ZEROS_DOUBLE);
 
 			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) && recepcionFactura.getFacturaCodigoMoneda() != null) {

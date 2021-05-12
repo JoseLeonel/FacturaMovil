@@ -27,8 +27,7 @@ public interface ProcesoHaciendaService {
 
 	Boolean enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 	
-	 void taskEnvioDeCorreosSimplificado() throws Exception;
-
+	
 	void enviarCorreosRecepcion(RecepcionFactura recepcionFactura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 
 	// Proceso de firmar las facturas y crear el registro de hacienda

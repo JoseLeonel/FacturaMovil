@@ -40,6 +40,7 @@ import com.emprendesoftcr.xml.schema.NotaDebitoschema.ReceptorType;
 @EnableTransactionManagement
 @Service("notaDebitoElectronicaSchemaBo")
 public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaSchemaBo {
+
 	@Autowired
 	RecepcionFacturaDao		recepcionFacturaDao;
 
@@ -56,7 +57,7 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	private String				pathFacturaXML;
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
-	
+
 	@Transactional
 	@Override
 	public void aplicarFacturaXMLToModelo(String ruta, Empresa empresa, Usuario usuarioSesion, String condicionImpuesto, Integer tipoGasto, String codigoActividad, String mensaje, String detalleMensaje) throws Exception {
@@ -126,13 +127,13 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 				proveedor.setEmpresa(usuarioSesion.getEmpresa());
 				proveedorDao.agregar(proveedor);
 
-			}else {
-					proveedor.setEmail(recepcionFactura.getEmisorCorreo());
-					proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
-					proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
-					proveedor.setMovil(recepcionFactura.getEmisorTelefono());
-					proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
-					proveedorDao.modificar(proveedor);
+			} else {
+				proveedor.setEmail(recepcionFactura.getEmisorCorreo());
+				proveedor.setNombreCompleto(recepcionFactura.getEmisorNombreComercial() != null && recepcionFactura.getEmisorNombreComercial().equals(Constantes.EMPTY) ? recepcionFactura.getEmisorNombreComercial() : recepcionFactura.getEmisorNombre());
+				proveedor.setDireccion(recepcionFactura.getEmisorOtraSena());
+				proveedor.setMovil(recepcionFactura.getEmisorTelefono());
+				proveedor.setRazonSocial(recepcionFactura.getEmisorNombre());
+				proveedorDao.modificar(proveedor);
 			}
 
 			// Agregar las linea de detalle de la factura electronica
@@ -141,7 +142,7 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 				recepcionFacturaDetalle.setRecepcionFactura(recepcionFactura);
 				recepcionFacturaDao.agregar(recepcionFacturaDetalle);
 			}
-			if (recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO)) {
+			if (recepcionFactura.getTipoGasto().equals(Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO) && !list.isEmpty() && list != null) {
 				Collection<RecepcionFacturaDetalle> lista = recepcionFacturaDao.findByIdRecepcionFactura(recepcionFactura.getId());
 				compraBo.crearCompra(recepcionFactura, usuarioSesion, proveedor, lista);
 			}
@@ -150,9 +151,9 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 			log.error(String.format("--error Compra aplicarFacturaXMLToModelo del xml :" + e.getMessage() + new Date()));
 			throw e;
 		}
-		
 
 	}
+
 	/**
 	 * Detalles de la factura
 	 * @param detalles
@@ -162,18 +163,20 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	private List<RecepcionFacturaDetalle> obtenerDetalle(NotaDebitoElectronicaSchema.DetalleServicio detalles) throws Exception {
 		List<RecepcionFacturaDetalle> lista = new ArrayList<RecepcionFacturaDetalle>();
 		try {
-			for (NotaDebitoElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
-				RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
-				// codigos comerciales
-				recepcionFacturaDetalleNueva = getCodigosComerciales(detalle, recepcionFacturaDetalleNueva);
-				// ** Descuentos
-				recepcionFacturaDetalleNueva = getDescuentosFactura(detalle.getDescuento(), recepcionFacturaDetalleNueva);
-				// Impuestos
-				recepcionFacturaDetalleNueva = getImpuestosFactura(detalle.getImpuesto(), recepcionFacturaDetalleNueva);
-				// resumen final
-				recepcionFacturaDetalleNueva = getDetalleResumen(detalle, recepcionFacturaDetalleNueva);
+			if (detalles.getLineaDetalle() != null && !detalles.getLineaDetalle().isEmpty()) {
+				for (NotaDebitoElectronicaSchema.DetalleServicio.LineaDetalle detalle : detalles.getLineaDetalle()) {
+					RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
+					// codigos comerciales
+					recepcionFacturaDetalleNueva = getCodigosComerciales(detalle, recepcionFacturaDetalleNueva);
+					// ** Descuentos
+					recepcionFacturaDetalleNueva = getDescuentosFactura(detalle.getDescuento(), recepcionFacturaDetalleNueva);
+					// Impuestos
+					recepcionFacturaDetalleNueva = getImpuestosFactura(detalle.getImpuesto(), recepcionFacturaDetalleNueva);
+					// resumen final
+					recepcionFacturaDetalleNueva = getDetalleResumen(detalle, recepcionFacturaDetalleNueva);
 
-				lista.add(recepcionFacturaDetalleNueva);
+					lista.add(recepcionFacturaDetalleNueva);
+				}
 			}
 		} catch (
 
@@ -194,55 +197,57 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	 */
 	private RecepcionFacturaDetalle getImpuestosFactura(List<ImpuestoType> impuestos, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (ImpuestoType impuestoType : impuestos) {
-				if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo1(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa1(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto1(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+			if (impuestos != null && !impuestos.isEmpty()) {
+				for (ImpuestoType impuestoType : impuestos) {
+					if (recepcionFacturaDetalleNueva.getImpuestoCodigo() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo1() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo1(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa1(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto1(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo2(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa2(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto2(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo2() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo2(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa2(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto2(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo3(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa3(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto3(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo3() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo3(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa3(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto3(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo4(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa4(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto4(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo4() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo4(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa4(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto4(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo5(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa5(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto5(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo5() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo5(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa5(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto5(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
-				} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
-					recepcionFacturaDetalleNueva.setImpuestoCodigo6(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoTarifa6(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setImpuestoMonto6(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
+					} else if (recepcionFacturaDetalleNueva.getImpuestoCodigo6() == null) {
+						recepcionFacturaDetalleNueva.setImpuestoCodigo6(impuestoType.getCodigo() != null ? impuestoType.getCodigo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoTarifa6(impuestoType.getTarifa() != null ? impuestoType.getTarifa().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(impuestoType.getCodigoTarifa() != null ? impuestoType.getCodigoTarifa() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setImpuestoMonto6(impuestoType.getMonto() != null ? impuestoType.getMonto().doubleValue() : Constantes.ZEROS_DOUBLE);
 
+					}
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getTipoDocumento() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNumeroDocumento() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNombreInstitucion() : Constantes.EMPTY);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getFechaEmision().toString() : null);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(impuestoType.getExoneracion() != null ? (double) impuestoType.getExoneracion().getPorcentajeExoneracion().intValue() : Constantes.ZEROS);
+					recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getMontoExoneracion().doubleValue() : Constantes.ZEROS_DOUBLE);
 				}
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getTipoDocumento() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNumeroDocumento() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getNombreInstitucion() : Constantes.EMPTY);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getFechaEmision().toString() : null);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(impuestoType.getExoneracion() != null ? (double) impuestoType.getExoneracion().getPorcentajeExoneracion().intValue() : Constantes.ZEROS);
-				recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(impuestoType.getExoneracion() != null ? impuestoType.getExoneracion().getMontoExoneracion().doubleValue() : Constantes.ZEROS_DOUBLE);
 			}
 
 		} catch (Exception e) {
@@ -260,12 +265,15 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	 */
 	private RecepcionFacturaDetalle getDescuentosFactura(List<DescuentoType> descuentos, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (DescuentoType descuentoType : descuentos) {
-				if (recepcionFacturaDetalleNueva.getDescuentoMonto() != null && recepcionFacturaDetalleNueva.getDescuentoMonto().equals(Constantes.ZEROS_DOUBLE)) {
-					recepcionFacturaDetalleNueva.setDescuentoMonto(descuentoType.getMontoDescuento() != null ? descuentoType.getMontoDescuento().doubleValue() : Constantes.ZEROS_DOUBLE);
-					recepcionFacturaDetalleNueva.setDescuentoNaturaleza(descuentoType.getNaturalezaDescuento() != null ? descuentoType.getNaturalezaDescuento() : Constantes.EMPTY);
+			if (descuentos != null && !descuentos.isEmpty()) {
+				for (DescuentoType descuentoType : descuentos) {
+					if (recepcionFacturaDetalleNueva.getDescuentoMonto() != null && recepcionFacturaDetalleNueva.getDescuentoMonto().equals(Constantes.ZEROS_DOUBLE)) {
+						recepcionFacturaDetalleNueva.setDescuentoMonto(descuentoType.getMontoDescuento() != null ? descuentoType.getMontoDescuento().doubleValue() : Constantes.ZEROS_DOUBLE);
+						recepcionFacturaDetalleNueva.setDescuentoNaturaleza(descuentoType.getNaturalezaDescuento() != null ? descuentoType.getNaturalezaDescuento() : Constantes.EMPTY);
 
+					}
 				}
+
 			}
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->getDescuentosFactura :" + e.getMessage() + new Date()));
@@ -283,16 +291,19 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	 */
 	private RecepcionFacturaDetalle getCodigosComerciales(NotaDebitoElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
-			for (CodigoType codigoType : lineaDetalle.getCodigoComercial()) {
-				if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercialCodigo(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
-				} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo1() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo1(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercial1(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
-				} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo2() == null) {
-					recepcionFacturaDetalleNueva.setCodigoComercialTipo2(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
-					recepcionFacturaDetalleNueva.setCodigoComercial2(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+			if (lineaDetalle.getCodigoComercial() != null && !lineaDetalle.getCodigoComercial().isEmpty()) {
+				for (CodigoType codigoType : lineaDetalle.getCodigoComercial()) {
+					if (recepcionFacturaDetalleNueva.getCodigoComercialTipo() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercialCodigo(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+					} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo1() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo1(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercial1(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+					} else if (recepcionFacturaDetalleNueva.getCodigoComercialTipo2() == null) {
+						recepcionFacturaDetalleNueva.setCodigoComercialTipo2(codigoType.getTipo() != null ? codigoType.getTipo() : Constantes.EMPTY);
+						recepcionFacturaDetalleNueva.setCodigoComercial2(codigoType.getCodigo() != null ? codigoType.getCodigo() : Constantes.EMPTY);
+
+					}
 
 				}
 
@@ -312,7 +323,7 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	 * @param recepcionFacturaDetalleNueva
 	 * @return
 	 */
-	private  RecepcionFacturaDetalle getDetalleResumen(NotaDebitoElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
+	private RecepcionFacturaDetalle getDetalleResumen(NotaDebitoElectronicaSchema.DetalleServicio.LineaDetalle lineaDetalle, RecepcionFacturaDetalle recepcionFacturaDetalleNueva) {
 		try {
 			recepcionFacturaDetalleNueva.setNumeroLinea(lineaDetalle.getNumeroLinea() != null ? lineaDetalle.getNumeroLinea().intValue() : Constantes.ZEROS);
 			recepcionFacturaDetalleNueva.setCodigoCabys(lineaDetalle.getCodigo());
@@ -342,7 +353,7 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	 * @return
 	 * @throws Exception
 	 */
-	private  RecepcionFactura getEncabezado(NotaDebitoElectronicaSchema notaCredito, RecepcionFactura recepcionFactura) throws Exception {
+	private RecepcionFactura getEncabezado(NotaDebitoElectronicaSchema notaCredito, RecepcionFactura recepcionFactura) throws Exception {
 
 		try {
 
@@ -371,16 +382,16 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	private RecepcionFactura obtenerEmisor(EmisorType emisorType, RecepcionFactura recepcionFactura) {
 		try {
 			recepcionFactura.setEmisorNombre(emisorType.getNombre());
-			recepcionFactura.setEmisorNombreComercial(emisorType.getNombreComercial() != null? emisorType.getNombreComercial():emisorType.getNombre());
-			
+			recepcionFactura.setEmisorNombreComercial(emisorType.getNombreComercial() != null ? emisorType.getNombreComercial() : emisorType.getNombre());
+
 			recepcionFactura.setEmisorCorreo(emisorType.getCorreoElectronico());
 			recepcionFactura.setEmisorTipoCedula(emisorType.getIdentificacion().getTipo());
 			recepcionFactura.setEmisorCedula(emisorType.getIdentificacion().getNumero());
-			recepcionFactura.setEmisorProvincia(emisorType.getUbicacion() != null?Utils.bigIntegerToStrig(emisorType.getUbicacion().getProvincia()):Constantes.EMPTY);
-			recepcionFactura.setEmisorCanton(emisorType.getUbicacion() != null?Utils.bigIntegerToStrig(emisorType.getUbicacion().getCanton()):Constantes.EMPTY);
-			recepcionFactura.setEmisorDistrito(emisorType.getUbicacion() != null?Utils.bigIntegerToStrig(emisorType.getUbicacion().getDistrito()):Constantes.EMPTY);
-			recepcionFactura.setEmisorOtraSena(emisorType.getUbicacion() != null ?emisorType.getUbicacion().getOtrasSenas():Constantes.EMPTY);
-			recepcionFactura.setEmisorTelefono(emisorType.getTelefono() != null ? Utils.bigIntegerToStrig(emisorType.getTelefono().getValue().getNumTelefono()):Constantes.EMPTY);
+			recepcionFactura.setEmisorProvincia(emisorType.getUbicacion() != null ? Utils.bigIntegerToStrig(emisorType.getUbicacion().getProvincia()) : Constantes.EMPTY);
+			recepcionFactura.setEmisorCanton(emisorType.getUbicacion() != null ? Utils.bigIntegerToStrig(emisorType.getUbicacion().getCanton()) : Constantes.EMPTY);
+			recepcionFactura.setEmisorDistrito(emisorType.getUbicacion() != null ? Utils.bigIntegerToStrig(emisorType.getUbicacion().getDistrito()) : Constantes.EMPTY);
+			recepcionFactura.setEmisorOtraSena(emisorType.getUbicacion() != null ? emisorType.getUbicacion().getOtrasSenas() : Constantes.EMPTY);
+			recepcionFactura.setEmisorTelefono(emisorType.getTelefono() != null ? Utils.bigIntegerToStrig(emisorType.getTelefono().getValue().getNumTelefono()) : Constantes.EMPTY);
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->obtenerEmisor :" + e.getMessage() + new Date()));
 			throw e;
@@ -391,15 +402,18 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 
 	private RecepcionFactura obtenerReceptor(ReceptorType receptorType, RecepcionFactura recepcionFactura) throws Exception {
 		try {
-			recepcionFactura.setReceptorNombre(receptorType.getNombre());
-			recepcionFactura.setReceptorNombreComercial(receptorType.getNombreComercial() != null?receptorType.getNombreComercial():receptorType.getNombre());
-			recepcionFactura.setReceptorCorreo(receptorType.getCorreoElectronico());
-			recepcionFactura.setReceptorTipoCedula(receptorType.getIdentificacion().getTipo());
-			recepcionFactura.setReceptorCedula(receptorType.getIdentificacion().getNumero());
-			recepcionFactura.setReceptorProvincia(receptorType.getUbicacion() != null? Utils.bigIntegerToStrig(receptorType.getUbicacion().getProvincia()):Constantes.EMPTY);
-			recepcionFactura.setReceptorCanton(receptorType.getUbicacion() != null?Utils.bigIntegerToStrig(receptorType.getUbicacion().getCanton()):Constantes.EMPTY);
-			recepcionFactura.setReceptorDistrito(receptorType.getUbicacion() != null?Utils.bigIntegerToStrig(receptorType.getUbicacion().getDistrito()):Constantes.EMPTY);
-			recepcionFactura.setReceptorOtraSena(receptorType.getUbicacion() != null?receptorType.getUbicacion().getOtrasSenas():Constantes.EMPTY);
+			if(receptorType != null) {
+				recepcionFactura.setReceptorNombre(receptorType.getNombre());
+				recepcionFactura.setReceptorNombreComercial(receptorType.getNombreComercial() != null ? receptorType.getNombreComercial() : receptorType.getNombre());
+				recepcionFactura.setReceptorCorreo(receptorType.getCorreoElectronico());
+				recepcionFactura.setReceptorTipoCedula(receptorType.getIdentificacion().getTipo());
+				recepcionFactura.setReceptorCedula(receptorType.getIdentificacion().getNumero());
+				recepcionFactura.setReceptorProvincia(receptorType.getUbicacion() != null ? Utils.bigIntegerToStrig(receptorType.getUbicacion().getProvincia()) : Constantes.EMPTY);
+				recepcionFactura.setReceptorCanton(receptorType.getUbicacion() != null ? Utils.bigIntegerToStrig(receptorType.getUbicacion().getCanton()) : Constantes.EMPTY);
+				recepcionFactura.setReceptorDistrito(receptorType.getUbicacion() != null ? Utils.bigIntegerToStrig(receptorType.getUbicacion().getDistrito()) : Constantes.EMPTY);
+				recepcionFactura.setReceptorOtraSena(receptorType.getUbicacion() != null ? receptorType.getUbicacion().getOtrasSenas() : Constantes.EMPTY);
+				
+			}
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->obtenerReceptor :" + e.getMessage() + new Date()));
 			throw e;

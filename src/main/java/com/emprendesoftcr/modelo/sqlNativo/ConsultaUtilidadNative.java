@@ -110,11 +110,8 @@ public class ConsultaUtilidadNative implements Serializable {
 		
 		Double valor = this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ? -1d : 1d;
 		Double finalTotal = Constantes.ZEROS_DOUBLE;
-		if(this.tipoCodigo != null && this.tipoCodigo.equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
-			finalTotal =Constantes.ZEROS_DOUBLE; 
-		}else {
-			finalTotal =resultado > Constantes.ZEROS_DOUBLE? (resultado * this.cantidad) * valor:Constantes.ZEROS_DOUBLE;
-		}
+	
+		finalTotal =resultado > Constantes.ZEROS_DOUBLE? (resultado * this.cantidad) * valor:Constantes.ZEROS_DOUBLE;
 		return  finalTotal;
 	}
 
@@ -130,11 +127,11 @@ public class ConsultaUtilidadNative implements Serializable {
 		totalCostoFinal = totalCostoFinal > Constantes.ZEROS_DOUBLE ?totalCostoFinal:Constantes.ZEROS_DOUBLE;
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Double ventaFinal = this.venta != null? this.venta:Constantes.ZEROS_DOUBLE;
-		if(ventaFinal >= totalCostoFinal && !ventaFinal.equals(Constantes.ZEROS_DOUBLE)  ) {
+		if(ventaFinal >= totalCostoFinal && ventaFinal > Constantes.ZEROS_DOUBLE && totalCostoFinal > Constantes.ZEROS_DOUBLE  ) {
 			resultado = (ventaFinal - totalCostoFinal) ;
-			resultado = resultado > Constantes.ZEROS_DOUBLE ?resultado * valor:Constantes.ZEROS_DOUBLE;
+			resultado = resultado > Constantes.ZEROS_DOUBLE ?resultado :Constantes.ZEROS_DOUBLE;
 		}
-		return resultado;
+		return resultado > Constantes.ZEROS_DOUBLE?resultado * valor:Constantes.ZEROS_DOUBLE;
 	}
 
 	public String getTotalUtilidadSTR() {

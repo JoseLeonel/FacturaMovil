@@ -773,7 +773,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalImpuesto(recepcionFactura.getFacturaTotalImpuestos());
 			compraDao.modificar(compra);
 			// Crear Credito del cliente
-			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO) && compra.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA)) {
 				CuentaPagar cuentaPagar = new CuentaPagar();
 				cuentaPagar.setConsecutivo(compra.getConsecutivo());
 				cuentaPagar.setCreated_at(new Date());

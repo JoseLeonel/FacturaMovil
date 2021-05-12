@@ -64,7 +64,7 @@ var _Init = function() {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
         $("#idArticulo").val(null);
-        
+
         $("#numeroFactura").val(null);
         $("#totalVenta").val(null);
         $("#totalCosto").val(null);
@@ -73,8 +73,8 @@ var _Init = function() {
     ocultarDescargaEnvioCorreo();
     listaActividadEconomica();
     listaUsuarios();
-  //  var advanced_search_section = $('#filtrosAvanzados');
-  //  advanced_search_section.slideToggle(750);
+    //  var advanced_search_section = $('#filtrosAvanzados');
+    //  advanced_search_section.slideToggle(750);
 }
 
 var haciendas = { data: [] };
@@ -254,7 +254,7 @@ function _consulta() {
         codigo: $('#idArticulo').val(),
         numeroFactura: $('#numeroFactura').val(),
         idUsuario: $('#usuario').val(),
-        
+
 
     }
     __Inicializar_Table('.tableListar')
@@ -305,18 +305,26 @@ function sumarTotales(data) {
     var utilidadBruta = 0;
     var totalCosto = 0;
     var totalVenta = 0;
+    var utilidadBrutaSinCosto = 0;
     $.each(data, function(index, modeloTabla) {
-        utilidadBruta = utilidadBruta + modeloTabla.totalUtilidad;
-        totalCosto = totalCosto + modeloTabla.totalCosto;
-        totalVenta = totalVenta + modeloTabla.venta;
+        if (modeloTabla.totalCosto > 0) {
+            utilidadBruta = utilidadBruta + modeloTabla.totalUtilidad;
+            totalCosto = totalCosto + modeloTabla.totalCosto;
+            totalVenta = totalVenta + modeloTabla.venta;
+        } else {
+            utilidadBrutaSinCosto = utilidadBrutaSinCosto + modeloTabla.venta;
+
+        }
     });
     if (totalVenta > 0) {
         mostrarDescargaEnvioCorreo();
     }
 
+
     $('#totalVenta').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalVenta)), 2));
     $('#totalCosto').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalCosto)), 2));
-    $('#utilidadBruta').val(formatoDecimales(__valorNumerico(redondeoDecimales(utilidadBruta)), 2));
+    $('#utilidadBruta').val(formatoDecimales(__valorNumerico(redondeoDecimales(totalVenta - totalCosto)), 2));
+    $('#utilidadBrutaSinCosto').val(formatoDecimales(__valorNumerico(redondeoDecimales(utilidadBrutaSinCosto)), 2));
 }
 /**
  * Reglas aplicadas
@@ -532,9 +540,35 @@ var informacion_tabla = [
     { 'data': 'codigo', "name": "codigo", "title": "Codigo", "autoWidth": true },
     { 'data': 'nombreArticulo', "name": "nombreArticulo", "title": "Descripcion", "autoWidth": true },
     { 'data': 'cantidad', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
-    { 'data': 'totalCostoSTR', "name": "totalCostoSTR", "title": "Costo", "autoWidth": true },
-    { 'data': 'ventaSTR', "name": "ventaSTR", "title": "Venta", "autoWidth": true },
-    { 'data': 'totalUtilidadSTR', "name": "totalUtilidadSTR", "title": "Util.Bruta", "autoWidth": true },
+    {
+        'data': 'totalCostoSTR',
+        "name": "totalCostoSTR",
+        "title": "Costo",
+        "autoWidth": true,
+        "render": function(totalCostoSTR, type, row) {
+            return row.totalCosto != null ? row.totalCosto <= 0 ? '<span class="costoStyle">' + totalCostoSTR + '</span>' : '<span class="costoTrueStyle">' + row.totalCostoSTR + '</span>' : '';
+        }
+
+    },
+    {
+        'data': 'ventaSTR',
+        "name": "ventaSTR",
+        "title": "Venta",
+        "autoWidth": true,
+        "render": function(ventaSTR, type, row) {
+            return row.totalCosto != null ? row.totalCosto <= 0 ? '<span class="costoStyle">' + ventaSTR + '</span>' : '<span class="costoTrueStyle">' + row.ventaSTR + '</span>' : '';
+        }
+    },
+    {
+        'data': 'totalUtilidadSTR',
+        "name": "totalUtilidadSTR",
+        "title": "Util.Bruta",
+        "autoWidth": true,
+        "render": function(totalUtilidadSTR, type, row) {
+            return row.totalCosto != null ? row.totalCosto <= 0 ? '<span class="costoStyle">' + totalUtilidadSTR + '</span>' : '<span class="costoTrueStyle">' + row.totalUtilidadSTR + '</span>' : '';
+        }
+
+    },
     {
         'data': 'id',
         "name": "id",
@@ -574,7 +608,7 @@ function __bajarExcel() {
     var codigo = $('#idArticulo').val();
     var numeroFactura = $('#numeroFactura').val();
     var idUsuario = $('#usuario').val();
-    location.href = "DescargarUtilidadAjax.do?fechaInicioParam=" + fechaInicioParam + "&" + "fechaFinParam=" + fechaFinParam + "&" + "idCliente=" + idCliente + "&estado=" + estado + "&tipoDoc=" + tipoDoc + "&actividadEconomica=" + actividadEconomica + "&idCategoria=" + idCategoria + "&codigo=" + codigo + "&numeroFactura=" + numeroFactura + '&idUsuario='+ idUsuario;
+    location.href = "DescargarUtilidadAjax.do?fechaInicioParam=" + fechaInicioParam + "&" + "fechaFinParam=" + fechaFinParam + "&" + "idCliente=" + idCliente + "&estado=" + estado + "&tipoDoc=" + tipoDoc + "&actividadEconomica=" + actividadEconomica + "&idCategoria=" + idCategoria + "&codigo=" + codigo + "&numeroFactura=" + numeroFactura + '&idUsuario=' + idUsuario;
 }
 /**
  * Fecha de emision

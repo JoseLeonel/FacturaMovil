@@ -733,22 +733,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
-					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-				//	 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
-//					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1144,50 +1144,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return resultado;
 	}
 
-	/**
-	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
-	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
-	 */
-
-	// @Scheduled(cron = "0 0/40 * * * ?")
-	@Override
-	public synchronized void taskEnvioDeCorreosSimplificado() throws Exception {
-		try {
-//			Semaforo semaforoEnvioCorreo = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIAR_CORREOS);
-//			if (semaforoEnvioCorreo != null) {
-//				// Listado de los documentos Pendientes de aceptar por hacienda
-//				Collection<Factura> listaFacturas = facturaBo.findByEnvioCorreoSimplificado(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE_CORREO_SIMPLIFICADO);
-//				if (listaFacturas != null) {
-//					if (!listaFacturas.isEmpty()) {
-//						for (Factura factura : listaFacturas) {
-//							try {
-//
-//								Factura facturaBD = facturaBo.findById(factura.getId());
-//						//		ArrayList<String> listaCorreos = listaCorreosAsociadosFactura(factura);
-//								// Se determina si es una recepcion de factura
-//								if (listaCorreos != null) {
-//									if (!listaCorreos.isEmpty()) {
-//										enviarCorreosSimplificado(facturaBD, listaCorreos);
-//									}
-//								}
-//								facturaBD.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-//								facturaBo.modificar(facturaBD);
-//							} catch (Exception e) {
-//								log.info("** Error1  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
-//							}
-//						}
-//
-//					}
-//				}
-//
-//			} else {
-//				log.info("Semaforo envio de correos INACTIVO  {}", new Date());
-//			}
-		} catch (Exception e) {
-			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-	}
+	
 
 	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
@@ -1941,7 +1898,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public void guardarXMLPeridoConsecutivo() throws Exception {
 		Semaforo semaforoMigracion = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_GUARDADO_XML);

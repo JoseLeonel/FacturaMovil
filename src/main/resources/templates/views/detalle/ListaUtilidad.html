@@ -175,6 +175,24 @@
         idth: 100%;
         overflow-y: scroll;
     }
+    
+    .costoStyle {
+        background: red;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-weight: 800;
+        color: white;
+        font-size: 14px;
+    }
+    
+    .costoTrueStyle {
+        background: #6dca42;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-weight: 800;
+        color: white;
+        font-size: 14px;
+    }
 </style>
 
 
@@ -199,10 +217,12 @@
                     <div>
                         <h1><i class="fa fa-university"></i>Utilidad por Articulo </h1>
                     </div>
+
+
                     <div id="totalsGenerales">
                         <div>
                             <div>
-                                <span>Total Venta(sin IVA) </span>
+                                <span>Total Venta </span>
                                 <input type="text" class="totalVenta " id="totalVenta" name="totalVenta" readonly>
                             </div>
                         </div>
@@ -214,11 +234,20 @@
                         </div>
                         <div>
                             <div>
-                                <span>Utilidad(Ventas-Costo) sin IVA</span>
+                                <span>Utilidad(Ventas-Costo)</span>
                                 <input type="text" class="utilidadBruta " id="utilidadBruta" name="utilidadBruta" readonly>
                             </div>
                         </div>
+                        <div>
+                            <div>
+                                <span>Utilidad(Sin Costo)</span>
+                                <input type="text" class="utilidadBrutaSinCosto " id="utilidadBrutaSinCosto" name="utilidadBrutaSinCosto" readonly>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div>
+                    <h1>Nota: Los calculos se les resta el impuesto(IVA) </h1>
                 </div>
                 <!-- Modal correo alternativo-->
 
@@ -354,7 +383,7 @@
                         </div>
 
                     </div>
-                    <div id="botonesConsulta" style="overflow-y: scroll;height: 3000px;">
+                    <div id="botonesConsulta">
                         <div></div>
                         <div>
                             <button type="button" class="btn btn-success btnBusquedaAvanzada descargarExcel" title="Descargar excel" name="button"> Descargar  <i class="fa fa-download"></i></button>
@@ -363,7 +392,7 @@
                             <button class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>
                         </div>
                     </div>
-                    <div id="Listado">
+                    <div id="Listado" style="overflow-y: scroll;height: 450px;">
                         <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar">
                             <thead>
                                 <tr>
@@ -375,7 +404,7 @@
                                     <th class="table-header">Cantidad</th>
                                     <th class="table-header">Venta Neta</th>
                                     <th class="table-header">Costo </th>
-                                    <th class="table-header">Util.Bruta</th>
+                                    <th class="table-header">Util.Bruta </th>
                                     <th class="table-header">Opcion</th>
                                 </tr>
                             </thead>
