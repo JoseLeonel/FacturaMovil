@@ -1,10 +1,10 @@
 $(document).ready(function() {
-	_Init();
-	
-} );/*fin document*/
+    _Init();
 
-var _Init = function () {
-	cargaMantenimiento()
+}); /*fin document*/
+
+var _Init = function() {
+    cargaMantenimiento()
 }
 
 
@@ -13,13 +13,11 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimiento() {
-	var parametros = {
-		url:"listarConsutaComprasIvaAjax.do",
-		titulo:"Compras"
-	}
-    riot.mount('consulta-iva',{parametros:parametros});   
-	
-	
+    var parametros = {
+        url: "listarConsutaComprasIvaAjax.do",
+        titulo: "Compras"
+    }
+    riot.mount('compras-iva', { parametros: parametros });
+
+
 }
-
-

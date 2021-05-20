@@ -35,7 +35,7 @@
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
+                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur}  autocomplete="off">
                                     </div>
                                     <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                         <label  >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
@@ -46,32 +46,32 @@
 
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label  >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
+                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  autocomplete="off" >
 
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.nombreComercial")} </label>
-                                        <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("cliente.nombreComercial")}" id="nombreComercial" name="nombreComercial" value="{cliente.nombreComercial}"  >
+                                        <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("cliente.nombreComercial")}" id="nombreComercial" name="nombreComercial" value="{cliente.nombreComercial}"   autocomplete="off">
                                     </div>
                                     
                                 </div>
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >Cedula Extranjero</label>
-                                        <input type="text" class="form-control identificacionExtranjero" placeHolder ="Cedula Extranjero" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
+                                        <input type="text" class="form-control identificacionExtranjero" placeHolder ="Cedula Extranjero" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  autocomplete="off">
                                     </div>
 
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
-                                        <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
+                                        <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  autocomplete="off">
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.telefono")} </label>
-                                        <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  >
+                                        <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  autocomplete="off">
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico")}</label>
-                                        <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
+                                        <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  autocomplete="off">
                                     </div>
                                 </div>
                                                     
@@ -80,15 +80,15 @@
 
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >{$.i18n.prop("cliente.correoElectronico1")}</label>
-                                        <input type="text" class="form-control correoElectronico1" placeHolder ="{$.i18n.prop("cliente.correoElectronico1")}" id="correoElectronico1" name="correoElectronico1" value="{cliente.correoElectronico1}"  >
+                                        <input type="text" class="form-control correoElectronico1" placeHolder ="{$.i18n.prop("cliente.correoElectronico1")}" id="correoElectronico1" name="correoElectronico1" value="{cliente.correoElectronico1}"  autocomplete="off">
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico2")}</label>
-                                        <input type="text" class="form-control correoElectronico2" placeHolder ="{$.i18n.prop("cliente.correoElectronico2")}" id="correoElectronico2" name="correoElectronico2" value="{cliente.correoElectronico2}"  >
+                                        <input type="text" class="form-control correoElectronico2" placeHolder ="{$.i18n.prop("cliente.correoElectronico2")}" id="correoElectronico2" name="correoElectronico2" value="{cliente.correoElectronico2}"  autocomplete="off">
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.correoElectronico3")}</label>
-                                        <input type="text" class="form-control correoElectronico3" placeHolder ="{$.i18n.prop("cliente.correoElectronico3")}" id="correoElectronico3" name="correoElectronico3" value="{cliente.correoElectronico3}"  >
+                                        <input type="text" class="form-control correoElectronico3" placeHolder ="{$.i18n.prop("cliente.correoElectronico3")}" id="correoElectronico3" name="correoElectronico3" value="{cliente.correoElectronico3}"  autocomplete="off">
                                     </div>
                                     <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >{$.i18n.prop("cliente.estado")}</label>
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                         <label>Limite Credito</label>
-                                        <input type="number" step="any" class="form-control limiteCredito " id="limiteCredito" name="limiteCredito" value="{cliente.limiteCredito}"  >
+                                        <input type="number" step="any" class="form-control limiteCredito " id="limiteCredito" name="limiteCredito" value="{cliente.limiteCredito}" autocomplete="off" >
                                     </div>
                                 </div>
                             </div>

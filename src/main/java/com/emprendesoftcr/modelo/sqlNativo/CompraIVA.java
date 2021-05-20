@@ -15,14 +15,16 @@ import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
 
-@BaseNativeQuery(name = "compra_iva", query = "SELECT f.id,f.fecha_emision,f.emisor_correo,f.clave,f.factura_consecutivo,f.cedula_emisor,f.emisor_nombre,f.emisor_nombre_comercial,f.tipo_doc,codigo_moneda,tipo_cambio,\n" + 
+@BaseNativeQuery(name = "compra_iva", query = "SELECT f.id,f.fecha_emision,f.emisor_correo,f.clave,f.factura_consecutivo,f.cedula_emisor,"
+		+ "f.emisor_nombre,f.emisor_nombre_comercial,f.tipo_doc,codigo_moneda,tipo_cambio,\n" + 
 		"IFNULL(f.total_impuestos,0) as total_impuestos,\n" + 
 		"ifnull(f.fac_total_exento,0) as total_mercancias_exentas,\n" + 
 		"ifnull(f.total_otros_cargos,0) as total_otros_cargos,\n" + 
 		"ifnull(f.total_descuentos,0) as total_descuentos,\n" + 
 		"ifnull(f.total_gravado,0) as total_mercancias_gravadas,\n" + 
 		"ifnull(f.total_serv_gravados,0) as total_serv_gravados,f.tipo_gasto,\n" + 
-		"ifnull(f.total_factura,0) as total_factura, \n" + 
+		"ifnull(f.total_factura,0) as total_factura, \n" +
+		"ifnull(d.sub_total,0) as sub_total, \n" + 
 		"(select IFNULL(sum(d.impuesto_monto),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo in('99','12','06','05','04','03','02') ) + (select IFNULL(sum(d.impuesto_monto1),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo1 in('99','12','06','05','04','03') ) as monto_iva_otros,\n" +
 		"(select IFNULL(sum(d.impuesto_monto),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo_tarifa = '08' ) + (select IFNULL(sum(d.impuesto_monto1),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo_tarifa1 = '08' ) as monto_iva_13,\n" + 
 		"(select IFNULL(sum(d.impuesto_monto),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo_tarifa = '01' ) +(select IFNULL(sum(d.impuesto_monto1),0)  FROM recepcion_factura_detalle d where  f.id = d.recepcion_factura_id and d.impuesto_codigo_tarifa1 = '01' ) as monto_iva_0 ,\n" + 
@@ -65,7 +67,8 @@ public class CompraIVA implements Serializable {
 	
 	@Column(name = "total_otros_cargos")
 	private Double	total_otros_cargos;
-	
+	@Column(name = "sub_total", precision = 18, scale = 5)
+	private Double						subTotal;
 	@Column(name = "total_descuentos")
 	private Double	totalDescuento;
 
@@ -469,8 +472,27 @@ public class CompraIVA implements Serializable {
 		}
 	}
 
+	public Double getSubTotalSTR() {
+		if (emisorTipoDocumento != null && emisorTipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.subTotal != null ? this.subTotal * -1 : this.subTotal;
+		} else {
+			return this.subTotal != null ? this.subTotal : Constantes.ZEROS_DOUBLE;
+		}
+	}
 
 	
+	
+	public Double getSubTotal() {
+		return subTotal;
+	}
+
+
+	
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+
+
 	public Double getMontoIVAOtros() {
 		return montoIVAOtros;
 	}

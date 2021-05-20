@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -667,15 +668,15 @@ private String obtenerParrafoOficial(Factura factura) {
 	 * @return
 	 */
 //
-//	@Autowired
-//	private CertificadoBo certificadoBo;
+	@Autowired
+	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -744,10 +745,7 @@ private String obtenerParrafoOficial(Factura factura) {
 		return "views/facturas/totalImpuestoVentasMensuales";
 	}
 
-	@RequestMapping(value = "/TotalImpuestoComprasMensuales", method = RequestMethod.GET)
-	public String totalImpuestoComprasMensuales(ModelMap model) {
-		return "views/facturas/totalImpuestoComprasMensuales";
-	}
+	
 
 	/**
 	 * Busca el total de facturas por rango de fechas

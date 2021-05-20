@@ -216,17 +216,7 @@ public class DetalleController {
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
 
-//	      SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("cons_vent_cate");
-//	      Map<String, Object> parameters = new HashMap<String, Object>();
-//	     
-//	      parameters.put("fecha_inicial", inicio1);
-//	      
-//	      parameters.put("fecha_final", fin1);
-//	      parameters.put("idempresa", usuarioSesion.getEmpresa().getId());
-//	      parameters.put("idcategoria", idCaegoria);
-//	      SqlParameterSource in = new MapSqlParameterSource(parameters); 
-//	      Map<String, Object> returnSp = simpleJdbcCall.execute(in);
-//	      
+
 
 		List<Map<String, Object>> listaObjetos = detalleBo.ventasbyCategoria(inicio1, fin1, estado, idCaegoria, usuarioSesion.getEmpresa().getId());
 

@@ -290,7 +290,7 @@ public class ClientesController {
 			}
 			if (!clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
 				ClienteMag clienteMag = clienteBo.clienteRegistradoMag(clienteCommand);
-				if (clienteMag != null) {
+				if (clienteMag != null && clienteMag.getNombreMAG() != null) {
 					clienteMag.setIndicadorActivoMAG(clienteMag.getIndicadorActivoMAG() == null ? Constantes.EMPTY : clienteMag.getIndicadorActivoMAG());
 					if (clienteMag.getIndicadorActivoMAG().equals(Constantes.EMPTY)) {
 						result.rejectValue("tipoMag", "cliente.mag.no.existe");
@@ -507,7 +507,7 @@ public class ClientesController {
 			}
 			if (!clienteCommand.getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
 				ClienteMag clienteMag = clienteBo.clienteRegistradoMag(clienteCommand);
-				if (clienteMag != null) {
+				if (clienteMag != null && clienteMag.getNombreMAG() != null) {
 					clienteMag.setIndicadorActivoMAG(clienteMag.getIndicadorActivoMAG() == null ? Constantes.EMPTY : clienteMag.getIndicadorActivoMAG());
 					if (clienteMag.getIndicadorActivoMAG().equals(Constantes.EMPTY)) {
 						result.rejectValue("tipoMag", "cliente.mag.no.existe");

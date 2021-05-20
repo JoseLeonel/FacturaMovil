@@ -72,6 +72,7 @@ import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.ComprasSinIngresarInventarioCommand;
+import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
@@ -189,6 +190,11 @@ public class ComprasController {
 		return "views/compras/totalesComprasAceptadas";
 	}
 
+	@RequestMapping(value = "/TotalImpuestoComprasMensuales", method = RequestMethod.GET)
+	public String totalImpuestoComprasMensuales(ModelMap model) {
+		return "views/compras/consultaIVA";
+	}
+
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -237,19 +243,7 @@ public class ComprasController {
 	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam(value = "fechaInicial", required = false) String fechaInicial, @RequestParam(value = "fechaFinal", required = false) String fechaFinal, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
 		List<TikectImprimir> lista = new ArrayList<>();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		Factura factura = facturaBo.findById(idFactura);
-//		Collection<Detalle> detalles = detalleBo.findbyIdFactura(idFactura);
-//		for (Detalle detalle : detalles) {
-//			TikectImprimir tikectImprimir = new TikectImprimir();
-//			tikectImprimir.setId(detalle.getId());
-//			tikectImprimir.setDescripcion(detalle.getDescripcion());
-//			tikectImprimir.setCantidad(detalle.getCantidadSTR());
-//			tikectImprimir.setPrecio(detalle.getPrecioUnitarioSTR());
-//			tikectImprimir.setTotal(detalle.getMontoTotalLineaSTR());
-//			tikectImprimir.setImpuesto(detalle.getImpuestoSTR() + "%");
-//			lista.add(tikectImprimir);
-//
-//		}
+
 		Map<String, Object> parametros = getParametroReportes(null, usuarioSesion);
 		parametros.put("p_rando_fechas", fechaInicial + " al " + fechaFinal);
 
@@ -467,8 +461,8 @@ public class ComprasController {
 			if (precioPublico.equals(Constantes.ZEROS_DOUBLE)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico");
 			}
-			
-			if (precioPublico <=  costo_inv) {
+
+			if (precioPublico <= costo_inv) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.precio.publico.menor");
 			}
 			if (codigoInventario.equals(Constantes.EMPTY)) {
@@ -479,7 +473,7 @@ public class ComprasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compra.automaticia.cantidad.inventario");
 			}
 
-			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico, codigoInventario, usuarioSesion.getEmpresa(), codigoProveedor, costo_inv, cant_inv,usuarioSesion);
+			Integer resultado = compraBo.actualizarCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, precioPublico, gananciaPrecioPublico, codigoInventario, usuarioSesion.getEmpresa(), codigoProveedor, costo_inv, cant_inv, usuarioSesion);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.actualizo.detalle.correctamente", resultado);
 		} catch (Exception e) {
@@ -487,16 +481,16 @@ public class ComprasController {
 		}
 
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/anularDetalleCompra.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator anularDetalleCompraPorAutomatica(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra,  @RequestParam Long idCompra, @RequestParam Long idDetalleCompra, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator anularDetalleCompraPorAutomatica(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Compra compra, @RequestParam Long idCompra, @RequestParam Long idDetalleCompra, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		try {
-	
-			Integer resultado = compraBo.anularCompraAutomaticaPorDetallle(idCompra,idDetalleCompra,usuarioSesion);
+
+			Integer resultado = compraBo.anularCompraAutomaticaPorDetallle(idCompra, idDetalleCompra, usuarioSesion);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.anulo.detalle.correctamente", resultado);
 		} catch (Exception e) {
@@ -504,7 +498,6 @@ public class ComprasController {
 		}
 
 	}
-	
 
 	/**
 	 * Recibir factura de otro emisor
@@ -838,7 +831,7 @@ public class ComprasController {
 	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) {
 		Date inicio = Utils.parseDate(fechaInicio);
 		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (finalDate != null) {
 				finalDate = Utils.sumarDiasFecha(finalDate, 0);
 			}
@@ -912,7 +905,7 @@ public class ComprasController {
 			// Se obtiene los totales
 			Date fechaInicio = Utils.parseDate(fechaInicioParam);
 			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-			if (fechaInicio != null ) {
+			if (fechaInicio != null) {
 				if (fechaFinal != null) {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 0);
 				}
@@ -1045,7 +1038,7 @@ public class ComprasController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (fechaFin != null) {
 				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
@@ -1065,7 +1058,7 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
+
 	@RequestMapping(value = "/DescargarComprasVentasResumenAjax.do", method = RequestMethod.GET)
 	public void DescargarComprasVentasResumenAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado, @RequestParam Integer tipoGasto, @RequestParam String actividadEconomica) throws Exception {
 
@@ -1074,7 +1067,7 @@ public class ComprasController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (fechaFin != null) {
 				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
@@ -1100,8 +1093,6 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
-	
 
 	/**
 	 * Modulo de compras
@@ -1165,7 +1156,7 @@ public class ComprasController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (fechaFin != null) {
 				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
@@ -1195,15 +1186,15 @@ public class ComprasController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (fechaFin != null) {
 				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
 		}
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
-	String inicio1 = dateFormat1.format(fechaInicio);
-	String fin1 = dateFormat2.format(fechaFin);
+		String inicio1 = dateFormat1.format(fechaInicio);
+		String fin1 = dateFormat2.format(fechaFin);
 
 		Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
 
@@ -1221,20 +1212,49 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-
+/**
+ * En construccion
+ * @param request
+ * @param response
+ * @param fechaInicioParam
+ * @param fechaFinParam
+ * @param estado
+ * @param selectActividadComercial
+ * @return
+ */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Date fechaFinalP = Utils.parseDate(fechaFin);
-		Date fechaInicioP = Utils.parseDate(fechaInicio);
-		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+	// Se buscan las facturas
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			if (fechaInicio != null) {
+				if (fechaFin != null) {
+					fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
+				}
+			}
+			
+			DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
+			String inicio1 = dateFormat1.format(fechaInicio);
+			String fin1 = dateFormat2.format(fechaFin);
+		  Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+		  List<ConsultaComprasIvaCommand> lista = new ArrayList<ConsultaComprasIvaCommand>();
+		  for(CompraIVA compraIVA :  recepcionFacturas) {
+		  	ConsultaComprasIvaCommand consultaComprasIvaCommand = new ConsultaComprasIvaCommand();
+//		  	consultaComprasIvaCommand.setCodTarifa(codTarifa);
+		  	
+		  	
+		  }
 //		String inicio1 = dateFormat1.format(fechaInicio);
 //		String fin1 = dateFormat1.format(fechaFinalP);
 //
@@ -1274,7 +1294,7 @@ public class ComprasController {
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null ) {
+		if (fechaInicio != null) {
 			if (fechaFin != null) {
 				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
