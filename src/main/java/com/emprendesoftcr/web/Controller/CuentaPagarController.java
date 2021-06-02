@@ -349,22 +349,19 @@ public class CuentaPagarController {
 			modelEmail.put("abono", abono);
 			modelEmail.put("saldo", saldo);
 
-			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
-			if (resultado.equals(Boolean.TRUE)) {
-				log.info("Enviado correctamente el correo {}", new Date());
-				System.out.println("Enviado correctamente el correo");
-			} else {
-				log.error("** Error  Enviado correo: " + " fecha " + new Date());
-				System.out.println("No enviado correctamente el correo");
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
-			}
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
+			
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			log.error("** Error  Enviado correo: " + " fecha " + new Date());
+			System.out.println("No enviado correctamente el correo");
+		
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+			
 		}
 
 		return respuestaServiceValidator;
@@ -407,22 +404,17 @@ public class CuentaPagarController {
 			modelEmail.put("abono", abono);
 			modelEmail.put("saldo", saldo);
 
-			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
-			if (resultado.equals(Boolean.TRUE)) {
-				log.info("Enviado correctamente el correo {}", new Date());
-				System.out.println("Enviado correctamente el correo");
-			} else {
-				log.error("** Error  Enviado correo: " + " fecha " + new Date());
-				System.out.println("No enviado correctamente el correo");
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
-			}
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
+			
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			log.error("** Error  Enviado correo: " + " fecha " + new Date());
+			System.out.println("No enviado correctamente el correo");
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 		}
 		return respuestaServiceValidator;
 	}

@@ -447,22 +447,16 @@ public class DetalleController {
 			Map<String, Object> modelEmail = new HashMap<>();
 			modelEmail.put("fechaInicial", fechaInicialParam);
 			modelEmail.put("fechaFinal", fechaFinalParam);
-			Boolean resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
-			if (resultado.equals(Boolean.TRUE)) {
-				log.info("Enviado correctamente el correo {}", new Date());
-				System.out.println("Enviado correctamente el correo");
-			} else {
-				log.error("** Error  Enviado correo: " + " fecha " + new Date());
-				System.out.println("No enviado correctamente el correo");
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
-			}
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			log.error("** Error  Enviado correo: " + " fecha " + new Date());
+			System.out.println("No enviado correctamente el correo");
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 		}
 		return respuestaServiceValidator;
 

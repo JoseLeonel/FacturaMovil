@@ -25,7 +25,7 @@ public interface ProcesoHaciendaService {
 	// Enviar documento hacienda
 	OpenIDConnectHacienda envioHacienda(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception;
 
-	Boolean enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
+	void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 	
 	
 	void enviarCorreosRecepcion(RecepcionFactura recepcionFactura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
@@ -50,7 +50,7 @@ public interface ProcesoHaciendaService {
 	
 	void guardarXMLPeridoConsecutivo() throws Exception;
 	void taskEnvioCorreosNoElectronico() throws Exception;
-	Boolean enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception;
+	void enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception;
 	
 	void envioFacturasCredito();
 	

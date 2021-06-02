@@ -745,10 +745,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-			//		recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
-					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1188,7 +1188,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									if (factura != null) {
 										listaCorreos = facturaBo.listaCorreosAsociadosFactura(factura);
 									}
-									Boolean resultado = listaCorreos != null && !listaCorreos.isEmpty() ? enviarCorreos(factura, haciendaBD, listaCorreos) : Boolean.TRUE;
+									enviarCorreos(factura, haciendaBD, listaCorreos) ;
 
 								}
 								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
@@ -1271,8 +1271,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	@Override
-	public Boolean enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception {
-		Boolean resultado = Boolean.FALSE;
+	public void enviarCorreosNoElectronicos(Factura factura, ArrayList<String> listaCorreos) throws Exception {
 		try {
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
@@ -1297,13 +1296,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
 			log.info("Documento enviado al correo: " + factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
-			resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + factura.getEmpresa().getNombre() + " Consecutivo" + factura.getNumeroConsecutivo());
 			throw e;
 		}
-		return resultado;
+		
 	}
 
 	private void soporteProblemaEnvioCorreos(Empresa empresa, String consecutivo, Exception error) throws Exception {
@@ -1321,11 +1320,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	/**
 	 * Envios de correos
+	 * @return 
+	 * @return 
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
 	 */
 	@Override
-	public Boolean enviarCorreos(Factura factura, Hacienda haciendaTemp, ArrayList<String> listaCorreos) throws Exception {
-		Boolean resultado = Boolean.FALSE;
+	public void enviarCorreos(Factura factura, Hacienda haciendaTemp, ArrayList<String> listaCorreos) throws Exception {
+		
 		try {
 			String xmlFactura = Constantes.EMPTY;
 			String xmlRespuesta = Constantes.EMPTY;
@@ -1364,13 +1365,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
 			log.info("Documento enviado al correo: " + haciendaTemp.getConsecutivo() + " Empresa:" + haciendaTemp.getEmpresa().getNombre());
-			resultado = correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
 
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + haciendaTemp.getEmpresa().getNombre() + " Consecutivo" + haciendaTemp.getConsecutivo());
 			throw e;
 		}
-		return resultado;
+		
 	}
 
 	/**
