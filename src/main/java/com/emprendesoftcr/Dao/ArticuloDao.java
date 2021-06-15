@@ -31,7 +31,7 @@ public interface ArticuloDao {
 	TotalInventarioCommand sumarInventarios(Integer idEmpresa,Date fechaInicial,Date FechaFinal);
 
 	Collection<Articulo> articulosBy(Empresa empresa);
-
+	Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa); 
 	
 	Collection<Articulo> articulosOrderCategoria(Empresa empresa);
 	Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa,Long idCategoria);

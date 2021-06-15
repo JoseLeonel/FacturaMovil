@@ -16,6 +16,7 @@ public class ArticuloCommand {
 
 	private Long				id;
 	private String			codigo;
+	private String			codigoSecundario;
 	private String			descripcion;
 	private String			serie;
 	private String			unidadMedida;
@@ -72,7 +73,7 @@ public class ArticuloCommand {
 	private Integer						baseImponible;
 	private Double cantidad1;
 	private String						codigoCabys;
-
+	private Integer						cantidadPaquete;
 	
 	
 
@@ -140,6 +141,8 @@ public class ArticuloCommand {
 		this.codigoTarifaMag = articulo.getCodigoTarifaMag();
 		this.baseImponible = articulo.getBaseImponible();
 		this.codigoCabys = articulo.getCodigoCabys();
+		this.codigoSecundario = articulo.getCodigoSecundario();
+		this.cantidadPaquete = articulo.getCantidadPaquete();
 
 	}
 	
@@ -561,5 +564,25 @@ public class ArticuloCommand {
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}
+	
+	public String getCodigoSecundario() {
+		return codigoSecundario;
+	}
+	
+	public void setCodigoSecundario(String codigoSecundario) {
+		this.codigoSecundario = codigoSecundario;
+	}
+	
+	public Integer getCantidadPaquete() {
+		return cantidadPaquete;
+	}
+	
+	public void setCantidadPaquete(Integer cantidadPaquete) {
+		this.cantidadPaquete = cantidadPaquete;
+	}
+	
+	
+	
+	
 
 }

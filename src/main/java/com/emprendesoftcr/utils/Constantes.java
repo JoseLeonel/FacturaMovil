@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final String					API_LISTA_CABYS_SIN_CANTIDAD																	= "https://api.hacienda.go.cr/fe/cabys?q=";
-	public static final String					API_LISTA_CABYS_SIN_CODIGO																	= "https://api.hacienda.go.cr/fe/cabys?codigo=";
+	public static final String					API_LISTA_CABYS_SIN_CODIGO																		= "https://api.hacienda.go.cr/fe/cabys?codigo=";
 	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
 	public static final String					API_RECEPCION_COMPRAS																					= "http://localhost:8083/api-v1/get-all?e=P&i=";
 	public static final String					API_MAG_PESCA																									= "https://api.hacienda.go.cr/fe/pesca?identificacion=";
@@ -17,7 +17,7 @@ public class Constantes {
 
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA																	= "3109177612";
 	public static final String					CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD												= "3102767133";
-	public static final String					CEDULA_MINI_SUPER_DARIO               												= "110010978";
+	public static final String					CEDULA_MINI_SUPER_DARIO																				= "110010978";
 	public static final ResourceBundle	RESOURCE_BUNDLE																								= ResourceBundle.getBundle("factura");
 	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR													= "/home/jose/dev/archivosXMLs";
 
@@ -30,13 +30,15 @@ public class Constantes {
 	public static final Integer					FACTURA_ANULACION_COMPLETA_SI																	= 1;
 	public static final Integer					FACTURA_ANULACION_COMPLETA_NO																	= 0;
 
+	public static final Integer					ARTICULO_PAQUETE_TIPO_ACTIVO																	= 1;
+	public static final Integer					ARTICULO_PAQUETE_TIPO_INACTIVO																= 0;
+
 	public static final Integer					COCINA_ACTIVO																									= 1;
 	public static final Integer					COCINA_INACTIVO																								= 2;
-	
-	public static final Integer					ES_SIMPLIFICADO_SI																									= 1;
-	public static final Integer					ES_SIMPLIFICADO_NO																								= 0;
 
-	
+	public static final Integer					ES_SIMPLIFICADO_SI																						= 1;
+	public static final Integer					ES_SIMPLIFICADO_NO																						= 0;
+
 	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO													= 1;
 	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO												= 2;
 
@@ -472,7 +474,6 @@ public class Constantes {
 	public static final String					DATE_FORMAT6																									= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																									= "yyyyMMdd";
 	public static final String					DATE_FORMAT7																									= "yyyy-MM-dd";
-	
 
 	public static final String					ANULACION_AUTOMATICA_PROFORMAS																= "Se completo los 30 dias, se procedio anular";
 
@@ -517,10 +518,10 @@ public class Constantes {
 
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_SI															= 1;
 	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_NO															= 2;
-	
-	public static final Integer					DETALLE_APLICADO_NO															= 1;
-	public static final Integer					DETALLE_APLICADO_SI															= 2;
-	public static final Integer					DETALLE_APLICADO_ANULADA															= 3;
+
+	public static final Integer					DETALLE_APLICADO_NO																						= 1;
+	public static final Integer					DETALLE_APLICADO_SI																						= 2;
+	public static final Integer					DETALLE_APLICADO_ANULADA																			= 3;
 
 	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR															= "Factura";
 	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR															= "Boleta";
@@ -746,6 +747,7 @@ public class Constantes {
 	public static final String					CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO													= "06";
 	public static final String					CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO													= "07";
 	public static final String					CODIGO_TARIFA_13_GENERAL_PORCIENTO														= "08";
-	public static final Double					CODIGO_TARIFA_13_IMPUESTO_99														= 99d;
+	public static final Double					CODIGO_TARIFA_13_IMPUESTO_99																	= 99d;
 
+	public static final String				REPORTE_MENSUAL_COMPRAS_Y_VENTAS														= "/reportes/factura/reporteMensual.jasper";
 }

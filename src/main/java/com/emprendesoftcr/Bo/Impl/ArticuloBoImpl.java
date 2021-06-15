@@ -199,6 +199,12 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return listaObjetos;
 	}
 
+	@Override
+	public Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa) {
+		
+		return articuloDao.buscarPorCodigoSecundarioYEmpresa(codigo, empresa);
+	}
+
 	
 	
 	

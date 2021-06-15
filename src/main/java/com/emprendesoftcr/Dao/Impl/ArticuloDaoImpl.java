@@ -310,4 +310,18 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 	}
 
+	@Override
+	public Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigoSecundario = :codigoSecundario and obj.empresa = :empresa");
+	
+		query.setParameter("empresa", empresa);
+		query.setParameter("codigoSecundario", codigo);
+		List<Articulo> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Articulo) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }

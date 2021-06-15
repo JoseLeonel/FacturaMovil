@@ -2569,7 +2569,7 @@ function crearFactura(estado){
         return false
     }
     if(self.factura.totalComprobante >= 20000000 && self.empresa.cedula != '109350164'){
-      mensajeAdvertencia("Error el monto mayor a 20000000, corregir  ")
+      mensajeEstatico("Error el monto mayor a 20000000, corregir  ")
       return
 
     }
@@ -3176,6 +3176,9 @@ function __agregarArticulo(cantidad){
     }
     if(cantidad == 0){
         cantidad = 1
+    }
+    if(self.articulo.cantidadPaquete > 0){
+       cantidad =  self.articulo.cantidad
     }
     var encontrado = false;
     var valor = $('.codigo').val()

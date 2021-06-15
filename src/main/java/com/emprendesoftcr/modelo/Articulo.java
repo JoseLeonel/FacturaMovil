@@ -157,8 +157,16 @@ public class Articulo implements Serializable {
 
 	@Column(name = "base_imponible", columnDefinition = "INT default '0'")
 	private Integer						baseImponible;
+	
 	@Column(name = "cod_cabys")
 	private String						codigoCabys;
+	
+	@Column(name = "cant_paque")
+	private Integer						cantidadPaquete;
+
+	@Column(name = "cod_secu")
+	private String						codigoSecundario;
+
 
 	public Articulo() {
 		super();
@@ -175,6 +183,7 @@ public class Articulo implements Serializable {
 		this.maximo = Constantes.ZEROS_DOUBLE;
 		this.minimo = Constantes.ZEROS_DOUBLE;
 		this.cantidad = Constantes.ZEROS_DOUBLE;
+		this.codigoSecundario = Constantes.EMPTY;
 		
 		this.codigoCabys = Constantes.EMPTY;
 
@@ -186,46 +195,7 @@ public class Articulo implements Serializable {
 
 
 
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuestoMag, Double impuestoMag, String codigoTarifa, String codigoTarifaMag, Integer baseImponible, String codigoCabys) {
-		super();
-		this.id = id;
-		this.codigo = codigo;
-		this.descripcion = descripcion;
-		this.serie = serie;
-		this.unidadMedida = unidadMedida;
-		this.contable = contable;
-		this.costo = costo;
-		this.impuesto = impuesto;
-		this.precioPublico = precioPublico;
-		this.gananciaPrecioPublico = gananciaPrecioPublico;
-		this.precioMayorista = precioMayorista;
-		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
-		this.precioEspecial = precioEspecial;
-		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
-		this.cantidad = cantidad;
-		this.minimo = minimo;
-		this.estado = estado;
-		this.tipoImpuesto = tipoImpuesto;
-		this.tipoCodigo = tipoCodigo;
-		this.maximo = maximo;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.marca = marca;
-		this.usuario = usuario;
-		this.categoria = categoria;
-		this.empresa = empresa;
-		this.comanda = comanda;
-		this.prioridad = prioridad;
-		this.pesoTransporte = pesoTransporte;
-		this.consecutivoCompra = consecutivoCompra;
-		this.fechaUltimaCompra = fechaUltimaCompra;
-		this.tipoImpuestoMag = tipoImpuestoMag;
-		this.impuestoMag = impuestoMag;
-		this.codigoTarifa = codigoTarifa;
-		this.codigoTarifaMag = codigoTarifaMag;
-		this.baseImponible = baseImponible;
-		this.codigoCabys = codigoCabys;
-	}
+	
 
 
 
@@ -658,6 +628,68 @@ public class Articulo implements Serializable {
 	
 	public void setCodigoCabys(String codigoCabys) {
 		this.codigoCabys = codigoCabys;
+	}
+
+
+
+
+
+
+
+	
+	public Integer getCantidadPaquete() {
+		return cantidadPaquete;
+	}
+
+
+
+
+
+
+
+	
+	public void setCantidadPaquete(Integer cantidadPaquete) {
+		this.cantidadPaquete = cantidadPaquete;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	public String getCodigoSecundario() {
+		return codigoSecundario;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	public void setCodigoSecundario(String codigoSecundario) {
+		this.codigoSecundario = codigoSecundario;
 	}
 
 

@@ -1386,7 +1386,16 @@ function __modificarClase(formulario,mensajeAlerModificar,urlModificar,urlListar
 }
 
 
-
+function mensajeEstatico(mensaje){
+	swal({
+          title: '',
+          text: mensaje,
+          type: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'Aceptar',
+               	  
+        })
+}
 
 /**
 *   Agregar 

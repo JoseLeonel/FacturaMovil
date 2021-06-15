@@ -184,7 +184,6 @@ public class ArticuloController {
 		return "views/articulos/ListarArticulosMinimos";
 	}
 
-	
 	/**
 	 * Listar JSP de los articulos
 	 * @param model
@@ -203,6 +202,11 @@ public class ArticuloController {
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
+	}
+
+	@RequestMapping(value = "/paqueteArticulos", method = RequestMethod.GET)
+	public String paqueteArticulo(ModelMap model) {
+		return "views/articulos/paqueteArticulos";
 	}
 
 	@RequestMapping(value = "/movil/ListarArticulosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -314,7 +318,6 @@ public class ArticuloController {
 	@RequestMapping(value = "/GenerarTikectFactura.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, BindingResult result, SessionStatus status) throws Exception {
 		List<DetalleFacturaCommand> lista = new ArrayList<>();
-
 
 		Collection<Detalle> listaDetalles = detalleBo.findbyIdFactura(idFactura);
 		for (Detalle detalle : listaDetalles) {
@@ -623,6 +626,51 @@ public class ArticuloController {
 				delimitadores.addFiltro(categoriaFilter);
 			}
 		}
+		categoriaFilter = new JqGridFilter("cantidadPaquete", "'" + Constantes.ARTICULO_PAQUETE_TIPO_INACTIVO + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Articulo object = (Articulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ArticuloCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticuloPaquetesAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarPaquetesAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter = null;
+		if (codigoArt != null) {
+			if (!codigoArt.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+		categoriaFilter = new JqGridFilter("cantidadPaquete", "'" + Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
 
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
@@ -909,10 +957,11 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			articulo.setCantidadPaquete(idPaquete);
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
@@ -938,6 +987,7 @@ public class ArticuloController {
 			if (articuloBd != null) {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}
+
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -951,6 +1001,25 @@ public class ArticuloController {
 			}
 			if (articulo.getCantidad() == null) {
 				articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+			}
+			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+				if (articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.indique.cantidad.paquete", result.getAllErrors());
+				}
+				if (articulo.getCodigoSecundario() == null || articulo.getCodigoSecundario().equals(Constantes.EMPTY)) {
+					result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario");
+				} else {
+					articuloBd = articuloBo.buscarPorCodigoSecundarioYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+					if (articuloBd != null) {
+						result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario.ya.existe");
+					}
+					articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+					if (articuloBd == null) {
+						result.rejectValue("codigoSecundario", "error.articulo.codigo.no.existe.inve");
+					}
+					
+				}
+
 			}
 
 			if (articulo.getTipoImpuesto() != null) {
@@ -1079,7 +1148,7 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
-			articulo.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
+			articulo.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -1111,10 +1180,10 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
-
+			articulo.setCantidadPaquete(idPaquete);
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
@@ -1213,7 +1282,31 @@ public class ArticuloController {
 					}
 				}
 			}
-
+			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+				if (articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.indique.cantidad.paquete", result.getAllErrors());
+				}
+				if (articulo.getCodigoSecundario() == null || articulo.getCodigoSecundario().equals(Constantes.EMPTY)) {
+					result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario");
+				} else {
+						articuloValidar = articuloBo.buscarPorCodigoSecundarioYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloValidar != null) {
+							if(!articuloBd.getCodigo().equals(articuloValidar.getCodigo())) {
+								result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario.ya.existe");	
+							}
+							
+						}
+						articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloValidar == null) {
+							result.rejectValue("codigoSecundario", "error.articulo.codigo.no.existe.inve");
+						}
+//						articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+//						if (articuloValidar != null) {
+//							result.rejectValue("codigoSecundario", "error.articulo.codigo.existe");
+//						}
+						
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -1222,7 +1315,7 @@ public class ArticuloController {
 				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
-				if(cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
+				if (cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
 					Cabys cabys = new Cabys();
 					cabys.setId(null);
 					cabys.setCodigo(cabysAct.getCodigo());
@@ -1236,6 +1329,7 @@ public class ArticuloController {
 
 				}
 			}
+			articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setUpdated_at(new Date());
@@ -1268,12 +1362,19 @@ public class ArticuloController {
 			articuloBd.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
+			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+				if (articulo.getCantidad() > Constantes.ZEROS_DOUBLE) {
+					articuloBd.setCantidad(articulo.getCantidad());
+				}
+				articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
+			}
+
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 		}
 	}
 
