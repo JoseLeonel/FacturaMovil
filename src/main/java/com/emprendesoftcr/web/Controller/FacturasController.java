@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletOutputStream;
@@ -870,124 +872,89 @@ public class FacturasController {
 		return respuestaServiceValidator;
 
 	}
-
-	@RequestMapping(value = "/totalResumenIVAFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+/**
+ * Resumen pdf
+ * @param request
+ * @param response
+ * @param model
+ * @param datos
+ * @param result
+ * @param fechaInicioParam
+ * @param fechaFinParam
+ * @param correoAlternativo
+ * @param estado
+ * @param actividadEconomica
+ * @return
+ * @throws IOException
+ */
+	@RequestMapping(value = "/ResumenPDFIVAFacturasAndCompras.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> totalResumenIVAFacturasAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) throws IOException {
+	public RespuestaServiceValidator<?> ResumenPDFIVAFacturasAndCompras(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "correoAlternativo", required = false) String correoAlternativo, @RequestParam(value = "estado", required = false)  Integer estado,@RequestParam(value = "actividadEconomica", required = false) String actividadEconomica) throws IOException {
 		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator<Object>();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			// Se obtiene los totales
-			Date fechaInicio = Utils.parseDate(fechaInicioParam);
-			Date fechaFinalP = Utils.parseDate(fechaFinParam);
-			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
-				if (fechaFinalP != null) {
-					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
-				}
-			}
-			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
-
-			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-			String inicio1 = dateFormat1.format(fechaInicio);
-			String fin1 = dateFormat1.format(fechaFinalP);
-			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado, usuario.getEmpresa().getId(), actividadEconomica);
-
-			@SuppressWarnings("rawtypes")
-			ArrayList arrayList = new ArrayList();
-			arrayList = (ArrayList<?>) listaObjetos;
-			JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
-			ArrayList<TotalbyImpuestosCommand> listaDetallada = new ArrayList<>();
-			Gson gson = new Gson();
-			if (jsonArray1 != null) {
-				for (int i = 0; i < jsonArray1.size(); i++) {
-					TotalbyImpuestosCommand totalbyImpuestosCommand = gson.fromJson(jsonArray1.get(i).toString(), TotalbyImpuestosCommand.class);
-					listaDetallada.add(totalbyImpuestosCommand);
-				}
-			}
+//			// Se obtiene los totales
+//			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+//			Date fechaFinalP = Utils.parseDate(fechaFinParam);
+//			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+//				if (fechaFinalP != null) {
+//					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+//				}
+//			}
+////			TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinalP, usuario.getEmpresa().getId(), estado, actividadEconomica);
+//
+//			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+//			String inicio1 = dateFormat1.format(fechaInicio);
+//			String fin1 = dateFormat1.format(fechaFinalP);
+//			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado, usuario.getEmpresa().getId(), actividadEconomica);
+//
+//			@SuppressWarnings("rawtypes")
+//			ArrayList arrayList = new ArrayList();
+//			arrayList = (ArrayList<?>) listaObjetos;
+//			JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+//			ArrayList<TotalbyImpuestosCommand> listaDetallada = new ArrayList<>();
+//			Gson gson = new Gson();
+//			if (jsonArray1 != null) {
+//				for (int i = 0; i < jsonArray1.size(); i++) {
+//					TotalbyImpuestosCommand totalbyImpuestosCommand = gson.fromJson(jsonArray1.get(i).toString(), TotalbyImpuestosCommand.class);
+//					listaDetallada.add(totalbyImpuestosCommand);
+//				}
+//			}
 			Map<String, Object> parametros = new HashMap<>();
+			parametros.put("P_logo", Constantes.EMPTY);
+			parametros.put("P_nombre_comercial", Constantes.EMPTY);
+			parametros.put("P_nombreCompleto", Constantes.EMPTY);
+			parametros.put("P_cedula", Constantes.EMPTY);
+			parametros.put("p_telefono", Constantes.EMPTY);
+			parametros.put("P_correo_electronico", Constantes.EMPTY);
+			parametros.put("P_direccion", Constantes.EMPTY);
+			parametros.put("P_contable", Constantes.EMPTY);
+			
 			// Ventas de Facturas resumen detallado iva
 
-			TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand = new TotalbyResumenImpuestosCommand(listaDetallada);
-			parametros = totalResumenVentaIVA(parametros,totalbyResumenImpuestosCommand);
+//			TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand = new TotalbyResumenImpuestosCommand(listaDetallada);
 
-			// Compras detallada iva
+			parametros = totalResumenVentaIVA(parametros, null);
+			parametros = totalResumenCompraIVA(parametros, null);
+			
+			String nombreArchivo = "ResumenIVAComprasAndVentas"+ UUID.randomUUID().toString() + ".pdf";
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+			URL url = Thread.currentThread().getContextClassLoader().getResource(Constantes.REPORTE_MENSUAL_COMPRAS_Y_VENTAS); 
+			byte[] bytes = GenerarReporte.jasperPDFBytes(parametros, url.getPath(), null);
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
 
-			// Se prepara el excell
-			// ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.createExcelVentasXCodigo(detallesFacturaCommand, fechaInicioParam, fechaFinParam, usuario.getEmpresa(), actividadEconomica));
-			// Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-
-			// Se prepara el correo
-			String from = "factura@facturaemprendesoftcr.com";
-			String nombre = usuario.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuario.getEmpresa().getNombre() : usuario.getEmpresa().getNombreComercial();
-			nombre = nombre.length() > 50 ? nombre.substring(0, 50) : nombre;
-			String subject = nombre + " Facturas Rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
-
-			ArrayList<String> listaCorreos = new ArrayList<>();
-			if (correoAlternativo != null && correoAlternativo.length() > 0) {
-				listaCorreos.add(correoAlternativo);
 			} else {
-				listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+				System.out.println("NO trae nada");
 			}
-			String estadoDesc = Constantes.EMPTY;
-			if (estado == 2) {
-				estadoDesc = "Facturados";
-			}
-			if (estado == 5) {
-				estadoDesc = "Anulados";
-			}
-			if (estado == 6) {
-				estadoDesc = "Aceptados";
-			}
-			if (estado == 7) {
-				estadoDesc = "Rechazados";
-			}
-			InputStream reportfile = getClass().getResourceAsStream(Constantes.REPORTE_MENSUAL_COMPRAS_Y_VENTAS);
-
-		
-			
-			
-			
-
-//			modelEmail.put("cedula", usuario.getEmpresa().getCedula());
-//			modelEmail.put("estadoDesc", "Documentos con Estado:" + estadoDesc);
-//			modelEmail.put("actividad", actividadEconomica.equals(Constantes.COMBO_TODOS) ? Constantes.EMPTY : "Actividad Economica:" + actividadEconomica);
-//			modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
-//			modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinalP));
-//			modelEmail.put("total", facturaCommand.getTotal() != null ? Utils.formateadorMiles(facturaCommand.getTotal()) : Constantes.ZEROS);
-//			modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos() != null ? facturaCommand.getTotalDescuentosSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalOtrosCargos", facturaCommand.getTotalOtrosCargos() != null ? facturaCommand.getTotalOtrosCargosSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalEfectivo", facturaCommand.getTotalEfectivo() != null ? facturaCommand.getTotalEfectivoSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalTarjeta", facturaCommand.getTotalTarjeta() != null ? facturaCommand.getTotalTarjetaSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalBanco", facturaCommand.getTotalBanco() != null ? facturaCommand.getTotalBancoSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalCredito", facturaCommand.getTotalCredito() != null ? facturaCommand.getTotalCreditoSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalDinero", facturaCommand.getTotalPagosSTR());
-//			modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() != null ? facturaCommand.getTotalImpuestosSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() != null ? facturaCommand.getTotalVentasGravadasSTR() : Constantes.ZEROS);
-//			modelEmail.put("totalMenosNotas", Utils.formateadorMiles(facturaCommand.getTotal() + facturaCommand.getTotal_n()));
-//
-//			modelEmail.put("total_n", facturaCommand.getTotal_n() != null ? facturaCommand.getTotalNC() : Constantes.ZEROS);
-//			modelEmail.put("totalDescuentos_n", facturaCommand.getTotalDescuentos_n() != null ? facturaCommand.getTotalDescuentosNC() : Constantes.ZEROS);
-//			modelEmail.put("totalOtrosCargos_n", facturaCommand.getTotalOtrosCargos_n() != null ? facturaCommand.getTotalOtrosCargosNC() : Constantes.ZEROS);
-//			modelEmail.put("totalEfectivo_n", facturaCommand.getTotalEfectivo_n() != null ? facturaCommand.getTotalEfectivoNC() : Constantes.ZEROS);
-//			modelEmail.put("totalTarjeta_n", facturaCommand.getTotalTarjeta_n() != null ? facturaCommand.getTotalTarjetaNC() : Constantes.ZEROS);
-//			modelEmail.put("totalBanco_n", facturaCommand.getTotalBanco_n() != null ? facturaCommand.getTotalBancoNC() : Constantes.ZEROS);
-//			modelEmail.put("totalCredito_n", facturaCommand.getTotalCredito_n() != null ? facturaCommand.getTotalCreditoNC() : Constantes.ZEROS);
-//			modelEmail.put("totalImpuestos_n", facturaCommand.getTotalImpuestos_n() != null ? facturaCommand.getTotalImpuestosNC() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasNetas_n", facturaCommand.getTotalVentasNetas_n() != null ? facturaCommand.getTotalVentasNetasNC() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasExentas_n", facturaCommand.getTotalVentasExentas_n() != null ? facturaCommand.getTotalVentasExentasNC() : Constantes.ZEROS);
-//			modelEmail.put("totalVentasGravadas_n", facturaCommand.getTotalVentasGravadas_n() != null ? facturaCommand.getTotalVentasGravadasNC() : Constantes.ZEROS);
-//			modelEmail.put("totalDinero_n", facturaCommand.getTotalPagosNC());
-//
-//		//	correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
-
-			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
-			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 		} catch (Exception e) {
-			log.error("** Error  Enviado correo: " + " fecha " + new Date() + "" + e.getMessage());
-			System.out.println("No enviado correctamente el correo");
+			log.error("** Error  generar PDF " + " fecha " + new Date() + "" + e.getMessage());
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 
 		}
@@ -995,75 +962,143 @@ public class FacturasController {
 		return respuestaServiceValidator;
 
 	}
-	
-	private Map<String, Object> totalResumenVentaIVA(Map<String, Object> parametros,TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand){
-	// Sumas de ventas y desglose del iva
 
-				// 0%
-				parametros.put("p_iva_cero_v", totalbyResumenImpuestosCommand.getImp_01());
-				// 1%
-				parametros.put("P_iva_1_v", totalbyResumenImpuestosCommand.getImp_02());
-				// 2%
-				parametros.put("P_iva_2_v", totalbyResumenImpuestosCommand.getImp_03());
-				// 4%
-				parametros.put("P_iva_4_v", totalbyResumenImpuestosCommand.getImp_04());
-				// 0 transitorio%
-				parametros.put("P_iva_trans_0_v", totalbyResumenImpuestosCommand.getImp_05());
-				// 4 transitorio%
-				parametros.put("P_iva_trans_4_v", totalbyResumenImpuestosCommand.getImp_06());
-				// 8 transitorio%
-				parametros.put("P_iva_trans_8_v", totalbyResumenImpuestosCommand.getImp_07());
-				// iva 13
-				parametros.put("P_iva_13_v", totalbyResumenImpuestosCommand.getImp_08());
-				// iva 13
-				parametros.put("P_iva_13_v", totalbyResumenImpuestosCommand.getImp_08());
-				// Iva cemento
-				parametros.put("P_cemento_iva_v", Constantes.ZEROS);
-				// Iva otros
-				parametros.put("P_iva_otros_v", Constantes.ZEROS);
-				// Total del iva agravado
-				parametros.put("P_iva_total_v", totalbyResumenImpuestosCommand.getTotal_impuesto());
-				//Resumen de total venta 0%
-				parametros.put("P_venta_cero", Constantes.ZEROS);
-				//Resumen de total venta 1%
-				parametros.put("P_venta_1", Constantes.ZEROS);
-				//Resumen de total venta 2%
-				parametros.put("P_venta_2", Constantes.ZEROS);
-				//Resumen de total venta 4%
-				parametros.put("P_venta_4", Constantes.ZEROS);
-				//Resumen de total venta trans 0%
-				parametros.put("P_v_trans_0", Constantes.ZEROS);
-		
-				//Resumen de total venta trans 4%
-				parametros.put("P_v_trans_4", Constantes.ZEROS);
-				//Resumen de total venta trans 8%
-				parametros.put("P_v_trans_8", Constantes.ZEROS);
-				
-				//Resumen de total venta trans 13
-				parametros.put("P_venta_13", Constantes.ZEROS);
-				//Resumen de total venta cemento
-				parametros.put("P_total_cemento_v", Constantes.ZEROS);
-				//Resumen de total otros
-				parametros.put("P_total_otros_v", Constantes.ZEROS);
-				//Resumen de total Gravado
-				parametros.put("p_venta_gravada", totalbyResumenImpuestosCommand.getTotal_gravado() );
-				//Resumen de total de impuesto
-				parametros.put("P_total_impuestos",totalbyResumenImpuestosCommand.getTotal_impuesto() );
-				//Resumen de total de exentos
-				parametros.put("P_total_exentos", totalbyResumenImpuestosCommand.getTotal_exento());
-				
-				//Resumen de total de Descuentos
-				parametros.put("P_total_descuento", totalbyResumenImpuestosCommand.getTotal_descuentos());
-				
-				//Resumen de total de ventas
-				parametros.put("P_total_ventas", totalbyResumenImpuestosCommand.getTotal_comprobante());
-				
-				//Resumen de total de ventas de exoneraciones
-				parametros.put("P_total_exoneracion_venta", totalbyResumenImpuestosCommand.getTotal_exo());
-				//Resumen de total venta del servicio del mesero
-				parametros.put("P_total_por_restaurante", totalbyResumenImpuestosCommand.getTotal_otros_cargos());
-				
-				
+	private Map<String, Object> totalResumenCompraIVA(Map<String, Object> parametros, TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand) {
+		// Sumas de ventas y desglose del iva
+
+		// 0%
+		parametros.put("P_iva_compra_cero", totalbyResumenImpuestosCommand.getImp_01());
+		// 1%
+		parametros.put("P_iva_compra_1", totalbyResumenImpuestosCommand.getImp_02());
+		// 2%
+		parametros.put("P_iva_compra_2", totalbyResumenImpuestosCommand.getImp_03());
+		// 4%
+		parametros.put("P_iva_compra_trans_cero", totalbyResumenImpuestosCommand.getImp_04());
+		// 0 transitorio%
+		parametros.put("P_iva_compra_trans_4", totalbyResumenImpuestosCommand.getImp_05());
+		// 4 transitorio%
+		parametros.put("P_iva_compra_13", totalbyResumenImpuestosCommand.getImp_06());
+		// 8 transitorio%
+		parametros.put("P_cemento_iva_c", totalbyResumenImpuestosCommand.getImp_07());
+		// iva 13
+		parametros.put("P_iva_13_v", totalbyResumenImpuestosCommand.getImp_08());
+		// iva 13
+		parametros.put("P_iva_13_v", totalbyResumenImpuestosCommand.getImp_08());
+		// Iva cemento
+		parametros.put("P_cemento_iva_v", Constantes.ZEROS);
+		// Iva otros
+		parametros.put("P_iva_otros_c", Constantes.ZEROS);
+		// Total del iva agravado
+		parametros.put("P_compra_iva_total", totalbyResumenImpuestosCommand.getTotal_impuesto());
+		// Resumen de total venta 0%
+		parametros.put("P_compra_0", Constantes.ZEROS);
+		// Resumen de total venta 1%
+		parametros.put("P_compra_1", Constantes.ZEROS);
+		// Resumen de total venta 2%
+		parametros.put("P_compra_2", Constantes.ZEROS);
+		// Resumen de total venta 4%
+		parametros.put("P_compra_4", Constantes.ZEROS);
+		// Resumen de total venta trans 0%
+		parametros.put("P_c_trans_0", Constantes.ZEROS);
+
+		// Resumen de total venta trans 4%
+		parametros.put("P_c_trans_4", Constantes.ZEROS);
+		// Resumen de total venta trans 8%
+		parametros.put("P_c_trans_8", Constantes.ZEROS);
+
+		// Resumen de total venta trans 13
+		parametros.put("P_compra_13", Constantes.ZEROS);
+		// Resumen de total venta cemento
+		parametros.put("P_total_cemento_c", Constantes.ZEROS);
+		// Resumen de total otros
+		parametros.put("P_total_otros_c", Constantes.ZEROS);
+		// Resumen de total Gravado
+		parametros.put("P_compra_gravada", Constantes.ZEROS);
+		// Resumen de total de impuesto
+		parametros.put("P_exentos_total_compras", Constantes.ZEROS);
+		// Resumen de total de exentos
+		parametros.put("P_compra_impuesto_total", Constantes.ZEROS);
+
+		// Resumen de total de Descuentos
+		parametros.put("P_total_compra", Constantes.ZEROS);
+
+		// Resumen de total de ventas
+		parametros.put("P_total_exoneracion_compra", Constantes.ZEROS);
+
+		// Resumen de total de ventas de exoneraciones
+		parametros.put("P_total_exoneracion_venta", Constantes.ZEROS);
+		// Resumen de total venta del servicio del mesero
+		parametros.put("P_total_por_restaurante", Constantes.ZEROS);
+
+		return parametros;
+	}
+
+	private Map<String, Object> totalResumenVentaIVA(Map<String, Object> parametros, TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand) {
+		// Sumas de ventas y desglose del iva
+
+		// 0%
+		parametros.put("p_iva_cero_v", Constantes.ZEROS);
+		// 1%
+		parametros.put("P_iva_1_v", Constantes.ZEROS);
+		// 2%
+		parametros.put("P_iva_2_v", Constantes.ZEROS);
+		// 4%
+		parametros.put("P_iva_4_v", Constantes.ZEROS);
+		// 0 transitorio%
+		parametros.put("P_iva_trans_0_v", Constantes.ZEROS);
+		// 4 transitorio%
+		parametros.put("P_iva_trans_4_v",Constantes.ZEROS);
+		// 8 transitorio%
+		parametros.put("P_iva_trans_8_v", Constantes.ZEROS);
+		// iva 13
+		parametros.put("P_iva_13_v", Constantes.ZEROS);
+		// iva 13
+		parametros.put("P_iva_13_v", Constantes.ZEROS);
+		// Iva cemento
+		parametros.put("P_cemento_iva_v", Constantes.ZEROS);
+		// Iva otros
+		parametros.put("P_iva_otros_v", Constantes.ZEROS);
+		// Total del iva agravado
+		parametros.put("P_iva_total_v", Constantes.ZEROS);
+		// Resumen de total venta 0%
+		parametros.put("P_venta_cero", Constantes.ZEROS);
+		// Resumen de total venta 1%
+		parametros.put("P_venta_1", Constantes.ZEROS);
+		// Resumen de total venta 2%
+		parametros.put("P_venta_2", Constantes.ZEROS);
+		// Resumen de total venta 4%
+		parametros.put("P_venta_4", Constantes.ZEROS);
+		// Resumen de total venta trans 0%
+		parametros.put("P_v_trans_0", Constantes.ZEROS);
+
+		// Resumen de total venta trans 4%
+		parametros.put("P_v_trans_4", Constantes.ZEROS);
+		// Resumen de total venta trans 8%
+		parametros.put("P_v_trans_8", Constantes.ZEROS);
+
+		// Resumen de total venta trans 13
+		parametros.put("P_venta_13", Constantes.ZEROS);
+		// Resumen de total venta cemento
+		parametros.put("P_total_cemento_v", Constantes.ZEROS);
+		// Resumen de total otros
+		parametros.put("P_total_otros_v", Constantes.ZEROS);
+		// Resumen de total Gravado
+		parametros.put("p_venta_gravada", Constantes.ZEROS);
+		// Resumen de total de impuesto
+		parametros.put("P_total_impuestos", Constantes.ZEROS);
+		// Resumen de total de exentos
+		parametros.put("P_total_exentos", Constantes.ZEROS);
+
+		// Resumen de total de Descuentos
+		parametros.put("P_total_descuento", Constantes.ZEROS);
+
+		// Resumen de total de ventas
+		parametros.put("P_total_ventas", Constantes.ZEROS);
+
+		// Resumen de total de ventas de exoneraciones
+		parametros.put("P_total_exoneracion_venta", Constantes.ZEROS);
+		// Resumen de total venta del servicio del mesero
+		parametros.put("P_total_por_restaurante", Constantes.ZEROS);
 
 		return parametros;
 	}
