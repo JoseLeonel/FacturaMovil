@@ -733,7 +733,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
 					 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -745,7 +745,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
 					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
@@ -1634,9 +1634,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 															hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
 															hacienda.setTotalReceptor(factura.getTotalComprobante());
 															hacienda.setNotificacion(siEnviarCorreo(factura) ? Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE : Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-//															hacienda.setPathMigracion(Constantes.EMPTY);
-//															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
-//															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+															hacienda.setPathMigracion(Constantes.EMPTY);
+															hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+															hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
 
 															haciendaBo.agregar(hacienda);
 
@@ -1775,9 +1775,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									hacienda.setCorreoReceptor(compraSimplificada.getProveedorSimplificado().getCorreoElectronico());
 									hacienda.setTotalReceptor(compraSimplificada.getTotalComprobante());
 									hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-//									hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-//									hacienda.setPathMigracion(Constantes.EMPTY);
-//									hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+									hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+									hacienda.setPathMigracion(Constantes.EMPTY);
+									hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 
 									haciendaBo.agregar(hacienda);
 									if (compraSimplificada != null) {
@@ -1865,9 +1865,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setCorreoReceptor(recepcionFactura.getEmpresa().getCorreoElectronico());
 								hacienda.setTotalReceptor(recepcionFactura.getFacturaTotalComprobante());
 								hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-//								hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
-//								hacienda.setPathMigracion(Constantes.EMPTY);
-//								hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
+								hacienda.setMigradoADisco(Constantes.MIGRADO_XMLS_A_DISCO_NO);
+								hacienda.setPathMigracion(Constantes.EMPTY);
+								hacienda.setPathMigracionRespuesta(Constantes.EMPTY);
 								haciendaBo.agregar(hacienda);
 
 								recepcionFactura = recepcionFactura.getId() == null || recepcionFactura.getId() == Constantes.ZEROS_LONG ? null : recepcionFacturaBo.findById(recepcionFactura.getId());

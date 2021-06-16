@@ -128,14 +128,14 @@ public class Hacienda implements Serializable {
 	@Column(name = "id_factura")
 	private Long							numeroFactura;
 //////
-//	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
-//	private Integer						migradoADisco;
-//
-//	@Column(name = "path_migra")
-//	private String						pathMigracion;
-//
-//	@Column(name = "path_resp")
-//	private String						pathMigracionRespuesta;
+	@Column(name = "migrado_disc", columnDefinition = "INT default '0'")
+	private Integer						migradoADisco;
+
+	@Column(name = "path_migra")
+	private String						pathMigracion;
+
+	@Column(name = "path_resp")
+	private String						pathMigracionRespuesta;
 
 	public Hacienda() {
 		super();
@@ -147,29 +147,29 @@ public class Hacienda implements Serializable {
 
 	}
 
-//	public Integer getMigradoADisco() {
-//		return migradoADisco;
-//	}
-//
-//	public void setMigradoADisco(Integer migradoADisco) {
-//		this.migradoADisco = migradoADisco;
-//	}
-//
-//	public String getPathMigracion() {
-//		return pathMigracion;
-//	}
-//
-//	public void setPathMigracion(String pathMigracion) {
-//		this.pathMigracion = pathMigracion;
-//	}
-//
-//	public String getPathMigracionRespuesta() {
-//		return pathMigracionRespuesta;
-//	}
-//
-//	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
-//		this.pathMigracionRespuesta = pathMigracionRespuesta;
-//	}
+	public Integer getMigradoADisco() {
+		return migradoADisco;
+	}
+
+	public void setMigradoADisco(Integer migradoADisco) {
+		this.migradoADisco = migradoADisco;
+	}
+
+	public String getPathMigracion() {
+		return pathMigracion;
+	}
+
+	public void setPathMigracion(String pathMigracion) {
+		this.pathMigracion = pathMigracion;
+	}
+
+	public String getPathMigracionRespuesta() {
+		return pathMigracionRespuesta;
+	}
+
+	public void setPathMigracionRespuesta(String pathMigracionRespuesta) {
+		this.pathMigracionRespuesta = pathMigracionRespuesta;
+	}
 
 	public Long getId() {
 		return id;

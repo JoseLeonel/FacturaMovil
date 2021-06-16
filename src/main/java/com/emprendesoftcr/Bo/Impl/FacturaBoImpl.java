@@ -200,7 +200,7 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			Empresa empresa = usuario.getEmpresa();
 			// Se actualizan los datos de la factura command
-			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && getVerificaNoEsNotaCreditoOrDebito(facturaCommand).equals(Boolean.FALSE)) {
 				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
 			}
 
@@ -358,7 +358,25 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
-
+/**
+ * Valida que no sea nota de credito interna o electronica , debito interna o electronica
+ * @param facturaCommand
+ * @return
+ */
+	private  Boolean getVerificaNoEsNotaCreditoOrDebito(FacturaCommand facturaCommand) {
+		Boolean resultado = Boolean.FALSE;
+		if(facturaCommand.getTipoDoc() != null){
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) ||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				resultado = Boolean.TRUE;
+			}
+			
+		}
+		
+		return resultado;
+	}
 	/**
 	 * Mueve los datos correspondientes a notas de creditos
 	 * @param factura
