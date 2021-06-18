@@ -626,7 +626,7 @@ public class DetalleBoImpl implements DetalleBo {
 	public List<Map<String, Object>>  totalbyImpuestos(String fechaInicial ,String fechaFinal,Integer estado,Integer idEmpresa,String codigoComercial){
 		jdbcTemplate = new JdbcTemplate(dataSource);
     String sql = "select t.fecha_emision,t.tipo_doc,t.clave,t.numero_consecutivo,t.consecutivo_proforma,t.cedula,t.identificacion_extranjero,\n" + 
-    		"		t.nombre_completo,t.nombre_factura,t.total_exo ,t.total_otros_cargos,total_descuentos\n" + 
+    		"		t.nombre_completo,t.nombre_factura,t.total_exo ,t.total_otros_cargos,total_descuentos,\n" + 
     		"        t.total_serv_gravados,t.total_serv_exentos,t.total_impuesto,\n" + 
     		"        t.total_mercancias_gravadas,t.total_mercancias_exentas,\n" + 
     		"        t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo, t.tipo_cambio, \n" + 
@@ -637,23 +637,32 @@ public class DetalleBoImpl implements DetalleBo {
     		"        sum(if(t.cod_tarifa = '05', t.total_tarifa,0)) imp_05,\n" + 
     		"        sum(if(t.cod_tarifa = '06', t.total_tarifa,0)) imp_06,\n" + 
     		"        sum(if(t.cod_tarifa = '07', t.total_tarifa,0)) imp_07,\n" + 
-    		"        sum(if(t.cod_tarifa = '08', t.total_tarifa,0)) imp_08\n" +
-    		"        sum(if(t.cod_tarifa = '01', t.sub_total,0)) venta_imp_01\n"+
-    		"        sum(if(t.cod_tarifa = '02', t.sub_total,0)) venta_imp_02\n"+
-    		"        sum(if(t.cod_tarifa = '03', t.sub_total,0)) venta_imp_03\n"+
-    		"        sum(if(t.cod_tarifa = '04', t.sub_total,0)) venta_imp_04\n"+
-    		"        sum(if(t.cod_tarifa = '05', t.sub_total,0)) venta_imp_05\n"+
-    		"        sum(if(t.cod_tarifa = '06', t.sub_total,0)) venta_imp_06\n"+
-    		"        sum(if(t.cod_tarifa = '07', t.sub_total,0)) venta_imp_07\n"+
-    		"        sum(if(t.cod_tarifa = '08', t.sub_total,0)) venta_imp_08\n"+
+    		"        sum(if(t.cod_tarifa = '08', t.total_tarifa,0)) imp_08,\n" +
+    		"        sum(if(t.cod_tarifa = '01', t.sub_total,0)) venta_imp_01,\n"+
+    		"        sum(if(t.cod_tarifa = '02', t.sub_total,0)) venta_imp_02,\n"+
+    		"        sum(if(t.cod_tarifa = '03', t.sub_total,0)) venta_imp_03,\n"+
+    		"        sum(if(t.cod_tarifa = '04', t.sub_total,0)) venta_imp_04,\n"+
+    		"        sum(if(t.cod_tarifa = '05', t.sub_total,0)) venta_imp_05,\n"+
+    		"        sum(if(t.cod_tarifa = '06', t.sub_total,0)) venta_imp_06,\n"+
+    		"        sum(if(t.cod_tarifa = '07', t.sub_total,0)) venta_imp_07,\n"+
+    		"        sum(if(t.cod_tarifa = '08', t.sub_total,0)) venta_imp_08,\n"+
+    		"        sum(total_otros_impuestos) total_otros_impuestos,\n"+
+    		"        sum(total_otros_impuestos_v) total_otros_impuestos_v,\n"+
+    		"        sum(total_imp_cemento) total_imp_cemento,\n"+
+    		"        sum(total_imp_cemento_v) total_imp_cemento_v\n"+
     		
     		"from (\n" + 
     		"\n" + 
     		"select f.fecha_emision,f.tipo_doc,f.numero_consecutivo,f.consecutivo_proforma ,f.clave,c.cedula,c.identificacion_extranjero,\n" + 
     		"		c.nombre_completo,f.nombre_factura,d.tipo_impuesto,f.total_exo ,f.total_otros_cargos,f.total_serv_gravados,f.total_serv_exentos,f.total_mercancias_gravadas,f.total_mercancias_exentas,f.total_impuesto,f.total_exento,"
-    		+ "  f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, f.total_descuentos\n" + 
+    		+ "  f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, f.total_descuentos,\n" + 
     		"        d.cod_tarifa,d.impuesto,f.tipo_cambio,\n" + 
-    		"        sum(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio)) as total_tarifa \n" + 
+    		    		"        sum(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.sub_total * f.tipo_cambio * -1,d.sub_total* f.tipo_cambio)) as sub_total ,\n" +
+    		"        sum(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio)) as total_tarifa, \n" + 
+    		"       sum(if(d.tipo_impuesto ='99',if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio),0)) as total_otros_impuestos, \n" +    		
+    		"       sum(if(d.tipo_impuesto ='99',if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.sub_total * f.tipo_cambio * -1,d.sub_total* f.tipo_cambio),0)) as total_otros_impuestos_v, \n" +
+    		"       sum(if(d.tipo_impuesto ='12',if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.sub_total * f.tipo_cambio * -1,d.sub_total* f.tipo_cambio),0)) as total_imp_cemento, \n" +
+    		"       sum(if(d.tipo_impuesto ='12',if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio),0)) as total_imp_cemento_v \n" +
     		"         from detalles d\n" + 
     		"       inner join facturas f on f.id = d.factura_id\n" + 
     		"       inner join clientes c on c.id = f.cliente_id\n" + 
@@ -667,7 +676,7 @@ public class DetalleBoImpl implements DetalleBo {
     		"                f.total_exo ,f.total_otros_cargos,f.total_serv_gravados,\n" + 
     		"                f.total_serv_exentos,f.total_mercancias_gravadas,\n" + 
     		"                f.total_mercancias_exentas,f.total_impuesto,\n" + 
-    		"                f.total_exento,f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, f.total_descuentos\n" + 
+    		"                f.total_exento,f.total_gravado,f.total_comprobante,f.total_merc_exo,f.total_serv_exo, f.total_descuentos,\n" + 
     		"				d.cod_tarifa,d.impuesto,f.tipo_cambio\n" + 
     		"	   order by f.fecha_emision,d.tipo_impuesto,d.cod_tarifa,d.impuesto) t\n" + 
     		"       GROUP by t.fecha_emision,t.tipo_doc,t.clave,t.numero_consecutivo,t.consecutivo_proforma,t.cedula,t.identificacion_extranjero,\n" + 
@@ -675,7 +684,7 @@ public class DetalleBoImpl implements DetalleBo {
     		"                t.total_otros_cargos,t.total_serv_gravados,\n" + 
     		"                t.total_serv_exentos,t.total_impuesto,\n" + 
     		"                t.total_mercancias_gravadas,t.total_mercancias_exentas,\n" + 
-    		"                t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo,t.total_descuentost.tipo_cambio";
+    		"                t.total_exento,t.total_gravado,t.total_comprobante,t.total_merc_exo,t.total_serv_exo,t.total_descuentos,t.tipo_cambio";
     
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("fecha_inicial", fechaInicial);

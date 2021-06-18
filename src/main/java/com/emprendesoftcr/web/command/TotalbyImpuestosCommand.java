@@ -47,6 +47,10 @@ public class TotalbyImpuestosCommand {
 	private Double	venta_imp_06;
 	private Double	venta_imp_07;
 	private Double	venta_imp_08;
+	private Double total_otros_impuestos;
+	private Double total_otros_impuestos_v;
+	private Double total_imp_cemento;
+	private Double total_imp_cemento_v;
 
 	public String getFechaEmisionSTR() {
 		if (this.fecha_emision != null) {
@@ -231,6 +235,46 @@ public class TotalbyImpuestosCommand {
 	}
 
 	
+	
+	
+	
+	public Double getTotal_imp_cemento() {
+		return total_imp_cemento;
+	}
+
+	
+	public void setTotal_imp_cemento(Double total_imp_cemento) {
+		this.total_imp_cemento = total_imp_cemento;
+	}
+
+	
+	public Double getTotal_imp_cemento_v() {
+		return total_imp_cemento_v;
+	}
+
+	
+	public void setTotal_imp_cemento_v(Double total_imp_cemento_v) {
+		this.total_imp_cemento_v = total_imp_cemento_v;
+	}
+
+	public Double getTotal_otros_impuestos_v() {
+		return total_otros_impuestos_v;
+	}
+
+	
+	public void setTotal_otros_impuestos_v(Double total_otros_impuestos_v) {
+		this.total_otros_impuestos_v = total_otros_impuestos_v;
+	}
+
+	public Double getTotal_otros_impuestos() {
+		return total_otros_impuestos;
+	}
+
+	
+	public void setTotal_otros_impuestos(Double total_otros_impuestos) {
+		this.total_otros_impuestos = total_otros_impuestos;
+	}
+
 	public void setVenta_imp_08(Double venta_imp_08) {
 		this.venta_imp_08 = venta_imp_08;
 	}

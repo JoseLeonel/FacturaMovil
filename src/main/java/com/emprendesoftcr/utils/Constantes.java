@@ -749,5 +749,5 @@ public class Constantes {
 	public static final String					CODIGO_TARIFA_13_GENERAL_PORCIENTO														= "08";
 	public static final Double					CODIGO_TARIFA_13_IMPUESTO_99																	= 99d;
 
-	public static final String				REPORTE_MENSUAL_COMPRAS_Y_VENTAS														= "/reportes/factura/reporteMensual.jasper";
+	public static final String				REPORTE_MENSUAL_COMPRAS_Y_VENTAS														= "reportes/factura/reporteMensual.jasper";
 }

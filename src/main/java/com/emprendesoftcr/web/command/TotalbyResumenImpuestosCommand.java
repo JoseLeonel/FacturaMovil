@@ -34,6 +34,10 @@ public class TotalbyResumenImpuestosCommand {
 	private Double	venta_imp_06;
 	private Double	venta_imp_07;
 	private Double	venta_imp_08;
+	private Double total_otros_impuestos;
+	private Double total_otros_impuestos_v;
+	private Double total_imp_cemento;
+	private Double total_imp_cemento_v;
 	
 	public TotalbyResumenImpuestosCommand() {
 		
@@ -52,7 +56,7 @@ public class TotalbyResumenImpuestosCommand {
 		this.total_mercancias_exentas =listaDetallada.stream().mapToDouble(l -> l.getTotal_mercancias_exentas()).sum();
 		this.total_exento =listaDetallada.stream().mapToDouble(l -> l.getTotal_exento()).sum();
 		this.total_gravado =listaDetallada.stream().mapToDouble(l -> l.getTotal_gravado()).sum();
-		this.total_descuentos =listaDetallada.stream().mapToDouble(l -> l.getTotal_gravado()).sum();
+		this.total_descuentos =listaDetallada.stream().mapToDouble(l -> l.getTotal_descuentos()).sum();
 		this.imp_01 =listaDetallada.stream().mapToDouble(l -> l.getImp_01()).sum();
 		this.imp_02=listaDetallada.stream().mapToDouble(l -> l.getImp_02()).sum();
 		this.imp_03=listaDetallada.stream().mapToDouble(l -> l.getImp_03()).sum();
@@ -69,11 +73,38 @@ public class TotalbyResumenImpuestosCommand {
 		this.venta_imp_06=listaDetallada.stream().mapToDouble(l -> l.getVenta_imp_06()).sum();
 		this.venta_imp_07=listaDetallada.stream().mapToDouble(l -> l.getVenta_imp_07()).sum();
 		this.venta_imp_08=listaDetallada.stream().mapToDouble(l -> l.getVenta_imp_08()).sum();
-			
+		this.total_otros_impuestos = listaDetallada.stream().mapToDouble(l -> l.getTotal_otros_impuestos()).sum();
+		this.total_otros_impuestos_v	= listaDetallada.stream().mapToDouble(l -> l.getTotal_otros_impuestos_v()).sum();
+		this.total_imp_cemento = listaDetallada.stream().mapToDouble(l -> l.getTotal_imp_cemento()).sum();
+		this.total_imp_cemento_v=listaDetallada.stream().mapToDouble(l -> l.getTotal_imp_cemento_v()).sum(); 		
 	}
 
 	
 	
+	
+	
+	public Double getTotal_imp_cemento() {
+		return total_imp_cemento;
+	}
+	
+	public void setTotal_imp_cemento(Double total_imp_cemento) {
+		this.total_imp_cemento = total_imp_cemento;
+	}
+	
+	public Double getTotal_imp_cemento_v() {
+		return total_imp_cemento_v;
+	}
+	
+	public void setTotal_imp_cemento_v(Double total_imp_cemento_v) {
+		this.total_imp_cemento_v = total_imp_cemento_v;
+	}
+	public Double getTotal_otros_impuestos_v() {
+		return total_otros_impuestos_v;
+	}
+	
+	public void setTotal_otros_impuestos_v(Double total_otros_impuestos_v) {
+		this.total_otros_impuestos_v = total_otros_impuestos_v;
+	}
 	public Double getTotal_exo() {
 		return total_exo;
 	}
@@ -304,6 +335,14 @@ public class TotalbyResumenImpuestosCommand {
 	
 	public void setVenta_imp_08(Double venta_imp_08) {
 		this.venta_imp_08 = venta_imp_08;
+	}
+	
+	public Double getTotal_otros_impuestos() {
+		return total_otros_impuestos;
+	}
+	
+	public void setTotal_otros_impuestos(Double total_otros_impuestos) {
+		this.total_otros_impuestos = total_otros_impuestos;
 	}
 
 

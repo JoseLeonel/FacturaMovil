@@ -366,7 +366,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public void envioFacturasCredito() {
 		try {
@@ -435,7 +435,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/50 22 * 6 ?")
+//	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
@@ -515,7 +515,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/01 23 * * ?")
+//	@Scheduled(cron = "0 0/01 23 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -551,7 +551,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -677,7 +677,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	@Scheduled(cron = "0 0/59 23 * * ?")
+//	@Scheduled(cron = "0 0/59 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -778,7 +778,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/55 * * * ?")
+//	@Scheduled(cron = "0 0/55 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1146,7 +1146,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-	@Scheduled(cron = "0 0/08 * * * ?")
+//	@Scheduled(cron = "0 0/08 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1223,7 +1223,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/12 * * * ?")
+//	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
 		try {
@@ -1522,7 +1522,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1816,7 +1816,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/11 * * * ?")
+//	@Scheduled(cron = "0 0/11 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

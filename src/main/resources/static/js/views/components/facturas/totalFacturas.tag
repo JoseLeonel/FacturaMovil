@@ -102,7 +102,8 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-     			<a show ="{mostrarBotones == true?true:false}" class="btn btn-primary btn-bajar" target="_blank" title="Descargar Resumen facturas" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar </a>        
+     			<a show ="{mostrarBotones == true?true:false}" class="btn btn-primary btn-bajar" target="_blank" title="Descargar Resumen facturas" href="ResumenPDFIVAFacturasAndCompras.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Prueba </a>        
+			    <a show ="{mostrarBotones == true?true:false}" class="btn btn-primary btn-bajar" target="_blank" title="Descargar Resumen facturas" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar </a>        
 				<a   show="{mostrarBotones == true?true:false}" class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle venta de articulo" href="DescargarDetallexCodigoAjax.do?fechaInicialParam={fechaInicio}&fechaFinalParam={fechaFin}&tipoImpuesto={0}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar IVA</a>        
 		        <button show ="{mostrarBotones == true?true:false}" onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
 		        <button show ="{mostrarBotones == true?true:false}" onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
