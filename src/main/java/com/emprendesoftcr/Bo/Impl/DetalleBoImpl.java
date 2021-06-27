@@ -203,7 +203,7 @@ public class DetalleBoImpl implements DetalleBo {
 			
 			
 			cell = row.createCell(5);
-			Utils.getCel(cell,styles,consultaUtilidadNative.getCosto());
+			Utils.getCel(cell,styles,consultaUtilidadNative.getTotalCosto());
 		
 			cell = row.createCell(6);
 			Utils.getCel(cell,styles,consultaUtilidadNative.getVenta());

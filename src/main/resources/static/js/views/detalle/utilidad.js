@@ -73,6 +73,7 @@ var _Init = function() {
     ocultarDescargaEnvioCorreo();
     listaActividadEconomica();
     listaUsuarios();
+    __BajarPDFHacienda();
     //  var advanced_search_section = $('#filtrosAvanzados');
     //  advanced_search_section.slideToggle(750);
 }
@@ -270,7 +271,7 @@ function _consulta() {
                 sumarTotales(result.aaData);
                 agregarInputsCombos();
                 ActivarEventoFiltro(".tableListar")
-                __BajarPDFHacienda()
+                
                 EventoFiltro();
             } else {
                 __Inicializar_Table('.tableListar')
