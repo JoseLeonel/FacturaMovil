@@ -1,5 +1,31 @@
 <punto-venta>
 
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("articulo.descripcion")} </label>
+                        <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarDescripcionDetalle}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecioDetalle' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -375,7 +401,7 @@
                                 </td>
                                 <td style="width:5%;"  class="campoLabel"><label >{numeroLinea}</label> </td>
                                 <td  style="width:4%" class="campoLabel"> <label >{codigo}</label></td>
-                                <td class="campoLabel"><label >{descripcion}</label></td>
+                                <td class="campoLabel" onclick ={__CambiarDescripcion}><label >{descripcion}</label></td>
                                 <td class="text-right" style="width:8%;">
                                     <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campoDetalle " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                                 </td>
@@ -832,8 +858,6 @@
 
 
 
-
-
 <!--fin validar rol de usuario-->
 
 
@@ -1059,12 +1083,18 @@
             }
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible')){
+                    if(!$('#modalFacturasDia').is(':visible')){
                     $(".codigo").val("")
-                    seguridadCambiarPrecioLinea()
+                    seguridadCambiarPrecioLinea()}
                     return
                 }else{
-                    $(".codigo").val("")
-                    event.preventDefault()
+                    if($('#modalFacturasDia').is(':visible')){
+                        return
+                    }else{
+                        $(".codigo").val("")
+                        event.preventDefault()
+
+                    }
                     return
                 }
             }
@@ -1154,8 +1184,38 @@
     }, false );
 
     })
+__CambiarDescripcion(e){
+   self.item = e.item; 
+   self.update()
+   if(self.item.codigo =="8888"){
+        return true
+    } 
+  
+    $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+        $( ".cambiarDescripcionArticulo" ).val(self.item.descripcion)      
+        $('.cambiarDescripcionArticulo').focus()
+        $('.cambiarDescripcionArticulo').select()
+    })
 
+
+
+}
+function  __cambiarDescripcionDetalleModal(){
+    var descripcion = $(".cambiarDescripcionArticulo").val();
+    self.item.descripcion = descripcion
+    self.update()
+    $(".cambiarDescripcionArticulo").val(null);
+    $('#modalCambiarDescripcion').modal('hide') 
+
+  }
 /**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarDescripcionDetalle(e){
+    __cambiarDescripcionDetalleModal()
+}
+/**&&  !$('#modalCambiarDescripcion').is(':visible')
 *Cambiar precio del producto
 **/
 __CambiarPrecioFactura(e){
@@ -1272,9 +1332,16 @@ function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     }
-    if($('#modalFacturasDia').is(':visible')){
-       getPosicionInputCodigo()
-    }
+    if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
+                        &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
+                        &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
+                        &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible') &&  !$('#modalCambiarPrecioDetalle').is(':visible') &&  !$('#modalCambiarDescripcion').is(':visible')
+                    ) {
+                        getPosicionInputCodigo()
+                    }
+       
+    
 }
 
     function disableF5(e) {
@@ -1298,7 +1365,7 @@ function teclamodal(e){
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
-                        &&  !$('#modalCambiarPrecio').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible') && !$('#modalCambiarDescripcion').is(':visible')
                     ) {
                         getPosicionInputCodigo()
                      }
@@ -1698,6 +1765,7 @@ function BuscarActividadComercial(){
 }
 
 function actualizaElPlazoDiasCredito(){
+     if(!$('#modalFacturasDia').is(':visible')){
     var valor = $('.selectFechaCredito').val()
     if(valor ==null || valor ==""){
         return true
@@ -1708,6 +1776,8 @@ function actualizaElPlazoDiasCredito(){
     var fecha2 = moment($('.selectFechaCredito').val());
     self.factura.plazoCredito = fecha2.diff(fecha1, 'days');
     self.update();
+
+     }
 
 }
 
@@ -4139,8 +4209,9 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()
         }else{
+            if(!$('#modalFacturasDia').is(':visible')){
             $(".codigo").val("")
-            event.preventDefault()
+            event.preventDefault()}
         }
         return
     }

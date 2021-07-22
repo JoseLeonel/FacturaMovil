@@ -858,6 +858,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setPorcentajeGanancia(Utils.getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
 			detalle.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
 			detalle.setUsuario(usuario);
+			
+			
+			
 			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() != null ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
 			detalleFacturaCommand.setTipoImpuestoMag(detalleFacturaCommand.getTipoImpuestoMag() != null ? detalleFacturaCommand.getTipoImpuestoMag() : Constantes.EMPTY);
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
@@ -865,6 +868,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
 
+			if(!detalle.getCodigoTarifaMag().equals(Constantes.EMPTY) && factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+         detalle.setCodigoTarifa(detalle.getCodigoTarifaMag());  				
+			}
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());

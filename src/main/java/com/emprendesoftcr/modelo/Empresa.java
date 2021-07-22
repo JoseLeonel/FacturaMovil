@@ -265,6 +265,9 @@ public class Empresa implements Serializable {
 	@Column(name = "es_simpli" )
 	private Integer			esSimplificado; //0 = No 1 = Si  
 	
+	@Column(name = "es_ponderado" )
+	private Integer			esPonderado; //0 = No 1 = Si  
+	
 	
 	
 
@@ -906,6 +909,16 @@ public class Empresa implements Serializable {
 	
 	public void setEsSimplificado(Integer esSimplificado) {
 		this.esSimplificado = esSimplificado;
+	}
+
+	
+	public Integer getEsPonderado() {
+		return esPonderado;
+	}
+
+	
+	public void setEsPonderado(Integer esPonderado) {
+		this.esPonderado = esPonderado;
 	}
 	
 	

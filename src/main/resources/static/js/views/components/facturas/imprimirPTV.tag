@@ -21,8 +21,8 @@
             <div class="row">
             <div class="col-md-4 col-sx-12 col-sm-12 col-lg-4"></div>
             <div class="col-md-4 col-sx-12 col-sm-12 col-lg-4">
-                    <section class="">
-                        <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
+            <section class="">
+                        <div class="forma-impresion " id="imprimeme" name ="imprimeme" class="imprimeme page">                        
                             <div class="ticket" id="ticket" name="ticket" > 
                                 
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
@@ -69,7 +69,7 @@
                                         <tr class = "forma-table">
                                             <th class="cantidad">{$.i18n.prop("tikect.detalle.cantidad")}  </th>
                                             <th class="producto">{$.i18n.prop("tikect.detalle.descripcion")}</th>
-                                            <th class="precio"> {$.i18n.prop("tikect.total.linea")} </th>
+                                            <th class="precio"> Total(s/iva) </th>
 
                                         </tr>
                                     </thead>
@@ -135,10 +135,14 @@
                                      <tr>
                                     <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                                     </tr>
+                                                                         <tr>
+                                    <td colspan="3" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}"><p>E=Excento G=Gravado </p></td>
+                                    </tr>
+
                                 </tbody>
                                 </table> 
                                 
-                                <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  
+                                
                                 
                                 <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
                                                 {$.i18n.prop("tikect.autorizado.parte.dos")}   
@@ -175,9 +179,40 @@
  </iframe>
 </div>
 <style type="text/css"  >
+@page {
+  size: auto !important;/* es el valor por defecto */
+  margin: 10% !important;
+}
+@page :left {
+ margin-left: 0cm !important;
+ margin-right: 0cm !important;
+}
+@page :right {
+ margin-left: 0cm !important;
+ margin-right: 0cm !important;
+}
+@page :first {
+ margin-top: 0cm !important;
+}
+@media print {
+  .imprimeme { 
+    background-color:white;
+    border-color:white;
+    width:20%;
+    height:10%;
+    white-space: "pre-wrap";
+    margin:-23px -40px 0;
+  }
+ 
+ body{
+  width:100% !important;; 
+  height:100% !important;;
+  margin: 0 !important;;
+ }
+}
 * {
     font-size: 12px !important;
-    font-family: 'Times New Roman' !important;
+    font-family: "Times New Roman", Times, serif !important;
 }
 
 .modal-content{
@@ -215,9 +250,6 @@
     .tituloPrincipal{
         text-align: center;
     }
-    .formatoTotal{
-        
-    } 
     .fondoEncabezado
     {
         background: #00539B;
@@ -307,7 +339,7 @@
         color: #000;
         float: left;
         font-family: "Times New Roman", Times, serif;
-        font-size: 13px;
+        font-size: 11px;
         font-style: normal;
         font-variant: normal;
         font-weight: normal;
@@ -315,34 +347,23 @@
         line-height: normal;
         margin: 0px;
       
-        padding: 0px;
+        padding: 0px !important;
         text-transform: none;
       
     }
     .ticket > table
     {
-        border-collapse: collapse;
-        border-top: 0px solid black;
+        border-collapse: collapse !important;;
+        border-top: 0px solid black !important;;
+        width:90% !important;
     }
     .forma-table
     {
-        border-collapse: collapse;
-        border-top: 1px solid black;
+        border-collapse: collapse !important;;
+        border-top: 1px solid black !important;
+        width:10%;
     }
-    .ticket > td.producto,th.producto
-    {
-        
-    }
-    .ticket > td.cantidad,th.cantidad
-    {
-      
-        word-break: break-all;
-    }
-    .ticket > td.precio,th.precio
-    {
-        
-        word-break: break-all;
-    }
+  
     .encabezado
     {
         align-content: left;
@@ -357,7 +378,7 @@
     }
     @page
     {
-        margin: 0;
+        margin: 0 !important;;
     }
     
     .encabezado
@@ -365,34 +386,46 @@
         align-content: left;
         text-align: left;
     }
-@page
-    {
-        margin: 0;
-    }
    
     
-  @media print {
-* {
-    -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
-    color-adjust: exact !important;  /*Firefox*/
-    body {
-		background: #fff;
-		color: #000;
-	}   
-  }
-}
-@media only print
-{
-    body * { display: none !important; }
-    body:after { content: "Don't waste paper!"; }
-}
+
 
 #imprimeme {
-    height: 100%;
-    width: 100%;
-    background: white;
+    height: 100% !important;;
+    width: 155px !important;;
+    max-width: 155px !important;
+    background: white !important;
    
 }
+.ticket {
+    background: white !important;
+ 
+ 
+}
+img {
+    max-width: inherit !important;
+    width: inherit !important;
+}
+td.cantidad,
+th.cantidad {
+    width: 10%!important;
+    max-width:  10%!important;
+    word-break: break-all !important;;
+}
+td.producto,
+th.producto {
+    width: 55%!important;
+    max-width:  55%!important;
+    word-break: break-all !important;;
+}
+
+td.precio,
+th.precio {
+    width: 25%!important;
+    max-width:  25%!important;
+    word-break: break-all !important;;
+}
+
 </style>    
 <script>
 var self = this;
@@ -415,6 +448,7 @@ self.facturaActiva = 0
 self.facturaImpresa = {
     id:null,
     nota:"",
+    estado:0,
     tipoDoc:"",
     plazoCredito:0,
     codigoActividad:"",
@@ -423,7 +457,10 @@ self.facturaImpresa = {
     totalDescuentos:0,
     cliente:{
        cedula:"",
-       nombreCompleto:""  
+       nombreCompleto:"",
+       correoAlternativo:"",
+       correoElectronico:""  ,
+       nombreComercial:""
     },
     empresa:{
         nombreComercial:"",
@@ -448,6 +485,34 @@ self.totalesIVAI    = []
 self.pdf = false;
 self.mostrarPDF = false  
 self.on('mount',function(){
+    self.facturaImpresa = {
+    id:null,
+    nota:"",
+    estado:0,
+    tipoDoc:"",
+    plazoCredito:0,
+    codigoActividad:"",
+    tipoCambio:0,
+    nombreFactura:"",
+    totalDescuentos:0,
+    cliente:{
+       cedula:"",
+       nombreCompleto:"",
+       correoAlternativo:"",
+       correoElectronico:""  ,
+       nombreComercial:""
+    },
+    empresa:{
+        nombreComercial:"",
+        imprimirDirecto:0,
+        noFacturaElectronica:0,
+        correoElectronico:"",
+        otraSenas:"",
+        telefono:0
+    },
+    referenciaNumero:""
+
+}
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
     self.update()
@@ -1035,7 +1100,7 @@ function __imprimir(){
            
        // }
     //if(self.mostrarPDF == false){
-        var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+        var objeto=document.getElementById('ticket');  //obtenemos el objeto a imprimir
         // var div = document.querySelector("#imprimeme");
         imprimirElemento(objeto)
    // }
@@ -1045,13 +1110,25 @@ function __imprimir(){
 }
 function imprimirElemento(elemento){
  // var originalContents = document.body.innerHTML;
-  var ventana =window.open("", "MsgWindow", "width=600,height=400");
+  var ventana =window.open("",'_blank'); //abrimos una ventana vacía nueva
   var html = "<!DOCTYPE HTML>";
   html += '<html><head><title>' + "" + '</title>'
-  html += '</head><body id="imprimirLaFactura" >'
+  html += '<style>'
+  html +=  estilos();   
+  
+  html += '</style>'
+  html += '</head><body id="imprimirLaFactura"  style="margin-top: 0;margin-right: 0; margin-left: 0;">'
+   html += "<section >"
+   html +='<div class="forma-impresion " id="imprimeme" name ="imprimeme" class="imprimeme page"> '
+   html +=' <div class="ticket" id="ticket" name="ticket" > '
+  html += elemento.innerHTML
+   html += "</section >"
+   html +='</div> '
+   html +=' </div> '
+  
+  html += '</body></html>'
+console.log(html)
   ventana.document.write(html);
-  ventana.document.write(elemento.innerHTML);
-  ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();
   ventana.print();
@@ -1063,6 +1140,25 @@ function imprimirElemento(elemento){
   return true;
 }
 
+function estilos(){
+
+stylos  = "	@media print {	.imprimeme {background-color:red;	border-color:white;	width:20%;height:10%;white-space: 'pre-wrap';margin:-23px -40px 0;}"
+stylos  += "body{width:100% !important;	height:100% !important;	margin: 0 !important;}}"
+stylos  += "*{font-size: 10px !important;font-family: 'Times New Roman', Times, serif !important;}"
+stylos  += ".ticket{color: #000;float: left;font-family: 'Times New Roman', Times, serif;font-size: 10px;font-style: normal;font-variant: normal;font-weight: normal;height: auto;line-height: normal;margin: 0px;padding: 0px !important;text-transform: none;}"
+stylos  += ".ticket > table{border-collapse: collapse !important;border-top: 0px solid black !important;width:100% !important;}"
+stylos  += ".forma-table{    width: 22%!important;border-collapse: collapse !important;border-top: 1px solid black !important;}"
+stylos  += ".encabezado{align-content: left;text-align: left;padding-top: 3px;}"
+stylos  += ".ticket > img{max-width: inherit;width: inherit;}@page{margin: 0 !important;}"
+stylos  += ".encabezado{align-content: left;text-align: left;}"
+stylos  += ".ticket {background: white !important;}img {max-width: inherit !important;width: inherit !important;}"
+stylos  += "td.cantidad,th.cantidad {width: 10%!important;max-width: 10%!important;word-break: break-all !important;}"
+stylos  += "td.producto,th.producto {width: 55%!important;max-width: 55%!important;word-break: break-all !important;}"
+stylos  += "td.precio,th.precio {width: 25%!important;max-width: 25%!important;	word-break: break-all !important;}"
+
+
+ return stylos;
+}
 
 function imprimirPFD(callback){
     var href =  'GenerarTikect1.do?idFactura='+self.parametro.factura.id + '&t=' + $.now() +'&tipoFactura=1'+'&subTotalGeneralSTR='+"" + '&totalImpuestoRestSTR='+""+'&impServicioTotalSTR='+""+'&totalComprobanteSTR='+ ""+'&totalDescuentosProformaREstSTR='+""

@@ -270,6 +270,7 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
   			return resultado;
   		}
+  		
   		if(montoImpuesto != null && tipoImpuesto !=null) {
     		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
           resultado = "<Impuesto>" +

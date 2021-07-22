@@ -135,7 +135,7 @@ public class DetalleFacturaCommand {
 		this.montoExoneracion1 = detalle.getMontoExoneracion1();
 		this.cantidadAplicadaNotaCredito = detalle.getCantidadAplicadaNotaCredito() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidadAplicadaNotaCredito();
 		this.codigoTarifa = detalle.getCodigoTarifa();
-		this.precio = detalle.getPrecio();
+		this.precio = Utils.round(detalle.getPrecioUnitario() + (detalle.getImpuesto() / detalle.getCantidad()), 0)  ;
 
 	}
 
@@ -277,6 +277,10 @@ public class DetalleFacturaCommand {
 
 	public String getPrecioUnitarioSTR() {
 		return Utils.formateadorMiles(this.precioUnitario);
+	}
+	
+	public String getPrecioSTR() {
+		return Utils.formateadorMiles(this.precio);
 	}
 
 	public Double getCantidad() {
