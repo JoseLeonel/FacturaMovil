@@ -446,7 +446,7 @@
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
                                     <label class="titleListaPrecio">Lista de Precios </label>  
-                                    <select  class="form-control selectListaPrecios" >
+                                    <select  class="form-control selectListaPrecios" id="selectListaPrecios" >
                                         <option    value="1"  >Precio Publico</option>
                                         <option    value="2"  >Precio Mayorista</option>
                                         <option    value="3"  >Precio Especial</option>
@@ -1338,7 +1338,11 @@ function teclamodal(e){
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
                         &&  !$('#modalCambiarPrecio').is(':visible') &&  !$('#modalCambiarPrecioDetalle').is(':visible') &&  !$('#modalCambiarDescripcion').is(':visible')
                     ) {
-                        getPosicionInputCodigo()
+                        if(e.target.id != 'selectListaPrecios' ){
+                            getPosicionInputCodigo();
+
+                        }
+                        
                     }
        
     
@@ -1350,7 +1354,7 @@ function teclamodal(e){
         if ((e.which || e.keyCode) == 114) e.preventDefault();
         if ((e.which || e.keyCode) == 112) e.preventDefault();
         if ((e.which || e.keyCode) == 117) e.preventDefault();
-        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+        if(id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
@@ -1765,10 +1769,10 @@ function BuscarActividadComercial(){
 }
 
 function actualizaElPlazoDiasCredito(){
-     if(!$('#modalFacturasDia').is(':visible')){
-    var valor = $('.selectFechaCredito').val()
-    if(valor ==null || valor ==""){
-        return true
+     if(!$('#modalFacturasDia').is(':visible')  ){
+        var valor = $('.selectFechaCredito').val()
+        if(valor ==null || valor ==""){
+            return true
     }
     var fechaReal = new Date();
     var formatoFecha = formatoFechaF(fechaReal);

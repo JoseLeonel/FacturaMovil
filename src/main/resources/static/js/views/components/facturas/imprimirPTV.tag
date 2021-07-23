@@ -339,7 +339,7 @@
         color: #000;
         float: left;
         font-family: "Times New Roman", Times, serif;
-        font-size: 11px;
+        font-size: 12px;
         font-style: normal;
         font-variant: normal;
         font-weight: normal;
@@ -355,13 +355,13 @@
     {
         border-collapse: collapse !important;;
         border-top: 0px solid black !important;;
-        width:90% !important;
+        width:93% !important;
     }
     .forma-table
     {
         border-collapse: collapse !important;;
         border-top: 1px solid black !important;
-        width:10%;
+        width:16%;
     }
   
     .encabezado
@@ -392,8 +392,8 @@
 
 #imprimeme {
     height: 100% !important;;
-    width: 155px !important;;
-    max-width: 155px !important;
+    width: 170px !important;;
+    max-width: 170px !important;
     background: white !important;
    
 }
@@ -1128,11 +1128,14 @@ function imprimirElemento(elemento){
   
   html += '</body></html>'
 console.log(html)
+//setTimeout(() => { // Needed for large documents
+  ventana.document.body.style.margin = '0 0';
   ventana.document.write(html);
   ventana.document.close();
   ventana.focus();
   ventana.print();
   ventana.close();
+  //}, 1000)
  // document.body.innerHTML = originalContents;
   
 //  printJS('imprimeme', 'html');
@@ -1142,19 +1145,19 @@ console.log(html)
 
 function estilos(){
 
-stylos  = "	@media print {	.imprimeme {background-color:red;	border-color:white;	width:20%;height:10%;white-space: 'pre-wrap';margin:-23px -40px 0;}"
-stylos  += "body{width:100% !important;	height:100% !important;	margin: 0 !important;}}"
-stylos  += "*{font-size: 10px !important;font-family: 'Times New Roman', Times, serif !important;}"
-stylos  += ".ticket{color: #000;float: left;font-family: 'Times New Roman', Times, serif;font-size: 10px;font-style: normal;font-variant: normal;font-weight: normal;height: auto;line-height: normal;margin: 0px;padding: 0px !important;text-transform: none;}"
+stylos  = "	@media print {	.imprimeme {background-color:red;	border-color:white;	width:23%;height:10%;white-space: 'pre-wrap';margin:-23px -40px 0;}"
+stylos  += "body{width:80mm !important;	height:100% !important;	margin: 0 !important;}}"
+stylos  += "*{font-size: 12px !important;font-family: 'Times New Roman', Times, serif !important;}"
+stylos  += ".ticket{color: #000;float: left;font-family: 'Times New Roman', Times, serif;font-size: 12px;font-style: normal;font-variant: normal;font-weight: normal;height: auto;line-height: normal;margin: 0px;padding: 0px !important;text-transform: none;}"
 stylos  += ".ticket > table{border-collapse: collapse !important;border-top: 0px solid black !important;width:100% !important;}"
-stylos  += ".forma-table{    width: 22%!important;border-collapse: collapse !important;border-top: 1px solid black !important;}"
+stylos  += ".forma-table{    width: 30%!important;border-collapse: collapse !important;border-top: 1px solid black !important;}"
 stylos  += ".encabezado{align-content: left;text-align: left;padding-top: 3px;}"
 stylos  += ".ticket > img{max-width: inherit;width: inherit;}@page{margin: 0 !important;}"
 stylos  += ".encabezado{align-content: left;text-align: left;}"
 stylos  += ".ticket {background: white !important;}img {max-width: inherit !important;width: inherit !important;}"
 stylos  += "td.cantidad,th.cantidad {width: 10%!important;max-width: 10%!important;word-break: break-all !important;}"
-stylos  += "td.producto,th.producto {width: 55%!important;max-width: 55%!important;word-break: break-all !important;}"
-stylos  += "td.precio,th.precio {width: 25%!important;max-width: 25%!important;	word-break: break-all !important;}"
+stylos  += "td.producto,th.producto {width: 60%!important;max-width: 60%!important;word-break: break-all !important;}"
+stylos  += "td.precio,th.precio {width: 30%!important;max-width: 30%!important;	word-break: break-all !important;}"
 
 
  return stylos;
