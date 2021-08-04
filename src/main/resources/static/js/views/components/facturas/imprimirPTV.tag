@@ -24,48 +24,173 @@
             <section class="">
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme" class="imprimeme page">                        
                             <div class="ticket" id="ticket" name="ticket" > 
-                                
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong> {$.i18n.prop("regimen.simplificado")} </strong><br></div>
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 2}"><strong> Recibo por reintegro de Gastos </strong><br></div>
-                                <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
-                                
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica != 2}"><strong> {$.i18n.prop("emisor.codigoActividad")} : </strong>{facturaImpresa.codigoActividad}</div> 
-                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
-                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div>
-                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></div>
-                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} <br></div>
-                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(0, 39):facturaImpresa.empresa.otraSenas} </div>
-                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(40, facturaImpresa.empresa.otraSenas.length):''} </div>
-                                
-                                <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} </div>
-                                <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
-                                <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
-                                <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
-                                <div class="encabezado" > <strong>Usuario:</strong>   {facturaImpresa.usuarioCreacion.nombreUsuario}  </div>  
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</div>
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '03' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Credito</div>
-                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '01' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
-                                <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")} </strong>{facturaImpresa.codigoMoneda}</div>
-                                <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
-                                <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.consecutivoProforma.length > 0}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.consecutivoProforma}                       </strong><br></div>
-                                <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
-                                <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
-                                <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {cedula}   </strong></div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
-                                <div class="encabezado" show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }"><strong>A nombre:     </strong>{facturaImpresa.nombreFactura}</div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }"><strong show={facturaImpresa.cliente.nombreComercial.length > 0}>{facturaImpresa.cliente.nombreComercial}</strong ></div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
-                                <div class="encabezado" show ="{facturaImpresa.cliente.correoAlternativo != ''}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></div>
-                                <div class="tamanoClaveencabezado" show ="{facturaImpresa.referenciaNumero.length > 0}"><strong > {$.i18n.prop("informacion.numero.referencia")} </strong></div>
-                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteUnoRef}</div>
-                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteDosRef}</div>
-                                <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
-                                <div class="encabezado" show="{facturaImpresa.mesa != null}"><strong> {facturaImpresa.mesa.descripcion} </strong><br></div> 
                                 <table class = "forma-table">
+
+
                                     <thead>
+                                    <tr show="{facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td class="encabezado" colspan="3" ><strong> {documentoElectronico} </strong></td>
+                                    </tr>
+                                    
+                                    
+                                    <tr show="{facturaImpresa.empresa.noFacturaElectronica == 1}">
+                                        <td class="encabezado" colspan="3" ><strong> {$.i18n.prop("regimen.simplificado")} </strong></td>
+                                    </tr>
+
+                                    <tr show="{facturaImpresa.empresa.noFacturaElectronica == 2}">
+                                        <td class="encabezado" colspan="3" ><strong> Recibo por reintegro de Gastos </strong></td>
+                                    </tr>
+
+
+                                    <tr show = "{facturaImpresa.tipoDoc == '87'}">
+                                        <td class="encabezado" colspan="3" ><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong></td>
+                                    </tr>
+
+
+                                    <tr show="{facturaImpresa.empresa.noFacturaElectronica != 2}">
+                                        <td class="encabezado" colspan="3" ><strong> {$.i18n.prop("emisor.codigoActividad")} : </strong>{facturaImpresa.codigoActividad}</td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong> {facturaImpresa.empresa.nombreComercial}  </strong></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong> {facturaImpresa.empresa.nombre} </strong></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></td>
+                                    </tr>
+
+
+                                    <tr show = {facturaImpresa.empresa.correoElectronico != ""} >
+                                        <td class="encabezado" colspan="3" >{facturaImpresa.empresa.correoElectronico}</td>
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                        <td class="encabezado" colspan="3" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(0, 39):facturaImpresa.empresa.otraSenas}</td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(40, facturaImpresa.empresa.otraSenas.length):''}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</td>
+                                    </tr>
+
+                                    <tr show ="{facturaImpresa.plazoCredito > 0}">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="encabezado" colspan="3" ><strong>Usuario:</strong>   {facturaImpresa.usuarioCreacion.nombreUsuario}</td>
+                                    </tr>
+
+                                    <tr  show="{facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</td>
+                                    </tr>
+
+                                    
+                                    <tr  show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</td>
+                                    </tr>
+
+                                    <tr  show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '86' }">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Credito</td>
+                                    </tr>
+
+
+                                    <tr  show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '01' }">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</td>
+                                    </tr>
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.moneda")} </strong>{facturaImpresa.codigoMoneda}</td>
+                                    </tr>
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</td>
+                                    </tr>
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.consecutivoProforma.length > 0}">
+                                        <td class="encabezado" colspan="3" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.consecutivoProforma} </strong><br></td>
+                                    </tr>
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}">
+                                        <td class="encabezado" colspan="3" ><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong></td>
+                                    </tr>
+
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td class="tamanoClave encabezado" colspan="3" >{claveParteUno}</td>
+                                    </tr>
+
+                                    <tr  show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td class="tamanoClave encabezado" colspan="3" >{claveParteDos}</td>
+                                    </tr>
+
+                                    <tr  show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}">
+                                        <td class="encabezado" colspan="3" ><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {cedula}   </strong></td>
+                                    </tr>
+
+                                    <tr  show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }">
+                                        <td class="encabezado" colspan="3" ><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></td>
+                                    </tr>
+
+                                    <tr  show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }">
+                                        <td class="encabezado" colspan="3" ><strong>A nombre:     </strong>{facturaImpresa.nombreFactura}</td>
+                                    </tr>
+
+                                    <tr  show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'  }">
+                                        <td class="encabezado" colspan="3" ><strong show={facturaImpresa.cliente.nombreComercial.length > 0}>{facturaImpresa.cliente.nombreComercial}</strong ></td>
+                                    </tr>
+
+                                    <tr  show ="{facturaImpresa.cliente.cedula != '999999999999' && facturaImpresa.cliente.cedula != '888888888888'}">
+                                        <td class="encabezado" colspan="3" > <strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></td>
+                                    </tr>
+
+                                    <tr show ="{facturaImpresa.cliente.correoAlternativo != ''}">
+                                        <td colspan="3" class="encabezado" > <strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></td>
+                                    </tr>
+
+                                    <tr show ="{facturaImpresa.referenciaNumero.length > 0}">
+                                        <td colspan="3" class="tamanoClaveencabezado" > <strong > {$.i18n.prop("informacion.numero.referencia")} </strong></td>
+                                    </tr>
+
+                                    <tr show = "{facturaImpresa.referenciaNumero.length > 0}">
+                                        <td colspan="3" class="tamanoClave encabezado" > {claveParteUnoRef}</td>
+                                    </tr>
+
+                                    <tr show = "{facturaImpresa.referenciaNumero.length > 0}">
+                                        <td colspan="3" class="tamanoClave encabezado" > {claveParteDosRef}</td>
+                                    </tr>
+
+                                    <tr show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'>
+                                        <td colspan="3" > {facturaImpresa.nota}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.estado == 5 }'>
+                                        <td colspan="3" > Estado:Anulada</td>
+                                    </tr>
+
+
+                                    <tr show="{facturaImpresa.mesa != null}">
+                                        <td colspan="3" ><strong> {facturaImpresa.mesa.descripcion} </strong><br></td>
+                                    </tr>
                                         <tr class = "forma-table">
                                             <th class="cantidad">{$.i18n.prop("tikect.detalle.cantidad")}  </th>
                                             <th class="producto">{$.i18n.prop("tikect.detalle.descripcion")}</th>
@@ -130,39 +255,63 @@
                                         <td></td>
                                         <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
                                         <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
-                                        
                                     </tr>
                                      <tr>
-                                    <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
+                                         <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                                     </tr>
-                                                                         <tr>
+                                    <tr>
                                     <td colspan="3" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}"><p>E=Excento G=Gravado </p></td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.parte.uno")}</td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.parte.dos")}   </td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.parte.tres")}  </td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.parte.cuatro")} </td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.uno")} </td>
+                                    </tr>
+
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.dos")}    </td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}    </td>
+                                    </tr>
+                                    <tr show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">
+                                        <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}    </td>
+                                    </tr>
+
+                                    <tr >
+                                        <td colspan="3" class="tamanoClave encabezado" > <br><br><br><br>{$.i18n.prop("tikect.final")}    </td>
+                                    </tr>
+                                    <tr >
+                                        <td colspan="3" class="tamanoClave encabezado" > {$.i18n.prop("emprendesoft.factura")}    </td>
+                                    </tr>
+                                    <tr >
+                                        <td colspan="3" class="tamanoClave encabezado" > {$.i18n.prop("emprendesoft.mensaje")}    </td>
+                                    </tr>
+                                    <tr >
+                                        <td colspan="3" class="tamanoClave encabezado" > {$.i18n.prop("emprendesoft.correo")}   </td>
+                                    </tr>
+
+                                    <tr  show={mostrarImprimiCelular == true}>
+                                        <td colspan="3" class="tamanoClave encabezado" > <br> <br><br><br><br><br>   </td>
+                                    </tr>
+
+                                    <tr  show={mostrarImprimiCelular == true}>
+                                        <td colspan="3" class="tamanoClave encabezado" > Recibido Por:___________________________   </td>
                                     </tr>
 
                                 </tbody>
                                 </table> 
-                                
-                                
-                                
-                                <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
-                                                {$.i18n.prop("tikect.autorizado.parte.dos")}   
-                                                    <br>{$.i18n.prop("tikect.autorizado.parte.tres")}
-                                                    <br>{$.i18n.prop("tikect.autorizado.parte.cuatro")}</p>
-                                <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.uno")}  <br>
-                                                {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.dos")}   
-                                                    <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}
-                                                    <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
-
-                                <br>
-                                <div class="encabezado">{$.i18n.prop("tikect.final")}</div>
-                                <div class="encabezado">{$.i18n.prop("emprendesoft.factura")}</div>
-                                <div class="encabezado">{$.i18n.prop("emprendesoft.mensaje")}</div> 
-                                <div class="encabezado">{$.i18n.prop("emprendesoft.correo")}</div>      
-                                <br show={mostrarImprimiCelular == true}>
-                                <br show={mostrarImprimiCelular == true}>
-                                <br show={mostrarImprimiCelular == true}>
-                                <br show={mostrarImprimiCelular == true}>     
-                                 <div class="encabezado" show={mostrarImprimiCelular == true}>Recibido Por:___________________________</div>           
+                                 
                             </div>
                         </div>
                     </section>
@@ -226,8 +375,11 @@
 }
 
 .botonregreso{
-   margin-left: 15px !important;
-   padding-right: 65px!important;
+    padding-right: 65px!important;
+    border-radius: 5px;
+    color: white;
+    padding-right: 20px;
+    font-size: 30px !important;
 }
 .botonImprimir{
     background-color: #66b12f;
@@ -361,7 +513,7 @@
     {
         border-collapse: collapse !important;;
         border-top: 1px solid black !important;
-        width:16%;
+        width:100%;
     }
   
     .encabezado
@@ -1100,11 +1252,51 @@ function __imprimir(){
            
        // }
     //if(self.mostrarPDF == false){
-        var objeto=document.getElementById('ticket');  //obtenemos el objeto a imprimir
-        // var div = document.querySelector("#imprimeme");
-        imprimirElemento(objeto)
+        
+        // var div = document.querySelector("#imprimeme");  Pinturas Miramar S.A
+        //if(self.facturaImpresa.empresa.cedula == '3101810172' || self.facturaImpresa.empresa.cedula == '3102359950'   ){
+        if(self.facturaImpresa.empresa.formatoImpresoraEpsonTM == 1    ){    
+             var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+            imprimirElementoPinturasSurPuntarenas(objeto)
+
+        }else{
+            var objeto=document.getElementById('ticket');  //obtenemos el objeto a imprimir
+           imprimirElemento(objeto)
+
+        }
+           
    // }
    
+
+   
+}
+function imprimirElementoPinturasSurPuntarenas(elemento){
+ // var originalContents = document.body.innerHTML;
+  var ventana =window.open("", "MsgWindow", "width=600,height=400");
+  var html = "<!DOCTYPE HTML>";
+  html += '<html><head><title>' + "" + '</title>'
+  // html += '<style>'
+  //html +=  estilosMiramar();   
+  
+  //html += '</style>'
+ 
+  html += '</head><body id="imprimirLaFactura" >'
+  ventana.document.write(html);
+  ventana.document.write(elemento.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+ // document.body.innerHTML = originalContents;
+  
+//  printJS('imprimeme', 'html');
+  
+  return true;
+}
+function estilosMiramar(){
+
+return "	#imprimeme { height: 100%!important; width: 100%!important; background: white;}"
 
    
 }
@@ -1146,11 +1338,11 @@ console.log(html)
 function estilos(){
 
 stylos  = "	@media print {	.imprimeme {background-color:red;	border-color:white;	width:23%;height:10%;white-space: 'pre-wrap';margin:-23px -40px 0;}"
-stylos  += "body{width:80mm !important;	height:100% !important;	margin: 0 !important;}}"
+stylos  += "body{width:100% !important;	height:100% !important;	margin: 2 !important;}}"
 stylos  += "*{font-size: 12px !important;font-family: 'Times New Roman', Times, serif !important;}"
 stylos  += ".ticket{color: #000;float: left;font-family: 'Times New Roman', Times, serif;font-size: 12px;font-style: normal;font-variant: normal;font-weight: normal;height: auto;line-height: normal;margin: 0px;padding: 0px !important;text-transform: none;}"
 stylos  += ".ticket > table{border-collapse: collapse !important;border-top: 0px solid black !important;width:100% !important;}"
-stylos  += ".forma-table{    width: 30%!important;border-collapse: collapse !important;border-top: 1px solid black !important;}"
+stylos  += ".forma-table{    width: 100%!important;border-collapse: collapse !important;border-top: 1px solid black !important;}"
 stylos  += ".encabezado{align-content: left;text-align: left;padding-top: 3px;}"
 stylos  += ".ticket > img{max-width: inherit;width: inherit;}@page{margin: 0 !important;}"
 stylos  += ".encabezado{align-content: left;text-align: left;}"

@@ -101,7 +101,7 @@ public class MensajeReceptorAutomatico {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	@Scheduled(cron = "0 0/03 * * * ?")
+	@Scheduled(fixedDelay = 30000)
 	public void verifyEmails() {
 		String correoProblemas = Constantes.EMPTY;
 		try {

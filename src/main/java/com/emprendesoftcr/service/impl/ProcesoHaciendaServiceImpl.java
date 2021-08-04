@@ -338,35 +338,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
 
-	// @Scheduled(cron = "0 0/1 * * * ?")
-	@Override
-	public synchronized void procesoCambiarConsecutivo() throws Exception {
 
-		// Primero borramos los rechados y luego cambiamos el consecutivo.
 
-		Collection<Factura> listaHacienda = facturaBo.findByEstadoFirma(90, 90);
-		log.info("Inicio de cambiar consecutivo estado - {}", formatter.format(LocalDateTime.now()));
-		Integer cont = 0;
-		for (Factura factura : listaHacienda) {
-			log.info("Empresa:" + factura.getEmpresa().getId() + " consecutiv:" + factura.getNumeroConsecutivo());
-			if (cont >= 100) {
-				log.info(cont + "contador - {}", formatter.format(LocalDateTime.now()));
-				cont = 0;
-
-			}
-			cont++;
-			factura.setNota("cambio de consecutivo por problemas de hacienda:" + factura.getNumeroConsecutivo());
-			factura.setNumeroConsecutivo(empresaBo.spGenerarConsecutivoFactura(factura.getEmpresa(), factura.getUsuarioCreacion(), factura.getTipoDoc()));
-			factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
-			factura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
-			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			facturaBo.modificar(factura);
-		}
-		log.info("cerrar de cambiar consecutivo estado  - {}", formatter.format(LocalDateTime.now()));
-
-	}
-
-//	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(fixedDelay = 900000)
 	@Override
 	public void envioFacturasCredito() {
 		try {
@@ -435,7 +409,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/50 22 * 6 ?")
+//	@Scheduled(cron = "0 0/50 22 * 6 ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
@@ -551,7 +525,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(fixedDelay = 400000)
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -739,7 +713,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
-					// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
 					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
@@ -778,7 +752,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/35 * * * ?")
+	
+	@Scheduled(fixedDelay = 1800000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1146,7 +1121,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	
 
-	@Scheduled(cron = "0 0/08 * * * ?")
+	@Scheduled(fixedDelay = 360000)
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1223,7 +1198,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(fixedDelay = 720000)
 	@Override
 	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
 		try {
@@ -1522,7 +1497,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(fixedDelay = 540000)
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1816,7 +1791,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/11 * * * ?")
+	@Scheduled(fixedDelay = 360000)
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -2019,5 +1994,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return resultado;
 
 	}
+
+	
 
 }

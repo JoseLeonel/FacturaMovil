@@ -200,9 +200,15 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			Empresa empresa = usuario.getEmpresa();
 			// Se actualizan los datos de la factura command
-			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && getVerificaNoEsNotaCreditoOrDebito(facturaCommand).equals(Boolean.FALSE)) {
-				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
-			}
+			
+				if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && getVerificaNoEsNotaCreditoOrDebito(facturaCommand).equals(Boolean.FALSE)) {
+					if (facturaCommand.getTipoDoc() != null && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+						facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);	
+					}
+					
+				}
+				
+			
 
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
@@ -239,11 +245,12 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setRebajaInventario(facturaCommand.getRebajaInventario() == null ? Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA : facturaCommand.getRebajaInventario());
 
 			// Fecha de credito
-			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)	|| facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ) {
 				if (facturaCommand.getFechaCredito() != null) {
 					factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(), "yyyy-MM-dd"));
-					factura.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.CANTIDAD_DIAS_MINIMO_CREDITO : facturaCommand.getPlazoCredito());
+					
 				}
+				factura.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.CANTIDAD_DIAS_MINIMO_CREDITO : facturaCommand.getPlazoCredito());
 			} else {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
@@ -471,16 +478,17 @@ public class FacturaBoImpl implements FacturaBo {
 					factura = aplicarModificarCuentaPorCobrar(factura, facturaReferencia);
 
 				}
-
-			} else {
-				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-				factura.setReferenciaTipoDoc(Constantes.EMPTY);
-				factura.setReferenciaNumero(Constantes.EMPTY);
-				factura.setReferenciaCodigo(Constantes.EMPTY);
-				factura.setReferenciaRazon(Constantes.EMPTY);
-				factura.setAnuladaCompleta(Constantes.ZEROS);
-				factura.setReferenciaFechaEmision(null);
 			}
+
+//			} else {
+//				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
+//				factura.setReferenciaTipoDoc(Constantes.EMPTY);
+//				factura.setReferenciaNumero(Constantes.EMPTY);
+//				factura.setReferenciaCodigo(Constantes.EMPTY);
+//				factura.setReferenciaRazon(Constantes.EMPTY);
+//				factura.setAnuladaCompleta(Constantes.ZEROS);
+//				factura.setReferenciaFechaEmision(null);
+//			}
 
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
@@ -839,15 +847,18 @@ public class FacturaBoImpl implements FacturaBo {
 			if (detalleFacturaCommand.getPrecioUnitario() != null) {
 				precioUnitario = Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario());
 			}
-			if (articulo != null) {
-				if (articulo.getCosto() != null) {
-					costo = articulo.getCosto();
-
-				}
-			}
+		
 
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			
+			if (articulo != null) {
+				if (articulo.getCosto() != null) {
+					costo = articulo.getCosto();
+					detalle.setPrecio(articulo.getPrecioPublico());
+
+				}
+			}
 			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
