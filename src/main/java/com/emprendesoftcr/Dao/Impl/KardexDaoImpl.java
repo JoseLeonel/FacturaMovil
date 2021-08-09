@@ -158,7 +158,16 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setUsuario(usuarioSesion);
 			kardex.setArticulo(articulo);
 			articulo.setCantidad(resultado);
-			articulo.setCosto(costoPromedio);
+			if(articulo.getEmpresa().getEsPonderado() != null && articulo.getEmpresa().getEsPonderado().equals(Constantes.EMPRESA_APLICA_PROMEDIO_PONDERADO_SI)) {
+				articulo.setCosto(costoPromedio);
+			}else {
+				articulo.setCosto(costoNuevo);
+				
+					
+			}
+			articulo.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articulo.getCosto(), articulo.getPrecioPublico(), articulo.getImpuesto()));
+			
+			
 			articuloDao.modificar(articulo);
 			log.info( kardex.toString());
 			agregar(kardex);

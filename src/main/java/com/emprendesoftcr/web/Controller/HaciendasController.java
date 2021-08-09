@@ -399,11 +399,16 @@ public class HaciendasController {
 
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
 					//log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
+					 if(estadoHacienda != null && estadoHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+						 facturaConsultada.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						facturaBo.modificar(facturaConsultada);
+						log.info("** Respuesta Aceptado, Se actualiza la factura : " + hacienda.getConsecutivo());
+					}
 
 					if (xmlFirmado != null) {
 						if (xmlFirmado.length() > 0) {
 					//		log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
-							haciendaBo.findByClaveSP(hacienda.getId(), hacienda.getNumeroFactura() == null ? Constantes.ZEROS_LONG : hacienda.getNumeroFactura(), respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
+							haciendaBo.findByClaveSP(hacienda.getId(), hacienda.getNumeroFactura() == null ? Constantes.ZEROS_LONG :facturaConsultada.getId() , respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {
 					//		log.info("No llamado procedimiento callback: {}", estadoHacienda);
 						}

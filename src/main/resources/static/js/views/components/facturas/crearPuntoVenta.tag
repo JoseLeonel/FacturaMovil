@@ -1,5 +1,31 @@
 <punto-venta>
 
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}   </h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <label class="tituloClienteNuevo" >{$.i18n.prop("articulo.descripcion")} </label>
+                        <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"   autofocus="autofocus"  autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__cambiarDescripcionDetalle}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecioDetalle' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -167,7 +193,7 @@
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                                <select class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                <select onchange= {__AsignarTipoDocumento}  class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
                                                     <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
@@ -375,7 +401,7 @@
                                 </td>
                                 <td style="width:5%;"  class="campoLabel"><label >{numeroLinea}</label> </td>
                                 <td  style="width:4%" class="campoLabel"> <label >{codigo}</label></td>
-                                <td class="campoLabel"><label >{descripcion}</label></td>
+                                <td class="campoLabel" onclick ={__CambiarDescripcion}><label >{descripcion}</label></td>
                                 <td class="text-right" style="width:8%;">
                                     <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campoDetalle " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                                 </td>
@@ -420,7 +446,7 @@
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
                                     <label class="titleListaPrecio">Lista de Precios </label>  
-                                    <select  class="form-control selectListaPrecios" >
+                                    <select  class="form-control selectListaPrecios" id="selectListaPrecios" >
                                         <option    value="1"  >Precio Publico</option>
                                         <option    value="2"  >Precio Mayorista</option>
                                         <option    value="3"  >Precio Especial</option>
@@ -455,7 +481,7 @@
                             </div>
                             <div class = 'containerIconosSumaRestaAgregarCliente'>
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnClientes" id="botonSumar"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-plus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                           Sumar
@@ -463,7 +489,7 @@
                                 </div>                     
                             
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__RestarConMouse} title="Restar -" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__RestarConMouse} title="Restar -" class="fontSumarRestar input-group-addon btnClientes" id="botonRestar"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-minus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                           Restar
@@ -471,7 +497,7 @@
                                 </div>                     
                                 
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__AplicarCambioPrecio} title="Cambio de Precio" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__AplicarCambioPrecio} title="Cambio de Precio" class="fontSumarRestar input-group-addon btnClientes" id="botonCambiarPrecio"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-calculator" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                       / = cambio Precio
@@ -479,26 +505,27 @@
                                 </div>                     
 
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__EntradaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="botonEntradaDinero"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Entrada de Dinero 
                                     </span> 
                                 </div>                     
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__SalidaDinero} title="Salida de Dinero de la caja" class="fontSumarRestar input-group-addon btnClientes" id="botonEntradaSalida"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Salida de Dinero
                                     </span> 
                                 </div>                     
                                 <div class="BotonesSumarRestar">
-                                    <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="add-new-client"> 
+                                    <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="fontSumarRestar input-group-addon btnClientes" id="botonNuevoCliente"> 
                                         <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-user-o" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
                                         Nuevo Cliente
                                     </span> 
                                 </div>
+                                
 
                             </div>
                             <section   class="ventaEspera">
@@ -526,11 +553,11 @@
                             <div class="row">
                                 <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                     <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                                    <input type="text" class="form-control codigoArt"  id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                                    <input type="text" class="form-control codigoArt"  id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} autocomplete="off">
                                 </div>
                                 <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                     <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus">
+                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus" autocomplete="off">
                                 </div>
                             </div> 
                         </form>    
@@ -630,8 +657,6 @@
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th style="width:8%"  class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
-                                
-                                
                             </thead>
                             <tfoot style="display: table-header-group;">
                                 <tr>
@@ -640,8 +665,6 @@
                                     <th>{$.i18n.prop("cliente.nombreCompleto")}</th>
                                     <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
                                     <th>{$.i18n.prop("cliente.nombreComercial")}</th>
-                                    
-                                    
                                 </tr>
                             </tfoot>                    
                         </table>
@@ -706,7 +729,7 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Cantidad </label>
-                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"   autofocus="autofocus" min="0" autocomplete="off">
+                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"    min="0" autocomplete="off">
                         </div>
                     </div>
  
@@ -738,7 +761,7 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >Descuento </label>
-                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"   autofocus="autofocus" min="0" autocomplete="off">
+                            <input type="text" class="form-control aplicarDescuento tamanoClienteNuevo modalInputCambioPrecio"  id="aplicarDescuento" name="aplicarDescuento" autofocus="autofocus"    min="0" autocomplete="off">
                         </div>
                     </div>
  
@@ -768,7 +791,7 @@
                     <div class="row">
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
-                            <input type="text" class="form-control tamanoClienteNuevo cedula" id="cedula" name="cedula"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
+                            <input type="text" class="form-control tamanoClienteNuevo cedula" id="cedula" name="cedula"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur}  autocomplete="off">
                         </div>
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
@@ -781,24 +804,24 @@
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
-                            <input type="text" class="form-control nombreCompleto tamanoClienteNuevo"  id="nombreCompleto" name="nombreCompleto" >
+                            <input type="text" class="form-control nombreCompleto tamanoClienteNuevo"  id="nombreCompleto" name="nombreCompleto" autocomplete="off">
                         </div>
                     </div>
                     <div class="row">
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.correoElectronico")}</label>
-                            <input type="text" class="form-control correoElectronico tamanoClienteNuevo"  id="correoElectronico" name="correoElectronico"  >
+                            <input type="text" class="form-control correoElectronico tamanoClienteNuevo"  id="correoElectronico" name="correoElectronico"  autocomplete="off">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
-                            <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais"  >
+                            <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais" autocomplete="off" >
                         </div>
                         <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.telefono")} </label>
-                            <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" >
+                            <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" autocomplete="off" >
                         </div>
                         <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                             <label class="tituloClienteNuevo" >Autorizacion del Mag</label>
@@ -826,8 +849,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 
@@ -1059,12 +1080,18 @@
             }
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible')){
+                    if(!$('#modalFacturasDia').is(':visible')){
                     $(".codigo").val("")
-                    seguridadCambiarPrecioLinea()
+                    seguridadCambiarPrecioLinea()}
                     return
                 }else{
-                    $(".codigo").val("")
-                    event.preventDefault()
+                    if($('#modalFacturasDia').is(':visible')){
+                        return
+                    }else{
+                        $(".codigo").val("")
+                        event.preventDefault()
+
+                    }
                     return
                 }
             }
@@ -1154,8 +1181,38 @@
     }, false );
 
     })
+__CambiarDescripcion(e){
+   self.item = e.item; 
+   self.update()
+   if(self.item.codigo =="8888"){
+        return true
+    } 
+  
+    $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+        $( ".cambiarDescripcionArticulo" ).val(self.item.descripcion)      
+        $('.cambiarDescripcionArticulo').focus()
+        $('.cambiarDescripcionArticulo').select()
+    })
 
+
+
+}
+function  __cambiarDescripcionDetalleModal(){
+    var descripcion = $(".cambiarDescripcionArticulo").val();
+    self.item.descripcion = descripcion
+    self.update()
+    $(".cambiarDescripcionArticulo").val(null);
+    $('#modalCambiarDescripcion').modal('hide') 
+
+  }
 /**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarDescripcionDetalle(e){
+    __cambiarDescripcionDetalleModal()
+}
+/**&&  !$('#modalCambiarDescripcion').is(':visible')
 *Cambiar precio del producto
 **/
 __CambiarPrecioFactura(e){
@@ -1272,9 +1329,23 @@ function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     }
-    if($('#modalFacturasDia').is(':visible')){
-       getPosicionInputCodigo()
-    }
+    if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
+                        &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
+                        &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
+                        &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible') &&  !$('#modalCambiarPrecioDetalle').is(':visible') &&  !$('#modalCambiarDescripcion').is(':visible')
+                        && !$('#modalEntradaSalidaDinero').is(':visible') && !$('#modalRolUsuario').is(':visible')  
+                    ) {
+                        if(e.target.id != 'selectListaPrecios' && e.target.id != 'selectActividadComercial' && e.target.id != 'botonRestar'
+                          && e.target.id != 'botonSumar'   && e.target.id != 'botonCambiarPrecio' && e.target.id != 'botonEntradaDinero'
+                          && e.target.id != 'descripEntradaSalidaDinero' ){
+                            getPosicionInputCodigo();
+
+                        }
+                        
+                    }
+       
+    
 }
 
     function disableF5(e) {
@@ -1283,7 +1354,7 @@ function teclamodal(e){
         if ((e.which || e.keyCode) == 114) e.preventDefault();
         if ((e.which || e.keyCode) == 112) e.preventDefault();
         if ((e.which || e.keyCode) == 117) e.preventDefault();
-        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+        if(id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
@@ -1291,14 +1362,15 @@ function teclamodal(e){
            && e.target.id != 'cedula' && e.target.id != 'nombreCompleto'
            && e.target.id != 'codigoArt' && e.target.id != 'descArticulo'
            && e.target.id != 'correoElectronico' && e.target.id != 'codigoPais'
-           && e.target.id != 'telefono'){
+           && e.target.id != 'telefono'  && e.target.id != 'descripEntradaSalidaDinero' ){
             if (self.mostrarFormularioPago == false ){
                if ((e.which || e.keyCode) == 13) {
                     if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
-                        &&  !$('#modalCambiarPrecio').is(':visible')
+                        &&  !$('#modalCambiarPrecio').is(':visible') && !$('#modalCambiarDescripcion').is(':visible') && !$('#modalEntradaSalidaDinero').is(':visible') 
+                        && !$('#modalRolUsuario').is(':visible')  
                     ) {
                         getPosicionInputCodigo()
                      }
@@ -1698,9 +1770,10 @@ function BuscarActividadComercial(){
 }
 
 function actualizaElPlazoDiasCredito(){
-    var valor = $('.selectFechaCredito').val()
-    if(valor ==null || valor ==""){
-        return true
+     if(!$('#modalFacturasDia').is(':visible') && !$('#modalEntradaSalidaDinero').is(':visible')  ){
+        var valor = $('.selectFechaCredito').val()
+        if(valor ==null || valor ==""){
+            return true
     }
     var fechaReal = new Date();
     var formatoFecha = formatoFechaF(fechaReal);
@@ -1708,6 +1781,8 @@ function actualizaElPlazoDiasCredito(){
     var fecha2 = moment($('.selectFechaCredito').val());
     self.factura.plazoCredito = fecha2.diff(fecha1, 'days');
     self.update();
+
+     }
 
 }
 
@@ -2577,7 +2652,7 @@ function crearFactura(estado){
     self.update()
     self.detalleFactura.data =self.detail
     self.update()
-    var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date()
+    var fechaCreditoTemporal =condicionVenta.value == "02" || self.factura.tipoDoc == '88'  ?fechaCredito.value:new Date()
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date()
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
@@ -2743,25 +2818,62 @@ this._AtrasFacturaFinal = function(){
    getPosicionInputCodigo()
 }.bind(this)
 
-this.__formaPago = function(e){
+/**
+Asignar el tipo de documento a la factura
+**/
+__AsignarTipoDocumento(e){
+    self.factura.tipoDoc = e.currentTarget.value
+    asignarTiposDocumento();
+}
 
-    if(e.currentTarget.value == 1 || e.currentTarget.value == 3){
-        self.mostrarCamposIngresoContado = true
+function asignarTiposDocumento(){
+
+    if(self.factura.tipoDoc == '88'){
+        self.mostrarCamposIngresoContado = false
+       // $('#condicionVenta').val('02')
+       // self.factura.condicionVenta = '02'
+        mostrarFechaCreditoCondicionPago()
+    }else{
+        self.mostrarCamposIngresoContado = true 
     }
-
-    if(e.currentTarget.value == 2){
+    if($('#condicionVenta').val() == "02"  ){
         self.mostrarCamposIngresoContado = false
     }
     self.update()
-    $('.fechaCredito').val(null)
-    $('.datepickerFechaCredito').datepicker(
+}
+
+function  mostrarFechaCreditoCondicionPago(){
+        self.factura.fechaCredito = null
+        self.factura.plazoCredito = 0
+        $('.plazoCreditoL').val(0)
+        
+        $('.fechaCredito').val(null)
+        $('.datepickerFechaCredito').datepicker(
             {
               format: 'yyyy-mm-dd',
               startDate: '-0d',
               todayHighlight:true,
             }
-    );
-    $('.plazoCreditoL').val(0)
+        );
+
+    
+}
+
+this.__formaPago = function(e){
+
+    if(e.currentTarget.value == 1 || e.currentTarget.value == 3){
+        if(self.factura.tipoDoc != '88'){
+        self.mostrarCamposIngresoContado = true
+        }
+    }
+
+    if(e.currentTarget.value == 2){
+        self.mostrarCamposIngresoContado = false
+        $('#condicionVenta').val('02')
+    }
+    self.update()
+    mostrarFechaCreditoCondicionPago()
+
 }.bind(this)
 
 this.__MostrarFormularioDePago = function(){
@@ -3728,24 +3840,31 @@ function __seleccionarClientes() {
         if(!verificarSiClienteFrecuente(self.cliente)){
             __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
-               self.factura.tipoDoc ='01'
-               self.update()
-               if(self.item != null){
-                if(self.item.tipoDocumentoExoneracion !=null){
-                    if(self.item.tipoDocumentoExoneracion =='02'){
-                        self.factura.tipoDoc ='04'
-                        self.update()
-                        }
+                if(self.factura.tipoDoc  == '88'){
+                   mostrarFechaCreditoCondicionPago()
+                }else{
+                    self.factura.tipoDoc ='01'
                 }
+               if(self.item != null){
+                    if(self.item.tipoDocumentoExoneracion !=null){
+                        if(self.item.tipoDocumentoExoneracion =='02' && self.factura.tipoDoc  != '88'){
+                           self.factura.tipoDoc ='04'
+                        }
+                    }
                }
             }else{
                self.factura.tipoDoc ='04'
-               self.update()
+               
             }
-           __ComboTipoDocumentos(1)
+            self.update()
+            __ComboTipoDocumentos(1)
+            
+           
         }else{
-            self.factura.tipoDoc ='04'
-            __ComboTipoDocumentos(0)
+            if(self.factura.tipoDoc  != '88'){
+                self.factura.tipoDoc ='04'
+                __ComboTipoDocumentos(0)
+            }
         }
         self.cliente.tipoMag = __valorNumerico(self.cliente.tipoMag)
         self.update()
@@ -3876,6 +3995,7 @@ function cargarDetallesFacturaEnEspera(data,facturaPametros,tipo){
     __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
     __calculate()
+    asignarTiposDocumento()
 }
 
 
@@ -4003,11 +4123,17 @@ function __ComboTipoDocumentoExonerados(){
 }
 
 function __ComboTipoDocumentos(valor){
-    if($('.tipoDoc').val() =="88"){
-        return
-    }
     self.comboTipoDocumentos = []
     self.update()
+    if($('.tipoDoc').val() =="88"){
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+        self.update()
+
+        return
+    }
     if(valor == 1){
         self.comboTipoDocumentos.push({
             estado:"01",
@@ -4142,8 +4268,9 @@ function __Teclas(tecla,event){
         if(!$('#modalCambiarCantidad').is(':visible')){
            seguridadCambiarPrecioLinea()
         }else{
+            if(!$('#modalFacturasDia').is(':visible')){
             $(".codigo").val("")
-            event.preventDefault()
+            event.preventDefault()}
         }
         return
     }
@@ -4255,15 +4382,15 @@ function __Teclas(tecla,event){
     }
 
 }
-this.__SumarConMouse = function(){
+__SumarConMouse(){
     aplicarSumaAlCodigo(0,1,true)
-    getPosicionInputCodigo()
-}.bind(this)
+ 
+}
 
-this.__RestarConMouse = function(){
+__RestarConMouse(){
     aplicarSumaAlCodigo(0,1,false)
-    getPosicionInputCodigo()
-}.bind(this)
+   // getPosicionInputCodigo()
+}
 
 function __SumarConTecla(e){
     if(verificaSiSuma()){

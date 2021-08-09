@@ -411,7 +411,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
 			queryStr = queryStr.replaceAll("and fac.tipo_doc", " and fac.tipo_doc in ('" + tipoDocumento + "') ");
 		} else {
-			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('04','86','87','01') ");
+			queryStr = queryStr.replaceAll("and fac.tipo_doc ", "and fac.tipo_doc in ('04','87','01') ");
 		}
 
 		if (estado > Constantes.ZEROS) {

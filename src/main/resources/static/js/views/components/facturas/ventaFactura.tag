@@ -3720,11 +3720,17 @@ function __seleccionarClientes() {
        // __aplicarExoneracionPorCliente()
 
          if(!verificarSiClienteFrecuente(self.cliente)){
-            self.factura.tipoDoc ='01'
+             if($('.tipoDoc').val() !="88"){
+                self.factura.tipoDoc ='01'
+             }
             __aplicarExoneracionPorCliente()
             if(stringVacio(self.cliente.identificacionExtranjero)== false){
-               self.factura.tipoDoc ='01'
-               self.update()
+                if($('.tipoDoc').val() !="88"){
+                   self.factura.tipoDoc ='01'
+                   self.update()
+
+                }
+
                 if(self.item != null){
                 if(self.item.tipoDocumentoExoneracion !=null){
                     if(self.item.tipoDocumentoExoneracion =='02'){
@@ -3735,12 +3741,17 @@ function __seleccionarClientes() {
                }
                
             }else{
-               self.factura.tipoDoc ='04'
-               self.update()
+                if($('.tipoDoc').val() !="88"){
+                    self.factura.tipoDoc ='04'
+                    self.update()
+                }
             }
-           __ComboTipoDocumentos(1)
+            __ComboTipoDocumentos(1)
+           
         }else{
-            self.factura.tipoDoc = "04";
+            if($('.tipoDoc').val() !="88"){
+                self.factura.tipoDoc = "04";
+            }
             __ComboTipoDocumentos(0)
         }
         
@@ -3835,8 +3846,10 @@ function __aplicarExoneracionPorCliente(){
     if(verificarClienteFrecuente(self.cliente)){
       __ComboTipoDocumentos(1)
     }else{
-        self.factura.tipoDoc ="01"
-        self.update()
+        if($('.tipoDoc').val() !="88"){
+            self.factura.tipoDoc ="01"
+            self.update()
+        }
         __ComboTipoDocumentosSinClienteFrecuente()
     }
 
@@ -3892,6 +3905,14 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
+    if($('.tipoDoc').val() =="88"){
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+        self.update()
+        return
+    }
     // Tipo documento unicamente proforma y factura 
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
@@ -3929,6 +3950,15 @@ function __ComboTipoDocumentos(valor){
 function __ComboTipoDocumentosSinClienteFrecuente(){
     self.comboTipoDocumentos = []
     self.update()
+    if($('.tipoDoc').val() =="88"){
+      self.comboTipoDocumentos.push({
+          estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+        self.update()
+        return
+    }
+
     // Tipo documento unicamente proforma y factura 
         self.comboTipoDocumentos.push({
             estado:"01",

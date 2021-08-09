@@ -475,7 +475,10 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
   			return resultado;
   			}
-  		
+  		//MAG
+  		if(detalle.getCodigoTarifaMag() != null && !detalle.getCodigoTarifaMag().equals(Constantes.EMPTY) ) {
+  			codigoTarifa =detalle.getCodigoTarifaMag();  				
+			}
   		if (codigoTarifa !=null) {
   			if(!codigoTarifa.equals(Constantes.EMPTY)) {
   				nodoCodigoTarifa ="<CodigoTarifa>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(codigoTarifa, 2)) + "</CodigoTarifa>";

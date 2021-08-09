@@ -432,7 +432,7 @@ public class NotaDebitoElectronicaSchemaBoImpl implements NotaDebitoElectronicaS
 	private RecepcionFactura resumenFacturaTotal(NotaDebitoElectronicaSchema.ResumenFactura resumenFactura, RecepcionFactura recepcionFactura) throws Exception {
 		try {
 
-			recepcionFactura.setFacturaCodigoMoneda(resumenFactura.getCodigoTipoMoneda().getCodigoMoneda());
+			recepcionFactura.setFacturaCodigoMoneda(resumenFactura.getCodigoTipoMoneda() != null?resumenFactura.getCodigoTipoMoneda().getCodigoMoneda():Constantes.EMPTY);
 			recepcionFactura.setFacturaTipoCambio(resumenFactura.getCodigoTipoMoneda() != null ? resumenFactura.getCodigoTipoMoneda().getTipoCambio().doubleValue() : Constantes.ZEROS_DOUBLE);
 
 			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) && recepcionFactura.getFacturaCodigoMoneda() != null) {

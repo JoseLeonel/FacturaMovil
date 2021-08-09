@@ -2189,6 +2189,8 @@ public class FacturasController {
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) || facturaBD.getAnuladaCompleta().equals(Constantes.FACTURA_ANULACION_COMPLETA_SI)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
 			}
+			
+			
 
 			if (facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 				if (Utils.roundFactura(facturaBD.getTotalComprobante(), 2) != Utils.roundFactura(facturaCommand.getTotalComprobante(), 2)) {

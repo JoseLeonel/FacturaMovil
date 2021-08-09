@@ -200,9 +200,15 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			Empresa empresa = usuario.getEmpresa();
 			// Se actualizan los datos de la factura command
-			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
-			}
+			
+				if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && getVerificaNoEsNotaCreditoOrDebito(facturaCommand).equals(Boolean.FALSE)) {
+					if (facturaCommand.getTipoDoc() != null && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+						facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);	
+					}
+					
+				}
+				
+			
 
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
@@ -239,11 +245,12 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setRebajaInventario(facturaCommand.getRebajaInventario() == null ? Constantes.NO_APLICA_REBAJO_INVENTARIO_POR_NOTA : facturaCommand.getRebajaInventario());
 
 			// Fecha de credito
-			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)	|| facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ) {
 				if (facturaCommand.getFechaCredito() != null) {
 					factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(), "yyyy-MM-dd"));
-					factura.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.CANTIDAD_DIAS_MINIMO_CREDITO : facturaCommand.getPlazoCredito());
+					
 				}
+				factura.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.CANTIDAD_DIAS_MINIMO_CREDITO : facturaCommand.getPlazoCredito());
 			} else {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
@@ -358,7 +365,25 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
-
+/**
+ * Valida que no sea nota de credito interna o electronica , debito interna o electronica
+ * @param facturaCommand
+ * @return
+ */
+	private  Boolean getVerificaNoEsNotaCreditoOrDebito(FacturaCommand facturaCommand) {
+		Boolean resultado = Boolean.FALSE;
+		if(facturaCommand.getTipoDoc() != null){
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) ||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) ||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO)||
+					facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				resultado = Boolean.TRUE;
+			}
+			
+		}
+		
+		return resultado;
+	}
 	/**
 	 * Mueve los datos correspondientes a notas de creditos
 	 * @param factura
@@ -453,16 +478,17 @@ public class FacturaBoImpl implements FacturaBo {
 					factura = aplicarModificarCuentaPorCobrar(factura, facturaReferencia);
 
 				}
-
-			} else {
-				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-				factura.setReferenciaTipoDoc(Constantes.EMPTY);
-				factura.setReferenciaNumero(Constantes.EMPTY);
-				factura.setReferenciaCodigo(Constantes.EMPTY);
-				factura.setReferenciaRazon(Constantes.EMPTY);
-				factura.setAnuladaCompleta(Constantes.ZEROS);
-				factura.setReferenciaFechaEmision(null);
 			}
+
+//			} else {
+//				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
+//				factura.setReferenciaTipoDoc(Constantes.EMPTY);
+//				factura.setReferenciaNumero(Constantes.EMPTY);
+//				factura.setReferenciaCodigo(Constantes.EMPTY);
+//				factura.setReferenciaRazon(Constantes.EMPTY);
+//				factura.setAnuladaCompleta(Constantes.ZEROS);
+//				factura.setReferenciaFechaEmision(null);
+//			}
 
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
@@ -821,15 +847,18 @@ public class FacturaBoImpl implements FacturaBo {
 			if (detalleFacturaCommand.getPrecioUnitario() != null) {
 				precioUnitario = Utils.Maximo5Decimales(Utils.aplicarRedondeo(detalleFacturaCommand.getPrecioUnitario()) ? Utils.roundFactura(detalleFacturaCommand.getPrecioUnitario(), 5) : detalleFacturaCommand.getPrecioUnitario());
 			}
-			if (articulo != null) {
-				if (articulo.getCosto() != null) {
-					costo = articulo.getCosto();
-
-				}
-			}
+		
 
 			gananciaProducto = Utils.Maximo5Decimales(Utils.getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento()));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			
+			if (articulo != null) {
+				if (articulo.getCosto() != null) {
+					costo = articulo.getCosto();
+					detalle.setPrecio(articulo.getPrecioPublico());
+
+				}
+			}
 			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
@@ -840,6 +869,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setPorcentajeGanancia(Utils.getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
 			detalle.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
 			detalle.setUsuario(usuario);
+			
+			
+			
 			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() != null ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
 			detalleFacturaCommand.setTipoImpuestoMag(detalleFacturaCommand.getTipoImpuestoMag() != null ? detalleFacturaCommand.getTipoImpuestoMag() : Constantes.EMPTY);
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
@@ -847,6 +879,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
 
+			if(!detalle.getCodigoTarifaMag().equals(Constantes.EMPTY) && factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+         detalle.setCodigoTarifa(detalle.getCodigoTarifaMag());  				
+			}
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
