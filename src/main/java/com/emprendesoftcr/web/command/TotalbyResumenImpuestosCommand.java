@@ -1,6 +1,10 @@
 package com.emprendesoftcr.web.command;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
+import com.emprendesoftcr.utils.Constantes;
 
 public class TotalbyResumenImpuestosCommand {
 
@@ -79,7 +83,43 @@ public class TotalbyResumenImpuestosCommand {
 		this.total_imp_cemento_v=listaDetallada.stream().mapToDouble(l -> l.getTotal_imp_cemento_v()).sum(); 		
 	}
 
-	
+	public TotalbyResumenImpuestosCommand(Collection<CompraIVA> listaDetallada) {
+		
+		this.total_comprobante =listaDetallada.stream().mapToDouble(l -> l.getFacturaTotalComprobante()).sum();
+		
+		this.total_exo =Constantes.ZEROS_DOUBLE;
+		this.total_otros_cargos =listaDetallada.stream().mapToDouble(l -> l.getTotal_otros_cargos()).sum();
+		this.total_serv_gravados =listaDetallada.stream().mapToDouble(l -> l.getTotalServicioGravado()).sum();
+		this.total_serv_exentos =Constantes.ZEROS_DOUBLE;
+		this.total_impuesto = listaDetallada.stream().mapToDouble(l -> l.getFacturaTotalImpuestos()).sum();
+		this.total_merc_exo =Constantes.ZEROS_DOUBLE;
+		this.total_serv_exo =Constantes.ZEROS_DOUBLE;
+		this.total_mercancias_gravadas =listaDetallada.stream().mapToDouble(l -> l.getTotalMercanciaGravada()).sum();
+		this.total_mercancias_exentas =listaDetallada.stream().mapToDouble(l -> l.getTotalMercanciasExentas()).sum();
+		this.total_exento =Constantes.ZEROS_DOUBLE;
+		this.total_gravado =Constantes.ZEROS_DOUBLE;
+		this.total_descuentos =listaDetallada.stream().mapToDouble(l -> l.getTotalDescuento()).sum();
+		this.imp_01 =listaDetallada.stream().mapToDouble(l -> l.getMontoIva0()).sum();
+		this.imp_02=listaDetallada.stream().mapToDouble(l -> l.getMontoIva1()).sum();
+		this.imp_03=Constantes.ZEROS_DOUBLE;
+		this.imp_04=listaDetallada.stream().mapToDouble(l -> l.getMontoIva4()).sum();
+		this.imp_05=Constantes.ZEROS_DOUBLE;
+		this.imp_06=Constantes.ZEROS_DOUBLE;
+		this.imp_07=Constantes.ZEROS_DOUBLE;
+		this.imp_08=listaDetallada.stream().mapToDouble(l -> l.getMontoIva13()).sum();
+		this.venta_imp_01=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_02=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_03=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_04=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_05=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_06=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_07=Constantes.ZEROS_DOUBLE;;
+		this.venta_imp_08=Constantes.ZEROS_DOUBLE;;
+		this.total_otros_impuestos = listaDetallada.stream().mapToDouble(l -> l.getMontoIVAOtros()).sum();
+		this.total_otros_impuestos_v	= Constantes.ZEROS_DOUBLE;;
+		this.total_imp_cemento = Constantes.ZEROS_DOUBLE;;
+		this.total_imp_cemento_v=Constantes.ZEROS_DOUBLE;; 		
+	}
 	
 	
 	

@@ -79,6 +79,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
@@ -937,7 +938,11 @@ public class FacturasController {
 			TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand = new TotalbyResumenImpuestosCommand(listaDetallada);
 
 			parametros = totalResumenVentaIVA(parametros, totalbyResumenImpuestosCommand);
-			parametros = totalResumenCompraIVA(parametros, null);
+			
+			Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+			TotalbyResumenImpuestosCommand totalbyResumenImpuestosComprasCommand = new TotalbyResumenImpuestosCommand(recepcionFacturas);
+			
+			parametros = totalResumenCompraIVA(parametros, totalbyResumenImpuestosComprasCommand);
 			
 			String nombreArchivo = "ResumenIVAComprasAndVentas"+ UUID.randomUUID().toString() + ".pdf";
 			response.setContentType("application/octet-stream");
@@ -970,64 +975,67 @@ public class FacturasController {
 		// Sumas de ventas y desglose del iva
 
 		// 0%
-		parametros.put("P_iva_compra_cero",Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_cero",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()));
 		// 1%
-		parametros.put("P_iva_compra_1",Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_1",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_02()));
 		// 2%
-		parametros.put("P_iva_compra_2", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
-		parametros.put("P_iva_compra_4", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_03()));
+		parametros.put("P_iva_compra_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_04()));
 		
 		// 4%
-		parametros.put("P_iva_compra_trans_cero", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_trans_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_05()));
 		// 0 transitorio%
-		parametros.put("P_iva_compra_trans_4",Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_trans_4",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
 		// 4 transitorio%
-		parametros.put("P_iva_compra_13", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_iva_compra_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_08()));
 		// 8 transitorio%
 		parametros.put("P_cemento_iva_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 		// Total del iva agravado
-		parametros.put("P_compra_iva_total",Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_iva_total",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()+totalbyResumenImpuestosCommand.getImp_02()+totalbyResumenImpuestosCommand.getImp_03()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_05()+totalbyResumenImpuestosCommand.getImp_07()+totalbyResumenImpuestosCommand.getImp_06()+totalbyResumenImpuestosCommand.getImp_08()));
 		// Resumen de total venta 0%
-		parametros.put("P_compra_0", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_01()));
 		// Resumen de total venta 1%
-		parametros.put("P_compra_1", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_1", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_02()));
 		// Resumen de total venta 2%
-		parametros.put("P_compra_2", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_03()));
 		// Resumen de total venta 4%
-		parametros.put("P_compra_4", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_04()));
 		// Resumen de total venta trans 0%
-		parametros.put("P_c_trans_0", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_c_trans_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_05()));
 
 		// Resumen de total venta trans 4%
-		parametros.put("P_c_trans_4", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_c_trans_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_06()));
 		// Resumen de total venta trans 8%
-		parametros.put("P_c_trans_8", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_c_trans_8", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_07()));
 
 		// Resumen de total venta trans 13
-		parametros.put("P_compra_13", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_08()));
 		// Resumen de total venta cemento
 		parametros.put("P_total_cemento_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 		// Resumen de total otros
-		parametros.put("P_total_otros_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_total_otros_c", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_impuestos_v()));
 		// Resumen de total Gravado
-		parametros.put("P_compra_gravada", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_compra_gravada", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_gravado()));
 		// Resumen de total de impuesto
-		parametros.put("P_exentos_total_compras", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_exentos_total_compras", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exento()));
 		// Resumen de total de exentos
 		parametros.put("P_compra_impuesto_total", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 
 		// Resumen de total de Descuentos
-		parametros.put("P_total_compra", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_total_compra", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_comprobante()));
 
 		// Resumen de total de ventas
 		parametros.put("P_total_exoneracion_compra", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 
 		// Resumen de total de ventas de exoneraciones
-		parametros.put("P_total_exoneracion_venta", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_total_exoneracion_venta", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exo()));
 		// Resumen de total venta del servicio del mesero
-		parametros.put("P_total_por_restaurante", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		parametros.put("P_total_por_restaurante", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_cargos()));
 		parametros.put("P_total_descuento_compras", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 		
+		
+
+
 
 		return parametros;
 	}
