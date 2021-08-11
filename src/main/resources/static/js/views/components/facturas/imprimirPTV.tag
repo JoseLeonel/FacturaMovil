@@ -288,11 +288,36 @@
                                         <td colspan="3" align="left" class="tamanoClave encabezado" > {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}    </td>
                                     </tr>
 
+                                     <tr show ='{ facturaImpresa.empresa.cuenta1 != "" && facturaImpresa.empresa.cuenta1 !=null}'>
+                                        <td colspan="3" ><br> {facturaImpresa.empresa.cuenta1}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta2 != "" && facturaImpresa.empresa.cuenta2 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta2}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta3 != "" && facturaImpresa.empresa.cuenta3 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta3}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta4 != "" && facturaImpresa.empresa.cuenta4 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta4}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta5 != "" && facturaImpresa.empresa.cuenta5 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta5}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta6 != "" && facturaImpresa.empresa.cuenta6 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta6}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta7 != "" && facturaImpresa.empresa.cuenta7 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta7}</td>
+                                    </tr>
+                                    <tr show ='{ facturaImpresa.empresa.cuenta8 != "" && facturaImpresa.empresa.cuenta8 !=null}'>
+                                        <td colspan="3" > {facturaImpresa.empresa.cuenta8}</td>
+                                    </tr>
+
                                     <tr >
-                                        <td colspan="3" class="tamanoClave encabezado" > <br><br><br><br>{$.i18n.prop("tikect.final")}    </td>
+                                        <td colspan="3" class="tamanoClave encabezado" > <br>{$.i18n.prop("tikect.final")}    </td>
                                     </tr>
                                     <tr >
-                                        <td colspan="3" class="tamanoClave encabezado" > {$.i18n.prop("emprendesoft.factura")}    </td>
+                                        <td colspan="3" class="tamanoClave encabezado" ><br> {$.i18n.prop("emprendesoft.factura")}    </td>
                                     </tr>
                                     <tr >
                                         <td colspan="3" class="tamanoClave encabezado" > {$.i18n.prop("emprendesoft.mensaje")}    </td>
@@ -302,7 +327,7 @@
                                     </tr>
 
                                     <tr  show={mostrarImprimiCelular == true}>
-                                        <td colspan="3" class="tamanoClave encabezado" > <br> <br><br><br><br><br>   </td>
+                                        <td colspan="3" class="tamanoClave encabezado" > <br><br><br><br>   </td>
                                     </tr>
 
                                     <tr  show={mostrarImprimiCelular == true}>
