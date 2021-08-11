@@ -186,20 +186,26 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">Base Imponible</label>
                                         <select  class="form-control campoNumerico" id="baseImponible" name="baseImponible" >
                                             <option  each={baseImponibles}  value="{codigo}" selected="{articulo.baseImponible ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>    
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra"  >{$.i18n.prop("articulo.fechaUltimaCompra")} </label>
                                         <input type="text" step="any" class="form-control campoNumerico"  value="{articulo.fechaUltimaCompra}"  readonly>
                                     </div>
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.estado")}</label>
                                         <select  class="form-control campoNumerico" id="estado" name="estado"  >
                                             <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>     
+                                   <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                                        <label class="tamanoLetra">Facturar</label>
+                                        <select  class="form-control campoNumerico" id="tipoFacturar" name="tipoFacturar"  >
+                                             <option  each={tipoFacturar}  value="{codigo}" selected="{articulo.tipoFacturar ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>     
                                 </div>
@@ -605,6 +611,7 @@ table {
     self.impuestos =[]
     self.impuestos1 =[]
     self.tipoCodigos =[]
+    self.tipoFacturar =[]
     self.contables                 = []
     self.estados                   = []
     self.baseImponibles            = []
@@ -676,15 +683,35 @@ table {
 
 self.on('mount',function(){
     __Eventos()
-    __ComboEstados()
-    __ComboComanda()
-    __ComboContables()
-    __ComboBaseImponibles()
-    __listadoTipoUnidadesActivas()   
-    __listadoMarcasActivas()
+    self.estados   = __ComboEstados()
+    self.comanda   = __ComboComanda()
+    self.contables = __ComboContables()
+    self.baseImponibles =__ComboBaseImponibles()
+    setTimeout(__listadoTipoUnidadesActivas(function(resultado){
+        self.tipoUnidades.aaData = resultado;
+    })
+     ,5000);
+
+    setTimeout(__listadoMarcasActivas(function(resultado){
+        self.marcas.aaData =  resultado;
+        self.update();
+        $('.selectMarca').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+        $('.selectMarca').selectpicker('refresh');
+    })
+     ,5000);
+
+
     self.impuestos = __ComboImpuestos()
     self.impuestosMag = __ComboImpuestosMaG()
     self.tipoCodigos =__CombotipoCodigo()
+    self.tipoFacturar =___ComboTipoFacturarArticulo();
+
     self.update()
      LimpiarArticulo()
     __Consulta()
@@ -1137,6 +1164,8 @@ function LimpiarArticulo(){
    $('.prioridad').val(null)
    $('.pesoTransporte').val(null)
    $('.codigoCabys').val(null)
+   $('.tipoFacturar').val(null)
+   
    $(".errorServerSideJgrid").remove();
    $("#formulario").validate(reglasDeValidacion());
    enviarCargarCombos()
@@ -1152,7 +1181,24 @@ __cargarCombos(){
 **/
 function enviarCargarCombos(){
     __listadoCategoriasActivas()
-    __listadoMarcasActivas()
+    setTimeout(__listadoTipoUnidadesActivas(function(resultado){
+        self.tipoUnidades.aaData = resultado;
+    })
+     ,5000);
+
+    setTimeout(__listadoMarcasActivas(function(resultado){
+        self.marcas.aaData =  resultado;
+        self.update();
+        $('.selectMarca').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+        $('.selectMarca').selectpicker('refresh');
+    })
+     ,5000);
    
 }
 
@@ -1847,128 +1893,12 @@ function __listadoCategoriasActivas(){
         }
     })
 }
-/**
-*  Mostrar listado datatable Categorias Actimpuestos
-**/
-function __listadoMarcasActivas(){
-    self.marcas                    = {aaData:[]}
-    self.update()
-    $.ajax({
-         url: "ListarMarcasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.marcas.aaData =  result.aaData
-                self.update();
-                $('.selectMarca').selectpicker(
-                    {
-                        style: 'btn-info',
-                        size:10,
-                        liveSearch: true
-                    }
-                );
-                $('.selectMarca').selectpicker('refresh');
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
 
-/**
-*  Mostrar listado datatable unidades de medidas activas
-**/
-function __listadoTipoUnidadesActivas(){
-    $.ajax({
-         url: "ListarTipoUnidadesAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.tipoUnidades.aaData =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
-/**
-*  Crear el combo de estados
-**/
-function __ComboComanda(){
-    self.comanda =[]
-    self.update()
-    self.comanda.push({
-        codigo: 0,
-        descripcion: "No enviar"
-     });
 
-    self.comanda.push({
-        codigo: 1,
-        descripcion: $.i18n.prop("combo.comanda.cocina.1")
-     });
-    self.comanda.push({
-        codigo:2,
-        descripcion:$.i18n.prop("combo.comanda.cocina.2")
-     });
-     self.update();
-}
-/**
-*  Crear el combo comanda
-**/
-function __ComboEstados(){
-    self.estados =[]
-    self.update()
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Activo"),
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Inactivo"),
-        descripcion: $.i18n.prop("combo.estado.Inactivo")
-     });
-     self.update();
-}
-/**
-*  Crear el combo base imponible
-**/
-function __ComboBaseImponibles(){
-    self.baseImponibles =[]
-    self.update()
-    
-    self.baseImponibles.push({
-        codigo: 0,
-        descripcion: $.i18n.prop("combo.estado.Inactivo")
-     });
-     self.baseImponibles.push({
-        codigo: 1,
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
-     self.update();
-}
-/**
-* Combo para verificar si es contabilizado en el inventario o no
-**/
-function __ComboContables(){
-    self.contables =[]
-    self.update()
-    self.contables.push({
-        codigo: $.i18n.prop("boolean.no"),
-        descripcion: $.i18n.prop("boolean.no") 
-     });
-    self.contables.push({
-        codigo: $.i18n.prop("boolean.si"),
-        descripcion:$.i18n.prop("boolean.si")
-     });
-     self.update();
-}
+
+
+
+
 
 
 /**

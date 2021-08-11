@@ -86,10 +86,10 @@ public class Articulo implements Serializable {
 	@Column(name = "estado")
 	private String						estado;
 
-	@Column(name = "tipo_impuesto", length=2)
+	@Column(name = "tipo_impuesto", length = 2)
 	private String						tipoImpuesto;
 	// Tipo de codigo del producto
-	@Column(name = "tipo_codigo", length=2)
+	@Column(name = "tipo_codigo", length = 2)
 	private String						tipoCodigo;
 
 	@Column(name = "maximo")
@@ -115,7 +115,6 @@ public class Articulo implements Serializable {
 
 	@Transient
 	private String						datosCabys;
-	
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
@@ -125,7 +124,7 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
 
-	// 1 = Articulo cocina 2 cocina 
+	// 1 = Articulo cocina 2 cocina
 	@Column(name = "comanda")
 	private Integer						comanda						= 0;
 
@@ -143,30 +142,32 @@ public class Articulo implements Serializable {
 	@Column(name = "fecha_compra")
 	private Date							fechaUltimaCompra;
 
-	@Column(name = "tipo_impuesto1", length=2)
+	@Column(name = "tipo_impuesto1", length = 2)
 	private String						tipoImpuestoMag;
 
 	@Column(name = "impuesto1", columnDefinition = "Decimal(10,2) default '0.00'")
 	private Double						impuestoMag;
-	
-	@Column(name = "cod_tarifa", length=2)
+
+	@Column(name = "cod_tarifa", length = 2)
 	private String						codigoTarifa;
-	
-	@Column(name = "cod_tarifa1", length=2)
+
+	@Column(name = "cod_tarifa1", length = 2)
 	private String						codigoTarifaMag;
 
 	@Column(name = "base_imponible", columnDefinition = "INT default '0'")
 	private Integer						baseImponible;
-	
+
 	@Column(name = "cod_cabys")
 	private String						codigoCabys;
-	
+
 	@Column(name = "cant_paque")
 	private Integer						cantidadPaquete;
 
 	@Column(name = "cod_secu")
 	private String						codigoSecundario;
 
+	@Column(name = "tipo_facturar", columnDefinition = "INT default '0'")
+	private Integer						tipoFacturar;
 
 	public Articulo() {
 		super();
@@ -184,46 +185,19 @@ public class Articulo implements Serializable {
 		this.minimo = Constantes.ZEROS_DOUBLE;
 		this.cantidad = Constantes.ZEROS_DOUBLE;
 		this.codigoSecundario = Constantes.EMPTY;
-		
+		this.tipoFacturar = Constantes.ZEROS;
+
 		this.codigoCabys = Constantes.EMPTY;
 
 	}
 
-	
-	
-	
-
-
-
-	
-
-
-
-
-
-
-
-	
 	public String getDatosCabys() {
 		return datosCabys;
 	}
 
-
-
-
-
-
-
-	
 	public void setDatosCabys(String datosCabys) {
 		this.datosCabys = datosCabys;
 	}
-
-
-
-
-
-
 
 	public Long getId() {
 		return id;
@@ -232,9 +206,6 @@ public class Articulo implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	
-	
 
 	public String getCodigoTarifa() {
 		return codigoTarifa;
@@ -522,8 +493,6 @@ public class Articulo implements Serializable {
 		this.prioridad = prioridad;
 	}
 
-	
-
 	public Double getPesoTransporte() {
 		return pesoTransporte;
 	}
@@ -555,148 +524,68 @@ public class Articulo implements Serializable {
 		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 
-
-	
 	public Integer getBaseImponible() {
 		return baseImponible;
 	}
 
-	
 	public void setBaseImponible(Integer baseImponible) {
 		this.baseImponible = baseImponible;
 	}
 
-
-
-	
 	public String getTipoImpuestoMag() {
 		return tipoImpuestoMag;
 	}
 
-
-
-	
 	public void setTipoImpuestoMag(String tipoImpuestoMag) {
 		this.tipoImpuestoMag = tipoImpuestoMag;
 	}
 
-
-
-	
 	public Double getImpuestoMag() {
 		return impuestoMag;
 	}
 
-
-
-	
 	public void setImpuestoMag(Double impuestoMag) {
 		this.impuestoMag = impuestoMag;
 	}
 
-
-
-	
 	public String getCodigoTarifaMag() {
 		return codigoTarifaMag;
 	}
 
-
-
-	
 	public void setCodigoTarifaMag(String codigoTarifaMag) {
 		this.codigoTarifaMag = codigoTarifaMag;
 	}
 
-
-
-
-
-
-
-	
 	public String getCodigoCabys() {
 		return codigoCabys;
 	}
 
-
-
-
-
-
-
-	
 	public void setCodigoCabys(String codigoCabys) {
 		this.codigoCabys = codigoCabys;
 	}
 
-
-
-
-
-
-
-	
 	public Integer getCantidadPaquete() {
 		return cantidadPaquete;
 	}
 
-
-
-
-
-
-
-	
 	public void setCantidadPaquete(Integer cantidadPaquete) {
 		this.cantidadPaquete = cantidadPaquete;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	public String getCodigoSecundario() {
 		return codigoSecundario;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	public void setCodigoSecundario(String codigoSecundario) {
 		this.codigoSecundario = codigoSecundario;
 	}
 
+	public Integer getTipoFacturar() {
+		return tipoFacturar;
+	}
 
-
-	
-	
-	
-	
+	public void setTipoFacturar(Integer tipoFacturar) {
+		this.tipoFacturar = tipoFacturar;
+	}
 
 }

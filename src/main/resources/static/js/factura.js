@@ -498,6 +498,135 @@ function __ComboImpuestos(){
 }
 
 /**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
+function __listadoMarcasActivas(callback){
+    $.ajax({
+         url: "ListarMarcasActivasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+            	callback(result.aaData);
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    });
+    callback(null);
+}
+
+/**
+*  Mostrar listado datatable unidades de medidas activas
+**/
+function __listadoTipoUnidadesActivas(callback){
+    $.ajax({
+         url: "ListarTipoUnidadesAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+            	 callback(result.aaData); 
+                
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+    callback(null); 
+}
+
+
+/**
+ * Tipo de Articulo 0 = Siempre debe facturar mayor a cero
+ * @returns
+ */
+function ___ComboTipoFacturarArticulo(){
+	var generico =[]
+	generico.push({
+        codigo: "0",
+        descripcion:"Facturar Mayor Cero"
+     });
+
+	generico.push({
+        codigo: '1',
+        descripcion:"Facturar en Cero"
+     });
+
+    return generico;
+}
+/**
+*  Crear el combo base imponible
+**/
+function __ComboBaseImponibles(){
+	var generico =[]
+	generico.push({
+        codigo: 0,
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+	generico.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+     return generico;
+}
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __ComboContables(){
+	var generico =[];
+	generico.push({
+        codigo: $.i18n.prop("boolean.no"),
+        descripcion: $.i18n.prop("boolean.no") 
+     });
+	generico.push({
+        codigo: $.i18n.prop("boolean.si"),
+        descripcion:$.i18n.prop("boolean.si")
+     });
+    return generico;
+}
+/**
+*  Crear el combo de estados
+**/
+function __ComboComanda(){
+	var generico =[]
+	generico.push({
+        codigo: 0,
+        descripcion: "No enviar"
+     });
+
+	generico.push({
+        codigo: 1,
+        descripcion: $.i18n.prop("combo.comanda.cocina.1")
+     });
+	generico.push({
+        codigo:2,
+        descripcion:$.i18n.prop("combo.comanda.cocina.2")
+     });
+    return generico;
+}
+/**
+*  Crear el combo comanda
+**/
+function __ComboEstados(){
+	var generico =[]
+	generico.push({
+        codigo: $.i18n.prop("combo.estado.Activo"),
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+	generico.push({
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+    return generico;
+}
+
+/**
 * Combo para verificar si es contabilizado en el inventario o no
 **/
 function __ComboImpuestosMaG(){

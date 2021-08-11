@@ -973,7 +973,7 @@ public class ArticuloController {
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
-
+      articulo.setTipoFacturar(articulo.getTipoFacturar() == null?Constantes.ZEROS:articulo.getTipoFacturar());
 			if (articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
 				result.rejectValue("estado", "error.articulo.inactivo.agregar");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
@@ -1190,6 +1190,7 @@ public class ArticuloController {
 			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
+			articulo.setTipoFacturar(articulo.getTipoFacturar() == null?Constantes.ZEROS:articulo.getTipoFacturar());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
@@ -1329,6 +1330,7 @@ public class ArticuloController {
 
 				}
 			}
+			articuloBd.setTipoFacturar(articulo.getTipoFacturar());
 			articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
