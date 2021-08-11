@@ -440,8 +440,8 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
-		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
+		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion","Estado", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
+		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,estado,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
 
@@ -486,8 +486,8 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos, " categoria,codigo, descripcion, cantidadActualReal", baos);
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion","Estado", "Cantidad Actual", "#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos, " categoria,estado,codigo, descripcion, cantidadActualReal", baos);
 		return baos;
 	}
 
@@ -813,8 +813,8 @@ public class ArticuloController {
 		}
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
-		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
+		List<String> headers = Arrays.asList("Categoria","Estado", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
+		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,estado,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
 		return baos;
 	}
 
