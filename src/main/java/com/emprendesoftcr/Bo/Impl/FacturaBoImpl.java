@@ -480,15 +480,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 
-//			} else {
-//				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-//				factura.setReferenciaTipoDoc(Constantes.EMPTY);
-//				factura.setReferenciaNumero(Constantes.EMPTY);
-//				factura.setReferenciaCodigo(Constantes.EMPTY);
-//				factura.setReferenciaRazon(Constantes.EMPTY);
-//				factura.setAnuladaCompleta(Constantes.ZEROS);
-//				factura.setReferenciaFechaEmision(null);
-//			}
+
 
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
@@ -833,6 +825,7 @@ public class FacturaBoImpl implements FacturaBo {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
+			
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
 			if (detalleFacturaCommand.getUnidadMedida() != null) {
 				if (detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
@@ -859,6 +852,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
+			detalle.setPrecioSugerido(articulo.getPrecioSugerido());
 			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);

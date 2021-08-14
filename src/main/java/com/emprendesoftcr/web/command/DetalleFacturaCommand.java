@@ -87,6 +87,7 @@ public class DetalleFacturaCommand {
 	private Double	cantidadAplicadaNotaCredito;
 	private String	codigoTarifa;
 	private Double	precio;
+	private Double precioSugerido;
 
 	public DetalleFacturaCommand() {
 		super();
@@ -520,5 +521,17 @@ public class DetalleFacturaCommand {
 	public void setMontoExoneracion(Double montoExoneracion) {
 		this.montoExoneracion = montoExoneracion;
 	}
+
+	
+	public Double getPrecioSugerido() {
+		return precioSugerido;
+	}
+
+	
+	public void setPrecioSugerido(Double precioSugerido) {
+		this.precioSugerido = precioSugerido;
+	}
+	
+	
 
 }

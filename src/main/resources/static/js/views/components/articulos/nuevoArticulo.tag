@@ -18,7 +18,7 @@
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
-                
+                <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -93,12 +93,16 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
                                         <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaEspecial}>
                                     </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                        <label  class="tamanoLetra">Precio Sugerido </label>
+                                        <input type="number" step="any" class="form-control campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
+                                    </div>
 
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
 
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.tipoImpuesto")} </label>
                                         <select onchange= {__asignarImpuesto} class="form-control selectTipoImpuesto campoNumerico" id="tipoImpuesto" name="tipoImpuesto"  >
@@ -106,7 +110,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                         <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa campoNumerico" id="codigoTarifa" name="codigoTarifa"  >
                                             <option  each={tarifas.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
@@ -741,7 +745,7 @@ __ConsultaCodigoCabysEnter(e){
 /*******************************Lista de cabys de hacienda ***************/
 
 __ConsultaHaciendaCabys(e){
-        ListarCodigosCabysModal()
+    ListarCodigosCabysModal()
     
     
 }
@@ -833,8 +837,6 @@ function __cargarTablaCompras() {
     agregarInputsCombosCabys()
     ActivarEventoFiltro(".tableListarHaciendaCabys")
     __SeleccionarCabys()
-    
-
 }
 
 
@@ -1298,7 +1300,7 @@ var reglasDeValidacion = function() {
 			},                                                
             precioPublico : {
 				required : true,
-                numeroMayorCero:true,
+            //    numeroMayorCero:true,
                 number:true,
 			} ,                                                
                                                              

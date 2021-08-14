@@ -168,6 +168,7 @@ public class Articulo implements Serializable {
 
 	@Column(name = "tipo_facturar", columnDefinition = "INT default '0'")
 	private Integer						tipoFacturar;
+	private Double precioSugerido;
 
 	public Articulo() {
 		super();
@@ -587,5 +588,17 @@ public class Articulo implements Serializable {
 	public void setTipoFacturar(Integer tipoFacturar) {
 		this.tipoFacturar = tipoFacturar;
 	}
+
+	
+	public Double getPrecioSugerido() {
+		return precioSugerido;
+	}
+
+	
+	public void setPrecioSugerido(Double precioSugerido) {
+		this.precioSugerido = precioSugerido;
+	}
+	
+	
 
 }

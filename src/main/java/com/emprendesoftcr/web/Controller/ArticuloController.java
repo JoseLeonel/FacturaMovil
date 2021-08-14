@@ -974,6 +974,7 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
       articulo.setTipoFacturar(articulo.getTipoFacturar() == null?Constantes.ZEROS:articulo.getTipoFacturar());
+      articulo.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			if (articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
 				result.rejectValue("estado", "error.articulo.inactivo.agregar");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
@@ -991,9 +992,9 @@ public class ArticuloController {
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
-			if (articulo.getPrecioPublico() == 0) {
-				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
-			}
+//			if (articulo.getPrecioPublico() == 0) {
+//				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
+//			}
 			if (articulo.getCantidad() != null) {
 				if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
 					articulo.setCantidad(Constantes.ZEROS_DOUBLE);
@@ -1191,6 +1192,7 @@ public class ArticuloController {
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			articulo.setTipoFacturar(articulo.getTipoFacturar() == null?Constantes.ZEROS:articulo.getTipoFacturar());
+			articulo.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
@@ -1212,12 +1214,12 @@ public class ArticuloController {
 				result.rejectValue("codigo", "error.articulo.codigo.no.modificarse");
 
 			}
-			if (articulo.getPrecioPublico() == null) {
-				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
-			}
-			if (articulo.getPrecioPublico() == 0) {
-				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
-			}
+//			if (articulo.getPrecioPublico() == null) {
+//				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
+//			}
+//			if (articulo.getPrecioPublico() == 0) {
+//				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
+//			}
 
 			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
@@ -1301,10 +1303,6 @@ public class ArticuloController {
 						if (articuloValidar == null) {
 							result.rejectValue("codigoSecundario", "error.articulo.codigo.no.existe.inve");
 						}
-//						articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
-//						if (articuloValidar != null) {
-//							result.rejectValue("codigoSecundario", "error.articulo.codigo.existe");
-//						}
 						
 				}
 			}
@@ -1331,6 +1329,7 @@ public class ArticuloController {
 				}
 			}
 			articuloBd.setTipoFacturar(articulo.getTipoFacturar());
+			articuloBd.setPrecioSugerido(articulo.getPrecioSugerido());
 			articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
@@ -1593,9 +1592,10 @@ public class ArticuloController {
 			if (articuloCommand.getCodigoCabys().equals(Constantes.EMPTY) && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys", result.getAllErrors());
 			}
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe.inve", result.getAllErrors());
 		}
 	}
 

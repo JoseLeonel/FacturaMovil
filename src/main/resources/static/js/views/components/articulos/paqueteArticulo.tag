@@ -10,7 +10,7 @@
         <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
     </div>
 </div>            
- <div class="row scrollerT"  >
+ <div class="row scrollerT "  >
     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
         <div id="divFormulario" > 
             <!--Form-->
@@ -18,7 +18,7 @@
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
                 <input type="hidden" name="idPaquete" id="idPaquete" value="1">
                 
-                <div class="panel-group" id="accordion">
+                <div class="panel-group " id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
@@ -95,12 +95,17 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
                                         <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaEspecial}>
                                     </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                        <label  class="tamanoLetra">Precio Sugerido </label>
+                                        <input type="number" step="any" class="campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
+                                    </div>
 
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
 
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.tipoImpuesto")} </label>
                                         <select onchange= {__asignarImpuesto} class="form-control selectTipoImpuesto campoNumerico" id="tipoImpuesto" name="tipoImpuesto"  >
@@ -108,7 +113,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                         <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1 campoNumerico" id="codigoTarifa" name="codigoTarifa"  >
                                             <option  each={tarifas.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
@@ -141,14 +146,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-group" id="accordion">
+                <div class="panel-group" id="accordion2">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
                                 <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Otros</h4>
                             </div>
                         </a>
-                        <div id="collapse2" class="panel-collapse collapse">
+                        <div id="collapse2" class="panel-collapse collapse2">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
@@ -218,7 +223,7 @@
                         </div>
                     </div>
                 </div>            
-                <div class="panel-group" id="accordion">
+                <div class="panel-group" id="accordion3">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
@@ -277,11 +282,11 @@
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                     <label  >Digite el codigo 碼</label>
-                                    <input type="text" class="form-control codigoCabys  codigoCabysMod"   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                    <input type="text" class="form-control codigoCabys  codigoCabysMod"   id="codigoCabysMod" name="codigoCabysMod" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <label>cantidad</label>
-                                    <select  class="form-control" id="cantidad" name="cantidad" >
+                                    <select  class="form-control" id="cantidadCabys" name="cantidadCabys" >
                                         <option  each={cantidades}  value="{codigo}" selected="{cabys.estado ==codigo?true:false}" >{descripcion}</option>
                                     </select>
                                 </div>
@@ -326,6 +331,8 @@
 
 .aplicarScroll{
    overflow: scroll;
+    width: 100%;
+   height: 500px;
 }
 
 table {
@@ -693,7 +700,7 @@ function __ListaDeHaciendaCabys(){
    // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
    //     return
    // }
-    var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
+    var cantidadTemp = $('#cantidadCabys').val() == 'Todos'?0:$('#cantidadCabys').val()
     var  encontro = false
     $(".tableListarHaciendaCabys").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();

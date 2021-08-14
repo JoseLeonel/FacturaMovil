@@ -384,8 +384,6 @@ function __TipoDocumentos(numeroConsecutivo,row){
         return  numeroConsecutivo
 }
 }
-
-
 /**
 *Tipo Cambio del Dolar 
 **/
@@ -508,14 +506,17 @@ function __listadoMarcasActivas(callback){
         success: function (result) {
             if(result.aaData.length > 0){
             	callback(result.aaData);
+            }else{
+            	callback(null);
             }            
         },
         error: function (xhr, status) {
             console.log(xhr);
+            callback(null);
              mensajeErrorServidor(xhr, status);
         }
     });
-    callback(null);
+    
 }
 
 /**
@@ -531,14 +532,17 @@ function __listadoTipoUnidadesActivas(callback){
              if(result.aaData.length > 0){
             	 callback(result.aaData); 
                 
-            }            
+            }  else{
+            	 callback(null); 
+            }          
         },
         error: function (xhr, status) {
             console.log(xhr);
+            callback(null); 
              mensajeErrorServidor(xhr, status);
         }
     })
-    callback(null); 
+    
 }
 
 
@@ -560,6 +564,55 @@ function ___ComboTipoFacturarArticulo(){
 
     return generico;
 }
+
+/**
+ * Buscar el articulo en la base de datos
+ * @param idArticulo
+ * @param cantidad
+ * @param precio
+ * @returns
+ */
+
+async function __buscarcodigo(idArticulo,cantidad,precio,callback){
+    var articulo = null
+    if(idArticulo ==null){
+        return
+    }
+      if(idArticulo.length ==0){
+        return
+    }
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message);
+                    callback(null);
+                }
+            }else{
+                articulo  = null;
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    	articulo  = modeloTabla;
+                    	callback(articulo);
+                  });
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            
+          mensajeErrorServidor(xhr, status);
+          callback(null);
+        }
+    });
+  // callback(articulo); 
+}
+
+
 /**
 *  Crear el combo base imponible
 **/

@@ -9,6 +9,8 @@
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
                             <input type="hidden" name="id" id="id" value="{articulo.id}" >
+                            
+                            <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
                             <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
                             <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
@@ -16,15 +18,12 @@
                             <input type="hidden"  id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}" >
                             <input type="hidden"  id="maximo" name="maximo" value="{articulo.maximo}"  >
                             <input type="hidden"  id="minimo" name="minimo" value="{articulo.minimo}"  >
-                            
                             <input type="hidden"  id="cantidad" name="cantidad" value="{articulo.cantidad}"  >
                             <input type="hidden"  id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
                             <input type="hidden"  id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
-
                             <input type="hidden"  id="tipoImpuesto1" name="tipoImpuesto1" value="{articulo.tipoImpuesto1}"  >
                             <input type="hidden"  id="codigoTarifa1" name="codigoTarifa1" value="{articulo.codigoTarifa1}"  >
                             <input type="hidden"  id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  >
-
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default" id="cuentas">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -149,9 +148,19 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3  has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.updated_at")}  </label>
                                                     <input type="text" class="form-control campo"  value="{articulo.updated_atSTR}" readonly >
+                                                </div>
+                                                 <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                                                        <label class="tamanoLetraTotales">Facturar</label>
+                                                        <select  class="form-control campo" id="tipoFacturar" name="tipoFacturar"  >
+                                                            <option  each={tipoFacturar}  value="{codigo}" selected="{articulo.tipoFacturar ==codigo?true:false}" >{descripcion}</option>
+                                                        </select>
+                                                </div>    
+                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label  class="tamanoLetraTotales">Precio Sugerido </label>
+                                                    <input type="number" step="any" class="campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
                                                 </div>
                                             </div>
                                         </div>
@@ -234,6 +243,8 @@
 
 .aplicarScroll{
    overflow: scroll;
+   width: 100%;
+   height: 65%;
 }
 
 table {
@@ -382,6 +393,7 @@ table {
     self.tipoUnidades              = {aaData:[]}
     self.impuestos =[]
     self.tipoCodigos =[]
+    self.tipoFacturar =[]
     self.contables                 = []
     self.estados                   = []
     self.botonModificar            = true
@@ -444,17 +456,41 @@ table {
     }  
 self.on('mount',function(){
     __Eventos()
-    __ComboEstados()
-    __ComboContables()
-    __listadoTipoUnidadesActivas()   
-    __listadoMarcasActivas()
-    self.tipoCodigos =__CombotipoCodigo()
+      self.estados   = __ComboEstados()
+    self.comanda   = __ComboComanda()
+    self.contables = __ComboContables()
+    self.baseImponibles =__ComboBaseImponibles()
+    self.update()
+    setTimeout(__listadoTipoUnidadesActivas(function(resultado){
+        self.tipoUnidades.aaData = resultado;
+    })
+     ,5000);
+
+    setTimeout(__listadoMarcasActivas(function(resultado){
+        self.marcas.aaData =  resultado;
+        self.update();
+        $('.selectMarca').selectpicker(
+            {
+              style: 'btn-info',
+              size:10,
+              liveSearch: true
+            }
+        );
+        $('.selectMarca').selectpicker('refresh');
+    })
+     ,5000);
+
+
     self.impuestos = __ComboImpuestos()
+    self.impuestosMag = __ComboImpuestosMaG()
+    self.tipoCodigos =__CombotipoCodigo()
+    self.tipoFacturar =___ComboTipoFacturarArticulo();
+   
     self.update() 
     LimpiarArticulo()
-    __ComboBaseImponibles()
     __ComboCantidades();
     $('.collapse').collapse("show")
+    $('.codigo').focus()
     window.addEventListener( "keydown", function(evento){
         $(".errorServerSideJgrid").remove();
         teclas(evento);
@@ -1134,7 +1170,19 @@ __cargarCombos(){
 **/
 function enviarCargarCombos(){
     __listadoCategoriasActivas()
-    __listadoMarcasActivas()
+     setTimeout(__listadoMarcasActivas(function(resultado){
+        self.marcas.aaData =  resultado;
+        self.update();
+        $('.selectMarca').selectpicker(
+            {
+              style: 'btn-info',
+              size:10,
+              liveSearch: true
+            }
+        );
+        $('.selectMarca').selectpicker('refresh');
+    })
+     ,5000);
 }
 /**
 *imprimir el codigo y precio
@@ -1155,13 +1203,13 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:80,
                 minlength:1,
-                lettersOnly : true
+              
 			},
             codigo : {
 				required : true,
                 maxlength:20,
                 minlength:1,
-                lettersOnly : true
+               
 			},                                                
             marca : {
 				required : true,
@@ -1178,7 +1226,7 @@ var reglasDeValidacion = function() {
 			},                                                
             precioPublico : {
 				required : true,
-                numeroMayorCero:true,
+//                numeroMayorCero:true,
                 number:true,
 			} ,                                                
  		},
@@ -1311,89 +1359,7 @@ function __listadoCategoriasActivas(){
         }
     })
 }
-/**
-*  Mostrar listado datatable Categorias Actimpuestos
-**/
-function __listadoMarcasActivas(){
-    self.marcas                    = {aaData:[]}
-    self.update()
-    $.ajax({
-         url: "ListarMarcasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.marcas.aaData =  result.aaData
-                self.update();
-                 $('.selectMarca').selectpicker(
-                    {
-                         style: 'btn-info',
-                        size:10,
-                        liveSearch: true
-                    }
-                );
-                $('.selectMarca').selectpicker('refresh');
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
-/**
-*  Mostrar listado datatable unidades de medidas activas
-**/
-function __listadoTipoUnidadesActivas(){
-    $.ajax({
-         url: "ListarTipoUnidadesAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.tipoUnidades.aaData =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
-/**
-*  Crear el combo de estados
-**/
-function __ComboEstados(){
-    self.estados =[]
-    self.update()
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Activo"),
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
-    self.estados.push({
-        codigo: $.i18n.prop("combo.estado.Inactivo"),
-        descripcion: $.i18n.prop("combo.estado.Inactivo")
-     });
-     self.update();
-}
-/**
-* Combo para verificar si es contabilizado en el inventario o no
-**/
-function __ComboContables(){
-    self.contables =[]
-    self.update()
-    self.contables.push({
-        codigo: $.i18n.prop("boolean.no"),
-        descripcion: $.i18n.prop("boolean.no")
-     });
-    self.contables.push({
-        codigo: $.i18n.prop("boolean.si"),
-        descripcion:$.i18n.prop("boolean.si")
-     });
-     self.update();
-}
+
 
 
 

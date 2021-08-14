@@ -1,5 +1,5 @@
 <punto-venta>
-
+<audio id="xyz" src="/dist/img/SD_ALERT_10.mp3" preload="auto"></audio>
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -1064,6 +1064,8 @@
               todayHighlight:true,
             }
         );
+        
+     
         var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -1181,6 +1183,7 @@
     }, false );
 
     })
+    
 __CambiarDescripcion(e){
    self.item = e.item; 
    self.update()
@@ -2924,7 +2927,7 @@ function lecturaCodigo(){
        getPosicionInputCodigo()
        return
     }
-    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
+    __buscarcodigo_General(codigoActual,__valorNumerico(cantidadAct),0);
 }
 
 __addPrecioDetail(e){
@@ -2947,8 +2950,27 @@ __addPrecioDetail(e){
        getPosicionInputCodigo()
        return
     }
-    __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
-    getPosicionInputCodigo()
+   // __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
+
+    setTimeout( __buscarcodigo(codigoActual,valor,__valorNumerico(precio),function(modeArticulo){
+        self.articulo = modeArticulo;
+        self.update()
+         if(self.articulo.estado  == "Inactivo"){
+            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
+            self.articulo = null
+        }
+
+        if(self.articulo !=null){
+            self.articulo.precioPublico = getListaPrecio(self.articulo)
+            self.descripcionArticulo = self.articulo.descripcion
+            self.update()
+            actualizarArticuloPrecio(precio,valor)
+        }
+        getPosicionInputCodigo()
+    })
+     ,2000);
+
+    
 }
 
 function getCantidadAdnCodigo_PV(){
@@ -3017,7 +3039,7 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
 }
 
 this.__agregarArticuloBotonAgregar = function(){
-   __buscarcodigo($( "#codigo" ).val(),1,0);
+   __buscarcodigo_General($( "#codigo" ).val(),1,0);
    return
 }.bind(this)
 
@@ -3171,50 +3193,7 @@ function __ListaArticulosUsoInterno(){
     return
 }
 
-function __buscarcodigoPrecio(idArticulo,cantidad,precio){
-    if(idArticulo ==null){
-        return
-    }
-    if(idArticulo.length ==0){
-        return
-    }
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-                }
-            }else{
-                self.articulo  = null
-                self.update()
-                if (data.message != null && data.message.length > 0) {
-                    self.articulo =null
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.articulo  = modeloTabla
-                        self.update()
-                        if(self.articulo !=null){
-                            actualizarArticuloPrecio(precio,cantidad)
 
-                        }
-                    });
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-          mensajeErrorServidor(xhr, status);
-        }
-    });
-   return
-}
 
 function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
@@ -3225,7 +3204,7 @@ function actualizarArticuloPrecio(precio,cantidad){
     __agregarArticulo(cantidad)
 }
 
-function __buscarcodigo(idArticulo,cantidad,precio){
+function __buscarcodigo_General(idArticulo,cantidad,precio){
     self.articulo = null
     self.update()
     if(idArticulo ==null){
@@ -3234,50 +3213,33 @@ function __buscarcodigo(idArticulo,cantidad,precio){
       if(idArticulo.length ==0){
         return
     }
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-
-                }
-            }else{
-                self.articulo  = null
-                self.update()
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.articulo  = modeloTabla
-                        if(modeloTabla.estado  == "Inactivo"){
-                            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.articulo.precioPublico = getListaPrecio(self.articulo)
-                        self.descripcionArticulo = modeloTabla.descripcion
-                        self.update()
-                        if(self.articulo !=null){
-                            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
-                                $('.precioVenta').val(getListaPrecio(self.articulo))
-                                $('.precioVenta').select()
-                                $(".precioVenta").focus()
-                                return
-                            }
-                        }
-                        __agregarArticulo(cantidad)
-                  });
-                }
+    setTimeout( __buscarcodigo(idArticulo,cantidad,precio,function(modeArticulo){
+        self.articulo = modeArticulo;
+        self.update()
+        if(self.articulo !=null){
+             if(self.articulo.estado  == "Inactivo"){
+                mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
+                self.articulo = null
             }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-          mensajeErrorServidor(xhr, status);
+
+
+            self.articulo.precioPublico = getListaPrecio(self.articulo)
+            self.descripcionArticulo = self.articulo.descripcion
+            self.update()
+            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+                $('.precioVenta').val(getListaPrecio(self.articulo))
+                $('.precioVenta').select()
+                $(".precioVenta").focus()
+                return
+            }
+            __agregarArticulo(cantidad)
         }
-    });
-   return
-}
+        
+    })
+     ,2000);
+
+}    
+
 
 function __agregarArticulo(cantidad){
     if(self.articulo == null){
@@ -3778,7 +3740,7 @@ function __agregarArticulos() {
             }
         }
         if(self.articulo.contable == "si"){
-           __buscarcodigo(self.articulo.codigo,1,0)
+           __buscarcodigo_General(self.articulo.codigo,1,0)
         }else{
             __agregarArticulo(1)
         }
