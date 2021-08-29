@@ -1155,7 +1155,7 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:80,
                 minlength:1,
-                lettersOnly : true
+                
 			},
             codigo : {
 				required : true,

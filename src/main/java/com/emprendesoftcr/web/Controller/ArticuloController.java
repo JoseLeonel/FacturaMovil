@@ -718,13 +718,13 @@ public class ArticuloController {
 			delimitadores.addFiltro(categoriaFilter);
 
 		}
-		if (!minimoMaximo.equals(Constantes.COMBO_TODOS)) {
+		if (minimoMaximo != null && !minimoMaximo.equals(Constantes.COMBO_TODOS)) {
 			if (minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad <= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
 
 			}
-			if (minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
+			if (minimoMaximo != null && minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad >= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
 			}

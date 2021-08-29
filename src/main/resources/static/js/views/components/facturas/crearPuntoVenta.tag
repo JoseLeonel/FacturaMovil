@@ -1339,13 +1339,29 @@ function teclamodal(e){
                         if(e.target.id != 'selectListaPrecios' && e.target.id != 'selectActividadComercial' && e.target.id != 'botonRestar'
                           && e.target.id != 'botonSumar'   && e.target.id != 'botonCambiarPrecio' && e.target.id != 'botonEntradaDinero'
                           && e.target.id != 'descripEntradaSalidaDinero' ){
-                            getPosicionInputCodigo();
+                           if(VerificarSiEstaPrecioOrCodigo(e)){
+                              getPosicionInputCodigo();
+                           }
+                            
 
                         }
                         
                     }
        
     
+}
+/**Verifica si algo se escribio en precioventa*/
+function VerificarSiEstaPrecioOrCodigo(e){
+    var resultadoCodigo = true
+    if(e.target.id == 'codigo' ){
+        var resultado = __valorNumerico($('.precioVenta').val())
+         if(resultado  > 0 ){
+            resultadoCodigo = false
+        }
+
+    }
+    return resultadoCodigo
+
 }
 
     function disableF5(e) {
@@ -1354,7 +1370,7 @@ function teclamodal(e){
         if ((e.which || e.keyCode) == 114) e.preventDefault();
         if ((e.which || e.keyCode) == 112) e.preventDefault();
         if ((e.which || e.keyCode) == 117) e.preventDefault();
-        if(id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
@@ -1385,7 +1401,6 @@ function teclamodal(e){
 function __AplicarCambioPrecioBD(){
     var parametros = __getUltimoArticuloIngresado();
     if(parametros == null){
-        $('.codigo').val(null)
         getPosicionInputCodigo()
         return
     }

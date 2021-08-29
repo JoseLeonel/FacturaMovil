@@ -2614,7 +2614,7 @@ public final class Utils {
 
 	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {
 		// 001 + 00004 + 01 + 0000003888
-		return consecutivo == null?"ne":consecutivo.substring(8, 10); // Se retorna 01
+		return consecutivo != null && !consecutivo.isEmpty() ?consecutivo.substring(8, 10):"ne"; // Se retorna 01
 	}
 
 	public static String obtenerDescripcionTipoDocumento(String tipoDocumento) {

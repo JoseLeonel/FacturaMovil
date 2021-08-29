@@ -55,10 +55,9 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label>{$.i18n.prop("proveedor.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="idProveedor" name="idProveedor" data-live-search="true">
-                                        <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
+                                    <span >Proveedores </span>
+                                    <select   class="form-control idProveedor"   name="idProveedor" id="idProveedor"  data-live-search="true">
+                                        <option  data-tokens="Seleccionar"   value="0"  >Seleccionar</option>
                                     </select>
                                 </div>  
                             </div> 
@@ -525,7 +524,7 @@ self.on('mount',function(){
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
    __ComboEstados()
-    __ListaProveedores()
+    cargarProveedores()
     $('.datepickerFechaFinal').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -541,6 +540,32 @@ self.on('mount',function(){
     
 
 })
+/**
+ * Lista de proveedores
+ */
+function cargarProveedores(){
+    $.ajax({
+        url: "ListarProveedoresActivosAjax.do",
+       datatype: "json",
+       method:"GET",
+       success: function (result) {
+            if(result.aaData.length > 0){
+                $.each(result.aaData, function( index, modeloTabla ) {
+                   var linea =  '<option value="' + modeloTabla.id +'"'+"data-tokens='" + modeloTabla.nombreCompleto + "' >"+modeloTabla.nombreCompleto+'</option>';
+                   $('#idProveedor').append(linea);  
+                })
+                $('.idProveedor').selectpicker();
+                
+            }            
+       },
+       error: function (xhr, status) {
+           console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+            
+       }
+    })
+
+}
  /**
 *  Crear el combo de estados
 **/
@@ -674,26 +699,7 @@ function TotalesGenerales(data){
     self.update();
 }
 
-/**
-*  Lista de los Proveedores
-**/
-function __ListaProveedores(){
-    $.ajax({
-        url: 'ListarProveedoresAjax.do',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.proveedores.data = result.aaData
-               self.update()
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
+
 /**
  * Regresar al listado
  * **/

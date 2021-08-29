@@ -24,6 +24,13 @@ $(document)
 
 
 
+
+
+
+
+
+
+
 /**
  * Carga imagen
  * @param Data64
@@ -520,7 +527,7 @@ function __ComboImpuestosMaG(){
 var myControlPago;
 //$.toast().reset('all');
 setInterval(function() {
-	 consultaControlPago()
+//	 consultaControlPago()
  }.bind(this),900000)
 
  
@@ -533,6 +540,7 @@ function __MensajesToasControlPago(){
 }
 
 function consultaControlPago(){
+	return
 	 $.ajax({
          type : "POST",
          global: false,
