@@ -73,9 +73,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.xml.schema.factura.electronica.EmisorType;
-import com.emprendesoftcr.xml.schema.factura.electronica.ReceptorType;
 import com.google.common.base.Strings;
 
 public final class Utils {

@@ -57,9 +57,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		 http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/fonts/**","/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
 
 		.permitAll().antMatchers("/service/CrearFacturaServiceAjax")
-		.permitAll().antMatchers("/movil/ListarClientesAjax.do")
-		.permitAll().antMatchers("/movil/ListarCategoriasAjax.do")
-		.permitAll().antMatchers("/movil/ListarArticulosAjax.do")
+		//nuevo
+		.permitAll().antMatchers("/ListarClientesAjax.do")
+		.permitAll().antMatchers("/ListarClientesActivosAjax.do")
+		.permitAll().antMatchers("/AgregarClienteAjax.do")
+		.permitAll().antMatchers("/ModificarClienteAjax.do")
+		.permitAll().antMatchers("/MostrarClienteAjax.do")
+		.permitAll().antMatchers("/clienteHacienda.do")
+		
+		.permitAll().antMatchers("/ListarCategoriasAjax.do")
+		.permitAll().antMatchers("/AgregarCategoriaAjax.do")
+		.permitAll().antMatchers("/ModificarCategoriaAjax.do")
+		.permitAll().antMatchers("/MostrarCategoriaAjax.do")
+		
+		
+		.permitAll().antMatchers("/ListarArticuloAjax.do")
+		.permitAll().antMatchers("/ModificarArticuloAjax.do")
+		.permitAll().antMatchers("/AgregarArticuloAjax.do")
+		.permitAll().antMatchers("/CambiarPrecioAjax")
+		.permitAll().antMatchers("/CambiarPrecioArticulo.do")
+		.permitAll().antMatchers("/findArticuloByCodigojax.do")
+		
+		.permitAll().antMatchers("/tipoCambioBancoCentral.do")
+		
+		.permitAll().antMatchers("/listarEntradasOrSalidas.do")
+		.permitAll().antMatchers("/ListarCajasActivasAjax.do")
+		.permitAll().antMatchers("/AgregarCajaAjax.do")
+		.permitAll().antMatchers("/ModificarCajaAjax.do")
+		.permitAll().antMatchers("/MostrarCajaAjax.do")
+		.permitAll().antMatchers("/AgregarSalidaEntradaDineroAjax.do")
+		.permitAll().antMatchers("/AgregarSalidaEntradaDineroAjax.do")
+		
+		
 		.permitAll().antMatchers("/webjars/**")
 		.permitAll().antMatchers("/login")
 		.permitAll().antMatchers("http://localhost:8083/api-v1/get-all")

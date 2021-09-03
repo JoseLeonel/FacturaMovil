@@ -3499,9 +3499,49 @@ function setItemNuevo(cantidad){
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
     }
-    __SetUltimoItemIngresado(item);
+    
     return item;
 }
+
+/**
+	* Obtiene el precio unitario sin descuento sin impuesto
+	**/
+	function getPrecioUnitario(precio ,impuesto){
+	   var porcentajeImpuesto = 0
+	   var resultado  = 0
+	   if(impuesto > 0){
+	      porcentajeImpuesto = impuesto / 100
+	      porcentajeImpuesto =  porcentajeImpuesto + 1
+	      resultado  =  precio  / porcentajeImpuesto
+	   }else{
+	       resultado  =  precio
+	   }
+	   return resultado     
+}
+/** Funciones en ventas nueva , venta post , restaurante comunes **/
+	/**
+	* Monto de Total
+	**/
+	function getMontoTotal(precioUnitario,cantidad){
+	    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+	    return resultado
+	}
+
+
+
+/**
+	 * calculo del impuesto iva
+	 * */
+	function _calcularImpuesto(precio,iva){
+	    if(iva == 0){
+	        return 0;
+	    }
+	    var impuesto = iva ;
+	    var resultado = precio * impuesto;
+		resultado = resultado / 100;
+	    return resultado;
+	}
+
 
 function verificarTarifa(){
     if(__valorNumerico(self.articulo.impuesto) > 0 ){

@@ -1225,7 +1225,7 @@ public class ComprasController {
 	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
-		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.SalidaEntradaDineroCommand;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
-
+@CrossOrigin
 @Controller
 public class SalidaEntradaDineroController {
 
