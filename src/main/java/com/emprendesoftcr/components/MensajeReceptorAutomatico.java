@@ -89,7 +89,6 @@ public class MensajeReceptorAutomatico {
 	@Value("${api.notificar.cliente}")
 	private String													apiNotificarCliente;
 
-	@SuppressWarnings("unused")
 	private final Logger										log	= LoggerFactory.getLogger(getClass());
 
 	private ZipFile													zipFile;

@@ -898,7 +898,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 			// detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			if (detalle.getPorcentajeExoneracion() != null && detalle.getImpuesto() != null && detalle.getPorcentajeExoneracion().equals(detalle.getImpuesto())) {
+			Double porcentajeExoneracion =detalle.getPorcentajeExoneracion() != null ?detalle.getPorcentajeExoneracion().longValue():Constantes.ZEROS_DOUBLE;  
+			if ( detalle.getImpuesto() != null && porcentajeExoneracion.equals(detalle.getImpuesto())) {
 				detalle.setMontoExoneracion(detalle.getMontoImpuesto());
 			} else {
 				detalle.setMontoExoneracion(Utils.getMontoExoneracionSubTotal(detalle.getTipoDocumentoExoneracion(), detalle.getImpuesto(), detalle.getPorcentajeExoneracion(), detalle.getSubTotal(), detalle.getMontoImpuesto()));

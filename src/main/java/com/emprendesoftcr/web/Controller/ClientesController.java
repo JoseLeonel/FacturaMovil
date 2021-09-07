@@ -29,6 +29,7 @@ import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -83,7 +84,11 @@ public class ClientesController {
 
 	@Autowired
 	private StringPropertyEditor													stringPropertyEditor;
+	
+	@Autowired
+	private ValidateTokenBo													validateTokenBo;
 
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
@@ -601,9 +606,12 @@ public class ClientesController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request, HttpServletResponse response, @RequestParam String cedula) {
+	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request,  ModelMap model, @ModelAttribute Cliente cliente ,HttpServletResponse response, @RequestParam String cedula,BindingResult result, SessionStatus status) {
 		try {
-
+//			String nombreUsuario = request.getUserPrincipal().getName();
+//			if(validateTokenBo.validarTokenApis(request) == false) {
+//				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+//			}
 			// request url
 			String url = "https://api.hacienda.go.cr/fe/ae?identificacion=" + cedula;
 
@@ -630,7 +638,7 @@ public class ClientesController {
 
 			// request url
 			String url = "https://api.hacienda.go.cr/indicadores/tc";
-
+			
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
 

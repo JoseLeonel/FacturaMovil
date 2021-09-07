@@ -8,7 +8,6 @@ import java.util.Map;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 public interface ArticuloBo {
