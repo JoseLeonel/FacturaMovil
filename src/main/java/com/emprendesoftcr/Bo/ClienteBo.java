@@ -2,9 +2,17 @@ package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.support.SessionStatus;
+
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.ClienteCommand;
 import com.emprendesoftcr.web.command.ClienteMag;
 
@@ -27,5 +35,9 @@ public interface ClienteBo {
 	
 	Cliente buscarPorCedulaExtranjera(String cedula, Empresa empresa);
 	ClienteMag clienteRegistradoMag(ClienteCommand clienteCommand);
+	RespuestaServiceValidator<?> clienteHaciendaByCedula(String cedula);
 	
+	RespuestaServiceValidator<?> agregar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result,Usuario usuarioSesion);
+	
+	 RespuestaServiceValidator modificar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result,Usuario usuarioSesion);
 }

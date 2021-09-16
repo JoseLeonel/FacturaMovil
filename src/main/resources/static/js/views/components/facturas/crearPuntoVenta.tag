@@ -1775,7 +1775,7 @@ function BuscarActividadComercial(){
     }
     $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
         if(modeloTabla.codigo == codigo  ){
-           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+           self.actividadComercial.descripcion =  modeloTabla.descripcion
             self.actividadComercial.codigo =  codigo
             self.factura.codigoActividad = codigo
             self.update()
@@ -2455,6 +2455,9 @@ function aplicarFactura(estado){
        }
 
     }
+    // if(self.cliente.tipoMag > 0){
+      //      retotalizarMAG(self.cliente.tipoMag == 1 || self.cliente.tipoMag == 2 ? 1:0 )                 
+       // }
     crearFactura(estado)
 }
 
@@ -3499,6 +3502,7 @@ function setItemNuevo(cantidad){
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
     }
+     __SetUltimoItemIngresado(item);
     
     return item;
 }

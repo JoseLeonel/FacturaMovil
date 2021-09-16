@@ -329,7 +329,7 @@ public class DetalleController {
 					if(acionRetoralizar.equals(Constantes.RETOTALIZA_MAG_SI)) {
 						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuestoMag() !=null && !articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)?articulo.getTipoImpuestoMag():articulo.getTipoImpuesto());
 						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifaMag() !=null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? articulo.getCodigoTarifaMag() : articulo.getCodigoTarifa());
-						detalleFacturaCommand.setImpuesto(articulo.getImpuestoMag() !=null && articulo.getImpuestoMag() > Constantes.ZEROS_DOUBLE ?  articulo.getImpuestoMag() : articulo.getImpuesto() );
+						detalleFacturaCommand.setImpuesto(articulo.getCodigoTarifaMag() !=null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY)  ?  Constantes.CODIGO_IMPUESTO_1_PORCIENTO : articulo.getImpuesto() );
 					}else {
 						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuesto());
 						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifa());

@@ -458,6 +458,7 @@ public class Constantes {
 	public static final String ROL_USUARIO_SUPERDARIO = "Usuario_SuperDario";
 	public static final String ROL_USUARIO_MESERO = "Usuario_Mesero";
 	public static final String ROL_USUARIO_CONDOMINIO = "Administrador_Condominios";
+	public static final String ROL_USUARIO_APIS = "Administrador_APIS";
 
 	// Usuario
 	public static final String WEB_SESSION_USUARIO = "usuario";
@@ -752,5 +753,7 @@ public class Constantes {
 	public static final String CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO = "07";
 	public static final String CODIGO_TARIFA_13_GENERAL_PORCIENTO = "08";
 	public static final Double CODIGO_TARIFA_13_IMPUESTO_99 = 99d;
+	
+	public static final Double CODIGO_IMPUESTO_1_PORCIENTO = 1d;
 
 }
