@@ -2,6 +2,7 @@ package com.emprendesoftcr.utils;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -91,4 +92,7 @@ public class RespuestaServiceDataTable<T extends Object> implements Serializable
 			return response;
 		}
 	}
+
+
+	
 }

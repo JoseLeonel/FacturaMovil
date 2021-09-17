@@ -376,7 +376,7 @@ public class ClienteBoImpl implements ClienteBo {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Transactional
 	@Override
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result, Usuario usuarioSesion) {
@@ -480,13 +480,11 @@ public class ClienteBoImpl implements ClienteBo {
 						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
 					}
 
-					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
-						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+						if (clienteCommand.getNumeroDocumentoExoneracion() != null && clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
 							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
 						}
-					}
 					if (clienteCommand.getPorcentajeExoneracion() != null) {
-						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
+						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
 						if (clienteCommand.getPorcentajeExoneracion() > Constantes.PORCENTAJE_MAXIMO_EXONERACION) {
@@ -582,6 +580,31 @@ public class ClienteBoImpl implements ClienteBo {
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@Override
+	public RespuestaServiceValidator<?> mostrar(HttpServletRequest request, Cliente cliente, BindingResult result) {
+		try {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+			Cliente clienteBD = null;
+			if (cliente.getId() != null) {
+				clienteBD = buscar(cliente.getId());
+			} else {
+				if (clienteBD == null && !cliente.getCedula().isEmpty()) {
+					clienteBD = buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+				}
+				if (clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
+					clienteBD = buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
+				}
+
+			}
+
+			ClienteCommand clienteCommand = new ClienteCommand(clienteBD);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", clienteCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}

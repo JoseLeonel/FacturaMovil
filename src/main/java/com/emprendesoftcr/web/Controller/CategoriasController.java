@@ -25,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -63,8 +64,6 @@ public class CategoriasController {
 	@Autowired
 	private CategoriaBo																			categoriaBo;
 
-	
-
 	@Autowired
 	private UsuarioBo																				usuarioBo;
 
@@ -76,6 +75,8 @@ public class CategoriasController {
 
 	@Autowired
 	private StringPropertyEditor														stringPropertyEditor;
+	@Autowired
+	private ValidateTokenBo																	validateTokenBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -84,11 +85,11 @@ public class CategoriasController {
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
+
 	@RequestMapping(value = "/TotalesCategoriaXArticulo.do", method = RequestMethod.GET)
 	public String totalesCategoriaXArticulo(ModelMap model) {
 		return "views/categoria/TotalesCategoriaXArticulos";
 	}
-
 
 	/**
 	 * Listar de las categorias
@@ -99,7 +100,7 @@ public class CategoriasController {
 	public String listar(ModelMap model) {
 		return "views/categoria/ListarCategorias";
 	}
-	
+
 	@RequestMapping(value = "/ListarCategoriasRestaurante.do", method = RequestMethod.GET)
 	public String listarRestaurante(ModelMap model) {
 		return "views/categoria/ListarCategoriasRestaurante";
@@ -112,10 +113,15 @@ public class CategoriasController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@Cacheable(value="categoriaCache")
+	@Cacheable(value = "categoriaCache")
 	@RequestMapping(value = "/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		return listarCategoriasAjax(request, response);
+	}
+
+	private RespuestaServiceDataTable<?> listarCategoriasAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Categoria");
@@ -127,45 +133,54 @@ public class CategoriasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+
+	@SuppressWarnings("all")
+	@Cacheable(value = "categorialocalCache")
+	@RequestMapping(value = "/local/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCategoriasLocalAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		return listarCategoriasAjax(request, response);
+	}
+
 	@RequestMapping(value = "/movil/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public Collection<Categoria> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam Integer idEmpresa) {
+	public Collection<Categoria> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa) {
 
-	
 		return categoriaBo.findByEmpresaAll(idEmpresa);
 	}
 
 	@SuppressWarnings("all")
-	@Cacheable(value="categoriaCache")
+	@Cacheable(value = "categoriaCache")
 	@RequestMapping(value = "/ListarPaginacionCategoriasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
-	
+
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Categoria");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();	
+			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if(delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
-			//Se ordena por prioridad por defecto se crearon en 9999
+		if (delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
+			// Se ordena por prioridad por defecto se crearon en 9999
 			delimitadores.setColumnData("prioridad, id");
-			delimitadores.setColumnOrderDir("asc");			
+			delimitadores.setColumnOrderDir("asc");
 		}
 
-		JqGridFilter categoriaFilter =   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
+		JqGridFilter categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(categoriaFilter);
 
-		delimitadores.setLength( parametrosPaginacion.getCantidadPorPagina());
+		delimitadores.setLength(parametrosPaginacion.getCantidadPorPagina());
 
 		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
+
 	/**
 	 * Categorias activas por empresa
 	 * @param request
@@ -173,7 +188,7 @@ public class CategoriasController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@Cacheable(value="categoriaCache")
+	@Cacheable(value = "categoriaCache")
 	@RequestMapping(value = "/ListarCategoriasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -201,7 +216,7 @@ public class CategoriasController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="categoriaCache",allEntries=true)
+	@CacheEvict(value = "categoriaCache", allEntries = true)
 	@RequestMapping(value = "/AgregarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
@@ -209,20 +224,29 @@ public class CategoriasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Categoria categoriaBd = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), usuario.getEmpresa());
-			if (categoriaBd != null) {
-				result.rejectValue("descripcion", "error.categoria.descripcion.existe");
-			}
 
-			if (result.hasErrors()) {
+			return categoriaBo.agregar(request, categoria, result, usuario);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@SuppressWarnings("all")
+	@CacheEvict(value = "categorialocalCache", allEntries = true)
+	@RequestMapping(value = "/local/AgregarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator agregarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
+
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			categoria.setEmpresa(usuario.getEmpresa());
-			categoria.setCreated_at(new Date());
-			categoria.setUpdated_at(new Date());
-			
-			categoriaBo.agregar(categoria);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente", categoria);
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+			return categoriaBo.agregar(request, categoria, result, usuario);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -233,7 +257,7 @@ public class CategoriasController {
 	 * Modificar una categoria
 	 */
 	@SuppressWarnings("all")
-	@CacheEvict(value="categoriaCache",allEntries=true)
+	@CacheEvict(value = "categorialocalCache", allEntries = true)
 	@RequestMapping(value = "/ModificarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
@@ -242,29 +266,26 @@ public class CategoriasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado", result.getAllErrors());
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Categoria categoriaBD = categoriaBo.buscar(categoria.getId());
+			return categoriaBo.modificar(request, categoria, result, usuario);
 
-			if (categoriaBD == null) {
-				return RESPONSES.ERROR.CATEGORIA.NO_EXISTE;
-			} else {
-				Categoria categoriaValidar = null;
-				if (!categoria.getDescripcion().equals(categoriaBD.getDescripcion())) {
-					categoriaValidar = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), usuario.getEmpresa());
-					if (categoriaValidar != null) {
-						result.rejectValue("descripcion", "error.categoria.descripcion.existe");
-					}
-				}
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
-				if (result.hasErrors()) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-				}
-				categoriaBD.setDescripcion(categoria.getDescripcion());
-				categoriaBD.setPrioridad(categoria.getPrioridad());
-				categoriaBD.setUpdated_at(new Date());
-				categoriaBD.setEstado(categoria.getEstado());
-				categoriaBo.modificar(categoriaBD);
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.modificado.correctamente", categoriaBD);
+	@SuppressWarnings("all")
+	@CacheEvict(value = "categorialocalCache", allEntries = true)
+	@RequestMapping(value = "/local/ModificarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado", result.getAllErrors());
 			}
+
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			return categoriaBo.modificar(request, categoria, result, usuario);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -286,13 +307,28 @@ public class CategoriasController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			CategoriaCommand categoriaCommand = new CategoriaCommand(categoriaBo.buscar(categoria.getId()));
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", categoriaCommand);
+		
+			return categoriaBo.mostrar(request, categoria, result);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/local/MostrarCategoriaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
+			}
+			return categoriaBo.mostrar(request, categoria, result);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

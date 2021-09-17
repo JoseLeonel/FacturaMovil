@@ -3,7 +3,6 @@ package com.emprendesoftcr.web.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,21 +28,17 @@ import org.springframework.web.client.RestTemplate;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.DataTableDelimitador;
 import com.emprendesoftcr.utils.JqGridFilter;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
-import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.ClienteCommand;
-import com.emprendesoftcr.web.command.ClienteMag;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -68,9 +63,6 @@ public class ClientesController {
 
 	@Autowired
 	private ClienteBo																			clienteBo;
-
-	@Autowired
-	private FacturaBo																			facturaBo;
 
 	@Autowired
 	private UsuarioBo																			usuarioBo;
@@ -133,7 +125,7 @@ public class ClientesController {
 
 		if (validateTokenBo.validarTokenApis(request) == false) {
 			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Cliente");
-			UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 		}
 
 		return listarClientesByEmpresa(request);
@@ -177,7 +169,7 @@ public class ClientesController {
 	public RespuestaServiceDataTable listarActivos(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		if (validateTokenBo.validarTokenApis(request) == false) {
 			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Cliente");
-			UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 		}
 
 		return listarActivosAjax(request);
@@ -201,7 +193,7 @@ public class ClientesController {
 		}
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		RespuestaServiceDataTable<Object> respuestaService = new RespuestaServiceDataTable<Object>();
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
 			Cliente object = (Cliente) iterator.next();
@@ -240,7 +232,7 @@ public class ClientesController {
 
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			
+
 			return clienteBo.agregar(request, clienteCommand, result, usuarioSesion);
 
 		} catch (Exception e) {
@@ -253,17 +245,19 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator agregarCliente(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
-
+			if (validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			
+
 			return clienteBo.agregar(request, clienteCommand, result, usuarioSesion);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	/**
 	 * Modificar una sucursal de una empresa
 	 * @param request
@@ -281,27 +275,33 @@ public class ClientesController {
 		try {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			
+
 			return clienteBo.modificar(request, clienteCommand, result, usuarioSesion);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/local/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
+
+			if (validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			
+
 			return clienteBo.modificar(request, clienteCommand, result, usuarioSesion);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -363,23 +363,22 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			String nombreUsuario = request.getUserPrincipal().getName();
-			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			Cliente clienteBD = null;
-			if (cliente.getId() != null) {
-				clienteBD = clienteBo.buscar(cliente.getId());
-			} else {
-				if (clienteBD == null && !cliente.getCedula().isEmpty()) {
-					clienteBD = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
-				}
-				if (clienteBD == null && !cliente.getIdentificacionExtranjero().isEmpty()) {
-					clienteBD = clienteBo.buscarPorCedulaExtranjera(cliente.getIdentificacionExtranjero(), usuarioSesion.getEmpresa());
-				}
 
+			return clienteBo.mostrar(request, cliente, result);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/local/MostrarClienteAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
-			ClienteCommand clienteCommand = new ClienteCommand(clienteBD);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", clienteCommand);
+			return clienteBo.mostrar(request, cliente, result);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}

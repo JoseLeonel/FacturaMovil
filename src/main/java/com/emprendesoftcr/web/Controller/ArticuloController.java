@@ -184,7 +184,6 @@ public class ArticuloController {
 		return "views/articulos/ListarArticulosMinimos";
 	}
 
-	
 	/**
 	 * Listar JSP de los articulos
 	 * @param model
@@ -315,7 +314,6 @@ public class ArticuloController {
 	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, BindingResult result, SessionStatus status) throws Exception {
 		List<DetalleFacturaCommand> lista = new ArrayList<>();
 
-
 		Collection<Detalle> listaDetalles = detalleBo.findbyIdFactura(idFactura);
 		for (Detalle detalle : listaDetalles) {
 			DetalleFacturaCommand detalleFacturaCommand = new DetalleFacturaCommand(detalle);
@@ -440,7 +438,7 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion","Estado", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
+		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Estado", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
 		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,estado,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
@@ -486,7 +484,7 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion","Estado", "Cantidad Actual", "#Cantidad Revision Fisica");
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Estado", "Cantidad Actual", "#Cantidad Revision Fisica");
 		new SimpleExporter().gridExport(headers, articulos, " categoria,estado,codigo, descripcion, cantidadActualReal", baos);
 		return baos;
 	}
@@ -610,42 +608,20 @@ public class ArticuloController {
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Articulo");
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();
-			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
-			delimitadores.addFiltro(dataTableFilter);
-		}
-		JqGridFilter categoriaFilter = null;
-		if (codigoArt != null) {
-			if (!codigoArt.equals(Constantes.EMPTY)) {
-				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
-				delimitadores.addFiltro(categoriaFilter);
-			}
-		}
-
-		Long total = dataTableBo.contar(delimitadores);
-		Collection<Object> objetos = dataTableBo.listar(delimitadores);
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		List<Object> solicitudList = new ArrayList<Object>();
-		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
-			Articulo object = (Articulo) iterator.next();
-			// no se carga el usuario del sistema el id -1
-			if (object.getId().longValue() > 0L) {
-				solicitudList.add(new ArticuloCommand(object));
-			}
-		}
-
-		respuestaService.setRecordsTotal(total);
-		respuestaService.setRecordsFiltered(total);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(solicitudList);
-		return respuestaService;
-
+		String nombreUsuario = request.getUserPrincipal().getName();
+		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/local/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
+
+		DataTableDelimitador delimitadores = null;
+		String nombreUsuario = request.getUserPrincipal().getName();
+		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
+	}
+	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloMinimosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -813,7 +789,7 @@ public class ArticuloController {
 		}
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria","Estado", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
+		List<String> headers = Arrays.asList("Categoria", "Estado", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
 		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,estado,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
 		return baos;
 	}
@@ -1051,7 +1027,7 @@ public class ArticuloController {
 
 				}
 			}
-      articulo.setDescripcion(articulo.getDescripcion().replace("&", ""));
+			articulo.setDescripcion(articulo.getDescripcion().replace("&", ""));
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
@@ -1079,7 +1055,7 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
-			articulo.setCodigoCabys(articulo.getCodigoCabys() != null? articulo.getCodigoCabys():Constantes.EMPTY);
+			articulo.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -1112,171 +1088,14 @@ public class ArticuloController {
 	@RequestMapping(value = "/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
-			articulo.setDescripcion(articulo.getDescripcion().replace("&", ""));
-			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
-			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
-			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
-			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
-			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
-			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
-			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if (articulo.getTipoImpuesto() != null) {
-				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
-			}
-			if (articulo.getTipoImpuestoMag() != null) {
-				articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
-			}
-			if (articulo.getTipoCodigo() == null) {
-				articulo.setTipoCodigo("04");
-			}
-			Articulo articuloBd = articuloBo.buscar(articulo.getId());
-			Articulo articuloValidar = null;
-
-			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
-				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
-				if (articuloValidar != null) {
-					result.rejectValue("codigo", "error.articulo.codigo.existe");
-				}
-				result.rejectValue("codigo", "error.articulo.codigo.no.modificarse");
-
-			}
-			if (articulo.getPrecioPublico() == null) {
-				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
-			}
-			if (articulo.getPrecioPublico() == 0) {
-				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
-			}
-
-			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
-				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
-				if (tarifaIVAI == null) {
-					result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.existe");
-				} else {
-					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto())) {
-						result.rejectValue("impuesto", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
-					} else {
-						articulo.setImpuesto(tarifaIVAI.getMonto());
-					}
-				}
-			}
-			if (!articulo.getCodigoTarifaMag().equals(Constantes.EMPTY)) {
-				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifaMag());
-				if (tarifaIVAI == null) {
-					result.rejectValue("codigoTarifaMag", "error.articulo.codigo.tarifa.no.existe");
-				} else {
-					if (!tarifaIVAI.getMonto().equals(articulo.getImpuestoMag())) {
-						result.rejectValue("impuestoMag", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
-					} else {
-						articulo.setImpuestoMag(tarifaIVAI.getMonto());
-					}
-				}
-			}
-			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
-					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
-
-					}
-				}
-
-			}
-			if (!articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)) {
-				if (!articulo.getTipoImpuestoMag().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuestoMag().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
-					if (articulo.getImpuestoMag().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
-
-					}
-				}
-
-			}
-
-			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
-				articulo.setCodigoTarifa(Constantes.EMPTY);
-			}
-			if (articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)) {
-				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
-				articulo.setCodigoTarifaMag(Constantes.EMPTY);
-			}
-			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
-					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.selectivoConsumo");
-					}
-
-				}
-				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-					if (articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
-						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
-					}
-				}
-			}
-
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-			Gson gson = new Gson();
-			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
-				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
-				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
-				if(cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
-					Cabys cabys = new Cabys();
-					cabys.setId(null);
-					cabys.setCodigo(cabysAct.getCodigo());
-					cabys.setCreated_at(new Date());
-					cabys.setUpdated_at(new Date());
-					cabys.setDescripcion(cabysAct.getDescripcion());
-					cabys.setEmpresa(usuarioSesion.getEmpresa());
-					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
-					cabys.setUri(cabysAct.getUri());
-					cabysBo.agregar(cabys);
-
-				}
-			}
-			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
-			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
-			articuloBd.setUpdated_at(new Date());
-			articuloBd.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
-			articuloBd.setMaximo(articulo.getMaximo());
-			articuloBd.setMinimo(articulo.getMinimo());
-			articuloBd.setMarca(articulo.getMarca());
-			articuloBd.setDescripcion(articulo.getDescripcion());
-			articuloBd.setContable(articulo.getContable());
-			articuloBd.setCategoria(articulo.getCategoria());
-			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
-			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
-			articuloBd.setEstado(articulo.getEstado());
-			articuloBd.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico() : Constantes.ZEROS_DOUBLE);
-			articuloBd.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() != null ? articulo.getGananciaPrecioMayorista() : Constantes.ZEROS_DOUBLE);
-			articuloBd.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() != null ? articulo.getGananciaPrecioEspecial() : Constantes.ZEROS_DOUBLE);
-			articuloBd.setPrecioPublico(articulo.getPrecioPublico());
-			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
-			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
-			articuloBd.setUsuario(usuarioSesion);
-			articuloBd.setCodigo(articulo.getCodigo().trim());
-			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
-			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
-			articuloBd.setComanda(articulo.getComanda());
-			articuloBd.setPrioridad(articulo.getPrioridad());
-			articuloBd.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
-			articuloBd.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
-			articuloBd.setPesoTransporte(articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
-			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
-			articuloBd.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
-			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
-			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
-			articuloBo.modificar(articuloBd);
-
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
+		return articuloBo.modificar(request, articulo, result);
 	}
-
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/local/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+		return articuloBo.modificar(request, articulo, result);
+	}
 	/**
 	 * Mostrar articulo por id
 	 * @param request

@@ -4,10 +4,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -39,5 +36,7 @@ public interface ClienteBo {
 	
 	RespuestaServiceValidator<?> agregar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result,Usuario usuarioSesion);
 	
-	 RespuestaServiceValidator modificar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result,Usuario usuarioSesion);
+	 RespuestaServiceValidator<?> modificar(HttpServletRequest request, ClienteCommand clienteCommand, BindingResult result,Usuario usuarioSesion);
+	 
+	 RespuestaServiceValidator<?> mostrar(HttpServletRequest request,  Cliente cliente, BindingResult result);
 }

@@ -5,9 +5,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.validation.BindingResult;
+
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 public interface ArticuloBo {
@@ -43,5 +50,7 @@ public interface ArticuloBo {
 	
 	List<Map<String, Object>>  articulosByCabys(String descripcion ,String codigo,Integer tipo,Integer idEmpresa,Integer cantidad);
 	
+	RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response,  String codigoArt,String nombreUsuario);
 	
+	 RespuestaServiceValidator<?> modificar(HttpServletRequest request, Articulo articulo, BindingResult result);
 }

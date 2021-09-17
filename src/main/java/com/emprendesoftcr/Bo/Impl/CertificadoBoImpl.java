@@ -40,7 +40,7 @@ public class CertificadoBoImpl implements CertificadoBo {
 			// desarrollo
 			// ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/" + nombrep12);
 
-			nombrep12 = "310278636827.p12";
+			nombrep12 = "011276043236.p12";
 			password = "1234";
 			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/llaves/produccion/" + nombrep12);
 			String path = new ClassPathResource("/home/jose/dev/llaves/tmp/").getPath();
