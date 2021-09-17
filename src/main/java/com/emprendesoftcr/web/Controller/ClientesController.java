@@ -305,7 +305,14 @@ public class ClientesController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, HttpServletResponse response, @RequestParam String cedula, BindingResult result, SessionStatus status) throws IOException, ServletException {
+	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request,  ModelMap model, @ModelAttribute Cliente cliente ,HttpServletResponse response, @RequestParam String cedula,BindingResult result, SessionStatus status) {
+		try {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			if(validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			// request url
+			String url = "https://api.hacienda.go.cr/fe/ae?identificacion=" + cedula;
 
 		return clienteBo.clienteHaciendaByCedula(cedula);
 
