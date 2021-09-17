@@ -242,7 +242,7 @@ public class CategoriasController {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -281,7 +281,7 @@ public class CategoriasController {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -321,7 +321,7 @@ public class CategoriasController {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad");
 			}
 			return categoriaBo.mostrar(request, categoria, result);
 		} catch (Exception e) {

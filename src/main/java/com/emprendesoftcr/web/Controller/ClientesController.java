@@ -246,7 +246,7 @@ public class ClientesController {
 	public RespuestaServiceValidator agregarCliente(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
@@ -290,7 +290,7 @@ public class ClientesController {
 		try {
 
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
@@ -305,15 +305,9 @@ public class ClientesController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request,  ModelMap model, @ModelAttribute Cliente cliente ,HttpServletResponse response, @RequestParam String cedula,BindingResult result, SessionStatus status) {
-		try {
-			String nombreUsuario = request.getUserPrincipal().getName();
-			if(validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-			// request url
-			String url = "https://api.hacienda.go.cr/fe/ae?identificacion=" + cedula;
-
+	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request,  ModelMap model, @ModelAttribute Cliente cliente ,HttpServletResponse response, @RequestParam String cedula,BindingResult result, SessionStatus status) throws IOException, ServletException {
+		
+		
 		return clienteBo.clienteHaciendaByCedula(cedula);
 
 	}
@@ -324,7 +318,7 @@ public class ClientesController {
 	public RespuestaServiceValidator mostrarClienteHacienda(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, HttpServletResponse response, @RequestParam String cedula, BindingResult result, SessionStatus status) throws IOException, ServletException {
 
 		if (validateTokenBo.validarTokenApis(request) == false) {
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 		}
 
 		return clienteBo.clienteHaciendaByCedula(cedula);
@@ -355,6 +349,32 @@ public class ClientesController {
 		}
 	}
 
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/local/tipoCambioBancoCentral.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator tipoCambioBancoCentralLocal(HttpServletRequest request, HttpServletResponse response,BindingResult result) {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
+			}
+			// request url
+			String url = "https://api.hacienda.go.cr/indicadores/tc";
+
+			// create an instance of RestTemplate
+			RestTemplate restTemplate = new RestTemplate();
+
+			// make an HTTP GET request
+			JSONObject json = restTemplate.getForObject(url, JSONObject.class);
+
+			// print json
+			System.out.println(json);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", json);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 	/**
 	 * Buscar por id el cliente para mostrar
 	 * @param request

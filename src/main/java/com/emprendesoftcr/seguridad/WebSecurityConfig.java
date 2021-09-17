@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
 						"/plugins/**", "/resources/**", "/registration")
-				.permitAll().antMatchers("/service/CrearFacturaServiceAjax").permitAll()
+				.permitAll().antMatchers("/local/CrearFacturaServiceAjax").authenticated()
 				.antMatchers("/local/ListarClientes.do").authenticated()
 				.antMatchers("/local/ListarClientesActivos.do").authenticated()
 				.antMatchers("/local/AgregarCliente.do").authenticated()
@@ -100,18 +99,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/local/MostrarCategoriaAjax.do").authenticated()
 				.antMatchers("/local/ListarArticuloAjax.do").authenticated()
 				.antMatchers("/local/ModificarArticuloAjax.do").authenticated()
-				.antMatchers("/AgregarArticuloAjax.do").permitAll()
-				.antMatchers("/CambiarPrecioAjax").permitAll()
-				.antMatchers("/CambiarPrecioArticulo.do").permitAll()
-				.antMatchers("/findArticuloByCodigojax.do").permitAll()
-				.antMatchers("/tipoCambioBancoCentral.do").authenticated()
-				.antMatchers("/listarEntradasOrSalidas.do").permitAll()
-				.antMatchers("/ListarCajasActivasAjax.do").permitAll()
-				.antMatchers("/AgregarCajaAjax.do").permitAll()
-				.antMatchers("/ModificarCajaAjax.do").permitAll()
-				.antMatchers("/MostrarCajaAjax.do").permitAll()
-				.antMatchers("/AgregarSalidaEntradaDineroAjax.do").permitAll()
-				.antMatchers("/AgregarSalidaEntradaDineroAjax.do").permitAll()
+				.antMatchers("/local/AgregarArticuloAjax.do").authenticated()
+				.antMatchers("/local/CambiarPrecioAjax").authenticated()
+				.antMatchers("/local/CambiarPrecioArticulo.do").authenticated()
+				.antMatchers("/local/findArticuloByCodigojax.do").authenticated()
+				.antMatchers("/local/tipoCambioBancoCentral.do").authenticated()
+				.antMatchers("/local/listarEntradasOrSalidas.do").authenticated()
+				.antMatchers("/local/ListarCajasActivasAjax.do").authenticated()
+				.antMatchers("/local/AgregarCajaAjax.do").authenticated()
+				.antMatchers("/local/ModificarCajaAjax.do").authenticated()
+				.antMatchers("/local/MostrarCajaAjax.do").authenticated()
+				.antMatchers("/local/AgregarSalidaEntradaDineroAjax.do").authenticated()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login").permitAll()

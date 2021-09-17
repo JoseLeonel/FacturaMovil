@@ -22,11 +22,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CabysBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
@@ -42,8 +44,10 @@ import com.emprendesoftcr.utils.DataTableDelimitador;
 import com.emprendesoftcr.utils.JqGridFilter;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
+import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CabysAct;
+import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.google.gson.Gson;
 
@@ -74,6 +78,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 	@Autowired
 	private CabysBo cabysBo;
+	@Autowired
+	private KardexBo kardexBo;
 	
 	private JdbcTemplate	jdbcTemplate;
 
@@ -431,6 +437,332 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	@Transactional
+	@Override
+	public RespuestaServiceValidator<?> agregar(HttpServletRequest request, Articulo articulo, BindingResult result) {
+		
+		try {
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
+			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
+
+			if (articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
+				result.rejectValue("estado", "error.articulo.inactivo.agregar");
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
+
+			}
+
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBd = null;
+
+			articuloBd = buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
+			if (articuloBd != null) {
+				result.rejectValue("codigo", "error.articulo.codigo.existe");
+			}
+			if (articulo.getPrecioPublico() == null) {
+				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
+			}
+			if (articulo.getPrecioPublico() == 0) {
+				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
+			}
+			if (articulo.getCantidad() != null) {
+				if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
+					articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+				}
+			}
+			if (articulo.getCantidad() == null) {
+				articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+			}
+
+			if (articulo.getTipoImpuesto() != null) {
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			}
+			if (articulo.getTipoImpuestoMag() != null) {
+				articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			}
+			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto())) {
+						result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuesto(tarifaIVAI.getMonto());
+					}
+				}
+			}
+			if (!articulo.getCodigoTarifaMag().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifaMag());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa1", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuestoMag())) {
+						result.rejectValue("impuesto1", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuestoMag(tarifaIVAI.getMonto());
+					}
+				}
+			}
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
+					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
+
+					}
+				}
+
+			}
+
+			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa(Constantes.EMPTY);
+			}
+			if (articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)) {
+				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifaMag(Constantes.EMPTY);
+			}
+			if (!articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuestoMag().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getImpuestoMag().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
+					}
+				}
+				if (articulo.getTipoImpuestoMag().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuestoMag().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
+					}
+
+				}
+			}
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
+					}
+
+				}
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
+					}
+				}
+
+			}
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			Gson gson = new Gson();
+			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
+				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
+				if (cabysBD == null) {
+					Cabys cabys = new Cabys();
+					cabys.setId(null);
+					cabys.setCodigo(cabysAct.getCodigo());
+					cabys.setCreated_at(new Date());
+					cabys.setUpdated_at(new Date());
+					cabys.setDescripcion(cabysAct.getDescripcion());
+					cabys.setEmpresa(usuarioSesion.getEmpresa());
+					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
+					cabys.setUri(cabysAct.getUri());
+					cabysBo.agregar(cabys);
+
+				}
+			}
+			articulo.setDescripcion(articulo.getDescripcion().replace("&", ""));
+			articulo.setCreated_at(new Date());
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioMayorista());
+			articulo.setCantidad(articulo.getCantidad() == null ? Constantes.ZEROS_DOUBLE : articulo.getCantidad());
+			articulo.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
+
+			articulo.setEmpresa(usuarioSesion.getEmpresa());
+			articulo.setUpdated_at(new Date());
+			articulo.setEstado(Constantes.ESTADO_ACTIVO);
+			articulo.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico() : Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() != null ? articulo.getGananciaPrecioMayorista() : Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() != null ? articulo.getGananciaPrecioEspecial() : Constantes.ZEROS_DOUBLE);
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setUsuario(usuarioSesion);
+			articulo.setTipoImpuestoMag(articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articulo.setImpuestoMag(articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setPesoTransporte(articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
+			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS : articulo.getMaximo());
+			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS : articulo.getMinimo());
+			articulo.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
+			agregar(articulo);
+
+			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
+				if (!articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+					kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE, articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
+
+				}
+
+			}
+
+			Articulo articuloNuevo = buscar(articulo.getId());
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articuloNuevo);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	@Transactional
+	@Override
+	public RespuestaServiceValidator<?> cambiarPrecio(HttpServletRequest request, HttpServletResponse response,
+			 Articulo articulo, Double precioPublico, String codigo, String tipoImpuesto,
+			Double impuesto, String descripcion, String tipoCodigo, String unidadMedida, BindingResult result) {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setImpuestoMag(
+					articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articulo.setCodigoTarifa(
+					articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifaMag(
+					articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
+			Articulo articuloBD = buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
+
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+
+			
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
+						result.getAllErrors());
+			}
+
+			if (tipoCodigo == null) {
+				articuloBD.setTipoCodigo("04");
+			} else {
+				articuloBD.setTipoCodigo(tipoCodigo);
+			}
+			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa(Constantes.EMPTY);
+			}
+			if (articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)) {
+				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifaMag(Constantes.EMPTY);
+			}
+			articuloBD.setUpdated_at(new Date());
+			articuloBD.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
+			articuloBD.setMarca(articulo.getMarca());
+			articuloBD.setDescripcion(articulo.getDescripcion());
+			articuloBD.setContable(articulo.getContable());
+			articuloBD.setCategoria(articulo.getCategoria());
+			articuloBD.setUnidadMedida(articulo.getUnidadMedida());
+			articuloBD.setTipoCodigo(articulo.getTipoCodigo());
+			articuloBD.setEstado(articulo.getEstado());
+			articuloBD.setGananciaPrecioPublico(
+					articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico()
+							: Constantes.ZEROS_DOUBLE);
+			articuloBD.setPrecioPublico(articulo.getPrecioPublico());
+			articuloBD.setUsuario(usuario);
+			articuloBD.setCodigo(articulo.getCodigo().trim());
+			articuloBD.setTipoImpuesto(
+					articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articuloBD.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articuloBD.setComanda(articulo.getComanda());
+			articuloBD.setPrioridad(articulo.getPrioridad());
+			articuloBD.setTipoImpuestoMag(
+					articulo.getTipoImpuestoMag() == null ? Constantes.EMPTY : articulo.getTipoImpuestoMag());
+			articuloBD.setImpuestoMag(
+					articulo.getImpuestoMag() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuestoMag());
+			articuloBD.setPesoTransporte(
+					articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
+			articuloBD.setCodigoTarifa(
+					articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articuloBD.setCodigoTarifaMag(
+					articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
+			articuloBD.setBaseImponible(
+					articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
+			modificar(articuloBD);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	@Transactional
+	@Override
+	public RespuestaServiceValidator<?> cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result) {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = buscar(cambiarPrecioArticuloCommand.getId());
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
+						result.getAllErrors());
+			}
+			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null ? Constantes.EMPTY
+					: cambiarPrecioArticuloCommand.getDescripcion();
+			articuloBD.setUpdated_at(new Date());
+			articuloBD.setDescripcion(descripcion.length() > 0 ? descripcion : articuloBD.getDescripcion());
+			articuloBD.setGananciaPrecioPublico(Utils.getPorcentajeGananciaArticulo(articuloBD.getCosto(),
+					cambiarPrecioArticuloCommand.getPrecioPublico(), articuloBD.getImpuesto()));
+			articuloBD.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
+			articuloBD.setUsuario(usuario);
+			modificar(articuloBD);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	@Transactional
+	@Override
+	public RespuestaServiceValidator<?> findArticuloByCodigojax(HttpServletRequest request, Articulo articulo,
+			HttpServletResponse response, String codigoArticulo, BindingResult result) {
+		try {
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
+			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
+
+			if (articuloCommand == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe",
+						result.getAllErrors());
+			}
+			if (articuloCommand.getCodigoCabys() == null && usuarioSesion.getEmpresa().getNoFacturaElectronica()
+					.equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys",
+						result.getAllErrors());
+			}
+			if (articuloCommand.getCodigoCabys().equals(Constantes.EMPTY) && usuarioSesion.getEmpresa()
+					.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("articulo.no.existe.codigo.cabys",
+						result.getAllErrors());
+			}
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
