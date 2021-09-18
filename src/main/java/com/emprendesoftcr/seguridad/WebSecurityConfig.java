@@ -117,6 +117,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/login").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/indicadores/tc").permitAll()
+				.antMatchers("https://api.hacienda.go.cr/fe/ae").permitAll()
 				.antMatchers("/service/callback.do").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login")
