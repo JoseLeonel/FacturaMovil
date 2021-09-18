@@ -1,7 +1,9 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +26,7 @@ import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.SalidaEntradaDineroBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
+import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.SalidaEntradaDinero;
@@ -77,6 +80,8 @@ public class CajasController {
 
 	@Autowired
 	private UsuarioBo																		usuarioBo;
+	@Autowired
+	private ValidateTokenBo validateTokenBo;
 
 	@Autowired
 	private EmpresaPropertyEditor												empresaPropertyEditor;
@@ -135,6 +140,29 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarEntradasOrSalidas(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) {
 
+	
+
+		return listarEntradasOrSalidasT(request, response,  idTipoEntrada,  idEntradaSalida);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/local/listarEntradasOrSalidas.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarEntradasOrSalidasLocal(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) throws IOException, ServletException {
+		
+		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
+		if (validateTokenBo.validarTokenApis(request) == false) {
+
+			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		}
+		return listarEntradasOrSalidasT(request, response,  idTipoEntrada,  idEntradaSalida);
+	}
+	
+	
+	
+	@SuppressWarnings("unused")
+	private  RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request,
+			HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
     if(idEntradaSalida != null) {
@@ -163,6 +191,24 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarCajasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
+
+		return listarCajasActivasAjaxT( request,  response);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/local/ListarCajasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCajasActivasAjaxLocal(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
+		if (validateTokenBo.validarTokenApis(request) == false) {
+
+			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		}
+		return listarCajasActivasAjaxT( request,  response);
+	}
+	
+	public RespuestaServiceDataTable<?> listarCajasActivasAjaxT(HttpServletRequest request, HttpServletResponse response) {
+
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Caja");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
@@ -178,36 +224,17 @@ public class CajasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 
-		@SuppressWarnings("unused")
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		
 		try {
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Caja cajaBd = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
-			if (cajaBd != null) {
-				result.rejectValue("descripcion", "error.caja.descripcion.existe");
-			}
-
-			cajaBd = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), usuario.getEmpresa());
-			if (cajaBd != null) {
-				result.rejectValue("terminal", "error.caja.terminal.existe");
-			}
-
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-			caja.setEmpresa(usuario.getEmpresa());
-			caja.setCreated_at(new Date());
-			caja.setUpdated_at(new Date());
-
-			caja.setUsuario(usuario);
-			cajaBo.agregar(caja);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("caja.agregar.correctamente", caja);
+			
+			
+			return cajaBo.agregar(request, caja, result);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -215,50 +242,54 @@ public class CajasController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/ModificarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/local/AgregarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
+
+		
 		try {
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("caja.no.modificado", result.getAllErrors());
+			
+			if (validateTokenBo.validarTokenApis(request) == false) {
+
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Caja cajaBD = cajaBo.buscar(caja.getId());
-
-			if (cajaBD == null) {
-				return RESPONSES.ERROR.CAJA.NO_EXISTE;
-			} else {
-				Caja cajaValidar = null;
-				if (!caja.getDescripcion().equals(cajaBD.getDescripcion())) {
-					cajaValidar = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
-					if (cajaValidar != null) {
-						result.rejectValue("descripcion", "error.caja.descripcion.existe");
-					}
-				}
-				if (!caja.getTerminal().equals(cajaBD.getTerminal())) {
-					cajaValidar = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), usuario.getEmpresa());
-					if (cajaValidar != null) {
-						result.rejectValue("terminal", "error.caja.terminal.existe");
-					}
-
-				}
-
-				if (result.hasErrors()) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-				}
-				cajaBD.setDescripcion(caja.getDescripcion());
-				cajaBD.setTerminal(caja.getTerminal());
-				cajaBD.setUpdated_at(new Date());
-				cajaBD.setEstado(caja.getEstado());
-				cajaBo.modificar(cajaBD);
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("caja.modificado.correctamente", cajaBD);
-			}
+			return cajaBo.agregar(request, caja, result);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/ModificarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			
 
+			return cajaBo.modificar(request, caja, result);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/local/ModificarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
+						result.getAllErrors());
+			}
+
+			return cajaBo.modificar(request, caja, result);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 	/**
 	 * Mostrar una caja
 	 * @param request
@@ -274,8 +305,26 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			CajaCommand cajaCommand = new CajaCommand(cajaBo.buscar(caja.getId()));
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", cajaCommand);
+			
+
+			return cajaBo.mostrar(request, caja);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/local/MostrarCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
+						result.getAllErrors());
+			}
+			return cajaBo.mostrar(request, caja);
+
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
