@@ -941,7 +941,7 @@ function listaProveedoresActivos(){
              if(result.aaData.length > 0){
                 self.proveedores.data = result.aaData
                 self.update()
-                $('.selectProveedor').selectpicker();
+                $('.selectProveedores').selectpicker();
              } 
         },
         error: function (xhr, status) {

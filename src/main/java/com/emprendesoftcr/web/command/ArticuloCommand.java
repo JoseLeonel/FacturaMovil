@@ -74,6 +74,9 @@ public class ArticuloCommand {
 	private Double cantidad1;
 	private String						codigoCabys;
 	private Integer						cantidadPaquete;
+	private Double cantidaProducto;
+	private Double montoTotalLinea;
+
 	
 	
 
@@ -84,7 +87,7 @@ public class ArticuloCommand {
 		this.descripcion = articuloMinimoNative.getDescripcion();
 				this.minimo = articuloMinimoNative.getMinimo();
 				this.cantidad1 =articuloMinimoNative.getCantidad();
-				
+				this.cantidaProducto =Constantes.ZEROS_DOUBLE;
 		
 	}
 	public ArticuloCommand(Articulo articulo) {
@@ -143,6 +146,8 @@ public class ArticuloCommand {
 		this.codigoCabys = articulo.getCodigoCabys();
 		this.codigoSecundario = articulo.getCodigoSecundario();
 		this.cantidadPaquete = articulo.getCantidadPaquete();
+		
+		this.cantidaProducto =Constantes.ZEROS_DOUBLE;
 
 	}
 	
@@ -292,7 +297,11 @@ public class ArticuloCommand {
 	public void setPrecioPublico(Double precioPublico) {
 		this.precioPublico = precioPublico;
 	}
-
+	public String getPrecioPublicoformato() {
+		return  this.precioPublico != null ?this.precioPublico > 1d ? Utils.formateadorMiles(this.precioPublico) : this.precioPublico+"":"0";
+		
+	}
+	
 	public Double getGananciaPrecioPublico() {
 		return gananciaPrecioPublico;
 	}
@@ -582,6 +591,23 @@ public class ArticuloCommand {
 	}
 	
 	
+	
+	
+	public Double getCantidaProducto() {
+		return cantidaProducto == null?Constantes.ZEROS_DOUBLE:cantidaProducto;
+	}
+	
+	public void setCantidaProducto(Double cantidaProducto) {
+		this.cantidaProducto = cantidaProducto;
+	}
+	
+	public Double getMontoTotalLinea() {
+		return montoTotalLinea;
+	}
+	
+	public void setMontoTotalLinea(Double montoTotalLinea) {
+		this.montoTotalLinea = montoTotalLinea;
+	}
 	
 	
 

@@ -17,7 +17,7 @@ var _Init = function () {
  */
 function cargaMantenimientoCategorias() {
 
-	riot.mount('venta-servicios');
+	riot.mount('ventasPorServiciosNormal');
 }
 
 

@@ -1,6 +1,7 @@
 package com.emprendesoftcr.schma.Bo.Impl;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -329,7 +330,17 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFacturaDetalleNueva.setCodigoCabys(lineaDetalle.getCodigo());
 			recepcionFacturaDetalleNueva.setCantidad(lineaDetalle.getCantidad() != null ? lineaDetalle.getCantidad().doubleValue() : Constantes.ZEROS_DOUBLE);
 			recepcionFacturaDetalleNueva.setUnidadMedida(lineaDetalle.getUnidadMedida() != null ? lineaDetalle.getUnidadMedida() : Constantes.EMPTY);
-			recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle() != null ? lineaDetalle.getDetalle() : Constantes.EMPTY);
+			
+			if(lineaDetalle.getDetalle() != null) {
+				if(lineaDetalle.getDetalle().length() >=180) {
+					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle().substring(0, 180));	
+				}else {
+					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle());
+				}
+			}else {
+				recepcionFacturaDetalleNueva.setDetalle("no hay detalles");
+			}
+			
 			recepcionFacturaDetalleNueva.setPrecioUnitario(lineaDetalle.getPrecioUnitario() != null ? lineaDetalle.getPrecioUnitario().doubleValue() : Constantes.ZEROS_DOUBLE);
 			recepcionFacturaDetalleNueva.setBaseImponible(lineaDetalle.getBaseImponible() != null ? lineaDetalle.getBaseImponible().doubleValue() : Constantes.ZEROS_DOUBLE);
 			recepcionFacturaDetalleNueva.setMontoTotal(lineaDetalle.getMontoTotal() != null ? lineaDetalle.getMontoTotal().doubleValue() : Constantes.ZEROS_DOUBLE);
@@ -391,7 +402,8 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFactura.setEmisorCanton(emisorType.getUbicacion() != null?Utils.bigIntegerToStrig(emisorType.getUbicacion().getCanton()):Constantes.EMPTY);
 			recepcionFactura.setEmisorDistrito(emisorType.getUbicacion() != null?Utils.bigIntegerToStrig(emisorType.getUbicacion().getDistrito()):Constantes.EMPTY);
 			recepcionFactura.setEmisorOtraSena(emisorType.getUbicacion() != null ?emisorType.getUbicacion().getOtrasSenas():Constantes.EMPTY);
-			recepcionFactura.setEmisorTelefono(emisorType.getTelefono() != null ? Utils.bigIntegerToStrig(emisorType.getTelefono().getValue().getNumTelefono()):Constantes.EMPTY);
+			BigInteger valor =  new BigInteger("0");
+			recepcionFactura.setEmisorTelefono(emisorType.getTelefono() != null ? Utils.bigIntegerToStrig(emisorType.getTelefono() !=null && emisorType.getTelefono().getValue() != null? emisorType.getTelefono().getValue().getNumTelefono():valor):Constantes.EMPTY);
 		} catch (Exception e) {
 			log.error(String.format("--error Compra formateda del xml->obtenerEmisor :" + e.getMessage() + new Date()));
 			throw e;

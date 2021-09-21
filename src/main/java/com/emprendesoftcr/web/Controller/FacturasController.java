@@ -37,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -64,6 +65,7 @@ import com.emprendesoftcr.Bo.MesaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
+import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.Bo.VendedorBo;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
@@ -370,7 +372,11 @@ public class FacturasController {
 
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
-
+	
+	
+	@Autowired
+	private ValidateTokenBo  validateTokenBo;
+	
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -686,8 +692,30 @@ public class FacturasController {
 	 * @return
 	 */
 	@RequestMapping(value = "/ventasPorServicio", method = RequestMethod.GET)
-	public String ventasPorServicios(ModelMap model) {
-		return "views/facturas/ventasPorServicios";
+	public String ventasPorServicios(Device device) {
+		
+    String deviceType = "browser";
+    String platform = "browser";
+    String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
+
+    if (device.isNormal()) {
+        deviceType = "browser";
+    } else if (device.isMobile()) {
+        deviceType = "mobile";
+        viewName = "views/facturacionProfesionales/ventasPorServiciosMobile.html";
+    } else if (device.isTablet()) {
+        deviceType = "tablet";
+        viewName = "views/facturacionProfesionales/ventasPorServiciosTable.html";
+    }
+    
+    platform = device.getDevicePlatform().name();
+    
+    if (platform.equalsIgnoreCase("UNKNOWN")) {
+        platform = "browser";
+    }
+ 	
+    return viewName;
+		
 	}
 
 	/**
@@ -2317,23 +2345,35 @@ public class FacturasController {
 		}
 	}
 
-	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/local/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFacturaTurismo(@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
-
+	public RespuestaServiceValidator crearFacturaTurismo(HttpServletRequest request, ModelMap model,
+			@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			if (validateTokenBo.validarTokenApis(request) == false) {
 
-			Usuario usuario = null;
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
+						result.getAllErrors());
+			}
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
 			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
 			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
 		} catch (Exception e) {
 
-			return RespuestaServiceValidator.ERROR(e);
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
 		}
 	}
+	
+	
+
+	
+
 
 	@SuppressWarnings("rawtypes")
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {

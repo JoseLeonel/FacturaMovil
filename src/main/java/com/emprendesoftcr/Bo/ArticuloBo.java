@@ -5,10 +5,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
+
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.web.command.ListCabysHacienda;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
+import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 public interface ArticuloBo {
@@ -45,4 +56,21 @@ public interface ArticuloBo {
 	List<Map<String, Object>>  articulosByCabys(String descripcion ,String codigo,Integer tipo,Integer idEmpresa,Integer cantidad);
 	Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa);
 	
+	RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response,  String codigoArt,String nombreUsuario);
+	
+	 RespuestaServiceValidator<?> modificar(HttpServletRequest request, Articulo articulo, BindingResult result);
+	 RespuestaServiceValidator<?> agregar(HttpServletRequest request,  Articulo articulo, BindingResult result);
+
+		RespuestaServiceValidator<?> cambiarPrecio(HttpServletRequest request, HttpServletResponse response,
+				 Articulo articulo,  Double precioPublico,
+				 String codigo, String tipoImpuesto,  Double impuesto,
+				 String descripcion,  String tipoCodigo, String unidadMedida,
+				BindingResult result );
+		RespuestaServiceValidator<?> cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response,
+				ModelMap model, CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand,
+				BindingResult result);	
+		
+		RespuestaServiceValidator<?> findArticuloByCodigojax(HttpServletRequest request, 
+				Articulo articulo, HttpServletResponse response, String codigoArticulo,
+				BindingResult result);
 }

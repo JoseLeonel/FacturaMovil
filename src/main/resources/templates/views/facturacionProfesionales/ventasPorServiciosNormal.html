@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/css/ventaPorServicio/ventaPorServicio.css?v=10}"/>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+				<ventasPorServiciosNormal></ventasPorServiciosNormal>
+    			<fact-servImprimir></fact-servImprimir>	        
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+	  
+ 
+<div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript" th:src="@{/js/views/components/facturacionProfesional/jsFacturaProfesional/ventasPorServiciosNormal.js?v=12}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturacionProfesional/ventasPorServiciosNormal.tag?v=12}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/facturas/mostrarFacturaServicios.tag?v=12}" ></script>
+
+
+</body>
+</html>

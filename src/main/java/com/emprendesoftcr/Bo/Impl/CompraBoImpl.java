@@ -887,7 +887,9 @@ public class CompraBoImpl implements CompraBo {
 				articulo.setUpdated_at(new Date());
 				articulo.setPrecioPublico(precioPublico);
         if(empresa != null && empresa.getCedula().equals(Constantes.CEDULA_MINI_SUPER_DARIO)) {
+        	
         	articulo.setDescripcion(detalleCompra.getDescripcion());
+        	articulo.setDescripcion(articulo.getDescripcion().replace("&", ""));
         }
 				articulo.setGananciaPrecioPublico(ganancia);
 				articuloDao.modificar(articulo);

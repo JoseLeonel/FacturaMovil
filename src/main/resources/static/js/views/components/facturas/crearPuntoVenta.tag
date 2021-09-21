@@ -525,7 +525,7 @@
                                         Nuevo Cliente
                                     </span> 
                                 </div>
-                                
+                              
 
                             </div>
                             <section   class="ventaEspera">
@@ -1342,13 +1342,29 @@ function teclamodal(e){
                         if(e.target.id != 'selectListaPrecios' && e.target.id != 'selectActividadComercial' && e.target.id != 'botonRestar'
                           && e.target.id != 'botonSumar'   && e.target.id != 'botonCambiarPrecio' && e.target.id != 'botonEntradaDinero'
                           && e.target.id != 'descripEntradaSalidaDinero' ){
-                            getPosicionInputCodigo();
+                           if(VerificarSiEstaPrecioOrCodigo(e)){
+                              getPosicionInputCodigo();
+                           }
+                            
 
                         }
                         
                     }
        
     
+}
+/**Verifica si algo se escribio en precioventa*/
+function VerificarSiEstaPrecioOrCodigo(e){
+    var resultadoCodigo = true
+    if(e.target.id == 'codigo' ){
+        var resultado = __valorNumerico($('.precioVenta').val())
+         if(resultado  > 0 ){
+            resultadoCodigo = false
+        }
+
+    }
+    return resultadoCodigo
+
 }
 
     function disableF5(e) {
@@ -1357,7 +1373,7 @@ function teclamodal(e){
         if ((e.which || e.keyCode) == 114) e.preventDefault();
         if ((e.which || e.keyCode) == 112) e.preventDefault();
         if ((e.which || e.keyCode) == 117) e.preventDefault();
-        if(id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
@@ -1388,7 +1404,6 @@ function teclamodal(e){
 function __AplicarCambioPrecioBD(){
     var parametros = __getUltimoArticuloIngresado();
     if(parametros == null){
-        $('.codigo').val(null)
         getPosicionInputCodigo()
         return
     }
@@ -1763,7 +1778,7 @@ function BuscarActividadComercial(){
     }
     $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
         if(modeloTabla.codigo == codigo  ){
-           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+           self.actividadComercial.descripcion =  modeloTabla.descripcion
             self.actividadComercial.codigo =  codigo
             self.factura.codigoActividad = codigo
             self.update()
@@ -2443,6 +2458,9 @@ function aplicarFactura(estado){
        }
 
     }
+    // if(self.cliente.tipoMag > 0){
+      //      retotalizarMAG(self.cliente.tipoMag == 1 || self.cliente.tipoMag == 2 ? 1:0 )                 
+       // }
     crearFactura(estado)
 }
 
@@ -3449,9 +3467,50 @@ function setItemNuevo(cantidad){
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
     }
-    __SetUltimoItemIngresado(item);
+     __SetUltimoItemIngresado(item);
+    
     return item;
 }
+
+/**
+	* Obtiene el precio unitario sin descuento sin impuesto
+	**/
+	function getPrecioUnitario(precio ,impuesto){
+	   var porcentajeImpuesto = 0
+	   var resultado  = 0
+	   if(impuesto > 0){
+	      porcentajeImpuesto = impuesto / 100
+	      porcentajeImpuesto =  porcentajeImpuesto + 1
+	      resultado  =  precio  / porcentajeImpuesto
+	   }else{
+	       resultado  =  precio
+	   }
+	   return resultado     
+}
+/** Funciones en ventas nueva , venta post , restaurante comunes **/
+	/**
+	* Monto de Total
+	**/
+	function getMontoTotal(precioUnitario,cantidad){
+	    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+	    return resultado
+	}
+
+
+
+/**
+	 * calculo del impuesto iva
+	 * */
+	function _calcularImpuesto(precio,iva){
+	    if(iva == 0){
+	        return 0;
+	    }
+	    var impuesto = iva ;
+	    var resultado = precio * impuesto;
+		resultado = resultado / 100;
+	    return resultado;
+	}
+
 
 function verificarTarifa(){
     if(__valorNumerico(self.articulo.impuesto) > 0 ){

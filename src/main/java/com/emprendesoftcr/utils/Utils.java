@@ -45,6 +45,11 @@ import java.util.regex.Pattern;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
@@ -67,15 +72,15 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.xml.schema.factura.electronica.EmisorType;
-import com.emprendesoftcr.xml.schema.factura.electronica.ReceptorType;
 import com.google.common.base.Strings;
 
 public final class Utils {
@@ -2614,7 +2619,7 @@ public final class Utils {
 
 	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {
 		// 001 + 00004 + 01 + 0000003888
-		return consecutivo == null?"ne":consecutivo.substring(8, 10); // Se retorna 01
+		return consecutivo != null && !consecutivo.isEmpty() ?consecutivo.substring(8, 10):"ne"; // Se retorna 01
 	}
 
 	public static String obtenerDescripcionTipoDocumento(String tipoDocumento) {
@@ -2654,6 +2659,10 @@ public final class Utils {
 		
 		
 	}
+	
+	
+  
+
 	
 
 }

@@ -6,8 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.FEMensajeReceptorAutomaticoDao;
@@ -17,7 +15,7 @@ import com.emprendesoftcr.modelo.FEMensajeReceptorAutomatico;
 public class FEMensajeReceptorAutomaticoDaoImpl implements FEMensajeReceptorAutomaticoDao {
 	@PersistenceContext
 	EntityManager		entityManager;
-	private Logger	log	= LoggerFactory.getLogger(this.getClass());
+	
 	
 	@Override
 	public void agregar(FEMensajeReceptorAutomatico fEMensajeReceptorAutomatico) {
