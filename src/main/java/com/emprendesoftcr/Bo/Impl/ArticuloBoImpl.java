@@ -378,7 +378,11 @@ public class ArticuloBoImpl implements ArticuloBo {
 					}
 				}
 			}
-
+			if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -561,6 +565,16 @@ public class ArticuloBoImpl implements ArticuloBo {
 				}
 
 			}
+			
+			
+				if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+					if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+						result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
+					}
+				}
+				
+				
+				
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -650,7 +664,13 @@ public class ArticuloBoImpl implements ArticuloBo {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
 
+			if(usuario.getEmpresa().getNoFacturaElectronica() != null && usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
+				}
+			}
 			
+		
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",

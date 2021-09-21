@@ -42,13 +42,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
-import com.emprendesoftcr.Bo.CabysBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
-import com.emprendesoftcr.Bo.KardexBo;
-import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Articulo;

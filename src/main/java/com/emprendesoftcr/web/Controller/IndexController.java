@@ -24,6 +24,7 @@ public class IndexController {
    public String index() throws Exception {
 		 Authentication auth = SecurityContextHolder.getContext().getAuthentication(); 
 	    System.out.println("username: " + auth.getName()); 
+	    
 	     return "dashboardAdmin/index";
    }
 

@@ -525,7 +525,7 @@
                                         Nuevo Cliente
                                     </span> 
                                 </div>
-                                
+                              
 
                             </div>
                             <section   class="ventaEspera">
