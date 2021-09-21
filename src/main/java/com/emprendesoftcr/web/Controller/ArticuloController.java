@@ -686,8 +686,42 @@ public class ArticuloController {
 	public RespuestaServiceDataTable listarPaquetesAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		
-		String nombreUsuario = request.getUserPrincipal().getName();
-		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter = null;
+		if (codigoArt != null) {
+			if (!codigoArt.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+		categoriaFilter = new JqGridFilter("cantidadPaquete", "'" + Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Articulo object = (Articulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ArticuloCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 	}
 
 	@SuppressWarnings("all")
@@ -983,10 +1017,10 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model,
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete,
 			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-
+			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.agregar(request, articulo, result);
 
 		} catch (Exception e) {
@@ -997,7 +1031,7 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/local/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model,
+	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete,
 			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
@@ -1006,7 +1040,7 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
 						result.getAllErrors());
 			}
-
+			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.agregar(request, articulo, result);
 
 		} catch (Exception e) {
@@ -1028,11 +1062,11 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,@RequestParam(value = "idPaquete", required = false) int idPaquete,
 			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
-
+			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.modificar(request, articulo, result);
 
 		} catch (Exception e) {
