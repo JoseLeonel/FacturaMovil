@@ -379,7 +379,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				}
 			}
 			if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}
@@ -388,7 +388,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getCodigoCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
 				if (cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
@@ -568,7 +568,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			
 			
 				if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-					if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+					if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 						result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 					}
 				}
@@ -581,7 +581,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getCodigoCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
 				if (cabysBD == null) {
@@ -665,7 +665,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 
 			if(usuario.getEmpresa().getNoFacturaElectronica() != null && usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}

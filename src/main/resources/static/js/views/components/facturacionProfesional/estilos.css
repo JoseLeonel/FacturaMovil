@@ -214,6 +214,7 @@ html {
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
+  color: white;
 }
 
 .cardArticulo-item-button {
