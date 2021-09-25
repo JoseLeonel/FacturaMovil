@@ -60,7 +60,7 @@ public class WebConfigurer implements ServletContextInitializer {
 				"X-proyectoBaseApp-alert", "X-proyectoBaseApp-error", "X-proyectoBaseApp-params"));
 
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOrigins(allowedOrigins);
+	//	config.setAllowedOrigins(allowedOrigins);
 		config.setAllowedMethods(allowedMethods);
 		config.setAllowedHeaders(allowedHeaders);
 		config.setExposedHeaders(exposedHeaders);

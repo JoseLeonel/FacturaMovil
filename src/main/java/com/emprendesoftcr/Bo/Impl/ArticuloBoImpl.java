@@ -388,7 +388,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getCodigoCabys());
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
 				if (cabysBD == null && cabysAct.getCodigo() != null && !cabysAct.getCodigo().equals(Constantes.EMPTY)) {
@@ -581,7 +581,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
-				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getCodigoCabys());
+				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
 				CabysAct cabysAct = gson.fromJson(json.toString(), CabysAct.class);
 				Cabys cabysBD = cabysBo.findByCodigo(cabysAct.getCodigo(), usuarioSesion.getEmpresa());
 				if (cabysBD == null) {
