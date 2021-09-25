@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -76,13 +78,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
              .accessDeniedHandler(problemSupport)
              .and()
              .headers()
-             .contentSecurityPolicy(CONTENT_SECURITY_POLICY)
+           	  .contentSecurityPolicy("default-src 'self';")
+        		  .and()
+        		  .contentSecurityPolicy("script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.gstatic.com https://www.google.com http://www.google-analytics.com https://maps.googleapis.com https://storage.googleapis.com;")
              .and()
              .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
              .and()
              .frameOptions()
              .deny();
-
+		
 		http.authorizeRequests()
 				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
 						"/plugins/**", "/resources/**", "/registration")
@@ -166,7 +170,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
 	}
-
+//
 //	@Bean
 //	public CorsFilter corsFilter() {
 //		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

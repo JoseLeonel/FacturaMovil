@@ -1848,10 +1848,15 @@
     self.clientes              = {data:[]}
     self.detalleFactura        = {data:[]}
     self.detalleComanda        = {data:[]}
-    self.cliente               = {}
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor              = {
         id:null,
-        nombreCompleto:""
+        nombreCompleto:"",
+        cedula:""
     };
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
@@ -3304,7 +3309,11 @@ function __Init(){
     self.articulo              = null;
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
-    self.cliente               = {};
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    };
     self.vendedor = {
         id:0,
         nombreCompleto:""
@@ -3474,7 +3483,11 @@ function __InitDatos(){
     self.articulo              = null;
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
-    self.cliente               = {};
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor = {
         id:0,
         nombreCompleto:""
@@ -5485,6 +5498,7 @@ function registrarComanda(impresora,detalles,factura,mesa){
 	        error: function (xhr, status) {
 	            console.log(xhr);
                 console.log(status);
+                mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ENVIAR A IMPRIMIR A LA COCINA O ESTACION DEL SERVICIO,POR FAVOR ACTIVAR LA COMANDA");
 	            //mensajeErrorServidor(xhr, status);
 	        }
 	    });		
@@ -5510,7 +5524,7 @@ function enviarImpresoraCocina(url,parametros){
 	        error: function (xhr, status) {
 	            console.log(xhr);
                 console.log(status);
-	            //mensajeErrorServidor(xhr, status);
+	            mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
 	        }
 	    });		
 
@@ -6073,7 +6087,7 @@ function abrirCajonDineroConComanda(){
 	        },
 	        error: function (xhr, status) {
 	            console.log(xhr);
-	            mensajeErrorServidor(xhr, status);
+	            mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
 	        }
 	    });		
 	

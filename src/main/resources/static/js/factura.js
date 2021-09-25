@@ -813,10 +813,10 @@ function verificarSiClienteFrecuente(clienteFrecuente){
     if(clienteFrecuente == null || typeof clienteFrecuente == "undefined"  ){
        return true;
    }
-   if(typeof clienteFrecuente.id == "undefined"  ){
+   if(clienteFrecuente.id == null || typeof clienteFrecuente.id == "undefined"  ){
        return true;
    }
-   if(typeof clienteFrecuente.nombreCompleto == "undefined"  ){
+   if(clienteFrecuente.nombreCompleto ==  "" || clienteFrecuente.nombreCompleto == null || typeof clienteFrecuente.nombreCompleto == "undefined"  ){
        return true;
    }
 

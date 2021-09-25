@@ -956,7 +956,11 @@
     self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        = {data:[]}
-    self.cliente               = {}
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor              = {
         id:null,
         nombreCompleto:""
@@ -2549,7 +2553,11 @@ function __Init(){
     self.articulo              = null;
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
-    self.cliente               = {};
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor = {
         id:0,
         nombreCompleto:""

@@ -35,38 +35,61 @@ public class WebConfigurer implements ServletContextInitializer {
 		log.info("Web application fully configured");
 	}
 
-	@Bean
-	public CorsFilter corsFilter() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = initCorsConfiguration();
-		if (!CollectionUtils.isEmpty(config.getAllowedOrigins())) {
-			log.debug("Registering CORS filter");
-			source.registerCorsConfiguration("/api/**", config);
-			source.registerCorsConfiguration("/management/**", config);
-			source.registerCorsConfiguration("/v2/api-docs", config);
-			source.registerCorsConfiguration("/v3/api-docs", config);
-			source.registerCorsConfiguration("/swagger-resources", config);
-			source.registerCorsConfiguration("/swagger-ui/**", config);
-		}
-		return new CorsFilter(source);
-	}
+//	@Bean
+//	public CorsFilter corsFilter() {
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		CorsConfiguration config = initCorsConfiguration();
+//		if (!CollectionUtils.isEmpty(config.getAllowedOrigins())) {
+//			log.debug("Registering CORS filter");
+//			source.registerCorsConfiguration("/api/**", config);
+//			source.registerCorsConfiguration("/management/**", config);
+//			source.registerCorsConfiguration("/v2/api-docs", config);
+//			source.registerCorsConfiguration("/v3/api-docs", config);
+//			source.registerCorsConfiguration("/swagger-resources", config);
+//			source.registerCorsConfiguration("/swagger-ui/**", config);
+//		}
+//		return new CorsFilter(source);
+//	}
+	
+	
+@Bean
+public CorsFilter corsFilter() {
+	final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	final CorsConfiguration configuration = new CorsConfiguration();
+	configuration.setAllowCredentials(true);
+	configuration.addAllowedOrigin("*");
+	configuration.addAllowedHeader("*");
+	configuration.addAllowedMethod("OPTIONS");
+	configuration.addAllowedMethod("HEAD");
+	configuration.addAllowedMethod("GET");
+	configuration.addAllowedMethod("PUT");
+	configuration.addAllowedMethod("POST");
+	configuration.addAllowedMethod("DELETE");
+	configuration.addAllowedMethod("PATCH");
+	configuration.setMaxAge(1800L);
+	List<String> exposedHeaders = new ArrayList<String>(Arrays.asList("Authorization", "Link", "X-Total-Count",
+			"X-proyectoBaseApp-alert", "X-proyectoBaseApp-error", "X-proyectoBaseApp-params"));
+	configuration.setExposedHeaders(exposedHeaders);
+	source.registerCorsConfiguration("/**", configuration);
+	return new CorsFilter(source);
+}
 
-	public CorsConfiguration initCorsConfiguration() {
-		List<String> allowedOrigins = new ArrayList<String>(
-				Arrays.asList("http://localhost:8085", "http://localhost:9000", "http://localhost:4200"));
-		List<String> allowedMethods = new ArrayList<String>(Arrays.asList("*"));
-		List<String> allowedHeaders = new ArrayList<String>(Arrays.asList("*"));
-		List<String> exposedHeaders = new ArrayList<String>(Arrays.asList("Authorization", "Link", "X-Total-Count",
-				"X-proyectoBaseApp-alert", "X-proyectoBaseApp-error", "X-proyectoBaseApp-params"));
-
-		CorsConfiguration config = new CorsConfiguration();
-	//	config.setAllowedOrigins(allowedOrigins);
-		config.setAllowedMethods(allowedMethods);
-		config.setAllowedHeaders(allowedHeaders);
-		config.setExposedHeaders(exposedHeaders);
-		config.setAllowCredentials(true);
-		config.setMaxAge(1800L);
-		return config;
-	}
+//	public CorsConfiguration initCorsConfiguration() {
+//		List<String> allowedOrigins = new ArrayList<String>(
+//				Arrays.asList("http://localhost:8085", "http://localhost:9000", "http://localhost:4200"));
+//		List<String> allowedMethods = new ArrayList<String>(Arrays.asList("*"));
+//		List<String> allowedHeaders = new ArrayList<String>(Arrays.asList("*"));
+//		List<String> exposedHeaders = new ArrayList<String>(Arrays.asList("Authorization", "Link", "X-Total-Count",
+//				"X-proyectoBaseApp-alert", "X-proyectoBaseApp-error", "X-proyectoBaseApp-params"));
+//
+//		CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowedOrigins(allowedOrigins);
+//		config.setAllowedMethods(allowedMethods);
+//		config.setAllowedHeaders(allowedHeaders);
+//		config.setExposedHeaders(exposedHeaders);
+//		config.setAllowCredentials(true);
+//		config.setMaxAge(1800L);
+//		return config;
+//	}
 
 }
