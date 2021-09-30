@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -728,8 +729,17 @@ public class ArticuloController {
 	@RequestMapping(value = "/local/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "codigoArt", required = false) String codigoArt) {
-
+			@RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
+		if (validateTokenBo.validarTokenApis(request) == false) {
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Articulo");
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
+		}
 		DataTableDelimitador delimitadores = null;
 		String nombreUsuario = request.getUserPrincipal().getName();
 		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);

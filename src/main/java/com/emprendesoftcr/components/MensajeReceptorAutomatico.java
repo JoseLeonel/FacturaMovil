@@ -125,6 +125,7 @@ public class MensajeReceptorAutomatico {
 
 	private void addAttachments(String direccionPathCarpetaXML, String correoCompras, Multipart parts, String enviarA) throws Exception {
 
+
 		String saveDirectory = direccionPathCarpetaXML + "/mr-automatico";
 //		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //		SimpleDateFormat formato1 = new SimpleDateFormat("dd/mm/YYYY HH:mm:ss a");
@@ -287,7 +288,6 @@ public class MensajeReceptorAutomatico {
 											mr.setEstado("P");
 											mr.setFechaCreacion(new Date());
 											mr.setTipoGasto(this.apiTipoGasto);
-
 											_mrService.save(mr);
 										}
 									} catch (Exception e) {

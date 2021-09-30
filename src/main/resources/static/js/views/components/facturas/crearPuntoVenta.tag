@@ -946,10 +946,15 @@
     self.articulo              = null;
     self.articulos             = {data:[]}
     self.detalleFactura        = {data:[]}
-    self.cliente               = {}
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor              = {
         id:null,
-        nombreCompleto:""
+        nombreCompleto:"",
+        cedula:""
     };
     self.facturas_espera       = {data:[]}
     self.articulos_uso_interno      = {data:[]}
@@ -2566,10 +2571,15 @@ function __Init(){
     self.descripcionArticulo   = ""
     self.precioUltimo = ""
     self.detalleFactura        ={data:[]}
-    self.cliente               = {};
+    self.cliente               = {
+         id:null,
+        nombreCompleto:"",
+        cedula:""
+    }
     self.vendedor              = {
         id:null,
-        nombreCompleto:""
+        nombreCompleto:"",
+        cedula:""
     }
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
@@ -4556,7 +4566,7 @@ function abrirCajonDineroConComanda(){
 	        },
 	        error: function (xhr, status) {
 	            console.log(xhr);
-	            mensajeErrorServidor(xhr, status);
+	           // mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
 	        }
 	    });
 }

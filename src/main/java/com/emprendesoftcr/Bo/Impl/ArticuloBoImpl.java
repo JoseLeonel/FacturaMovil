@@ -388,7 +388,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				}
 			}
 			if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}
@@ -610,7 +610,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			
 			
 				if(usuarioSesion.getEmpresa().getNoFacturaElectronica() != null && usuarioSesion.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-					if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+					if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 						result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 					}
 				}
@@ -733,7 +733,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 
 			if(usuario.getEmpresa().getNoFacturaElectronica() != null && usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-				if (articulo.getDatosCabys() != null && articulo.getDatosCabys().equals(Constantes.EMPTY)) {
+				if (articulo.getCodigoCabys() != null && articulo.getCodigoCabys().equals(Constantes.EMPTY)) {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}

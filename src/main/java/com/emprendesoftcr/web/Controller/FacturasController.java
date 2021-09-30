@@ -698,21 +698,21 @@ public class FacturasController {
     String platform = "browser";
     String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
 
-    if (device.isNormal()) {
-        deviceType = "browser";
-    } else if (device.isMobile()) {
-        deviceType = "mobile";
-        viewName = "views/facturacionProfesionales/ventasPorServiciosMobile.html";
-    } else if (device.isTablet()) {
-        deviceType = "tablet";
-        viewName = "views/facturacionProfesionales/ventasPorServiciosTable.html";
-    }
-    
-    platform = device.getDevicePlatform().name();
-    
-    if (platform.equalsIgnoreCase("UNKNOWN")) {
-        platform = "browser";
-    }
+//    if (device.isNormal()) {
+//        deviceType = "browser";
+//    } else if (device.isMobile()) {
+//        deviceType = "mobile";
+//        viewName = "views/facturacionProfesionales/ventasPorServiciosMobile.html";
+//    } else if (device.isTablet()) {
+//        deviceType = "tablet";
+//        viewName = "views/facturacionProfesionales/ventasPorServiciosTable.html";
+//    }
+//    
+//    platform = device.getDevicePlatform().name();
+//    
+//    if (platform.equalsIgnoreCase("UNKNOWN")) {
+//        platform = "browser";
+//    }
  	
     return viewName;
 		

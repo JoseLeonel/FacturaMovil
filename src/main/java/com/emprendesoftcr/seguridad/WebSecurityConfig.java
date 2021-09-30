@@ -20,8 +20,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -35,54 +35,31 @@ import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 @Import(SecurityProblemSupport.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private final TokenProvider tokenProvider;
-	private final  CorsFilter corsFilter;
-	private final SecurityProblemSupport problemSupport;
-	private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:";
 	@Autowired
 	private CustomUsuariosDetailsService usuarioDetailsService;
-
-	public WebSecurityConfig(TokenProvider tokenProvider, CorsFilter corsFilter,
-			SecurityProblemSupport problemSupport) {
-		this.tokenProvider = tokenProvider;
-		this.corsFilter = corsFilter;
-		this.problemSupport = problemSupport;
-	}
-
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioDetailsService).passwordEncoder(passwordEncoder());
 	}
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/administrativo/**", "/templates/**", "/resources/**", "/static/**", "/css/**",
-				"/js/**", "/prueba/**", "/images/**", "/dist/**");
-	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/administrativo/**", "/templates/**","/resources/**", "/static/**","/css/**", "/js/**","/prueba/**", "/images/**", "/dist/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		 http.csrf().disable()
-		 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-         .exceptionHandling()
-             .authenticationEntryPoint(problemSupport)
-             .accessDeniedHandler(problemSupport)
-             .and()
-             .headers()
-             .contentSecurityPolicy(CONTENT_SECURITY_POLICY)
-             .and()
-             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-             .and()
-             .frameOptions()
-             .deny();
-
+		 http.csrf().disable();
+		
+		
 		http.authorizeRequests()
 				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
 						"/plugins/**", "/resources/**", "/registration")
@@ -119,72 +96,63 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/service/callback.do").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login")
-				.permitAll()
-				.anyRequest()
-				.authenticated()
-				.and().formLogin().loginPage("/login")
-				.failureUrl("/login?error=true")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/")
-				.and()
-	            .httpBasic()
-	            .and()
-	            .apply(securityConfigurerAdapter())
-				.and().logout().and().exceptionHandling().accessDeniedPage("/403").and().exceptionHandling()
-				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
-		
-		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
+				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password")
+				
+				.and().logout().and().exceptionHandling().accessDeniedPage("/403")
+				.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
+				http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
 
-		
-		http.headers().frameOptions().disable();
-		http.sessionManagement().invalidSessionUrl("/");
+				http.csrf().disable();
+				http.headers().frameOptions().disable();
+				http.sessionManagement().invalidSessionUrl("/");
 	}
 
-	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
-		public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
-			super(loginUrl);
-		}
-
-		@Override
-		public void commence(
-
-				HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-				throws IOException, ServletException {
-			String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
-			boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
-			if (isAjax) {
-				response.setHeader("UNAUTHORIZED", "true");// Utilizado para los llamados ajax
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ajax REquest Denied (Session Expired)");
-			} else {
-				super.commence(request, response, authException);
-			}
-		}
-	}
-
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**");
-	}
-
-//	@Bean
-//	public CorsFilter corsFilter() {
-//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		final CorsConfiguration configuration = new CorsConfiguration();
-//		configuration.setAllowCredentials(true);
-//		configuration.addAllowedOrigin("*");
-//		configuration.addAllowedHeader("*");
-//		configuration.addAllowedMethod("OPTIONS");
-//		configuration.addAllowedMethod("HEAD");
-//		configuration.addAllowedMethod("GET");
-//		configuration.addAllowedMethod("PUT");
-//		configuration.addAllowedMethod("POST");
-//		configuration.addAllowedMethod("DELETE");
-//		configuration.addAllowedMethod("PATCH");
-//		source.registerCorsConfiguration("/**", configuration);
-//		return new CorsFilter(source);
-//	}
-	private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
+	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint     {
+    public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
+        super(loginUrl);
     }
+
+    @Override
+    public void commence(
+    		
+        HttpServletRequest request,
+        HttpServletResponse response,
+        AuthenticationException authException)
+        throws IOException, ServletException {
+        String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
+        boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
+        if (isAjax) {
+    				response.setHeader("UNAUTHORIZED", "true");// Utilizado para los llamados ajax
+    				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ajax REquest Denied (Session Expired)");
+        } else {
+            super.commence(request, response, authException);
+        }
+    }
+}
+
+public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**");
+}
+@Bean
+public CorsFilter corsFilter() {
+    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    final CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowCredentials(true);
+    configuration.addAllowedOrigin("*");
+    configuration.addAllowedHeader("*");
+    configuration.addAllowedMethod("OPTIONS");
+    configuration.addAllowedMethod("HEAD");
+    configuration.addAllowedMethod("GET");
+    configuration.addAllowedMethod("PUT");
+    configuration.addAllowedMethod("POST");
+    configuration.addAllowedMethod("DELETE");
+    configuration.addAllowedMethod("PATCH");
+    source.registerCorsConfiguration("/**", configuration);
+    return new CorsFilter(source);
+}
+
+//	private JWTConfigurer securityConfigurerAdapter() {
+//        return new JWTConfigurer(tokenProvider);
+//    }
 }
