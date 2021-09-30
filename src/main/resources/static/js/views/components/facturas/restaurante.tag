@@ -5498,7 +5498,7 @@ function registrarComanda(impresora,detalles,factura,mesa){
 	        error: function (xhr, status) {
 	            console.log(xhr);
                 console.log(status);
-                mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ENVIAR A IMPRIMIR A LA COCINA O ESTACION DEL SERVICIO,POR FAVOR ACTIVAR LA COMANDA");
+            //    mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ENVIAR A IMPRIMIR A LA COCINA O ESTACION DEL SERVICIO,POR FAVOR ACTIVAR LA COMANDA");
 	            //mensajeErrorServidor(xhr, status);
 	        }
 	    });		
@@ -5524,7 +5524,7 @@ function enviarImpresoraCocina(url,parametros){
 	        error: function (xhr, status) {
 	            console.log(xhr);
                 console.log(status);
-	            mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
+	          //  mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
 	        }
 	    });		
 

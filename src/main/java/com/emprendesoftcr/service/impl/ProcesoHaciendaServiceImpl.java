@@ -716,13 +716,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+//					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-//					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+			//		recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
-//					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -1120,7 +1120,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	
-
 	@Scheduled(fixedDelay = 360000)
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {

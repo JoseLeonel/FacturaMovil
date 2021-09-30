@@ -168,8 +168,15 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivos(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		if (validateTokenBo.validarTokenApis(request) == false) {
-			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Cliente");
-			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Cliente");
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
 		}
 
 		return listarActivosAjax(request);

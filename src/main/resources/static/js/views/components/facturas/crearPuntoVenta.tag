@@ -4601,7 +4601,7 @@ function abrirCajonDineroConComanda(){
 	        },
 	        error: function (xhr, status) {
 	            console.log(xhr);
-	            mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
+	           // mensajeAdvertencia("COMANDA NO ESTA ACTIVA PARA ABRIR EL CAJON DE DINERO,POR FAVOR ACTIVAR LA COMANDA");
 	        }
 	    });
 }
