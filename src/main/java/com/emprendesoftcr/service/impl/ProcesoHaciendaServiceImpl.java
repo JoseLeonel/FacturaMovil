@@ -341,7 +341,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 
 
-	@Scheduled(fixedDelay = 900000)
+	//@Scheduled(fixedDelay = 900000)
 	@Override
 	public void envioFacturasCredito() {
 		try {
@@ -526,7 +526,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	//@Scheduled(fixedDelay = 400000)
+	@Scheduled(fixedDelay = 5000)
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -754,7 +754,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-	@Scheduled(fixedDelay = 80000)
+	@Scheduled(fixedDelay = 6000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1121,7 +1121,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	
-	@Scheduled(fixedDelay = 360000)
+	//@Scheduled(fixedDelay = 360000)
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1497,7 +1497,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	//@Scheduled(fixedDelay = 540000)
+	@Scheduled(fixedDelay = 4000)
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

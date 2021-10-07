@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+<style>
+	.tituloFacturas {
+		font-size: 24px;
+		color: black;
+	}
+	
+	.formatoEntrada {
+		margin-bottom: 1%;
+	}
+	
+	.scrlollT {
+		overflow-y: scroll;
+		overflow-x: scroll;
+		height: 400px;
+	}
+	
+	html {
+		scroll-behavior: smooth;
+	}
+	
+	#titulo-encabezado {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	
+	#totalsGenerales {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: flex-end;
+	}
+	
+	#totalsGenerales>div {
+		margin-right: 2px;
+	}
+	
+	#totalsGenerales>div>div {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	#totalsGenerales>div>div>input {
+		width: 200px;
+		background-color: #ecf0f5 !important;
+		height: 30px;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 16px;
+		/*   font-weight: 900; */
+	}
+	
+	#totalsGenerales>div>div>span {
+		font-size: 18px;
+		font-weight: 600;
+	}
+</style>
+
+</head>
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+		<header class="main-header">
+			<div th:replace="administrativo/header"></div>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<div th:replace="administrativo/mainsidebar"></div>
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header" th:fragment="header"></section>
+			<!-- Main content -->
+			<section class="content">
+				<recepcion-apiAceptadas></recepcion-apiAceptadas>
+				<view-pdf></view-pdf>
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+	</div>
+	<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript"
+		th:src="@{/js/views/compras/recepcionComprasAceptadas.js?v=1}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/compras/recepcionAutomaticaAceptadas.tag?v=10}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/modalPDF/viewPDF.tag}"></script>
+
+</body>
+</html>

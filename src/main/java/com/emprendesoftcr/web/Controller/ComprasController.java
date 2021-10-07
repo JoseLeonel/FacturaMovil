@@ -51,6 +51,7 @@ import com.emprendesoftcr.Bo.IFEMensajeReceptorAutomaticoBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
@@ -76,6 +77,7 @@ import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
+import com.emprendesoftcr.web.command.FEMensajeReceptorAutomaticoCommand;
 import com.emprendesoftcr.web.command.TikectImprimir;
 import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.command.VectorCompras;
@@ -99,71 +101,77 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 @Controller
 public class ComprasController {
 
-	private static final Function<Object, CompraEsperaCommand>				TO_COMMAND					= new Function<Object, CompraEsperaCommand>() {
+	private static final Function<Object, CompraEsperaCommand>								TO_COMMAND						= new Function<Object, CompraEsperaCommand>() {
 
-																																													@Override
-																																													public CompraEsperaCommand apply(Object f) {
-																																														return new CompraEsperaCommand((Compra) f);
-																																													};
-																																												};
+																																																		@Override
+																																																		public CompraEsperaCommand apply(Object f) {
+																																																			return new CompraEsperaCommand((Compra) f);
+																																																		};
+																																																	};
+	private static final Function<Object, FEMensajeReceptorAutomaticoCommand>	TO_COMMAND_RECEPCION	= new Function<Object, FEMensajeReceptorAutomaticoCommand>() {
 
-	private static final Function<Object, DetalleCompraEsperaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleCompraEsperaCommand>() {
+																																																		@Override
+																																																		public FEMensajeReceptorAutomaticoCommand apply(Object f) {
+																																																			return new FEMensajeReceptorAutomaticoCommand((FEMensajeReceptorAutomatico) f);
+																																																		};
+																																																	};
+	private static final Function<Object, DetalleCompraEsperaCommand>					TO_COMMAND_DETALLE		= new Function<Object, DetalleCompraEsperaCommand>() {
 
-																																													@Override
-																																													public DetalleCompraEsperaCommand apply(Object f) {
-																																														return new DetalleCompraEsperaCommand((DetalleCompra) f);
-																																													};
-																																												};
-
-	@Autowired
-	private DataTableBo																								dataTableBo;
-
-	@Autowired
-	private RecepcionFacturaBo																				recepcionFacturaBo;
-	private Logger																										log									= LoggerFactory.getLogger(this.getClass());
-
-	@Autowired
-	private UsuarioBo																									usuarioBo;
+																																																		@Override
+																																																		public DetalleCompraEsperaCommand apply(Object f) {
+																																																			return new DetalleCompraEsperaCommand((DetalleCompra) f);
+																																																		};
+																																																	};
 
 	@Autowired
-	private ProveedorBo																								proveedorBo;
+	private DataTableBo																												dataTableBo;
 
 	@Autowired
-	private CorreosBo																									correosBo;
+	private RecepcionFacturaBo																								recepcionFacturaBo;
+	private Logger																														log										= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private CompraBo																									compraBo;
+	private UsuarioBo																													usuarioBo;
 
 	@Autowired
-	private IFEMensajeReceptorAutomaticoBo														ifEMensajeReceptorAutomaticoBo;
-	@Autowired
-	private DetalleCompraBo																						detalleCompraBo;
+	private ProveedorBo																												proveedorBo;
 
 	@Autowired
-	private EmpresaBo																									empresaBo;
+	private CorreosBo																													correosBo;
 
 	@Autowired
-	private FEMensajeReceptorAutomaticoBo															fEMensajeReceptorAutomaticoBo;
+	private CompraBo																													compraBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																			empresaPropertyEditor;
+	private IFEMensajeReceptorAutomaticoBo																		ifEMensajeReceptorAutomaticoBo;
+	@Autowired
+	private DetalleCompraBo																										detalleCompraBo;
 
 	@Autowired
-	private ProveedorPropertyEditor																		proveedorPropertyEditor;
+	private EmpresaBo																													empresaBo;
 
 	@Autowired
-	private StringPropertyEditor																			stringPropertyEditor;
+	private FEMensajeReceptorAutomaticoBo																			fEMensajeReceptorAutomaticoBo;
 
 	@Autowired
-	private FechaPropertyEditor																				fechaPropertyEditor;
+	private EmpresaPropertyEditor																							empresaPropertyEditor;
 
 	@Autowired
-	private ClientePropertyEditor																			clientePropertyEditor;
+	private ProveedorPropertyEditor																						proveedorPropertyEditor;
+
 	@Autowired
-	private ConsultasNativeBo																					consultasNativeBo;
+	private StringPropertyEditor																							stringPropertyEditor;
+
+	@Autowired
+	private FechaPropertyEditor																								fechaPropertyEditor;
+
+	@Autowired
+	private ClientePropertyEditor																							clientePropertyEditor;
+	@Autowired
+	private ConsultasNativeBo																									consultasNativeBo;
 
 	@Value("${path.upload.files.api}")
-	private String																										pathUploadFilesApi;
+	private String																														pathUploadFilesApi;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -220,6 +228,11 @@ public class ComprasController {
 		return "views/compras/recepcionCompras";
 	}
 
+	@RequestMapping(value = "/recepcionComprasPorCorreoAceptadas", method = RequestMethod.GET)
+	public String recepcionComprasPorCorreoAceptadas(ModelMap model) {
+		return "views/compras/recepcionComprasAceptadas";
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarRecepcionCompras.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -236,6 +249,40 @@ public class ComprasController {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
 		}
 		return respuestaService;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/listarRecepcionComprasAceptadas.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarRecepcionComprasAceptaas(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "cedulaProveedor", required = false) String cedulaProveedor) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		// Se obtiene los totales
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "FEMensajeReceptorAutomatico");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + "P" + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		if (fechaInicioParam != null && !fechaInicioParam.equals(Constantes.EMPTY) && fechaFinParam != null && !fechaFinParam.equals(Constantes.EMPTY)) {
+			delimitadores.addFiltro(dataTableFilter);
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+			if (fechaInicio != null) {
+				if (fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 0);
+				}
+				String inicio = FacturaElectronicaUtils.toISO8601StringFirma(fechaInicio);
+				String fin = FacturaElectronicaUtils.toISO8601StringFirma(fechaFinal);
+				delimitadores.addFiltro(new JqGridFilter("FEMensajeReceptorAutomatico.fechaEmision", inicio, "date>="));
+				delimitadores.addFiltro(new JqGridFilter("FEMensajeReceptorAutomatico.fechaEmision", fin, "dateFinal<="));
+			}
+		}
+		if (cedulaProveedor != null && !cedulaProveedor.equals("0")) {
+			dataTableFilter = new JqGridFilter("FEMensajeReceptorAutomatico.receptorIdentificacion", "'" + cedulaProveedor + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
+		// dataTableFilter = new JqGridFilter("FEMensajeReceptorAutomatico.correoCompras", "'" + usuarioSesion.getEmpresa().getCorreoAceptacionCompra() + "'", "=");
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_RECEPCION);
 	}
 
 	@SuppressWarnings("all")
@@ -995,8 +1042,8 @@ public class ComprasController {
 			modelEmail.put("totalImpuesto", totalComprasAceptadasCommand.getTotalImpuesto() != null ? totalComprasAceptadasCommand.getTotalImpuestoSTR() : Constantes.ZEROS);
 
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_COMPRAS_ACEPTADAS, modelEmail);
-				log.info("Enviado correctamente el correo {}", new Date());
-				System.out.println("Enviado correctamente el correo");
+			log.info("Enviado correctamente el correo {}", new Date());
+			System.out.println("Enviado correctamente el correo");
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -1004,7 +1051,7 @@ public class ComprasController {
 		} catch (Exception e) {
 			log.error("** Error  Enviado correo: " + " fecha " + new Date());
 			System.out.println("No enviado correctamente el correo");
-		
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 		}
 
@@ -1209,49 +1256,49 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-/**
- * En construccion
- * @param request
- * @param response
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param estado
- * @param selectActividadComercial
- * @return
- */
+
+	/**
+	 * En construccion
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param estado
+	 * @param selectActividadComercial
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
-		
+
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-	// Se buscan las facturas
-			Date fechaInicio = Utils.parseDate(fechaInicioParam);
-			Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-			if (fechaInicio != null) {
-				if (fechaFin != null) {
-					fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
-				}
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		if (fechaInicio != null) {
+			if (fechaFin != null) {
+				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
 			}
-			
-			DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
-			String inicio1 = dateFormat1.format(fechaInicio);
-			String fin1 = dateFormat2.format(fechaFin);
-		  Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
-		  List<ConsultaComprasIvaCommand> lista = new ArrayList<ConsultaComprasIvaCommand>();
-		  for(CompraIVA compraIVA :  recepcionFacturas) {
-		  	ConsultaComprasIvaCommand consultaComprasIvaCommand = new ConsultaComprasIvaCommand();
+		}
+
+		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
+		String inicio1 = dateFormat1.format(fechaInicio);
+		String fin1 = dateFormat2.format(fechaFin);
+		Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+		List<ConsultaComprasIvaCommand> lista = new ArrayList<ConsultaComprasIvaCommand>();
+		for (CompraIVA compraIVA : recepcionFacturas) {
+			ConsultaComprasIvaCommand consultaComprasIvaCommand = new ConsultaComprasIvaCommand();
 //		  	consultaComprasIvaCommand.setCodTarifa(codTarifa);
-		  	
-		  	
-		  }
+
+		}
 //		String inicio1 = dateFormat1.format(fechaInicio);
 //		String fin1 = dateFormat1.format(fechaFinalP);
 //

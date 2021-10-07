@@ -1006,7 +1006,7 @@
                                         <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")}/SINPE </label> 
                                             <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco" name = "totalBanco"  >
                                     </div>
                                 </div>

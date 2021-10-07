@@ -251,8 +251,8 @@
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")}<span class="teclashift">(Tecla =shift )</span>  </label> 
                                         <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" autocomplete="off">
                                     </div> 
-                                    <div  class="form-group " show={empresa.pantChino == 0}>
-                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                    <div  class="form-group " >
+                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")}/SINPE </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}"  autocomplete="off">
                                     </div>
                                     
