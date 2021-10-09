@@ -124,7 +124,7 @@
                                       
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selectMarca campoNumerico"  name="marca" data-live-search="true">
+                                        <select  class="form-control selectMarca campoNumerico"  id="marca" name="marca" data-live-search="true">
                                             <option  each={marcas.aaData}  value="{id}" data-tokens ={descripcion} selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>
@@ -1059,11 +1059,21 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
         self.mostrarFormulario = true 
         self.botonModificar   = true;
         self.mostrarFormularioEntrada = false
-        self.botonAgregar  = false;            
+        self.botonA
+        gregar  = false;            
         self.update()
         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
         __listadoTarifasByTipoImpuestoMag(self.articulo.tipoImpuestoMag,1)
-        $("#formulario").validate(reglasDeValidacion());     
+        $("#formulario").validate(reglasDeValidacion());   
+        $('.selectMarca').val(self.articulo.marca.id)  
+         $('.selectMarca').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+                $('.selectMarca').selectpicker('refresh');
        
     }  
     //Entrada
@@ -1145,10 +1155,10 @@ function LimpiarArticulo(){
    $('.selectTipoCodigo').prop("selectedIndex", 0);
    $('.selectTipoCodigo1').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
-   $('.selectMarca').prop("selectedIndex", 0);
+   //$('.selectMarca').prop("selectedIndex", 0);
    $('.selectCategoria').prop("selectedIndex", 0);
    $("#categoria").val($("#categoria option:first").val()); 
-   $("#marca").val($("#marca option:first").val()); 
+  // $("#marca").val($("#marca option:first").val()); 
    $("#unidadMedida").val($("#unidadMedida option:first").val()); 
    $("#contable").val($("#contable option:first").val()); 
    $('.codigo').val(null)
