@@ -52,42 +52,42 @@ import com.google.common.base.Function;
 @Controller
 public class CajasController {
 
-	private static final Function<Object, CajaCommand>	TO_COMMAND	= new Function<Object, CajaCommand>() {
+	private static final Function<Object, CajaCommand>								TO_COMMAND								= new Function<Object, CajaCommand>() {
 
-																																		@Override
-																																		public CajaCommand apply(Object f) {
-																																			return new CajaCommand((Caja) f);
-																																		};
-																																	};
+																																																@Override
+																																																public CajaCommand apply(Object f) {
+																																																	return new CajaCommand((Caja) f);
+																																																};
+																																															};
 	private static final Function<Object, SalidaEntradaDineroCommand>	TO_COMMAND_ENTRADA_SALIDA	= new Function<Object, SalidaEntradaDineroCommand>() {
 
-																																		@Override
-																																		public SalidaEntradaDineroCommand apply(Object f) {
-																																			return new SalidaEntradaDineroCommand((SalidaEntradaDinero) f);
-																																		};
-																																	};
+																																																@Override
+																																																public SalidaEntradaDineroCommand apply(Object f) {
+																																																	return new SalidaEntradaDineroCommand((SalidaEntradaDinero) f);
+																																																};
+																																															};
 
 	@Autowired
-	private DataTableBo																	dataTableBo;
+	private DataTableBo																								dataTableBo;
 
 	@Autowired
-	private CajaBo																			cajaBo;
+	private CajaBo																										cajaBo;
 
 	@Autowired
-	private UsuarioCajaBo																usuarioCajaBo;
+	private UsuarioCajaBo																							usuarioCajaBo;
 	@Autowired
-	private SalidaEntradaDineroBo  salidaEntradaDineroBo;
+	private SalidaEntradaDineroBo																			salidaEntradaDineroBo;
 
 	@Autowired
-	private UsuarioBo																		usuarioBo;
+	private UsuarioBo																									usuarioBo;
 	@Autowired
-	private ValidateTokenBo validateTokenBo;
+	private ValidateTokenBo																						validateTokenBo;
 
 	@Autowired
-	private EmpresaPropertyEditor												empresaPropertyEditor;
+	private EmpresaPropertyEditor																			empresaPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor												stringPropertyEditor;
+	private StringPropertyEditor																			stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -140,50 +140,45 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarEntradasOrSalidas(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) {
 
-	
-
-		return listarEntradasOrSalidasT(request, response,  idTipoEntrada,  idEntradaSalida);
+		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/listarEntradasOrSalidas.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarEntradasOrSalidasLocal(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) throws IOException, ServletException {
-		
+
 		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
 		if (validateTokenBo.validarTokenApis(request) == false) {
 
 			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 		}
-		return listarEntradasOrSalidasT(request, response,  idTipoEntrada,  idEntradaSalida);
+		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
-	
-	
-	
+
 	@SuppressWarnings("unused")
-	private  RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request,
-			HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
+	private RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request, HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-    if(idEntradaSalida != null) {
-    	SalidaEntradaDinero salidaEntradaDinero = salidaEntradaDineroBo.findById(idEntradaSalida);
-    	if(salidaEntradaDinero != null) {
-    		salidaEntradaDineroBo.eliminar(salidaEntradaDinero);
-    	}
-    }
+		if (idEntradaSalida != null) {
+			SalidaEntradaDinero salidaEntradaDinero = salidaEntradaDineroBo.findById(idEntradaSalida);
+			if (salidaEntradaDinero != null) {
+				salidaEntradaDineroBo.eliminar(salidaEntradaDinero);
+			}
+		}
 		UsuarioCaja usuarioCaja = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 		if (usuarioCaja != null) {
 			delimitadores = new DataTableDelimitador(request, "SalidaEntradaDinero");
-			
+
 			JqGridFilter dataTableFilter = new JqGridFilter("tipo", "'" + idTipoEntrada.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 
 			dataTableFilter = new JqGridFilter("usuariocaja.id", "'" + usuarioCaja.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-			
+
 		}
 
-		return usuarioCaja == null?null:UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_ENTRADA_SALIDA);
+		return usuarioCaja == null ? null : UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_ENTRADA_SALIDA);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -191,8 +186,7 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarCajasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
-
-		return listarCajasActivasAjaxT( request,  response);
+		return listarCajasActivasAjaxT(request, response);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -204,36 +198,35 @@ public class CajasController {
 
 			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 		}
-		return listarCajasActivasAjaxT( request,  response);
+		return listarCajasActivasAjaxT(request, response);
 	}
-	
+
 	public RespuestaServiceDataTable<?> listarCajasActivasAjaxT(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Caja");
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		if (usuarioBo.isUsuario_Condominio(usuario) && usuarioBo.isAdministrador_sistema(usuario) && usuarioBo.isAdministrador_empresa(usuario) && usuarioBo.isAdministrador_restaurante(usuario)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AgregarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 
-		
 		try {
-			
-			
+
 			return cajaBo.agregar(request, caja, result);
 
 		} catch (Exception e) {
@@ -246,9 +239,8 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceValidator agregarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 
-		
 		try {
-			
+
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
@@ -259,13 +251,12 @@ public class CajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			
 
 			return cajaBo.modificar(request, caja, result);
 
@@ -273,6 +264,7 @@ public class CajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/ModificarCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -280,8 +272,7 @@ public class CajasController {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 
 			return cajaBo.modificar(request, caja, result);
@@ -290,6 +281,7 @@ public class CajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	/**
 	 * Mostrar una caja
 	 * @param request
@@ -305,7 +297,6 @@ public class CajasController {
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			
 
 			return cajaBo.mostrar(request, caja);
 
@@ -313,15 +304,14 @@ public class CajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/MostrarCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Caja caja, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return cajaBo.mostrar(request, caja);
 

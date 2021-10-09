@@ -8,10 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,15 +23,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import com.emprendesoftcr.repository.UsuarioRepository;
 import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 
 @EnableJpaRepositories(basePackageClasses = UsuarioRepository.class)
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Import(SecurityProblemSupport.class)
+@Configuration	
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -88,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/local/MostrarCajaAjax.do").authenticated()
 				.antMatchers("/local/AgregarSalidaEntradaDineroAjax.do").authenticated()
 				.antMatchers("/api/authenticate").permitAll()
-				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/indicadores/tc").permitAll()

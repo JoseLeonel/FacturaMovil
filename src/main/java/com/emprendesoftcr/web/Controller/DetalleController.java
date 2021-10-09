@@ -307,7 +307,7 @@ public class DetalleController {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/retotalizarVentaMAG.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/retotalizarVentaMAG.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<?> retotalizarVentaMAG(HttpServletRequest request, HttpServletResponse response, @RequestParam String detalleFactura,@RequestParam Integer acionRetoralizar ) throws Exception {
 
@@ -327,9 +327,9 @@ public class DetalleController {
 				
 				if(articulo != null) {
 					if(acionRetoralizar.equals(Constantes.RETOTALIZA_MAG_SI)) {
-						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuestoMag() !=null && !articulo.getTipoImpuestoMag().equals(Constantes.EMPTY)?articulo.getTipoImpuestoMag():articulo.getTipoImpuesto());
-						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifaMag() !=null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? articulo.getCodigoTarifaMag() : articulo.getCodigoTarifa());
-						detalleFacturaCommand.setImpuesto(articulo.getCodigoTarifaMag() !=null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY)  ?  Constantes.CODIGO_IMPUESTO_1_PORCIENTO : articulo.getImpuesto() );
+						detalleFacturaCommand.setTipoImpuesto("01");
+						detalleFacturaCommand.setCodigoTarifa(Constantes.CODIGO_TARIFA_1_PORCIENTO);
+						detalleFacturaCommand.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO  );
 					}else {
 						detalleFacturaCommand.setTipoImpuesto(articulo.getTipoImpuesto());
 						detalleFacturaCommand.setCodigoTarifa(articulo.getCodigoTarifa());

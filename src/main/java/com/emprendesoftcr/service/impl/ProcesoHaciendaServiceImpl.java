@@ -710,7 +710,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-//					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 //					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);

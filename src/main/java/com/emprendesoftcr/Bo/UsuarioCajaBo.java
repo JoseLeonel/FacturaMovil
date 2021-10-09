@@ -3,11 +3,15 @@ package com.emprendesoftcr.Bo;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.web.command.DenominacionCommand;
 
 public interface UsuarioCajaBo {
@@ -34,4 +38,6 @@ public interface UsuarioCajaBo {
 	Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado);
 	
 	void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo)throws Exception;
+	
+	RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception ;
 }

@@ -2836,7 +2836,10 @@ this.__TotalDeDescuento = function(e){
     __calculate()
 }.bind(this)
 
-this._AtrasFacturaFinal = function(){
+_AtrasFacturaFinal(){
+    self.totalCambioPagarSTR = 0
+    self.totalCambioPagar = 0
+    self.factura.totalCambioPagar = 0
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaFactura = true
    self.cantidadEnterFacturar = 0
@@ -2844,7 +2847,7 @@ this._AtrasFacturaFinal = function(){
    self.error = false
    self.update()
    getPosicionInputCodigo()
-}.bind(this)
+}
 
 /**
 Asignar el tipo de documento a la factura
@@ -3960,7 +3963,7 @@ function retotalizarMAG(valor){
         url: "retotalizarVentaMAG.do",
         datatype: "json",
         data: datos,
-        method:"GET",
+        method:"POST",
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {

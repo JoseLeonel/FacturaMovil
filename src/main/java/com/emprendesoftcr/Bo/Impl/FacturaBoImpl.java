@@ -874,12 +874,11 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 
 			if(siClienteAgro == true) {
-				detalle.setCodigoTarifaMag(articulo.getCodigoTarifaMag() != null ? articulo.getCodigoTarifaMag() : Constantes.EMPTY);
-				detalleFacturaCommand.setTipoImpuestoMag(detalleFacturaCommand.getTipoImpuestoMag() != null ? detalleFacturaCommand.getTipoImpuestoMag() : Constantes.EMPTY);
-				detalle.setImpuestoMag( articulo.getCodigoTarifaMag() != null && !articulo.getCodigoTarifaMag().equals(Constantes.EMPTY) ? Constantes.CODIGO_IMPUESTO_1_PORCIENTO : Constantes.ZEROS_DOUBLE);
-				if (!detalle.getCodigoTarifaMag().equals(Constantes.EMPTY) && factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					detalle.setCodigoTarifa(detalle.getCodigoTarifaMag());
-				}
+				detalle.setImpuestoMag( Constantes.CODIGO_IMPUESTO_1_PORCIENTO );
+				detalleFacturaCommand.setTipoImpuestoMag("01");
+				detalleFacturaCommand.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO  );
+				detalle.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO);
+				detalle.setCodigoTarifa(Constantes.CODIGO_TARIFA_1_PORCIENTO);
 			}else {
 				detalle.setCodigoTarifaMag(Constantes.EMPTY);
 				detalleFacturaCommand.setTipoImpuestoMag(Constantes.EMPTY);
