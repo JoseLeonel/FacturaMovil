@@ -39,6 +39,7 @@ public class FEMensajeReceptorAutomaticoDaoImpl implements FEMensajeReceptorAuto
 	public FEMensajeReceptorAutomatico buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from FEMensajeReceptorAutomatico obj where obj.id = :id");
 		query.setParameter("id", id);
+		@SuppressWarnings("unchecked")
 		List<FEMensajeReceptorAutomatico> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (FEMensajeReceptorAutomatico) results.get(0);

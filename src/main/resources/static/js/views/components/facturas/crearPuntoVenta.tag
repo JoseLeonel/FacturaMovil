@@ -252,7 +252,7 @@
                                         <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" autocomplete="off">
                                     </div> 
                                     <div  class="form-group " >
-                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")}/SINPE </label> 
+                                        <label class="{labelTotales} ">Banco/SINPE </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}"  autocomplete="off">
                                     </div>
                                     
@@ -4333,39 +4333,40 @@ function __Teclas(tecla,event){
       }
       resultado = __valorNumerico($(".totalTarjeta").val())
       if(resultado > 0){
-        self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
-        self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
+        self.factura.totalBanco = resultado
+        self.factura.totalEfectivo = 0
         self.factura.totalTarjeta = 0
         self.update()
-        if(self.empresa.pantChino == 0){
+       // if(self.empresa.pantChino == 0){
             $(".totalEfectivo").val(null)
             $(".totalTarjeta").val(null)
             $(".totalBanco").val(self.factura.totalBanco)
             $('.totalBanco').select()
             $('.totalBanco').focus()
 
-        }else{
-            $(".totalBanco").val(null)
-            $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
-            seleccionarEfectivo()
-        }
+        //}else{
+        //    $(".totalBanco").val(null)
+        //    $(".totalTarjeta").val(null)
+        //    $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
+        //    seleccionarEfectivo()
+      //  }
         return
       }
-      if(self.empresa.pantChino == 0){
-        resultado = __valorNumerico($(".totalBanco").val())
-        if(resultado > 0){
-            self.factura.totalEfectivo = resultado
-            self.factura.totalBanco = 0
-            self.factura.totalTarjeta = 0
-            self.update()
-            $(".totalBanco").val(null)
-            $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
-            seleccionarEfectivo()
-            return
-        }
-      }else{
+      //if(self.empresa.pantChino == 0){
+      //  resultado = __valorNumerico($(".totalBanco").val())
+      //  if(resultado > 0){
+      //      self.factura.totalEfectivo = resultado
+      //      self.factura.totalBanco = 0
+      //      self.factura.totalTarjeta = 0
+      //      self.update()
+      //      $(".totalBanco").val(null)
+      //      $(".totalTarjeta").val(null)
+      //      $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
+     //       seleccionarEfectivo()
+     //       return
+     //   }
+     // }
+      //else{
         resultado = __valorNumerico($(".totalEfectivo").val())
         if(resultado > 0){
             self.factura.totalEfectivo = resultado
@@ -4379,7 +4380,7 @@ function __Teclas(tecla,event){
             return
         }
 
-      }
+      //}
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
         self.factura.totalBanco = 0
         self.factura.totalTarjeta = 0

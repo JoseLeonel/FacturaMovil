@@ -244,6 +244,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response, String codigoArt, String nombreUsuario) {
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -479,6 +480,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				}
 				articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
 			}
+			articuloBd.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);

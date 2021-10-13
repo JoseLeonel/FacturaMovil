@@ -168,6 +168,7 @@ public class Articulo implements Serializable {
 
 	@Column(name = "tipo_facturar", columnDefinition = "INT default '0'")
 	private Integer						tipoFacturar;
+	@Column(name = "precio_sugerido")
 	private Double precioSugerido;
 
 	public Articulo() {

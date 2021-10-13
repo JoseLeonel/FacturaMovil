@@ -73,7 +73,6 @@ import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.ComprasSinIngresarInventarioCommand;
-import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraSinIngresaCommand;
 import com.emprendesoftcr.web.command.EtiquetasCommand;
@@ -251,11 +250,10 @@ public class ComprasController {
 		return respuestaService;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	@RequestMapping(value = "/listarRecepcionComprasAceptadas.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionComprasAceptaas(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "cedulaProveedor", required = false) String cedulaProveedor) {
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+	public RespuestaServiceDataTable<?> listarRecepcionComprasAceptaas(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "cedulaProveedor", required = false) String cedulaProveedor) {
 		// Se obtiene los totales
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "FEMensajeReceptorAutomatico");
@@ -1271,7 +1269,6 @@ public class ComprasController {
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Integer selectActividadComercial) {
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
 
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
@@ -1279,26 +1276,26 @@ public class ComprasController {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
 		}
-		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-		// Se buscan las facturas
-		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		if (fechaInicio != null) {
-			if (fechaFin != null) {
-				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
-			}
-		}
-
-		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
-		String inicio1 = dateFormat1.format(fechaInicio);
-		String fin1 = dateFormat2.format(fechaFin);
-		Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
-		List<ConsultaComprasIvaCommand> lista = new ArrayList<ConsultaComprasIvaCommand>();
-		for (CompraIVA compraIVA : recepcionFacturas) {
-			ConsultaComprasIvaCommand consultaComprasIvaCommand = new ConsultaComprasIvaCommand();
-//		  	consultaComprasIvaCommand.setCodTarifa(codTarifa);
-
-		}
+//		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+//		// Se buscan las facturas
+//		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+//		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+//		if (fechaInicio != null) {
+//			if (fechaFin != null) {
+//				fechaFin = Utils.sumarDiasFecha(fechaFin, 0);
+//			}
+//		}
+//
+//		DateFormat dateFormat2 = new SimpleDateFormat(Constantes.DATE_FORMAT8);
+//		String inicio1 = dateFormat1.format(fechaInicio);
+//		String fin1 = dateFormat2.format(fechaFin);
+//		Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+//		List<ConsultaComprasIvaCommand> lista = new ArrayList<ConsultaComprasIvaCommand>();
+//		for (CompraIVA compraIVA : recepcionFacturas) {
+//			ConsultaComprasIvaCommand consultaComprasIvaCommand = new ConsultaComprasIvaCommand();
+////		  	consultaComprasIvaCommand.setCodTarifa(codTarifa);
+//
+//		}
 //		String inicio1 = dateFormat1.format(fechaInicio);
 //		String fin1 = dateFormat1.format(fechaFinalP);
 //

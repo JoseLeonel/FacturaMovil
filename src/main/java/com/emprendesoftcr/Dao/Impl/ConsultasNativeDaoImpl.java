@@ -641,6 +641,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<CompraIVA> findBySumComprasIVAResumen(Empresa empresa, String fechaInicial, String fechaFinal) {
 		String queryStr = getQueryBase(CompraIVA.class);

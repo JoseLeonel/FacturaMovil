@@ -70,26 +70,25 @@ public class ArticuloCommand {
 
 	private String			codigoTarifa;
 	private String			codigoTarifaMag;
-	private Integer						baseImponible;
-	private Double cantidad1;
-	private String						codigoCabys;
-	private Integer						cantidadPaquete;
-	private Double cantidaProducto;
-	private Double montoTotalLinea;
-
-	
-	
+	private Integer			baseImponible;
+	private Double			cantidad1;
+	private String			codigoCabys;
+	private Integer			cantidadPaquete;
+	private Double			cantidaProducto;
+	private Double			montoTotalLinea;
+	private Double			precioSugerido;
 
 	public ArticuloCommand(ArticuloMinimoNative articuloMinimoNative) {
 		super();
 		this.id = articuloMinimoNative.getId();
 		this.codigo = articuloMinimoNative.getCodigo();
 		this.descripcion = articuloMinimoNative.getDescripcion();
-				this.minimo = articuloMinimoNative.getMinimo();
-				this.cantidad1 =articuloMinimoNative.getCantidad();
-				this.cantidaProducto =Constantes.ZEROS_DOUBLE;
-		
+		this.minimo = articuloMinimoNative.getMinimo();
+		this.cantidad1 = articuloMinimoNative.getCantidad();
+		this.cantidaProducto = Constantes.ZEROS_DOUBLE;
+
 	}
+
 	public ArticuloCommand(Articulo articulo) {
 		super();
 		this.id = articulo.getId();
@@ -146,41 +145,34 @@ public class ArticuloCommand {
 		this.codigoCabys = articulo.getCodigoCabys();
 		this.codigoSecundario = articulo.getCodigoSecundario();
 		this.cantidadPaquete = articulo.getCantidadPaquete();
-		
-		this.cantidaProducto =Constantes.ZEROS_DOUBLE;
 
+		this.cantidaProducto = Constantes.ZEROS_DOUBLE;
+		this.precioSugerido = articulo.getPrecioSugerido();
 	}
-	
 
-	
-	
 	public String getCodigoCabys() {
 		return codigoCabys;
 	}
-	
+
 	public void setCodigoCabys(String codigoCabys) {
 		this.codigoCabys = codigoCabys;
 	}
+
 	public Integer getBaseImponible() {
 		return baseImponible;
 	}
 
-
-
-	
-	
 	public Double getCantidad1() {
 		return cantidad1;
 	}
-	
+
 	public void setCantidad1(Double cantidad1) {
 		this.cantidad1 = cantidad1;
 	}
+
 	public void setBaseImponible(Integer baseImponible) {
 		this.baseImponible = baseImponible;
 	}
-
-
 
 	public Integer getPrioridad() {
 		return prioridad;
@@ -297,11 +289,12 @@ public class ArticuloCommand {
 	public void setPrecioPublico(Double precioPublico) {
 		this.precioPublico = precioPublico;
 	}
+
 	public String getPrecioPublicoformato() {
-		return  this.precioPublico != null ?this.precioPublico > 1d ? Utils.formateadorMiles(this.precioPublico) : this.precioPublico+"":"0";
-		
+		return this.precioPublico != null ? this.precioPublico > 1d ? Utils.formateadorMiles(this.precioPublico) : this.precioPublico + "" : "0";
+
 	}
-	
+
 	public Double getGananciaPrecioPublico() {
 		return gananciaPrecioPublico;
 	}
@@ -573,42 +566,45 @@ public class ArticuloCommand {
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}
-	
+
 	public String getCodigoSecundario() {
 		return codigoSecundario;
 	}
-	
+
 	public void setCodigoSecundario(String codigoSecundario) {
 		this.codigoSecundario = codigoSecundario;
 	}
-	
+
 	public Integer getCantidadPaquete() {
 		return cantidadPaquete;
 	}
-	
+
 	public void setCantidadPaquete(Integer cantidadPaquete) {
 		this.cantidadPaquete = cantidadPaquete;
 	}
-	
-	
-	
-	
+
 	public Double getCantidaProducto() {
-		return cantidaProducto == null?Constantes.ZEROS_DOUBLE:cantidaProducto;
+		return cantidaProducto == null ? Constantes.ZEROS_DOUBLE : cantidaProducto;
 	}
-	
+
 	public void setCantidaProducto(Double cantidaProducto) {
 		this.cantidaProducto = cantidaProducto;
 	}
-	
+
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
-	
+
 	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
-	
-	
+
+	public Double getPrecioSugerido() {
+		return precioSugerido;
+	}
+
+	public void setPrecioSugerido(Double precioSugerido) {
+		this.precioSugerido = precioSugerido;
+	}
 
 }

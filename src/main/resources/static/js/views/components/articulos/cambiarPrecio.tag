@@ -9,7 +9,8 @@
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
                             <input type="hidden" name="id" id="id" value="{articulo.id}" >
-                            
+                             <input type="hidden" name="categoria" id="categoria" value="{articulo.categoria.id}">
+                             <input type="hidden" name="marca" id="marca" value="{articulo.marca.id}">
                             <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
                             <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
@@ -49,9 +50,7 @@
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                                    <select  class="campo selectCategoria"   name="categoria"  data-live-search="true">
-                                                        <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
-                                                    </select>
+                                                    <input type="text" class="form-control campoNumerico " id="descripcionCategoria" name="descripcionCategoria" value="{articulo.categoria.descripcion}"  onclick={__ConsultaCategorias}  autocomplete="off">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -115,9 +114,7 @@
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                                    <select  class="campo selectMarca"  name="marca" data-live-search="true">
-                                                        <option  each={marcas.aaData}  value="{id}" data-tokens ={descripcion} selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
-                                                    </select>
+                                                    <input type="text" class="form-control campoNumerico " id="descripcionMarca" name="descripcionMarca" value="{articulo.marca.descripcion}"  onclick={__ConsultaMarcas}  autocomplete="off">
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
@@ -237,7 +234,62 @@
     </div>
 </div>
 
+<!--Modal mostrar marcas -->
+<div id='modalMarcas' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Marcas </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListarMarca" class="table responsive display table-striped table-hover nowrap tableListarMarca "  >
+                    <thead>
+                        <th class="table-header"  >{$.i18n.prop("listado.acciones")}</th>
+                        <th class="table-header"  >{$.i18n.prop("articulo.descripcion")}</th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr class="headt">
+                            <th style="width:5%"></th>
+                            <th style="width:100%">{$.i18n.prop("articulo.descripcion")}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>        
+        <div class="modal-footer">
+            <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
+        </div>
+     </div>
+    </div>
+</div>
 
+<!--Modal mostrar marcas -->
+<div id='modalCategorias' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Categorias </h4>
+            </div>
+             <div class="modal-body">
+                    <table id="tableListarCategoria" class="table responsive display table-striped table-hover nowrap   tableListarCategoria "  >
+                        <thead>
+                                <th class="table-header "  >{$.i18n.prop("listado.acciones")}</th>
+                                <th class="table-header "  >{$.i18n.prop("articulo.descripcion")}</th>
+                        </thead>
+                        <tfoot style="display: table-header-group;">
+                            <tr class="headt">
+                                <th style="width:5%"></th>
+                                <th style="width:100%">{$.i18n.prop("articulo.descripcion")}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+            </div>        
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style type ="text/css">
 
@@ -466,19 +518,7 @@ self.on('mount',function(){
     })
      ,5000);
 
-    setTimeout(__listadoMarcasActivas(function(resultado){
-        self.marcas.aaData =  resultado;
-        self.update();
-        $('.selectMarca').selectpicker(
-            {
-              style: 'btn-info',
-              size:10,
-              liveSearch: true
-            }
-        );
-        $('.selectMarca').selectpicker('refresh');
-    })
-     ,5000);
+    
 
 
     self.impuestos = __ComboImpuestos()
@@ -489,6 +529,8 @@ self.on('mount',function(){
     self.update() 
     LimpiarArticulo()
     __ComboCantidades();
+    __seleccionarCategorias()
+   __seleccionarMarcas()
     $('.collapse').collapse("show")
     $('.codigo').focus()
     window.addEventListener( "keydown", function(evento){
@@ -570,6 +612,133 @@ __ConsultaCodigoCabys(e){
     __ListaDeHaciendaCabys()
 }
 
+
+__ConsultaCategorias(e){
+ __listadoCategoriasActivas()
+    
+}
+
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategoriasActivas(){
+     self.categorias                = {aaData:[]}
+     self.informacion_tabla_categorias    = []
+     self.update()
+    $.ajax({
+         url: "ListarCategoriasActivasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.categorias.aaData =  result.aaData
+                self.update();
+                self.informacion_tabla_categorias =__informacionData_formato_categoria()
+                self.update()
+                loadListar(".tableListarCategoria",idioma_espanol,self.informacion_tabla_categorias,result.aaData)
+                agregarInputsCombos_categorias()
+                ActivarEventoFiltro(".tableListarCategoria")
+                
+                 $('#modalCategorias').modal('show')
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+
+function agregarInputsCombos_categorias(){
+
+    $('.tableListarCategoria tfoot th').each( function (e) {
+        var title = $('.tableListarCategoria thead th').eq($(this).index()).text();
+
+        if ( $(this).index() != 0    ){
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+}
+
+function __seleccionarCategorias() {
+     $('#tableListarCategoria').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarCategoria').DataTable();
+		if(table.row(this).child.isShown()){
+
+	       var data = table.row(this).data();
+	    }else{
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        self.categoria = data
+        self.articulo.categoria = data
+        self.update();
+        $('#modalCategorias').modal('hide')
+    });
+
+}
+
+__ConsultaMarcas(e){
+ __listadoMarcaActivas()
+    
+}
+/**
+*  Mostrar listado datatable marcas activas
+**/
+function __listadoMarcaActivas(){
+     self.marcas                = {aaData:[]}
+     self.informacion_tabla_marca    = []
+     self.update()
+    $.ajax({
+         url: "ListarMarcasActivasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.marcas.aaData =  result.aaData
+                self.update();
+                self.informacion_tabla_marca =__informacionData_formato_marca()
+                self.update()
+                loadListar(".tableListarMarca",idioma_espanol,self.informacion_tabla_marca,result.aaData)
+                agregarInputsCombos_Marca()
+                ActivarEventoFiltro(".tableListarMarca")
+                
+                 $('#modalMarcas').modal('show')
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+
+function agregarInputsCombos_Marca(){
+
+    $('.tableListarMarca tfoot th').each( function (e) {
+        var title = $('.tableListarMarca thead th').eq($(this).index()).text();
+
+        if ( $(this).index() != 0    ){
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+}
+
+function __seleccionarMarcas() {
+     $('#tableListarMarca').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarMarca').DataTable();
+		if(table.row(this).child.isShown()){
+
+	       var data = table.row(this).data();
+	    }else{
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        self.marca = data
+        self.articulo.marca = data
+        self.update();
+        $('#modalMarcas').modal('hide')
+    });
+
+}
 
 function __ListaDeHaciendaCabys(){
    // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
@@ -1141,10 +1310,7 @@ function LimpiarArticulo(){
    $('.selectTipoImpuesto1').prop("selectedIndex", 0);
    $('.selectTipoCodigo').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
-   $('.selectMarca').prop("selectedIndex", 0);
-   $('.selectCategoria').prop("selectedIndex", 0);
-   $("#categoria").val($("#categoria option:first").val()); 
-   $("#marca").val($("#marca option:first").val()); 
+  
    $("#unidadMedida").val($("#unidadMedida option:first").val()); 
    $("#contable").val($("#contable option:first").val()); 
    $('.codigo').val(null)
@@ -1169,20 +1335,7 @@ __cargarCombos(){
 * Enviar a consultar al back end 
 **/
 function enviarCargarCombos(){
-    __listadoCategoriasActivas()
-     setTimeout(__listadoMarcasActivas(function(resultado){
-        self.marcas.aaData =  resultado;
-        self.update();
-        $('.selectMarca').selectpicker(
-            {
-              style: 'btn-info',
-              size:10,
-              liveSearch: true
-            }
-        );
-        $('.selectMarca').selectpicker('refresh');
-    })
-     ,5000);
+  
 }
 /**
 *imprimir el codigo y precio
@@ -1329,36 +1482,7 @@ function __Eventos(){
 	});
 
 }
-/**
-*  Mostrar listado datatable Categorias activas
-**/
-function __listadoCategoriasActivas(){
-     self.categorias                = {aaData:[]}
-     self.update()
-    $.ajax({ 
-         url: "ListarCategoriasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.categorias.aaData =  result.aaData
-                self.update();
-                 $('.selectCategoria').selectpicker(
-                    {
-                         style: 'btn-info',
-                        size:10,
-                        liveSearch: true
-                    }
-                );
-                $('.selectCategoria').selectpicker('refresh');
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
+
 
 
 

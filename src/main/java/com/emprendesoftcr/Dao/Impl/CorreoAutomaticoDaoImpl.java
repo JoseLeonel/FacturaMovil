@@ -17,6 +17,7 @@ public class CorreoAutomaticoDaoImpl implements CorreoAutomaticoDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<CorreoAutomatico> allEmails() {
 		Query query = entityManager.createQuery("select obj from CorreoAutomatico obj");

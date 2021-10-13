@@ -53,7 +53,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -694,9 +693,9 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/ventasPorServicio", method = RequestMethod.GET)
 	public String ventasPorServicios(Device device) {
-		
-    String deviceType = "browser";
-    String platform = "browser";
+//		
+//    String deviceType = "browser";
+//    String platform = "browser";
     String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
 
 //    if (device.isNormal()) {

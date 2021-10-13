@@ -87,6 +87,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 		Workbook workbook = WorkbookFactory.create(new File("")); 
 		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		@SuppressWarnings("unused")
 		Sheet sheet = workbook.getSheetAt(0);
 		CompraVentasResumenCommand compraVentasResumenCommand = new CompraVentasResumenCommand();
 		DoubleSummaryStatistics doubleSummaryStatistics = lista.stream().collect(Collectors.summarizingDouble(CompraIVA::getMontoIva0));

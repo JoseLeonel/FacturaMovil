@@ -316,6 +316,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	
 		query.setParameter("empresa", empresa);
 		query.setParameter("codigoSecundario", codigo);
+		@SuppressWarnings("unchecked")
 		List<Articulo> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Articulo) results.get(0);

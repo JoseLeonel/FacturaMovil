@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		
 		http.authorizeRequests()
-				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
+				.antMatchers("/administrativo/**", "/static/**","/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
 						"/plugins/**", "/resources/**", "/registration")
 				.permitAll().antMatchers("/local/CrearFacturaServiceAjax").authenticated()
 				.antMatchers("/local/ListarClientes.do").authenticated()
@@ -80,10 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/local/tipoCambioBancoCentral.do").authenticated()
 				.antMatchers("/local/listarEntradasOrSalidas.do").authenticated()
 				.antMatchers("/local/ListarCajasActivasAjax.do").authenticated()
-				.antMatchers("/local/AgregarCajaAjax.do").authenticated()
-				.antMatchers("/local/ModificarCajaAjax.do").authenticated()
-				.antMatchers("/local/MostrarCajaAjax.do").authenticated()
+				.antMatchers("/local/aperturaCaja.do").authenticated()
+				.antMatchers("/local/CerrarUsuarioCajaAjax.do").authenticated()
 				.antMatchers("/local/AgregarSalidaEntradaDineroAjax.do").authenticated()
+				.antMatchers("/local/ListarCajasActivas.do").authenticated()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/").permitAll()

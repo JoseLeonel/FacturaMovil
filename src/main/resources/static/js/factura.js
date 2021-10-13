@@ -853,6 +853,60 @@ function __informacionData_formato_cliente(){
    return informacion_tabla_clientes
 }
 
+function __informacionData_formato_categoria(){
+    var informacion_tabla_categorias = [	
+							        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+								            "render":function(id,type, row){
+									            return __OpcionesCategorias(id,type,row);
+								                }	 
+							            },
+                                        {'data' : 'descripcion',"name":"descripcion" ,"title" : 'Descripcion' ,"autoWidth":true,
+    								            "render":function(id,type, row){
+    									            return row.descripcion;
+	 							                }	 
+                                        },
+                                    
+
+                                        ];                              
+   
+   return informacion_tabla_categorias;
+}
+/**
+* Opciones del modal de categorias
+*/
+function __OpcionesCategorias(){
+  var agregar  = '<a href="#"  title="Seleccionar Categoria" class="btn btnAgregar btn-success form-control" title="Seleccione categoria" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+function __informacionData_formato_marca(){
+    var informacion_tabla_marca = [	
+							        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+								            "render":function(id,type, row){
+									            return __OpcionesMarcas(id,type,row);
+								                }	 
+							            },
+                                        {'data' : 'descripcion',"name":"descripcion" ,"title" : 'Descripcion' ,"autoWidth":true,
+    								            "render":function(id,type, row){
+    									            return row.descripcion;
+	 							                }	 
+                                        },
+                                    
+
+                                        ];                              
+   
+   return informacion_tabla_marca;
+}
+/**
+* Opciones del modal de categorias
+*/
+function __OpcionesMarcas(){
+  var agregar  = '<a href="#"  title="Seleccionar Marca" class="btn btnAgregar btn-success form-control" title="Seleccione marca" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+
+
 function financial(x) {
 	if(x == null || typeof x == "undefined"  ){
         return 0;
