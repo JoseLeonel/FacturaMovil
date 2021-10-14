@@ -272,6 +272,8 @@ public class Empresa implements Serializable {
 	@Column(name = "form_epson" )
 	private Integer			formatoImpresoraEpsonTM; //0 = No 1 = Si  
 	
+	@Column(name = "vent_espera" )
+	private Integer			aplicaVentaEspera; //0 = Si aplica venta en espera  1 = No aplica  
 	
 
 	public Empresa() {
@@ -285,6 +287,7 @@ public class Empresa implements Serializable {
 		this.cambiarPrecio = Constantes.ESTADO_INACTIVO;
 		this.vueltoImprimir = Constantes.ZEROS;
 		this.formatoImpresoraEpsonTM = Constantes.ZEROS;
+		this.aplicaVentaEspera = Constantes.ZEROS;
 	}
 
 	public Integer getId() {
@@ -933,6 +936,16 @@ public class Empresa implements Serializable {
 	
 	public void setFormatoImpresoraEpsonTM(Integer formatoImpresoraEpsonTM) {
 		this.formatoImpresoraEpsonTM = formatoImpresoraEpsonTM;
+	}
+
+	
+	public Integer getAplicaVentaEspera() {
+		return aplicaVentaEspera;
+	}
+
+	
+	public void setAplicaVentaEspera(Integer aplicaVentaEspera) {
+		this.aplicaVentaEspera = aplicaVentaEspera;
 	}
 	
 	

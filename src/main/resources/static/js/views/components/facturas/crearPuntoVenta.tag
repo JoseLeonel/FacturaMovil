@@ -359,7 +359,7 @@
                            <div  class= "labelBotones"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
                         </div>
                         <div class="botonesFuncional ">
-                           <div  class= "labelBotones"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f9")}</div>
+                           <div  class= "labelBotones" show={empresa.aplicaVentaEspera == 0}   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f9")}</div>
                         </div>
                         <div class="botonesFuncional " show={mostarAbrirCajon == true} >
                            <div  class= "labelBotones"    onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("abrir.cajon")}</div>
@@ -2401,9 +2401,11 @@ __AplicarYcrearFactura(e){
 }
 
 __AplicarYcrearFacturaTemporal(e){
-
- __OpcionAbrirCajon()
- aplicarFactura(1)
+    if(self.empresa.aplicaVentaEspera == 0){
+        __OpcionAbrirCajon()
+        aplicarFactura(1)
+    }
+ 
 }
 
 function aplicarFactura(estado){
@@ -4392,7 +4394,7 @@ function __Teclas(tecla,event){
       return
     }
 
-    if(tecla ==120){
+    if(tecla ==120 && self.empresa.aplicaVentaEspera == 0){
       aplicarFactura(1)
       return
     }
