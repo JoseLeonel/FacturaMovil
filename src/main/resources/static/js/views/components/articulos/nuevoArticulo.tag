@@ -19,8 +19,11 @@
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
                 <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
+                <input type="hidden" name="esPaquete" id="esPaquete" value="0">
+                <input type="hidden" name="codigoSecundario" id="codigoSecundario" value="{articulo.codigoSecundario}">
                  <input type="hidden" name="categoria" id="categoria" value="{articulo.categoria.id}">
                 <input type="hidden" name="marca" id="marca" value="{articulo.marca.id}">
+                <input type="hidden" name="tipoFacturar" id="tipoFacturar" value="{articulo.tipoFacturar}">
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -208,12 +211,12 @@
                                             <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>     
-                                    <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                                  <!--     <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">Facturar</label>
                                         <select  class="form-control campoNumerico" id="tipoFacturar" name="tipoFacturar"  >
                                              <option  each={tipoFacturar}  value="{codigo}" selected="{articulo.tipoFacturar ==codigo?true:false}" >{descripcion}</option>
                                         </select>
-                                    </div>     
+                                    </div>      -->   
 
                                 </div>
                             
@@ -1448,10 +1451,10 @@ var reglasDeValidacion = function() {
                 minlength:1,
                 
 			},                                                
-            marca : {
+            descripcionMarca : {
 				required : true,
 			},                                                
-            categoria : {
+            descripcionCategoria : {
 				required : true,
 			},                                                
             unidadMedida : {
