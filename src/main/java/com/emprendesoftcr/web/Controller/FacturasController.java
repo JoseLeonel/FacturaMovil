@@ -4,8 +4,10 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletOutputStream;
@@ -50,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -78,6 +82,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.CompraIVA;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaUtilidadNative;
@@ -118,6 +123,7 @@ import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TikectImprimir;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.command.TotalbyImpuestosCommand;
+import com.emprendesoftcr.web.command.TotalbyResumenImpuestosCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -161,6 +167,7 @@ public class FacturasController {
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
 																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
+																																																			detalleFacturaElectronica.set_precioSugerido(d.getPrecioSugerido() == null?Constantes.ZEROS_DOUBLE:d.getPrecioSugerido());
 																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
 																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
 																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
@@ -377,7 +384,7 @@ public class FacturasController {
 	public DataSource																									dataSource;
 
 	private JdbcTemplate																							jdbcTemplate;
-
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
@@ -423,16 +430,14 @@ public class FacturasController {
 		return "views/facturas/ventaDolares";
 	}
 
-
 	@RequestMapping(value = "/ventaComprasTotal", method = RequestMethod.GET)
 	public String ventaComprasTotal(ModelMap model) {
 		return "views/facturas/VentasComprasTotal";
 	}
 
-	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarTikect1.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model,@RequestParam(value="subTotalGeneralSTR", required = false) String subTotalGeneralSTR,@RequestParam(value="totalImpuestoRestSTR", required = false) String totalImpuestoRestSTR,  @RequestParam("idFactura") Long idFactura,@RequestParam(value="impServicioTotalSTR", required = false) String impServicioTotalSTR,@RequestParam(value="totalComprobanteSTR", required = false) String totalComprobanteSTR,@RequestParam(value="totalDescuentosProformaREstSTR", required = false) String totalDescuentosProformaREstSTR,@RequestParam("tipoFactura") Integer tipoFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
+	public void GenerarTikete(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam(value = "subTotalGeneralSTR", required = false) String subTotalGeneralSTR, @RequestParam(value = "totalImpuestoRestSTR", required = false) String totalImpuestoRestSTR, @RequestParam("idFactura") Long idFactura, @RequestParam(value = "impServicioTotalSTR", required = false) String impServicioTotalSTR, @RequestParam(value = "totalComprobanteSTR", required = false) String totalComprobanteSTR, @RequestParam(value = "totalDescuentosProformaREstSTR", required = false) String totalDescuentosProformaREstSTR, @RequestParam("tipoFactura") Integer tipoFactura, @ModelAttribute TikectImprimir tikectImprimir1, BindingResult result, SessionStatus status) throws Exception {
 		List<TikectImprimir> lista = new ArrayList<>();
 		Factura factura = facturaBo.findById(idFactura);
 		Collection<Detalle> detalles = detalleBo.findbyIdFactura(idFactura);
@@ -447,12 +452,9 @@ public class FacturasController {
 			lista.add(tikectImprimir);
 
 		}
-		Map<String, Object> parametros = getParametroReportes(factura,tipoFactura,subTotalGeneralSTR,totalImpuestoRestSTR,
-				impServicioTotalSTR,
-				totalComprobanteSTR,
-				totalDescuentosProformaREstSTR);
+		Map<String, Object> parametros = getParametroReportes(factura, tipoFactura, subTotalGeneralSTR, totalImpuestoRestSTR, impServicioTotalSTR, totalComprobanteSTR, totalDescuentosProformaREstSTR);
 
-		InputStream reportFile = getObtienePDF(factura,tipoFactura);
+		InputStream reportFile = getObtienePDF(factura, tipoFactura);
 		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
 		JsonDataSource ds = new JsonDataSource(jsonDataStream);
 		byte[] bytes = JasperRunManager.runReportToPdf(reportFile, parametros, ds);
@@ -470,17 +472,16 @@ public class FacturasController {
 
 	}
 
-	private InputStream getObtienePDF(Factura factura,Integer tipoFactura) {
+	private InputStream getObtienePDF(Factura factura, Integer tipoFactura) {
 		InputStream reportFile = null;
 		try {
-		    if(tipoFactura.equals(1)) {
-		    	reportFile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");	
-		    }
-		    if(tipoFactura.equals(2)) {
-		    	reportFile = getClass().getResourceAsStream("/reportes/factura/proformaRestaurante.jasper");	
-		    }
-		    
-		
+			if (tipoFactura.equals(1)) {
+				reportFile = getClass().getResourceAsStream("/reportes/factura/tikect.jasper");
+			}
+			if (tipoFactura.equals(2)) {
+				reportFile = getClass().getResourceAsStream("/reportes/factura/proformaRestaurante.jasper");
+			}
+
 		} catch (Exception e) {
 			log.info("** Error  getObtienePDF: " + e.getMessage() + " fecha " + new Date());
 
@@ -488,7 +489,8 @@ public class FacturasController {
 		}
 		return reportFile;
 	}
-	private String obtenerTipoDocumento(Factura factura ) {
+
+	private String obtenerTipoDocumento(Factura factura) {
 		String resultado = Constantes.EMPTY;
 		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 			resultado = "Factura Electronica 4.3";
@@ -496,7 +498,7 @@ public class FacturasController {
 		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 			resultado = "Tiquete Electronico 4.3";
 		}
-		
+
 		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 			resultado = "Nota credito";
 		}
@@ -509,22 +511,20 @@ public class FacturasController {
 		if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			resultado = "Nota credito Electronico 4.3";
 		}
-		if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+		if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 			resultado = "Tiquete";
 		}
-		
-		
+
 		return resultado;
 	}
 
-	private Map<String, Object> getParametroReportes(Factura factura,Integer tipoFactura,String subTotalGeneralSTR,String totalImpuestoRestSTR
-			,String impServicioTotalSTR,String	totalComprobanteSTR,String totalDescuentosProformaREstSTR) {
+	private Map<String, Object> getParametroReportes(Factura factura, Integer tipoFactura, String subTotalGeneralSTR, String totalImpuestoRestSTR, String impServicioTotalSTR, String totalComprobanteSTR, String totalDescuentosProformaREstSTR) {
 		Map<String, Object> parametros;
 		parametros = new HashMap<>();
 		try {
 
 			Integer nofactura_elec = factura.getEmpresa().getNoFacturaElectronica() != null ? factura.getEmpresa().getNoFacturaElectronica() : Constantes.ZEROS;
-			
+
 			parametros.put("P_titulo_electronico", obtenerTipoDocumento(factura));
 			parametros.put("P_documento_electronico", MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc()));
 			parametros.put("P_regimen", nofactura_elec.equals(Constantes.ZEROS) ? "Régimen Simplificado" : "Régimen Tradicional");
@@ -550,30 +550,29 @@ public class FacturasController {
 			String clave1 = factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? factura.getClave() : Constantes.EMPTY;
 			parametros.put("P_clave1", clave1);
 			parametros.put("P_nota", factura.getNota() != null && !factura.getNota().equals(Constantes.EMPTY) ? factura.getNota() : Constantes.EMPTY);
-			
-			if(tipoFactura.equals(2)) {
-				
-				parametros.put("P_NOMBRE_FACTURA",factura.getNombreFactura() != null?factura.getNombreFactura():Constantes.EMPTY);
-				parametros.put("P_PROFORMA","#"+factura.getId());
-				
+
+			if (tipoFactura.equals(2)) {
+
+				parametros.put("P_NOMBRE_FACTURA", factura.getNombreFactura() != null ? factura.getNombreFactura() : Constantes.EMPTY);
+				parametros.put("P_PROFORMA", "#" + factura.getId());
+
 				parametros.put("P_total_general", "Total:" + totalComprobanteSTR);
-				parametros.put("P_total_impuesto","              IVA:"+ totalImpuestoRestSTR);
-				parametros.put("P_impuesto_servicio","	Servicio(10%):"+ impServicioTotalSTR);
-				parametros.put("P_descuento","                Desc:"+ totalDescuentosProformaREstSTR);
-				parametros.put("P_subTotal", "         SubTotal:" +subTotalGeneralSTR);
-			}else {
+				parametros.put("P_total_impuesto", "              IVA:" + totalImpuestoRestSTR);
+				parametros.put("P_impuesto_servicio", "	Servicio(10%):" + impServicioTotalSTR);
+				parametros.put("P_descuento", "                Desc:" + totalDescuentosProformaREstSTR);
+				parametros.put("P_subTotal", "         SubTotal:" + subTotalGeneralSTR);
+			} else {
 				parametros.put("P_subTotal", "         SubTotal:" + factura.getSubTotalSTR());
 				parametros.put("P_total_general", "               Total:" + factura.getTotalComprobanteSTR());
 				String impuesto = factura.getTotalImpuesto() != null && factura.getTotalImpuesto() > Constantes.ZEROS_DOUBLE ? "              IVA:" + factura.getTotalImpuestoSTR() : Constantes.EMPTY;
 				parametros.put("P_total_impuesto", impuesto);
-				parametros.put("P_impuesto_servicio", factura.getTotalImpuestoServicio() != null && factura.getTotalImpuestoServicio() > Constantes.ZEROS_DOUBLE?"	Servicio(10%):"+factura.getTotalImpuestoServicioSTR():Constantes.EMPTY);
+				parametros.put("P_impuesto_servicio", factura.getTotalImpuestoServicio() != null && factura.getTotalImpuestoServicio() > Constantes.ZEROS_DOUBLE ? "	Servicio(10%):" + factura.getTotalImpuestoServicioSTR() : Constantes.EMPTY);
 				String descuento = factura.getTotalDescuentos() != null && factura.getTotalDescuentos() > Constantes.ZEROS_DOUBLE ? "                Desc:" + factura.getTotalDescuentoSTR() : Constantes.EMPTY;
 				parametros.put("P_descuento", descuento);
 
 			}
-			
-			
-			parametros.put("P_cambio","           Cambio:"+ factura.getMontoCambioSTR());
+
+			parametros.put("P_cambio", "           Cambio:" + factura.getMontoCambioSTR());
 			parametros.put("P_correo", factura.getEmpresa().getCorreoElectronico());
 			parametros.put("P_telefono", factura.getEmpresa().getTelefono().toString());
 			parametros.put("P_nombreFactura", obtenerNombreCliente(factura));
@@ -583,23 +582,21 @@ public class FacturasController {
 			String exoneracion = factura.getTotalExonerado() != null && factura.getTotalExonerado() > Constantes.ZEROS_DOUBLE ? "Exoneracion(-):" + factura.getTotalExoneradoSTR() : Constantes.EMPTY;
 			parametros.put("P_total_exoneracion", exoneracion);
 			parametros.put("P_ref_documento", obtenerReferenciaDocumento(factura));
-			
+
 			parametros.put("P_parrafoOficialHacienda", obtenerParrafoOficial(factura));
-			
-			parametros.put("P_cuenta_titulo",factura.getEmpresa().getCuenta1() != null && !factura.getEmpresa().getCuenta1().equals(Constantes.EMPTY)? "---Transferencias Bancarias---":Constantes.EMPTY);
-			parametros.put("P_cuenta_uno", factura.getEmpresa().getCuenta1() != null ?factura.getEmpresa().getCuenta1():Constantes.EMPTY);
-			parametros.put("P_cuenta_dos", factura.getEmpresa().getCuenta2() != null ?factura.getEmpresa().getCuenta2():Constantes.EMPTY);
-			parametros.put("P_cuenta_tres", factura.getEmpresa().getCuenta3() != null ?factura.getEmpresa().getCuenta3():Constantes.EMPTY);
-			parametros.put("P_cuenta_cuatro", factura.getEmpresa().getCuenta4() != null ?factura.getEmpresa().getCuenta4():Constantes.EMPTY);
-			parametros.put("P_cuenta_cinco", factura.getEmpresa().getCuenta5() != null ?factura.getEmpresa().getCuenta5():Constantes.EMPTY);
-			parametros.put("P_cuenta_seis", factura.getEmpresa().getCuenta6() != null ?factura.getEmpresa().getCuenta6():Constantes.EMPTY);
-			parametros.put("P_cuenta_siete", factura.getEmpresa().getCuenta7() != null ?factura.getEmpresa().getCuenta7():Constantes.EMPTY);
-			parametros.put("P_titulo_clave", factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY)?"Clave":Constantes.EMPTY);
-			
-			
-			parametros.put("P_Mesa",factura.getMesa() != null?factura.getMesa().getDescripcion():Constantes.EMPTY);
-			
-			
+
+			parametros.put("P_cuenta_titulo", factura.getEmpresa().getCuenta1() != null && !factura.getEmpresa().getCuenta1().equals(Constantes.EMPTY) ? "---Transferencias Bancarias---" : Constantes.EMPTY);
+			parametros.put("P_cuenta_uno", factura.getEmpresa().getCuenta1() != null ? factura.getEmpresa().getCuenta1() : Constantes.EMPTY);
+			parametros.put("P_cuenta_dos", factura.getEmpresa().getCuenta2() != null ? factura.getEmpresa().getCuenta2() : Constantes.EMPTY);
+			parametros.put("P_cuenta_tres", factura.getEmpresa().getCuenta3() != null ? factura.getEmpresa().getCuenta3() : Constantes.EMPTY);
+			parametros.put("P_cuenta_cuatro", factura.getEmpresa().getCuenta4() != null ? factura.getEmpresa().getCuenta4() : Constantes.EMPTY);
+			parametros.put("P_cuenta_cinco", factura.getEmpresa().getCuenta5() != null ? factura.getEmpresa().getCuenta5() : Constantes.EMPTY);
+			parametros.put("P_cuenta_seis", factura.getEmpresa().getCuenta6() != null ? factura.getEmpresa().getCuenta6() : Constantes.EMPTY);
+			parametros.put("P_cuenta_siete", factura.getEmpresa().getCuenta7() != null ? factura.getEmpresa().getCuenta7() : Constantes.EMPTY);
+			parametros.put("P_titulo_clave", factura.getClave() != null && !factura.getClave().equals(Constantes.EMPTY) ? "Clave" : Constantes.EMPTY);
+
+			parametros.put("P_Mesa", factura.getMesa() != null ? factura.getMesa().getDescripcion() : Constantes.EMPTY);
+
 		} catch (Exception e) {
 			log.info("** Error  getParametroReportes: " + e.getMessage() + " fecha " + new Date());
 
@@ -608,45 +605,45 @@ public class FacturasController {
 		return parametros;
 
 	}
-private String obtenerParrafoOficial(Factura factura) {
-	
-	StringBuilder parrafoOficialHacienda = new StringBuilder();
-	if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-		parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución");
-		parrafoOficialHacienda.append(" de Facturación Electrónica,");
-		parrafoOficialHacienda.append("No DGT-R-033-2019 del 20-06-2019 ");
-		parrafoOficialHacienda.append("de la Direccion General de Tributación  ");
-	}else {
-		parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución de Facturación Electrónica,");
-		parrafoOficialHacienda.append(" No DGT-R-033-2019 del 20-06-2019 de la Direccion General de Tributación.");
-		
+
+	private String obtenerParrafoOficial(Factura factura) {
+
+		StringBuilder parrafoOficialHacienda = new StringBuilder();
+		if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+			parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución");
+			parrafoOficialHacienda.append(" de Facturación Electrónica,");
+			parrafoOficialHacienda.append("No DGT-R-033-2019 del 20-06-2019 ");
+			parrafoOficialHacienda.append("de la Direccion General de Tributación  ");
+		} else {
+			parrafoOficialHacienda.append("Emitida conforme lo establecido en la resolución de Facturación Electrónica,");
+			parrafoOficialHacienda.append(" No DGT-R-033-2019 del 20-06-2019 de la Direccion General de Tributación.");
+
+		}
+
+		return parrafoOficialHacienda.toString();
+
 	}
-	
-	
-	return parrafoOficialHacienda.toString();
-	
-	
-}	
- private String obtenerReferenciaDocumento(Factura factura) {
-	 String resultado = Constantes.EMPTY;
-	 if(factura.getReferenciaNumero() != null && !factura.getReferenciaNumero().equals(Constantes.EMPTY)) {
-		 resultado = factura.getReferenciaNumero();
-	 }
-	 return resultado;
- }
-	
+
+	private String obtenerReferenciaDocumento(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		if (factura.getReferenciaNumero() != null && !factura.getReferenciaNumero().equals(Constantes.EMPTY)) {
+			resultado = factura.getReferenciaNumero();
+		}
+		return resultado;
+	}
+
 	private String obtenerNombreCliente(Factura factura) {
 		String nombreFactura = Constantes.EMPTY;
 		if (factura.getCliente().getCedula() != null) {
 			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-        nombreFactura = factura.getCliente().getNombreCompleto();
+				nombreFactura = factura.getCliente().getNombreCompleto();
 			}
 		}
-		if(nombreFactura.equals(Constantes.EMPTY)) {
-			nombreFactura = factura.getNombreFactura() != null && !factura.getNombreFactura().equals(Constantes.EMPTY)? factura.getNombreFactura():Constantes.EMPTY;
-			
+		if (nombreFactura.equals(Constantes.EMPTY)) {
+			nombreFactura = factura.getNombreFactura() != null && !factura.getNombreFactura().equals(Constantes.EMPTY) ? factura.getNombreFactura() : Constantes.EMPTY;
+
 		}
-		
+
 		return nombreFactura;
 
 	}
@@ -655,13 +652,13 @@ private String obtenerParrafoOficial(Factura factura) {
 		String cedula = Constantes.EMPTY;
 		if (factura.getCliente().getCedula() != null) {
 			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-				cedula = "Cedula:"+factura.getCliente().getCedula();
+				cedula = "Cedula:" + factura.getCliente().getCedula();
 			}
 
 		}
 		if (cedula.equals(Constantes.EMPTY)) {
 			if (factura.getCliente().getIdentificacionExtranjero() != null && !factura.getCliente().getIdentificacionExtranjero().equals(Constantes.EMPTY)) {
-				cedula = "Cedula:"+factura.getCliente().getIdentificacionExtranjero();
+				cedula = "Cedula:" + factura.getCliente().getIdentificacionExtranjero();
 			}
 		}
 		return cedula;
@@ -673,15 +670,15 @@ private String obtenerParrafoOficial(Factura factura) {
 	 * @return
 	 */
 //
-//	@Autowired
-//	private CertificadoBo certificadoBo;
+	@Autowired
+	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -697,9 +694,9 @@ private String obtenerParrafoOficial(Factura factura) {
 	 */
 	@RequestMapping(value = "/ventasPorServicio", method = RequestMethod.GET)
 	public String ventasPorServicios(Device device) {
-		
-    String deviceType = "browser";
-    String platform = "browser";
+//		
+//    String deviceType = "browser";
+//    String platform = "browser";
     String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
 
 //    if (device.isNormal()) {
@@ -771,8 +768,6 @@ private String obtenerParrafoOficial(Factura factura) {
 	public String totalImpuestoVentasMensuales(ModelMap model) {
 		return "views/facturas/totalImpuestoVentasMensuales";
 	}
-
-	
 
 	/**
 	 * Busca el total de facturas por rango de fechas
@@ -895,8 +890,7 @@ private String obtenerParrafoOficial(Factura factura) {
 			modelEmail.put("totalDinero_n", facturaCommand.getTotalPagosNC());
 
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
-			
-			
+
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -909,6 +903,237 @@ private String obtenerParrafoOficial(Factura factura) {
 
 		return respuestaServiceValidator;
 
+	}
+/**
+ * Resumen pdf
+ * @param request
+ * @param response
+ * @param model
+ * @param datos
+ * @param result
+ * @param fechaInicioParam
+ * @param fechaFinParam
+ * @param correoAlternativo
+ * @param estado
+ * @param actividadEconomica
+ * @return
+ * @throws IOException
+ */
+	@RequestMapping(value = "/ResumenPDFIVAFacturasAndCompras.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public void ResumenPDFIVAFacturasAndCompras(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "correoAlternativo", required = false) String correoAlternativo, @RequestParam(value = "estado", required = false)  Integer estado,@RequestParam(value = "actividadEconomica", required = false) String actividadEconomica) throws IOException {
+		
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// Se obtiene los totales
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFinalP = Utils.parseDate(fechaFinParam);
+			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+				if (fechaFinalP != null) {
+					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+				}
+			}
+			
+//
+			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+			String inicio1 = dateFormat1.format(fechaInicio);
+			String fin1 = dateFormat1.format(fechaFinalP);
+			List<Map<String, Object>> listaObjetos = detalleBo.totalbyImpuestos(inicio1, fin1, estado, usuario.getEmpresa().getId(), actividadEconomica);
+
+			@SuppressWarnings("rawtypes")
+			ArrayList arrayList = new ArrayList();
+			arrayList = (ArrayList<?>) listaObjetos;
+			JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+			ArrayList<TotalbyImpuestosCommand> listaDetallada = new ArrayList<>();
+			Gson gson = new Gson();
+			if (jsonArray1 != null) {
+				for (int i = 0; i < jsonArray1.size(); i++) {
+					TotalbyImpuestosCommand totalbyImpuestosCommand = gson.fromJson(jsonArray1.get(i).toString(), TotalbyImpuestosCommand.class);
+					listaDetallada.add(totalbyImpuestosCommand);
+				}
+			}
+			Map<String, Object> parametros = new HashMap<>();
+			File file = new File("/opt/appjava/data/logos/" + usuario.getEmpresa().getLogo());
+			parametros.put("P_logo",file != null?file.getPath():   Constantes.EMPTY);
+			parametros.put("P_nombre_comercial",usuario.getEmpresa().getNombreComercial());
+			parametros.put("P_nombreCompleto", usuario.getEmpresa().getNombre());
+			parametros.put("P_cedula", "Ced: "+ usuario.getEmpresa().getCedula());
+			parametros.put("p_telefono","Telf: "+ usuario.getEmpresa().getTelefono()+ "");
+			parametros.put("P_correo_electronico", usuario.getEmpresa().getCorreoElectronico());
+			parametros.put("P_direccion", usuario.getEmpresa().getOtraSenas());
+			parametros.put("P_contable", "Resumen de ventas y  compras para el periodo de "+ fechaInicioParam + " al " +   fechaFinParam);
+			
+			// Ventas de Facturas resumen detallado iva
+
+			TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand = new TotalbyResumenImpuestosCommand(listaDetallada);
+
+			parametros = totalResumenVentaIVA(parametros, totalbyResumenImpuestosCommand);
+			
+			Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
+			TotalbyResumenImpuestosCommand totalbyResumenImpuestosComprasCommand = new TotalbyResumenImpuestosCommand(recepcionFacturas);
+			
+			parametros = totalResumenCompraIVA(parametros, totalbyResumenImpuestosComprasCommand);
+			
+			String nombreArchivo = "ResumenIVAComprasAndVentas"+ UUID.randomUUID().toString() + ".pdf";
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+			
+			URL url = Thread.currentThread().getContextClassLoader().getResource(Constantes.REPORTE_MENSUAL_COMPRAS_Y_VENTAS); 
+			byte[] bytes = GenerarReporte.jasperPDFBytes(parametros, url.getPath(), null);
+			if (bytes != null && bytes.length > 0) {
+				response.setContentType("application/pdf");
+				// response.setHeader("Content-Disposition", "attachment;filename=etiquetas.pdf");
+				ServletOutputStream outputstream = response.getOutputStream();
+				outputstream.write(bytes, 0, bytes.length);
+				outputstream.flush();
+				outputstream.close();
+
+			}  else {
+				System.out.println("NO trae nada");
+			}
+		} catch (Exception e) {
+			log.error("** Error  generar PDF " + " fecha " + new Date() + "" + e.getMessage());
+			
+
+		}
+
+		
+
+	}
+
+	private Map<String, Object> totalResumenCompraIVA(Map<String, Object> parametros, TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand) {
+		// Sumas de ventas y desglose del iva
+
+		// 0%
+		parametros.put("P_iva_compra_cero",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()));
+		// 1%
+		parametros.put("P_iva_compra_1",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_02()));
+		// 2%
+		parametros.put("P_iva_compra_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_03()));
+		parametros.put("P_iva_compra_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_04()));
+		
+		// 4%
+		parametros.put("P_iva_compra_trans_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_05()));
+		// 0 transitorio%
+		parametros.put("P_iva_compra_trans_4",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
+		// 4 transitorio%
+		parametros.put("P_iva_compra_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_08()));
+		// 8 transitorio%
+		parametros.put("P_cemento_iva_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		// Total del iva agravado
+		parametros.put("P_compra_iva_total",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()+totalbyResumenImpuestosCommand.getImp_02()+totalbyResumenImpuestosCommand.getImp_03()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_05()+totalbyResumenImpuestosCommand.getImp_07()+totalbyResumenImpuestosCommand.getImp_06()+totalbyResumenImpuestosCommand.getImp_08()));
+		// Resumen de total venta 0%
+		parametros.put("P_compra_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_01()));
+		// Resumen de total venta 1%
+		parametros.put("P_compra_1", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_02()));
+		// Resumen de total venta 2%
+		parametros.put("P_compra_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_03()));
+		// Resumen de total venta 4%
+		parametros.put("P_compra_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_04()));
+		// Resumen de total venta trans 0%
+		parametros.put("P_c_trans_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_05()));
+
+		// Resumen de total venta trans 4%
+		parametros.put("P_c_trans_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_06()));
+		// Resumen de total venta trans 8%
+		parametros.put("P_c_trans_8", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_07()));
+
+		// Resumen de total venta trans 13
+		parametros.put("P_compra_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_08()));
+		// Resumen de total venta cemento
+		parametros.put("P_total_cemento_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		// Resumen de total otros
+		parametros.put("P_total_otros_c", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_impuestos_v()));
+		// Resumen de total Gravado
+		parametros.put("P_compra_gravada", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_gravado()));
+		// Resumen de total de impuesto
+		parametros.put("P_exentos_total_compras", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exento()));
+		// Resumen de total de exentos
+		parametros.put("P_compra_impuesto_total", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+
+		// Resumen de total de Descuentos
+		parametros.put("P_total_compra", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_comprobante()));
+
+		// Resumen de total de ventas
+		parametros.put("P_total_exoneracion_compra", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+
+		// Resumen de total de ventas de exoneraciones
+		parametros.put("P_total_exoneracion_venta", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exo()));
+		// Resumen de total venta del servicio del mesero
+		parametros.put("P_total_por_restaurante", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_cargos()));
+		parametros.put("P_total_descuento_compras", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
+		
+		
+
+
+
+		return parametros;
+	}
+
+	private Map<String, Object> totalResumenVentaIVA(Map<String, Object> parametros, TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand) {
+		// Sumas de ventas y desglose del iva
+
+		// 0%
+		parametros.put("p_iva_cero_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()));
+		// 1%
+		parametros.put("P_iva_1_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_02()));
+		// 2%
+		parametros.put("P_iva_2_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_03()));
+		// 4%
+		parametros.put("P_iva_4_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_04()));
+		// 0 transitorio%
+		parametros.put("P_iva_trans_0_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_05()));
+		// 4 transitorio%
+		parametros.put("P_iva_trans_4_v",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
+		// 8 transitorio%
+		parametros.put("P_iva_trans_8_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_07()));
+		// iva 13
+		parametros.put("P_iva_13_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_08()));
+		// Iva cemento
+		parametros.put("P_cemento_iva_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_imp_cemento()));
+		// Iva otros
+		parametros.put("P_iva_otros_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_impuestos()));
+		// Total del iva agravado
+		parametros.put("P_iva_total_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()+totalbyResumenImpuestosCommand.getImp_02()+totalbyResumenImpuestosCommand.getImp_03()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_05()+totalbyResumenImpuestosCommand.getImp_07()+totalbyResumenImpuestosCommand.getImp_06()+totalbyResumenImpuestosCommand.getImp_08()));
+		// Resumen de total venta 0%
+		parametros.put("P_venta_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_01()));
+		// Resumen de total venta 1%
+		parametros.put("P_venta_1", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_02()));
+		// Resumen de total venta 2%
+		parametros.put("P_venta_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_03()));
+		// Resumen de total venta 4%
+		parametros.put("P_venta_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_04()));
+		// Resumen de total venta trans 0%
+		parametros.put("P_v_trans_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_05()));
+		// Resumen de total venta trans 4%
+		parametros.put("P_v_trans_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_06()));
+		// Resumen de total venta trans 8%
+		parametros.put("P_v_trans_8", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_07()));
+		// Resumen de total venta trans 13
+		parametros.put("P_venta_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_08()));
+		// Resumen de total venta cemento
+		parametros.put("P_total_cemento_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_imp_cemento_v()));
+		// Resumen de total otros
+		parametros.put("P_total_otros_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_impuestos_v()));
+		// Resumen de total Gravado
+		parametros.put("p_venta_gravada", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_gravado()));
+		// Resumen de total de impuesto
+		parametros.put("P_total_impuestos", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_impuesto()));
+		// Resumen de total de exentos
+		parametros.put("P_total_exentos", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exento()));
+
+		// Resumen de total de Descuentos
+		parametros.put("P_total_descuento", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_descuentos()));
+
+		// Resumen de total de ventas
+		parametros.put("P_total_ventas", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_comprobante()));
+
+		// Resumen de total de ventas de exoneraciones
+		parametros.put("P_total_exoneracion_venta", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_exo()));
+		// Resumen de total venta del servicio del mesero
+		parametros.put("P_total_por_restaurante", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_cargos()));
+
+		return parametros;
 	}
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
@@ -1399,7 +1624,7 @@ private String obtenerParrafoOficial(Factura factura) {
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 		} catch (Exception e) {
-			log.error("** Error  Enviado correo: " + " fecha " + new Date()+ " "+e.getMessage());
+			log.error("** Error  Enviado correo: " + " fecha " + new Date() + " " + e.getMessage());
 			System.out.println("No enviado correctamente el correo");
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
@@ -1760,7 +1985,7 @@ private String obtenerParrafoOficial(Factura factura) {
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 		} catch (Exception e) {
-			log.error("** Error  Enviado correo: " + " fecha " + new Date() + " " +e.getMessage());
+			log.error("** Error  Enviado correo: " + " fecha " + new Date() + " " + e.getMessage());
 			System.out.println("No enviado correctamente el correo");
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 		}
@@ -2637,12 +2862,12 @@ private String obtenerParrafoOficial(Factura factura) {
 
 			String subject = "Proforma N° " + facturaBD.getId().toString() + " del Emisor: " + nombre;
 
-			 correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
 			//
 			if (facturaBD.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
 				correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emaiNoElectronico.vm", modelEmail);
 			} else {
-				 correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
+				correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
 			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
@@ -2702,7 +2927,7 @@ private String obtenerParrafoOficial(Factura factura) {
 				}
 			}
 			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
-				 procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
+				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
 			} else {
 				if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
@@ -2710,7 +2935,7 @@ private String obtenerParrafoOficial(Factura factura) {
 				if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
 				}
-				 procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2812,7 +3037,7 @@ private String obtenerParrafoOficial(Factura factura) {
 				procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			} else {
-				 procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
+				procesoHaciendaService.enviarCorreosNoElectronicos(factura, listaCorreos);
 			}
 			//
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -2820,7 +3045,7 @@ private String obtenerParrafoOficial(Factura factura) {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 
 		} catch (Exception e) {
-			log.error("** Error  Enviado correo: " + " fecha " + new Date()+"" +e.getMessage());
+			log.error("** Error  Enviado correo: " + " fecha " + new Date() + "" + e.getMessage());
 			System.out.println("No enviado correctamente el correo");
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
 		}

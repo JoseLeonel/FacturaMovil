@@ -19,6 +19,7 @@ public class DetalleFacturaElectronica {
 	private double	_impuesto;
 	private double	_exento;
 	private double	_total;
+	private double	_precioSugerido;
 	private String	tipoDocumentoExoneracion;
 
 	private String	numeroDocumentoExoneracion;
@@ -36,6 +37,40 @@ public class DetalleFacturaElectronica {
 	public String getUnidad() {
 		return _unidad;
 	}
+
+	
+	
+
+	
+
+
+
+
+	
+	public double get_precioSugerido() {
+		return _precioSugerido;
+	}
+
+
+
+
+
+
+
+
+
+	
+	public void set_precioSugerido(double _precioSugerido) {
+		this._precioSugerido = _precioSugerido;
+	}
+
+
+
+
+
+
+
+
 
 	public void setUnidad(String _unidad) {
 		this._unidad = _unidad;
@@ -200,6 +235,8 @@ public class DetalleFacturaElectronica {
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
 	}
+	
+	
 
 	public static DetalleFacturaElectronica Foo(int linea) {
 		DetalleFacturaElectronica f = new DetalleFacturaElectronica();

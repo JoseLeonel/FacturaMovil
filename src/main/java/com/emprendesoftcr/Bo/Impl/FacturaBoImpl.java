@@ -477,15 +477,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 
-//			} else {
-//				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-//				factura.setReferenciaTipoDoc(Constantes.EMPTY);
-//				factura.setReferenciaNumero(Constantes.EMPTY);
-//				factura.setReferenciaCodigo(Constantes.EMPTY);
-//				factura.setReferenciaRazon(Constantes.EMPTY);
-//				factura.setAnuladaCompleta(Constantes.ZEROS);
-//				factura.setReferenciaFechaEmision(null);
-//			}
+
 
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
@@ -833,6 +825,7 @@ public class FacturaBoImpl implements FacturaBo {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
+			
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
 			if (detalleFacturaCommand.getUnidadMedida() != null) {
 				if (detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
@@ -858,6 +851,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
+			detalle.setPrecioSugerido(articulo.getPrecioSugerido());
 			detalle.setCodigoCabys(articulo.getCodigoCabys() != null && articulo.getCodigoCabys().length() <= 13 ? articulo.getCodigoCabys() : Constantes.EMPTY);
 			detalle.setId(null);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
@@ -898,8 +892,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoImpuesto(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoImpuesto()));
 
 			// detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
+			Double porcentajeExoneracion = Double.valueOf(detalle.getPorcentajeExoneracion() != null ? detalle.getPorcentajeExoneracion() : Constantes.ZEROS);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			Double porcentajeExoneracion = detalle.getPorcentajeExoneracion() != null ? detalle.getPorcentajeExoneracion().longValue() : Constantes.ZEROS_DOUBLE;
+			
 			if (detalle.getImpuesto() != null && porcentajeExoneracion.equals(detalle.getImpuesto())) {
 				detalle.setMontoExoneracion(detalle.getMontoImpuesto());
 			} else {
@@ -1045,24 +1040,34 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
-			factura.setRebajaInventario(factura.getRebajaInventario() == null ? Constantes.ZEROS : factura.getRebajaInventario());
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
-				if (factura.getRebajaInventario().equals(Constantes.APLICA_SUMA_INVENTARIO_POR_NOTA)) {
-					String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
-					kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, factura.getUsuarioCreacion());
+			//aplica decremento de los articulos cuando se trata de paquetes o six pack
+			if (articulo != null) {
+				if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+					articulo = articuloDao.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario(), articulo.getEmpresa());
+
 				}
-			} else {
-
-				String leyenda = factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ? Constantes.MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO + factura.getNumeroConsecutivo() : Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-					if (factura.getRebajaInventario() != null) {
-						if (factura.getRebajaInventario().equals(Constantes.APLICA_REBAJO_INVENTARIO_POR_NOTA)) {
-							kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
-						}
+			}
+			
+			if (articulo != null) {
+				factura.setRebajaInventario(factura.getRebajaInventario() == null ? Constantes.ZEROS : factura.getRebajaInventario());
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+					if (factura.getRebajaInventario().equals(Constantes.APLICA_SUMA_INVENTARIO_POR_NOTA)) {
+						String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
+						kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, factura.getUsuarioCreacion());
 					}
 				} else {
-					kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+
+					String leyenda = factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ? Constantes.MOTIVO_SALIDA_INVENTARIO_NOTA_DEBITO + factura.getNumeroConsecutivo() : Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
+					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_INTERNO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+						if (factura.getRebajaInventario() != null) {
+							if (factura.getRebajaInventario().equals(Constantes.APLICA_REBAJO_INVENTARIO_POR_NOTA)) {
+								kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+							}
+						}
+					} else {
+						kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+					}
+
 				}
 
 			}
@@ -1650,4 +1655,6 @@ public class FacturaBoImpl implements FacturaBo {
 		workbook.close();
 		return new ByteArrayInputStream(stream.toByteArray());
 	}
+
+
 }

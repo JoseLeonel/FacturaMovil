@@ -237,6 +237,15 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa) {
+		
+		return articuloDao.buscarPorCodigoSecundarioYEmpresa(codigo, empresa);
+	}
+
+	
+	
+	
+	@SuppressWarnings("unchecked")
 	public RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response, String codigoArt, String nombreUsuario) {
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -252,7 +261,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 				delimitadores.addFiltro(categoriaFilter);
 			}
 		}
-
+		categoriaFilter = new JqGridFilter("cantidadPaquete", "'" + Constantes.ARTICULO_PAQUETE_TIPO_INACTIVO + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
 		@SuppressWarnings("rawtypes")
@@ -384,6 +394,31 @@ public class ArticuloBoImpl implements ArticuloBo {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}
+			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+				if (articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.indique.cantidad.paquete", result.getAllErrors());
+				}
+				if (articulo.getCodigoSecundario() == null || articulo.getCodigoSecundario().equals(Constantes.EMPTY)) {
+					result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario");
+				} else {
+						articuloValidar = buscarPorCodigoSecundarioYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloValidar != null) {
+							if(!articuloBd.getCodigo().equals(articuloValidar.getCodigo())) {
+								result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario.ya.existe");	
+							}
+							
+						}
+						articuloValidar = buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloValidar == null) {
+							result.rejectValue("codigoSecundario", "error.articulo.codigo.no.existe.inve");
+						}
+//						articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+//						if (articuloValidar != null) {
+//							result.rejectValue("codigoSecundario", "error.articulo.codigo.existe");
+//						}
+						
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -406,6 +441,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 				}
 			}
+			articuloBd.setTipoFacturar(articulo.getTipoFacturar());
+			articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setUpdated_at(new Date());
@@ -438,6 +475,17 @@ public class ArticuloBoImpl implements ArticuloBo {
 			articuloBd.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articuloBd.setCodigoCabys(articulo.getCodigoCabys() != null ? articulo.getCodigoCabys() : Constantes.EMPTY);
+			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+				if (articulo.getCantidad() > Constantes.ZEROS_DOUBLE) {
+					articuloBd.setCantidad(articulo.getCantidad());
+				}
+				articuloBd.setCantidadPaquete(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO);
+				articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
+			}else {
+				articuloBd.setCantidadPaquete(Constantes.ARTICULO_PAQUETE_TIPO_INACTIVO);
+				articuloBd.setCodigoSecundario(Constantes.EMPTY);
+			}
+			articuloBd.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
@@ -462,7 +510,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			articulo.setCodigoTarifaMag(articulo.getCodigoTarifaMag() == null ? Constantes.EMPTY : articulo.getCodigoTarifaMag());
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articulo.setEstado(articulo.getEstado() == null ? Constantes.EMPTY : articulo.getEstado());
-
+			articulo.setTipoFacturar(articulo.getTipoFacturar() == null?Constantes.ZEROS:articulo.getTipoFacturar());
 			if (articulo.getEstado().equals(Constantes.ESTADO_INACTIVO)) {
 				result.rejectValue("estado", "error.articulo.inactivo.agregar");
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.inactivo.agregar", result.getAllErrors());
@@ -573,7 +621,33 @@ public class ArticuloBoImpl implements ArticuloBo {
 						result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 					}
 				}
-				
+				if (articulo.getCantidad() != null) {
+					if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
+						articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+					}
+				}
+				if (articulo.getCantidad() == null) {
+					articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+				}
+				if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+					if (articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.indique.cantidad.paquete", result.getAllErrors());
+					}
+					if (articulo.getCodigoSecundario() == null || articulo.getCodigoSecundario().equals(Constantes.EMPTY)) {
+						result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario");
+					} else {
+						articuloBd = buscarPorCodigoSecundarioYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloBd != null) {
+							result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario.ya.existe");
+						}
+						articuloBd = buscarPorCodigoYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
+						if (articuloBd == null) {
+							result.rejectValue("codigoSecundario", "error.articulo.codigo.no.existe.inve");
+						}
+						
+					}
+
+				}
 				
 				
 
@@ -595,7 +669,10 @@ public class ArticuloBoImpl implements ArticuloBo {
 					cabys.setEmpresa(usuarioSesion.getEmpresa());
 					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
 					cabys.setUri(cabysAct.getUri());
-					cabysBo.agregar(cabys);
+					if(cabys.getOrigen() != null) {
+						cabysBo.agregar(cabys);	
+					}
+					
 
 				}
 			}

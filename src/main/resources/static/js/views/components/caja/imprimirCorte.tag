@@ -87,7 +87,7 @@
                                     <td class="valorPro" >{usuarioCaja.totalTarjetaSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">
-                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")} Sistema: </td>
+                                    <td class="valorPro" > {$.i18n.prop("imprimir.caja.totalBanco")}/SINPE: </td>
                                     <td class="valorPro" >{usuarioCaja.totalBancoSTR}</td>
                                 </tr>
                                 <tr class="detalleTables">

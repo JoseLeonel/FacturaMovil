@@ -51,6 +51,7 @@ public interface ArticuloBo {
 	Collection<Articulo> articulosByCategoriaAndEmpresa(Integer idEmpresa,Long idCategoria);
 	
 	List<Map<String, Object>>  articulosByCabys(String descripcion ,String codigo,Integer tipo,Integer idEmpresa,Integer cantidad);
+	Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa);
 	
 	RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response,  String codigoArt,String nombreUsuario);
 	

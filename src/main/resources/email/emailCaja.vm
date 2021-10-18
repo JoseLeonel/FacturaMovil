@@ -413,19 +413,19 @@ a[x-apple-data-detectors=true] {
                   <tbody style="border: 1px solid black; ">
 
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Efectivo Sistema:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Venta Efectivo:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalEfectivo</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Tarjeta Sistema:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Venta Tarjeta:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalTarjeta</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Banco Sistema:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Banco/Sinpe:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalBanco</td>
                   </tr>
                   <tr style="border: 1px solid black;">
-                    <td style="padding: 8px; border: 1px solid black;">Abonos Sistema:</td>
+                    <td style="padding: 8px; border: 1px solid black;">Abonos CXC:</td>
                     <td style="padding: 8px; border: 1px solid black;">$totalAbonoSTR</td>
                   </tr>
                   <tr style="border: 1px solid black;">

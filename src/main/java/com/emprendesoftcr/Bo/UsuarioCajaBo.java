@@ -6,12 +6,16 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.validation.BindingResult;
+
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
+import com.emprendesoftcr.utils.RespuestaServiceValidator;
+import com.emprendesoftcr.web.command.ConteoManualCommand;
 import com.emprendesoftcr.web.command.DenominacionCommand;
 
 public interface UsuarioCajaBo {
@@ -28,16 +32,21 @@ public interface UsuarioCajaBo {
 
 	UsuarioCaja cierreCaja(UsuarioCaja usuarioCaja, ArrayList<DenominacionCommand> listaCoteo, Usuario usuario) throws Exception;
 
-	UsuarioCaja aperturaCaja(ArrayList<DenominacionCommand> listaCoteo, Usuario usuario,Caja caja) throws Exception;
+	UsuarioCaja aperturaCaja(ArrayList<DenominacionCommand> listaCoteo, Usuario usuario, Caja caja) throws Exception;
 
 	void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception;
 
 	void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception;
 
 	ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId);
+
 	Collection<UsuarioCaja> usuarioCajaBy(Empresa empresa, String estado);
+
+	void eliminarConteo(UsuarioCaja usuarioCaja, Integer tipo) throws Exception;
+
+	RespuestaServiceDataTable<?> listarUsuariosCajasActivasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	RespuestaServiceValidator<?> agregarCaja(HttpServletRequest request, ConteoManualCommand conteoManualCommand, BindingResult result) throws Exception;
 	
-	void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo)throws Exception;
-	
-	RespuestaServiceDataTable<?> listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception ;
+	 RespuestaServiceValidator<?> cerrarCajaCajero(HttpServletRequest request,  ConteoManualCommand conteoManualCommand, BindingResult result) throws Exception;
 }

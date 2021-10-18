@@ -186,7 +186,7 @@ Listado  -->
                     </div>
                     <div class="row" show = {usuarioCaja.id != null ? true:false}>    
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                            <label class="tituloClienteNuevo" >Cierre Datafono</label>
+                            <label class="tituloClienteNuevo" >Cierre Datafono+SINPE</label>
                             <input type="number" class="form-control conteoTarjeta tamanoClienteNuevo modalInputCambioPrecio"  id="conteoTarjeta" name="conteoTarjeta" autofocus="autofocus"   autocomplete="off">
                         </div>                            
 

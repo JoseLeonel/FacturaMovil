@@ -84,6 +84,7 @@ public class EmpresaCommand {
 	private String	ipImprimirComanda;
 	private String	correoCaja1;
 	private String	correoCaja2;
+	private Integer aplicaVentaEspera;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -142,6 +143,7 @@ public class EmpresaCommand {
 		this.ipImprimirComanda = empresa.getIpImprimirComanda() == null?Constantes.EMPTY:empresa.getIpImprimirComanda();
 		this.correoCaja1 = empresa.getCorreoCaja1();
 		this.correoCaja2 = empresa.getCorreoCaja2();
+		this.aplicaVentaEspera = empresa.getAplicaVentaEspera();
 	}
 
 	public EmpresaCommand() {
@@ -550,6 +552,16 @@ public class EmpresaCommand {
 
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
+	}
+
+	
+	public Integer getAplicaVentaEspera() {
+		return aplicaVentaEspera;
+	}
+
+	
+	public void setAplicaVentaEspera(Integer aplicaVentaEspera) {
+		this.aplicaVentaEspera = aplicaVentaEspera;
 	}
 
 }

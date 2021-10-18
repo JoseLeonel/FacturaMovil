@@ -59,11 +59,11 @@ public class ReportePdfView {
 
 	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer, String tipoDoc) throws Exception {
 		// document.add(new Paragraph("\n", pequeFont));
-		PdfPTable tabla_tercera_tabla = new PdfPTable(9);
+		PdfPTable tabla_tercera_tabla = new PdfPTable(10);
 		tabla_tercera_tabla.setWidthPercentage(60);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 23, 60, 133, 18, 27, 35, 22, 35, 40 };
+		float[] header_espacio_03 = { 18, 48, 133, 22, 26, 40, 18, 30, 40,40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -83,6 +83,7 @@ public class ReportePdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVAI", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total IVA", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Sugerido", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 
 		tabla_tercera_tabla.setHeaderRows(1);
 		tabla_tercera_tabla.setSplitRows(true);
@@ -116,6 +117,7 @@ public class ReportePdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.ZEROS_DOUBLE : item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.get_precioSugerido()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			indice_++;
 		}
 		fac_electro.setMontoExoneracion(totalExoneracion);

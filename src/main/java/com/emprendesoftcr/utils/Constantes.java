@@ -6,28 +6,41 @@ import java.util.ResourceBundle;
 public class Constantes {
 	public static final String LOGIN_REGEX = "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$";
 
+	public static final String					API_LISTA_CABYS_SIN_CANTIDAD																	= "https://api.hacienda.go.cr/fe/cabys?q=";
+	public static final String					API_LISTA_CABYS_SIN_CODIGO																		= "https://api.hacienda.go.cr/fe/cabys?codigo=";
+	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
+	public static final String					API_RECEPCION_COMPRAS																					= "http://localhost:8083/api-v1/get-all?e=P&i=";
+	public static final String					API_MAG_PESCA																									= "https://api.hacienda.go.cr/fe/pesca?identificacion=";
+	public static final String					INDICADOR_ACTIVO_MAG																					= "true";
+	public static final Integer					CLIENTE_MAG_INACTIVO																					= 0;
+	public static final Integer					CLIENTE_MAG_AGRO																							= 1;
+	public static final Integer					CLIENTE_MAG_PESCA																							= 2;
+
+	public static final String					CONDOMINIO_MONTANA_SANTA_ANA																	= "3109177612";
+	public static final String					CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD												= "3102767133";
+	public static final String					CEDULA_MINI_SUPER_DARIO																				= "110010978";
+	public static final ResourceBundle	RESOURCE_BUNDLE																								= ResourceBundle.getBundle("factura");
+	public static final String					DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR													= "/home/jose/dev/archivosXMLs";
+
+	public static final Integer					EMPRESA_APLICA_PROMEDIO_PONDERADO_SI																= 1;
+	public static final Integer					EMPRESA_APLICA_PROMEDIO_PONDERADO_NO																= 0;
 	public static final String SYSTEM = "system";
 	public static final String DEFAULT_LANGUAGE = "es";
 
-	public static final String API_LISTA_CABYS_SIN_CANTIDAD = "https://api.hacienda.go.cr/fe/cabys?q=";
-	public static final String API_LISTA_CABYS_SIN_CODIGO = "https://api.hacienda.go.cr/fe/cabys?codigo=";
-	public static final String API_MAG_AGRO = "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
-	public static final String API_RECEPCION_COMPRAS = "http://localhost:8083/api-v1/get-all?e=P&i=";
-	public static final String API_MAG_PESCA = "https://api.hacienda.go.cr/fe/pesca?identificacion=";
-	public static final String INDICADOR_ACTIVO_MAG = "true";
-	public static final Integer CLIENTE_MAG_INACTIVO = 0;
-	public static final Integer CLIENTE_MAG_AGRO = 1;
-	public static final Integer CLIENTE_MAG_PESCA = 2;
+	
 
-	public static final String CONDOMINIO_MONTANA_SANTA_ANA = "3109177612";
-	public static final String CONDOMINIO_MONTANA_SANTA_ANA_SEGURIDAD = "3102767133";
-	public static final String CEDULA_MINI_SUPER_DARIO = "110010978";
-	public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("factura");
-	public static final String DIRECCION_PATH_ARCHIVOS_XML_SERVIDOR = "/home/jose/dev/archivosXMLs";
 
-	public static final Integer EMPRESA_APLICA_PROMEDIO_PONDERADO_SI = 1;
-	public static final Integer EMPRESA_APLICA_PROMEDIO_PONDERADO_NO = 0;
+	public static final Integer					ARTICULO_PAQUETE_TIPO_ACTIVO																	= 1;
+	public static final Integer					ARTICULO_PAQUETE_TIPO_INACTIVO																= 0;
 
+	public static final Integer					COCINA_ACTIVO																									= 1;
+	public static final Integer					COCINA_INACTIVO																								= 2;
+
+	public static final Integer					ES_SIMPLIFICADO_SI																						= 1;
+	public static final Integer					ES_SIMPLIFICADO_NO																						= 0;
+
+	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO													= 1;
+	public static final Integer					EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO												= 2;
 	public static final Integer VERSION_EXONERACION_SUBTOTAL_SI = 1;
 	public static final Integer VERSION_EXONERACION_SUBTOTAL_NO = 0;
 
@@ -37,14 +50,7 @@ public class Constantes {
 	public static final Integer FACTURA_ANULACION_COMPLETA_SI = 1;
 	public static final Integer FACTURA_ANULACION_COMPLETA_NO = 0;
 
-	public static final Integer COCINA_ACTIVO = 1;
-	public static final Integer COCINA_INACTIVO = 2;
-
-	public static final Integer ES_SIMPLIFICADO_SI = 1;
-	public static final Integer ES_SIMPLIFICADO_NO = 0;
-
-	public static final Integer EMPRESA_ENVIAR_CORREO_CREDITO_ACTIVO = 1;
-	public static final Integer EMPRESA_ENVIAR_CORREO_CREDITO_INACTIVO = 2;
+	
 
 	public static final Integer COMMANDA_COCINA_ACTIVO = 1;
 	public static final Integer COMMANDA_COCINA_INACTIVO = 2;
@@ -187,8 +193,8 @@ public class Constantes {
 	public static final Integer LIBRE_IMPUESTOS_INACTIVO = 0;
 
 	// Semaforo
-	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR = 150;
-	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS = 40;
+	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR = 30;
+	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS = 25;
 
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS													= 5;
@@ -465,26 +471,26 @@ public class Constantes {
 	public static final Long ID_USUARIO_SISTEMA = -1L;
 
 	// Errores en el Broker
-	public static final String ERROR_POR_COMUNICACION = "2033";
-	public static final String MQ_NO_REASON_CODE = "0000";
-	public static final String DATE_FORMATImpServi = "yyyy-MM-dd hh:mm:ss";
-	public static final String DATE_FORMATImpServi1 = "yyyy-MM-dd hh:mm a";
-	public static final String DATE_FORMATImpServi2 = "yyyy-MM-dd hh:mm ";
-	public static final String DATE_FORMAT1 = "dd/MM/yyyy hh:mm:ss";
-	public static final String DATE_1900 = "01/01/1990 00:00:00.0";
-	public static final String DATE_FORMAT2 = "dd/MM/yyyy";
-	public static final String DATE_FORMAT3 = "dd-MM-yyyy";
-	public static final String DATE_FORMAT5 = "yyyy-MM-dd 00:00:00";
-	public static final String DATE_FORMAT8 = "yyyy-MM-dd 23:59:59";
-	public static final String DATE_FORMAT6 = "yyyy-MM-dd";
-	public static final String DATE_FORMAT4 = "yyyyMMdd";
-	public static final String DATE_FORMAT7 = "yyyy-MM-dd";
+	public static final String					ERROR_POR_COMUNICACION																				= "2033";
+	public static final String					MQ_NO_REASON_CODE																							= "0000";
+	public static final String					DATE_FORMATImpServi																						= "yyyy-MM-dd hh:mm:ss";
+	public static final String					DATE_FORMATImpServi1																					= "yyyy-MM-dd hh:mm a";
+	public static final String					DATE_FORMATImpServi2																					= "yyyy-MM-dd hh:mm ";
+	public static final String					DATE_FORMAT1																									= "dd/MM/yyyy hh:mm:ss";
+	public static final String					DATE_1900																											= "01/01/1990 00:00:00.0";
+	public static final String					DATE_FORMAT2																									= "dd/MM/yyyy";
+	public static final String					DATE_FORMAT3																									= "dd-MM-yyyy";
+	public static final String					DATE_FORMAT5																									= "yyyy-MM-dd 00:00:00";
+	public static final String					DATE_FORMAT8																									= "yyyy-MM-dd 23:59:59";
+	public static final String					DATE_FORMAT6																									= "yyyy-MM-dd";
+	public static final String					DATE_FORMAT4																									= "yyyyMMdd";
+	public static final String					DATE_FORMAT7																									= "yyyy-MM-dd";
 
-	public static final String ANULACION_AUTOMATICA_PROFORMAS = "Se completo los 30 dias, se procedio anular";
+	public static final String					ANULACION_AUTOMATICA_PROFORMAS																= "Se completo los 30 dias, se procedio anular";
 
-	public static final String DATE_FORMAT_TIME = "HH:mm:ss";
-	public static final String DATE_FORMAT_TIME2 = "HH:mm";
-	public static final String DATE_FORMAT_MIN = "00/00/0000 ";
+	public static final String					DATE_FORMAT_TIME																							= "HH:mm:ss";
+	public static final String					DATE_FORMAT_TIME2																							= "HH:mm";
+	public static final String					DATE_FORMAT_MIN																								= "00/00/0000 ";
 
 	// Tipo de cedula
 	public static final String TIPO_CEDULA_FISICA = "01";
@@ -503,30 +509,31 @@ public class Constantes {
 
 	// Compra
 
-	public static final String COMPRA_AUTOMATICA_ESTADO_PENDIENTE = "P";
-	public static final String COMPRA_AUTOMATICA_ESTADO_APLICADA = "A";
-	public static final Integer COMPRA_ESTADO_PENDIENTE = 1;
-	public static final Integer COMPRA_ESTADO_INGRESADA_INVENTARIO = 2;
-	public static final Integer COMPRA_ESTADO_CHEQUEDO_MERCANCIA = 3;
-	public static final Integer COMPRA_ESTADO_ANULADA = 4;
-	public static final Integer COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA = 6;
+	public static final String					COMPRA_AUTOMATICA_ESTADO_PENDIENTE														= "P";
+	public static final String					COMPRA_AUTOMATICA_ESTADO_APLICADA															= "A";
+	public static final Integer					COMPRA_ESTADO_PENDIENTE																				= 1;
+	public static final Integer					COMPRA_ESTADO_INGRESADA_INVENTARIO														= 2;
+	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA															= 3;
+	public static final Integer					COMPRA_ESTADO_ANULADA																					= 4;
+	public static final Integer					COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA									= 6;
 
-	public static final String COMPRA_ESTADO_PENDIENTE_STR = "Pendiente";
-	public static final String COMPRA_ESTADO_INGRESADA_INVENTARIO_STR = "Ingresada";
-	public static final String COMPRA_ESTADO_CHEQUEDO_MERCANCIA_STR = "Chequeo";
-	public static final String COMPRA_ESTADO_ANULADA_STR = "Anulada";
+	public static final String					COMPRA_ESTADO_PENDIENTE_STR																		= "Pendiente";
+	public static final String					COMPRA_ESTADO_INGRESADA_INVENTARIO_STR												= "Ingresada";
+	public static final String					COMPRA_ESTADO_CHEQUEDO_MERCANCIA_STR													= "Chequeo";
+	public static final String					COMPRA_ESTADO_ANULADA_STR																			= "Anulada";
 
-	public static final Integer COMPRA_TIPO_DOCUMENTO_FACTURA = 1;
-	public static final Integer COMPRA_TIPO_DOCUMENTO_BOLETA = 2;
-	public static final Integer COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO = 3;
-	public static final Integer COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO = 4;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_FACTURA																	= 1;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
 
-	public static final Integer APLICADO_RECEPCION_AUTOMATICA_SI = 1;
-	public static final Integer APLICADO_RECEPCION_AUTOMATICA_NO = 2;
+	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_SI															= 1;
+	public static final Integer					APLICADO_RECEPCION_AUTOMATICA_NO															= 2;
 
-	public static final Integer DETALLE_APLICADO_NO = 1;
-	public static final Integer DETALLE_APLICADO_SI = 2;
-	public static final Integer DETALLE_APLICADO_ANULADA = 3;
+	public static final Integer					DETALLE_APLICADO_NO																						= 1;
+	public static final Integer					DETALLE_APLICADO_SI																						= 2;
+	public static final Integer					DETALLE_APLICADO_ANULADA																			= 3;
+
 
 	public static final String COMPRA_TIPO_DOCUMENTO_FACTURA_STR = "Factura";
 	public static final String COMPRA_TIPO_DOCUMENTO_BOLETA_STR = "Boleta";
@@ -738,22 +745,24 @@ public class Constantes {
 	public static final String SP_CALLBACK_HACIENDA_MENSAJE = "mensaje_e";
 
 	// Procecimiento para actualizar la caja
-	public static final String SP_ACTUALIZA_CAJA = "sp_actua_caja";
-	public static final String SP_ELIMINAR_CONTEO = "sp_elimi_conteo";
-	public static final String SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO = "ID_CAJA_USUARIO";
-	public static final String SP_ELIMINA_CAJA_ID_CAJA_USUARIO = "usua_caja_id";
-	public static final String SP_ELIMINA_CONTEO_TIPO = "tipo";
+	public static final String					SP_ACTUALIZA_CAJA																							= "sp_actua_caja";
+	public static final String					SP_ELIMINAR_CONTEO																						= "sp_elimi_conteo";
+	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO															= "ID_CAJA_USUARIO";
+	public static final String					SP_ELIMINA_CAJA_ID_CAJA_USUARIO																= "usua_caja_id";
+	public static final String					SP_ELIMINA_CONTEO_TIPO																				= "tipo";
 
-	public static final String CODIGO_TARIFA_0_PORCIENTO = "01";
-	public static final String CODIGO_TARIFA_1_PORCIENTO = "02";
-	public static final String CODIGO_TARIFA_2_PORCIENTO = "03";
-	public static final String CODIGO_TARIFA_4_PORCIENTO = "04";
-	public static final String CODIGO_TARIFA_0_TRANSITORIO_PORCIENTO = "05";
-	public static final String CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO = "06";
-	public static final String CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO = "07";
-	public static final String CODIGO_TARIFA_13_GENERAL_PORCIENTO = "08";
-	public static final Double CODIGO_TARIFA_13_IMPUESTO_99 = 99d;
+	public static final String					CODIGO_TARIFA_0_PORCIENTO																			= "01";
+	public static final String					CODIGO_TARIFA_1_PORCIENTO																			= "02";
+	public static final String					CODIGO_TARIFA_2_PORCIENTO																			= "03";
+	public static final String					CODIGO_TARIFA_4_PORCIENTO																			= "04";
+	public static final String					CODIGO_TARIFA_0_TRANSITORIO_PORCIENTO													= "05";
+	public static final String					CODIGO_TARIFA_4_TRANSITORIO_PORCIENTO													= "06";
+	public static final String					CODIGO_TARIFA_8_TRANSITORIO_PORCIENTO													= "07";
+	public static final String					CODIGO_TARIFA_13_GENERAL_PORCIENTO														= "08";
+	public static final Double					CODIGO_TARIFA_13_IMPUESTO_99																	= 99d;
 	
+		
 	public static final Double CODIGO_IMPUESTO_1_PORCIENTO = 1d;
 
+	public static final String				REPORTE_MENSUAL_COMPRAS_Y_VENTAS														= "reportes/factura/reporteMensual.jasper";
 }

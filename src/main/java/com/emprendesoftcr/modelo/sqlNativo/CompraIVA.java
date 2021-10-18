@@ -249,13 +249,23 @@ public class CompraIVA implements Serializable {
 	}
 
 	
-	
 
 	
 	public Double getMontoIva13() {
 			return montoIva13 != null ? montoIva13 : Constantes.ZEROS_DOUBLE;
 
 	}
+	public Double getMontoIva13Nota() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (emisorTipoDocumento != null && emisorTipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.montoIva13 != null ? (this.montoIva13 * resultadoTipoCambio) * -1 : (this.montoIva13 * resultadoTipoCambio);
+		} else {
+			return this.montoIva13 != null ? (this.montoIva13 * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
+		}
+
+		
+
+}
 
 	
 	public void setMontoIva13(Double montoIva13) {
@@ -267,6 +277,17 @@ public class CompraIVA implements Serializable {
 			return montoIva0 != null ? montoIva0 : Constantes.ZEROS_DOUBLE;
 
 	}
+	public Double getMontoIva0Nota() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (emisorTipoDocumento != null && emisorTipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.montoIva0 != null ? (this.montoIva0 * resultadoTipoCambio) * -1 : (this.montoIva0 * resultadoTipoCambio);
+		} else {
+			return this.montoIva0 != null ? (this.montoIva0 * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
+		}
+
+		
+
+}
 
 	
 	public void setMontoIva0(Double montoIva0) {
@@ -278,6 +299,18 @@ public class CompraIVA implements Serializable {
 			return montoIva1 != null ? montoIva1 : Constantes.ZEROS_DOUBLE;
 
 	}
+	
+	public Double getMontoIva1Nota() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (emisorTipoDocumento != null && emisorTipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.montoIva1 != null ? (this.montoIva1 * resultadoTipoCambio) * -1 : (this.montoIva1 * resultadoTipoCambio);
+		} else {
+			return this.montoIva1 != null ? (this.montoIva1 * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
+		}
+
+		
+
+}
 
 	
 	public void setMontoIva1(Double montoIva1) {
@@ -289,6 +322,17 @@ public class CompraIVA implements Serializable {
 			return montoIva2 != null ? montoIva2 : Constantes.ZEROS_DOUBLE;
 
 	}
+	public Double getMontoIva2Nota() {
+		Double resultadoTipoCambio = this.facturaTipoCambio == null ? 1 : this.facturaTipoCambio;
+		if (emisorTipoDocumento != null && emisorTipoDocumento.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return this.montoIva2 != null ? (this.montoIva2 * resultadoTipoCambio) * -1 : (this.montoIva2 * resultadoTipoCambio);
+		} else {
+			return this.montoIva2 != null ? (this.montoIva2 * resultadoTipoCambio) : Constantes.ZEROS_DOUBLE;
+		}
+
+		
+
+}
 
 	
 	public void setMontoIva2(Double montoIva2) {

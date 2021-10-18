@@ -97,6 +97,10 @@
 						<li><a th:href="@{/ListarArticulos}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Listar Articulos</a></li>
+						<li><a th:href="@{/paqueteArticulos}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+								class="fa fa-circle-o"></i>Cajas/Paquetes Art</a></li>
+
 						<li><a th:href="@{/ListarArticulosMinimos}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Minimos</a></li>
@@ -384,6 +388,10 @@
 				<li><a th:href="@{/recepcionComprasPorCorreo}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i>Recepcion de Compras</a></li>
+						
+<!-- 				<li><a th:href="@{/recepcionComprasPorCorreoAceptadas}" -->
+<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i -->
+<!-- 						class="fa fa-circle-o"></i>Compras aceptadas </a></li>		 -->
 
 			</ul>
 		</li>

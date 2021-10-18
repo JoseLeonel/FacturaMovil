@@ -1,5 +1,5 @@
 <punto-venta>
-
+<audio id="xyz" src="/dist/img/SD_ALERT_10.mp3" preload="auto"></audio>
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -251,8 +251,8 @@
                                         <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")}<span class="teclashift">(Tecla =shift )</span>  </label> 
                                         <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" autocomplete="off">
                                     </div> 
-                                    <div  class="form-group " show={empresa.pantChino == 0}>
-                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                    <div  class="form-group " >
+                                        <label class="{labelTotales} ">Banco/SINPE </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}"  autocomplete="off">
                                     </div>
                                     
@@ -359,7 +359,7 @@
                            <div  class= "labelBotones"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
                         </div>
                         <div class="botonesFuncional ">
-                           <div  class= "labelBotones"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f9")}</div>
+                           <div  class= "labelBotones" show={empresa.aplicaVentaEspera == 0}   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f9")}</div>
                         </div>
                         <div class="botonesFuncional " show={mostarAbrirCajon == true} >
                            <div  class= "labelBotones"    onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("abrir.cajon")}</div>
@@ -1069,6 +1069,8 @@
               todayHighlight:true,
             }
         );
+        
+     
         var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -1186,6 +1188,7 @@
     }, false );
 
     })
+    
 __CambiarDescripcion(e){
    self.item = e.item; 
    self.update()
@@ -2398,9 +2401,11 @@ __AplicarYcrearFactura(e){
 }
 
 __AplicarYcrearFacturaTemporal(e){
-
- __OpcionAbrirCajon()
- aplicarFactura(1)
+    if(self.empresa.aplicaVentaEspera == 0){
+        __OpcionAbrirCajon()
+        aplicarFactura(1)
+    }
+ 
 }
 
 function aplicarFactura(estado){
@@ -2672,7 +2677,7 @@ function crearFactura(estado){
         return false
     }
     if(self.factura.totalComprobante >= 20000000 && self.empresa.cedula != '109350164'){
-      mensajeAdvertencia("Error el monto mayor a 20000000, corregir  ")
+      mensajeEstatico("Error el monto mayor a 20000000, corregir  ")
       return
 
     }
@@ -2955,7 +2960,7 @@ function lecturaCodigo(){
        getPosicionInputCodigo()
        return
     }
-    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
+    __buscarcodigo_General(codigoActual,__valorNumerico(cantidadAct),0);
 }
 
 __addPrecioDetail(e){
@@ -2978,8 +2983,27 @@ __addPrecioDetail(e){
        getPosicionInputCodigo()
        return
     }
-    __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
-    getPosicionInputCodigo()
+   // __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
+
+    setTimeout( __buscarcodigo(codigoActual,valor,__valorNumerico(precio),function(modeArticulo){
+        self.articulo = modeArticulo;
+        self.update()
+         if(self.articulo.estado  == "Inactivo"){
+            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
+            self.articulo = null
+        }
+
+        if(self.articulo !=null){
+            self.articulo.precioPublico = getListaPrecio(self.articulo)
+            self.descripcionArticulo = self.articulo.descripcion
+            self.update()
+            actualizarArticuloPrecio(precio,valor)
+        }
+        getPosicionInputCodigo()
+    })
+     ,2000);
+
+    
 }
 
 function getCantidadAdnCodigo_PV(){
@@ -3048,7 +3072,7 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
 }
 
 this.__agregarArticuloBotonAgregar = function(){
-   __buscarcodigo($( "#codigo" ).val(),1,0);
+   __buscarcodigo_General($( "#codigo" ).val(),1,0);
    return
 }.bind(this)
 
@@ -3202,50 +3226,7 @@ function __ListaArticulosUsoInterno(){
     return
 }
 
-function __buscarcodigoPrecio(idArticulo,cantidad,precio){
-    if(idArticulo ==null){
-        return
-    }
-    if(idArticulo.length ==0){
-        return
-    }
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-                }
-            }else{
-                self.articulo  = null
-                self.update()
-                if (data.message != null && data.message.length > 0) {
-                    self.articulo =null
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.articulo  = modeloTabla
-                        self.update()
-                        if(self.articulo !=null){
-                            actualizarArticuloPrecio(precio,cantidad)
 
-                        }
-                    });
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-          mensajeErrorServidor(xhr, status);
-        }
-    });
-   return
-}
 
 function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
@@ -3256,7 +3237,7 @@ function actualizarArticuloPrecio(precio,cantidad){
     __agregarArticulo(cantidad)
 }
 
-function __buscarcodigo(idArticulo,cantidad,precio){
+function __buscarcodigo_General(idArticulo,cantidad,precio){
     self.articulo = null
     self.update()
     if(idArticulo ==null){
@@ -3265,50 +3246,33 @@ function __buscarcodigo(idArticulo,cantidad,precio){
       if(idArticulo.length ==0){
         return
     }
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-
-                }
-            }else{
-                self.articulo  = null
-                self.update()
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.articulo  = modeloTabla
-                        if(modeloTabla.estado  == "Inactivo"){
-                            mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.articulo.precioPublico = getListaPrecio(self.articulo)
-                        self.descripcionArticulo = modeloTabla.descripcion
-                        self.update()
-                        if(self.articulo !=null){
-                            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
-                                $('.precioVenta').val(getListaPrecio(self.articulo))
-                                $('.precioVenta').select()
-                                $(".precioVenta").focus()
-                                return
-                            }
-                        }
-                        __agregarArticulo(cantidad)
-                  });
-                }
+    setTimeout( __buscarcodigo(idArticulo,cantidad,precio,function(modeArticulo){
+        self.articulo = modeArticulo;
+        self.update()
+        if(self.articulo !=null){
+             if(self.articulo.estado  == "Inactivo"){
+                mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
+                self.articulo = null
             }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-          mensajeErrorServidor(xhr, status);
+
+
+            self.articulo.precioPublico = getListaPrecio(self.articulo)
+            self.descripcionArticulo = self.articulo.descripcion
+            self.update()
+            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+                $('.precioVenta').val(getListaPrecio(self.articulo))
+                $('.precioVenta').select()
+                $(".precioVenta").focus()
+                return
+            }
+            __agregarArticulo(cantidad)
         }
-    });
-   return
-}
+        
+    })
+     ,2000);
+
+}    
+
 
 function __agregarArticulo(cantidad){
     if(self.articulo == null){
@@ -3319,6 +3283,9 @@ function __agregarArticulo(cantidad){
     }
     if(cantidad == 0){
         cantidad = 1
+    }
+    if(self.articulo.cantidadPaquete > 0){
+       cantidad =  self.articulo.cantidad
     }
     var encontrado = false;
     var valor = $('.codigo').val()
@@ -3847,7 +3814,7 @@ function __agregarArticulos() {
             }
         }
         if(self.articulo.contable == "si"){
-           __buscarcodigo(self.articulo.codigo,1,0)
+           __buscarcodigo_General(self.articulo.codigo,1,0)
         }else{
             __agregarArticulo(1)
         }
@@ -4368,39 +4335,40 @@ function __Teclas(tecla,event){
       }
       resultado = __valorNumerico($(".totalTarjeta").val())
       if(resultado > 0){
-        self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
-        self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
+        self.factura.totalBanco = resultado
+        self.factura.totalEfectivo = 0
         self.factura.totalTarjeta = 0
         self.update()
-        if(self.empresa.pantChino == 0){
+       // if(self.empresa.pantChino == 0){
             $(".totalEfectivo").val(null)
             $(".totalTarjeta").val(null)
             $(".totalBanco").val(self.factura.totalBanco)
             $('.totalBanco').select()
             $('.totalBanco').focus()
 
-        }else{
-            $(".totalBanco").val(null)
-            $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
-            seleccionarEfectivo()
-        }
+        //}else{
+        //    $(".totalBanco").val(null)
+        //    $(".totalTarjeta").val(null)
+        //    $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
+        //    seleccionarEfectivo()
+      //  }
         return
       }
-      if(self.empresa.pantChino == 0){
-        resultado = __valorNumerico($(".totalBanco").val())
-        if(resultado > 0){
-            self.factura.totalEfectivo = resultado
-            self.factura.totalBanco = 0
-            self.factura.totalTarjeta = 0
-            self.update()
-            $(".totalBanco").val(null)
-            $(".totalTarjeta").val(null)
-            $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
-            seleccionarEfectivo()
-            return
-        }
-      }else{
+      //if(self.empresa.pantChino == 0){
+      //  resultado = __valorNumerico($(".totalBanco").val())
+      //  if(resultado > 0){
+      //      self.factura.totalEfectivo = resultado
+      //      self.factura.totalBanco = 0
+      //      self.factura.totalTarjeta = 0
+      //      self.update()
+      //      $(".totalBanco").val(null)
+      //      $(".totalTarjeta").val(null)
+      //      $(".totalEfectivo").val(self.factura.totalEfectivo.toFixed(2))
+     //       seleccionarEfectivo()
+     //       return
+     //   }
+     // }
+      //else{
         resultado = __valorNumerico($(".totalEfectivo").val())
         if(resultado > 0){
             self.factura.totalEfectivo = resultado
@@ -4414,7 +4382,7 @@ function __Teclas(tecla,event){
             return
         }
 
-      }
+      //}
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
         self.factura.totalBanco = 0
         self.factura.totalTarjeta = 0
@@ -4426,7 +4394,7 @@ function __Teclas(tecla,event){
       return
     }
 
-    if(tecla ==120){
+    if(tecla ==120 && self.empresa.aplicaVentaEspera == 0){
       aplicarFactura(1)
       return
     }

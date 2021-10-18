@@ -62,4 +62,8 @@ public interface FacturaBo {
 	ByteArrayInputStream createExcelFacturas(Collection<ListarFacturasNativa> facturas, Empresa empresa, String fechaInicio, String fechaFinal, Integer estado, Cliente cliente) throws IOException;
 
 	ByteArrayInputStream createExcelFacturasTotalMensual(Collection<Factura> facturas, Empresa empresa, String fechaInicio, String fechaFinal, Integer estado, String actividadEconomica) throws IOException;
+
+//	Map<String, Object> generarPDFIVAMensual(Date fechaInicial, Date fechaFinal, Integer estado, String actividadEconomica,Empresa empresa);
+	
+	
 }

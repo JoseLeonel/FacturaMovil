@@ -167,6 +167,9 @@ public class Detalle implements Serializable {
 	@Column(name = "cant_notaC", precision = 18, scale = 5)
 	private Double						cantidadAplicadaNotaCredito;
 	
+	@Column(name = "precio_sugerido", precision = 18, scale = 5)
+	private Double						precioSugerido;
+	
 	@Column(name = "cod_cabys", precision = 18, scale = 5)
 	private String						codigoCabys;
 
@@ -767,6 +770,16 @@ public class Detalle implements Serializable {
 	
 	public void setCodigoCabys(String codigoCabys) {
 		this.codigoCabys = codigoCabys;
+	}
+
+	
+	public Double getPrecioSugerido() {
+		return precioSugerido;
+	}
+
+	
+	public void setPrecioSugerido(Double precioSugerido) {
+		this.precioSugerido = precioSugerido;
 	}
 	
 	

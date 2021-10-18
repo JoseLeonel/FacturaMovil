@@ -391,8 +391,6 @@ function __TipoDocumentos(numeroConsecutivo,row){
         return  numeroConsecutivo
 }
 }
-
-
 /**
 *Tipo Cambio del Dolar 
 **/
@@ -502,6 +500,190 @@ function __ComboImpuestos(){
      });
    
     return impuestos;
+}
+
+/**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
+function __listadoMarcasActivas(callback){
+    $.ajax({
+         url: "ListarMarcasActivasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+            	callback(result.aaData);
+            }else{
+            	callback(null);
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            callback(null);
+             mensajeErrorServidor(xhr, status);
+        }
+    });
+    
+}
+
+/**
+*  Mostrar listado datatable unidades de medidas activas
+**/
+function __listadoTipoUnidadesActivas(callback){
+    $.ajax({
+         url: "ListarTipoUnidadesAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+            	 callback(result.aaData); 
+                
+            }  else{
+            	 callback(null); 
+            }          
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            callback(null); 
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+    
+}
+
+
+/**
+ * Tipo de Articulo 0 = Siempre debe facturar mayor a cero
+ * @returns
+ */
+function ___ComboTipoFacturarArticulo(){
+	var generico =[]
+	generico.push({
+        codigo: 0,
+        descripcion:"Facturar Mayor Cero"
+     });
+
+	generico.push({
+        codigo: 1,
+        descripcion:"Facturar en Cero"
+     });
+
+    return generico;
+}
+
+/**
+ * Buscar el articulo en la base de datos
+ * @param idArticulo
+ * @param cantidad
+ * @param precio
+ * @returns
+ */
+
+async function __buscarcodigo(idArticulo,cantidad,precio,callback){
+    var articulo = null
+    if(idArticulo ==null){
+        return
+    }
+      if(idArticulo.length ==0){
+        return
+    }
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    mensajeAdvertencia(data.message);
+                    callback(null);
+                }
+            }else{
+                articulo  = null;
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    	articulo  = modeloTabla;
+                    	callback(articulo);
+                  });
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            
+          mensajeErrorServidor(xhr, status);
+          callback(null);
+        }
+    });
+  // callback(articulo); 
+}
+
+
+/**
+*  Crear el combo base imponible
+**/
+function __ComboBaseImponibles(){
+	var generico =[]
+	generico.push({
+        codigo: 0,
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+	generico.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+     return generico;
+}
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __ComboContables(){
+	var generico =[];
+	generico.push({
+        codigo: $.i18n.prop("boolean.no"),
+        descripcion: $.i18n.prop("boolean.no") 
+     });
+	generico.push({
+        codigo: $.i18n.prop("boolean.si"),
+        descripcion:$.i18n.prop("boolean.si")
+     });
+    return generico;
+}
+/**
+*  Crear el combo de estados
+**/
+function __ComboComanda(){
+	var generico =[]
+	generico.push({
+        codigo: 0,
+        descripcion: "No enviar"
+     });
+
+	generico.push({
+        codigo: 1,
+        descripcion: $.i18n.prop("combo.comanda.cocina.1")
+     });
+	generico.push({
+        codigo:2,
+        descripcion:$.i18n.prop("combo.comanda.cocina.2")
+     });
+    return generico;
+}
+/**
+*  Crear el combo comanda
+**/
+function __ComboEstados(){
+	var generico =[]
+	generico.push({
+        codigo: $.i18n.prop("combo.estado.Activo"),
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+	generico.push({
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+    return generico;
 }
 
 /**
@@ -670,6 +852,60 @@ function __informacionData_formato_cliente(){
    
    return informacion_tabla_clientes
 }
+
+function __informacionData_formato_categoria(){
+    var informacion_tabla_categorias = [	
+							        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+								            "render":function(id,type, row){
+									            return __OpcionesCategorias(id,type,row);
+								                }	 
+							            },
+                                        {'data' : 'descripcion',"name":"descripcion" ,"title" : 'Descripcion' ,"autoWidth":true,
+    								            "render":function(id,type, row){
+    									            return row.descripcion;
+	 							                }	 
+                                        },
+                                    
+
+                                        ];                              
+   
+   return informacion_tabla_categorias;
+}
+/**
+* Opciones del modal de categorias
+*/
+function __OpcionesCategorias(){
+  var agregar  = '<a href="#"  title="Seleccionar Categoria" class="btn btnAgregar btn-success form-control" title="Seleccione categoria" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+function __informacionData_formato_marca(){
+    var informacion_tabla_marca = [	
+							        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+								            "render":function(id,type, row){
+									            return __OpcionesMarcas(id,type,row);
+								                }	 
+							            },
+                                        {'data' : 'descripcion',"name":"descripcion" ,"title" : 'Descripcion' ,"autoWidth":true,
+    								            "render":function(id,type, row){
+    									            return row.descripcion;
+	 							                }	 
+                                        },
+                                    
+
+                                        ];                              
+   
+   return informacion_tabla_marca;
+}
+/**
+* Opciones del modal de categorias
+*/
+function __OpcionesMarcas(){
+  var agregar  = '<a href="#"  title="Seleccionar Marca" class="btn btnAgregar btn-success form-control" title="Seleccione marca" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+
 
 function financial(x) {
 	if(x == null || typeof x == "undefined"  ){
@@ -1394,7 +1630,16 @@ function __modificarClase(formulario,mensajeAlerModificar,urlModificar,urlListar
 }
 
 
-
+function mensajeEstatico(mensaje){
+	swal({
+          title: '',
+          text: mensaje,
+          type: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'Aceptar',
+               	  
+        })
+}
 
 /**
 *   Agregar 
