@@ -475,7 +475,7 @@ public final class FacturaElectronicaUtils {
 		try {
 			b = new javax.sql.rowset.serial.SerialBlob(valor.getBytes());
 		} catch (Exception e) {
-			throw e;
+		//	throw e;
 
 		}
 

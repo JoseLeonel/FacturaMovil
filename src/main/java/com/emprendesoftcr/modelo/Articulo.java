@@ -160,7 +160,7 @@ public class Articulo implements Serializable {
 	@Column(name = "cod_cabys")
 	private String						codigoCabys;
 
-	@Column(name = "cant_paque")
+	@Column(name = "cant_paque", columnDefinition = "INT default '0'")
 	private Integer						cantidadPaquete;
 
 	@Column(name = "cod_secu")
@@ -168,8 +168,8 @@ public class Articulo implements Serializable {
 
 	@Column(name = "tipo_facturar", columnDefinition = "INT default '0'")
 	private Integer						tipoFacturar;
-	@Column(name = "precio_sugerido")
-	private Double precioSugerido;
+	@Column(name = "precio_sugerido", columnDefinition = "INT default '0'")
+	private Double						precioSugerido;
 
 	public Articulo() {
 		super();
@@ -188,7 +188,7 @@ public class Articulo implements Serializable {
 		this.cantidad = Constantes.ZEROS_DOUBLE;
 		this.codigoSecundario = Constantes.EMPTY;
 		this.tipoFacturar = Constantes.ZEROS;
-
+		this.cantidadPaquete = Constantes.ZEROS;
 		this.codigoCabys = Constantes.EMPTY;
 
 	}
@@ -590,16 +590,12 @@ public class Articulo implements Serializable {
 		this.tipoFacturar = tipoFacturar;
 	}
 
-	
 	public Double getPrecioSugerido() {
 		return precioSugerido;
 	}
 
-	
 	public void setPrecioSugerido(Double precioSugerido) {
 		this.precioSugerido = precioSugerido;
 	}
-	
-	
 
 }

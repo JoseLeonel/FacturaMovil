@@ -560,12 +560,12 @@ function __listadoTipoUnidadesActivas(callback){
 function ___ComboTipoFacturarArticulo(){
 	var generico =[]
 	generico.push({
-        codigo: "0",
+        codigo: 0,
         descripcion:"Facturar Mayor Cero"
      });
 
 	generico.push({
-        codigo: '1',
+        codigo: 1,
         descripcion:"Facturar en Cero"
      });
 

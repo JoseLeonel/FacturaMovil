@@ -9,9 +9,11 @@
                         <!--Form-->
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
                             <input type="hidden" name="id" id="id" value="{articulo.id}" >
+                             <input type="hidden" name="esPaquete" id="esPaquete" value="0">
                              <input type="hidden" name="categoria" id="categoria" value="{articulo.categoria.id}">
                              <input type="hidden" name="marca" id="marca" value="{articulo.marca.id}">
                             <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
+                            <input type="hidden" name="codigoSecundario" id="codigoSecundario" value="{articulo.codigoSecundario}">
                             <input type="hidden" name="datosCabys" id="datosCabys" >
                             <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
                             <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
@@ -25,6 +27,11 @@
                             <input type="hidden"  id="tipoImpuesto1" name="tipoImpuesto1" value="{articulo.tipoImpuesto1}"  >
                             <input type="hidden"  id="codigoTarifa1" name="codigoTarifa1" value="{articulo.codigoTarifa1}"  >
                             <input type="hidden"  id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  >
+                            <input type="hidden"  id="codigoTarifaMag" name="codigoTarifaMag" value="{articulo.codigoTarifaMag}"  >
+                            <input type="hidden"  id="impuestoMag" name="impuestoMag" value="{articulo.impuestoMag}"  >
+                            <input type="hidden"  id="tipoImpuestoMag" name="tipoImpuestoMag" value="{articulo.tipoImpuestoMag}"  >
+
+                            <input type="hidden" name="tipoFacturar" id="tipoFacturar" value="{articulo.tipoFacturar}">
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default" id="cuentas">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -149,12 +156,12 @@
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.updated_at")}  </label>
                                                     <input type="text" class="form-control campo"  value="{articulo.updated_atSTR}" readonly >
                                                 </div>
-                                                 <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                                            <!--     <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                                         <label class="tamanoLetraTotales">Facturar</label>
                                                         <select  class="form-control campo" id="tipoFacturar" name="tipoFacturar"  >
                                                             <option  each={tipoFacturar}  value="{codigo}" selected="{articulo.tipoFacturar ==codigo?true:false}" >{descripcion}</option>
                                                         </select>
-                                                </div>    
+                                                </div>    -->   
                                                  <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label  class="tamanoLetraTotales">Precio Sugerido </label>
                                                     <input type="number" step="any" class="campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
@@ -1364,14 +1371,14 @@ var reglasDeValidacion = function() {
                 minlength:1,
                
 			},                                                
-            marca : {
+            descripcionCategoria : {
 				required : true,
 			},     
                                                       
             codigoCabys : {
 				required : true,
 			},                                                
-            categoria : {
+            descripcionMarca : {
 				required : true,
 			},                                                
             unidadMedida : {

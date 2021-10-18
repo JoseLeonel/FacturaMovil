@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,8 +20,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
@@ -29,17 +30,25 @@ import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 
 @EnableJpaRepositories(basePackageClasses = UsuarioRepository.class)
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Configuration	
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	private final TokenProvider tokenProvider;
+	private final  CorsFilter corsFilter;
 
 	@Autowired
 	private CustomUsuariosDetailsService usuarioDetailsService;
-
+	private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:";
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioDetailsService).passwordEncoder(passwordEncoder());
 	}
-
+	public WebSecurityConfig(TokenProvider tokenProvider, CorsFilter corsFilter
+			) {
+		this.tokenProvider = tokenProvider;
+		this.corsFilter = corsFilter;
+		
+	}
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -54,11 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		 http.csrf().disable();
-		
-		
+		http.csrf().disable();
+
 		http.authorizeRequests()
-				.antMatchers("/administrativo/**", "/static/**","/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
+				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
 						"/plugins/**", "/resources/**", "/registration")
 				.permitAll().antMatchers("/local/CrearFacturaServiceAjax").authenticated()
 				.antMatchers("/local/ListarClientes.do").authenticated()
@@ -92,63 +100,73 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/service/callback.do").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password")
-				
-				.and().logout().and().exceptionHandling().accessDeniedPage("/403")
-				.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
-				http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
+				.permitAll()
+				.anyRequest()
+				.authenticated()
+				.and().formLogin().loginPage("/login")
+				.failureUrl("/login?error=true")
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/")
+				.and()
+	            .httpBasic()
+	            .and()
+	            .apply(securityConfigurerAdapter())
+				.and().logout().and().exceptionHandling().accessDeniedPage("/403").and().exceptionHandling()
+				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
+		
+		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
 
-				http.csrf().disable();
-				http.headers().frameOptions().disable();
-				http.sessionManagement().invalidSessionUrl("/");
+		
+		http.headers().frameOptions().disable();
+		http.sessionManagement().invalidSessionUrl("/");
 	}
 
-	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint     {
-    public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
-        super(loginUrl);
+
+	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
+		public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
+			super(loginUrl);
+		}
+
+		@Override
+		public void commence(
+
+				HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+				throws IOException, ServletException {
+			String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
+			boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
+			if (isAjax) {
+				response.setHeader("UNAUTHORIZED", "true");// Utilizado para los llamados ajax
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ajax REquest Denied (Session Expired)");
+			} else {
+				super.commence(request, response, authException);
+			}
+		}
+	}
+
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**");
+	}
+
+//	@Bean
+//	public CorsFilter corsFilter() {
+//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		final CorsConfiguration configuration = new CorsConfiguration();
+//		configuration.setAllowCredentials(true);
+//		configuration.addAllowedOrigin("*");
+//		configuration.addAllowedHeader("*");
+//		configuration.addAllowedMethod("OPTIONS");
+//		configuration.addAllowedMethod("HEAD");
+//		configuration.addAllowedMethod("GET");
+//		configuration.addAllowedMethod("PUT");
+//		configuration.addAllowedMethod("POST");
+//		configuration.addAllowedMethod("DELETE");
+//		configuration.addAllowedMethod("PATCH");
+//		source.registerCorsConfiguration("/**", configuration);
+//		return new CorsFilter(source);
+//	}
+	private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
     }
-
-    @Override
-    public void commence(
-    		
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AuthenticationException authException)
-        throws IOException, ServletException {
-        String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
-        boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
-        if (isAjax) {
-    				response.setHeader("UNAUTHORIZED", "true");// Utilizado para los llamados ajax
-    				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ajax REquest Denied (Session Expired)");
-        } else {
-            super.commence(request, response, authException);
-        }
-    }
-}
-
-public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**");
-}
-@Bean
-public CorsFilter corsFilter() {
-    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    final CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowCredentials(true);
-    configuration.addAllowedOrigin("*");
-    configuration.addAllowedHeader("*");
-    configuration.addAllowedMethod("OPTIONS");
-    configuration.addAllowedMethod("HEAD");
-    configuration.addAllowedMethod("GET");
-    configuration.addAllowedMethod("PUT");
-    configuration.addAllowedMethod("POST");
-    configuration.addAllowedMethod("DELETE");
-    configuration.addAllowedMethod("PATCH");
-    source.registerCorsConfiguration("/**", configuration);
-    return new CorsFilter(source);
-}
-
-//	private JWTConfigurer securityConfigurerAdapter() {
-//        return new JWTConfigurer(tokenProvider);
-//    }
 }

@@ -478,7 +478,11 @@ public class ArticuloBoImpl implements ArticuloBo {
 				if (articulo.getCantidad() > Constantes.ZEROS_DOUBLE) {
 					articuloBd.setCantidad(articulo.getCantidad());
 				}
+				articuloBd.setCantidadPaquete(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO);
 				articuloBd.setCodigoSecundario(articulo.getCodigoSecundario());
+			}else {
+				articuloBd.setCantidadPaquete(Constantes.ARTICULO_PAQUETE_TIPO_INACTIVO);
+				articuloBd.setCodigoSecundario(Constantes.EMPTY);
 			}
 			articuloBd.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			modificar(articuloBd);
@@ -664,7 +668,10 @@ public class ArticuloBoImpl implements ArticuloBo {
 					cabys.setEmpresa(usuarioSesion.getEmpresa());
 					cabys.setOrigen(FacturaElectronicaUtils.convertirStringToblod(cabysAct.getOrigenSTR()));
 					cabys.setUri(cabysAct.getUri());
-					cabysBo.agregar(cabys);
+					if(cabys.getOrigen() != null) {
+						cabysBo.agregar(cabys);	
+					}
+					
 
 				}
 			}

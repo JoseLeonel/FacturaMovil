@@ -85,7 +85,6 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
- * 
  * @author jose.
  * @since 19 abr. 2018
  */
@@ -93,45 +92,45 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 @Controller
 public class ArticuloController {
 
-	private static final Function<Object, ArticuloCommand> TO_COMMAND = new Function<Object, ArticuloCommand>() {
+	private static final Function<Object, ArticuloCommand>	TO_COMMAND	= new Function<Object, ArticuloCommand>() {
 
-		@Override
-		public ArticuloCommand apply(Object f) {
-			return new ArticuloCommand((Articulo) f);
-		};
-	};
-
-	@Autowired
-	private DataTableBo dataTableBo;
+																																				@Override
+																																				public ArticuloCommand apply(Object f) {
+																																					return new ArticuloCommand((Articulo) f);
+																																				};
+																																			};
 
 	@Autowired
-	private ArticuloBo articuloBo;
+	private DataTableBo																			dataTableBo;
 
 	@Autowired
-	ConsultasNativeBo consultasNativeBo;
+	private ArticuloBo																			articuloBo;
 
 	@Autowired
-	private DetalleBo detalleBo;
+	ConsultasNativeBo																				consultasNativeBo;
 
 	@Autowired
-	private CategoriaBo categoriaBo;
+	private DetalleBo																				detalleBo;
 
 	@Autowired
-	private UsuarioBo usuarioBo;
+	private CategoriaBo																			categoriaBo;
 
 	@Autowired
-	private ArticuloPropertyEditor articuloPropertyEditor;
+	private UsuarioBo																				usuarioBo;
 
 	@Autowired
-	private MarcaPropertyEditor marcaPropertyEditor;
+	private ArticuloPropertyEditor													articuloPropertyEditor;
 
 	@Autowired
-	private CategoriaPropertyEditor categoriaPropertyEditor;
+	private MarcaPropertyEditor															marcaPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private CategoriaPropertyEditor													categoriaPropertyEditor;
+
 	@Autowired
-	private ValidateTokenBo validateTokenBo;
+	private StringPropertyEditor														stringPropertyEditor;
+	@Autowired
+	private ValidateTokenBo																	validateTokenBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -160,7 +159,6 @@ public class ArticuloController {
 
 	/**
 	 * Listar JSP de los articulos
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -176,7 +174,6 @@ public class ArticuloController {
 
 	/**
 	 * Listar JSP de los articulos
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -202,8 +199,7 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/movil/ListarArticulosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @RequestParam Integer idEmpresa, @RequestParam Long idCategoria) {
+	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa, @RequestParam Long idCategoria) {
 
 		return articuloBo.articulosByCategoriaAndEmpresa(idEmpresa, idCategoria);
 	}
@@ -211,11 +207,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/CambiarCategoriaArticulosGrupalAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model,
-			@RequestParam("listaArticuloGrupales") String listaArticuloGrupales,
-			@RequestParam("categoria") Long idCategoria,
-			@ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result,
-			SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("categoria") Long idCategoria, @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		Articulo articuloTemp = new Articulo();
 		try {
@@ -227,18 +219,15 @@ public class ArticuloController {
 				Gson gson = new Gson();
 				if (jsonArrayDetalleFactura != null) {
 					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
-						ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupal = gson.fromJson(
-								jsonArrayDetalleFactura.get(i).toString(), ArticuloCambioCategoriaGrupal.class);
+						ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupal = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), ArticuloCambioCategoriaGrupal.class);
 						Articulo articuloBD = articuloBo.buscar(articuloCambioCategoriaGrupal.getId());
 						if (articuloBD == null) {
 							respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
-							respuestaServiceValidator.setMessage(
-									Constantes.RESOURCE_BUNDLE.getString("error.articulo.codigo.no.existe"));
+							respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.articulo.codigo.no.existe"));
 							return respuestaServiceValidator;
 						}
 						if (result.hasErrors()) {
-							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-									result.getAllErrors());
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 						}
 						Categoria categoria = categoriaBo.buscar(idCategoria);
 						articuloBD.setCategoria(categoria);
@@ -260,10 +249,7 @@ public class ArticuloController {
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarEtiquetasPrecios.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void GenerarEtiquetasPrecios(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			@RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas,
-			@ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status)
-			throws Exception {
+	public void GenerarEtiquetasPrecios(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("listaArticuloEtiquetas") String listaArticuloEtiquetas, @ModelAttribute EtiquetasCommand EtiquetasCommand1, BindingResult result, SessionStatus status) throws Exception {
 		List<EtiquetasCommand> lista = new ArrayList<>();
 
 		byte[] decodedBytes = Base64.getDecoder().decode(listaArticuloEtiquetas);
@@ -281,8 +267,7 @@ public class ArticuloController {
 
 			if (jsonArrayDetalleFactura != null) {
 				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
-					EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(),
-							EtiquetasCommand.class);
+					EtiquetasCommand etiquetasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), EtiquetasCommand.class);
 					for (int e = 0; e < etiquetasCommand.getCantidadEtiqueta(); e++) {
 						lista.add(etiquetasCommand);
 					}
@@ -297,8 +282,7 @@ public class ArticuloController {
 		// JasperReport report = (JasperReport) JRLoader.loadObject(new File(
 		// "/data/reportes/articulos/reporte_etiquetas.jasper" ));
 		// JasperCompileManager.compileReport("/reportes/articulos/MyReports/reporte_etiquetas.jrxml");
-		InputStream reportfile = getClass()
-				.getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");
+		InputStream reportfile = getClass().getResourceAsStream("/reportes/articulos/MyReports/reporte_etiquetas.jasper");
 		ByteArrayInputStream jsonDataStream = new ByteArrayInputStream(new Gson().toJson(lista).getBytes());
 		JsonDataSource ds = new JsonDataSource(jsonDataStream);
 		// Map parameters = new HashMap();
@@ -322,8 +306,7 @@ public class ArticuloController {
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/GenerarTikectFactura.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			@RequestParam("idFactura") Long idFactura, BindingResult result, SessionStatus status) throws Exception {
+	public void GenerarTikect(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam("idFactura") Long idFactura, BindingResult result, SessionStatus status) throws Exception {
 		List<DetalleFacturaCommand> lista = new ArrayList<>();
 
 		Collection<Detalle> listaDetalles = detalleBo.findbyIdFactura(idFactura);
@@ -358,8 +341,7 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fechaInicio") String fechaInicio) {
+	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) {
 		// Se buscan las facturas
 		Date fechaI = Utils.parseDate(fechaInicio);
 		Date fechaF = Utils.parseDate(fechaInicio);
@@ -376,8 +358,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosFechaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarArticulosFechaActivosAjax(HttpServletRequest request,
-			HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) {
+	public RespuestaServiceDataTable listarArticulosFechaActivosAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) {
 
 		// Se buscan las facturas
 		Date fechaI = Utils.parseDate(fechaInicio);
@@ -397,8 +378,7 @@ public class ArticuloController {
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
-		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),
-				inicio1, fin1);
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 		for (ArticuloByFechaNative articuloByFechaNative : objetos) {
 			solicitudList.add(articuloByFechaNative);
 		}
@@ -414,8 +394,7 @@ public class ArticuloController {
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioAjax.do", method = RequestMethod.GET)
-	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
+	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
 
 		// Se buscan las facturas
 		Date fechaI = Utils.parseDate(fechaInicio);
@@ -433,8 +412,7 @@ public class ArticuloController {
 
 		// Se buscan las facturas
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),
-				inicio1, fin1);
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 
 		String nombreArchivo = "Inventario.xls";
 		response.setContentType("application/octet-stream");
@@ -455,19 +433,14 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Estado", "Categoria", "#Codigo",
-				"Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico",
-				"Total Venta Esperada(cantidadXPrecioPublico)");
-		new SimpleExporter().gridExport(headers, articulos,
-				"updated_atSTR,estado,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico",
-				baos);
+		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Estado", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
+		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,estado,categoria, codigo, descripcion, cantidadActualReal, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
 
 //Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioExistenciasAjax.do", method = RequestMethod.GET)
-	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
+	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam("fechaInicio") String fechaInicio) throws IOException, Exception {
 
 		// Se buscan las facturas
 		Date fechaI = Utils.parseDate(fechaInicio);
@@ -485,8 +458,7 @@ public class ArticuloController {
 
 		// Se buscan las facturas
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(),
-				inicio1, fin1);
+		Collection<ArticuloByFechaNative> objetos = consultasNativeBo.findByInventario(usuarioSesion.getEmpresa(), inicio1, fin1);
 
 		String nombreArchivo = "InventarioExistencias.xls";
 		response.setContentType("application/octet-stream");
@@ -507,16 +479,13 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<ArticuloByFechaNative> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Estado", "Cantidad Actual",
-				"#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos, " categoria,estado,codigo, descripcion, cantidadActualReal",
-				baos);
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Estado", "Cantidad Actual", "#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos, " categoria,estado,codigo, descripcion, cantidadActualReal", baos);
 		return baos;
 	}
 
 	@RequestMapping(value = "/PDFGondolaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			@RequestParam Long idArticulo) throws Exception {
+	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idArticulo) throws Exception {
 
 		try {
 			Articulo articuloBD = articuloBo.buscar(idArticulo);
@@ -553,8 +522,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarArticulosActivosAjax(HttpServletRequest request,
-			HttpServletResponse response) {
+	public RespuestaServiceDataTable listarArticulosActivosAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -572,8 +540,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosUsoInternoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarArticulosActivosTipoUsoInternoAjax(HttpServletRequest request,
-			HttpServletResponse response) {
+	public RespuestaServiceDataTable listarArticulosActivosTipoUsoInternoAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -592,18 +559,13 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloCabysAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarCabysAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "codigo", required = false) String codigo,
-			@RequestParam(value = "descripcion", required = false) String descripcion,
-			@RequestParam(value = "tipo", required = false) Integer tipo,
-			@RequestParam(value = "cantidad", required = false) Integer cantidad) {
+	public RespuestaServiceDataTable listarCabysAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigo", required = false) String codigo, @RequestParam(value = "descripcion", required = false) String descripcion, @RequestParam(value = "tipo", required = false) Integer tipo, @RequestParam(value = "cantidad", required = false) Integer cantidad) {
 		RespuestaServiceDataTable<ArticuloCabysCommand> respuestaService = new RespuestaServiceDataTable<ArticuloCabysCommand>();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
 
-		List<Map<String, Object>> listaObjetos = articuloBo.articulosByCabys(descripcion, codigo, tipo,
-				usuarioSesion.getEmpresa().getId(), cantidad);
+		List<Map<String, Object>> listaObjetos = articuloBo.articulosByCabys(descripcion, codigo, tipo, usuarioSesion.getEmpresa().getId(), cantidad);
 
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
@@ -615,8 +577,7 @@ public class ArticuloController {
 		Gson gson = new Gson();
 		if (jsonArray1 != null) {
 			for (int i = 0; i < jsonArray1.size(); i++) {
-				ArticuloCabysCommand articuloCabysCommand = gson.fromJson(jsonArray1.get(i).toString(),
-						ArticuloCabysCommand.class);
+				ArticuloCabysCommand articuloCabysCommand = gson.fromJson(jsonArray1.get(i).toString(), ArticuloCabysCommand.class);
 				detallesFacturaCommand.add(articuloCabysCommand);
 			}
 		}
@@ -632,7 +593,6 @@ public class ArticuloController {
 
 	/**
 	 * Listar Ajax de los articulos de una empresa
-	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -640,8 +600,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "codigoArt", required = false) String codigoArt) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -686,7 +645,6 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarPaquetesAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
-		
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
@@ -728,8 +686,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/local/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
+	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
 		if (validateTokenBo.validarTokenApis(request) == false) {
 			DataTableDelimitador delimitadores = null;
 			delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -748,8 +705,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloMinimosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarMinimosAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "codigoArt", required = false) String codigoArt) {
+	public RespuestaServiceDataTable listarMinimosAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -795,10 +751,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "categoria", required = false) String categoria,
-			@RequestParam(value = "estado", required = false) String estado,
-			@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) {
+	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "categoria", required = false) String categoria, @RequestParam(value = "estado", required = false) String estado, @RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -858,7 +811,6 @@ public class ArticuloController {
 
 	/**
 	 * Descarga del excel de Totales por categorias
-	 * 
 	 * @param request
 	 * @param response
 	 * @param categoria
@@ -868,10 +820,7 @@ public class ArticuloController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/DescargarArticuloXCategoriaAjax.do", method = RequestMethod.GET)
-	public void descargarArticuloXCategoriaAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = "idCategoria", required = false) String idCategoria,
-			@RequestParam(value = "estado", required = false) String estado,
-			@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) throws IOException, Exception {
+	public void descargarArticuloXCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "idCategoria", required = false) String idCategoria, @RequestParam(value = "estado", required = false) String estado, @RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Long codigoCategoria = Constantes.ZEROS_LONG;
@@ -885,8 +834,7 @@ public class ArticuloController {
 
 		// Se buscan las facturas
 		String cate = Constantes.EMPTY;
-		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(
-				usuario.getEmpresa(), categoria, estado, minimoMaximo);
+		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(usuario.getEmpresa(), categoria, estado, minimoMaximo);
 		if (categoria != null) {
 			cate = categoria.getDescripcion().trim();
 		} else {
@@ -921,20 +869,15 @@ public class ArticuloController {
 		}
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "Estado", "#Codigo", "Descripcion", "Cantidad", "Minimo",
-				"Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada",
-				"Ganancia Esperada");
-		new SimpleExporter().gridExport(headers, list,
-				" categoria.descripcion,estado,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR",
-				baos);
+		List<String> headers = Arrays.asList("Categoria", "Estado", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
+		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,estado,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
 		return baos;
 	}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarPorDescripcionCodigoArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarDescripcionCodigoArticulosAjax(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, @ModelAttribute String descArticulo, @RequestParam String codigoArt) {
+	public RespuestaServiceDataTable listarDescripcionCodigoArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, @ModelAttribute String descArticulo, @RequestParam String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		String valorDescripcion = request.getParameter("descArticulo");
@@ -969,7 +912,6 @@ public class ArticuloController {
 
 	/**
 	 * Paginacion de la venta
-	 * 
 	 * @param request
 	 * @param model
 	 * @param parametrosPaginacion
@@ -978,8 +920,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarPaginacionArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model,
-			@ModelAttribute ParametrosPaginacion parametrosPaginacion) {
+	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -991,15 +932,13 @@ public class ArticuloController {
 		}
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (delimitadores.getColumnData() == null
-				&& usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
+		if (delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
 			// Se ordena por prioridad por defecto se crearon en 9999
 			delimitadores.setColumnData("prioridad, id");
 			delimitadores.setColumnOrderDir("asc");
 		}
 
-		delimitadores.addFiltro(new JqGridFilter("categoria.id",
-				"'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "="));
+		delimitadores.addFiltro(new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "="));
 		delimitadores.addFiltro(new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="));
 		if (parametrosPaginacion.getTipoVenta() != null) {
 			if (!parametrosPaginacion.getTipoVenta().equals(Constantes.SI_MOSTRAR_IMPUESTO_10_PORCIENTO)) {
@@ -1015,7 +954,6 @@ public class ArticuloController {
 
 	/**
 	 * Crear un articulo
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -1027,10 +965,15 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @RequestParam(value = "esPaquete", required = false) Integer esPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			articulo.setCantidadPaquete(idPaquete);
+			esPaquete = esPaquete == null ? Constantes.ZEROS : esPaquete;
+			if (esPaquete != null && esPaquete.equals(Constantes.ZEROS)) {
+				articulo.setCantidadPaquete(Constantes.ZEROS);
+				articulo.setCodigoSecundario(Constantes.EMPTY);
+			} else {
+				articulo.setCantidadPaquete(idPaquete);
+			}
 			return articuloBo.agregar(request, articulo, result);
 
 		} catch (Exception e) {
@@ -1041,14 +984,12 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/local/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) int idPaquete,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.agregar(request, articulo, result);
@@ -1060,7 +1001,6 @@ public class ArticuloController {
 
 	/**
 	 * Modificar Articulo
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -1072,8 +1012,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,@RequestParam(value = "idPaquete", required = false) int idPaquete,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
 			articulo.setCantidadPaquete(idPaquete);
@@ -1087,14 +1026,12 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/local/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 
 			return articuloBo.modificar(request, articulo, result);
@@ -1106,7 +1043,6 @@ public class ArticuloController {
 
 	/**
 	 * Mostrar articulo por id
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -1118,8 +1054,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
@@ -1128,8 +1063,7 @@ public class ArticuloController {
 			if (articuloBD == null) {
 				if (articulo.getCodigo() != null) {
 					if (!articulo.getCodigo().equals(Constantes.EMPTY)) {
-						articuloBD = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(),
-								usuarioSesion.getEmpresa());
+						articuloBD = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), usuarioSesion.getEmpresa());
 					}
 
 				}
@@ -1139,8 +1073,7 @@ public class ArticuloController {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
 
 			ArticuloCommand articuloCommand = new ArticuloCommand(articuloBD);
@@ -1153,9 +1086,7 @@ public class ArticuloController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarPorCodigoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			@ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo,
-			BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
@@ -1164,8 +1095,7 @@ public class ArticuloController {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloBD);
@@ -1177,35 +1107,27 @@ public class ArticuloController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico,
-			@RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto,
-			@RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida,
-			BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
 
-			return articuloBo.cambiarPrecio(request, response,  articulo, precioPublico, codigo, tipoImpuesto, impuesto, descripcion, tipoCodigo, unidadMedida, result);
+			return articuloBo.cambiarPrecio(request, response, articulo, precioPublico, codigo, tipoImpuesto, impuesto, descripcion, tipoCodigo, unidadMedida, result);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 
 	}
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioLocal(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico,
-			@RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto,
-			@RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida,
-			BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecioLocal(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return articuloBo.cambiarPrecio(request, response, articulo, precioPublico, codigo, tipoImpuesto, impuesto, descripcion, tipoCodigo, unidadMedida, result);
 
@@ -1214,12 +1136,11 @@ public class ArticuloController {
 		}
 
 	}
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand,
-			BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecioArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 
 			return articuloBo.cambiarPrecioArticulo(request, response, model, cambiarPrecioArticuloCommand, result);
@@ -1228,17 +1149,15 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioArticuloLocal(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand,
-			BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecioArticuloLocal(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return articuloBo.cambiarPrecioArticulo(request, response, model, cambiarPrecioArticuloCommand, result);
 
@@ -1250,9 +1169,7 @@ public class ArticuloController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/eliminarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator eliminarArticulo(HttpServletRequest request, HttpServletResponse response,
-			ModelMap model, @ModelAttribute Articulo articulo, @RequestParam String codigo, BindingResult result,
-			SessionStatus status) throws Exception {
+	public RespuestaServiceValidator eliminarArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam String codigo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
@@ -1266,8 +1183,7 @@ public class ArticuloController {
 				result.rejectValue("descripcion", "error.articulo.con.facturas.asociadas");
 			}
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
 			articuloBo.eliminar(articuloBD);
@@ -1280,7 +1196,6 @@ public class ArticuloController {
 
 	/**
 	 * Buscar Articulo por id del inventario
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo findArticuloByCodigojax
@@ -1292,9 +1207,7 @@ public class ArticuloController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/findArticuloByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator findArticuloByCodigojax(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo,
-			BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator findArticuloByCodigojax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
 		try {
 
 			return articuloBo.findArticuloByCodigojax(request, articulo, response, codigoArticulo, result);
@@ -1303,24 +1216,20 @@ public class ArticuloController {
 		}
 	}
 
-	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/local/findArticuloByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator findArticuloByCodigojaxLocal(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo,
-			BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator findArticuloByCodigojaxLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return articuloBo.findArticuloByCodigojax(request, articulo, response, codigoArticulo, result);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 
@@ -1328,10 +1237,8 @@ public class ArticuloController {
 
 			private static class ARTICULO {
 
-				private static final RespuestaServiceValidator AGREGADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("articulo.agregar.correctamente");
-				private static final RespuestaServiceValidator MODIFICADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("articulo.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente");
 			}
 		}
 
@@ -1339,8 +1246,7 @@ public class ArticuloController {
 
 			private static class ARTICULO {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.ERROR("error.articulo.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.noExiste");
 			}
 		}
 	}

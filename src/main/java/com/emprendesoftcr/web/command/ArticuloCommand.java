@@ -77,7 +77,7 @@ public class ArticuloCommand {
 	private Double			cantidaProducto;
 	private Double			montoTotalLinea;
 	private Double			precioSugerido;
-
+	private Integer						tipoFacturar;
 	public ArticuloCommand(ArticuloMinimoNative articuloMinimoNative) {
 		super();
 		this.id = articuloMinimoNative.getId();
@@ -148,6 +148,7 @@ public class ArticuloCommand {
 
 		this.cantidaProducto = Constantes.ZEROS_DOUBLE;
 		this.precioSugerido = articulo.getPrecioSugerido();
+		this.tipoFacturar = articulo.getTipoFacturar();
 	}
 
 	public String getCodigoCabys() {
@@ -575,13 +576,10 @@ public class ArticuloCommand {
 		this.codigoSecundario = codigoSecundario;
 	}
 
-	public Integer getCantidadPaquete() {
-		return cantidadPaquete;
-	}
 
-	public void setCantidadPaquete(Integer cantidadPaquete) {
-		this.cantidadPaquete = cantidadPaquete;
-	}
+
+	
+
 
 	public Double getCantidaProducto() {
 		return cantidaProducto == null ? Constantes.ZEROS_DOUBLE : cantidaProducto;
@@ -605,6 +603,26 @@ public class ArticuloCommand {
 
 	public void setPrecioSugerido(Double precioSugerido) {
 		this.precioSugerido = precioSugerido;
+	}
+
+	
+	public Integer getCantidadPaquete() {
+		return cantidadPaquete;
+	}
+
+	
+	public void setCantidadPaquete(Integer cantidadPaquete) {
+		this.cantidadPaquete = cantidadPaquete;
+	}
+
+	
+	public Integer getTipoFacturar() {
+		return tipoFacturar;
+	}
+
+	
+	public void setTipoFacturar(Integer tipoFacturar) {
+		this.tipoFacturar = tipoFacturar;
 	}
 
 }

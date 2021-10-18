@@ -33,6 +33,7 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 				+ "que ha dado a su Hijo al mundo para que todo aquel que cree en EL "
 				+ "no se pierda y tenga vida Eterna  ---------------------------");
 		SpringApplication.run(FacturaElectronicaApplication.class, args);
+		
 	}
 	
 

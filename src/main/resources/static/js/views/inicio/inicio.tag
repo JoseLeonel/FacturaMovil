@@ -306,7 +306,7 @@ function __ArticulosMasVendido(){
                 }           
             },
             error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
+                console,log(xhr);
             }
         });
 }
@@ -380,7 +380,8 @@ function __ArticulosMinimo(){
                 }           
             },
             error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
+                console,log(xhr);
+
             }
         });
 }
@@ -448,7 +449,8 @@ function __CuentasXCobrarGrafico(){
                 }           
             },
             error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
+                console,log(xhr);
+
             }
         });
 }
@@ -523,7 +525,8 @@ function __CuentasXPagarGrafico(){
                 }           
             },
             error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
+                console,log(xhr);
+
             }
         });
 }
@@ -585,7 +588,8 @@ function __cargaMeses(){
         },
         error: function (xhr, status) {
             console.log(xhr);
-             mensajeErrorServidor(xhr, status);
+            console,log(xhr);
+
         }
     })
 }
