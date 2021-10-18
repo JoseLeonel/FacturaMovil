@@ -63,13 +63,12 @@ public class UsuarioCajasController {
 
 																																																	@Override
 																																																	public UsuarioCajaCommand apply(Object f) {
-																																																		listarUsuariosCajasAjax																																											return new UsuarioCajaCommand((UsuarioCaja) f);
+																																																		return new UsuarioCajaCommand((UsuarioCaja) f);
 																																																	};
 																																																};
 
 	@Autowired
 	private DataTableBo																				dataTableBo;
-
 
 	@Autowired
 	private UsuarioCajaBo																			usuarioCajaBo;
@@ -281,7 +280,7 @@ public class UsuarioCajasController {
 		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			
+
 			return usuarioCajaBo.cerrarCajaCajero(request, conteoManualCommand, result);
 
 		} catch (Exception e) {
@@ -297,13 +296,12 @@ public class UsuarioCajasController {
 		@SuppressWarnings("unused")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			
+
 			if (validateTokenBo.validarTokenApis(request) == false) {
-			    return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+
 			}
-			
-			
+
 			return usuarioCajaBo.cerrarCajaCajero(request, conteoManualCommand, result);
 
 		} catch (Exception e) {

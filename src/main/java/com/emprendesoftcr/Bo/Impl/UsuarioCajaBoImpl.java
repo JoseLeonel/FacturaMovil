@@ -433,14 +433,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		}
 	}
 
-<<<<<<< HEAD
-	@Override
-	public RespuestaServiceDataTable<?> listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-=======
 	private void enviarCorreoCierreCaja(UsuarioCajaCommand usuarioCajaCommand, Usuario usuario) throws Exception {
 
 		Map<String, Object> modelEmail = new HashMap<>();
@@ -515,5 +508,5 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		}
 
 	}
->>>>>>> cargaInventarioCompra
+
 }

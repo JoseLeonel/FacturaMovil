@@ -235,7 +235,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return listaObjetos;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public Articulo buscarPorCodigoSecundarioYEmpresa(String codigo, Empresa empresa) {
 		
