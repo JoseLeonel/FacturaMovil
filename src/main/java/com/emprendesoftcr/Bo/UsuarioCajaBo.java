@@ -39,5 +39,5 @@ public interface UsuarioCajaBo {
 	
 	void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo)throws Exception;
 	
-	RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception ;
+	RespuestaServiceDataTable<?> listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception ;
 }

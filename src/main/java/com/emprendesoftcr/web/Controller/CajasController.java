@@ -1,7 +1,6 @@
 package com.emprendesoftcr.web.Controller;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -156,7 +155,7 @@ public class CajasController {
 		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
 
-	@SuppressWarnings("unused")
+
 	private RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request, HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());

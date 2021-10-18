@@ -71,7 +71,7 @@ public class UsuarioCajasController {
 
 																																																	@Override
 																																																	public UsuarioCajaCommand apply(Object f) {
-																																																		return new UsuarioCajaCommand((UsuarioCaja) f);
+																																																		listarUsuariosCajasAjax																																											return new UsuarioCajaCommand((UsuarioCaja) f);
 																																																	};
 																																																};
 

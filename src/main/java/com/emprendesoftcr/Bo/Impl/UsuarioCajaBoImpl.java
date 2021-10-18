@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.DoubleSummaryStatistics;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
 import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.DenominacionCommand;
 
@@ -238,6 +242,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	public void eliminarConteo(UsuarioCaja usuarioCaja,Integer tipo) throws Exception {
 		usuarioCajaDao.eliminarConteo(usuarioCaja,tipo);
 		
+	}
+
+	@Override
+	public RespuestaServiceDataTable<?> listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

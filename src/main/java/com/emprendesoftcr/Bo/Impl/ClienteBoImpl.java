@@ -284,7 +284,7 @@ public class ClienteBoImpl implements ClienteBo {
 						}
 					}
 					if (clienteCommand.getPorcentajeExoneracion() != null) {
-						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
+						if (clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS)) {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
 						if (clienteCommand.getPorcentajeExoneracion() > Constantes.PORCENTAJE_MAXIMO_EXONERACION) {

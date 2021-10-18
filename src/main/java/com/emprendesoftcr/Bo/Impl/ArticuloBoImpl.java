@@ -235,6 +235,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return listaObjetos;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RespuestaServiceDataTable<?> listarByCodigoArticulo(HttpServletRequest request, HttpServletResponse response, String codigoArt, String nombreUsuario) {
 		DataTableDelimitador delimitadores = null;

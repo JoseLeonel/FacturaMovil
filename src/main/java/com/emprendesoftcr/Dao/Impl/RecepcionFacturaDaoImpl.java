@@ -201,6 +201,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RecepcionFactura findByClaveAndCedulaEmisor(String clave, String cedula) throws Exception {
 		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where obj.facturaClave = :clave and obj.emisorCedula = :cedula");

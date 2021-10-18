@@ -35,6 +35,7 @@ public class FEMensajeReceptorAutomaticoDaoImpl implements FEMensajeReceptorAuto
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public FEMensajeReceptorAutomatico buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from FEMensajeReceptorAutomatico obj where obj.id = :id");

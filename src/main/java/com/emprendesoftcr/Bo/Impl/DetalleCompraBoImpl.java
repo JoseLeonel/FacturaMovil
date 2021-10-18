@@ -81,6 +81,7 @@ public class DetalleCompraBoImpl implements DetalleCompraBo {
 	/**
 	 * Formulario de contadores
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public ByteArrayInputStream createExcelResumen(	Collection<CompraIVA> lista, String fechaInicio, String fechaFin, Empresa empresa) throws Exception {
 		
