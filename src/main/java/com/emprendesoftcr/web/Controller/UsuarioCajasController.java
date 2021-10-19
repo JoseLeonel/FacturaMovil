@@ -298,7 +298,7 @@ public class UsuarioCajasController {
 		try {
 
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 
 			}
 

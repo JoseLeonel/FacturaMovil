@@ -1,6 +1,8 @@
 package com.emprendesoftcr.web.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -142,20 +144,26 @@ public class CajasController {
 		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/local/listarEntradasOrSalidas.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarEntradasOrSalidasLocal(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) throws IOException, ServletException {
 
-		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
 		if (validateTokenBo.validarTokenApis(request) == false) {
 
-			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			@SuppressWarnings("unused")
+			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "SalidaEntradaDinero");
+
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
 		}
 		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
 
-	
 	private RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request, HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -188,14 +196,19 @@ public class CajasController {
 		return listarCajasActivasAjaxT(request, response);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	@RequestMapping(value = "/local/ListarCajasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarCajasActivasAjaxLocal(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
 		if (validateTokenBo.validarTokenApis(request) == false) {
 
-			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
 		}
 		return listarCajasActivasAjaxT(request, response);
 	}
@@ -211,7 +224,7 @@ public class CajasController {
 			delimitadores.addFiltro(dataTableFilter);
 			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-			
+
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
