@@ -318,6 +318,10 @@
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
                                     <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
+                                <div  class="form-group " >
+                                    <label class="">Descuento General </label> 
+                                     <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}"  autocomplete="off">
+                                 </div>
                                 <div class="pantallaBilletes">
                                    <div class="billeteContainer">
                                       <div class="billete" each={billetes}   onclick={_sumarBilletes}>

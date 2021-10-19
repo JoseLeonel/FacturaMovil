@@ -263,6 +263,9 @@ public class Factura implements Serializable {
 	@Column(name = "notifi_noelec")
 	private Integer						notificacionNoElectronicio;
 
+	@Column(name = "desc_general")
+	private Double						porcentajeDescuentoGeneral;
+
 
 	public Factura() {
 		super();
@@ -1269,6 +1272,26 @@ public class Factura implements Serializable {
 
 	public void setNotificacionNoElectronicio(Integer notificacionNoElectronicio) {
 		this.notificacionNoElectronicio = notificacionNoElectronicio;
+	}
+
+
+
+
+
+
+	
+	public Double getPorcentajeDescuentoGeneral() {
+		return porcentajeDescuentoGeneral;
+	}
+
+
+
+
+
+
+	
+	public void setPorcentajeDescuentoGeneral(Double porcentajeDescuentoGeneral) {
+		this.porcentajeDescuentoGeneral = porcentajeDescuentoGeneral;
 	}
 
 
