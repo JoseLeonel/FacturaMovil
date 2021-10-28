@@ -32,6 +32,7 @@ import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 @Configuration	
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final TokenProvider tokenProvider;
+	@SuppressWarnings("unused")
 	private final  CorsFilter corsFilter;
 
 	@Autowired
@@ -89,6 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/local/CerrarUsuarioCajaAjax.do").authenticated()
 				.antMatchers("/local/AgregarSalidaEntradaDineroAjax.do").authenticated()
 				.antMatchers("/local/ListarCajasActivas.do").authenticated()
+				.antMatchers("/local/ListarFacturasEsperaActivasAjax").authenticated()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("https://api.hacienda.go.cr/").permitAll()

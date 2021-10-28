@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -13,6 +16,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
@@ -64,6 +68,6 @@ public interface FacturaBo {
 	ByteArrayInputStream createExcelFacturasTotalMensual(Collection<Factura> facturas, Empresa empresa, String fechaInicio, String fechaFinal, Integer estado, String actividadEconomica) throws IOException;
 
 //	Map<String, Object> generarPDFIVAMensual(Date fechaInicial, Date fechaFinal, Integer estado, String actividadEconomica,Empresa empresa);
-	
+	RespuestaServiceDataTable<?> listarEsperaActivasAjax(HttpServletRequest request, HttpServletResponse response);
 	
 }
