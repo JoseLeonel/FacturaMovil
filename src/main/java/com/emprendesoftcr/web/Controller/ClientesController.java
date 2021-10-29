@@ -124,8 +124,14 @@ public class ClientesController {
 	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		if (validateTokenBo.validarTokenApis(request) == false) {
-			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Cliente");
-			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Cliente");
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
 		}
 
 		return listarClientesByEmpresa(request);
@@ -410,7 +416,7 @@ public class ClientesController {
 	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return clienteBo.mostrar(request, cliente, result);
 		} catch (Exception e) {

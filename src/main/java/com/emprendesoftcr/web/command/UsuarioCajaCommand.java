@@ -1,7 +1,8 @@
 package com.emprendesoftcr.web.command;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.ConteoManualCaja;
@@ -10,87 +11,83 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.Utils;
-import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class UsuarioCajaCommand {
 
-	private Long									id;
-	private Double								totalFondoInicial;
+	private Long											id;
+	private Double										totalFondoInicial;
 
-	private Double								totalEfectivo;
+	private Double										totalEfectivo;
 
-	private Double								totalTarjeta;
+	private Double										totalTarjeta;
 
-	private Double								totalBanco;
+	private Double										totalBanco;
 
-	private Double								totalCredito;
+	private Double										totalCredito;
 
-	private Double								totalNeto;
+	private Double										totalNeto;
 
-	private Double								totalAbono;
+	private Double										totalAbono;
 
-	private Double								totalServicio;
+	private Double										totalServicio;
 
-	private Double								totalDolares;
+	private Double										totalDolares;
 
-	private String								totalFondoInicialSTR;
+	private String										totalFondoInicialSTR;
 
-	private String								totalEfectivoSTR;
+	private String										totalEfectivoSTR;
 
-	private String								totalTarjetaSTR;
+	private String										totalTarjetaSTR;
 
-	private String								totalBancoSTR;
+	private String										totalBancoSTR;
 
-	private String								totalCreditoSTR;
+	private String										totalCreditoSTR;
 
-	private String								totalNetoSTR;
+	private String										totalNetoSTR;
 
-	private String								totalAbonoSTR;
+	private String										totalAbonoSTR;
 
-	private String								totalServicioSTR;
+	private String										totalServicioSTR;
 
-	private String								totalDolaresSTR;
+	private String										totalDolaresSTR;
 
-	private Usuario								usuario;
+	private Usuario										usuario;
 
-	private Caja									caja;
+	private Caja											caja;
 
-	private Date									created_at;
+	private Date											created_at;
 
-	private Date									updated_at;
+	private Date											updated_at;
 
-	private Date									cierreCaja;
+	private Date											cierreCaja;
 
-	private String								created_atSTR;
+	private String										created_atSTR;
 
-	private String								updated_atSTR;
+	private String										updated_atSTR;
 
-	private String								estado;
+	private String										estado;
 
-	private Double								sumaEntradas;
-	private Double								sumaSalida;
-	private Double								conteoManual;
-	private String								sumaConteoManualCierreSTR;
+	private Double										sumaEntradas;
+	private Double										sumaSalida;
+	private Double										conteoManual;
+	private String										sumaConteoManualCierreSTR;
 
-	private String								sumaConteoManualAperturaSTR;
-	private String								tipoCambioSTR;
+	private String										sumaConteoManualAperturaSTR;
+	private String										tipoCambioSTR;
 
-	private String								conteoDolarSTR;
+	private String										conteoDolarSTR;
 
-	private Double								totalCierre;
+	private Double										totalCierre;
 
-	private String								diferenciaSTR;
-	private String								diferenciaFinalSTR;
-	private String								datafonoSTR;
+	private String										diferenciaSTR;
+	private String										diferenciaFinalSTR;
+	private String										datafonoSTR;
 
-	private String								conteoDolarConversionSTR;
+	private String										conteoDolarConversionSTR;
 
-	@JsonDeserialize(using = ClienteDeserializer.class)
-	private Set<ConteoManualCaja>	conteoManualCajas;
-	
-	@JsonDeserialize(using = ClienteDeserializer.class)
-	private Set<SalidaEntradaDinero>	salidaEntradaDineros;
+	private List<ConteoManualCaja>		conteoManualCajas;
+
+	private List<SalidaEntradaDinero>	salidaEntradaDineros;
 
 	public UsuarioCajaCommand() {
 		super();
@@ -125,8 +122,21 @@ public class UsuarioCajaCommand {
 		this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
-		this.conteoManualCajas = usuarioCaja.getConteoManualCajas();
-		this.salidaEntradaDineros = usuarioCaja.getSalidaEntradaDineros();
+		this.conteoManualCajas = new ArrayList<ConteoManualCaja>();
+		if (usuarioCaja.getConteoManualCajas() != null && !usuarioCaja.getConteoManualCajas().isEmpty()) {
+			for (ConteoManualCaja conteoManualCaja : usuarioCaja.getConteoManualCajas()) {
+				this.conteoManualCajas.add(conteoManualCaja);
+			}
+
+		}
+		this.salidaEntradaDineros = new ArrayList<SalidaEntradaDinero>();
+		if (usuarioCaja.getSalidaEntradaDineros() != null && !usuarioCaja.getSalidaEntradaDineros().isEmpty()) {
+			for (SalidaEntradaDinero salidaEntradaDinero : usuarioCaja.getSalidaEntradaDineros()) {
+				this.salidaEntradaDineros.add(salidaEntradaDinero);
+			}
+
+		}
+
 		this.sumaEntradas = usuarioCaja.getSumaEntradas() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaEntradas();
 		this.sumaSalida = usuarioCaja.getSumaSalida() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getSumaSalida();
 		this.conteoManual = usuarioCaja.getConteoManual() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getConteoManual();
@@ -138,19 +148,15 @@ public class UsuarioCajaCommand {
 		this.totalCierre = usuarioCaja.getTotalCierre();
 		this.diferenciaSTR = usuarioCaja.getDiferenciaSTR();
 		this.datafonoSTR = usuarioCaja.getDatafonoSTR();
-		Double diferencia = usuarioCaja.getDiferencia() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getDiferencia();
-		
-		this.diferenciaFinalSTR = Utils.formateadorMiles(diferencia.equals(Constantes.ZEROS_DOUBLE) ? Constantes.ZEROS_DOUBLE : diferencia - usuarioCaja.getTotalFondoInicial() );
+		Double diferencia = usuarioCaja.getDiferencia() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getDiferencia();
+
+		this.diferenciaFinalSTR = Utils.formateadorMiles(diferencia.equals(Constantes.ZEROS_DOUBLE) ? Constantes.ZEROS_DOUBLE : diferencia - usuarioCaja.getTotalFondoInicial());
 	}
-	
 
-
-	
 	public String getDiferenciaFinalSTR() {
 		return diferenciaFinalSTR;
 	}
 
-	
 	public void setDiferenciaFinalSTR(String diferenciaFinalSTR) {
 		this.diferenciaFinalSTR = diferenciaFinalSTR;
 	}
@@ -163,12 +169,10 @@ public class UsuarioCajaCommand {
 		this.diferenciaSTR = diferenciaSTR;
 	}
 
-	
 	public String getDatafonoSTR() {
 		return datafonoSTR;
 	}
 
-	
 	public void setDatafonoSTR(String datafonoSTR) {
 		this.datafonoSTR = datafonoSTR;
 	}
@@ -211,7 +215,7 @@ public class UsuarioCajaCommand {
 
 	public String getTotalGeneralSTR() {
 		Double totalNeto = this.totalNeto == null ? Constantes.ZEROS_DOUBLE : this.totalNeto + this.sumaEntradas;
-		return Utils.formateadorMiles(totalNeto );
+		return Utils.formateadorMiles(totalNeto);
 
 	}
 
@@ -459,11 +463,11 @@ public class UsuarioCajaCommand {
 		this.totalDolaresSTR = totalDolaresSTR;
 	}
 
-	public Set<ConteoManualCaja> getConteoManualCajas() {
+	public List<ConteoManualCaja> getConteoManualCajas() {
 		return conteoManualCajas;
 	}
 
-	public void setConteoManualCajas(Set<ConteoManualCaja> conteoManualCajas) {
+	public void setConteoManualCajas(List<ConteoManualCaja> conteoManualCajas) {
 		this.conteoManualCajas = conteoManualCajas;
 	}
 
@@ -495,13 +499,11 @@ public class UsuarioCajaCommand {
 		this.sumaConteoManualAperturaSTR = sumaConteoManualAperturaSTR;
 	}
 
-	
-	public Set<SalidaEntradaDinero> getSalidaEntradaDineros() {
+	public List<SalidaEntradaDinero> getSalidaEntradaDineros() {
 		return salidaEntradaDineros;
 	}
 
-	
-	public void setSalidaEntradaDineros(Set<SalidaEntradaDinero> salidaEntradaDineros) {
+	public void setSalidaEntradaDineros(List<SalidaEntradaDinero> salidaEntradaDineros) {
 		this.salidaEntradaDineros = salidaEntradaDineros;
 	}
 

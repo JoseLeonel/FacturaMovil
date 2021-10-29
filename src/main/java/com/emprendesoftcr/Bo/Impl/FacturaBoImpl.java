@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -29,9 +32,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.DetalleDao;
@@ -48,8 +53,10 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasEsperaNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.utils.Constantes;
+import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
@@ -88,7 +95,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	private DetalleDao						detalleDao;
-
+	@Autowired
+	private ConsultasNativeBo			consultasNativeBo;
+	@Autowired
+	private UsuarioBo usuarioBo;
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -477,8 +487,6 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 
-
-
 		} catch (Exception e) {
 			log.error(String.format("--error getNotaCreditoOrDebito :" + e.getMessage() + new Date()));
 			throw e;
@@ -783,10 +791,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
 		// evitar problemas con el tema de los decimales en el front
-    boolean siClienteAgro = false;
-    if(factura.getCliente() != null && factura.getCliente().getTipoMag() != null &&  !factura.getCliente().getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
-    	siClienteAgro = true;
-    }
+		boolean siClienteAgro = false;
+		if (factura.getCliente() != null && factura.getCliente().getTipoMag() != null && !factura.getCliente().getTipoMag().equals(Constantes.CLIENTE_MAG_INACTIVO)) {
+			siClienteAgro = true;
+		}
 		// Se inicializan los totales
 		Double totalServGravados = Constantes.ZEROS_DOUBLE;
 		Double totalServExentos = Constantes.ZEROS_DOUBLE;
@@ -825,7 +833,7 @@ public class FacturaBoImpl implements FacturaBo {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
-			
+
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
 			if (detalleFacturaCommand.getUnidadMedida() != null) {
 				if (detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
@@ -867,13 +875,13 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 
-			if(siClienteAgro == true) {
-				detalle.setImpuestoMag( Constantes.CODIGO_IMPUESTO_1_PORCIENTO );
+			if (siClienteAgro == true) {
+				detalle.setImpuestoMag(Constantes.CODIGO_IMPUESTO_1_PORCIENTO);
 				detalleFacturaCommand.setTipoImpuestoMag("01");
-				detalleFacturaCommand.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO  );
+				detalleFacturaCommand.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO);
 				detalle.setImpuesto(Constantes.CODIGO_IMPUESTO_1_PORCIENTO);
 				detalle.setCodigoTarifa(Constantes.CODIGO_TARIFA_1_PORCIENTO);
-			}else {
+			} else {
 				detalle.setCodigoTarifaMag(Constantes.EMPTY);
 				detalleFacturaCommand.setTipoImpuestoMag(Constantes.EMPTY);
 			}
@@ -894,7 +902,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// detalle.setMontoExoneracion(Utils.getMontoConRedondeo(detalleFacturaCommand.getMontoExoneracion()));
 			Double porcentajeExoneracion = Double.valueOf(detalle.getPorcentajeExoneracion() != null ? detalle.getPorcentajeExoneracion() : Constantes.ZEROS);
 			detalle.setMontoExoneracion1(Constantes.ZEROS_DOUBLE);
-			
+
 			if (detalle.getImpuesto() != null && porcentajeExoneracion.equals(detalle.getImpuesto())) {
 				detalle.setMontoExoneracion(detalle.getMontoImpuesto());
 			} else {
@@ -1040,14 +1048,14 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
-			//aplica decremento de los articulos cuando se trata de paquetes o six pack
+			// aplica decremento de los articulos cuando se trata de paquetes o six pack
 			if (articulo != null) {
 				if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
 					articulo = articuloDao.buscarPorCodigoYEmpresa(articulo.getCodigoSecundario(), articulo.getEmpresa());
 
 				}
 			}
-			
+
 			if (articulo != null) {
 				factura.setRebajaInventario(factura.getRebajaInventario() == null ? Constantes.ZEROS : factura.getRebajaInventario());
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
@@ -1656,5 +1664,25 @@ public class FacturaBoImpl implements FacturaBo {
 		return new ByteArrayInputStream(stream.toByteArray());
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public RespuestaServiceDataTable<Object> listarEsperaActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		Collection<FacturasEsperaNativa> objetos = consultasNativeBo.findByVentaEspera(usuarioSesion.getEmpresa());
+		for (FacturasEsperaNativa facturasEsperaNativa : objetos) {
+			solicitudList.add(facturasEsperaNativa);
+		}
+		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
+		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
 
 }

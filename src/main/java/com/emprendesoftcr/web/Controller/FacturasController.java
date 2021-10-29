@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +54,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -167,7 +167,7 @@ public class FacturasController {
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
 																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
-																																																			detalleFacturaElectronica.set_precioSugerido(d.getPrecioSugerido() == null?Constantes.ZEROS_DOUBLE:d.getPrecioSugerido());
+																																																			detalleFacturaElectronica.set_precioSugerido(d.getPrecioSugerido() == null ? Constantes.ZEROS_DOUBLE : d.getPrecioSugerido());
 																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
 																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
 																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
@@ -373,18 +373,17 @@ public class FacturasController {
 
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
-	
-	
+
 	@Autowired
-	private ValidateTokenBo  validateTokenBo;
-	
+	private ValidateTokenBo																						validateTokenBo;
+
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public DataSource																									dataSource;
 
 	private JdbcTemplate																							jdbcTemplate;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
@@ -670,15 +669,15 @@ public class FacturasController {
 	 * @return
 	 */
 //
-	@Autowired
-	private CertificadoBo certificadoBo;
+//	@Autowired
+//	private CertificadoBo certificadoBo;
 
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 //		 Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 //		 criptografica desde linux
-		certificadoBo.agregar(usuario.getEmpresa(), "", "");
+//		certificadoBo.agregar(usuario.getEmpresa(), "", "");
 		if (usuarioBo.isUsuario_Condominio(usuario) || usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
 			model.addAttribute("rolAdminitrador", 1);
 		} else {
@@ -697,7 +696,7 @@ public class FacturasController {
 //		
 //    String deviceType = "browser";
 //    String platform = "browser";
-    String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
+		String viewName = "views/facturacionProfesionales/ventasPorServiciosNormal.html";
 
 //    if (device.isNormal()) {
 //        deviceType = "browser";
@@ -714,9 +713,9 @@ public class FacturasController {
 //    if (platform.equalsIgnoreCase("UNKNOWN")) {
 //        platform = "browser";
 //    }
- 	
-    return viewName;
-		
+
+		return viewName;
+
 	}
 
 	/**
@@ -904,25 +903,26 @@ public class FacturasController {
 		return respuestaServiceValidator;
 
 	}
-/**
- * Resumen pdf
- * @param request
- * @param response
- * @param model
- * @param datos
- * @param result
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param correoAlternativo
- * @param estado
- * @param actividadEconomica
- * @return
- * @throws IOException
- */
+
+	/**
+	 * Resumen pdf
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param datos
+	 * @param result
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param correoAlternativo
+	 * @param estado
+	 * @param actividadEconomica
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/ResumenPDFIVAFacturasAndCompras.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public void ResumenPDFIVAFacturasAndCompras(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "correoAlternativo", required = false) String correoAlternativo, @RequestParam(value = "estado", required = false)  Integer estado,@RequestParam(value = "actividadEconomica", required = false) String actividadEconomica) throws IOException {
-		
+	public void ResumenPDFIVAFacturasAndCompras(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute String datos, BindingResult result, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "correoAlternativo", required = false) String correoAlternativo, @RequestParam(value = "estado", required = false) Integer estado, @RequestParam(value = "actividadEconomica", required = false) String actividadEconomica) throws IOException {
+
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			// Se obtiene los totales
@@ -933,7 +933,7 @@ public class FacturasController {
 					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 				}
 			}
-			
+
 //
 			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 			String inicio1 = dateFormat1.format(fechaInicio);
@@ -954,31 +954,31 @@ public class FacturasController {
 			}
 			Map<String, Object> parametros = new HashMap<>();
 			File file = new File("/opt/appjava/data/logos/" + usuario.getEmpresa().getLogo());
-			parametros.put("P_logo",file != null?file.getPath():   Constantes.EMPTY);
-			parametros.put("P_nombre_comercial",usuario.getEmpresa().getNombreComercial());
+			parametros.put("P_logo", file != null ? file.getPath() : Constantes.EMPTY);
+			parametros.put("P_nombre_comercial", usuario.getEmpresa().getNombreComercial());
 			parametros.put("P_nombreCompleto", usuario.getEmpresa().getNombre());
-			parametros.put("P_cedula", "Ced: "+ usuario.getEmpresa().getCedula());
-			parametros.put("p_telefono","Telf: "+ usuario.getEmpresa().getTelefono()+ "");
+			parametros.put("P_cedula", "Ced: " + usuario.getEmpresa().getCedula());
+			parametros.put("p_telefono", "Telf: " + usuario.getEmpresa().getTelefono() + "");
 			parametros.put("P_correo_electronico", usuario.getEmpresa().getCorreoElectronico());
 			parametros.put("P_direccion", usuario.getEmpresa().getOtraSenas());
-			parametros.put("P_contable", "Resumen de ventas y  compras para el periodo de "+ fechaInicioParam + " al " +   fechaFinParam);
-			
+			parametros.put("P_contable", "Resumen de ventas y  compras para el periodo de " + fechaInicioParam + " al " + fechaFinParam);
+
 			// Ventas de Facturas resumen detallado iva
 
 			TotalbyResumenImpuestosCommand totalbyResumenImpuestosCommand = new TotalbyResumenImpuestosCommand(listaDetallada);
 
 			parametros = totalResumenVentaIVA(parametros, totalbyResumenImpuestosCommand);
-			
+
 			Collection<CompraIVA> recepcionFacturas = consultasNativeBo.findBySumComprasIVAResumen(usuario.getEmpresa(), inicio1, fin1);
 			TotalbyResumenImpuestosCommand totalbyResumenImpuestosComprasCommand = new TotalbyResumenImpuestosCommand(recepcionFacturas);
-			
+
 			parametros = totalResumenCompraIVA(parametros, totalbyResumenImpuestosComprasCommand);
-			
-			String nombreArchivo = "ResumenIVAComprasAndVentas"+ UUID.randomUUID().toString() + ".pdf";
+
+			String nombreArchivo = "ResumenIVAComprasAndVentas" + UUID.randomUUID().toString() + ".pdf";
 			response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-			
-			URL url = Thread.currentThread().getContextClassLoader().getResource(Constantes.REPORTE_MENSUAL_COMPRAS_Y_VENTAS); 
+
+			URL url = Thread.currentThread().getContextClassLoader().getResource(Constantes.REPORTE_MENSUAL_COMPRAS_Y_VENTAS);
 			byte[] bytes = GenerarReporte.jasperPDFBytes(parametros, url.getPath(), null);
 			if (bytes != null && bytes.length > 0) {
 				response.setContentType("application/pdf");
@@ -988,16 +988,13 @@ public class FacturasController {
 				outputstream.flush();
 				outputstream.close();
 
-			}  else {
+			} else {
 				System.out.println("NO trae nada");
 			}
 		} catch (Exception e) {
 			log.error("** Error  generar PDF " + " fecha " + new Date() + "" + e.getMessage());
-			
 
 		}
-
-		
 
 	}
 
@@ -1005,23 +1002,23 @@ public class FacturasController {
 		// Sumas de ventas y desglose del iva
 
 		// 0%
-		parametros.put("P_iva_compra_cero",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()));
+		parametros.put("P_iva_compra_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()));
 		// 1%
-		parametros.put("P_iva_compra_1",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_02()));
+		parametros.put("P_iva_compra_1", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_02()));
 		// 2%
 		parametros.put("P_iva_compra_2", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_03()));
 		parametros.put("P_iva_compra_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_04()));
-		
+
 		// 4%
 		parametros.put("P_iva_compra_trans_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_05()));
 		// 0 transitorio%
-		parametros.put("P_iva_compra_trans_4",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
+		parametros.put("P_iva_compra_trans_4", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
 		// 4 transitorio%
 		parametros.put("P_iva_compra_13", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_08()));
 		// 8 transitorio%
 		parametros.put("P_cemento_iva_c", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
 		// Total del iva agravado
-		parametros.put("P_compra_iva_total",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()+totalbyResumenImpuestosCommand.getImp_02()+totalbyResumenImpuestosCommand.getImp_03()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_05()+totalbyResumenImpuestosCommand.getImp_07()+totalbyResumenImpuestosCommand.getImp_06()+totalbyResumenImpuestosCommand.getImp_08()));
+		parametros.put("P_compra_iva_total", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01() + totalbyResumenImpuestosCommand.getImp_02() + totalbyResumenImpuestosCommand.getImp_03() + totalbyResumenImpuestosCommand.getImp_04() + totalbyResumenImpuestosCommand.getImp_04() + totalbyResumenImpuestosCommand.getImp_05() + totalbyResumenImpuestosCommand.getImp_07() + totalbyResumenImpuestosCommand.getImp_06() + totalbyResumenImpuestosCommand.getImp_08()));
 		// Resumen de total venta 0%
 		parametros.put("P_compra_0", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_01()));
 		// Resumen de total venta 1%
@@ -1062,10 +1059,6 @@ public class FacturasController {
 		// Resumen de total venta del servicio del mesero
 		parametros.put("P_total_por_restaurante", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_cargos()));
 		parametros.put("P_total_descuento_compras", Utils.formateadorMiles(Constantes.ZEROS_DOUBLE));
-		
-		
-
-
 
 		return parametros;
 	}
@@ -1084,7 +1077,7 @@ public class FacturasController {
 		// 0 transitorio%
 		parametros.put("P_iva_trans_0_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_05()));
 		// 4 transitorio%
-		parametros.put("P_iva_trans_4_v",Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
+		parametros.put("P_iva_trans_4_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_06()));
 		// 8 transitorio%
 		parametros.put("P_iva_trans_8_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_07()));
 		// iva 13
@@ -1094,7 +1087,7 @@ public class FacturasController {
 		// Iva otros
 		parametros.put("P_iva_otros_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getTotal_otros_impuestos()));
 		// Total del iva agravado
-		parametros.put("P_iva_total_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01()+totalbyResumenImpuestosCommand.getImp_02()+totalbyResumenImpuestosCommand.getImp_03()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_04()+totalbyResumenImpuestosCommand.getImp_05()+totalbyResumenImpuestosCommand.getImp_07()+totalbyResumenImpuestosCommand.getImp_06()+totalbyResumenImpuestosCommand.getImp_08()));
+		parametros.put("P_iva_total_v", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getImp_01() + totalbyResumenImpuestosCommand.getImp_02() + totalbyResumenImpuestosCommand.getImp_03() + totalbyResumenImpuestosCommand.getImp_04() + totalbyResumenImpuestosCommand.getImp_04() + totalbyResumenImpuestosCommand.getImp_05() + totalbyResumenImpuestosCommand.getImp_07() + totalbyResumenImpuestosCommand.getImp_06() + totalbyResumenImpuestosCommand.getImp_08()));
 		// Resumen de total venta 0%
 		parametros.put("P_venta_cero", Utils.formateadorMiles(totalbyResumenImpuestosCommand.getVenta_imp_01()));
 		// Resumen de total venta 1%
@@ -1295,26 +1288,30 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "/ListarFacturasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		return facturaBo.listarEsperaActivasAjax(request, response);
+	}
 
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		List<Object> solicitudList = new ArrayList<Object>();
-		Collection<FacturasEsperaNativa> objetos = consultasNativeBo.findByVentaEspera(usuarioSesion.getEmpresa());
-		for (FacturasEsperaNativa facturasEsperaNativa : objetos) {
-			solicitudList.add(facturasEsperaNativa);
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	@RequestMapping(value = "/local/ListarFacturasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarEsperaActivasAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		if (validateTokenBo.validarTokenApis(request) == false) {
+
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Factura");
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
 		}
-		respuestaService.setRecordsTotal(Constantes.ZEROS_LONG);
-		respuestaService.setRecordsFiltered(Constantes.ZEROS_LONG);
-		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-		}
-		respuestaService.setAaData(solicitudList);
-		return respuestaService;
+		return facturaBo.listarEsperaActivasAjax(request, response);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -2227,8 +2224,6 @@ public class FacturasController {
 			if (facturaBD.getEstado().equals(Constantes.FACTURA_ESTADO_ANULADA) || facturaBD.getAnuladaCompleta().equals(Constantes.FACTURA_ANULACION_COMPLETA_SI)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.notaCredito.factura.limite.notas.credito", result.getAllErrors());
 			}
-			
-			
 
 			if (facturaCommand.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 				if (Utils.roundFactura(facturaBD.getTotalComprobante(), 2) != Utils.roundFactura(facturaCommand.getTotalComprobante(), 2)) {
@@ -2349,14 +2344,12 @@ public class FacturasController {
 	@RequestMapping(value = "/local/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFacturaTurismo(HttpServletRequest request, ModelMap model,
-			@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
+	public RespuestaServiceValidator crearFacturaTurismo(HttpServletRequest request, ModelMap model, @RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -2370,11 +2363,6 @@ public class FacturasController {
 			return respuestaServiceValidator;
 		}
 	}
-	
-	
-
-	
-
 
 	@SuppressWarnings("rawtypes")
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {
