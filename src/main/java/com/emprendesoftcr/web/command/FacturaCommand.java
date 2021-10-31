@@ -125,6 +125,7 @@ public class FacturaCommand {
 	private String		codigoActividad;
 
 	private Integer		rebajaInventario;
+	private Double						descuentoGlobal;
 
 	public FacturaCommand() {
 		super();
@@ -568,6 +569,16 @@ public class FacturaCommand {
 
 	public void setRebajaInventario(Integer rebajaInventario) {
 		this.rebajaInventario = rebajaInventario;
+	}
+
+	
+	public Double getDescuentoGlobal() {
+		return descuentoGlobal;
+	}
+
+	
+	public void setDescuentoGlobal(Double descuentoGlobal) {
+		this.descuentoGlobal = descuentoGlobal;
 	}
 
 }

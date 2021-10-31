@@ -118,6 +118,7 @@ public class FacturaEsperaCommand {
 	private Date			referenciaFechaEmision;
 	private Double		totalImpuestoServicio;
 	private String  tipoDocSTR;
+	private Double						descuentoGlobal;
 	
 
 	private String		codigoActividad;
@@ -181,6 +182,7 @@ public class FacturaEsperaCommand {
 		this.impuestoServicioISSTR = Utils.formateadorMiles(this.impuestoServicioIS);
 		this.codigoActividad = factura.getCodigoActividad();
 		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc());
+		this.descuentoGlobal = factura.getDescuentoGlobal() != Constantes.ZEROS_DOUBLE ? factura.getDescuentoGlobal():Constantes.ZEROS_DOUBLE;
 		
 	}
 

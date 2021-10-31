@@ -217,7 +217,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 
 			}
-
+			facturaCommand.setDescuentoGlobal(facturaCommand.getDescuentoGlobal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getDescuentoGlobal());
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
@@ -275,7 +275,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getId() == null) {
 				factura.setUsuarioCreacion(usuario);
 			}
-
+      factura.setDescuentoGlobal(facturaCommand.getDescuentoGlobal());
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());

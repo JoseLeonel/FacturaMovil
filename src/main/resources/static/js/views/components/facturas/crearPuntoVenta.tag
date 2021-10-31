@@ -282,6 +282,7 @@
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
+                            <input type="hidden" id="descuentoGlobal"         name="descuentoGlobal"         value="{factura.descuentoGlobal}"  >
                         </form>   
                         <div class="botonesContainer">
                             <div class="boton">
@@ -319,8 +320,8 @@
                                     <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
                                 <div  class="form-group " >
-                                    <label class="">Descuento General </label> 
-                                     <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}"  autocomplete="off">
+                                    <label class="">Descuento General(%) </label> 
+                                     <input onclick={aplicarDescuentoGlobalInterfaz} onkeyup={ aplicarDescuentoGlobalInterfaz } onBlur = {aplicarDescuentoGlobalInterfaz}  type="number"  onkeypress = {aplicarDescuentoGlobalInterfaz}  step="any"  class="{campoTotales} {tamanoLetra}  descuentoGlobal"  id="descuentoGlobal" name="descuentoGlobal"  value="{factura.descuentoGlobal}"  autocomplete="off">
                                  </div>
                                 <div class="pantallaBilletes">
                                    <div class="billeteContainer">
@@ -1169,6 +1170,7 @@
             self.cliente = clienteObject
             self.update()
             __calculate()
+              seleccionarEfectivo()
         }
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -1341,7 +1343,7 @@ function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     }
-    if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
+    if (e.target.id != 'descuentoGlobal' &&  !$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
@@ -1382,7 +1384,7 @@ function VerificarSiEstaPrecioOrCodigo(e){
         if ((e.which || e.keyCode) == 114) e.preventDefault();
         if ((e.which || e.keyCode) == 112) e.preventDefault();
         if ((e.which || e.keyCode) == 117) e.preventDefault();
-        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+        if( e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
@@ -2480,6 +2482,7 @@ __Limpiar(){
 }
 
 function __Init(){
+    $(".descuentoGlobal").val(null);
     __DeleteUltimoItemIngresado()
     __DeleteUltimoArticuloIngresado()
     self.facturaImpresa={
@@ -2843,6 +2846,7 @@ this.__TotalDeDescuento = function(e){
     self.factura.porcentajeDesc = __valorNumerico(e.target.value)
     self.update()
     __calculate()
+      seleccionarEfectivo()
 }.bind(this)
 
 _AtrasFacturaFinal(){
@@ -2941,8 +2945,7 @@ function mostrarPAgo(){
     seleccionarEfectivo()
 }
 
-function lecturaCodigo(){
-    var valor = $('.codigo').val()
+function lecturaCodigo(valor){
     if (valor == "" || valor.length == 0){
         if(self.cantidadEnterFacturar >= 1){
             self.cantidadEnterFacturar = 0
@@ -3073,6 +3076,7 @@ function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
         }
     }
     __calculate();
+      seleccionarEfectivo()
 }
 
 this.__agregarArticuloBotonAgregar = function(){
@@ -3333,6 +3337,7 @@ function __agregarArticulo(cantidad){
 
     }
     __calculate();
+      seleccionarEfectivo()
     return encontrado
 }
 
@@ -3356,6 +3361,7 @@ function aplicarLineaFacturaCambioPrecio(){
          }
     }
     __calculate();
+      seleccionarEfectivo()
 
 }
 
@@ -3402,6 +3408,7 @@ function  eliminarDetalle(){
     }
     self.update()
      __calculate();
+       seleccionarEfectivo()
      __DeleteUltimoArticuloIngresado()
      __DeleteUltimoItemIngresado()
  }
@@ -3693,11 +3700,54 @@ function aplicarCambioLineaDetalle(){
     self.detail[index] = self.item;
     self.update()
     __calculate()
+      seleccionarEfectivo()
 }
 
-this.__actualizarDescuento = function(e){
+__actualizarDescuento (e){
    aplicarDescuentoEnter()
-}.bind(this)
+}
+
+/**
+Aplicar descuento global
+**/
+aplicarDescuentoGlobalInterfaz(e){
+    var descuentoGlobal = __valorNumerico(e.target.value);
+    if(descuentoGlobal > 100){
+        $('.descuentoGlobal').val(100)
+        // mensajeAlertErrorOConfirmacion('error',$.i18n.prop("error.descuento.global"));   
+         return  	
+    }
+    self.factura.descuentoGlobal = descuentoGlobal;
+    aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa); 
+    __calculate();
+    
+}
+
+function aplicarDescuentoGlobalDetalle(detail,porcentajeDescuentoAplicar,empresa){
+
+     var descuento = 0;
+     if(detail.length != 0 ){
+           $.each(detail, function( index, item ) {
+                descuento = porcentajeDescuentoAplicar;
+                if(empresa.aplicaGanancia ==1){
+                   if(item.porcentajeGanancia < porcentajeDescuentoAplicar ){
+                      descuento  = __valorNumerico(item.porcentajeGanancia)
+                   }
+                }
+                var index    = detail.indexOf(item);   
+                item.porcentajeDesc =  descuento;
+                item = ActualizarLineaDEtalle(item) 
+                detail[index] = item;
+    
+           });
+     
+     }
+
+     return detail;
+}
+
+
+
 function aplicarDescuentoEnter(){
     if ($("#formularioDescuento").valid()) {
         _actualizarDesc()
@@ -3764,7 +3814,7 @@ function __calculate() {
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    seleccionarEfectivo()
+  
 
 }
 
@@ -4035,6 +4085,7 @@ function cargarDetallesFacturaEnEspera(data,facturaPametros,tipo){
     __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
     __calculate()
+    seleccionarEfectivo()
     asignarTiposDocumento()
 }
 
@@ -4098,6 +4149,7 @@ function __aplicarExoneracionPorCliente(){
     }
     
     __calculate()
+      seleccionarEfectivo()
     if(aplicaExo == true){
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0

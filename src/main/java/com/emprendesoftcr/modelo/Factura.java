@@ -226,7 +226,6 @@ public class Factura implements Serializable {
 //	@Column(name = "ver_porc_exo", columnDefinition = "INT default '0'")
 //	private Integer					versionPorcentajeExoneracion;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente						cliente;
@@ -255,17 +254,15 @@ public class Factura implements Serializable {
 
 	@Column(name = "no_caja", columnDefinition = "INT default '0'")
 	private Integer						noAplicarEnCaja;
-	
+
 	@Column(name = "anul_compl", columnDefinition = "INT default '0'")
 	private Integer						anuladaCompleta;
 
-	
 	@Column(name = "notifi_noelec")
 	private Integer						notificacionNoElectronicio;
 
 	@Column(name = "desc_general")
-	private Double						porcentajeDescuentoGeneral;
-
+	private Double						descuentoGlobal;
 
 	public Factura() {
 		super();
@@ -274,11 +271,6 @@ public class Factura implements Serializable {
 		this.updated_at = new Date();
 
 	}
-
-		
-	
-
-
 
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
 			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa, String codigoActividad, Integer rebajaInventario, Integer noAplicarEnCaja, Integer anuladaCompleta,
@@ -356,23 +348,13 @@ public class Factura implements Serializable {
 		this.notificacionNoElectronicio = notificacionNoElectronicio;
 	}
 
-
-
-
-
-
 	public Integer getAnuladaCompleta() {
 		return anuladaCompleta;
 	}
 
-
-
-	
 	public void setAnuladaCompleta(Integer anuladaCompleta) {
 		this.anuladaCompleta = anuladaCompleta;
 	}
-
-
 
 	public Integer getRebajaInventario() {
 		return rebajaInventario;
@@ -1265,35 +1247,22 @@ public class Factura implements Serializable {
 	public void setNoAplicarEnCaja(Integer noAplicarEnCaja) {
 		this.noAplicarEnCaja = noAplicarEnCaja;
 	}
+
 	public Integer getNotificacionNoElectronicio() {
 		return notificacionNoElectronicio;
 	}
-
 
 	public void setNotificacionNoElectronicio(Integer notificacionNoElectronicio) {
 		this.notificacionNoElectronicio = notificacionNoElectronicio;
 	}
 
-
-
-
-
-
-	
-	public Double getPorcentajeDescuentoGeneral() {
-		return porcentajeDescuentoGeneral;
+	public Double getDescuentoGlobal() {
+		return descuentoGlobal;
 	}
 
-
-
-
-
-
-	
-	public void setPorcentajeDescuentoGeneral(Double porcentajeDescuentoGeneral) {
-		this.porcentajeDescuentoGeneral = porcentajeDescuentoGeneral;
+	public void setDescuentoGlobal(Double descuentoGlobal) {
+		this.descuentoGlobal = descuentoGlobal;
 	}
-
 
 //	public Integer getVersionPorcentajeExoneracion() {
 //		return versionPorcentajeExoneracion;
@@ -1303,7 +1272,5 @@ public class Factura implements Serializable {
 //	public void setVersionPorcentajeExoneracion(Integer versionPorcentajeExoneracion) {
 //		this.versionPorcentajeExoneracion = versionPorcentajeExoneracion;
 //	}
-	
-	
 
 }
