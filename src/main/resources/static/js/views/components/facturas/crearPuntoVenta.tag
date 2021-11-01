@@ -321,7 +321,7 @@
                                 </div>
                                 <div  class="form-group " >
                                     <label class="">Descuento General(%) </label> 
-                                     <input onclick={aplicarDescuentoGlobalInterfaz} onkeyup={ aplicarDescuentoGlobalInterfaz } onBlur = {aplicarDescuentoGlobalInterfaz}  type="number"  onkeypress = {aplicarDescuentoGlobalInterfaz}  step="any"  class="{campoTotales} {tamanoLetra}  descuentoGlobal"  id="descuentoGlobal" name="descuentoGlobal"  value="{factura.descuentoGlobal}"  autocomplete="off">
+                                     <input onclick={aplicarDescuentoGlobalInterfaz} onkeyup={ aplicarDescuentoGlobalInterfaz } onBlur = {aplicarDescuentoGlobalInterfaz}  type="number"  onkeypress = {aplicarDescuentoGlobalInterfaz}  step="any"  class="{campoTotales} {tamanoLetra}  descuentoGlobal1"  id="descuentoGlobal1" name="descuentoGlobal1"  value="{factura.descuentoGlobal}"  autocomplete="off">
                                  </div>
                                 <div class="pantallaBilletes">
                                    <div class="billeteContainer">
@@ -1343,7 +1343,7 @@ function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     }
-    if (e.target.id != 'descuentoGlobal' &&  !$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
+    if (e.target.id != 'descuentoGlobal1' &&  !$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
                         &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
                         &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
@@ -2482,7 +2482,7 @@ __Limpiar(){
 }
 
 function __Init(){
-    $(".descuentoGlobal").val(null);
+    $(".descuentoGlobal1").val(null);
     __DeleteUltimoItemIngresado()
     __DeleteUltimoArticuloIngresado()
     self.facturaImpresa={
@@ -3713,7 +3713,7 @@ Aplicar descuento global
 aplicarDescuentoGlobalInterfaz(e){
     var descuentoGlobal = __valorNumerico(e.target.value);
     if(descuentoGlobal > 100){
-        $('.descuentoGlobal').val(100)
+        $('.descuentoGlobal1').val(100)
         // mensajeAlertErrorOConfirmacion('error',$.i18n.prop("error.descuento.global"));   
          return  	
     }

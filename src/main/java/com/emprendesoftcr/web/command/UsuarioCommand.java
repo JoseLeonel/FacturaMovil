@@ -24,6 +24,7 @@ public class UsuarioCommand {
 	private String		password;
 	private Empresa		empresa;
 	private Set<Rol>	roles;;
+	private Double						descuentoVenta;
 
 	public UsuarioCommand(Usuario usuario) {
 		super();
@@ -37,6 +38,7 @@ public class UsuarioCommand {
 		this.empresa = usuario.getEmpresa();
 		this.roles = usuario.getRoles();
 		this.password = usuario.getPassword();
+		this.descuentoVenta = usuario.getDescuentoVenta();
 	}
 
 	public UsuarioCommand() {
@@ -121,6 +123,16 @@ public class UsuarioCommand {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	
+	public Double getDescuentoVenta() {
+		return descuentoVenta;
+	}
+
+	
+	public void setDescuentoVenta(Double descuentoVenta) {
+		this.descuentoVenta = descuentoVenta;
 	}
 
 }

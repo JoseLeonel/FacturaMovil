@@ -2,7 +2,7 @@
 <!-- Titulos -->
 <div  class="row titulo-encabezado"  >
     <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-        <h1 ><i class="fa fa-edit"></i>&nbsp{$.i18n.prop("usuario.usuarios")} </h1>
+        <h1 ><i class="fa fa-edit"></i>&nbsp{$.i18n.prop("usuario.usuarios")}  </h1>
         </div>
     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
     </div>
@@ -22,6 +22,7 @@
                         <th class="table-header" >{$.i18n.prop("usuario.segundoApellido")}</th>
                         <th class="table-header" >{$.i18n.prop("usuario.nombreUsuario")}  </th>
                         <th class="table-header" >{$.i18n.prop("usuario.estado")}         </th>
+                          <th class="table-header" >Descuento Venta %         </th>
                         <th class="table-header" >{$.i18n.prop("btn.acciones")}           </th>
                     </tr>
                 </thead>
@@ -32,6 +33,7 @@
                         <th>{$.i18n.prop("usuario.nombre")}          </th>
                         <th>{$.i18n.prop("usuario.primerApellido")}  </th>
                         <th>{$.i18n.prop("usuario.segundoApellido")} </th>
+                         <th>Descuento Venta %   </th>
                         <th> {$.i18n.prop("usuario.estado")}         </th>
                         <th>                                         </th>
 					</tr>
@@ -98,8 +100,8 @@
                             </select>
                         </div>
                         <div class="col-md-6 col-sx-7 col-sm-6 col-lg-6">
-                            <label class="knob-label">{$.i18n.prop("usuario.password")}&nbsp<span class="requeridoDato">*</span></label>
-                            <input  type="text" class="form-control password " placeholder = "{$.i18n.prop("usuario.password")}" title="{$.i18n.prop("usuario.password")}" name="password" id= "password"   value='{modeloTabla.password}' maxlength="250">
+                            <label class="knob-label">Descuento para la venta %<span class="requeridoDato">*</span></label>
+                            <input   class="form-control descuentoVenta " onkeyup={ aplicarDescuentoGlobalInterfaz } onBlur = {aplicarDescuentoGlobalInterfaz}  type="number"  onkeypress = {aplicarDescuentoGlobalInterfaz}  step="any"   placeholder = "%" title="Descuento" name="descuentoVenta" id= "descuentoVenta"   value='{modeloTabla.descuentoVenta}' >
                         
                         </div>
                     </div>
@@ -231,7 +233,17 @@
     });
 
 
-
+aplicarDescuentoGlobalInterfaz(e){
+    var descuentoVenta = __valorNumerico(e.target.value);
+    if(descuentoVenta > 100){
+        $('.descuentoVenta').val(100)
+        // mensajeAlertErrorOConfirmacion('error',$.i18n.prop("error.descuento.global"));   
+         return  	
+    }
+    self.usuario.descuentoVenta = descuentoVenta;
+    
+    
+}
 
 
 /**
@@ -349,7 +361,7 @@ function __listado(){
              if(result.aaData.length > 0){
                 __Fomarto_Campos_Listado()
                  loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                 includeActionsUsuario('.dataTables_wrapper','.dataTables_length')
+              //   includeActionsUsuario('.dataTables_wrapper','.dataTables_length')
                 agregarInputsCombos();
                 ActivarEventoFiltro('.tableListar')
                 __mostrarFormularioAgregar() 
@@ -376,6 +388,7 @@ function __Fomarto_Campos_Listado(){
                             {'data': 'nombre'         ,"name": "nombre"         ,"title": $.i18n.prop("usuario.nombre")        },
                             {'data': 'primerApellido' ,"name": "primerApellido" ,"title": $.i18n.prop("usuario.primerApellido") },
                             {'data': 'segundoApellido',"name": "segundoApellido","title": $.i18n.prop("usuario.segundoApellido")},
+                            {'data': 'descuentoVenta',"name": "descuentoVenta","title": 'Desc Venta %'},
                             {'data': 'strEstado'         ,"name": "strEstado"     ,"title": $.i18n.prop("usuario.estado"),
                                 "render": function (id, type, row) {
                                        return row.strEstado;
@@ -490,11 +503,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ($(this).index() != 6    ){
+        if ($(this).index() != 7    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
          // Select Tipo, 2 columna
-        if ($(this).index() == 5  ){
+        if ($(this).index() == 6  ){
             var select = $('<select id="comboTipoAmbiente" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

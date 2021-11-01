@@ -69,11 +69,12 @@ public class Usuario implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@ManyToOne
+	@ManyToOne 
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
 
-	
+	@Column(name = "descuento_venta")
+	private Double						descuentoVenta;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
@@ -250,6 +251,16 @@ public class Usuario implements Serializable {
 	
 	public void setTerminalFactura(String terminalFactura) {
 		this.terminalFactura = terminalFactura;
+	}
+
+	
+	public Double getDescuentoVenta() {
+		return descuentoVenta;
+	}
+
+	
+	public void setDescuentoVenta(Double descuentoVenta) {
+		this.descuentoVenta = descuentoVenta;
 	}
 
 	

@@ -323,10 +323,11 @@ public class UsuarioController {
 				usuarioBD.setNombreUsuario(usuario.getNombreUsuario());
 				usuarioBD.setPrimerApellido(usuario.getPrimerApellido());
 				usuarioBD.setSegundoApellido(usuario.getSegundoApellido());
-				PasswordEncoder encoder = new BCryptPasswordEncoder();
-				String encodedPassword = encoder.encode(usuario.getPassword());
-				usuarioBD.setPassword(encodedPassword);
-				usuarioBD.setPasswordConfirm(encodedPassword);
+//				PasswordEncoder encoder = new BCryptPasswordEncoder();
+//				String encodedPassword = encoder.encode(usuario.getPassword());
+//				usuarioBD.setPassword(encodedPassword);
+//				usuarioBD.setPasswordConfirm(encodedPassword);
+				usuarioBD.setDescuentoVenta(usuario.getDescuentoVenta() != null?usuario.getDescuentoVenta():Constantes.ZEROS_DOUBLE);
 				usuarioBo.modificar(usuarioBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.modificado.correctamente", usuarioBD);
 			}
