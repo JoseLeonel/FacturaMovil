@@ -752,6 +752,13 @@ public class FacturasController {
 	public String ventaByCategoria(ModelMap model) {
 		return "views/facturas/vetasbycategoria";
 	}
+	
+	@RequestMapping(value = "/ventaByArticulosDetallados", method = RequestMethod.GET)
+	public String ventaByArticulos(ModelMap model) {
+		return "views/facturas/ventasbyArticulos";
+	}
+	
+
 
 	/**
 	 * Listado de facturas anuladas y facturadas

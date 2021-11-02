@@ -311,6 +311,10 @@
 						<li><a th:href="@{/ventaByCategoria}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i
 								class="fa fa-circle-o"></i>Ventas por Categoria</a></li>
+								
+							<li><a th:href="@{/ventaByArticulosDetallados}"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i
+								class="fa fa-circle-o"></i>Articulo por Fecha</a></li>		
 					</ul>
 				</li>
 
