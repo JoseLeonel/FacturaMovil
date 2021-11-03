@@ -46,7 +46,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 
 	private String tipoDocVersion() {
 		String resultado = Constantes.EMPTY;
-		if (this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) ) {
+		if (this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)  ) {
 			return Constantes.REGIMEN_SIMPLIFICADO;
 		}
 		if (this.facturaElectronica.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS)) {
