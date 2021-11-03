@@ -133,8 +133,7 @@ function ListarFacturas() {
     $('.descargarExcel').hide();
     var fechaInicio = $('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
-    var idCliente = $('#categoria').val();
-    var estado = $('.selectEstado').val();
+    
     var table = $('.tableListar').DataTable();
     table
         .clear()
@@ -143,22 +142,21 @@ function ListarFacturas() {
     var parametros = {
         fechaInicioParam: fechaInicio,
         fechaFinParam: fechaFin,
-        idCaegoria: idCliente,
-        estado: estado,
+       
     }
     __Inicializar_Table('.tableListar')
     $.ajax({
-        url: "ListaVentasByCategoria.do",
+        url: "ListaVentasByArticulo.do",
         datatype: "json",
         data: parametros,
-        method: "GET",
+        method: "POST",
         success: function(result) {
             if (result.aaData.length > 0) {
                 loadListar(".tableListar", idioma_espanol, informacion_tabla, result.aaData)
                 facturas.data = result.aaData
                 console.log(facturas)
-                    //__CorreoAlternativo();
-                suma(facturas.data);
+              
+               // suma(facturas.data);
                 $('.descargarExcel').show();
 
             } else {
@@ -250,14 +248,13 @@ function agregarInputsCombos() {
 
 
 var informacion_tabla = [
-    { 'data': 'estadoSTR', "name": "estadoSTR", "title": "Estado", "autoWidth": true },
-    { 'data': 'descrpcion', "name": "descrpcion", "title": "Descrip\u00F3n", "autoWidth": true },
-    { 'data': 'tipoImpuestoSTR', "name": "tipoImpuestoSTR", "title": "Tipo Impuesto", "autoWidth": true },
-    { 'data': 'codigoTarifaSTR', "name": "codigoTarifaSTR", "title": "Tarifa", "autoWidth": true },
-    { 'data': 'impuesto', "name": "impuesto", "title": "Impuesto", "autoWidth": true },
-    { 'data': 'totalCostoSTR', "name": "totalCostoSTR", "title": "Costo", "autoWidth": true },
-    { 'data': 'totalDesccuentoSTR', "name": "totalDesccuentoSTR", "title": "Descuento", "autoWidth": true },
-    { 'data': 'totalNetoSTR', "name": "totalNetoSTR", "title": "Total IVA", "autoWidth": true },
-    { 'data': 'totalLineaSTR', "name": "totalLineaSTR", "title": "Total", "autoWidth": true },
-    { 'data': 'montoExoneracionSTR', "name": "montoExoneracionSTR", "title": "Total Exonerado", "autoWidth": true },
+    { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
+    { 'data': 'codigo', "name": "codigo", "title": "Codigo", "autoWidth": true },
+    { 'data': 'descripcion', "name": "descripcion", "title": "Descripcion", "autoWidth": true },
+    { 'data': 'cantidad', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
+    { 'data': 'descuento', "name": "descuento", "title": "Descuento", "autoWidth": true },
+    { 'data': 'totalExoneraciones', "name": "totalExoneraciones", "title": "Exoneraciones", "autoWidth": true },
+    { 'data': 'totalImpuesto', "name": "totalImpuesto", "title": "Total Impuesto", "autoWidth": true },
+    { 'data': 'totalVentas', "name": "totalVentas", "title": "Total Venta", "autoWidth": true },
+   
 ];

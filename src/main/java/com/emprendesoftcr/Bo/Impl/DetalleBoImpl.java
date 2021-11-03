@@ -622,6 +622,42 @@ public class DetalleBoImpl implements DetalleBo {
 		return listaObjetos;
 	}
 	
+	
+	@Override
+	public List<Map<String, Object>>  ventasbyArticulo(String fechaInicial ,String fechaFinal,String codigoArticulo,Integer idEmpresa){
+	  jdbcTemplate = new JdbcTemplate(dataSource);
+    String sql = " Select DATE_FORMAT(f.fecha_emision, \"%Y-%c-%w\")  as fechaEmision,\n" + 
+    		"      d.codigo,d.descripcion,sum(d.cantidad)as cantidad,\n" + 
+    		"      sum(d.monto_descuento) as descuento,\n" + 
+    		"      sum(IFNULL(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.mont_exone * -1,d.mont_exone), 0) * f.tipo_cambio) as totalExoneraciones ,\n" + 
+    		"      sum(IFNULL(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.imp_neto * f.tipo_cambio * -1,d.imp_neto* f.tipo_cambio), 0) ) as totalImpuesto,\n" + 
+    		"      sum(IFNULL(if(f.tipo_doc = '03' or f.tipo_doc = '86' ,d.monto_total_linea * -1,d.monto_total_linea), 0) * f.tipo_cambio) as totalVentas \n" + 
+    		"      from detalles d \n" + 
+    		"      inner join facturas f on f.id = d.factura_id \n" + 
+    		"      where f.empresa_id = :idempresa and f.fecha_emision >= :fecha_inicial  and f.fecha_emision <= :fecha_final "
+    		+ " and f.estado in (2,6,7) \n" + 
+    		"       and f.tipo_doc in ('04','86','87','01','03')\n" + 
+    		"      GROUP by fechaEmision,d.codigo,d.descripcion "
+    		+ "order by DATE_FORMAT(f.fecha_emision, \"%Y-%c-%w\"),d.codigo asc";
+    
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("fecha_inicial", fechaInicial);
+    parameters.addValue("fecha_final",fechaFinal);
+    parameters.addValue("idempresa", idEmpresa);
+  	
+   	if (codigoArticulo != null && !codigoArticulo.equals(Constantes.EMPTY)) {
+  		
+  		sql = sql.replaceAll("and d.codigo = ", "and d.codigo = :codigoArticulo ");
+  		parameters.addValue("codigoArticulo",codigoArticulo);
+		} else {
+			sql = sql.replaceAll("and d.codigo = ", " ");
+		}
+    
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate( jdbcTemplate );
+    List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);  
+		
+		return listaObjetos;
+	}
 	@Override
 	public List<Map<String, Object>>  totalbyImpuestos(String fechaInicial ,String fechaFinal,Integer estado,Integer idEmpresa,String codigoComercial){
 		jdbcTemplate = new JdbcTemplate(dataSource);

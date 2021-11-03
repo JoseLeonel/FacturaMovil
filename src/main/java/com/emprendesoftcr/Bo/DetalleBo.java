@@ -51,6 +51,6 @@ public interface DetalleBo {
 	List<Map<String, Object>>  ventasbyCategoria(String fechaInicial ,String fechaFinal,Integer estado,Long idCategoria,Integer idEmpresa);
 	
 	List<Map<String, Object>>  totalbyImpuestos(String fechaInicial ,String fechaFinal,Integer estado,Integer idEmpresa,String codigoComercial);
-	
+	List<Map<String, Object>>  ventasbyArticulo(String fechaInicial ,String fechaFinal,String codigoArticulo,Integer idEmpresa);
 	
 }

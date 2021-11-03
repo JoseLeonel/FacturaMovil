@@ -57,6 +57,7 @@ import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
+import com.emprendesoftcr.web.command.DetalleVentaArticuloCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.command.TotalbyImpuestosCommand;
@@ -241,6 +242,50 @@ public class DetalleController {
 		respuestaService.setAaData(detallesFacturaCommand);
 		return respuestaService;
 
+	}
+	
+	
+	@RequestMapping(value = "/ListaVentasByArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable<DetalleVentaArticuloCommand> listaVentasByArticulo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo) {
+
+		RespuestaServiceDataTable<DetalleVentaArticuloCommand> respuestaService = new RespuestaServiceDataTable<DetalleVentaArticuloCommand>();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+
+
+
+		List<Map<String, Object>> listaObjetos = detalleBo.ventasbyArticulo(inicio1, fin1,  codigoArticulo, usuarioSesion.getEmpresa().getId());
+
+		@SuppressWarnings("rawtypes")
+		ArrayList arrayList = new ArrayList();
+		arrayList = (ArrayList<?>) listaObjetos;
+//	      arrayList = (ArrayList) returnSp.get("#result-set-1");
+		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
+		ArrayList<DetalleVentaArticuloCommand> detallesFacturaCommand = new ArrayList<>();
+		Gson gson = new Gson();
+		if (jsonArray1 != null) {
+			for (int i = 0; i < jsonArray1.size(); i++) {
+				DetalleVentaArticuloCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), DetalleVentaArticuloCommand.class);
+				detallesFacturaCommand.add(ventasByCategoriasCommand);
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(detallesFacturaCommand);
+		return respuestaService;
 	}
 
 	@RequestMapping(value = "/DescargarVentasByCategoria.do", method = RequestMethod.GET)
