@@ -72,7 +72,7 @@
 <div id="modalComandasPendientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("comanda.lista.pendientes")}   </h4>
             </div>
             <div class="modal-body">
@@ -445,7 +445,7 @@
 <div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
@@ -668,7 +668,7 @@
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
             </div>
             <div class="modal-body">
@@ -696,7 +696,7 @@
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al Cliente</h1>
             </div>
             <div class="modal-body">
@@ -722,7 +722,7 @@
 <div id='ModalAgregarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Crear Proforma</h1>
             </div>
             <div class="modal-body">
@@ -748,7 +748,7 @@
 <div id='ModalCambiarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Modificar el Nombre Factura</h1>
             </div>
             <div class="modal-body">
@@ -781,7 +781,7 @@
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Modificar Descripcion del Articulo</h1>
             </div>
             <div class="modal-body">

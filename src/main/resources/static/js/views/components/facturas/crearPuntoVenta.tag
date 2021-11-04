@@ -3,7 +3,7 @@
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> &nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}   </h1>
             </div>
             <div class="modal-body">
@@ -31,7 +31,7 @@
 <div id='modalCambiarPrecioDetalle' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambio de Precio en la Factura(no cambia el inventario)</h1>
             </div>
             <div class="modal-body">
@@ -58,7 +58,7 @@
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar el Precio  del Ultimo producto ingresado</h1>
             </div>
             <div class="modal-body">
@@ -103,7 +103,7 @@
 <div id='modalRolUsuario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Seguridad de Acceso Solo Administradores</h1>
             </div>
             <div class="modal-body">
@@ -548,7 +548,7 @@
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
@@ -570,11 +570,11 @@
 
                         <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                             <thead>
-                                <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
-                                <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
-                                <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
-                                <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
-                                <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                                <th >{$.i18n.prop("listado.acciones")}       </th>
+                                <th >{$.i18n.prop("articulo.codigo")}        </th>
+                                <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                                <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                                <th >{$.i18n.prop("articulo.precioPublico")} </th>
                                 
                             </thead>
                             <tfoot style="display: table-header-group;">
@@ -602,7 +602,7 @@
 <div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
             </div>
             <div class="modal-body facturaDiaContainer">
@@ -649,7 +649,7 @@
 <div id="modalClientes" class="modal fade modalClientes " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
@@ -688,7 +688,7 @@
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
             <div class="modal-body">
@@ -725,7 +725,7 @@
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
             </div>
             <div class="modal-body">
@@ -757,7 +757,7 @@
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Aplicar el Descuento al producto</h1>
             </div>
             <div class="modal-body">
@@ -788,7 +788,7 @@
 <div id='modalAgregarClienteNuevo' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Cliente Nuevo </h4>
             </div>
             <div class="modal-body">

@@ -1,105 +1,118 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-<link rel="stylesheet" type="text/css" th:href="@{css/articulo/crudArticulo/crudArticulo.css}"/>
+<link rel="stylesheet" type="text/css"
+	th:href="@{css/articulo/crudArticulo/crudArticulo.css}" />
 
- <style type ="text/css">
-	
+<style type="text/css">
 </style>
 
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
-	    <header class="main-header">
-	        <div th:replace="administrativo/header"></div>
-	    </header>
-	    <!-- Left side column. contains the logo and sidebar -->
-	    <aside class="main-sidebar">
-	        <div th:replace="administrativo/mainsidebar"></div>
-	    </aside>
-	    <!-- Content Wrapper. Contains page content -->
-	    <div class="content-wrapper">
-	        <!-- Content Header (Page header) -->
-	        <section class="content-header" th:fragment="header"></section>
-	        <!-- Main content -->
-	        <section class="content">
+		<header class="main-header">
+			<div th:replace="administrativo/header"></div>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<div th:replace="administrativo/mainsidebar"></div>
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header" th:fragment="header"></section>
+			<!-- Main content -->
+			<section class="content">
 				<!-- Titulos -->
-				<div id="mostrarListado" class="mostrarListado" >
-				    <div  class="row titulo-encabezado "  >
-				        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-				            <h1><i class="fa fa-cog"></i>Maestro Articulos  </h1>
-				        </div>
-				      
-				    </div>
-				    <div class="row">
-				        <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-						    <form id = "filtros" name ="filtros" >
-				   		       <label>Digete el Codigo</label>
-						       <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt" placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
-						     </form>  
-					    </div>
-	  	 		    </div>        
-			        <div class="row">
-				         <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scrollerT " style="width:98.50%;">
-				              <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar" >
-				                    <thead>
-				                         <tr>
-				                                <th style="width:20%" class="table-header"  th:text="#{articulo.categoria}" >Categoria   </th>
-				                                <th class="table-header" style ="width:5%" >Codigo   </th>
-				                                <th style="width:40%"  class="table-header" >Descripcion</th>
-				                                <th style="width:4%"  class="table-header" >Costo</th>
-				                                <th style="width:4%"  class="table-header" >IVAI</th>
-				                                <th style="width:4%"  class="table-header" >Precio</th>
-				                                <th style="width:4%"  class="table-header" >Min</th>
-				                                <th style="width:4%"  class="table-header" >Max</th>
-				                                <th style="width:4%"  class="table-header" >Cant</th>
-				                                <th class="table-header" style ="width:8%">Contable  </th>
-				                                <th style="width:8%"  class="table-header" >Estado</th>
-				                                <th style="width:8%" class="table-header" > Acciones</th>
-				                         </tr>
-				                    </thead>
-				                     <tfoot style="display: table-header-group;">
-				                            <tr>
-				                                <th style="width:20%" >Categoria</th>
-				                                <th>Codigo</th>
-				                                <th style="width:40%">Descripcion</th>
-				                                <th style="width:4%" ></th>
-				                                <th style="width:4%" ></th>
-				                                <th style="width:4%"  ></th>
-				                                <th style="width:4%"  ></th>
-				                                <th style="width:4%"  ></th>
-				                                <th style="width:4%" ></th>
-				                                <th  style="width:08%">Contable</th>
-				                                <th style="width:8%" >Estado</th>
-				                                <th style="width:8%"></th>
-				                            </tr>
-				                     </tfoot>
-				              </table>
-				         </div>
-				     </div> 
-   
-              </div>
-			  <articulo-imprimir></articulo-imprimir>   
-			  <articulo-crud></articulo-crud>                  
-          </section>    
- 		</div>
-         <!-- /.content-wrapper -->
-	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
-   
+				<div id="mostrarListado" class="mostrarListado">
+					<div class="row titulo-encabezado ">
+						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+							<h1>
+								<i class="fa fa-cog"></i>Maestro Articulos
+							</h1>
+						</div>
 
- 
- 
- 
- 	
- 
-	        <!-- /.content -->
-	    </div>
-	  
- 
-<div th:replace="layout/layout :: scripts"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+							<form id="filtros" name="filtros">
+								<label>Digete el Codigo</label> <input type="text"
+									class="form-control codigoArt" id="codigoArt" name="codigoArt"
+									placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
+							</form>
+						</div>
+					</div>
+					<div class="card-table">
 
-<script type="text/javascript" th:src="@{/js/views/articulos/articulo.js?v=42}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/articulos/crudArticulo.tag?v=42}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/articulos/imprimirCodgio.tag?v=42}" ></script>
+						<div class="row  ">
+							<div
+								class="col-md-12 col-sx-12 col-sm-12 col-lg-12 tableListar_ajuste scrollerT">
+
+								<table id="tableListar"
+									class="display table responsive table-hover nowrap table-condensed tableListar">
+									<thead>
+										<tr>
+											<th style="width: 20%" class="table-header"
+												th:text="#{articulo.categoria}">Categoria</th>
+											<th class="table-header" style="width: 5%">Codigo</th>
+											<th style="width: 40%" class="table-header">Descripcion</th>
+											<th style="width: 4%" class="table-header">Costo</th>
+											<th style="width: 4%" class="table-header">IVAI</th>
+											<th style="width: 4%" class="table-header">Precio</th>
+											<th style="width: 4%" class="table-header">Min</th>
+											<th style="width: 4%" class="table-header">Max</th>
+											<th style="width: 4%" class="table-header">Cant</th>
+											<th class="table-header" style="width: 8%">Contable</th>
+											<th style="width: 8%" class="table-header">Estado</th>
+											<th style="width: 8%" class="table-header">Acciones</th>
+										</tr>
+									</thead>
+									<tfoot style="display: table-header-group;">
+										<tr>
+											<th style="width: 20%">Categoria</th>
+											<th>Codigo</th>
+											<th style="width: 40%">Descripcion</th>
+											<th style="width: 4%"></th>
+											<th style="width: 4%"></th>
+											<th style="width: 4%"></th>
+											<th style="width: 4%"></th>
+											<th style="width: 4%"></th>
+											<th style="width: 4%"></th>
+											<th style="width: 08%">Contable</th>
+											<th style="width: 8%">Estado</th>
+											<th style="width: 8%"></th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<articulo-imprimir></articulo-imprimir>
+				<articulo-crud></articulo-crud>
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+
+
+
+
+
+
+
+		<!-- /.content -->
+	</div>
+
+
+	<div th:replace="layout/layout :: scripts"></div>
+
+	<script type="text/javascript"
+		th:src="@{/js/views/articulos/articulo.js?v=42}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/articulos/crudArticulo.tag?v=42}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/articulos/imprimirCodgio.tag?v=42}"></script>
 
 </body>
 </html>

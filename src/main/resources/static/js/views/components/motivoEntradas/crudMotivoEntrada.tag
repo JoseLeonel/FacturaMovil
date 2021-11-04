@@ -8,6 +8,9 @@
     </div>
 <!-- Listado  -->
 <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
+	<div class="box">
+						<div class="box-body">
+							<div class="planel-body">
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
@@ -27,6 +30,9 @@
                         </tfoot>
                     </table>
             </div>
+        </div> 
+        </div> 
+        </div> 
         </div>    
 </div>
 <!-- Fin del Listado -->

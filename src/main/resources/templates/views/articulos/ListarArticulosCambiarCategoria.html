@@ -1,154 +1,173 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-<style type ="text/css">
-	.fondoEncabezado {
-		background: #00539B;
-		color: #f9fafc;
-	}
-	
-	.requeridoDato {
-		color: red;
-		text-align: left;
-		font-weight: 500;
-		font-size: 13px;
-	}
-	
-	.fondoFacturacion {
-		background: rgb(247, 244, 244);
-		color: #f9fafc;
-		border-style: solid;
-		border-width: 5px;
-	}
-	
-	.wrap {
-		max-width: 1100px;
-		width: 100%;
-	}
-	
-	body {
-		overflow: hidden;
-		background: white;
-		font-size: 12px !important;
-	}
-	
-	.contenedor-listar {
-		width: 100%;
-	}
-	
-	.input-table-search {
-		margin-left: 15px;
-		margin-right: 15px;
-		width: 100%;
-	}
-	
-	.botonConsulta {
-		margin-top: 28px;
-	}
-	
-	table td {
-		text-align: left;
-		font-size: 12px;
-	}
-	
-	table th {
-		text-align: center;
-		font-size: 12px;
-	}
-	
-	th, td {
-		white-space: nowrap;
-	}
-	
-	.scroller {
-		width: 200px;
-		height: 600px;
-		overflow-y: scroll;
-	}
+<style type="text/css">
+.fondoEncabezado {
+	background: #00539B;
+	color: #f9fafc;
+}
+
+.requeridoDato {
+	color: red;
+	text-align: left;
+	font-weight: 500;
+	font-size: 13px;
+}
+
+.fondoFacturacion {
+	background: rgb(247, 244, 244);
+	color: #f9fafc;
+	border-style: solid;
+	border-width: 5px;
+}
+
+.wrap {
+	max-width: 1100px;
+	width: 100%;
+}
+
+body {
+	overflow: hidden;
+	background: white;
+	font-size: 12px !important;
+}
+
+.contenedor-listar {
+	width: 100%;
+}
+
+.input-table-search {
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 100%;
+}
+
+.botonConsulta {
+	margin-top: 28px;
+}
+
+table td {
+	text-align: left;
+	font-size: 12px;
+}
+
+table th {
+	text-align: center;
+	font-size: 12px;
+}
+
+th, td {
+	white-space: nowrap;
+}
+
+.scroller {
+	width: 200px;
+	height: 600px;
+	overflow-y: scroll;
+}
 </style>
 </head>
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
-	    <header class="main-header">
-	        <div th:replace="administrativo/header"></div>
-	    </header>
-	    <!-- Left side column. contains the logo and sidebar -->
-	    <aside class="main-sidebar">
-	        <div th:replace="administrativo/mainsidebar"></div>
-	    </aside>
-	    <!-- Content Wrapper. Contains page content -->
-	    <div class="content-wrapper">
-	        <!-- Content Header (Page header) -->
-	        <section class="content-header" th:fragment="header"></section>
-	        <!-- Main content -->
-	        <section class="content">
-	        	<div id="mostrarListado" class="mostrarListado" >	 
-				    <div  class="row titulo-encabezado "  >
-				        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-				            <h1><i class="fa fa-cog"></i> Cambio de Categoria  </h1>
-				        </div>
-				        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
-				    </div>
-				    <!-- Listado  -->
-				       <form id = "filtros" name ="filtros" >
-					        <input type="hidden" name="listaArticuloGrupales" id="listaArticuloGrupales" >
-							  <div class= "row">
-					               	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-					                     <div class="form-group">
-					                         <label th:text="#{titulo.categoria.cambio}"> </label>  
-					                         <select  class="form-control categoria" id="categoria" name="categoria" data-live-search="true" >
-					                             
-					                         </select>
-					                     </div>
-					                     <button type="button" class="btn btn-warning btncategoria " title ="Aplicar el cambio de la nueva categoria" name="button" th:text="#{aplicar.categoria.nueva}" ><i class="fa fa-pencil-square-o" ></i></button>  
-					                 </div>
-					          </div>    
-					          <br>     
-				        </form>
-  			            <div class="row">
-				          <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
-				                 <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"  >
-				                        <thead>
-				                            <tr>
-				                                <th style="width:3%" class="table-header"   >   </th>             
-				                                <th style="width:10%" class="table-header"  th:text="#{articulo.categoria}" >Categoria   </th>
-				                                <th class="table-header" style ="width:5%" >Codigo   </th>
-				                                <th style="width:35%"  class="table-header" >Descripcion</th>
-				                                <th style="width:9%"  class="table-header" >Costo</th>
-				                                <th style="width:7%"  class="table-header" >Impuesto</th>
-				                                <th style="width:9%"  class="table-header" >Precio</th>
-				                                <th style="width:6%"  class="table-header" >Cantidad</th>
-				                                <th class="table-header" style ="width:6%">Contable</th>
-				                                <th style="width:8%"  class="table-header" >Estado</th>
-				                            </tr>
-				                        </thead>
-				                        <tfoot style="display: table-header-group;">
-				                            <tr>
-				                                <th style="width:3%" > </th>
-				                                <th style="width:10%" >Categoria</th>
-				                                <th>Codigo</th>
-				                                <th style="width:35%"  >Descripcion</th>
-				                                <th style="width:9%" >Costo</th>
-				                                <th style="width:7%" >Impuesto        </th>
-				                                <th style="width:9%"  >Precio          </th>
-				                                <th style="width:6%" >Cantidad        </th>
-				                                <th>Contable        </th>
-				                                <th style="width:8%" >Estado          </th>
-				                            </tr>
-				                        </tfoot>
-				                 </table>
-				          </div>
-			            </div>    
-				 </div>
-            </section>    
- 		</div>
-         <!-- /.content-wrapper -->
-	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
-    </div>
-	  
- 
-<div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/articulos/articuloCambioCategoria.js?v=40}"></script>
+		<header class="main-header">
+			<div th:replace="administrativo/header"></div>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<div th:replace="administrativo/mainsidebar"></div>
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header" th:fragment="header"></section>
+			<!-- Main content -->
+			<section class="content">
+				<div id="mostrarListado" class="mostrarListado">
+					<div class="row titulo-encabezado ">
+						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+							<h1>
+								<i class="fa fa-cog"></i> Cambio de Categoria
+							</h1>
+						</div>
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
+					</div>
+					<!-- Listado  -->
+					<form id="filtros" name="filtros">
+						<input type="hidden" name="listaArticuloGrupales"
+							id="listaArticuloGrupales">
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<div class="form-group">
+									<label th:text="#{titulo.categoria.cambio}"> </label> <select
+										class="form-control categoria" id="categoria" name="categoria"
+										data-live-search="true">
+
+									</select>
+								</div>
+								<button type="button" class="btn btn-warning btncategoria "
+									title="Aplicar el cambio de la nueva categoria" name="button"
+									th:text="#{aplicar.categoria.nueva}">
+									<i class="fa fa-pencil-square-o"></i>
+								</button>
+							</div>
+						</div>
+						<br>
+					</form>
+						<div class="box">
+							<div class="box-body">
+								<div class="planel-body">
+								<div class="row">
+									<div
+										class="col-md-12 col-sx-12 col-sm-12 col-lg-12 tableListar_ajuste "
+										style="width: 98.50%;">
+										<table id="tableListar"
+											class="display table responsive table-hover nowrap table-condensed tableListar">
+											<thead>
+												<tr>
+													<th style="width: 3%" class="table-header"></th>
+													<th style="width: 10%" class="table-header"
+														th:text="#{articulo.categoria}">Categoria</th>
+													<th class="table-header" style="width: 5%">Codigo</th>
+													<th style="width: 35%" class="table-header">Descripcion</th>
+													<th style="width: 9%" class="table-header">Costo</th>
+													<th style="width: 7%" class="table-header">Impuesto</th>
+													<th style="width: 9%" class="table-header">Precio</th>
+													<th style="width: 6%" class="table-header">Cantidad</th>
+													<th class="table-header" style="width: 6%">Contable</th>
+													<th style="width: 8%" class="table-header">Estado</th>
+												</tr>
+											</thead>
+											<tfoot style="display: table-header-group;">
+												<tr>
+													<th style="width: 3%"></th>
+													<th style="width: 10%">Categoria</th>
+													<th>Codigo</th>
+													<th style="width: 35%">Descripcion</th>
+													<th style="width: 9%">Costo</th>
+													<th style="width: 7%">Impuesto</th>
+													<th style="width: 9%">Precio</th>
+													<th style="width: 6%">Cantidad</th>
+													<th>Contable</th>
+													<th style="width: 8%">Estado</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+	</div>
+
+
+	<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript"
+		th:src="@{/js/views/articulos/articuloCambioCategoria.js?v=40}"></script>
 
 </body>
 </html>

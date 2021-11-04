@@ -1,70 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-<link rel="stylesheet" type="text/css" th:href="@{/css/cliente/cliente.css}"/>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/cliente/cliente.css}" />
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
-	    <header class="main-header">
-	        <div th:replace="administrativo/header"></div>
-	    </header>
-	    <!-- Left side column. contains the logo and sidebar -->
-	    <aside class="main-sidebar">
-	        <div th:replace="administrativo/mainsidebar"></div>
-	    </aside>
-	    <!-- Content Wrapper. Contains page content -->
-	    <div class="content-wrapper">
-	        <!-- Content Header (Page header) -->
-	        <section class="content-header" th:fragment="header"></section>
-	        <!-- Main content -->
-	        <section class="content">
-				<cliente-crud></cliente-crud>	  
-	   		    <div id="mostrarListado"> 
-			    	<!-- Titulos -->
-			    	<div  class="row "  >
-			        	<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			            	<h1 > <i class="fa fa-cog" th:text="#{cliente.titulo}"></i ></h1>
-			        	</div>
-				    </div>
-			    	 <!-- Listado  -->
-			        <div class="row" >        
-			             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" style="width:98.50%;">
-			                  <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   >
-			                      <thead>
-			                        <tr>
-			                           <th class="table-header" th:text="#{cliente.cedula}" >  </th>
-				                       <th class="table-header" th:text="#{cliente.nombreCompleto}"> </th>
-					                   <th class="table-header" th:text="#{cliente.nombreComercial}"> </th>
-					                   <th class="table-header" style= "width:6%;" th:text="#{cliente.celular}" ></th>
-					                   <th class="table-header" style= "width:6%;" th:text="#{cliente.telefono}"> </th>
-					                   <th class="table-header" th:text="#{empresa.estado}"></th>
-					                   <th class="table-header" th:text="#{listado.acciones}"></th>
-			                        </tr>
-			                        </thead>
-			                        <tfoot style="display: table-header-group;">
-			                           <tr>
-			                              <th th:text="#{cliente.cedula}" >  </th>
-					                      <th th:text="#{cliente.nombreCompleto}"> </th>
-					                      <th th:text="#{cliente.nombreComercial}"> </th>
-					                      <th style= "width:6%;" th:text="#{cliente.celular}" ></th>
-					                      <th style= "width:6%;" th:text="#{cliente.telefono}"> </th>
-					                      <th th:text="#{empresa.estado}"></th>
-					  	                  <th ></th>
-			                         </tr>
-			                         </tfoot>
-			                     </table>
-			                </div>
-		    		</div> 
-    			</div>        
-            </section>    
- 		</div>
-         <!-- /.content-wrapper -->
-	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
-    </div>
-	  
- 
-<div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/cliente/cliente.js?v=40}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/clientes/crudCliente.tag?v=40}" ></script>
+		<header class="main-header">
+			<div th:replace="administrativo/header"></div>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<div th:replace="administrativo/mainsidebar"></div>
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header" th:fragment="header"></section>
+			<!-- Main content -->
+			<section class="content">
+				<cliente-crud></cliente-crud>
+				<div id="mostrarListado">
+					<!-- Titulos -->
+					<div class="row ">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<h1>
+								<i class="fa fa-cog" th:text="#{cliente.titulo}"></i>
+							</h1>
+						</div>
+					</div>
+					<!-- Listado  -->
+					<div class="box">
+						<div class="box-body">
+							<div class="planel-body">
+								<div class="row">
+									<div class="col-md-12 col-sx-12 col-sm-12 col-lg-12"
+										style="width: 98.50%;">
+										<table id="tableListar"
+											class="display table responsive table-hover nowrap table-condensed tableListar ">
+											<thead>
+												<tr>
+													<th class="table-header" th:text="#{cliente.cedula}">
+													</th>
+													<th class="table-header"
+														th:text="#{cliente.nombreCompleto}"></th>
+													<th class="table-header"
+														th:text="#{cliente.nombreComercial}"></th>
+													<th class="table-header" style="width: 6%;"
+														th:text="#{cliente.celular}"></th>
+													<th class="table-header" style="width: 6%;"
+														th:text="#{cliente.telefono}"></th>
+													<th class="table-header" th:text="#{empresa.estado}"></th>
+													<th class="table-header" th:text="#{listado.acciones}"></th>
+												</tr>
+											</thead>
+											<tfoot style="display: table-header-group;">
+												<tr>
+													<th th:text="#{cliente.cedula}"></th>
+													<th th:text="#{cliente.nombreCompleto}"></th>
+													<th th:text="#{cliente.nombreComercial}"></th>
+													<th style="width: 6%;" th:text="#{cliente.celular}"></th>
+													<th style="width: 6%;" th:text="#{cliente.telefono}">
+													</th>
+													<th th:text="#{empresa.estado}"></th>
+													<th></th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+	</div>
+
+
+	<div th:replace="layout/layout :: scripts"></div>
+	<script type="text/javascript"
+		th:src="@{/js/views/cliente/cliente.js?v=40}"></script>
+	<script type="riot/tag"
+		th:src="@{/js/views/components/clientes/crudCliente.tag?v=40}"></script>
 
 
 </body>

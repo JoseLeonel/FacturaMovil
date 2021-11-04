@@ -11,6 +11,9 @@
 
 <!-- Listado  -->
 <div classs="contenedor-listar container" show={mostrarListado} >
+    <div class="box">
+		<div class="box-body">
+			<div class="planel-body">
     <div  class="row">
         <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="width:98.50%;">
             <table id="tableListar" class="responsive display nowrap tableListar"  cellspacing="0" width="100%">
@@ -39,6 +42,9 @@
 					</tr>
 				</tfoot>
             </table>
+        </div>
+        </div>
+        </div>
         </div>
     </div>    
 </div>

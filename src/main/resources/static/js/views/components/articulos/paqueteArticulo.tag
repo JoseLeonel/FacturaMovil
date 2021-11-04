@@ -268,7 +268,7 @@
 <div id='modalHaciendaCabys' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg" >
         <div class="modal-content" style="width:100%;">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central de Costa Rica(cabys@hacienda.go.cr) </h4>
             </div>
             <div class="modal-body aplicarScroll">
@@ -332,7 +332,7 @@
 <div id='modalMarcas' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog" >
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Marcas </h4>
             </div>
             <div class="modal-body">
@@ -361,7 +361,7 @@
 <div id='modalCategorias' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog" >
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Categorias </h4>
             </div>
              <div class="modal-body">

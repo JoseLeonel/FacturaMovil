@@ -124,6 +124,7 @@
                     </div>
                     <div class="box-body">
                         <div class="planel-body" >
+                        
                             <div class="row" >
                                 <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                                     <table id="tableListaAbonos" class="display table responsive table-hover nowrap table-condensed tableListaAbonos"   cellspacing="0" width="100%">
@@ -285,7 +286,9 @@
                  <button show = "{totalAplicarAbono > 0 }" onclick ={__CrearAbono} type="button" class="btn btn-warning " title ="Aplicar Abonos a las cuentas seleccionadas" name="button" ><i class="fa fa-pencil-square-o"></i>Aplicar Abonos</button>
             </div>                             
         </div>
-
+ <div class="box">
+						<div class="box-body">
+							<div class="planel-body">
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
@@ -320,6 +323,9 @@
                             </tr>
                         </tfoot>
                     </table>
+            </div>
+            </div>
+            </div>
             </div>
         </div>    
     </div>

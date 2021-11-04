@@ -9,7 +9,12 @@
     
 <!-- Listado  -->
 <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
+    <div class="box">
+		<div class="box-body">
+			<div class="planel-body">
         <div class="row">
+
+
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
@@ -36,7 +41,10 @@
                         </tfoot>
                     </table>
             </div>
-        </div>    
+        </div>   
+         </div>   
+          </div>   
+           </div>    
 </div>
 <br>
 <br>
@@ -108,7 +116,7 @@ Listado  -->
 <div id='modalCerrarCaja' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=800px;>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja y Conteo Manual de los billetes / monedas": "Apertura de la Caja"} </h1>
             </div>
             <div class="modal-body">

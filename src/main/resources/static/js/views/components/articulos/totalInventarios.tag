@@ -32,11 +32,11 @@
 
     
     <!-- Inicio Filtros-->
-    <div>
+
         <div class= 'row'>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 tableListar_ajuste">
                 <div class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
-                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
                 </div>  
                 <div class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                 <form id="filtros" name="filtros">       
