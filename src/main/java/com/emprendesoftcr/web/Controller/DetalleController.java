@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -247,7 +249,7 @@ public class DetalleController {
 	
 	@RequestMapping(value = "/ListaVentasByArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable<DetalleVentaArticuloCommand> listaVentasByArticulo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo) {
+	public RespuestaServiceDataTable<DetalleVentaArticuloCommand> listaVentasByArticulo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo,  @RequestParam(value = "estado", required = false) Integer estado) {
 
 		RespuestaServiceDataTable<DetalleVentaArticuloCommand> respuestaService = new RespuestaServiceDataTable<DetalleVentaArticuloCommand>();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -264,29 +266,69 @@ public class DetalleController {
 
 
 
-		List<Map<String, Object>> listaObjetos = detalleBo.ventasbyArticulo(inicio1, fin1,  codigoArticulo, usuarioSesion.getEmpresa().getId());
+		List<Map<String, Object>> listaObjetos = detalleBo.ventasbyArticulo(inicio1, fin1,  codigoArticulo, usuarioSesion.getEmpresa().getId(),estado);
 
 		@SuppressWarnings("rawtypes")
 		ArrayList arrayList = new ArrayList();
 		arrayList = (ArrayList<?>) listaObjetos;
 //	      arrayList = (ArrayList) returnSp.get("#result-set-1");
 		JsonArray jsonArray1 = new Gson().toJsonTree(arrayList).getAsJsonArray();
-		ArrayList<DetalleVentaArticuloCommand> detallesFacturaCommand = new ArrayList<>();
+		List<DetalleVentaArticuloCommand> lista = new ArrayList<DetalleVentaArticuloCommand>();
 		Gson gson = new Gson();
 		if (jsonArray1 != null) {
 			for (int i = 0; i < jsonArray1.size(); i++) {
 				DetalleVentaArticuloCommand ventasByCategoriasCommand = gson.fromJson(jsonArray1.get(i).toString(), DetalleVentaArticuloCommand.class);
-				detallesFacturaCommand.add(ventasByCategoriasCommand);
+				lista.add(ventasByCategoriasCommand);
 			}
 		}
+		if(lista !=null && !lista.isEmpty()) {
+			Comparator<DetalleVentaArticuloCommand> comparatorVentaArticulo = Comparator.comparing(DetalleVentaArticuloCommand::getFechaEmisionF);
+			lista.sort(comparatorVentaArticulo);
+		
+		}
+		
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
 		}
-		respuestaService.setAaData(detallesFacturaCommand);
+		respuestaService.setAaData(lista);
 		return respuestaService;
 	}
+	
+
+
+	@RequestMapping(value = "/DescargarVentasByArticulos.do", method = RequestMethod.GET)
+	public void descargarVentasByArticulos(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo,  @RequestParam(value = "estado", required = false) Integer estado)  throws IOException, Exception {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		String nombreArchivo = "ventaxArticulos.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.ventasbyArticuloExcel(inicio1, fin1,  codigoArticulo, usuarioSesion.getEmpresa().getId(),estado));
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+	
+	
 
 	@RequestMapping(value = "/DescargarVentasByCategoria.do", method = RequestMethod.GET)
 	public void descargaByCategoriaVentas(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam Long idCaegoria) throws IOException, Exception {

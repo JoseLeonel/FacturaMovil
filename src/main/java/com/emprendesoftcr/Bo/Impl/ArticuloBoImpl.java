@@ -402,7 +402,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 					result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario");
 				} else {
 						articuloValidar = buscarPorCodigoSecundarioYEmpresa(articulo.getCodigoSecundario().trim(), usuarioSesion.getEmpresa());
-						if (articuloValidar != null) {
+						if (articuloValidar != null) { 
 							if(!articuloBd.getCodigo().equals(articuloValidar.getCodigo())) {
 								result.rejectValue("codigoSecundario", "error.articulo.codigo.secundario.ya.existe");	
 							}

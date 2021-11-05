@@ -331,11 +331,13 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFacturaDetalleNueva.setCantidad(lineaDetalle.getCantidad() != null ? lineaDetalle.getCantidad().doubleValue() : Constantes.ZEROS_DOUBLE);
 			recepcionFacturaDetalleNueva.setUnidadMedida(lineaDetalle.getUnidadMedida() != null ? lineaDetalle.getUnidadMedida() : Constantes.EMPTY);
 			
-			if(lineaDetalle.getDetalle() != null) {
-				if(lineaDetalle.getDetalle().length() >=180) {
-					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle().substring(0, 180));	
+			if(lineaDetalle.getDetalle() != null && !lineaDetalle.getDetalle().equals(Constantes.EMPTY)) {
+				if(lineaDetalle.getDetalle().length() >=100) {
+					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle().substring(0, 100));	
+					String detalle =lineaDetalle.getDetalle();
+					recepcionFacturaDetalleNueva.setDetalle(detalle.replace("&", Constantes.EMPTY));	
 				}else {
-					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle());
+					recepcionFacturaDetalleNueva.setDetalle(lineaDetalle.getDetalle().replace("&", Constantes.EMPTY));
 				}
 			}else {
 				recepcionFacturaDetalleNueva.setDetalle("no hay detalles");

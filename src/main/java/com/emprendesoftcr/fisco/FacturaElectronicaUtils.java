@@ -257,7 +257,7 @@ public final class FacturaElectronicaUtils {
 	public static String procesarTexto(String j) {
 		String r = "";
 
-		r = StringEscapeUtils.escapeJava(j);
+		r = j != null && !j.isEmpty()?   StringEscapeUtils.escapeJava(j.replace("&", Constantes.EMPTY)):Constantes.EMPTY;
 
 		return r;
 		}

@@ -90,9 +90,9 @@ function __Inicializar_Table(nombreTabla) {
 function descargarExcel() {
     var fechaInicio = $('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
-    var idCategoria = $('#categoria').val();
+    var codigoArticulo = $('.codigoArticulo').val();
     var estado = $('.selectEstado').val();
-    location.href = "DescargarVentasByCategoria.do?fechaInicioParam=" + fechaInicio + "&fechaFinParam=" + fechaFin + "&idCaegoria=" + idCategoria + "&estado=" + estado;
+    location.href = "DescargarVentasByArticulos.do?fechaInicioParam=" + fechaInicio + "&fechaFinParam=" + fechaFin + "&codigoArticulo=" + codigoArticulo + "&estado=" + estado;
 }
 
 /**
@@ -142,7 +142,8 @@ function ListarFacturas() {
     var parametros = {
         fechaInicioParam: fechaInicio,
         fechaFinParam: fechaFin,
-       
+        codigoArticulo: $('.codigoArticulo').val(),
+        estado: $('.estado').val(),
     }
     __Inicializar_Table('.tableListar')
     $.ajax({
@@ -156,7 +157,7 @@ function ListarFacturas() {
                 facturas.data = result.aaData
                 console.log(facturas)
               
-               // suma(facturas.data);
+                suma(facturas.data);
                 $('.descargarExcel').show();
 
             } else {
@@ -184,13 +185,13 @@ function suma(data) {
     var totalVenta = 0
     $.each(data, function(index, modeloTabla) {
         var estado = $('.selectEstado').val()
-        if (modeloTabla.estado == 2 || modeloTabla.estado == 7 || modeloTabla.estado == 6) {
+      //  if (modeloTabla.estado == 2 || modeloTabla.estado == 7 || modeloTabla.estado == 6) {
             totalExonerado = __valorFloat(modeloTabla.mont_exon) + totalExonerado;
             totalCosto = __valorFloat(modeloTabla.total_costo) + totalCosto;
-            totalDescuento = __valorFloat(modeloTabla.total_desc) + totalDescuento;
-            totalIVAI = __valorFloat(modeloTabla.total_neto) + totalIVAI;
-            totalVenta = __valorFloat(modeloTabla.total_linea) + totalVenta;
-        }
+            totalDescuento = __valorFloat(modeloTabla.descuento) + totalDescuento;
+            totalIVAI = __valorFloat(modeloTabla.totalImpuesto) + totalIVAI;
+            totalVenta = __valorFloat(modeloTabla.totalVentas) + totalVenta;
+       // }
 
 
     })
@@ -248,13 +249,13 @@ function agregarInputsCombos() {
 
 
 var informacion_tabla = [
-    { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
+    { 'data': 'fechaEmisionF', "name": "fechaEmisionF", "title": "Fecha Emision", "autoWidth": true },
     { 'data': 'codigo', "name": "codigo", "title": "Codigo", "autoWidth": true },
     { 'data': 'descripcion', "name": "descripcion", "title": "Descripcion", "autoWidth": true },
-    { 'data': 'cantidad', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
-    { 'data': 'descuento', "name": "descuento", "title": "Descuento", "autoWidth": true },
-    { 'data': 'totalExoneraciones', "name": "totalExoneraciones", "title": "Exoneraciones", "autoWidth": true },
-    { 'data': 'totalImpuesto', "name": "totalImpuesto", "title": "Total Impuesto", "autoWidth": true },
-    { 'data': 'totalVentas', "name": "totalVentas", "title": "Total Venta", "autoWidth": true },
+    { 'data': 'cantidadSTR', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
+    { 'data': 'descuentoSTR', "name": "descuento", "title": "Descuento", "autoWidth": true },
+    { 'data': 'totalExoneracionesSTR', "name": "totalExoneraciones", "title": "Exoneraciones", "autoWidth": true },
+    { 'data': 'totalImpuestoSTR', "name": "totalImpuesto", "title": "Total Impuesto", "autoWidth": true },
+    { 'data': 'totalVentasSTR', "name": "totalVentas", "title": "Total Venta", "autoWidth": true },
    
 ];

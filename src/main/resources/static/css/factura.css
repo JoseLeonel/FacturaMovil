@@ -4,6 +4,7 @@
   --color-filtros-color: #ffffff;
   --color-sub-title: rgba(0, 0, 0, .6);
   --v-primary-base: #3c8dbc;
+  --color-back-header-table: #ddd;
 }
 
 .page-title {
@@ -128,7 +129,7 @@
 }
 
 .table-header {
-  background: var(--color-filtros-color);
+  background: var(--color-back-header-table);
   color: #131111;
 }
 
