@@ -26,9 +26,9 @@
 						class="fa fa-circle-o"></i> Act.Comerciales
 				</a>
 				</li>
-				<li sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_Cajero','Administrador_Servicios')"><a
-					th:href="@{/ListarUsuario}"><i class="fa fa-circle-o"></i>
-						Autorizar descuentos </a></li>
+<!-- 				<li sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_Cajero','Administrador_Servicios')"><a -->
+<!-- 					th:href="@{/ListarUsuario}"><i class="fa fa-circle-o"></i> -->
+<!-- 						Autorizar descuentos </a></li> -->
 				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a
 					th:href="@{/ListarEmpresas}"><i class="fa fa-circle-o"></i>
 						Empresas </a></li>

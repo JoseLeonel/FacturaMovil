@@ -109,8 +109,8 @@
                                             <div class="row">
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
-                                                    <select  class="campo selecTipoUnidad has-success" name="unidadMedida" >
-                                                        <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
+                                                    <select  class="campo selecTipoUnidad has-success" name="tipoUnidades" id="tipoUnidades">
+                                                        
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -520,14 +520,20 @@ self.on('mount',function(){
     self.contables = __ComboContables()
     self.baseImponibles =__ComboBaseImponibles()
     self.update()
+      $('.selecTipoUnidad').prop("selectedIndex", 0);
+   $('.selecTipoUnidad').empty();
+   $('.selecTipoUnidad').val('')
+   $("#unidadMedida-sysSelect").remove()
     setTimeout(__listadoTipoUnidadesActivas(function(resultado){
         self.tipoUnidades.aaData = resultado;
+        self.update()
+        _evento_refrescar_distritos("#formulario")
+
     })
      ,5000);
 
     
-
-
+    
     self.impuestos = __ComboImpuestos()
     self.impuestosMag = __ComboImpuestosMaG()
     self.tipoCodigos =__CombotipoCodigo()
@@ -546,6 +552,31 @@ self.on('mount',function(){
 
         }, false );
 })
+
+function _evento_refrescar_distritos(){
+
+	/**
+	 * Se realiza la verificacion de cambio de canton con un
+	 * patron observer al atributo 'rel' del input del sysSelect de canton,
+	 * ya que no se puede aplicar el evento change al
+	 * select, porque el sysTable.js lo reconstruye por lo que no
+	 * se dispara el change del elemento @wsanchez
+	 */
+	//var observable = document.querySelector(form + ' #tipoUnidades-input')
+
+		    
+					//Destruye el sysSelect de distritos
+					$( ' #tipoUnidades').empty()
+					$(' #tipoUnidades-input').val('')
+					$("#tipoUnidades-sysSelect").remove()
+					
+					//Reconstruye el sysSelect de distritos
+					$(" #tipoUnidades").sysSelect(self.tipoUnidades.aaData, "id", "descripcion", true);
+		
+
+	
+}
+
 /**
 *  Crear el combo de estados
 **/
@@ -1316,8 +1347,8 @@ function LimpiarArticulo(){
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
    $('.selectTipoImpuesto1').prop("selectedIndex", 0);
    $('.selectTipoCodigo').prop("selectedIndex", 0);
-   $('.selecTipoUnidad').prop("selectedIndex", 0);
-  
+ 
+
    $("#unidadMedida").val($("#unidadMedida option:first").val()); 
    $("#contable").val($("#contable option:first").val()); 
    $('.codigo').val(null)
