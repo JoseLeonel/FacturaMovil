@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 var _Init = function () {
 	   
-	     agregarInputsCombos();
+	    agregarInputsCombos();
 	    EventoFiltro();
 	    __MantenimientoAgregar();
 	    __modificarRegistro_Listar();
@@ -60,7 +60,25 @@ var ListarArticulos = function(codigo){
  __agregarEntradaAlInventario();
  __agregarSalidaAlInventario();
  __Imprimir_Articulo()
+
+ 
+	__listadoMarcaCombo(function (data){
+	    marcas = data;
+	    
+	 });
+	__listadoCategoriasCombo(function (data){
+	    categorias = data
+	    
+	});
+	__listadoTipoUnidadesCombo(function(data){
+	    tipoUnidades  = data;
+	      
+	});
 }  
+
+var tipoUnidades = null;
+var marcas = null;
+var categorias = null;
 /**
  * Eventos del filtro
  */
@@ -184,7 +202,10 @@ function __MantenimientoAgregar(){
     	$('#mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
-					tipoEjecucion:1
+					tipoEjecucion:1,
+					categorias:categorias,
+					marcas:marcas,
+					tipoUnidades:tipoUnidades
 			};
      	  // here tags are compiled and riot.mount works synchronously
 		  var tags = riot.mount('articulo-crud',{parametros:parametros})
@@ -228,7 +249,10 @@ function __modificarRegistro_Listar(){
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:2,
-				articulo:data
+				articulo:data,
+				categorias:categorias,
+				marcas:marcas,
+				tipoUnidades:tipoUnidades
 			};
 			 // here tags are compiled and riot.mount works synchronously
 			  var tags = riot.mount('articulo-crud',{parametros:parametros});
@@ -254,7 +278,10 @@ function __agregarEntradaAlInventario(){
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:3,
-				articulo:data
+				articulo:data,
+				categorias:categorias,
+				marcas:marcas,
+				tipoUnidades:tipoUnidades
 			};
 			 // here tags are compiled and riot.mount works synchronously
 			  var tags = riot.mount('articulo-crud',{parametros:parametros});
@@ -280,7 +307,10 @@ function __agregarSalidaAlInventario(){
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:4,
-				articulo:data
+				articulo:data,
+				categorias:categorias,
+				marcas:marcas,
+				tipoUnidades:tipoUnidades
 			};
 			 // here tags are compiled and riot.mount works synchronously
 			  var tags = riot.mount('articulo-crud',{parametros:parametros});

@@ -5,6 +5,83 @@
   --color-sub-title: rgba(0, 0, 0, .6);
   --v-primary-base: #3c8dbc;
   --color-back-header-table: #ddd;
+  --Darkgrey3: #C4C4C4;
+  --lightGrey3: #BDBDBD;
+  --Darkgrey: #646B70;
+}
+
+.hide {
+  display: none;
+}
+
+.hiddenInput {
+  visibility: hidden !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 0 !important;
+}
+
+.tammno {
+  width: 100%;
+}
+
+input,
+select {
+  border-radius: 8px !important;
+  border: 1px solid var(--lightGrey3) !important;
+  color: var(--Darkgrey) !important;
+  font-weight: 500 !important;
+  height: 45px;
+  font-size: 28px;
+  line-height: 38px !important;
+  -webkit-box-sizing: border-box !important;
+          box-sizing: border-box !important;
+  padding: 0 0 0 20px !important;
+}
+
+.options {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.options > span {
+  display: block;
+  color: var(--Darkgrey) !important;
+  cursor: pointer;
+  padding: 5px 20px;
+  font-size: 18px;
+}
+
+.options > span:hover {
+  background: #1e90ff;
+  color: var(--Darkgrey) !important;
+}
+
+.sysSelectContainer {
+  position: fixed;
+  width: 80%;
+  background: white !important;
+  -webkit-box-sizing: border-box !important;
+          box-sizing: border-box !important;
+  border: 1px solid #999 !important;
+  z-index: 999999 !important;
+  width: 340px !important;
+  margin-top: 55px !important;
+}
+
+.sysSelectContainer > input {
+  width: calc(100% - 40px) !important;
+  padding: 10px !important;
+  margin: 20px 20px 10px !important;
+  -webkit-box-sizing: border-box !important;
+          box-sizing: border-box !important;
+  color: var(--Darkgrey) !important;
+  border: 1px solid var(--lightGrey3) !important;
+}
+
+.sysSelectContainer > input:focus {
+  border: 1px solid var(--lightGrey3) !important;
 }
 
 .page-title {
@@ -23,6 +100,98 @@
   min-height: 8px !important;
   font-weight: 600 !important;
   padding-left: 3px !important;
+}
+
+fieldset {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  color: white;
+  position: relative;
+  width: 360px;
+  max-width: 100%;
+}
+
+fieldset > .leftIcon > label {
+  position: absolute;
+  left: 20px;
+  z-index: 2;
+  pointer-events: none;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+  bottom: calc(100% - 17px);
+}
+
+fieldset > .leftIcon > i {
+  position: absolute;
+  bottom: 13px;
+  left: 18px;
+  pointer-events: none;
+  color: #646B70 !important;
+  font-size: 30px !important;
+}
+
+fieldset > .leftIcon > hr {
+  position: absolute;
+  width: calc(100% - 80px);
+  bottom: 8px;
+  border: 0.5px solid #00B5AE;
+  left: 60px;
+  opacity: 1;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+
+fieldset > .leftIcon > .inactive > label {
+  bottom: 17px;
+  font-size: 18px;
+  left: 60px;
+}
+
+fieldset > .leftIcon > .inactive > label > hr {
+  opacity: 0;
+}
+
+fieldset > .rightIcon > label {
+  position: absolute;
+  left: 20px;
+  z-index: 2;
+  pointer-events: none;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+  bottom: calc(100% - 17px);
+  color: #4B4B4B;
+}
+
+fieldset > .rightIcon > i {
+  position: absolute;
+  bottom: 13px;
+  right: 18px;
+  pointer-events: none;
+  color: #646B70 !important;
+  font-size: 30px !important;
+}
+
+fieldset > .rightIcon > hr {
+  position: absolute;
+  width: calc(100% - 80px);
+  bottom: 8px;
+  border: 0.5px solid #00B5AE;
+  left: 60px;
+  opacity: 1;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+
+fieldset > .rightIcon > .inactive > label {
+  bottom: 17px;
+  font-size: 18px;
+  left: 60px;
+}
+
+fieldset > .rightIcon > .inactive > hr {
+  opacity: 0;
 }
 
 .card-table {
@@ -2112,28 +2281,15 @@ form {
   /*padding: 10px;*/
 }
 
-input,
-select,
-textarea {
-  background-color: #fcfcfc;
-  border: 1px solid #ccc;
-  font: 11px verdana, arial, helvetica, sans-serif;
-  margin: 2px 0;
-  padding: 2px 4px;
-}
-
-select {
-  padding: 2px 2px 2px 0;
-}
-
+/*   select {
+        padding: 2px 2px 2px 0;
+    }*/
 textarea {
   width: 250px;
   height: 150px;
   vertical-align: top;
 }
 
-input:focus,
-select:focus,
 textarea:focus {
   border: 1px solid #015EB2;
 }
@@ -11449,6 +11605,10 @@ table.text-center th {
 @media (min-width: 768px) {
   .skin-purple-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
+  }
+  .modal-dialog {
+    width: 80%;
+    margin: 30px auto;
   }
 }
 /*# sourceMappingURL=factura.css.map */

@@ -968,6 +968,9 @@ public class ArticuloController {
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @RequestParam(value = "esPaquete", required = false) Integer esPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			esPaquete = esPaquete == null ? Constantes.ZEROS : esPaquete;
+			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
+				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
+			}
 			if (esPaquete != null && esPaquete.equals(Constantes.ZEROS)) {
 				articulo.setCantidadPaquete(Constantes.ZEROS);
 				articulo.setCodigoSecundario(Constantes.EMPTY);
@@ -990,6 +993,9 @@ public class ArticuloController {
 			if (validateTokenBo.validarTokenApis(request) == false) {
 
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
+			}
+			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
+				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
 			}
 			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.agregar(request, articulo, result);
@@ -1015,6 +1021,9 @@ public class ArticuloController {
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
+			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
+				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
+			}
 			articulo.setCantidadPaquete(idPaquete);
 			return articuloBo.modificar(request, articulo, result);
 
@@ -1033,7 +1042,9 @@ public class ArticuloController {
 
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
-
+			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
+				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
+			}
 			return articuloBo.modificar(request, articulo, result);
 
 		} catch (Exception e) {
@@ -1110,7 +1121,9 @@ public class ArticuloController {
 	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
-
+			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
+				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
+			}
 			return articuloBo.cambiarPrecio(request, response, articulo, precioPublico, codigo, tipoImpuesto, impuesto, descripcion, tipoCodigo, unidadMedida, result);
 
 		} catch (Exception e) {

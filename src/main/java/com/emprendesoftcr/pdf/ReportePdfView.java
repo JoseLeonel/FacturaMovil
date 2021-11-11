@@ -273,48 +273,57 @@ public class ReportePdfView {
 	//	if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 
 			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta1(), UtilsPdf.font_cabezera_tabla));
+				document.add(new Paragraph(cuentas(fac_electro), UtilsPdf.font_cabezera_tabla));
 				contador += 1;
 			}
-			if (!fac_electro.getCuenta2().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta2(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta3().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta3(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta4().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta4(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta5().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta5(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta6().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta6(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta7().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta7(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (!fac_electro.getCuenta8().equals(Constantes.EMPTY)) {
-				document.add(new Paragraph(fac_electro.getCuenta8(), UtilsPdf.font_cabezera_tabla));
-				contador += 1;
-			}
-			if (contador < 4) {
-				document.add(new Paragraph(" ", UtilsPdf.font_cabezera_tabla));
-				document.add(new Paragraph(" ", UtilsPdf.font_cabezera_tabla));
-
-			}
+			
+			
 			if (!fac_electro.getTipoDocumento().equals("Proforma")){
 				document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));	
 			}
 			
 		//}
 
+	}
+	
+	
+	public String cuentas(FacturaElectronica fac_electro) {
+		String resultado = Constantes.EMPTY;
+		
+		try {
+			
+			StringBuilder parrafo = new StringBuilder();
+		
+			
+			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta1() + "\n");
+			}
+			if (!fac_electro.getCuenta2().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta2() + "\n");
+			}
+			if (!fac_electro.getCuenta3().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta3() + "\n");
+			}
+			if (!fac_electro.getCuenta4().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta4() + "\n");
+			}
+			if (!fac_electro.getCuenta5().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta5() + "\n");
+			}
+			if (!fac_electro.getCuenta6().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta6() + "\n");
+			}
+			if (!fac_electro.getCuenta7().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta7() + "\n");
+			}
+			if (!fac_electro.getCuenta8().equals(Constantes.EMPTY)) {
+				parrafo.append(fac_electro.getCuenta8() + "\n");
+			}
+			resultado = parrafo.toString();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return resultado;
 	}
 
 	public void agregaLineasBlanco(PdfPTable tabla_, int longitud_lista, boolean primera_pagina) {

@@ -394,7 +394,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 					result.rejectValue("codigo", "error.articulo.cabys.es.requerido");					
 				}
 			}
-			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
+ 			if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {
 				if (articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.indique.cantidad.paquete", result.getAllErrors());
 				}

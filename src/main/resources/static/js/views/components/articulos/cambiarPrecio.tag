@@ -10,8 +10,8 @@
                         <form class="form-horizontal formulario" name= "formulario" id="formulario">
                             <input type="hidden" name="id" id="id" value="{articulo.id}" >
                              <input type="hidden" name="esPaquete" id="esPaquete" value="0">
-                             <input type="hidden" name="categoria" id="categoria" value="{articulo.categoria.id}">
-                             <input type="hidden" name="marca" id="marca" value="{articulo.marca.id}">
+                             
+                            
                             <input type="hidden" name="idPaquete" id="idPaquete" value="{articulo.cantidadPaquete}">
                             <input type="hidden" name="codigoSecundario" id="codigoSecundario" value="{articulo.codigoSecundario}">
                             <input type="hidden" name="datosCabys" id="datosCabys" >
@@ -57,7 +57,7 @@
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="text" class="form-control campoNumerico " id="descripcionCategoria" name="descripcionCategoria" value="{articulo.categoria.descripcion}"  onclick={__ConsultaCategorias}  autocomplete="off">
+                                                    <select  class=" selecCategoria has-success" name="categoria" id="categoria" value="{articulo.categoria.id}"></select>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -108,8 +108,8 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
-                                                    <select  class="campo selecTipoUnidad has-success" name="tipoUnidades" id="tipoUnidades">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.unidadMedida")}  </label>
+                                                    <select  class=" selecUnidadMedida has-success" name="unidadMedida" id="unidadMedida">
                                                         
                                                     </select>
                                                 </div>
@@ -120,13 +120,10 @@
                                                     </select>
                                                 </div>
                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="text" class="form-control campoNumerico " id="descripcionMarca" name="descripcionMarca" value="{articulo.marca.descripcion}"  onclick={__ConsultaMarcas}  autocomplete="off">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")} <span class="requeridoDato">*</span> </label>
+                                                    <select  class=" selecMarca has-success" name="marca" id="marca" ></select>
                                                 </div>
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
-                                                    <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}" autocomplete="off" >
-                                                </div>
+                                                
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -165,6 +162,10 @@
                                                  <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                                     <label  class="tamanoLetraTotales">Precio Sugerido </label>
                                                     <input type="number" step="any" class="campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
+                                                </div>
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
+                                                    <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}" autocomplete="off" >
                                                 </div>
                                             </div>
                                         </div>
@@ -241,62 +242,7 @@
     </div>
 </div>
 
-<!--Modal mostrar marcas -->
-<div id='modalMarcas' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header with-border encabezado-pantalla " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Marcas </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListarMarca" class="table responsive display table-striped table-hover nowrap tableListarMarca "  >
-                    <thead>
-                        <th class="table-header"  >{$.i18n.prop("listado.acciones")}</th>
-                        <th class="table-header"  >{$.i18n.prop("articulo.descripcion")}</th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr class="headt">
-                            <th style="width:5%"></th>
-                            <th style="width:100%">{$.i18n.prop("articulo.descripcion")}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>        
-        <div class="modal-footer">
-            <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
-        </div>
-     </div>
-    </div>
-</div>
 
-<!--Modal mostrar marcas -->
-<div id='modalCategorias' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header with-border encabezado-pantalla " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Categorias </h4>
-            </div>
-             <div class="modal-body">
-                    <table id="tableListarCategoria" class="table responsive display table-striped table-hover nowrap   tableListarCategoria "  >
-                        <thead>
-                                <th class="table-header "  >{$.i18n.prop("listado.acciones")}</th>
-                                <th class="table-header "  >{$.i18n.prop("articulo.descripcion")}</th>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr class="headt">
-                                <th style="width:5%"></th>
-                                <th style="width:100%">{$.i18n.prop("articulo.descripcion")}</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-            </div>        
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left" data-dismiss="modal" >{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <style type ="text/css">
 
@@ -520,20 +466,25 @@ self.on('mount',function(){
     self.contables = __ComboContables()
     self.baseImponibles =__ComboBaseImponibles()
     self.update()
-      $('.selecTipoUnidad').prop("selectedIndex", 0);
-   $('.selecTipoUnidad').empty();
-   $('.selecTipoUnidad').val('')
-   $("#unidadMedida-sysSelect").remove()
-    setTimeout(__listadoTipoUnidadesActivas(function(resultado){
-        self.tipoUnidades.aaData = resultado;
+   inicializarCombos()
+    __listadoTipoUnidadesCombo(function(data){
+        self.tipoUnidades  = data;
         self.update()
-        _evento_refrescar_distritos("#formulario")
-
-    })
-     ,5000);
-
+        _evento_refrescar_unidades_medida(self.tipoUnidades); 
+    });
+     __listadoMarcaCombo(function (data){
+         self.marcas = data;
+         self.update()
+         _evento_refrescar_marca(self.marcas)
+     });
+    __listadoCategoriasCombo(function (data){
+        self.categorias = data
+        self.update()
+        _evento_refrescar_categorias(self.categorias);
+    });
     
-    
+  
+  
     self.impuestos = __ComboImpuestos()
     self.impuestosMag = __ComboImpuestosMaG()
     self.tipoCodigos =__CombotipoCodigo()
@@ -542,8 +493,6 @@ self.on('mount',function(){
     self.update() 
     LimpiarArticulo()
     __ComboCantidades();
-    __seleccionarCategorias()
-   __seleccionarMarcas()
     $('.collapse').collapse("show")
     $('.codigo').focus()
     window.addEventListener( "keydown", function(evento){
@@ -553,29 +502,6 @@ self.on('mount',function(){
         }, false );
 })
 
-function _evento_refrescar_distritos(){
-
-	/**
-	 * Se realiza la verificacion de cambio de canton con un
-	 * patron observer al atributo 'rel' del input del sysSelect de canton,
-	 * ya que no se puede aplicar el evento change al
-	 * select, porque el sysTable.js lo reconstruye por lo que no
-	 * se dispara el change del elemento @wsanchez
-	 */
-	//var observable = document.querySelector(form + ' #tipoUnidades-input')
-
-		    
-					//Destruye el sysSelect de distritos
-					$( ' #tipoUnidades').empty()
-					$(' #tipoUnidades-input').val('')
-					$("#tipoUnidades-sysSelect").remove()
-					
-					//Reconstruye el sysSelect de distritos
-					$(" #tipoUnidades").sysSelect(self.tipoUnidades.aaData, "id", "descripcion", true);
-		
-
-	
-}
 
 /**
 *  Crear el combo de estados
@@ -651,132 +577,7 @@ __ConsultaCodigoCabys(e){
 }
 
 
-__ConsultaCategorias(e){
- __listadoCategoriasActivas()
-    
-}
 
-/**
-*  Mostrar listado datatable Categorias activas
-**/
-function __listadoCategoriasActivas(){
-     self.categorias                = {aaData:[]}
-     self.informacion_tabla_categorias    = []
-     self.update()
-    $.ajax({
-         url: "ListarCategoriasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.categorias.aaData =  result.aaData
-                self.update();
-                self.informacion_tabla_categorias =__informacionData_formato_categoria()
-                self.update()
-                loadListar(".tableListarCategoria",idioma_espanol,self.informacion_tabla_categorias,result.aaData)
-                agregarInputsCombos_categorias()
-                ActivarEventoFiltro(".tableListarCategoria")
-                
-                 $('#modalCategorias').modal('show')
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
-
-function agregarInputsCombos_categorias(){
-
-    $('.tableListarCategoria tfoot th').each( function (e) {
-        var title = $('.tableListarCategoria thead th').eq($(this).index()).text();
-
-        if ( $(this).index() != 0    ){
-	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
-    })
-}
-
-function __seleccionarCategorias() {
-     $('#tableListarCategoria').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListarCategoria').DataTable();
-		if(table.row(this).child.isShown()){
-
-	       var data = table.row(this).data();
-	    }else{
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.categoria = data
-        self.articulo.categoria = data
-        self.update();
-        $('#modalCategorias').modal('hide')
-    });
-
-}
-
-__ConsultaMarcas(e){
- __listadoMarcaActivas()
-    
-}
-/**
-*  Mostrar listado datatable marcas activas
-**/
-function __listadoMarcaActivas(){
-     self.marcas                = {aaData:[]}
-     self.informacion_tabla_marca    = []
-     self.update()
-    $.ajax({
-         url: "ListarMarcasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.marcas.aaData =  result.aaData
-                self.update();
-                self.informacion_tabla_marca =__informacionData_formato_marca()
-                self.update()
-                loadListar(".tableListarMarca",idioma_espanol,self.informacion_tabla_marca,result.aaData)
-                agregarInputsCombos_Marca()
-                ActivarEventoFiltro(".tableListarMarca")
-                
-                 $('#modalMarcas').modal('show')
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
-
-function agregarInputsCombos_Marca(){
-
-    $('.tableListarMarca tfoot th').each( function (e) {
-        var title = $('.tableListarMarca thead th').eq($(this).index()).text();
-
-        if ( $(this).index() != 0    ){
-	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
-    })
-}
-
-function __seleccionarMarcas() {
-     $('#tableListarMarca').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListarMarca').DataTable();
-		if(table.row(this).child.isShown()){
-
-	       var data = table.row(this).data();
-	    }else{
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.marca = data
-        self.articulo.marca = data
-        self.update();
-        $('#modalMarcas').modal('hide')
-    });
-
-}
 
 function __ListaDeHaciendaCabys(){
    // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
@@ -1272,6 +1073,7 @@ function actualizarPreciosImpuestosEspecial(){
                         LimpiarArticulo()
                         self.articulo = modeloTabla
                         if(self.articulo !=null){
+                           cargarCombosArticulo(self.categorias,self.marcas,self.tipoUnidades,modeloTabla.categoria.id,modeloTabla.marca.id,modeloTabla.unidadMedida);
                             self.botonModificar            = true
                             self.botonAgregar              = false
                             self.tabprecio = true
@@ -1300,6 +1102,9 @@ function actualizarPreciosImpuestosEspecial(){
         }
     });
 }
+
+
+
 /**
 *volver al codigo
 **/
@@ -1349,7 +1154,7 @@ function LimpiarArticulo(){
    $('.selectTipoCodigo').prop("selectedIndex", 0);
  
 
-   $("#unidadMedida").val($("#unidadMedida option:first").val()); 
+  
    $("#contable").val($("#contable option:first").val()); 
    $('.codigo').val(null)
    $('.descripcion').val(null)
@@ -1402,14 +1207,14 @@ var reglasDeValidacion = function() {
                 minlength:1,
                
 			},                                                
-            descripcionCategoria : {
+            categoria : {
 				required : true,
 			},     
                                                       
             codigoCabys : {
 				required : true,
 			},                                                
-            descripcionMarca : {
+            marca : {
 				required : true,
 			},                                                
             unidadMedida : {

@@ -29,9 +29,9 @@ function sysSelect(htmlId, object, identifier, name, searchable){
 
     if(htmlId.find(":selected").val()){
       var filteredObject = object.filter(a=>a.id == htmlId.find(":selected").val());
-      $(this).after("<input id='"+htmlId.attr("id")+"-input' name='"+htmlId.attr("id")+"-input' " + required + " type='text' style='margin-top: 0px;' value='"+filteredObject[0].nombre+"'>");
+      $(this).after("<input id='"+htmlId.attr("id")+"-input' name='"+htmlId.attr("id")+"-input' " + required + " type='text' style='margin-top: 0px;    width: 100%;' value='"+filteredObject[0].nombre+"'>");
     }else{
-      $(this).after("<input id='"+htmlId.attr("id")+"-input' name='"+htmlId.attr("id")+"-input' " + required + " type='text' style='margin-top: 0px;'>");
+      $(this).after("<input id='"+htmlId.attr("id")+"-input' name='"+htmlId.attr("id")+"-input' " + required + " type='text' style='margin-top: 0px;    width: 100%;'>");
     }
     $(this).parent().find("input").click(sysSelectClick);
   })
@@ -78,7 +78,7 @@ function sysSelectOptionsClick(){
 
 function sysSelectClick(){
 	  var sysSelect = $("#" + $(this).attr("id").replace("-input","") + "-sysSelect");
-	  var sysSelectSearch = $("#" + $(this).attr("id").replace("-input","") + "-sysSelect .sysSelectSearch");
+	  var sysSelectSearch = $("#" + $(this).attr("id").replace("-input","") + "-sysSelect .sysSelectSearch ");
 	  $(this).attr("rel", "1");
 	  sysSelect.css("top", $(this).offset().top);
 	  sysSelect.css("left", $(this).offset().left);

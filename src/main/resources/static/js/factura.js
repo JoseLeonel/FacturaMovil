@@ -2291,3 +2291,152 @@ function __CalcularGanancia(impuesto,costo,precio){
     var precioMayorista    =  __valorNumerico(precio);
     return  precio >0?_porcentajeGanancia(costo,impuesto,0,precioMayorista):100;
 }
+
+/**
+ * Metodos para el modulo de articulos
+ */
+function inicializarCombos(){
+	   $('.selecUnidadMedida').prop("selectedIndex", 0);
+	   $('.selecUnidadMedida').empty();
+	   $('.selecUnidadMedida').val('')
+	   $("#unidadMedida-sysSelect").remove()
+
+	   $('.selecMarca').prop("selectedIndex", 0);
+	   $('.selecMarca').empty();
+	   $('.selecMarca').val('')
+	   $("#marca-sysSelect").remove()
+
+	   $('.selecCategoria').prop("selectedIndex", 0);
+	   $('.selecCategoria').empty();
+	   $('.selecCategoria').val('')
+	   $("#Categoria-sysSelect").remove()
+
+	}
+
+	function __listadoTipoUnidadesCombo(data){
+	   
+	  
+	    $.ajax({
+	         url: "ListarTipoUnidadesAjax.do",
+	        datatype: "json",
+	        global: false,
+	        method:"GET",
+	        success: function (result) {
+	             if(result.aaData.length > 0){
+	            	 
+	                data(result.aaData);
+	                
+	            }        
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            callback(null); 
+	             mensajeErrorServidor(xhr, status);
+	        }
+	    })
+	    
+	}
+
+	/**
+	*  Mostrar listado datatable Categorias activas
+	**/
+	function __listadoCategoriasCombo(data){
+	    
+	     var categorias                = {aaData:[]}
+	    $.ajax({
+	         url: "ListarCategoriasActivasAjax.do",
+	        datatype: "json",
+	        method:"GET",
+	        success: function (result) {
+	             if(result.aaData.length > 0){
+	              
+	                data(result.aaData);
+	            }            
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	             mensajeErrorServidor(xhr, status);
+	        }
+	    })
+	}
+
+	/**
+	*  Mostrar listado datatable marcas activas
+	**/
+	function __listadoMarcaCombo(data){
+	   
+	    $.ajax({
+	         url: "ListarMarcasActivasAjax.do",
+	        datatype: "json",
+	        method:"GET",
+	        success: function (result) {
+	             if(result.aaData.length > 0){
+	               
+	                data(result.aaData);
+	            }            
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	             mensajeErrorServidor(xhr, status);
+	        }
+	    })
+	}
+	/**
+	* cargar las categorias
+	**/
+	function _evento_refrescar_categorias(data){
+		//Destruye el sysSelect de distritos
+		$('#categoria').empty()
+		$('#categoria-input').val('')
+	 	$("#categoria-sysSelect").remove()
+		//Reconstruye el sysSelect de distritos
+		$("#categoria").sysSelect(data, "id", "descripcion", true);
+	}
+	/**
+	* Cargar marcas
+	**/
+	function _evento_refrescar_marca(data){
+		//Destruye el sysSelect de distritos
+		$('#marca').empty()
+		$('#marca-input').val('')
+	 	$("#marca-sysSelect").remove()
+		//Reconstruye el sysSelect de distritos
+		$("#marca").sysSelect(data, "id", "descripcion", true);
+	}
+	/**
+	* unidades de medida carga
+	**/
+	function _evento_refrescar_unidades_medida(data){
+		//Destruye el sysSelect de distritos
+		$( ' #unidadMedida').empty()
+		$(' #unidadMedida-input').val('')
+	 	$("#unidadMedida-sysSelect").remove()
+		//Reconstruye el sysSelect de distritos
+		$("#unidadMedida").sysSelect(data, "codigo", "descripcion", true);
+	}
+
+	function cargarCombosArticulo(categorias,marcas,tipoUnidades,categoriaP,marcaP,unidadMedidaP){
+        var categoria = categorias != undefined && categorias != null && categorias.lenght != 0?  categorias.find(categoria => categoria.id == categoriaP):null;
+        $("#categoria").empty();
+        if(categoria != undefined && categoria != null){
+        	$("#categoria").html("<option value='"+categoria.id+"' selected hidden>"+categoria.descripcion+"</option>");
+        	$("#categoria-input").val(categoria.descripcion)
+        }
+        var marca = marcas != undefined && marcas != null && marcas.lenght != 0 ?marcas.find(marca => marca.id == marcaP):null;
+        $("#marca").empty();
+        if(marca != undefined && marca != null){
+    		$("#marca").html("<option value='"+marca.id+"' selected hidden>"+marca.descripcion+"</option>");
+    		$("#marca-input").val(marca.descripcion);
+        }
+
+        var unidadMedida = tipoUnidades != undefined && tipoUnidades != null && tipoUnidades.lenght != 0? tipoUnidades.find(unidadMedida => unidadMedida.codigo == unidadMedidaP):null;
+        $("#unidadMedida").empty();
+    	if(unidadMedida != undefined && unidadMedida != null){
+    		$("#unidadMedida").html("<option value='"+unidadMedida.codigo+"' selected hidden>"+unidadMedida.descripcion+"</option>");
+    		$("#unidadMedida-input").val(unidadMedida.descripcion);
+	
+        }
+    	
+
+
+}

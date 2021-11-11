@@ -9,7 +9,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>    
                 <div class="modal-body">
-                    <iframe style="width: 100%; height: 500px" id="loadPdf" src="">
+                    <iframe  style="top:0;left:0;width: 100%; height: 500px" id="loadPdf" src="">
                      <p style="font-size: 110%;"><em><strong>ERROR: </strong>  
                             An &#105;frame should be displayed here but your browser version does not support &#105;frames. </em>Please update your browser to its most recent version and try again.</p>
                     </iframe>
@@ -37,7 +37,7 @@
   font-weight: 800;
 }
 .modal-dialog {
-    width: 60% !important;
+    width: 300vh% !important;
 }
 
 
