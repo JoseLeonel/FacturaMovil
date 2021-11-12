@@ -712,13 +712,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-//					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 //					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-//					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
 					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -1150,7 +1150,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 									if (listaCorreos != null) {
 										if (!listaCorreos.isEmpty()) {
-											enviarCorreosRecepcion(recepcionFactura, haciendaBD, listaCorreos);
+										//	enviarCorreosRecepcion(recepcionFactura, haciendaBD, listaCorreos);
 											haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
 											haciendaBo.modificar(haciendaBD);
 										}

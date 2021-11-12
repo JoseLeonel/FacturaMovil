@@ -175,7 +175,7 @@
 				<div class="box">
 					<div class="box-header with-border fondoEncabezado">
 						<h3 class="box-title">{$.i18n.prop("ventas.titulo")} </h3>
-                        <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
+                        <h3 class="box-title pull-right ">Se Recibe el Dolar($): {tipoCambioCompraDolarSeRecibeSistema} </h3>
 					</div>
 					<div class="box-body">
                         <form id="formularioFactura">
@@ -311,6 +311,7 @@
                                     <div  show= "{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                     <div  show="{soloParaChinos == false && montoExoneracion.length > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                    <div   class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
                                 <div class="precioTotalFactura" show={soloParaChinos == true}>
@@ -442,12 +443,9 @@
                                  <div  show="{soloParaChinos == false }" class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                  <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                  <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                 <div   class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
                             </div>
-                            <div class="gananciaContainer">
-                                <div class="formatoTituloGanancia">IG: {totalGananciaByProducto}</div>
-                                <div class="formatoTituloGanancia">PG: {totalPesoByFacturaSTR}</div>
-                            </div>
-                            <br>
+                            
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
                                     <label class="titleListaPrecio">Lista de Precios </label>  
@@ -483,6 +481,7 @@
                                     </div>
                                 
                                 </div>
+                                
                             </div>
                             <div class = 'containerIconosSumaRestaAgregarCliente'>
                                 <div class="BotonesSumarRestar">
@@ -990,6 +989,8 @@
     self.montoExoneracion              = ""
     self.montoExoneracion1             = ""
     self.totalComprobante              = 0
+    self.totalComprobanteDolares       = 0
+    
     self.primeraVezBilleteClick = false
     self.totalCambioPagar              = 0
     self.semaforo_carga_articulos = false;
@@ -1161,6 +1162,13 @@
             });
         };
         getTipoCambioDolar()
+        __TipoCambio();
+        self.tipoCambioCompraDolarSeRecibeSistema = JSON.parse(localStorage.getItem('tipoCambioCompraDolarSeRecibeSistema'));
+        if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
+            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
+        } 
+        
+        self.update(self.tipoCambioCompraDolarSeRecibeSistema)
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
         if(retrievedObject != null){
             self.detail = retrievedObject
@@ -1172,6 +1180,8 @@
             __calculate()
               seleccionarEfectivo()
         }
+      
+       
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
@@ -2009,6 +2019,7 @@ __LimpiarFormulario(){
 }
 
 function __SeguridadLimpiar(){
+   
     self.autorizarBorrado = 2
     self.update()
     if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
@@ -2332,6 +2343,7 @@ function _calculoEnterPago(){
             self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
+            self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
             self.update()
             return
         }
@@ -2344,6 +2356,7 @@ function _calculoEnterPago(){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
+        self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
         self.update()
 }
 
@@ -2482,6 +2495,7 @@ __Limpiar(){
 }
 
 function __Init(){
+     self.totalComprobanteDolares = 0
     $(".descuentoGlobal1").val(null);
     __DeleteUltimoItemIngresado()
     __DeleteUltimoArticuloIngresado()
@@ -3792,6 +3806,8 @@ function __calculate() {
     var resultado = __ResumenFactura(self.detail,self.factura);
     self.factura = resultado.factura
     self.update()
+    self.totalComprobanteDolares = conversionColonesDolares(resultado.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
+    
     self.cantArticulos = resultado.cantArticulos
     self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)
     self.totalPesoByFactura = __valorNumerico(resultado.totalPesoByFactura)
@@ -3804,6 +3820,7 @@ function __calculate() {
     self.totalDescuentos = formatoDecimales(resultado.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(resultado.totalImpuesto) 
     self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2)
+    self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     self.update()
     getPosicionInputCodigo()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
@@ -3814,6 +3831,7 @@ function __calculate() {
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
+    
   
 
 }

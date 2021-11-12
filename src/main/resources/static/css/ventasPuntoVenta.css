@@ -5,7 +5,23 @@
     width: 10%!important;
     font-size: 26px!important;
 }
-
+.letraTipoCambioDolarRecibe{
+  font-size:22px;
+  color:#473f5b;
+  	display: block;
+    text-align: center;
+    font-weight: 600;
+}
+.elementoTotalesDolares {
+   font-weight: 900 !important;
+    font-size: 20px !important;
+    font-family: Roboto,sans-serif !important;
+    color: yellow !important;
+    /* font-style: italic; */
+    align-items: center;
+    text-align: left;
+    margin-left: 2%;
+}
 .boton-consultar {
 	display: block;
 	display: inline-block;

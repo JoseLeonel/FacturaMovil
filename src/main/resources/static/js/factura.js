@@ -438,8 +438,8 @@ function __TipoCambio(){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       localStorage.setItem('tipoCambioTotal', __valorNumerico(modeloTabla.dolar.venta.valor));
-                       localStorage.setItem('tipoCambioCompra', __valorNumerico(modeloTabla.total));
+                      // localStorage.setItem('tipoCambioTotalSistema', __valorNumerico(modeloTabla.dolar.venta.valor));
+                       localStorage.setItem('tipoCambioCompraDolarSeRecibeSistema', __valorNumerico(modeloTabla.total));
                     });
                 }
             }
@@ -450,7 +450,15 @@ function __TipoCambio(){
         }
     });
 }
-
+/**
+ * Conversion de Colones a Dolares
+ * @param totalComprobante
+ * @param tipoCambioDolar=	que
+ * @returns
+ */
+function conversionColonesDolares(totalComprobante,tipoCambioDolar){
+	return formatoDecimales((__valorNumerico(redondeoDecimales(totalComprobante,2)) /tipoCambioDolar),2);
+}
 function __getTipoCambioCompra(){
     return JSON.parse(localStorage.getItem('tipoCambioCompra'));
 } 
