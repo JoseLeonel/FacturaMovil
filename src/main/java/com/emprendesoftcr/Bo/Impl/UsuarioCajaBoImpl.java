@@ -483,11 +483,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			modelEmail.put("conteoManualSTR", usuarioCajaCommand1.getConteoManualSTR());
 			modelEmail.put("diferenciaSTR", usuarioCajaCommand1.getDiferenciaSTR());
 			modelEmail.put("diferenciaFinalSTR", usuarioCajaCommand1.getDiferenciaFinalSTR());
-			modelEmail.put("totalDolares", usuarioCajaCommand1.getConteoDolarSTR());
+			modelEmail.put("totalDolaresSTR", usuarioCajaCommand1.getConteoDolarSTR());
 			modelEmail.put("totalAbonoSTR", usuarioCajaCommand1.getTotalAbonoSTR());
 			modelEmail.put("tipoCambio", usuarioCajaCommand1.getTipoCambioSTR());
 			modelEmail.put("totalServicio", usuarioCajaCommand1.getTotalServicioSTR());
 			modelEmail.put("idCaja", usuarioCajaCommand1.getId());
+			modelEmail.put("tipoCambio", usuarioCajaCommand1.getTipoCambioSTR());
 			Collection<ConteoManualCaja> conteoCierre = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_CIERRE_CAJA_TIPO);
 			modelEmail.put("conteoCierres", conteoCierre);
 			Collection<ConteoManualCaja> conteoApertura = conteoManualCajaBo.buscarPorUsuarioCaja(usuarioCajaBd, Constantes.CONTEO_APERTURA_CAJA_TIPO);

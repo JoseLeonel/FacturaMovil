@@ -415,7 +415,8 @@ function getTipoCambioDolar(){
 	            }
 	        },
 	        error: function (xhr, status) {
-	            mensajeErrorServidor(xhr, status);
+	        	localStorage.setItem('tipoCambioTotal', 0);
+                localStorage.setItem('tipoCambioCompra', 0);
 	            
 	        }
 	    });
@@ -445,10 +446,24 @@ function __TipoCambio(){
             }
         },
         error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
+        	localStorage.setItem('tipoCambioCompraDolarSeRecibeSistema', 0);
             
         }
     });
+}
+/**
+ * obtiene el tipo de cambio de dola que se encuentra en storege
+ * @returns
+ */
+function obtenerTipoCambioDolar(){
+	var tipoCambioCompraDolarSeRecibeSistema = __getTipoCambioDolarRecibeEmpresaTotal();
+	if(tipoCambioCompraDolarSeRecibeSistema != null && tipoCambioCompraDolarSeRecibeSistema !== "undefined" &&
+			tipoCambioCompraDolarSeRecibeSistema > 0){
+		return  __getTipoCambioDolarRecibeEmpresaTotal();
+	}else{
+		return __getTipoCambioCompra();
+	}	
+	
 }
 /**
  * Conversion de Colones a Dolares
@@ -456,8 +471,8 @@ function __TipoCambio(){
  * @param tipoCambioDolar=	que
  * @returns
  */
-function conversionColonesDolares(totalComprobante,tipoCambioDolar){
-	return formatoDecimales((__valorNumerico(redondeoDecimales(totalComprobante,2)) /tipoCambioDolar),2);
+function conversionColonesDolares(totalComprobante){
+	return formatoDecimales((__valorNumerico(redondeoDecimales(totalComprobante,2)) /obtenerTipoCambioDolar()),2);
 }
 function __getTipoCambioCompra(){
     return JSON.parse(localStorage.getItem('tipoCambioCompra'));
@@ -465,6 +480,10 @@ function __getTipoCambioCompra(){
 
 function __getTipoCambioTotal(){
     return JSON.parse(localStorage.getItem('tipoCambioTotal'));
+} 
+
+function __getTipoCambioDolarRecibeEmpresaTotal(){
+    return JSON.parse(localStorage.getItem('tipoCambioCompraDolarSeRecibeSistema'));
 } 
 
 
@@ -554,7 +573,7 @@ function __listadoTipoUnidadesActivas(callback){
         error: function (xhr, status) {
             console.log(xhr);
             callback(null); 
-             mensajeErrorServidor(xhr, status);
+            // mensajeErrorServidor(xhr, status);
         }
     })
     
@@ -2325,6 +2344,7 @@ function inicializarCombos(){
 	   
 	  
 	    $.ajax({
+	    	async: false,
 	         url: "ListarTipoUnidadesAjax.do",
 	        datatype: "json",
 	        global: false,
@@ -2352,6 +2372,7 @@ function inicializarCombos(){
 	    
 	     var categorias                = {aaData:[]}
 	    $.ajax({
+	    	async: false,
 	         url: "ListarCategoriasActivasAjax.do",
 	        datatype: "json",
 	        method:"GET",
@@ -2374,6 +2395,7 @@ function inicializarCombos(){
 	function __listadoMarcaCombo(data){
 	   
 	    $.ajax({
+	    	async: false,
 	         url: "ListarMarcasActivasAjax.do",
 	        datatype: "json",
 	        method:"GET",
@@ -2424,20 +2446,44 @@ function inicializarCombos(){
 	}
 
 	function cargarCombosArticulo(categorias,marcas,tipoUnidades,categoriaP,marcaP,unidadMedidaP){
-        var categoria = categorias != undefined && categorias != null && categorias.lenght != 0?  categorias.find(categoria => categoria.id == categoriaP):null;
+		
+         var categoria = null;
+         if(categorias != undefined && categorias != null && categorias.lenght != 0 ){
+        	 if(categoriaP ==undefined ||  categoriaP == null  ){
+             	categoria =categorias.find(categoria => categoria.descripcion == 'Generica');
+             }else{
+             	categoria =  categorias.find(categoria => categoria.id == categoriaP);
+             }	 
+         }
+       
+        	
         $("#categoria").empty();
         if(categoria != undefined && categoria != null){
         	$("#categoria").html("<option value='"+categoria.id+"' selected hidden>"+categoria.descripcion+"</option>");
         	$("#categoria-input").val(categoria.descripcion)
         }
-        var marca = marcas != undefined && marcas != null && marcas.lenght != 0 ?marcas.find(marca => marca.id == marcaP):null;
+        var marca = null;
+        if(marcas != undefined && marcas != null && marcas.lenght != 0 ){
+        	if(marcaP ==undefined ||  marcaP == null){
+        		marca = marcas.find(marca => marca.descripcion == 'Generica');
+        	}else{
+        		marca = marcas.find(marca => marca.id == marcaP);	
+        	}
+        }
         $("#marca").empty();
         if(marca != undefined && marca != null){
     		$("#marca").html("<option value='"+marca.id+"' selected hidden>"+marca.descripcion+"</option>");
     		$("#marca-input").val(marca.descripcion);
         }
 
-        var unidadMedida = tipoUnidades != undefined && tipoUnidades != null && tipoUnidades.lenght != 0? tipoUnidades.find(unidadMedida => unidadMedida.codigo == unidadMedidaP):null;
+        var unidadMedida = null;
+        if(unidadMedidaP ==undefined ||  unidadMedidaP == null){
+        	unidadMedida = tipoUnidades != undefined && tipoUnidades != null && tipoUnidades.lenght != 0? tipoUnidades.find(unidadMedida => unidadMedida.codigo == 'Unid'):null;
+        }else{
+        	unidadMedida = tipoUnidades != undefined && tipoUnidades != null && tipoUnidades.lenght != 0? tipoUnidades.find(unidadMedida => unidadMedida.codigo == unidadMedidaP):null;	
+        }
+        	
+        	
         $("#unidadMedida").empty();
     	if(unidadMedida != undefined && unidadMedida != null){
     		$("#unidadMedida").html("<option value='"+unidadMedida.codigo+"' selected hidden>"+unidadMedida.descripcion+"</option>");

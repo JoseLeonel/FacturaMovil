@@ -7,7 +7,8 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	
+	__TipoCambio();  // obtiene tipo de cambio de la empresa como recibe el dolar
+	//getTipoCambioDolar();// obtiene el tipo cambio del banco central
 	cargaMantenimiento();
 }
 /**

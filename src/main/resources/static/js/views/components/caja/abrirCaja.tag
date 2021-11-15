@@ -255,12 +255,12 @@ Listado  -->
     }
     .modalInputCambioPrecioCodigoDescripcion{
        border-radius: 10px !important;
-       font-size: 26px !important;
+       font-size: 42px !important;
        text-align: center !important;
     
     }
     .modalInputCambioPrecio{
-        font-size: 26px !important;
+        font-size: 42px !important;
         color:blue !important;
         border-radius: 16px !important;
         border-color: green;
@@ -342,6 +342,59 @@ Listado  -->
            border: none;
            cursor: pointer;
         }
+        .btn-green {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 24px !important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+body{
+    font-size: 24px !important;
+}
+.modalInputCambioPrecio {
+    font-size: 42px !important;
+    color: blue !important;
+    border-radius: 16px !important;
+    border-color: green;
+}
+.modalInputCambioPrecio, [data-is="abrir-caja"] .modalInputCambioPrecio {
+    font-size: 42px !important;
+    color: blue !important;
+    border-radius: 16px !important;
+    border-color: green;
+        font-weight: 800!important;
+}
+label {
+    display: inline-block!important;
+    max-width: 100%!important;
+    margin-bottom: 5px!important;
+    
+    font-size: 23px!important;
+}
+.btn-dark-gray {
+    background-color: #3D3E42;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 22px!important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
     </style>
 <script>
     var self = this;

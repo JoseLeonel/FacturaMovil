@@ -34,6 +34,24 @@
                         <div id="collapse1" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="row">
+                                  <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}" onkeypress = {__ConsultarCodigo} autocomplete="off" autofocus="autofocus">
+                                    </div>
+                                    <div class= "col-md-4 col-sx-8 col-sm-4 col-lg-4 has-success">
+                                        <label  class="tamanoLetra">{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control descripcion campoNumerico" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
+                                    </div>
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys}  autocomplete="off">
+                                    </div>
+                                    
+                                  
+                                  
+                                </div> 
+                                <div class="row">   
+                                  
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                          <select  class=" selecCategoria has-success" name="categoria" id="categoria" value="{articulo.categoria.id}"></select>
@@ -45,21 +63,6 @@
                                         </select>
                                     </div>
 
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                                        <label class="tamanoLetra" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}" onkeypress = {__ConsultarCodigo} autocomplete="off" autofocus="autofocus">
-                                    </div>
-                                  
-                                </div> 
-                                <div class="row">   
-                                  <div class= "col-md-8 col-sx-8 col-sm-8 col-lg-8 has-success">
-                                        <label  class="tamanoLetra">{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control descripcion campoNumerico" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
-                                    </div>
-                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                                        <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys}  autocomplete="off">
-                                    </div>
 
                                 </div>    
                                 <div class="row">   

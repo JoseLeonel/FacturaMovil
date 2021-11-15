@@ -249,7 +249,7 @@ function agregarInputsCombos() {
 
 
 var informacion_tabla = [
-    { 'data': 'fechaEmisionF', "name": "fechaEmisionF", "title": "Fecha Emision", "autoWidth": true },
+    { 'data': 'fechaEmision', "name": "fechaEmision", "title": "Fecha Emision", "autoWidth": true },
     { 'data': 'codigo', "name": "codigo", "title": "Codigo", "autoWidth": true },
     { 'data': 'descripcion', "name": "descripcion", "title": "Descripcion", "autoWidth": true },
     { 'data': 'cantidadSTR', "name": "cantidad", "title": "Cantidad", "autoWidth": true },

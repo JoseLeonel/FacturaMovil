@@ -1042,6 +1042,10 @@
     self.transaccion = false
     self.on('mount',function(){
         __ObtengoTipoCambio()
+         self.tipoCambioCompraDolarSeRecibeSistema = __getTipoCambioDolarRecibeEmpresaTotal();
+        if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
+            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
+        } 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
          self.informacion_tabla_clientes =__informacionData_formato_cliente()
          self.tipoCambio.total = __getTipoCambioTotal()
@@ -1075,8 +1079,23 @@
               todayHighlight:true,
             }
         );
+         // getTipoCambioDolar()
+        //__TipoCambio();
+       
         
-     
+        self.update()
+        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
+        if(retrievedObject != null){
+            self.detail = retrievedObject
+            var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+            self.factura = facturaObject
+            var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+            self.cliente = clienteObject
+            self.update()
+            __calculate()
+              seleccionarEfectivo()
+        }
+      
         var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -1161,26 +1180,8 @@
                 timer = setTimeout(fn, ms);
             });
         };
-        getTipoCambioDolar()
-        __TipoCambio();
-        self.tipoCambioCompraDolarSeRecibeSistema = JSON.parse(localStorage.getItem('tipoCambioCompraDolarSeRecibeSistema'));
-        if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
-            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
-        } 
-        
-        self.update(self.tipoCambioCompraDolarSeRecibeSistema)
-        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
-        if(retrievedObject != null){
-            self.detail = retrievedObject
-            var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
-            self.factura = facturaObject
-            var clienteObject = JSON.parse(localStorage.getItem('cliente'));
-            self.cliente = clienteObject
-            self.update()
-            __calculate()
-              seleccionarEfectivo()
-        }
       
+        
        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -1313,14 +1314,11 @@ __RegresarInputSeguridad(){
 }
 
 function __ObtengoTipoCambio(){
-    var tempTipoCambio =__getTipoCambioCompra()
-    if(tempTipoCambio == null){
-       getTipoCambioDolar()
-    }else{
+  
         self.tipoCambio.total = __getTipoCambioTotal()
         self.tipoCambio.totalCompra = __getTipoCambioCompra()
 
-    }
+    
     self.update()
 
 }
@@ -2620,6 +2618,11 @@ function __Init(){
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.totalCambioPagarSTR           = 0
+      __ObtengoTipoCambio()
+         self.tipoCambioCompraDolarSeRecibeSistema = __getTipoCambioDolarRecibeEmpresaTotal();
+        if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
+            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
+        } 
     self.update();
     $(".tableListarFacturasDia").dataTable().fnClearTable();
     __InicializarTabla('.tableListarFacturasDia')

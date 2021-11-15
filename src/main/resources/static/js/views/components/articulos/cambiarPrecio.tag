@@ -30,6 +30,7 @@
                             <input type="hidden"  id="codigoTarifaMag" name="codigoTarifaMag" value="{articulo.codigoTarifaMag}"  >
                             <input type="hidden"  id="impuestoMag" name="impuestoMag" value="{articulo.impuestoMag}"  >
                             <input type="hidden"  id="tipoImpuestoMag" name="tipoImpuestoMag" value="{articulo.tipoImpuestoMag}"  >
+                            <input type="hidden"   id="impuesto" name="impuesto" value="{articulo.impuesto}"   >
 
                             <input type="hidden" name="tipoFacturar" id="tipoFacturar" value="{articulo.tipoFacturar}">
                             <div class="panel-group" id="accordion">
@@ -42,23 +43,20 @@
                                     <div id="collapse1" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <div class="row">
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
                                                     <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus" autocomplete="off">
                                                 </div>
-                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >Cabys <span class="requeridoDato">*</span></label>
                                                     <input type="text" class="campoNumerico codigoCabys" id="codigoCabys" name="codigoCabys" value="{articulo.codigoCabys}"  onclick={__ConsultaHaciendaCabys} autofocus="autofocus" autocomplete="off">
                                                 </div>
 
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
                                                     <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}" autocomplete="off" >
                                                 </div>
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                                    <select  class=" selecCategoria has-success" name="categoria" id="categoria" value="{articulo.categoria.id}"></select>
-                                                </div>
+                                                
                                             </div>
                                             <div class="row">
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
@@ -87,11 +85,11 @@
                                                         <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
                                                     </select>
                                                 </div>
-
-                                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
-                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
-                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos} autocomplete="off">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
+                                                    <select  class=" selecCategoria has-success" name="categoria" id="categoria" value="{articulo.categoria.id}"></select>
                                                 </div>
+                                               
                                             </div>    
                                         </div>
                                     </div>
@@ -107,19 +105,19 @@
                                     <div id="collapse2" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <div class="row">
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.unidadMedida")}  </label>
                                                     <select  class=" selecUnidadMedida has-success" name="unidadMedida" id="unidadMedida">
                                                         
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales">{$.i18n.prop("articulo.contable")}</label>
                                                     <select  class="campo" id="contable" name="contable" >
                                                         <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
                                                     </select>
                                                 </div>
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")} <span class="requeridoDato">*</span> </label>
                                                     <select  class=" selecMarca has-success" name="marca" id="marca" ></select>
                                                 </div>
@@ -149,7 +147,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3  has-success">
+                                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4  has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.updated_at")}  </label>
                                                     <input type="text" class="form-control campo"  value="{articulo.updated_atSTR}" readonly >
                                                 </div>
@@ -159,11 +157,11 @@
                                                             <option  each={tipoFacturar}  value="{codigo}" selected="{articulo.tipoFacturar ==codigo?true:false}" >{descripcion}</option>
                                                         </select>
                                                 </div>    -->   
-                                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label  class="tamanoLetraTotales">Precio Sugerido </label>
                                                     <input type="number" step="any" class="campoNumerico precioSugerido" id="precioSugerido" name="precioSugerido" value="{articulo.precioSugerido}" autocomplete="off" >
                                                 </div>
-                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
                                                     <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}" autocomplete="off" >
                                                 </div>
@@ -391,6 +389,7 @@ table {
     </style>
 <script>
     var self = this;
+    self.parametros   = opts.parametros;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.categorias                = {aaData:[]}
@@ -467,23 +466,14 @@ self.on('mount',function(){
     self.baseImponibles =__ComboBaseImponibles()
     self.update()
    inicializarCombos()
-    __listadoTipoUnidadesCombo(function(data){
-        self.tipoUnidades  = data;
-        self.update()
-        _evento_refrescar_unidades_medida(self.tipoUnidades); 
-    });
-     __listadoMarcaCombo(function (data){
-         self.marcas = data;
-         self.update()
-         _evento_refrescar_marca(self.marcas)
-     });
-    __listadoCategoriasCombo(function (data){
-        self.categorias = data
-        self.update()
-        _evento_refrescar_categorias(self.categorias);
-    });
+    _evento_refrescar_marca(self.parametros.marcas)
+    _evento_refrescar_categorias(self.parametros.categorias);
+    _evento_refrescar_unidades_medida(self.parametros.tipoUnidades); 
+    cargarCombosArticulo(self.parametros.categorias,self.parametros.marcas,self.parametros.tipoUnidades,null,null,null);
+   
     
-  
+    
+   
   
     self.impuestos = __ComboImpuestos()
     self.impuestosMag = __ComboImpuestosMaG()
@@ -495,6 +485,7 @@ self.on('mount',function(){
     __ComboCantidades();
     $('.collapse').collapse("show")
     $('.codigo').focus()
+    
     window.addEventListener( "keydown", function(evento){
         $(".errorServerSideJgrid").remove();
         teclas(evento);
@@ -1073,7 +1064,7 @@ function actualizarPreciosImpuestosEspecial(){
                         LimpiarArticulo()
                         self.articulo = modeloTabla
                         if(self.articulo !=null){
-                           cargarCombosArticulo(self.categorias,self.marcas,self.tipoUnidades,modeloTabla.categoria.id,modeloTabla.marca.id,modeloTabla.unidadMedida);
+                           cargarCombosArticulo(self.parametros.categorias,self.parametros.marcas,self.parametros.tipoUnidades,modeloTabla.categoria.id,modeloTabla.marca.id,modeloTabla.unidadMedida);
                             self.botonModificar            = true
                             self.botonAgregar              = false
                             self.tabprecio = true
