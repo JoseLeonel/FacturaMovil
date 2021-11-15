@@ -124,7 +124,11 @@
                                 </tr>
                                 <tr class="detalleTables">
                                     <td class="valorPro" > Cant.Dolares    </td>
-                                    <td class="valorPro" >{usuarioCaja.totalDolaresSTR}</td>
+                                    <td class="valorPro" >{usuarioCaja.conteoDolarSTR}</td>
+                                </tr>
+                                  <tr class="detalleTables">
+                                    <td class="valorPro" > Tipo Cambio $:    </td>
+                                    <td class="valorPro" >{usuarioCaja.tipoCambioSTR}</td>
                                 </tr>
                                 
                                 <tr class="detalleTables">
@@ -354,7 +358,6 @@
         align-content: left;
     }
     
-
 </style>    
 
 <script>
