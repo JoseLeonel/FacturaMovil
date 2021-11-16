@@ -263,6 +263,8 @@ public class Factura implements Serializable {
 
 	@Column(name = "desc_general")
 	private Double						descuentoGlobal;
+	
+	
 
 	public Factura() {
 		super();
