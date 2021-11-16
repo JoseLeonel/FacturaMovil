@@ -243,7 +243,7 @@
                     <aside class="left-sidebar">
                         <article class="booking-details clearfix">
                             <div onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}:  {totalComprobante}</div>
+                                <div class="pagarTitulo">{$.i18n.prop("factura.total")}:  {totalComprobante}</div>
                             </div>
                         </article>
                     </aside>

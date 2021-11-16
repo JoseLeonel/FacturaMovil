@@ -311,7 +311,7 @@
                                     <div  show= "{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                     <div  show="{soloParaChinos == false && montoExoneracion.length > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
-                                    <div   class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
+                                    <div show="{empresa.activaVentaEnDolar ==0}"  class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
                                     <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
                                 <div class="precioTotalFactura" show={soloParaChinos == true}>
@@ -443,7 +443,7 @@
                                  <div  show="{soloParaChinos == false }" class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                  <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                  <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
-                                 <div   class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
+                                 <div show="{empresa.activaVentaEnDolar ==0}"  class="elementoTotalesDolares">Dolares $:  <span id="lblTotal">{totalComprobanteDolares}         </span> </div> 
                             </div>
                             
                             <div class="seleccionOtroPrecioVenta">
@@ -3809,7 +3809,6 @@ function __calculate() {
     var resultado = __ResumenFactura(self.detail,self.factura);
     self.factura = resultado.factura
     self.update()
-    self.totalComprobanteDolares = conversionColonesDolares(resultado.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     
     self.cantArticulos = resultado.cantArticulos
     self.totalGananciaByProducto = formatoDecimales(parseFloat(resultado.totalGananciaByProducto),2)

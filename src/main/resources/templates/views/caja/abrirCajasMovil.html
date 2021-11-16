@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+<body class="hold-transition skin-blue  sidebar-mini">
+	<div class="containerMenu">
+	    <header class="main-header">
+	        <div th:replace="administrativo/header"></div>
+	    </header>
+	    <!-- Left side column. contains the logo and sidebar -->
+	    <aside class="main-sidebar">
+	        <div th:replace="administrativo/mainsidebar"></div>
+	    </aside>
+	    <!-- Content Wrapper. Contains page content -->
+	    <div class="content-wrapper">
+	        <!-- Content Header (Page header) -->
+	        <section class="content-header" th:fragment="header"></section>
+	        <!-- Main content -->
+	        <section class="content">
+	        	<abrir-cajaMovil></abrir-cajaMovil>
+ 				<imprimir-caja></imprimir-caja>
+            </section>    
+ 		</div>
+         <!-- /.content-wrapper -->
+	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
+    </div>
+<div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript" th:src="@{/js/views/caja/abrirCajaMovil.js?v=50}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/caja/abrirCajaMovil.tag?v=50}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/caja/imprimirCorte.tag?v=50}" ></script>
+
+
+</body>
+</html>

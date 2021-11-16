@@ -1,4 +1,4 @@
-<abrir-caja>
+<abrir-cajaMovil>
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -55,7 +55,7 @@
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
-                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja de las ventas": "Apertura de la Caja"} </h1>
+                <span class="modal-title tituloModalCierreCaja" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja de las ventas": "Apertura de la Caja"} </span>
             </div>
             <div class="modal-body">
                 
@@ -149,6 +149,7 @@
 
             </div>
                     <div class="modal-footer">
+                <div class="row">    
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                     <button onclick={__Regresar}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
@@ -157,6 +158,7 @@
                 <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
                     <button  show = "{usuarioCaja.id == null ? true:false}"  onclick={__agregar}   class=" btn-green pull-right modalCambioPrecioBotones" > Agregar Apertura </button>
                     <button  show = "{usuarioCaja.id != null ? true:false}"  onclick={__cierre}   class=" btn-green pull-right modalCambioPrecioBotones" > Cerrar Caja </button>
+                </div>
                 </div>
             </div>
         </div>
@@ -167,6 +169,10 @@
 
 
 <style type ="text/css">
+.tituloModalCierreCaja{
+    font-size: 20px;
+    font-weight: 800;
+}
 .colorTotal{
     color: #48a66a!important;
     font-weight: 900!important;
@@ -182,14 +188,14 @@
     flex-direction: column;
 }
 .elemento-total > input{
-     font-size: 50px !important;
+     font-size: 16px !important;
     font-weight: 600;
     height: 80px;
     width: 180px;
     color:#2624aa!important
 }
 .elemento-total{
-    font-size:30px;
+    font-size:16px;
     text-align: center;
 }
 .principal{
@@ -199,7 +205,7 @@
     justify-content: space-around;
 }
 .elemento-total > span{
-    font-size: 28px !important;
+    font-size: 16px !important;
     font-weight: 600;
 }
 .elemento{  
@@ -209,19 +215,19 @@
     flex-direction: column;
 }
 .elemento > input{
-    font-size: 40px !important;
+    font-size: 16px !important;
     font-weight: 500;
-    height: 50px;
-    width: 180px;
+    height: 35px;
+    width: 100px;
     color:#2624aa!important;
     text-align: center!important;
 }
 
 .tamnnoinput{
-    width: 331px!important;
+    width: 185px!important;
 }
 .elemento > span{
-    font-size: 28px !important;
+    font-size: 16px !important;
     font-weight: 500;
 }
 .tamanoModal{
@@ -353,12 +359,12 @@ label {
     color: #FFF;
     border-radius: 5px;
     padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 24px !important;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 20px !important;
     font-weight: bold;
-    margin-right: 15px;
+    margin-right: 9px;
     border: none;
     float: right;
     cursor: pointer;
@@ -391,12 +397,12 @@ label {
     color: #FFF;
     border-radius: 5px;
     padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 22px!important;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 20px !important;
     font-weight: bold;
-    margin-right: 15px;
+    margin-right: 9px;
     border: none;
     float: right;
     cursor: pointer;
@@ -1113,4 +1119,4 @@ function __CrearListaMonedas(tipo){
     return lista;
 } 
 </script>
-</abrir-caja>
+</abrir-cajaMovil>

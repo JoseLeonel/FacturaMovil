@@ -13,6 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -112,8 +113,27 @@ public class UsuarioCajasController {
 	 * @return
 	 */
 	@RequestMapping(value = "/AbrirCajas", method = RequestMethod.GET)
-	public String abrirCajas(ModelMap model) {
-		return "views/caja/abrirCajas";
+	public String abrirCajas(Device device) {
+  String deviceType = "browser";
+  String platform = "browser";
+	String viewName = "views/caja/abrirCajas";
+
+  if (device.isNormal()) {
+      deviceType = "browser";
+  } else if (device.isMobile()) {
+      deviceType = "mobile";
+      viewName = "views/caja/abrirCajasMovil.html";
+  } else if (device.isTablet()) {
+      deviceType = "tablet";
+      viewName = "views/caja/abrirCajas";
+  }
+  
+  platform = device.getDevicePlatform().name();
+  
+  if (platform.equalsIgnoreCase("UNKNOWN")) {
+      platform = "browser";
+  }
+		return viewName;
 	}
 
 	@RequestMapping(value = "/Configuracion.do", method = RequestMethod.GET)

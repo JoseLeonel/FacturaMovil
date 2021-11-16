@@ -352,7 +352,7 @@
                         <div class="row">    
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                 <label  >{$.i18n.prop("cuentaCobrar.cliente")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control "  value="{cuentaCobrar.cliente.nombreCompleto}" readonly>
+                                <input type="text" class="form-control"  value="{cuentaCobrar.cliente.nombreCompleto}" readonly>
                             </div>
                         </div>
                         <div class="row">    

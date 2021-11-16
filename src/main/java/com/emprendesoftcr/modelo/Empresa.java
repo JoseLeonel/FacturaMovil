@@ -275,7 +275,11 @@ public class Empresa implements Serializable {
 	@Column(name = "vent_espera" )
 	private Integer			aplicaVentaEspera; //0 = Si aplica venta en espera  1 = No aplica  
 	
-
+	
+	@Column(name = "tota_dolar", columnDefinition = "INT default '0'")
+	private Integer			activaVentaEnDolar; //0 = Si aplica venta en espera  1 = No aplica  
+	
+	
 	public Empresa() {
 		super();
 		this.created_at = new Date();
@@ -301,6 +305,16 @@ public class Empresa implements Serializable {
 	
 
 	
+	
+	public Integer getActivaVentaEnDolar() {
+		return activaVentaEnDolar;
+	}
+
+	
+	public void setActivaVentaEnDolar(Integer activaVentaEnDolar) {
+		this.activaVentaEnDolar = activaVentaEnDolar;
+	}
+
 	public String getCorreoCaja1() {
 		return correoCaja1;
 	}

@@ -141,7 +141,7 @@
                             <tbody>
                                 <tr>
                                     <td width="70%" id="">
-                                        <div id="pagarTitulo"><i class="fa fa-exchange"> {$.i18n.prop("titulo.cambiar.mesa")}</i></div>
+                                        <div class="pagarTitulo"><i class="fa fa-exchange"> {$.i18n.prop("titulo.cambiar.mesa")}</i></div>
                                     </td>
                                 </tr>                     
                             </tbody>
@@ -203,11 +203,11 @@
                             <tbody>
                                 <tr>
                                     <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                        <div class="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
                                     </td>
                                     <td width="70%" id="">
                                         <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="textShadow total_show_peso">  </span>
                                             <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
                                        </div>
                                     </td>
@@ -392,7 +392,7 @@
                     <div class="row">   
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreSepararCuenta"  id="cambioNombreSepararCuenta" name="cambioNombreSepararCuenta" autofocus="autofocus" >
+                            <input type="text" class="campo tamanoLetraTotales cambioNombreSepararCuenta cambioNombreFactura tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreSepararCuenta" name="cambioNombreSepararCuenta" autofocus="autofocus" >
                         </div>
                     </div>
                 </form>
@@ -720,7 +720,7 @@
 
 
 <div id='ModalAgregarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Crear Proforma</h1>
@@ -746,7 +746,7 @@
 </div>
 
 <div id='ModalCambiarNombreTiquete' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Modificar el Nombre Factura</h1>
@@ -755,7 +755,7 @@
                 <input type="hidden" id='idFactura'  name='idFactura'  value="{factura.id}" >
                 <input type="hidden" id='nombreFactura'  name='nombreFactura'  value="{factura.nombreFactura}" >
                 <div class="row">
-                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                    <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                         <label class="tituloClienteNuevo" >Digite el nombre </label>
                         <input type="text" class="form-control cambioNombreTiquete tamanoClienteNuevo modalInputCambioPrecio"  id="cambioNombreTiquete" name="cambioNombreTiquete"     autocomplete="off">
                     </div>
@@ -811,8 +811,36 @@
 
 
 <style type="text/css">
-  
-    
+  .btn-green {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 33px !important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+    .btn-dark-gray {
+    background-color: #3D3E42;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 33px!important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
 </style> 
 
 <script>
@@ -3174,12 +3202,13 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-   self.factura.total            = 0;
+  self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
     self.factura.totalImpuestoServ = 0; 
     self.factura.subTotal          = 0;
     self.update()
+    
              //Factura.js
     var resultado = __ResumenFactura(self.detail,self.factura);
     self.factura = resultado.factura
@@ -3191,14 +3220,17 @@ function __calculate() {
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto = formatoDecimales(self.factura.totalImpuesto,2);
     self.montoExoneracion = resultado.montoExoneracion > 0 ?formatoDecimales(resultado.montoExoneracion,2):"";
-    self.subTotalGeneral = resultado.subTotalGeneral
+    self.subTotalGeneral = formatoDecimales(resultado.subTotalGeneral,2)
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) 
-    self.totalImpuesto = resultado.totalImpuesto
+    self.totalImpuesto = formatoDecimales(resultado.totalImpuesto,2)
     self.totalImpuestoServ = formatoDecimales(self.factura.totalImpuestoServ,2);
     self.ImpuestoServicio = self.factura.totalImpuestoServ;
-    self.montoExoneracion = formatoDecimales(montoExoneracion,2);
+    self.montoExoneracion = formatoDecimales(resultado.montoExoneracion,2);
+    self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     self.update(); 
+    $( "#codigoBarra" ).val(null);
+    $( "#quantity" ).val(null);
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
     localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));

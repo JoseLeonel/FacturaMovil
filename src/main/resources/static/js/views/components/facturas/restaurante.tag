@@ -205,7 +205,7 @@
                             <tbody>
                                 <tr>
                                     <td width="70%" id="">
-                                        <div id="pagarTitulo"><i class="fa fa-scissors">     {$.i18n.prop("separar.cuenta.procesar")}</i></div>
+                                        <div class="pagarTitulo"><i class="fa fa-scissors">     {$.i18n.prop("separar.cuenta.procesar")}</i></div>
                                     </td>
                                 </tr>                     
                             </tbody>
@@ -226,7 +226,7 @@
                                     </td>
                                     <td width="70%" id="">
                                         <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span id="total_show_peso textShadow" >  </span>
                                             <span class="label label-info textShadow" id="total-show">{totalComprobantePorSeparar}</span>
                                        </div>
                                     </td>
@@ -322,15 +322,27 @@
                             <tbody>
                                 <tr>
                                     <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                        <div class="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
                                     </td>
                                     <td width="70%" id="">
                                         <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="total_show_peso textShadow">  </span>
                                             <span class="label label-info textShadow" id="total-show">{totalComprobanteFactSeparada}</span>
                                        </div>
                                     </td>
-                                </tr>                     
+                                    
+                                </tr>     
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div class="pagarTitulo">Dolares $:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span class="total_show_peso textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobanteDolaresSeparada}</span>
+                                       </div>
+                                    </td>
+                                </tr>                
                             </tbody>
                         </table>
                     </div>
@@ -437,7 +449,7 @@
                             <tbody>
                                 <tr>
                                     <td width="70%" id="">
-                                        <div id="pagarTitulo"><i class="fa fa-exchange"> {$.i18n.prop("titulo.cambiar.mesa")}</i></div>
+                                        <div class="pagarTitulo"><i class="fa fa-exchange"> {$.i18n.prop("titulo.cambiar.mesa")}</i></div>
                                     </td>
                                 </tr>                     
                             </tbody>
@@ -499,15 +511,29 @@
                             <tbody>
                                 <tr>
                                     <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                        <div class="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
                                     </td>
+
                                     <td width="70%" id="">
                                         <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="total_show_peso textShadow" >  </span>
                                             <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
                                        </div>
                                     </td>
+                                </tr>     
+                                 <tr>
+                                    <td width="30%" id="">
+                                        <div   class="pagarTitulo">Dolares $:   </div> 
+                                    </td>
+                                    
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span class="total_show_peso textShadow" >  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobanteDolares}</span>
+                                       </div>
+                                    </td>
                                 </tr>                     
+                             
                             </tbody>
                         </table>
                     </div>
@@ -923,7 +949,7 @@
 				<div class="box">
 					<div class="box-header with-border fondoEncabezado">
 						<h3 class="box-title">{$.i18n.prop("ventas.titulo")} </h3>
-                        <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
+                        <h3 class="box-title pull-right ">Se Recibe el Dolar($): {tipoCambioCompraDolarSeRecibeSistema} </h3>
 					</div>
 					<div class="box-body">
                         <form id="formularioFactura">
@@ -1051,39 +1077,54 @@
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
                                     <div class="containerTotales">
-                                        <div class="elementoTotales" >
-                                           <div class="tituloTotal">
-                                             {$.i18n.prop("factura.resumen.subTotal")}
-                                           </div>
-                                           <div class="valorTotal">  {subTotalGeneral} </div>
-                                        </div>
-                                        <div class="elementoTotales" >
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.descuento")}</div>
-                                           <div class="valorTotal">  {totalDescuentos}  </div>
-                                        </div>
-                                        <div class="elementoTotales" >
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuesto")}</div>
-                                           <div class="valorTotal">  {totalImpuesto}  </div>
-                                        </div>   
-                                        <div class="elementoTotales" >
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.exoneracion")}</div>
-                                           <div class="valorTotal">  {montoExoneracion}  </div>
-                                        </div>   
-                                        <div class="elementoTotales" >   
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuestoServ")}</div>
-                                           <div class="valorTotal">  {totalImpuestoServ}   </div>
-                                        </div>
-                                        <div class="elementoTotales" >   
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.total")}</div>
-                                           <div class="valorTotal">  {totalComprobante}  </div>
-                                        </div>
-                                        <div class="elementoTotales" show={mostrarCamposIngresoContado}>   
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.cambio")}</div>
-                                           <div class="valorTotal">{totalCambioPagarSTR} </div>
-                                        </div>
+                                     <table class=" ">
+                                        <thead>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.subTotal")}</th>
+                                                <th class="formatoTotalesTable">{subTotalGeneral}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.descuento")}</th>
+                                                <th class="formatoTotalesTable">{totalDescuentos}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.impuesto")}</th>
+                                                <th class="formatoTotalesTable">{totalImpuesto}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.exoneracion")}</th>
+                                                <th class="formatoTotalesTable">{montoExoneracion}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.impuestoServ")}</th>
+                                                <th class="formatoTotalesTable">{totalImpuestoServ}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.total")}</th>
+                                                <th class="formatoTotalesTable">{totalComprobante}</th>
+                                            </tr>
+                                            <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">Dolares $:</th>
+                                                <th class="formatoTotalesTable">{totalComprobanteDolares}</th>
+                                            </tr>
+                                             <tr  class="tituloTotal"> 
+                                                <th class="formatoTotalesTable">{$.i18n.prop("factura.resumen.cambio")}</th>
+                                                <th class="formatoTotalesTable">{totalCambioPagarSTR}</th>
+                                            </tr>
+                                            
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>    
+
+                                       
                                         
                                     </div>
                                     <div class="containerBotonesPagar">
+                                        <div  class="elementoPagar" >
+                                            <label class="">Descuento General(%) </label> 
+                                            <input onclick={aplicarDescuentoGlobalInterfaz} onkeyup={ aplicarDescuentoGlobalInterfaz } onBlur = {aplicarDescuentoGlobalInterfaz}  type="number"  onkeypress = {aplicarDescuentoGlobalInterfaz}  step="any"  class="{campoTotales} {tamanoLetra}  descuentoGlobal1"  id="descuentoGlobal1" name="descuentoGlobal1"  value="{factura.descuentoGlobal}"  autocomplete="off">
+                                        </div>
                                         <div class="elementoPagar">
                                              <button onclick={__MoverMontoTarjeta}  class="btn-Pagar btn-PagarICON pull-right"> </i> Pagar Tarjeta</button>
                                         </div>
@@ -1098,6 +1139,7 @@
 <!--Fin Ventana de los billetes-->   
  <!--Ventana de los billetes-->
             <div class="row" show={mostrarFormularioPago}>
+                
                 <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de Billetes-->
                     <section  class="lista-articulos" >
@@ -1336,9 +1378,10 @@
     .containerBotonesPagar{
         display:flex;
         margin-top: 2%;
+        flex-direction: column;
     }
     .elementoPagar{
-
+       padding-bottom: 8px;
     }
     .teclashift {
         font-weight: 700;
@@ -1874,6 +1917,7 @@
     self.totalImpuestoPorSeparar       = 0
     self.totalImpuestoServPorSeparar   = 0
 
+    self.totalComprobanteDolaresSeparada  = 0	
     self.totalComprobanteFactSeparada  = 0	
     self.subTotalGeneralFactSeparada   = 0
     self.totalDescuentosFactSeparada   = 0
@@ -2010,7 +2054,12 @@
         total:0,
         id:null
     }
+    self.totalComprobanteDolares       = 0
     self.on('mount',function(){
+        self.tipoCambioCompraDolarSeRecibeSistema = __getTipoCambioDolarRecibeEmpresaTotal();
+        if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
+            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
+        } 
         __ListaActividadesComercales()
          var xTriggered = 0;
            window.addEventListener( "keydown", function(evento){
@@ -2719,6 +2768,46 @@ function consultaParaReimprimir(data,tipoImpresion){
         }
     });
 }
+
+/**
+Aplicar descuento global
+**/
+aplicarDescuentoGlobalInterfaz(e){
+    var descuentoGlobal = __valorNumerico(e.target.value);
+    if(descuentoGlobal > 100){
+        $('.descuentoGlobal1').val(100)
+        // mensajeAlertErrorOConfirmacion('error',$.i18n.prop("error.descuento.global"));   
+         return  	
+    }
+    self.factura.descuentoGlobal = descuentoGlobal;
+    aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa); 
+    __calculate();
+    
+}
+
+function aplicarDescuentoGlobalDetalle(detail,porcentajeDescuentoAplicar,empresa){
+
+     var descuento = 0;
+     if(detail.length != 0 ){
+           $.each(detail, function( index, item ) {
+                descuento = porcentajeDescuentoAplicar;
+                if(empresa.aplicaGanancia ==1){
+                   if(item.porcentajeGanancia < porcentajeDescuentoAplicar ){
+                      descuento  = __valorNumerico(item.porcentajeGanancia)
+                   }
+                }
+                var index    = detail.indexOf(item);   
+                item.porcentajeDesc =  descuento;
+                item = ActualizarLineaDEtalle(item) 
+                detail[index] = item;
+    
+           });
+     
+     }
+
+     return detail;
+}
+
 /**
 * Camps requeridos
 **/
@@ -2816,37 +2905,7 @@ __CambiarPrecio(e){
    $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
    $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true})   
 }
-/**
-* Tipo Cambio de moneda
-**/
-function __TipoCambio(){
-    
-    $.ajax({
-        url: "MostrarTipoCambioActivoAjax.do",
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia(data.message);
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.tipoCambio = modeloTabla
-                       self.tipoCambio.total = formatoDecimales(self.tipoCambio.total,2)
-                       self.update()
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
+
 /**
 * Imprimir 
 **/
@@ -2905,7 +2964,7 @@ __TotalDeBancoAPagar(e){
 **/
 __CalculaCambioAEntregarOnblur(e){
     self.totalCambioPagar    = 0
-    self.totalCambioPagarSTR =0
+    self.totalCambioPagarSTR = 0
     self.update()
    _calculoEnterPago()  
 }
@@ -2914,7 +2973,7 @@ __CalculaCambioAEntregarOnblur(e){
 **/
 __CalculaCambioAEntregarKeyPress(e){
     self.totalCambioPagar    = 0
-    self.totalCambioPagarSTR =0
+    self.totalCambioPagarSTR = 0
     self.update()
      _calculoEnterPago()  
 }
@@ -2928,6 +2987,7 @@ function _calculoEnterPago(){
     if(sumaMontosEntregadosParaCambios == 0){
         self.factura.totalCambioPagar = self.factura.totalComprobante * -1
         self.totalCambioPagarSTR =formatoDecimales(self.factura.totalCambioPagar,2)
+        self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
         self.update()
         return
     }
@@ -2940,6 +3000,7 @@ function _calculoEnterPago(){
     self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
     self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
     self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
+    self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     self.update()
 }
 /**
@@ -3236,10 +3297,20 @@ function __SeguridadLimpiar(){
         __Init()
     }
 }
+function __ObtengoTipoCambio(){
+  
+        self.tipoCambio.total = __getTipoCambioTotal()
+        self.tipoCambio.totalCompra = __getTipoCambioCompra()
+
+    
+    self.update()
+
+}
 /**
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.totalComprobanteDolares = 0
     self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
@@ -3388,7 +3459,12 @@ function __Init(){
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
-    self.update()
+     __ObtengoTipoCambio()
+    self.tipoCambioCompraDolarSeRecibeSistema = __getTipoCambioDolarRecibeEmpresaTotal();
+    if(self.tipoCambioCompraDolarSeRecibeSistema == 0){
+            self.tipoCambioCompraDolarSeRecibeSistema = self.tipoCambio.totalCompra;
+    } 
+    self.update();
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $('#estado').prop("selectedIndex", 0);
@@ -3615,8 +3691,8 @@ function cargarDetallesFacturaEnEspera(data){
         });
         self.update()
     })
-    self.totalCambioPagar = 0
-    self.totalCambioPagarSTR =0
+    self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR = 0
     self.update()
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
@@ -4427,6 +4503,7 @@ function __calculate() {
     self.factura.totalImpuestoServ = 0; 
     self.factura.subTotal          = 0;
     self.update()
+    
              //Factura.js
     var resultado = __ResumenFactura(self.detail,self.factura);
     self.factura = resultado.factura
@@ -4445,6 +4522,7 @@ function __calculate() {
     self.totalImpuestoServ = formatoDecimales(self.factura.totalImpuestoServ,2);
     self.ImpuestoServicio = self.factura.totalImpuestoServ;
     self.montoExoneracion = formatoDecimales(resultado.montoExoneracion,2);
+    self.totalComprobanteDolares = conversionColonesDolares(self.factura.totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     self.update(); 
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
@@ -5602,6 +5680,7 @@ function mostrarSeperarCuentasFun(){
     self.totalImpuestoPorSeparar       = 0
     self.totalImpuestoServPorSeparar   = 0
 
+    self.totalComprobanteDolaresSeparada  = 0	
     self.totalComprobanteFactSeparada  = 0	
     self.subTotalGeneralFactSeparada   = 0
     self.totalDescuentosFactSeparada   = 0
@@ -5700,8 +5779,8 @@ __removeCuentaSeparada(e) {
              subTotal        : parseFloat(0),
              montoTotalLinea : parseFloat(0),
              montoTotal      : parseFloat(0),
-             costo           : parseFloat(self.detailPorSeparar[indexPorSeparar].costo),
-             porcentajeGanancia : parseFloat(self.detailPorSeparar[indexPorSeparar].gananciaPrecioPublico),
+             costo           : self.detailFacturaSeparada[indexPorSeparar].costo != "undefined" && self.detailFacturaSeparada[indexPorSeparar].costo != null ?parseFloat(self.detailFacturaSeparada[indexPorSeparar].costo):0,
+             porcentajeGanancia : parseFloat(self.detailFacturaSeparada[indexPorSeparar].gananciaPrecioPublico),
         });
     }
 
@@ -5897,6 +5976,7 @@ function __calculatePorSeparar() {
     self.totalImpuestoServPorSeparar   = 0
 
     self.totalComprobanteFactSeparada  = 0	
+    self.totalComprobanteDolaresSeparada  = 0	
     self.subTotalGeneralFactSeparada   = 0
     self.totalDescuentosFactSeparada   = 0
     self.totalImpuestoFactSeparada     = 0
@@ -5959,8 +6039,10 @@ function __calculatePorSeparar() {
         totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10));
         self.totalImpuestoServFactSeparada = formatoDecimales(totalImpuestoServ,2);
         self.totalComprobanteFactSeparada = formatoDecimales(Math.round(__valorNumerico(totalComprobante + totalImpuestoServ)),2);
+        self.totalComprobanteDolaresSeparada = conversionColonesDolares(totalComprobante + totalImpuestoServ,self.tipoCambioCompraDolarSeRecibeSistema);
     }else{
         self.totalComprobanteFactSeparada = formatoDecimales(Math.round(__valorNumerico(totalComprobante)),2);
+        self.totalComprobanteDolaresSeparada = conversionColonesDolares(totalComprobante,self.tipoCambioCompraDolarSeRecibeSistema);
     }
     self.update(); 
 }	

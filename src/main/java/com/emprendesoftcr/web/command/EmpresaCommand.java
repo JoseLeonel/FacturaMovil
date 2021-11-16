@@ -85,7 +85,9 @@ public class EmpresaCommand {
 	private String	correoCaja1;
 	private String	correoCaja2;
 	private Integer aplicaVentaEspera;
-
+	private Integer			activaVentaEnDolar; //0 = Si aplica venta en espera  1 = No aplica  
+	
+	
 	public EmpresaCommand(Empresa empresa) {
 		super();
 		this.nombreLlaveCriptografica = empresa.getNombreLlaveCriptografica();
@@ -144,6 +146,7 @@ public class EmpresaCommand {
 		this.correoCaja1 = empresa.getCorreoCaja1();
 		this.correoCaja2 = empresa.getCorreoCaja2();
 		this.aplicaVentaEspera = empresa.getAplicaVentaEspera();
+		this.activaVentaEnDolar = empresa.getActivaVentaEnDolar();  
 	}
 
 	public EmpresaCommand() {
@@ -151,6 +154,16 @@ public class EmpresaCommand {
 	}
 
 	
+	
+	public Integer getActivaVentaEnDolar() {
+		return activaVentaEnDolar;
+	}
+
+	
+	public void setActivaVentaEnDolar(Integer activaVentaEnDolar) {
+		this.activaVentaEnDolar = activaVentaEnDolar;
+	}
+
 	public String getCorreoCaja1() {
 		return correoCaja1;
 	}

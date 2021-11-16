@@ -10,6 +10,12 @@
   --Darkgrey: #646B70;
 }
 
+.modal-title {
+  margin: 0;
+  line-height: 1.42857143;
+  color: white;
+}
+
 .hide {
   display: none;
 }
