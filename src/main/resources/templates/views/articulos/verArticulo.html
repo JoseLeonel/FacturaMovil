@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-
+    
+</head>
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
 	    <header class="main-header">
@@ -17,17 +18,19 @@
 	        <section class="content-header" th:fragment="header"></section>
 	        <!-- Main content -->
 	        <section class="content">
-	        	<abrir-cajaMovil></abrir-cajaMovil>
- 				<imprimir-cajaMovil></imprimir-cajaMovil>
+	        	<ver-articulo></ver-articulo>
             </section>    
  		</div>
          <!-- /.content-wrapper -->
 	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
     </div>
+	  
+ 
 <div th:replace="layout/layout :: scripts"></div>
-<script type="text/javascript" th:src="@{/js/views/caja/abrirCajaMovil.js?v=50}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/caja/abrirCajaMovil.tag?v=50}" ></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/caja/imprimirCorteMovil.tag?v=50}" ></script>
+<!-- MANTENIMIENTO DE ver articulo -->
+<script type="text/javascript"  th:src="@{/js/views/facturas/funcionesApiFetchVentas.js?v=55}"></script>
+<script type="text/javascript" th:src="@{/js/views/articulos/verArticulo.js?v=50}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/articulos/verArticulo.tag?v=50}" ></script>
 
 
 </body>

@@ -55,35 +55,26 @@ function _consulta() {
     var fechaFin = $('.fechaFinal').val();
     var cedulaReceptor = $('#cliente').val();
     var tipoDocumento = $('.tipoDocumento').val();
-    var parametros = {
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin,
-        cedulaReceptor: cedulaReceptor,
-        tipoDocumento: tipoDocumento,
-    }
-    __Inicializar_Table('.tableListar')
-    $.ajax({
-        url: "ListarHaciendasAjax.do",
-        datatype: "json",
-        data: parametros,
-        method: "GET",
-        success: function(result) {
-            if (result.aaData.length > 0) {
-                loadListar(".tableListar", idioma_espanol, informacion_tabla, result.aaData)
-                haciendas.data = result.aaData
-                agregarInputsCombos();
-                ActivarEventoFiltro(".tableListar")
 
-                EventoFiltro();
-            } else {
-                __Inicializar_Table('.tableListar')
-            }
-        },
-        error: function(xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
+    getListaEnviosHacienda(fechaInicio, fechaFin, cedulaReceptor, tipoDocumento).then(r => {
+        __Inicializar_Table('.tableListar')
+        if (r.length > 0) {
+            loadListar(".tableListar", idioma_espanol, informacion_tabla, r)
+            haciendas.data = r
+            agregarInputsCombos();
+            ActivarEventoFiltro(".tableListar")
+
+            EventoFiltro();
+        } else {
+            __Inicializar_Table('.tableListar')
         }
+
+    }).catch(() => {
+        console.log('Algo salió mal');
+
     });
+
+
 }
 /**
  * Reglas aplicadas

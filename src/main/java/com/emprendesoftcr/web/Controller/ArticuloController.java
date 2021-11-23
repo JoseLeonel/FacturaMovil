@@ -129,8 +129,6 @@ public class ArticuloController {
 
 	@Autowired
 	private StringPropertyEditor														stringPropertyEditor;
-	@Autowired
-	private ValidateTokenBo																	validateTokenBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -196,7 +194,10 @@ public class ArticuloController {
 	public String paqueteArticulo(ModelMap model) {
 		return "views/articulos/paqueteArticulos";
 	}
-
+	@RequestMapping(value = "/verArticulo", method = RequestMethod.GET)
+	public String verArticulo(ModelMap model) {
+		return "views/articulos/verArticulo";
+	}
 	@RequestMapping(value = "/movil/ListarArticulosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public Collection<Articulo> listarMovilAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idEmpresa, @RequestParam Long idCategoria) {
@@ -683,24 +684,7 @@ public class ArticuloController {
 		return respuestaService;
 	}
 
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/local/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
-		if (validateTokenBo.validarTokenApis(request) == false) {
-			DataTableDelimitador delimitadores = null;
-			delimitadores = new DataTableDelimitador(request, "Articulo");
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-			List<Object> solicitudList = new ArrayList<Object>();
-			respuestaService.setRecordsTotal(0l);
-			respuestaService.setRecordsFiltered(0l);
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-		}
-		DataTableDelimitador delimitadores = null;
-		String nombreUsuario = request.getUserPrincipal().getName();
-		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
-	}
+	
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloMinimosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -985,26 +969,7 @@ public class ArticuloController {
 
 	}
 
-	@RequestMapping(value = "/local/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
-
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
-				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
-			}
-			articulo.setCantidadPaquete(idPaquete);
-			return articuloBo.agregar(request, articulo, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
+	
 	/**
 	 * Modificar Articulo
 	 * @param request
@@ -1032,26 +997,7 @@ public class ArticuloController {
 		}
 	}
 
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/local/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
-
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			if (articulo.getUnidadMedida() != null && articulo.getUnidadMedida().length() > 0) {
-				articulo.setUnidadMedida(articulo.getUnidadMedida().length() > 20 ? articulo.getUnidadMedida().substring(0, 20) : articulo.getUnidadMedida());
-			}
-			return articuloBo.modificar(request, articulo, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-		}
-	}
-
+	
 	/**
 	 * Mostrar articulo por id
 	 * @param request
@@ -1132,24 +1078,7 @@ public class ArticuloController {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/local/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioLocal(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
-
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			return articuloBo.cambiarPrecio(request, response, articulo, precioPublico, codigo, tipoImpuesto, impuesto, descripcion, tipoCodigo, unidadMedida, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-
-	}
-
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -1163,22 +1092,7 @@ public class ArticuloController {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/local/CambiarPrecioArticulo.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecioArticuloLocal(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute CambiarPrecioArticuloCommand cambiarPrecioArticuloCommand, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			return articuloBo.cambiarPrecioArticulo(request, response, model, cambiarPrecioArticuloCommand, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/eliminarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -1229,19 +1143,8 @@ public class ArticuloController {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/local/findArticuloByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator findArticuloByCodigojaxLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			return articuloBo.findArticuloByCodigojax(request, articulo, response, codigoArticulo, result);
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
+	
+	
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {

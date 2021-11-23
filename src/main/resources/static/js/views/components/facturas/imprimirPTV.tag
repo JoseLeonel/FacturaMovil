@@ -662,34 +662,7 @@ self.totalesIVAI    = []
 self.pdf = false;
 self.mostrarPDF = false  
 self.on('mount',function(){
-    self.facturaImpresa = {
-    id:null,
-    nota:"",
-    estado:0,
-    tipoDoc:"",
-    plazoCredito:0,
-    codigoActividad:"",
-    tipoCambio:0,
-    nombreFactura:"",
-    totalDescuentos:0,
-    cliente:{
-       cedula:"",
-       nombreCompleto:"",
-       correoAlternativo:"",
-       correoElectronico:""  ,
-       nombreComercial:""
-    },
-    empresa:{
-        nombreComercial:"",
-        imprimirDirecto:0,
-        noFacturaElectronica:0,
-        correoElectronico:"",
-        otraSenas:"",
-        telefono:0
-    },
-    referenciaNumero:""
-
-}
+    inicializarFactura()
     self.claveParteUnoRef =""
     self.claveParteDosRef =""
     self.update()
@@ -716,7 +689,41 @@ self.on('mount',function(){
     }
     
 })
+function inicializarFactura(){
+    self.facturaImpresa = {
+    id:null,
+    nota:"",
+    estado:0,
+    tipoDoc:"",
+    plazoCredito:0,
+    codigoActividad:"",
+    tipoCambio:0,
+    nombreFactura:"",
+    totalDescuentos:0,
+    usuarioCreacion:{
+       nombreUsuario:""
+    },
+    
+    cliente:{
+       cedula:"",
+       nombreCompleto:"",
+       correoAlternativo:"",
+       correoElectronico:""  ,
+       nombreComercial:""
+    },
+    empresa:{
+        nombreComercial:"",
+        imprimirDirecto:0,
+        noFacturaElectronica:0,
+        correoElectronico:"",
+        otraSenas:"",
+        telefono:0
+    },
+    referenciaNumero:""
 
+}
+self.update()
+}
 function  llamarQR(){
     if (typeof self.parametro.factura.empresa != 'undefined' )  {
         if (self.parametro.factura.empresa.noFacturaElectronica ==0) {
@@ -912,74 +919,83 @@ function __nuevoImpuesto(detalle){
 *consultar Facturas
 **/
 function consultaFactura(idFactura){
-     self.facturaImpresa =null
+    inicializarFactura()
+    getFacturaByIdFactura(idFactura)
+    .then(respuestaConsultaIDFactura => {
+         console.log("completo de la factura");
+         detalleMostrarFactura(respuestaConsultaIDFactura);
+     })
+     .catch(err=>{
+         console.error(err)
+     })
+     
+     
+
+}
+
+function detalleMostrarFactura(respuestaConsultaIDFactura){
+    self.facturaImpresa =null
      self.update()
-     $.ajax({
-        url: "ListarDetlleByFacturaAjax.do",
-        datatype: "json",
-        data: {idFactura:idFactura},
-        method:"POST",
-        success: function (data) {
-            if(data.aaData.length > 0){
-                    self.detalles = []
-                    self.detalles =data.aaData
-                    self.detalles.sort(function(a,b) {
-                        if ( a.numeroLinea < b.numeroLinea )
-                            return -1;
-                        if ( a.numeroLinea > b.numeroLinea )
-                            return 1;
-                        return 0;
-                    } );
-                    self.detalles.forEach(function(elemen){
-                        if(elemen.codigo == "8888"){
-                            self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
-                            self.update()
-                        }
-                        elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
+        if(respuestaConsultaIDFactura.length > 0){
+                self.detalles = []
+                self.detalles =respuestaConsultaIDFactura
+                self.detalles.sort(function(a,b) {
+                if ( a.numeroLinea < b.numeroLinea )
+                    return -1;
+                    if ( a.numeroLinea > b.numeroLinea )
+                        return 1;
+                      return 0;
+                });
+                self.detalles.forEach(function(elemen){
+                    if(elemen.codigo == "8888"){
+                        self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
                         self.update()
-                        sumarImpuesto(elemen)
-                    })
-                   self.montoExoneracion = 0
-                   self.montoImpuesto = 0
-                   self.montoExoneracionSTR = ""
-                   self.montoImpuestoSTR = ""
-                   self.update()
-                    $.each(data.aaData, function( index, modeloTabla ) {
-                        self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
-                        self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
-                      if(self.facturaImpresa == null){
-                            self.facturaImpresa = modeloTabla.factura 
-                            //factura.js
-                            self.cedula = getCedulaOrIdentificacionExtranjero(self.facturaImpresa.cliente.cedula,self.facturaImpresa.cliente.identificacionExtranjero)
-                            if(self.facturaImpresa.empresa.imprimirCelular == 1){
-                                self.mostrarImprimiCelular = true
-                            }
-                            console.log(self.facturaImpresa)
-                            self.update()
-                            self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
-                            self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
-                            self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
-                            self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
-                              self.subTotal = 0
-                            self.update()
-                            getMoneda()
-                            _VersionTiquete()
-                            __ComboTipoDocumentos()
-                            buscarTipoDocumento()
-                            __comboCondicionPago()
-                            buscarCondicionPago()
-                            getMedioPago()
-                            if(self.facturaImpresa.estado ==2){
-                                self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
-                            }
-                            if(self.facturaImpresa.estado ==3){
-                                self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
-                            }
-                            if(self.facturaImpresa.estado == 4){
-                                self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
-                            }
-                            self.update()
-                            
+                    }
+                    elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
+                    self.update()
+                    sumarImpuesto(elemen)
+                })
+                self.montoExoneracion = 0
+                self.montoImpuesto = 0
+                self.montoExoneracionSTR = ""
+                self.montoImpuestoSTR = ""
+                self.update()
+                $.each(respuestaConsultaIDFactura, function( index, modeloTabla ) {
+                    self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
+                    self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
+                    if(self.facturaImpresa == null){
+                       self.facturaImpresa = modeloTabla.factura 
+                        //factura.js
+                        self.cedula = getCedulaOrIdentificacionExtranjero(self.facturaImpresa.cliente.cedula,self.facturaImpresa.cliente.identificacionExtranjero)
+                        if(self.facturaImpresa.empresa.imprimirCelular == 1){
+                            self.mostrarImprimiCelular = true
+                        }
+                        console.log(self.facturaImpresa)
+                        self.update()
+                        self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
+                        self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
+                        self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
+                        self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
+                        self.subTotal = 0
+                        self.update()
+                        getMoneda()
+                        _VersionTiquete()
+                        __ComboTipoDocumentos()
+                         buscarTipoDocumento()
+                        __comboCondicionPago()
+                         buscarCondicionPago()
+                        getMedioPago()
+                        if(self.facturaImpresa.estado ==2){
+                            self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
+                        }
+                        if(self.facturaImpresa.estado ==3){
+                            self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
+                        }
+                        if(self.facturaImpresa.estado == 4){
+                            self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
+                        }
+                        self.update()
+                          
                       }
                     });
                    self.montoExoneracionSTR = formatoDecimales(self.montoExoneracion,0);
@@ -999,112 +1015,25 @@ function consultaFactura(idFactura){
                      if (self.facturaImpresa.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
                       __imprimir()
                      }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
         }
-    });
-     
-
 }
 
 /**
 *consultar Facturas por Consecutivo
 **/
 function consultaFacturaPorConsecutivo(consecutivo){
-     self.facturaImpresa =null
-     self.update()
-     $.ajax({
-        url: "ListarDetlleByFacturaConsecutivoAjax.do",
-        datatype: "json",
-        data: {consecutivo:consecutivo},
-        method:"POST",
-        success: function (data) {
-            if(data.aaData.length > 0){
-                    self.detalles = []
-                    self.detalles =data.aaData
-                    self.detalles.sort(function(a,b) {
-                        if ( a.numeroLinea < b.numeroLinea )
-                            return -1;
-                        if ( a.numeroLinea > b.numeroLinea )
-                            return 1;
-                        return 0;
-                    } );
-                    self.detalles.forEach(function(elemen){
-                        if(elemen.codigo == "8888"){
-                            self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
-                            self.update()
-                        }
-                        elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
-                        self.update()
-                    })
-                   self.montoExoneracion = 0
-                   self.montoImpuesto = 0
-                   self.montoExoneracionSTR = ""
-                   self.montoImpuestoSTR = ""
-                   self.update()
-                    $.each(data.aaData, function( index, modeloTabla ) {
-                        self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
-                        self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
-                      if(self.facturaImpresa == null){
-                            self.facturaImpresa = modeloTabla.factura
-                            if(self.facturaImpresa.empresa.imprimirCelular == 1){
-                                self.mostrarImprimiCelular = true
-                            }
-                            console.log(self.facturaImpresa)
-                            self.update()
-                            self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
-                            self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
-                            self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
-                            self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
-                              self.subTotal = 0
-                            self.update()
-                            getMoneda()
-                            _VersionTiquete()
-                            __ComboTipoDocumentos()
-                            buscarTipoDocumento()
-                            __comboCondicionPago()
-                            buscarCondicionPago()
-                            getMedioPago()
-                            if(self.facturaImpresa.estado ==2){
-                                self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
-                            }
-                            if(self.facturaImpresa.estado ==3){
-                                self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
-                            }
-                            if(self.facturaImpresa.estado == 4){
-                                self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
-                            }
-                            self.update()
-                            
-                      }
-                    });
-                   self.montoExoneracionSTR = formatoDecimales(self.montoExoneracion,0);
-                   self.montoImpuestoSTR = formatoDecimales(self.montoImpuesto,0);
+    
+     inicializarFactura()
+    getFacturaByConsecutivo(idFactura)
+    .then(respuestaConsultaIDFactura => {
+         console.log("completo de la factura");
+         detalleMostrarFactura(respuestaConsultaIDFactura);
+     })
+     .catch(err=>{
+         console.error(err)
+     })
+     
 
-                    if(self.totalImpuestoServicio == 0 ){
-                        self.totalImpuestoServicio = self.facturaImpresa.totalOtrosCargos
-                    }
-                   self.totalImpuestoServicioSTR = ""
-                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
-                   self.update()
-         
-                    if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
-                        $('.imprimirModal').modal('show');   
-                    }
-                   
-                     if (self.facturaImpresa.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
-                      __imprimir()
-                     }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
      
 
 }

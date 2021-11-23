@@ -2494,9 +2494,151 @@ function inicializarCombos(){
 
 
 }
+/**
+ * closures  DetalleFactura
+ */
+	const detalleFacturaClosures = (function(){
+		 let dataDetalle = {
+	     		 factura : null,
+				 cliente : null,
+				 vendedor : null,
+				 descripcionArticulo :'',
+				 numeroLinea   : 0,
+				 cantArticulos : 0, 
+				 pesoPrioridad : 0,
+				 totalCambioPagar : 0,
+				 detail : []
+					 
+			 };
+		 return {
+			 aplicarDescuentoGlobalDetalle:function (detail,porcentajeDescuentoAplicar,empresa){
+
+		     var descuento = 0;
+		     if(detail.length != 0 ){
+		           $.each(detail, function( index, item ) {
+		                descuento = porcentajeDescuentoAplicar;
+		                if(empresa.aplicaGanancia ==1){
+		                   if(item.porcentajeGanancia < porcentajeDescuentoAplicar ){
+		                      descuento  = __valorNumerico(item.porcentajeGanancia)
+		                   }
+		                }
+		                var index    = detail.indexOf(item);   
+		                item.porcentajeDesc =  descuento;
+		                item = ActualizarLineaDEtalle(item) 
+		                detail[index] = item;
+		    
+		           });
+		     
+		     }
+
+		     return detail;
+		},
+		obtenerDetailVentaEspera:function(data,facturaPametros,tipo,cliente){
+			  dataDetalle = {
+			     		 factura : null,
+						 cliente : null,
+						 vendedor : null,
+						 descripcionArticulo :'',
+						 numeroLinea   : 0,
+						 cantArticulos : 0, 
+						 pesoPrioridad : 0,
+						 totalCambioPagar : 0,
+						 detail : []
+							 
+					 };
+
+			$.each(data, function( index, modeloTabla ) {
+				dataDetalle.factura              = tipo == 1?modeloTabla.factura:facturaPametros;
+				dataDetalle.factura.fechaCredito = dataDetalle.factura.fechaCredito !=null?__displayDate_detail(dataDetalle.factura.fechaCredito):null
+				dataDetalle.cliente              = tipo == 1?modeloTabla.factura.cliente:cliente
+				dataDetalle.vendedor             = tipo == 1?modeloTabla.factura.vendedor:null
+				dataDetalle.descripcionArticulo  = modeloTabla.descripcion
+				dataDetalle.detail.push({
+		            numeroLinea     : modeloTabla.numeroLinea,
+		            tipoCodigo      : modeloTabla.tipoCodigo,
+		            unidadMedida    : modeloTabla.unidadMedida,
+		            pesoPrioridad    :modeloTabla.numeroLinea,
+		            codigo          : modeloTabla.codigo,
+		            tipoImpuesto    : modeloTabla.tipoImpuesto,
+		            tipoImpuesto1   : "",
+		            descripcion     : modeloTabla.descripcion,
+		            cantidad        : __valorNumerico(modeloTabla.cantidad),
+		            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
+		            impuesto        : __valorNumerico(modeloTabla.impuesto),
+		            impuesto1       : 0,
+		            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
+		            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
+		            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
+		            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
+		            subTotal        : __valorNumerico(modeloTabla.subTotal),
+		            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
+		            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
+		            costo           : __valorNumerico(modeloTabla.costo),
+		            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
+		            montoGanancia :__valorNumerico(modeloTabla.montoGanancia),
+		            ganancia :__valorNumerico(__valorNumerico(modeloTabla.ganancia)),
+		            pesoTransporte :  __valorNumerico(modeloTabla.pesoTransporte),
+		            pesoTransporteTotal :__valorNumerico(modeloTabla.pesoTransporteTotal),
+		            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
+		            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
+		            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
+		            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+		            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+		            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+		            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
+		        });
+				dataDetalle.numeroLinea   = dataDetalle.numeroLinea + 1;
+				dataDetalle.cantArticulos = dataDetalle.cantArticulos + 1;
+				dataDetalle.pesoPrioridad = dataDetalle.numeroLinea;
+		    });
+			dataDetalle.factura.totalCambioPagar = dataDetalle.factura.totalComprobante;
+			dataDetalle.totalCambioPagar         =  dataDetalle.factura.totalComprobante;
+			dataDetalle.detail.sort(function(a,b) {
+		        if ( a.pesoPrioridad > b.pesoPrioridad )
+		            return -1;
+		        if ( a.pesoPrioridad < b.pesoPrioridad )
+		            return 1;
+		        return 0;
+		    } );
+			return dataDetalle;
+			
+		}
+		
+        
+		
+		}
+	})();
 	
 	
-	var formatter = new Intl.NumberFormat('es-CR', {
+	  /**
+     * consulta de una factura por id
+     */
+const getFacturaByIdFactura = async(idFactura) => {
+    try {
+        const rawResponse = await fetch('/api/factura/getFacturaByIdFactura?idFactura=' + idFactura);
+        const data = await rawResponse.json();
+        console.log(data.aaData);
+        return data.aaData;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const getFacturaByConsecutivo = async(consecutivo) => {
+    try {
+        const rawResponse = await fetch('/api/factura/getFacturaByConsecutivo=' + consecutivo);
+        const data = await rawResponse.json();
+        console.log(data.aaData);
+        return data.aaData;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+	
+	var formatterColones = new Intl.NumberFormat('es-CR', {
 		  style: 'currency',
 		  currency: 'CRC',
 
@@ -2504,10 +2646,18 @@ function inicializarCombos(){
 		  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
 		  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 		});
+	var formatterDolares = new Intl.NumberFormat('es-US', {
+		  style: 'currency',
+		  currency: 'USD',
 
-		function formatMiles(value)
+		  // These options are needed to round to whole numbers if that's what you want.
+		  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+		  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+		});
+
+		function formatMiles(value,moneda)
 		{
-		    return formatter.format(value);
+		    return moneda == 1  ?formatterDolares.format(value):formatterColones.format(value);
 		    
 		   
 		 

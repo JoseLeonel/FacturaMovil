@@ -93,7 +93,8 @@ public class KardexController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idArticulo) {
 		Articulo articulo = articuloBo.buscar(idArticulo);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, articulo);
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, articulo,usuarioSesion);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -183,7 +184,7 @@ public class KardexController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Articulo articulo) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Articulo articulo,Usuario usuario) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Kardex");
 			Date fechaInicio = new Date();
@@ -201,6 +202,11 @@ public class KardexController {
 				if (fechaFinal != null && fechaFinal != null) {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 				}
+			
+					
+					JqGridFilter dataTableFilter = new JqGridFilter("articulo.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
+					delimitador.addFiltro(dataTableFilter);
+				
 			  DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 
 				inicio = dateFormat.format(fechaInicio);

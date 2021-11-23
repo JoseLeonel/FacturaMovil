@@ -29,24 +29,27 @@ import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 @EnableJpaRepositories(basePackageClasses = UsuarioRepository.class)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Configuration	
+@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	private final TokenProvider tokenProvider;
+
+	private final TokenProvider						tokenProvider;
 	@SuppressWarnings("unused")
-	private final  CorsFilter corsFilter;
+	private final CorsFilter							corsFilter;
 
 	@Autowired
-	private CustomUsuariosDetailsService usuarioDetailsService;
+	private CustomUsuariosDetailsService	usuarioDetailsService;
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioDetailsService).passwordEncoder(passwordEncoder());
 	}
-	public WebSecurityConfig(TokenProvider tokenProvider, CorsFilter corsFilter
-			) {
+
+	public WebSecurityConfig(TokenProvider tokenProvider, CorsFilter corsFilter) {
 		this.tokenProvider = tokenProvider;
 		this.corsFilter = corsFilter;
-		
+
 	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -55,74 +58,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/administrativo/**", "/templates/**","/resources/**", "/static/**","/css/**", "/js/**","/prueba/**", "/images/**", "/dist/**");
+		web.ignoring().antMatchers("/administrativo/**", "/templates/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/prueba/**", "/images/**", "/dist/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		http.csrf().disable();
 
-		http.authorizeRequests()
-				.antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**",
-						"/plugins/**", "/resources/**", "/registration")
-				.permitAll().antMatchers("/local/CrearFacturaServiceAjax").authenticated()
-				.antMatchers("/local/ListarClientes.do").authenticated()
-				.antMatchers("/local/ListarClientesActivos.do").authenticated()
-				.antMatchers("/local/AgregarCliente.do").authenticated()
-				.antMatchers("/local/ModificarClienteAjax.do").authenticated()
-				.antMatchers("/local/MostrarClienteAjax.do").authenticated()
-				.antMatchers("/local/clienteHaciendaByCedula").authenticated()
-				.antMatchers("/local/ListarCategoriasAjax.do").authenticated()
-				.antMatchers("/local/AgregarCategoriaAjax.do").authenticated()
-				.antMatchers("/local/ModificarCategoriaAjax.do").authenticated()
-				.antMatchers("/local/MostrarCategoriaAjax.do").authenticated()
-				.antMatchers("/local/ListarArticuloAjax.do").authenticated()
-				.antMatchers("/local/ModificarArticuloAjax.do").authenticated()
-				.antMatchers("/local/AgregarArticuloAjax.do").authenticated()
-				.antMatchers("/local/CambiarPrecioAjax").authenticated()
-				.antMatchers("/local/CambiarPrecioArticulo.do").authenticated()
-				.antMatchers("/local/findArticuloByCodigojax.do").authenticated()
-				.antMatchers("/local/tipoCambioBancoCentral.do").authenticated()
-				.antMatchers("/local/listarEntradasOrSalidas.do").authenticated()
-				.antMatchers("/local/ListarCajasActivasAjax.do").authenticated()
-				.antMatchers("/local/aperturaCaja.do").authenticated()
-				.antMatchers("/local/CerrarUsuarioCajaAjax.do").authenticated()
-				.antMatchers("/local/AgregarSalidaEntradaDineroAjax.do").authenticated()
-				.antMatchers("/local/ListarCajasActivas.do").authenticated()
-				.antMatchers("/local/ListarFacturasEsperaActivasAjax").authenticated()
-				.antMatchers("/api/authenticate").permitAll()
-				.antMatchers("/login").permitAll()
-				.antMatchers("https://api.hacienda.go.cr/").permitAll()
-				.antMatchers("https://api.hacienda.go.cr/indicadores/tc").permitAll()
-				.antMatchers("https://api.hacienda.go.cr/fe/ae").permitAll()
-				.antMatchers("/service/callback.do").permitAll()
-				.antMatchers("/webjars/**").permitAll()
-				.antMatchers("/login")
-				.permitAll()
-				.anyRequest()
-				.authenticated()
-				.and().formLogin().loginPage("/login")
-				.failureUrl("/login?error=true")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/")
-				.and()
-	            .httpBasic()
-	            .and()
-	            .apply(securityConfigurerAdapter())
-				.and().logout().and().exceptionHandling().accessDeniedPage("/403").and().exceptionHandling()
-				.authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
-		
+		http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/fonts/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration").permitAll()
+
+				.antMatchers("/api/cliente/ListarClientes.do").authenticated() // GET
+				.antMatchers("/api/cliente/ListarClientesActivos.do").authenticated() // GET
+				.antMatchers("/api/cliente/AgregarCliente.do").authenticated() // POST
+				.antMatchers("/api/cliente/ModificarClienteAjax.do").authenticated() // POST
+				.antMatchers("/api/cliente/MostrarClienteAjax.do").authenticated() // GET
+				.antMatchers("/api/cliente/clienteHaciendaByCedula").authenticated()// GET
+
+				.antMatchers("/api/categoria/ListarCategoriasAjax.do").authenticated() // GET
+				.antMatchers("/api/categoria/AgregarCategoriaAjax.do").authenticated()// POST
+				.antMatchers("/api/categoria/ModificarCategoriaAjax.do").authenticated()// POST
+				.antMatchers("/api/categoria/MostrarCategoriaAjax.do").authenticated()// POST
+
+				.antMatchers("/api/articulo/ListarArticuloAjax.do").authenticated() // POST
+				.antMatchers("/api/articulo/ModificarArticuloAjax.do").authenticated() // POST
+				.antMatchers("/api/articulo/AgregarArticuloAjax.do").authenticated()// POST
+				.antMatchers("/api/articulo/CambiarPrecioAjax").authenticated()// POST es modificar todo el articulo
+				.antMatchers("/api/articulo/CambiarPrecioArticulo.do").authenticated()// POST es para cambiar precio descripcion
+				.antMatchers("/api/articulo/findArticuloByCodigojax.do").authenticated()// GET
+
+				.antMatchers("/api/usuarioCajero/ListarUsuariosCajasAjax.do").authenticated()// GET
+				.antMatchers("/api/usuarioCajero/aperturaCaja.do").authenticated()// POST
+				.antMatchers("/api/usuarioCajero/CerrarUsuarioCajaAjax.do").authenticated()// POST
+
+				.antMatchers("/api/factura/AgregarSalidaEntradaDineroAjax.do").authenticated()// POST
+				.antMatchers("/api/factura/listarEntradasOrSalidas.do").authenticated().antMatchers("/api/factura/ListarFacturasEsperaActivasAjax").authenticated()// GET
+				.antMatchers("/api/factura/mostrarVentaEnEspera").authenticated() // GET
+				.antMatchers("/api/factura/CrearFacturaServiceAjax").authenticated()// POST
+				.antMatchers("/api/factura/tipoCambioBancoCentral.do").authenticated()// GET
+
+				.antMatchers("/api/authenticate").permitAll().antMatchers("/login").permitAll().antMatchers("https://api.hacienda.go.cr/").permitAll().antMatchers("https://api.hacienda.go.cr/indicadores/tc").permitAll().antMatchers("https://api.hacienda.go.cr/fe/ae").permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login").permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/").and().httpBasic().and().apply(securityConfigurerAdapter()).and().logout().and().exceptionHandling().accessDeniedPage("/403").and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
+
 		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
 
-		
 		http.headers().frameOptions().disable();
 		http.sessionManagement().invalidSessionUrl("/");
 	}
 
-
 	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
+
 		public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
 			super(loginUrl);
 		}
@@ -130,8 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		@Override
 		public void commence(
 
-				HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-				throws IOException, ServletException {
+				HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 			String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
 			boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
 			if (isAjax) {
@@ -166,6 +149,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //		return new CorsFilter(source);
 //	}
 	private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
-    }
+		return new JWTConfigurer(tokenProvider);
+	}
 }

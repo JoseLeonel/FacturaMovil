@@ -527,7 +527,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	//5 minutos
-	@Scheduled(fixedDelay = 300000)
+	@Scheduled(fixedDelay = 340000)
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -712,16 +712,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 				//	 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-			//		 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-			//		recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
 					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
@@ -755,7 +755,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-	@Scheduled(fixedDelay = 1800000)
+	@Scheduled(fixedDelay = 3800000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;

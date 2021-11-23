@@ -76,6 +76,7 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
+                                                <th class = "table-header" >Responsable              </th>
                                                 <th class = "table-header" >{$.i18n.prop("kardez.listado.fecha")}              </th>
                                                 <th class = "table-header" >{$.i18n.prop("kardez.listado.tipo")}               </th>
                                                 <th class = "table-header" >{$.i18n.prop("kardez.listado.cantidad.solicitada")}</th>
@@ -90,6 +91,7 @@
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
+                                                <th>Responsable             </th>
                                                 <th>{$.i18n.prop("kardez.listado.fecha")}              </th>
                                                 <th>{$.i18n.prop("kardez.listado.tipo")}               </th>
                                                 <th>{$.i18n.prop("kardez.listado.cantidad.solicitada")}</th>
@@ -366,7 +368,8 @@ function agregarInputsCombos_Kardex(){
 * Definicion de la tabla articulos 
 **/
 function _informacionData_Kardex(){
-   self.informacion_tabla_kardex = [	{'data' : 'created_at'         ,"name":"created_at"         ,"title" : $.i18n.prop("kardez.listado.fecha")       ,"autoWidth":false,
+   self.informacion_tabla_kardex = [	{'data' : 'usuario.nombreUsuario'               ,"name":"usuario.nombreUsuario"                   ,"title" : 'Responsable'  ,"autoWidth":false},
+                                        {'data' : 'created_at'         ,"name":"created_at"         ,"title" : $.i18n.prop("kardez.listado.fecha")       ,"autoWidth":false,
                                             "render":function(created_at,type, row){
 									            return created_at !=null?formatoFechaHora(created_at):null;
 	 							            }

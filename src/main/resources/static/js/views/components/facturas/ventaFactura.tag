@@ -1175,7 +1175,8 @@ aplicarDescuentoGlobalInterfaz(e){
          return  	
     }
     self.factura.descuentoGlobal = descuentoGlobal;
-    aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa); 
+    self.detail = detalleFacturaClosures.aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa);
+    self.update() 
     __calculate();
     
 }
@@ -2778,65 +2779,28 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
-     $('.nota').val(null);
-    $('.correoAlternativo').val(null);
-    $('.nombreFactura').val(null);
     self.detail = [];
     self.numeroLinea =  0
     self.cantArticulos =  0
     self.pesoPrioridad = 0
     self.update()
-    $.each(data, function( index, modeloTabla ) {
-        self.factura = modeloTabla.factura
-        $('.nota').val(self.factura.nota);
-        $('.correoAlternativo').val(self.factura.correoAlternativo);
-        $('.nombreFactura').val(self.factura.nombreFactura);
-        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-        self.cliente              = modeloTabla.factura.cliente
-        self.vendedor             = modeloTabla.factura.vendedor
-        self.update()
-        self.detail.push({
-            numeroLinea     : modeloTabla.numeroLinea,
-            pesoPrioridad    :modeloTabla.numeroLinea,
-            codigo          : modeloTabla.codigo,
-            tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuesto1   : "",
-            descripcion     : modeloTabla.descripcion,
-            cantidad        : __valorNumerico(modeloTabla.cantidad),
-            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
-            impuesto        : __valorNumerico(modeloTabla.impuesto),
-            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
-            montoImpuesto1  : __valorNumerico(modeloTabla.montoImpuesto1),
-            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
-            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
-            subTotal        : __valorNumerico(modeloTabla.subTotal),
-            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
-            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
-            costo           : __valorNumerico(modeloTabla.costo),
-            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
-            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
-            montoExoneracion1:__valorNumerico(modeloTabla.montoExoneracion1),
-            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
-            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
-            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
-            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
-            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
-        });
-        self.update()
-        self.numeroLinea   = self.numeroLinea + 1
-        self.cantArticulos = self.cantArticulos + 1
-        self.pesoPrioridad = self.numeroLinea
-    })
-    self.factura.totalCambioPagar = self.factura.totalComprobante;
-    self.totalCambioPagar         = self.factura.totalComprobante
-    self.detail.sort(function(a,b) {
-    if ( a.pesoPrioridad > b.pesoPrioridad )
-        return -1;
-    if ( a.pesoPrioridad < b.pesoPrioridad )
-        return 1;
-    return 0;
-    } );
+    //factura.js
+    let detalleFacturatemp = detalleFacturaClosures.obtenerDetailVentaEspera(data,null,1,self.cliente);
+    self.factura = detalleFacturatemp.factura
+    self.detail = detalleFacturatemp.detail
+    $('.nota').val(self.factura.nota);
+    $('.correoAlternativo').val(self.factura.correoAlternativo);
+    $('.nombreFactura').val(self.factura.nombreFactura);
+    self.cliente             = self.factura.cliente
+    self.vendedor            = self.factura.vendedor
+    self.descripcionArticulo = detalleFacturatemp.descripcion
+    self.numeroLinea         = detalleFacturatemp.numeroLinea 
+    self.cantArticulos       = detalleFacturatemp.cantArticulos
+    self.pesoPrioridad       = detalleFacturatemp.numeroLinea
+    self.totalCambioPagar    = self.factura.totalComprobante
+    self.totalCambioPagarSTR = 0
     self.update()
+  
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
    
@@ -2932,28 +2896,26 @@ function evaluarFactura(data){
         });
     }
 }
+
 /**
 *  Lista de las facturas pendientes por el usuario
 **/
 function __ListaFacturasEnEspera(){
      self.facturas_espera       = {data:[]}  
      self.update()
-    $.ajax({
-        url: 'ListarFacturasEsperaActivasAjax',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.facturas_espera.data =  result.aaData;  
-               self.update(); 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });    
+
+    obtenerVentasEnEsperaApi()
+    .then(res => {
+         console.log("completo la carga de ventas en espera");
+         self.facturas_espera.data =  res
+         self.update()
+     })
+     .catch(err=>{
+         console.error(err)
+     })
+        
 }
+
 /**
 *  Obtiene el valor de lo digitado en el campo de Descuento
 **/

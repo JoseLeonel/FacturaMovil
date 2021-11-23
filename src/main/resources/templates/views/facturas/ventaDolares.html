@@ -24,6 +24,7 @@
     			<entrada-salida></entrada-salida>
     			<impentrada-salida></impentrada-salida>	    
     			<view-pdf></view-pdf>    
+    				<ver-articulo></ver-articulo>  
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -32,12 +33,14 @@
 	  
  
 <div th:replace="layout/layout :: scripts"></div>
+<script type="text/javascript"  th:src="@{/js/views/facturas/funcionesApiFetchVentas.js?v=54}"></script>
 <script type="text/javascript"  th:src="@{/js/views/facturas/ventaDolares.js?v=50}"></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag?v=50}" ></script>
-<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=50}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/crearPuntoVenta.tag?v=55}" ></script>
+<script type = "riot/tag"       th:src="@{/js/views/components/facturas/imprimirPTV.tag?v=54}" ></script>
 <script type = "riot/tag"       th:src="@{/js/views/components/caja/entradaSalidaDinero.tag?v=50}" ></script>
 <script type = "riot/tag"       th:src="@{/js/views/components/caja/imprimirEntradaSalida.tag?v=50}" ></script>
 <script type = "riot/tag"  th:src="@{/js/views/components/modalPDF/viewPDF.tag?v=50}" ></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/articulos/verArticulo.tag?v=50}" ></script>
 
 
 </body>

@@ -1303,23 +1303,7 @@ public class FacturasController {
 		return facturaBo.listarEsperaActivasAjax(request, response);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	@RequestMapping(value = "/local/ListarFacturasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarEsperaActivasAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		if (validateTokenBo.validarTokenApis(request) == false) {
-
-			DataTableDelimitador delimitadores = null;
-			delimitadores = new DataTableDelimitador(request, "Factura");
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-			List<Object> solicitudList = new ArrayList<Object>();
-			respuestaService.setRecordsTotal(0l);
-			respuestaService.setRecordsFiltered(0l);
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-		}
-		return facturaBo.listarEsperaActivasAjax(request, response);
-	}
+	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasEsperaActivasCajeraAjax", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -2348,28 +2332,6 @@ public class FacturasController {
 		}
 	}
 
-	@RequestMapping(value = "/local/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFacturaTurismo(HttpServletRequest request, ModelMap model, @RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = facturaBo.formaDetallesCommand(facturaCommand);
-			ArrayList<DetalleFacturaCommand> detallesNotaCredito = new ArrayList<DetalleFacturaCommand>();
-			return this.crearFactura(facturaCommand, result, usuario, detallesFacturaCommand, detallesNotaCredito);
-		} catch (Exception e) {
-
-			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
-			respuestaServiceValidator.setMessage(e.getMessage());
-			return respuestaServiceValidator;
-		}
-	}
 
 	@SuppressWarnings("rawtypes")
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand, ArrayList<DetalleFacturaCommand> detallesNotaCredito) {

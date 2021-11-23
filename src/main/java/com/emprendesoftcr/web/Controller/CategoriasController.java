@@ -24,7 +24,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -74,9 +73,7 @@ public class CategoriasController {
 
 	@Autowired
 	private StringPropertyEditor														stringPropertyEditor;
-	@Autowired
-	private ValidateTokenBo																	validateTokenBo;
-
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 
@@ -108,7 +105,7 @@ public class CategoriasController {
 	/**
 	 * Listar Ajax de las categorias
 	 * @param request
-	 * @param response
+	 * @param responselistarCategoriasAjax
 	 * @return
 	 */
 	@SuppressWarnings("all")
@@ -133,14 +130,7 @@ public class CategoriasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	@SuppressWarnings("all")
-	@Cacheable(value = "categorialocalCache")
-	@RequestMapping(value = "/local/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarCategoriasLocalAjax(HttpServletRequest request, HttpServletResponse response) {
 
-		return listarCategoriasAjax(request, response);
-	}
 
 	@RequestMapping(value = "/movil/ListarCategoriasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -231,27 +221,7 @@ public class CategoriasController {
 		}
 	}
 
-	@SuppressWarnings("all")
-	@CacheEvict(value = "categorialocalCache", allEntries = true)
-	@RequestMapping(value = "/local/AgregarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator agregarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
-
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-			return categoriaBo.agregar(request, categoria, result, usuario);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
+	
 	/**
 	 * Modificar una categoria
 	 */
@@ -272,24 +242,7 @@ public class CategoriasController {
 		}
 	}
 
-	@SuppressWarnings("all")
-	@CacheEvict(value = "categorialocalCache", allEntries = true)
-	@RequestMapping(value = "/local/ModificarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator modificarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-			}
-
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			return categoriaBo.modificar(request, categoria, result, usuario);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
+	
 
 	/**
 	 * Mostrar la categoria
@@ -313,20 +266,7 @@ public class CategoriasController {
 		}
 	}
 
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/local/MostrarCategoriaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator mostrarLocal(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad");
-			}
-			return categoriaBo.mostrar(request, categoria, result);
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
+	
 	
 	@SuppressWarnings("all")
 	private static class RESPONSES {

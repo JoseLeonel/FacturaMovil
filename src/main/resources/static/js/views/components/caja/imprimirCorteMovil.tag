@@ -1,7 +1,7 @@
-<imprimir-caja>
+<imprimir-cajaMovil>
 
 <div class="modal fade imprimirModalCorte" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog ">
     <div class="modal-content">
       <div  class= "wrap">
         <h1>{$.i18n.prop("imprimir.caja.titulo")}#{usuarioCaja.id}<h1>
@@ -213,14 +213,14 @@
     overflow-y: auto;
 }
   .tituloCierre{
-      font-size:16px!important;
+      font-size:12px!important;
   }
   .valorPro{
-      font-size:15px!important;
+      font-size:12px!important;
       padding: 2%!important;;
   }
     .titulo{
-        font-size:16px!important;
+        font-size:12px!important;
         padding-right: 2%;
 
     }
@@ -231,7 +231,7 @@
         display:flex!important;
     }
     .elemen1{
-        font-size:18px!important;
+        font-size:12px!important;
     }
     
     .wrap{
@@ -257,11 +257,13 @@
     .pantalla-imprimir{
         display: flex;
 	    flex-wrap: wrap;
+        flex-direction: column;
     }
     .botones-imprimir{
         display: flex;
 	    flex-direction: column;
 	    width: 20%;
+        flex-direction: row;
     }
     .botones-imprimir .boton-imprimir{
         cursor: pointer;
@@ -286,7 +288,7 @@
      }
    .ticket {
         height: auto;
-        width: 377px;
+       
         margin: 0px;
         padding: 0px;
         float: left;
@@ -296,10 +298,10 @@
         font-variant: normal;
         text-transform: none;
         color: #000;
-        font-size: 14px;
+        font-size: 12px;
         font-family: 'Times New Roman';
         
-        max-width: 377px;
+       
        
     }
     .ticket > table{
@@ -312,7 +314,7 @@
     }
     .ticket > td.producto,th.producto {
         width: 377px;
-        max-width: 75px;
+        max-width: 375px;
     }
     .ticket > td.cantidad,th.cantidad {
         width: 377px;
@@ -336,12 +338,13 @@
     }
     
     .zona-impresion{
-        width: 80%;
+        width: 100%;
 	    display: flex;
-	    flex-wrap: wrap;
+	    
+        
      }
      .zona-impresion .forma-impresion{
-        width: 80%;
+        width: 100%;
         margin-left: 1%;
         margin-bottom: 45px;
         box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
@@ -377,6 +380,7 @@ self.on('mount',function(){
    
 
 })
+
 
 /**
 *consultar Facturas por Consecutivo
@@ -511,4 +515,4 @@ __ImprimirFactura(){
 
 
 
-</imprimir-caja>
+</imprimir-cajaMovil>

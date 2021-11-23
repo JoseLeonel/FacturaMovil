@@ -2780,33 +2780,13 @@ aplicarDescuentoGlobalInterfaz(e){
          return  	
     }
     self.factura.descuentoGlobal = descuentoGlobal;
-    aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa); 
+   self.detail = detalleFacturaClosures.aplicarDescuentoGlobalDetalle(self.detail,descuentoGlobal,self.empresa);
+    self.update() 
     __calculate();
     
 }
 
-function aplicarDescuentoGlobalDetalle(detail,porcentajeDescuentoAplicar,empresa){
 
-     var descuento = 0;
-     if(detail.length != 0 ){
-           $.each(detail, function( index, item ) {
-                descuento = porcentajeDescuentoAplicar;
-                if(empresa.aplicaGanancia ==1){
-                   if(item.porcentajeGanancia < porcentajeDescuentoAplicar ){
-                      descuento  = __valorNumerico(item.porcentajeGanancia)
-                   }
-                }
-                var index    = detail.indexOf(item);   
-                item.porcentajeDesc =  descuento;
-                item = ActualizarLineaDEtalle(item) 
-                detail[index] = item;
-    
-           });
-     
-     }
-
-     return detail;
-}
 
 /**
 * Camps requeridos
@@ -3643,57 +3623,35 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
-    self.detail = [];
-    self.factura = null
+
+
+  self.detail = [];
+    self.numeroLinea =  0
+    self.cantArticulos =  0
+    self.pesoPrioridad = 0
     self.update()
-    $.each(data, function( index, modeloTabla ) {
-        if(self.factura ==null){
-            self.factura = modeloTabla.factura
-            self.totalComprobante         = formatoDecimales(modeloTabla.factura.totalComprobante,2);
-            self.factura.totalEfectivo    = 0
-            self.factura.totalBanco       = 0
-            self.factura.totalTarjeta     = 0
-            self.factura.totalCambioPagar = 0
-            self.totalCambioPagarSTR =0
-            self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-            self.cliente  = self.factura.cliente
-            self.vendedor = self.factura.vendedor    
-        }
-        self.detail.push({
-            numeroLinea     : modeloTabla.numeroLinea,
-            pesoPrioridad    :modeloTabla.numeroLinea,
-            codigo          : modeloTabla.codigo,
-            tipoImpuesto    : modeloTabla.tipoImpuesto,
-            tipoImpuestoMag   : "",
-            impuestoMag:0,
-            montoImpuestoMag:0,
-            precio:0,
-            codigoTarifaMag:'',
-            descripcion     : modeloTabla.descripcion,
-            cantidad        : __valorNumerico(modeloTabla.cantidad),
-            precioUnitario  : __valorNumerico(modeloTabla.precioUnitario),
-            impuesto        : __valorNumerico(modeloTabla.impuesto),
-            montoImpuesto   : __valorNumerico(modeloTabla.montoImpuesto),
-            montoImpuesto1  : 0,
-            montoDescuento  : __valorNumerico(modeloTabla.montoDescuento),
-            porcentajeDesc  : __valorNumerico(modeloTabla.porcentajeDesc),
-            subTotal        : __valorNumerico(modeloTabla.subTotal),
-            montoTotalLinea : __valorNumerico(modeloTabla.montoTotalLinea),
-            montoTotal      : __valorNumerico(modeloTabla.montoTotal),
-            costo           : __valorNumerico(modeloTabla.costo),
-            porcentajeGanancia :__valorNumerico(modeloTabla.porcentajeGanancia),
-            montoExoneracion:__valorNumerico(modeloTabla.montoExoneracion),
-            porcentajeExoneracion:__valorNumerico(modeloTabla.porcentajeExoneracion),
-            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
-            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
-            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
-            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
-        });
-        self.update()
-    })
-    self.totalCambioPagar    = 0
+    //factura.js
+    let detalleFacturatemp = detalleFacturaClosures.obtenerDetailVentaEspera(data,null,1,self.cliente);
+    self.factura = detalleFacturatemp.factura
+    self.detail = detalleFacturatemp.detail
+    $('.nota').val(self.factura.nota);
+    $('.correoAlternativo').val(self.factura.correoAlternativo);
+    $('.nombreFactura').val(self.factura.nombreFactura);
+    self.cliente             = self.factura.cliente
+    self.vendedor            = self.factura.vendedor
+    self.descripcionArticulo = detalleFacturatemp.descripcion
+    self.numeroLinea         = detalleFacturatemp.numeroLinea 
+    self.cantArticulos       = detalleFacturatemp.cantArticulos
+    self.pesoPrioridad       = detalleFacturatemp.numeroLinea
+    self.totalCambioPagar    = self.factura.totalComprobante
     self.totalCambioPagarSTR = 0
     self.update()
+  
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    
+    
+    
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
     $('#totalEfectivo').val(self.factura.totalComprobante)

@@ -50,24 +50,6 @@ public class SalidaEntradaDineroController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/local/AgregarSalidaEntradaDineroAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator agregarlocal(HttpServletRequest request, ModelMap model, @ModelAttribute SalidaEntradaDineroCommand salidaEntradaDineroCommand, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad",
-						result.getAllErrors());
-			}
-
-			return salidaEntradaDineroBo.agregar(request, salidaEntradaDineroCommand, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {

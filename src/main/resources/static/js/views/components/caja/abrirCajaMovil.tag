@@ -12,46 +12,40 @@
     <div class="box">
 		<div class="box-body">
 			<div class="planel-body">
-        <div class="row">
-
-
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header" style="width:2%" >{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th class="table-header"  style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th class="table-header"  style="width:10%">Ventas   </th>
-                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th style="width:10%">Ventas   </th>
-                                <th  > </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-            </div>
+                <div class="row">
+                    <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                        <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="table-header" style="width:2%" >{$.i18n.prop("usuarioCaja.caja")}          </th>
+                                    <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
+                                    <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
+                                    <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
+                                    <th class="table-header"  style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                    <th class="table-header"  style="width:10%">Ventas   </th>
+                                    <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                                </tr>
+                            </thead>
+                            <tfoot style="display: table-header-group;">
+                                <tr>
+                                    <th style="width:10%">{$.i18n.prop("usuarioCaja.caja")}          </th>
+                                    <th style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
+                                    <th style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
+                                    <th style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
+                                    <th style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                    <th style="width:10%">Ventas   </th>
+                                    <th  > </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>   
+            </div>   
         </div>   
-         </div>   
-          </div>   
-           </div>    
+    </div>    
 </div>
-<br>
-<br>
-<br>
 
-
-<div id='modalCerrarCaja' class="modal fade tamanoModal " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+<div id='modalCerrarCaja' class="modal fade tamanoModal " tabindex="-1" role="dialog" aria-labelledby="modalCerrarCaja" aria-hidden="true" >
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
@@ -765,7 +759,7 @@ __agregar(){
                                 tipo:1
                             }
                             hidemodal()
-                            riot.mount('imprimir-caja',{parametros:parametros});
+                            riot.mount('imprimir-cajaMovil',{parametros:parametros});
                             __listado()
                         }
                     },
@@ -1009,7 +1003,7 @@ function cerrarCajaAjax(){
                                     usuarioCaja:self.usuarioCaja,
                                     tipo:2
                                 }
-                                riot.mount('imprimir-caja',{parametros:parametros});
+                                riot.mount('imprimir-cajaMovil',{parametros:parametros});
                                 hidemodal()
                                                      
 

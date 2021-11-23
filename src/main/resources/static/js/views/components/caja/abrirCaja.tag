@@ -425,6 +425,8 @@ label {
             id:null,
             totalFondoInicial:0
         }
+
+        self.moneda = ""
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
@@ -603,19 +605,21 @@ function conteoDinero(){
     var tipoCambio = __valorNumerico($(".tipoCambio").val())
     var conteoDolar = __valorNumerico($(".conteoDolar").val())
    
+
+  
     
     if(self.usuarioCaja.id != null ){
         var conteoTarjeta = __valorNumerico($(".conteoTarjeta").val())
         self.totalConteoManual = billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta +(tipoCambio * conteoDolar );
         self.totalConteoManualSTR = billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5 + conteoTarjeta +(tipoCambio * conteoDolar );
-         self.totalConteoManualSTR = formatMiles(self.totalConteoManual);
+         self.totalConteoManualSTR = formatMiles(self.totalConteoManual,self.moneda);
         self.update()
     }else{
         
         
         self.totalFondoInicial = billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5;
         self.totalFondoInicialSTR = billete50000 + billete10000 + billete20000 + billete5000 + billete2000 + billete1000  + moneda500 + moneda100 + moneda50 + moneda25  + moneda10 + moneda5;
-        self.totalFondoInicialSTR = formatMiles(self.totalFondoInicial);
+        self.totalFondoInicialSTR = formatMiles(self.totalFondoInicial,self.moneda);
         self.update()
     }
 }
@@ -668,9 +672,13 @@ function showModal(){
     $('#modalCerrarCaja').modal({backdrop: 'static', keyboard: true}) 
     $('#modalCerrarCaja').on('shown.bs.modal', function () {
         __limpiar()
-    
+        self.moneda = 0; 
+        if(self.usuarioCaja.usuario.empresa.cedula == "3101343439"){
+            self.moneda = 1; 
+        }
+                    
         self.totalFondoInicial = self.usuarioCaja.totalFondoInicial;
-        self.totalFondoInicialSTR = formatMiles(self.usuarioCaja.totalFondoInicial)
+        self.totalFondoInicialSTR = formatMiles(self.usuarioCaja.totalFondoInicial,self.moneda)
         self.update()
         $(".billete50000").val(0)
         $(".billete50000").focus()
@@ -704,6 +712,7 @@ function __consultar(){
                         }
                         self.mostrarListado   = false;
                         self.usuarioCaja  = modeloTabla
+                       
                         self.update()
                     });
                 }

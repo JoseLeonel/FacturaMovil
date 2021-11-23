@@ -144,25 +144,7 @@ public class CajasController {
 		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value = "/local/listarEntradasOrSalidas.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarEntradasOrSalidasLocal(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idTipoEntrada, @RequestParam(value = "idEntradaSalida", required = false) Long idEntradaSalida) throws IOException, ServletException {
 
-		if (validateTokenBo.validarTokenApis(request) == false) {
-
-			@SuppressWarnings("unused")
-			DataTableDelimitador delimitadores = new DataTableDelimitador(request, "SalidaEntradaDinero");
-
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-			List<Object> solicitudList = new ArrayList<Object>();
-			respuestaService.setRecordsTotal(0l);
-			respuestaService.setRecordsFiltered(0l);
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-		}
-		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
-	}
 
 	private RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request, HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
@@ -196,23 +178,7 @@ public class CajasController {
 		return listarCajasActivasAjaxT(request, response);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
-	@RequestMapping(value = "/local/ListarCajasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarCajasActivasAjaxLocal(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Caja");
-		if (validateTokenBo.validarTokenApis(request) == false) {
-
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-			List<Object> solicitudList = new ArrayList<Object>();
-			respuestaService.setRecordsTotal(0l);
-			respuestaService.setRecordsFiltered(0l);
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-		}
-		return listarCajasActivasAjaxT(request, response);
-	}
-
+	
 	public RespuestaServiceDataTable<?> listarCajasActivasAjaxT(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;

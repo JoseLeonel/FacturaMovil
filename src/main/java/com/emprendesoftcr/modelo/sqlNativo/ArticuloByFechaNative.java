@@ -46,11 +46,11 @@ import com.emprendesoftcr.utils.Utils;
 		"   a.cod_tarifa, \n" +
 "       a.cod_tarifa1,\n" + 
 		"   (COALESCE((SELECT kardex.cantidad_nueva FROM kardex \n" + 
-"    WHERE kardex.codigo = a.codigo  \n" + 
+"    WHERE kardex.articulo_id = a.id  \n" + 
 		"    and kardex.created_at >= :fechaInicial \n" + 
 "        and kardex.created_at <= :fechaFinal \n" + 
 		"    ORDER by kardex.created_at desc LIMIT 1),0)) cant_actual\n" + 
-"FROM articulos a where a.empresa_id = :ID_EMPRESA")
+"FROM articulos a where a.empresa_id = :ID_EMPRESA ")
 @Entity
 public class ArticuloByFechaNative implements Serializable {
 

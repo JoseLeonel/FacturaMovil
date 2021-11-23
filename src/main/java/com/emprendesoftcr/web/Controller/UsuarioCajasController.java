@@ -167,28 +167,7 @@ public class UsuarioCajasController {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/local/ListarCajasActivas.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable<?> listarCajasActivas(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if (validateTokenBo.validarTokenApis(request) == false) {
-
-			List<Object> solicitudList = new ArrayList<Object>();
-			@SuppressWarnings("rawtypes")
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-
-			respuestaService.setRecordsTotal((long) solicitudList.size());
-			respuestaService.setRecordsFiltered((long) solicitudList.size());
-			if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-				respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-			}
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-
-		}
-		return usuarioCajaBo.listarUsuariosCajasActivasAjax(request, response);
-
-	}
+	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -245,22 +224,7 @@ public class UsuarioCajasController {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/local/aperturaCaja.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator aperturaCaja(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
-		try {
-			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-
-			}
-			return usuarioCajaBo.agregarCaja(request, conteoManualCommand, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
 
 	public ArrayList<DenominacionCommand> denominacionCommand(ConteoManualCommand conteoManualCommand) throws Exception {
 		JSONObject json = null;
@@ -308,26 +272,7 @@ public class UsuarioCajasController {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/local/CerrarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator cerrarCajaLocal(HttpServletRequest request, ModelMap model, @ModelAttribute ConteoManualCommand conteoManualCommand, BindingResult result, SessionStatus status) throws Exception {
 
-		@SuppressWarnings("unused")
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-		try {
-
-			if (validateTokenBo.validarTokenApis(request) == false) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
-
-			}
-
-			return usuarioCajaBo.cerrarCajaCajero(request, conteoManualCommand, result);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ActualizarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
