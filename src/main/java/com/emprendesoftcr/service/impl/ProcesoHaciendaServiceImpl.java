@@ -709,7 +709,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-//					 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
 				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);

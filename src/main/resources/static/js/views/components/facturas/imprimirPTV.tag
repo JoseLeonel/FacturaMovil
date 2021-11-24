@@ -923,9 +923,11 @@ function consultaFactura(idFactura){
     getFacturaByIdFactura(idFactura)
     .then(respuestaConsultaIDFactura => {
          console.log("completo de la factura");
+         unBlockUIStop();
          detalleMostrarFactura(respuestaConsultaIDFactura);
      })
      .catch(err=>{
+         unBlockUIStop();
          console.error(err)
      })
      
@@ -1027,9 +1029,11 @@ function consultaFacturaPorConsecutivo(consecutivo){
     getFacturaByConsecutivo(idFactura)
     .then(respuestaConsultaIDFactura => {
          console.log("completo de la factura");
+         unBlockUIStop();
          detalleMostrarFactura(respuestaConsultaIDFactura);
      })
      .catch(err=>{
+         unBlockUIStop();
          console.error(err)
      })
      

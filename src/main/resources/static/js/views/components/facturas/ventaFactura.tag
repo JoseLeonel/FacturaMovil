@@ -2906,11 +2906,13 @@ function __ListaFacturasEnEspera(){
 
     obtenerVentasEnEsperaApi()
     .then(res => {
+        unBlockUIStop();
          console.log("completo la carga de ventas en espera");
          self.facturas_espera.data =  res
          self.update()
      })
      .catch(err=>{
+         unBlockUIStop();
          console.error(err)
      })
         

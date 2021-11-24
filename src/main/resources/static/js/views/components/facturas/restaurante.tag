@@ -2616,30 +2616,32 @@ _ListaFacturasDia(){
 *  Facturas del Dia
 **/
 function ListadoFacturasDelDia(){
-      $("#tableListarFacturasDia").dataTable().fnClearTable(); 
+     getFacturasDelDia()
+    .then(respuestaFacturasDia => {
+       unBlockUIStop();
+        $("#tableListarFacturasDia").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListarFacturasDia')  
-        $.ajax({
-            url: "ListarFacturasDelDiaAjax.do",
-            datatype: "json",
-            method:"GET",
-            success: function (result) {
-                if(result.aaData.length > 0){
-                    __InformacionDataTableDia();
-                    loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
-                    agregarInputsCombos_Facturas_Dias();
-                    ActivarEventoFiltro(".tableListarFacturasDia")
-                     $('#modalFacturasDia').modal('show')    
-                     __reimprimir()
-                }else{
-                    __InformacionDataTableDia();
-                     agregarInputsCombos_Facturas_Dias();
-                }           
-            },
-            error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
-                console.log(xhr);
-            }
-        });
+        __InformacionDataTableDia();
+        if(respuestaFacturasDia !=null && respuestaFacturasDia.length > 0){
+            __InformacionDataTableDia();
+            loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
+            agregarInputsCombos_Facturas_Dias();
+            ActivarEventoFiltro(".tableListarFacturasDia")
+            $('#modalFacturasDia').modal('show')    
+            __reimprimir()
+
+        }else{
+            __InformacionDataTableDia();
+            agregarInputsCombos_Facturas_Dias();
+                   
+        }
+            
+    })
+    .catch(err=>{
+        unBlockUIStop();
+        console.error(err)
+    })
+   
 }
 /**
 *  Agregar los inpust  y select de las tablas
@@ -2739,34 +2741,26 @@ function __reimprimir(){
 /**
 *Consulta la Reimprimir
 **/
-function consultaParaReimprimir(data,tipoImpresion){
-     $.ajax({
-        url: "MostrarFacturaAjax",
-        datatype: "json",
-        data: {idFactura:data.id},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeAdvertencia( data.message);
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    var parametros = {
+function consultaParaReimprimir(idFactura,tipoImpresion){
+
+     getFacturaByConsecutivo(idFactura)
+    .then(respuestaConsultaIDFactura => {
+         console.log("completo de la factura");
+         unBlockUIStop();
+        $.each(respuestaConsultaIDFactura, function( index, modeloTabla ) {
+              var parametros = {
                           factura:modeloTabla,
                           facturaDia:tipoImpresion
                       }
                        riot.mount('ptv-imprimir',{parametros:parametros});
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
+        })
+     })
+     .catch(err=>{
+         unBlockUIStop();
+         console.error(err)
+     })
+     
+    
 }
 
 /**

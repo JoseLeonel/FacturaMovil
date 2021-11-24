@@ -67,7 +67,7 @@ public class HaciendaRest {
 
 	
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/ListarHaciendasAjax.do")
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());

@@ -175,10 +175,11 @@ function lecturaCodigo(idArticulo){
      self.articuloMostrar =  r;
      self.precioPublico = formatMiles(self.articuloMostrar.precioPublico,moneda)
      self.update()
-     
+     unBlockUIStop();
      $('.codigoVerPrecio').focus()
       $('.codigoVerPrecio').select()
     }).catch(() => {
+        unBlockUIStop();
      console.log('Algo salió mal');
      self.articuloMostrar = {
         codigo:"",

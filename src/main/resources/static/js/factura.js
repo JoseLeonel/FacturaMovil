@@ -10,13 +10,15 @@ $.i18n.properties({
 var pathWebFactura  = 'factura';
 var pathWebRecepcionCompras  = 'http://localhost:8083/api-v1/';
 
+
+
 // Se configura un bloqueo para todo el ajax que se utiliza en la aplicacion
 $(document)
 
         .ajaxStart(
                 function () {
                     //$.blockUI({message : "<h4>Procesando..  <i class='fa fa-spinner fa-spin' style='font-size:48px;color:#009688'></i></h4>"});
-                    $.blockUI({message: "<div style='padding: 5px; z-index: 99999;'Factura<div class='spinner'><div class='rect1'></div><div class='rect2'></div><div class='rect3'></div><div class='rect4'></div><div class='rect5'></div></div></div>",
+                    $.blockUI({message: "<div style='padding: 5px; z-index: 99999;'Factura<div class='spinner'><div class='rect1'></div><div class='rect2'></div><div class='rect3'></div><div class='rect4'></div><div class='rect5'></div></div><span style='font-size: 5vh;'>Por favor espere un momento..... </span></div>",
                         css: {backgroundColor: '#00539B', color: '#FFD204', borderRadius: '10px', borderColor: '#FFD204'},
                         baseZ: 11000}
                     );
@@ -2609,7 +2611,16 @@ function inicializarCombos(){
 		}
 	})();
 	
-	
+	var blockUILoad = function(){
+	    $.blockUI({message: "<div style='padding: 5px; z-index: 99999;'Factura<div class='spinner'><div class='rect1'></div><div class='rect2'></div><div class='rect3'></div><div class='rect4'></div><div class='rect5'></div></div><span style='font-size: 5vh;'>Por favor espere un momento..... </span></div>",
+	        css: {backgroundColor: '#00539B', color: '#FFD204', borderRadius: '10px', borderColor: '#FFD204'},
+	        baseZ: 5000}
+	    );
+	}
+
+	var unBlockUIStop = function(){
+		$.unblockUI();
+	}
 	  /**
      * consulta de una factura por id
      */
@@ -2618,8 +2629,10 @@ const getFacturaByIdFactura = async(idFactura) => {
         const rawResponse = await fetch('/api/factura/getFacturaByIdFactura?idFactura=' + idFactura);
         const data = await rawResponse.json();
         console.log(data.aaData);
+        blockUILoad();
         return data.aaData;
     } catch (error) {
+    	unBlockUIStop();
         console.log(error);
     }
 }
@@ -2629,6 +2642,7 @@ const getFacturaByConsecutivo = async(consecutivo) => {
     try {
         const rawResponse = await fetch('/api/factura/getFacturaByConsecutivo=' + consecutivo);
         const data = await rawResponse.json();
+        blockUILoad();
         console.log(data.aaData);
         return data.aaData;
     } catch (error) {

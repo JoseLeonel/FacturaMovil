@@ -2095,6 +2095,7 @@ _ListaFacturasDia(){
 function ListadoFacturasDelDia(){
     getFacturasDelDia()
     .then(respuestaFacturasDia => {
+       unBlockUIStop();
         $(".tableListarFacturasDia").dataTable().fnClearTable();
         __InicializarTabla('.tableListarFacturasDia')
         __InformacionDataTableDia();
@@ -2108,6 +2109,7 @@ function ListadoFacturasDelDia(){
             
     })
     .catch(err=>{
+        unBlockUIStop();
         console.error(err)
     })
         
@@ -2122,11 +2124,13 @@ function __ListaFacturasEnEspera(){
 
     obtenerVentasEnEsperaApi()
     .then(res => {
+        unBlockUIStop();
          console.log("completo la carga de ventas en espera");
          self.facturas_espera.data =  res
          self.update()
      })
      .catch(err=>{
+         unBlockUIStop();
          console.error(err)
      })
         
@@ -3024,6 +3028,7 @@ __addPrecioDetail(e){
     }
    // __buscarcodigoPrecio(codigoActual,valor,__valorNumerico(precio));
    obtenerArticulo(codigoActual).then(r =>{
+       unBlockUIStop();
      self.articulo =  r;
      self.update()
      if(self.articulo !=null){
@@ -3044,6 +3049,7 @@ __addPrecioDetail(e){
     }
 
     }).catch(() => {
+        unBlockUIStop();
      console.log('Algo salió mal');
          
     });
@@ -3300,6 +3306,7 @@ function __buscarcodigo_General(idArticulo,cantidad,precio){
     obtenerArticulo(idArticulo).then(r =>{
      self.articulo =  r;
      self.update()
+     unBlockUIStop();
      if(self.articulo !=null){
              if(self.articulo.estado  == "Inactivo"){
                 mensajeAdvertencia($.i18n.prop("error.articulo.inactivo.inventario"))
@@ -3323,6 +3330,7 @@ function __buscarcodigo_General(idArticulo,cantidad,precio){
     }
 
     }).catch(() => {
+        unBlockUIStop();
      console.log('Algo salió mal');
     });
 
