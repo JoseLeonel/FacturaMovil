@@ -79,28 +79,28 @@ public class CabysBoImpl implements CabysBo {
 		return cabysDao.findByEmpresaAll(idEmpresa);
 	}
 
-//	public static String getServiceCall(String url) throws IOException {
-//		try {
-//
-//			URL obj = new URL(url);
-//			HttpURLConnection conn = (HttpURLConnection) obj.openConnection(Proxy.NO_PROXY);
-//			conn.setRequestMethod("GET");
-//			conn.setRequestProperty("Accept", AppConstants.JSON_MEDIA_TYPE);
-//
-//			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-//				String error = "Error en el llamado del servicio get: " + conn.getResponseCode();
-//				LoggerHandler.escribirError(ServiceCalls.class.toString(), error, AppConstants.LOGGER_ARCHIVO_CONFIG);
-//				throw new RuntimeException(Util.messageError(messageError(conn)));
-//			}
-//
-//			return messageSucessful(conn);
-//
-//		} catch (MalformedURLException e) {
-//			throw new MalformedURLException();
-//		} catch (IOException e) {
-//			throw new IOException();
-//		}
-//	}
+	public static String getServiceCall(String url) throws IOException {
+		try {
+
+			URL obj = new URL(url);
+			HttpURLConnection conn = (HttpURLConnection) obj.openConnection(Proxy.NO_PROXY);
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", AppConstants.JSON_MEDIA_TYPE);
+
+			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				String error = "Error en el llamado del servicio get: " + conn.getResponseCode();
+				
+				throw new RuntimeException(Util.messageError(messageError(conn)));
+			}
+
+			return messageSucessful(conn);
+
+		} catch (MalformedURLException e) {
+			throw new MalformedURLException();
+		} catch (IOException e) {
+			throw new IOException();
+		}
+	}
 	
 	 private static String messageError(HttpURLConnection connection) {
 		 StringBuilder response = new StringBuilder();
