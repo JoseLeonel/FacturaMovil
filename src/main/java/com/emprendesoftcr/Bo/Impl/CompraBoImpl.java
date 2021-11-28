@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CompraBo;
+import com.emprendesoftcr.Bo.ControlPrecioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
@@ -90,6 +91,8 @@ public class CompraBoImpl implements CompraBo {
 
 	@Autowired
 	private JdbcTemplate					jdbcTemplate;
+	@Autowired
+	private ControlPrecioBo controlPrecioBo;
 
 	@Transactional
 	@Override
@@ -305,6 +308,8 @@ public class CompraBoImpl implements CompraBo {
 
 				proveedorArticuloDao.agregar(proveedorArticuloNuevo);
 			}
+			Articulo articuloTemp = new Articulo();
+			controlPrecioBo.agregarControlPrecio(articuloTemp, articulo, "cambio de precio por recepcion de compra al inventario", null,detalleCompra.getCompra().getConsecutivo(), detalleCompra.getUsuarioActualizacion());
 
 		} catch (Exception e) {
 			log.info("** Error  actualizarProveedor: " + e.getMessage() + " fecha " + new Date());
@@ -765,7 +770,7 @@ public class CompraBoImpl implements CompraBo {
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
 						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
 					}
-
+					
 				}
 			}
 			compra.setTotalCompra(recepcionFactura.getFacturaTotalComprobante());

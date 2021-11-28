@@ -6,6 +6,25 @@ import java.util.ResourceBundle;
 public class Constantes {
 	public static final String LOGIN_REGEX = "^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$";
 
+
+public static final String JSON_MEDIA_TYPE = "application/json";
+
+
+public static final String URL_REST_VALUE = "url";
+
+public static final String CONTENT_TYPE = "Content-Type";
+
+
+
+
+public static final int HTTP_OK = 0;
+
+
+
+	
+	
+	
+
 	public static final String					API_LISTA_CABYS_SIN_CANTIDAD																	= "https://api.hacienda.go.cr/fe/cabys?q=";
 	public static final String					API_LISTA_CABYS_SIN_CODIGO																		= "https://api.hacienda.go.cr/fe/cabys?codigo=";
 	public static final String					API_MAG_AGRO																									= "https://api.hacienda.go.cr/fe/agropecuario?identificacion=";
@@ -400,6 +419,10 @@ public class Constantes {
 //Estados
 	public static final Integer ESTADO_ACTIVO_PROVEEDOR_SIMPLIFICADO = 1;
 	public static final Integer ESTADO_INACTIVO_PROVEEDOR_SIMPLIFICADO = 0;
+	
+	public static final Integer ESTADO_RECHAZADO_ADMINISTRADOR_CAMBIO_PRECIO = 2;
+	public static final Integer ESTADO_ACEPTADO_ADMINISTRADOR_CAMBIO_PRECIO = 1;
+	public static final Integer ESTADO_PENDIENTE_ADMINISTRADOR_CAMBIO_PRECIO = 0;
 	//
 	public static final String EMPTY = "";
 	public static final String BLANK = " ";

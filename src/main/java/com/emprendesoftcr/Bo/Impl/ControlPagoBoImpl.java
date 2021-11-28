@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.ControlPagoBo;
 import com.emprendesoftcr.Dao.ControlPagoDao;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.ControlPago;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 
 @EnableTransactionManagement
 @Service("controlPagoBo")
@@ -48,5 +50,7 @@ public class ControlPagoBoImpl implements ControlPagoBo {
 		
 		return controlPagoDao.findByEstadoAndEmpresa(estado, empresa);
 	}
+
+	
 
 }

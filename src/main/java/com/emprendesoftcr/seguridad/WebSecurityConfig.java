@@ -96,7 +96,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/factura/mostrarVentaEnEspera").authenticated() // GET
 				.antMatchers("/api/factura/CrearFacturaServiceAjax").authenticated()// POST
 				.antMatchers("/api/factura/tipoCambioBancoCentral.do").authenticated()// GET
-
 				.antMatchers("/api/authenticate").permitAll().antMatchers("/login").permitAll().antMatchers("https://api.hacienda.go.cr/").permitAll().antMatchers("https://api.hacienda.go.cr/indicadores/tc").permitAll().antMatchers("https://api.hacienda.go.cr/fe/ae").permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login").permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/").and().httpBasic().and().apply(securityConfigurerAdapter()).and().logout().and().exceptionHandling().accessDeniedPage("/403").and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 
 		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);

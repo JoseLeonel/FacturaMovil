@@ -12,23 +12,21 @@
 		</a>
 			<ul class="treeview-menu">
 
-				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')">
-					<a th:href="@{/ListarTarifas}"><i class="fa fa-circle-o"></i>
-						Tarifas </a>
-				</li>
-				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')">
-					<a th:href="@{/ListarControlPago}"><i class="fa fa-circle-o"></i>
-						Control Pago </a>
-				</li>
+				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a
+					th:href="@{/ListarTarifas}"><i class="fa fa-circle-o"></i>
+						Tarifas </a></li>
+				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a
+					th:href="@{/ListarControlPago}"><i class="fa fa-circle-o"></i>
+						Control Pago </a></li>
 				<li
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
 					<a th:href="@{/ListarActividadComercialPorEmpresa}"> <i
 						class="fa fa-circle-o"></i> Act.Comerciales
 				</a>
 				</li>
-<!-- 				<li sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_Cajero','Administrador_Servicios')"><a -->
-<!-- 					th:href="@{/ListarUsuario}"><i class="fa fa-circle-o"></i> -->
-<!-- 						Autorizar descuentos </a></li> -->
+				<!-- 				<li sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_Cajero','Administrador_Servicios')"><a -->
+				<!-- 					th:href="@{/ListarUsuario}"><i class="fa fa-circle-o"></i> -->
+				<!-- 						Autorizar descuentos </a></li> -->
 				<li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a
 					th:href="@{/ListarEmpresas}"><i class="fa fa-circle-o"></i>
 						Empresas </a></li>
@@ -48,8 +46,8 @@
 				</li>
 				<li sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><a
 					th:href="@{/ListarMesas}"><i class="fa fa-circle-o"></i> Mesas</a></li>
-				<li><a th:href="@{/CambioClave}"> <i
-						class="fa fa-circle-o"></i> Cambio Clave
+				<li><a th:href="@{/CambioClave}"> <i class="fa fa-circle-o"></i>
+						Cambio Clave
 				</a></li>
 			</ul>
 		</li>
@@ -69,8 +67,8 @@
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Crear Cabys</a></li>
 					</ul>
-				
-						<ul class="treeview-menu">
+
+					<ul class="treeview-menu">
 						<li><a th:href="@{/asociarCabys}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Asociar Cabys con Articulo</a></li>
@@ -117,7 +115,7 @@
 					</ul>
 				</li>
 
-						
+
 				<li><a th:href="@{/ListarKardex}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
 						class="fa fa-circle-o"></i> Kardex </a></li>
@@ -133,12 +131,17 @@
 				<span>Cambio Precio</span>
 		</a>
 		</li>
-
+		<li class="treeview"
+			sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
+			<a th:href="@{/ListarControlPrecio}"> <i class="fa fa-pencil-square"></i>
+				<span>Verificacion Precios</span>
+		</a>
+		</li>
 
 		<li class="treeview"
 			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')">
-			<a th:href="@{#}"> <i class="fa fa-folder"></i> <span>Compras Inventario</span>
-				<i class="fa fa-angle-left pull-right"></i>
+			<a th:href="@{#}"> <i class="fa fa-folder"></i> <span>Compras
+					Inventario</span> <i class="fa fa-angle-left pull-right"></i>
 		</a>
 			<ul class="treeview-menu">
 				<li><a th:href="@{/compras}"><i class="fa fa-circle-o"></i>
@@ -147,7 +150,7 @@
 				<li><a th:href="@{/ListarProveedores}"><i
 						class="fa fa-circle-o"></i> Proveedores</a></li>
 				<li><a th:href="@{/ComprasSinAceptarInventario}"><i
-						class="fa fa-circle-o"></i> Compras sin ingresar</a></li>						
+						class="fa fa-circle-o"></i> Compras sin ingresar</a></li>
 				<li><a th:href="@{/ListaComprasAnular}"><i
 						class="fa fa-circle-o"></i> Anular Compra</a></li>
 				<li><a th:href="@{/ListarProveedorArticulo.do}"
@@ -156,7 +159,7 @@
 				<li><a th:href="@{/ArticuloPorProveedores}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i> Analisis de compra </a></li>
-						
+
 			</ul>
 		</li>
 
@@ -189,7 +192,7 @@
 
 			</ul>
 		</li>
-		
+
 		<li class="treeview"
 			sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Usuario_Mesero','Usuario_Cajero','Usuario_SuperDario',)">
 			<a th:href="@{#}"> <i class="fa fa-shopping-cart"></i> <span>Ventas</span>
@@ -312,10 +315,10 @@
 						<li><a th:href="@{/ventaByCategoria}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i
 								class="fa fa-circle-o"></i>Ventas por Categoria</a></li>
-								
-							<li><a th:href="@{/ventaByArticulosDetallados}"
+
+						<li><a th:href="@{/ventaByArticulosDetallados}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i
-								class="fa fa-circle-o"></i>Articulo por Fecha</a></li>		
+								class="fa fa-circle-o"></i>Articulo por Fecha</a></li>
 					</ul>
 				</li>
 
@@ -334,9 +337,9 @@
 						<li><a th:href="@{/totalesComprasAceptadas}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i
 								class="fa fa-circle-o"></i>Totales Aceptadas Hacienda</a></li>
-<!-- 						<li><a th:href="@{/TotalImpuestoComprasMensuales}" -->
-<!-- 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i -->
-<!-- 								class="fa fa-circle-o"></i>IVA Mensual</a></li>								 -->
+						<!-- 						<li><a th:href="@{/TotalImpuestoComprasMensuales}" -->
+						<!-- 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Restaurante','Usuario_Mesero','Administrador_Empresa',)"><i -->
+						<!-- 								class="fa fa-circle-o"></i>IVA Mensual</a></li>								 -->
 						<li><a th:href="@{/ListarConsultaComprasSimplificado}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Contador')"><i
 								class="fa fa-circle-o"></i> Simplificado</a></li>
@@ -356,12 +359,12 @@
 								class="fa fa-circle-o"></i>Categoria por Articulo</a></li>
 					</ul>
 				</li>
-<!-- 				<li class="treeview" -->
-<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"> -->
-<!-- 					<a th:href="@{/ventaComprasTotal}"> <i class="fa  fa-circle-o"></i> <span>Ventas/Compras Total</span> -->
-<!-- 						<i class="fa fa-angle-left pull-right"></i> -->
-<!-- 				</a> -->
-<!-- 				</li> -->
+				<!-- 				<li class="treeview" -->
+				<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"> -->
+				<!-- 					<a th:href="@{/ventaComprasTotal}"> <i class="fa  fa-circle-o"></i> <span>Ventas/Compras Total</span> -->
+				<!-- 						<i class="fa fa-angle-left pull-right"></i> -->
+				<!-- 				</a> -->
+				<!-- 				</li> -->
 				<li class="treeview"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Contador','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
 					<a th:href="@{#}"> <i class="fa fa-circle-o"></i> <span>Cuentas</span>
@@ -393,14 +396,14 @@
 				<li><a th:href="@{/recepcionComprasPorCorreo}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i>Recepcion de Compras</a></li>
-						
-<!-- 				<li><a th:href="@{/recepcionComprasPorCorreoAceptadas}" -->
-<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i -->
-<!-- 						class="fa fa-circle-o"></i>Compras aceptadas </a></li>		 -->
+
+				<!-- 				<li><a th:href="@{/recepcionComprasPorCorreoAceptadas}" -->
+				<!-- 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i -->
+				<!-- 						class="fa fa-circle-o"></i>Compras aceptadas </a></li>		 -->
 
 			</ul>
 		</li>
-		
+
 		<li class="treeview"><a th:href="@{/logout}"> <i
 				class="fa fa-sign-out"></i> <span>Salir</span>
 		</a></li>

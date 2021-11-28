@@ -1,5 +1,13 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,6 +29,7 @@ import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.CabysHaciendaCommand;
 import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.google.gson.Gson;
+import com.sun.tools.xjc.reader.Util;
 
 /**
  * categorias se va dividir los articulos de una empresa CategoriaBoImpl.
@@ -33,10 +42,10 @@ import com.google.gson.Gson;
 public class CabysBoImpl implements CabysBo {
 
 	@Autowired
-	private CabysDao cabysDao;
+	private CabysDao	cabysDao;
 
-	
-	private Logger	log	= LoggerFactory.getLogger(this.getClass());
+	private Logger		log	= LoggerFactory.getLogger(this.getClass());
+
 	@Transactional
 	@Override
 	public void agregar(Cabys cabys) {
@@ -69,53 +78,104 @@ public class CabysBoImpl implements CabysBo {
 	public Collection<Cabys> findByEmpresaAll(Integer idEmpresa) {
 		return cabysDao.findByEmpresaAll(idEmpresa);
 	}
+
+//	public static String getServiceCall(String url) throws IOException {
+//		try {
+//
+//			URL obj = new URL(url);
+//			HttpURLConnection conn = (HttpURLConnection) obj.openConnection(Proxy.NO_PROXY);
+//			conn.setRequestMethod("GET");
+//			conn.setRequestProperty("Accept", AppConstants.JSON_MEDIA_TYPE);
+//
+//			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//				String error = "Error en el llamado del servicio get: " + conn.getResponseCode();
+//				LoggerHandler.escribirError(ServiceCalls.class.toString(), error, AppConstants.LOGGER_ARCHIVO_CONFIG);
+//				throw new RuntimeException(Util.messageError(messageError(conn)));
+//			}
+//
+//			return messageSucessful(conn);
+//
+//		} catch (MalformedURLException e) {
+//			throw new MalformedURLException();
+//		} catch (IOException e) {
+//			throw new IOException();
+//		}
+//	}
 	
+	 private static String messageError(HttpURLConnection connection) {
+		 StringBuilder response = new StringBuilder();
+		 try(BufferedReader br = new BufferedReader(
+		    new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+		      
+		    String responseLine = null;
+		    while ((responseLine = br.readLine()) != null) {
+		        response.append(responseLine.trim());
+		    }
+		     } catch (Exception e) {
+		     response = null;
+		 }
+		     connection.disconnect();
+		     return response.toString();
+		 }
+
+	private static String messageSucessful(HttpURLConnection connection) {
+		StringBuilder response = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+
+			String responseLine = null;
+			while ((responseLine = br.readLine()) != null) {
+				response.append(responseLine.trim());
+			}
+		} catch (Exception e) {
+			response = null;
+		}
+		connection.disconnect();
+		return response.toString();
+	}
+
 	@Override
-	public ListCabysHacienda obtieneListaCabysHacienda(String descripcion,String codigo, Integer cantidad) {
-	ListCabysHacienda lista = new ListCabysHacienda();
-	List<CabysHaciendaCommand> listaCodigos = new  ArrayList<CabysHaciendaCommand>();
+	public ListCabysHacienda obtieneListaCabysHacienda(String descripcion, String codigo, Integer cantidad) {
+		ListCabysHacienda lista = new ListCabysHacienda();
+		List<CabysHaciendaCommand> listaCodigos = new ArrayList<CabysHaciendaCommand>();
 		try {
-			descripcion = descripcion == null?Constantes.EMPTY : descripcion;
-			codigo = codigo == null? Constantes.EMPTY:codigo;
+			descripcion = descripcion == null ? Constantes.EMPTY : descripcion;
+			codigo = codigo == null ? Constantes.EMPTY : codigo;
 			Boolean aplicarURLPorDescripcion = Boolean.FALSE;
-			if(!descripcion.equals(Constantes.EMPTY)) {
+			if (!descripcion.equals(Constantes.EMPTY)) {
 				aplicarURLPorDescripcion = Boolean.TRUE;
 			}
 			String url = Constantes.EMPTY;
-			cantidad = cantidad != null ? cantidad:Constantes.ZEROS;
-			if(aplicarURLPorDescripcion) {
-				 url = cantidad.equals(Constantes.ZEROS)  ? Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion : Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion + "&top="+cantidad;
-			}else {
-				 url = cantidad.equals(Constantes.ZEROS)  ? Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo : Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo + "&top="+cantidad;
+			cantidad = cantidad != null ? cantidad : Constantes.ZEROS;
+			if (aplicarURLPorDescripcion) {
+				url = cantidad.equals(Constantes.ZEROS) ? Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion : Constantes.API_LISTA_CABYS_SIN_CANTIDAD + descripcion + "&top=" + cantidad;
+			} else {
+				url = cantidad.equals(Constantes.ZEROS) ? Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo : Constantes.API_LISTA_CABYS_SIN_CODIGO + codigo + "&top=" + cantidad;
 			}
 			// create an instance of RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
 			// make an HTTP GET request
 			Object[] forNow;
-			if(aplicarURLPorDescripcion) {
-				lista = restTemplate.getForObject(url, ListCabysHacienda.class);	
-			}else {
+			if (aplicarURLPorDescripcion) {
+				lista = restTemplate.getForObject(url, ListCabysHacienda.class);
+			} else {
 				Gson gson = new Gson();
 				forNow = restTemplate.getForObject(url, Object[].class);
 				Double total = 0d;
 				for (int i = 0; i < forNow.length; i++) {
 					Object object = forNow[i];
 					String JSON = gson.toJson(object);
-					total ++;
-					
+					total++;
+
 					CabysHaciendaCommand listCabysCodigo = gson.fromJson(JSON, CabysHaciendaCommand.class);
 					listaCodigos.add(listCabysCodigo);
-					
+
 				}
 				lista.setCabys(listaCodigos);
 				lista.setTotal(total);
-				
-			
-				
-				
-			//	listaPorCodigo = restTemplate.getForObject(url, ListCabysCodigo[].class);
+
+				// listaPorCodigo = restTemplate.getForObject(url, ListCabysCodigo[].class);
 			}
-			
+
 			System.out.println(lista.toString());
 
 		} catch (Exception e) {

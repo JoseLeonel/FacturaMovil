@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
@@ -70,4 +71,6 @@ public interface ArticuloBo {
 		RespuestaServiceValidator<?> findArticuloByCodigojax(HttpServletRequest request, 
 				Articulo articulo, HttpServletResponse response, String codigoArticulo,
 				BindingResult result);
+		
+		RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario);
 }

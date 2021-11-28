@@ -24,10 +24,13 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.ControlPrecioArticulo;
 import com.emprendesoftcr.modelo.Marca;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.DataTableDelimitador;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
@@ -61,6 +64,9 @@ public class ArticuloRest {
 	private StringPropertyEditor		stringPropertyEditor;
 	@Autowired
 	private ValidateTokenBo					validateTokenBo;
+	
+	@Autowired
+	private UsuarioBo usuarioBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -72,23 +78,7 @@ public class ArticuloRest {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-	@SuppressWarnings("all")
-	@PostMapping("/ListarArticuloAjax.do")
-	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
-		if (validateTokenBo.validarTokenApis(request) == false) {
-			DataTableDelimitador delimitadores = null;
-			delimitadores = new DataTableDelimitador(request, "Articulo");
-			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-			List<Object> solicitudList = new ArrayList<Object>();
-			respuestaService.setRecordsTotal(0l);
-			respuestaService.setRecordsFiltered(0l);
-			respuestaService.setAaData(solicitudList);
-			return respuestaService;
-		}
-		DataTableDelimitador delimitadores = null;
-		String nombreUsuario = request.getUserPrincipal().getName();
-		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
-	}
+
 
 	@PostMapping("/AgregarArticuloAjax.do")
 	public RespuestaServiceValidator<?> agregarLocal(HttpServletRequest request, ModelMap model, @RequestParam(value = "idPaquete", required = false) Integer idPaquete, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
@@ -200,4 +190,40 @@ public class ArticuloRest {
 		}
 	}
 	
+	/**
+	 * Listar el control de precio pendiente de aceptar
+	 * @param request
+	 * @param model
+	 * @param controlPrecioArticulo
+	 * @param response
+	 * @param result
+	 * @param status
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	@GetMapping("/listaControlPrecioPendienteAceptar")
+	public RespuestaServiceDataTable listaControlPrecioPendienteAceptar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPrecioArticulo controlPrecioArticulo, HttpServletResponse response, BindingResult result, SessionStatus status) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		@SuppressWarnings("unused")
+		DataTableDelimitador delimitadores = null;
+		
+		return articuloBo.listarByControlPrecioPendiente(request, response,  usuario);
+	}
+	@SuppressWarnings("all")
+	@PostMapping("/ListarArticuloAjax.do")
+	public RespuestaServiceDataTable listarLocalAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) throws IOException, ServletException {
+		if (validateTokenBo.validarTokenApis(request) == false) {
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Articulo");
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			List<Object> solicitudList = new ArrayList<Object>();
+			respuestaService.setRecordsTotal(0l);
+			respuestaService.setRecordsFiltered(0l);
+			respuestaService.setAaData(solicitudList);
+			return respuestaService;
+		}
+		DataTableDelimitador delimitadores = null;
+		String nombreUsuario = request.getUserPrincipal().getName();
+		return articuloBo.listarByCodigoArticulo(request, response, codigoArt, nombreUsuario);
+	}
 }

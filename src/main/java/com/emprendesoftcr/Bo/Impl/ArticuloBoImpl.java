@@ -27,6 +27,7 @@ import org.springframework.validation.BindingResult;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CabysBo;
+import com.emprendesoftcr.Bo.ControlPrecioBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.TarifaIVAIBo;
@@ -36,6 +37,7 @@ import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.ControlPrecioArticulo;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
@@ -48,6 +50,7 @@ import com.emprendesoftcr.utils.Utils;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.CabysAct;
 import com.emprendesoftcr.web.command.CambiarPrecioArticuloCommand;
+import com.emprendesoftcr.web.command.ControlPrecioCommand;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.google.gson.Gson;
 
@@ -75,6 +78,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 	
 	@Autowired
 	private TarifaIVAIBo	tarifaIVAIBo;
+	@Autowired
+	private ControlPrecioBo controlPrecioBo;
 
 	@Autowired
 	private CabysBo cabysBo;
@@ -284,6 +289,45 @@ public class ArticuloBoImpl implements ArticuloBo {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario) {
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "ControlPrecioArticulo");
+		
+		
+		JqGridFilter categoriaFilter = null;
+		
+		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_PENDIENTE_ADMINISTRADOR_CAMBIO_PRECIO + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+		
+		categoriaFilter = new JqGridFilter("articulo.empresa.id", "'" + usuario.getEmpresa().getId() + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			
+		
+		delimitadores.addFiltro(categoriaFilter);
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		@SuppressWarnings("rawtypes")
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			ControlPrecioArticulo object = (ControlPrecioArticulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ControlPrecioCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
 
 	@Transactional
 	@Override
@@ -422,6 +466,9 @@ public class ArticuloBoImpl implements ArticuloBo {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			//Revisar si cambio de precio.
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBd, "Actualizacion del articulo sin compra asociada", null,null, usuarioSesion);
+		
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
 				JSONObject json = (JSONObject) new JSONParser().parse(articulo.getDatosCabys());
@@ -487,6 +534,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			articuloBd.setPrecioSugerido(articulo.getPrecioSugerido() != null?articulo.getPrecioSugerido():Constantes.ZEROS_DOUBLE);
 			modificar(articuloBd);
+			
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
@@ -768,6 +816,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifaMag(Constantes.EMPTY);
 			}
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null, usuario);
 			articuloBD.setUpdated_at(new Date());
 			articuloBD.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
 			articuloBD.setMarca(articulo.getMarca());
@@ -801,6 +850,9 @@ public class ArticuloBoImpl implements ArticuloBo {
 			articuloBD.setBaseImponible(
 					articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			modificar(articuloBD);
+		//Revisar si cambio de precio.
+			
+		
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
 		} catch (Exception e) {
@@ -822,6 +874,10 @@ public class ArticuloBoImpl implements ArticuloBo {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
 						result.getAllErrors());
 			}
+			Articulo articulo = new Articulo();
+			articulo.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null, usuario);
+		
 			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null ? Constantes.EMPTY
 					: cambiarPrecioArticuloCommand.getDescripcion();
 			articuloBD.setUpdated_at(new Date());
@@ -831,7 +887,6 @@ public class ArticuloBoImpl implements ArticuloBo {
 			articuloBD.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
 			articuloBD.setUsuario(usuario);
 			modificar(articuloBD);
-
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -866,4 +921,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 		}
 	}
 
+	
+	
+	
+	
 }
