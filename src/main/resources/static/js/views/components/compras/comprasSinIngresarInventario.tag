@@ -470,12 +470,7 @@ __actualizarCantidadInventario(e){
     self.update()
 }
 
-__actualizarGananciaBlur(e){
-    if (e.keyCode == 8 || e.keyCode == 46){
-        return
-    }
-    aplicarGananciaCompra(e)
-}
+
 function aplicarGananciaCompra(e){
     var ganancia = e.currentTarget.value;
     self.item = e.item; 
