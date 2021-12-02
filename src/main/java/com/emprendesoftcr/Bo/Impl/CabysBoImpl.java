@@ -1,13 +1,5 @@
 package com.emprendesoftcr.Bo.Impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -29,7 +21,6 @@ import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.web.command.CabysHaciendaCommand;
 import com.emprendesoftcr.web.command.ListCabysHacienda;
 import com.google.gson.Gson;
-import com.sun.tools.xjc.reader.Util;
 
 /**
  * categorias se va dividir los articulos de una empresa CategoriaBoImpl.
@@ -79,59 +70,7 @@ public class CabysBoImpl implements CabysBo {
 		return cabysDao.findByEmpresaAll(idEmpresa);
 	}
 
-	public static String getServiceCall(String url) throws IOException {
-		try {
-
-			URL obj = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection) obj.openConnection(Proxy.NO_PROXY);
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", AppConstants.JSON_MEDIA_TYPE);
-
-			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				String error = "Error en el llamado del servicio get: " + conn.getResponseCode();
-				
-				throw new RuntimeException(Util.messageError(messageError(conn)));
-			}
-
-			return messageSucessful(conn);
-
-		} catch (MalformedURLException e) {
-			throw new MalformedURLException();
-		} catch (IOException e) {
-			throw new IOException();
-		}
-	}
 	
-	 private static String messageError(HttpURLConnection connection) {
-		 StringBuilder response = new StringBuilder();
-		 try(BufferedReader br = new BufferedReader(
-		    new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
-		      
-		    String responseLine = null;
-		    while ((responseLine = br.readLine()) != null) {
-		        response.append(responseLine.trim());
-		    }
-		     } catch (Exception e) {
-		     response = null;
-		 }
-		     connection.disconnect();
-		     return response.toString();
-		 }
-
-	private static String messageSucessful(HttpURLConnection connection) {
-		StringBuilder response = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-
-			String responseLine = null;
-			while ((responseLine = br.readLine()) != null) {
-				response.append(responseLine.trim());
-			}
-		} catch (Exception e) {
-			response = null;
-		}
-		connection.disconnect();
-		return response.toString();
-	}
 
 	@Override
 	public ListCabysHacienda obtieneListaCabysHacienda(String descripcion, String codigo, Integer cantidad) {
