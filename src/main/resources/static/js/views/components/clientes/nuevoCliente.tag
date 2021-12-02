@@ -493,88 +493,42 @@ function getClienteHacienda(){
         actividades:[]
     }
     self.update()
-    $.ajax({
-    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
-    "method": "GET",
-    statusCode: {
-        
-        404: function() {
-            mensajeAdvertencia( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
-            __listadoTipoCedulas()
-            self.mostrarFormulario  = true 
-            self.botonModificar   = false;
-            self.botonAgregar = true;
-            self.update()
-             __Eventos()
-        }
-    }
-    }).done(function (response) {
-        self.clienteHacienda = response
-        self.update()
-        __listadoTipoCedulas()
-         $('#nombreCompleto').val(self.clienteHacienda.nombre)
-        self.mostrarFormulario  = true 
-        self.botonModificar   = false;
-        self.botonAgregar = true;
-        self.update()
-         __Eventos()
-         
-    });
+
+
+  getClienteHaciendaApi(cedula)
+            .then(res => {
+                unBlockUIStop();
+                if (res == null ) {
+                     mensajeAdvertencia( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
+                    __listadoTipoCedulas()
+                    self.mostrarFormulario  = true 
+                    self.botonModificar   = false;
+                    self.botonAgregar = true;
+                    self.update()
+                    __Eventos()
+                }else{
+                     self.clienteHacienda = res
+                    self.update()
+                    __listadoTipoCedulas()
+                    $('#nombreCompleto').val(self.clienteHacienda.nombre)
+                    self.mostrarFormulario  = true 
+                    self.botonModificar   = false;
+                    self.botonAgregar = true;
+                    self.update()
+                    __Eventos()
+                }
+                 
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+    
+
+    
 }
 
-function getClienteHacienda(){
-    var cedula = $('#cedula').val()
-    if(stringVacio($(".cedula").val()) == false){
-       return    
-    }
-    $('.correoElectronico').val('')
-    $('.correoElectronico1').val('')
-    $('.correoElectronico2').val('')
-    $('.correoElectronico3').val('')
-    $('.numeroDocumentoExoneracion').val('')
-    $('.nombreInstitucionExoneracion').val('')
-    $('.nombreComercial').val('')
-    $('.porcentajeExoneracion').val(0)
-    self.clienteHacienda= {
-        nombre:"",
-        tipoIdentificacion:"",
-        regimen:{
-            codigo:"",
-            descripcion:""
-        },
-        actividades:[]
-    }
-    self.update()
-    $.ajax({
-        url: "clienteHacienda.do",
-        datatype: "json",
-        data: {cedula:cedula},
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
-                    __listadoTipoCedulas()
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.clienteHacienda = modeloTabla
-                        self.update()
-                        __listadoTipoCedulas()
-                         $('#nombreCompleto').val(self.clienteHacienda.nombre)
-                        
-                    });
-                }
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 
 /**
 *  Mostrar listado datatable TipoCedulas

@@ -2651,7 +2651,46 @@ const getFacturaByConsecutivo = async(consecutivo) => {
 }
 
 
+const getCabysByCodigo = async(codigo,cantidad) => {
+    try {
+    	var data ={cabys:[]}
+        const rawResponse = await fetch('https://api.hacienda.go.cr/fe/cabys?codigo=' + codigo+ "&top="+cantidad);
+        const data1 = await rawResponse.json();
+        data.cabys = data1;
+        blockUILoad();
+        console.log(data);
+        
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const getCabysByDescripcion = async(descripcion,cantidad) => {
+    try {
+        const rawResponse = await fetch('https://api.hacienda.go.cr/fe/cabys?q=' + descripcion+ "&top="+cantidad);
+        const data = await rawResponse.json();
+        blockUILoad();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
 	
+const getClienteHaciendaApi = async(cedula) => {
+    try {
+        const rawResponse = await fetch('https://api.hacienda.go.cr/fe/ae?identificacion=' + cedula);
+        const data = await rawResponse.json();
+        blockUILoad();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 	var formatterColones = new Intl.NumberFormat('es-CR', {
 		  style: 'currency',
 		  currency: 'CRC',

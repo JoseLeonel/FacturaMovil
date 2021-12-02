@@ -527,7 +527,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	//5 minutos
-	@Scheduled(fixedDelay = 340000)
+	@Scheduled(fixedDelay = 15000)
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -602,10 +602,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			for (Hacienda hacienda : FacturasConProblemas) {
 				log.error("** Error problemas de envio factura: " + hacienda.getEmpresa().getNombre());
-//				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
-//				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
-				// correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
-				// correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
+				String subject = "EmpredesoftSoporte  Empresa :" + hacienda.getEmpresa().getNombre() + " Problemas de conexion";
+				String texto = "Empresa :" + hacienda.getEmpresa().getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + hacienda.getConsecutivo();
+				 correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
+//				 correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
 			}
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
@@ -709,19 +709,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// Ambiente de pruebas
 					// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 					// Alajuela
-					 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				//	 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-				//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+//					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
-				//	 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+//					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-					recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
 					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
@@ -755,7 +755,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-	@Scheduled(fixedDelay = 3800000)
+	@Scheduled(fixedDelay = 5000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1498,7 +1498,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(fixedDelay = 600000)
+	@Scheduled(fixedDelay = 8000)
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

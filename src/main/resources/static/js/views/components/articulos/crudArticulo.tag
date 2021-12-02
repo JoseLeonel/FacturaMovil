@@ -421,7 +421,7 @@
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <label>cantidad</label>
-                                    <select  class="form-control" id="cantidad" name="cantidad" >
+                                    <select  class="form-control cantidadCabys" id="cantidadCabys" name="cantidadCabys" >
                                         <option  each={cantidades}  value="{codigo}" selected="{cabys.estado ==codigo?true:false}" >{descripcion}</option>
                                     </select>
                                 </div>
@@ -691,6 +691,7 @@ table {
     }  
 self.mostarDatos = false
 self.on('mount',function(){
+    __ComboCantidades()
     __Eventos()
     self.estados   = __ComboEstados()
     self.comanda   = __ComboComanda()
@@ -765,54 +766,86 @@ function ListarCodigosCabysModal(){
     __ListaDeHaciendaCabys()
 }
 
+/**
+*  Crear el combo de estados
+**/
+function __ComboCantidades(){
+    self.cantidades =[]
+    self.update()
+    self.cantidades.push({
+        codigo: null,
+        descripcion: "Todos"
+     });
+    self.cantidades.push({
+        codigo: 5,
+        descripcion: 5
+     });
+    self.cantidades.push({
+        codigo: 10,
+        descripcion: 10
+     });
+    self.cantidades.push({
+        codigo: 20,
+        descripcion: 20
+     });
+     self.update();
+}
 
 
 function __ListaDeHaciendaCabys(){
-   // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
-   //     return
-   // }
-    var cantidadTemp = $('#cantidad').val() == 'Todos'?0:$('#cantidad').val()
+  
+    try {
     var  encontro = false
     $(".tableListarHaciendaCabys").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    var parametros = {
-        descArticulo :$('#descArticulo').val(),
-        cantidad: cantidadTemp,
-        codigo: $('.codigoCabysMod').val()
-    };
-  if ($("#formularioParametros").valid()) {
-    $.ajax({
-        url: 'ListarCabysDeHaciendaAjax.do',
-        datatype: "json",
-        method:"GET",
-        data :parametros,
-        success: function (result) {
-            if(result.aaData.length > 0){
-                __InformacionDataTable_cabys()
-                $.each(result.aaData, function( index, modeloTabla ) {
-                   if(modeloTabla.cabys.length){
-                      self.listaCabys.aaData =modeloTabla.cabys    
-                      encontro = true 
-                   } 
-                   
-                })
-                self.update()
-                if(encontro == true){
-                   __cargarTablaCompras()
-                }
-                
+   if ($("#formularioParametros").valid()) {
 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
+       var descripcion  = $('#descArticulo').val()
+       var  codigo = $('.codigoCabysMod').val() 
+       var cantidadTemp = $('.cantidadCabys').val() == 'Todos'?999:$('.cantidadCabys').val()
+       if(descripcion != null && descripcion.length > 0){
+            getCabysByDescripcion(descripcion,__valorNumerico(cantidadTemp))
+            .then(res => {
+                unBlockUIStop();
+                 __InformacionDataTable_cabys()
+                console.log("cabys");
+                  __cargarTablaCompras(res)
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+       }else{
+            getCabysByCodigo(codigo,__valorNumerico(cantidadTemp))
+            .then(res => {
+                unBlockUIStop();
+                   __InformacionDataTable_cabys()
+                console.log("cabys");
+                  __cargarTablaCompras(res)
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+           
+       }
+ 
   }
+  } catch (error) {
+        console.log(error);
+    }
 }
 
-function __cargarTablaCompras() {
+
+
+function __cargarTablaCompras(data) {
+   if(data != null && data.cabys.length == 0){
+       mensajeAlertErrorOConfirmacion("error","No hay informacion con esos datos.")
+       return
+    } 
+     self.listaCabys.aaData =data.cabys    
+    self.update()
+                   
     __InicializarTabla('.tableListarHaciendaCabys')  
     $("#tableListarHaciendaCabys").dataTable().fnClearTable();
     __InformacionDataTable_cabys();
@@ -1214,6 +1247,7 @@ var reglasDeValidacion = function() {
               codigoCabys : {
                 maxlength:13,
                 required : true,
+                minlength:13,
 			},
 			descripcion : {
 				required : true,
