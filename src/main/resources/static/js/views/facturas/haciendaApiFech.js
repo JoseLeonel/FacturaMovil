@@ -3,7 +3,7 @@ const getListaEnviosHacienda = async(fechaInicio, fechaFin, cedulaReceptor, tipo
     	
         const rawResponse = await fetch('/api/hacienda/ListarHaciendasAjax.do?fechaInicio=' + fechaInicio + '&&fechaFin=' + fechaFin + '&&cedulaReceptor=' + cedulaReceptor + '&&tipoDocumento=' + tipoDocumento);
         const data = await rawResponse.json();
-        console.log(data.aaData);
+       
         blockUILoad();
         return data.aaData;
     } catch (error) {

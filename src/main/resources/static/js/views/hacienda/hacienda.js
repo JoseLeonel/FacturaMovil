@@ -57,9 +57,10 @@ function _consulta() {
     var tipoDocumento = $('.tipoDocumento').val();
 
     getListaEnviosHacienda(fechaInicio, fechaFin, cedulaReceptor, tipoDocumento).then(r => {
-        __Inicializar_Table('.tableListar');
+        
         unBlockUIStop();
         if (r.length > 0) {
+        	__Inicializar_Table('.tableListar');
             loadListar(".tableListar", idioma_espanol, informacion_tabla, r)
             haciendas.data = r
             agregarInputsCombos();

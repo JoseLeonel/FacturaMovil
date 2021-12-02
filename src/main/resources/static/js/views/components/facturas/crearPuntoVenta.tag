@@ -1523,36 +1523,27 @@ function getClienteHacienda(){
         actividades:[]
     }
     self.update()
-    $.ajax({
-        url: "clienteHacienda.do",
-        datatype: "json",
-        data: {cedula:cedula},
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
+      getClienteHaciendaApi(cedula)
+            .then(res => {
+                unBlockUIStop();
+                if (res == null ) {
                     mensajeErrorTiempo( "Cedula no se encuentra registrada en Registro Nacional de Costa Rica" )
                     __listadoTipoCedulas()
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.clienteHacienda = modeloTabla
+                }else{
+                      self.clienteHacienda = res
                         self.mostrarBotonAgregarCliente = true
                         self.update()
                         __listadoTipoCedulas()
                         $('#nombreCompleto').val(self.clienteHacienda.nombre)
-
-                    });
                 }
-            }
-
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
+                 
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+    
+  
 
 }
 

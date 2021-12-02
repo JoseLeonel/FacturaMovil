@@ -212,7 +212,7 @@ public static final int HTTP_OK = 0;
 	public static final Integer LIBRE_IMPUESTOS_INACTIVO = 0;
 
 	// Semaforo
-	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR = 25;
+	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR = 500;
 	public static final Integer BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS = 25;
 
 //	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR																	= 5;
@@ -220,7 +220,7 @@ public static final int HTTP_OK = 0;
 
 	// 48 horas cada 5 minutos
 
-	public static final Integer MAXIMO_REINTENTOS_ACEPTACION = 05;
+	public static final Integer MAXIMO_REINTENTOS_ACEPTACION = 02;
 	public static final String MAXIMO_REINTENTOS_ACEPTACION_STR = "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer SEMAFORO_ESTADO_ACTIVO = 1;
