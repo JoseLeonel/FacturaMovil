@@ -1246,8 +1246,8 @@ var reglasDeValidacion = function() {
 		rules : {
               codigoCabys : {
                 maxlength:13,
-                required : true,
                 minlength:13,
+                required : true,
 			},
 			descripcion : {
 				required : true,

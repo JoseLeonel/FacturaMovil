@@ -340,8 +340,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private static final DateTimeFormatter														formatter												= DateTimeFormatter.ofPattern("HH:mm:ss");
 
 
-
-	@Scheduled(fixedDelay = 1080000)
+//
+//	@Scheduled(fixedDelay = 1080000)
 	@Override
 	public void envioFacturasCredito() {
 		try {
@@ -490,7 +490,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
 	 */
-	@Scheduled(cron = "0 0/01 23 * * ?")
+//	@Scheduled(cron = "0 0/01 23 * * ?")
 	@Override
 	public synchronized void taskAnularProformas() throws Exception {
 		try {
@@ -527,13 +527,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	//5 minutos
-	@Scheduled(fixedDelay = 15000)
+	@Scheduled(fixedDelay = 5000)
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
 		ArrayList<Hacienda> facturasConProblemas = new ArrayList<Hacienda>();
 		OpenIDConnectHacienda openIDConnectHacienda = null;
 		Hacienda haciendaBD = null;
+		Integer contador = 0;
 		try {
 			Semaforo semaforoEnvio = semaforoBo.findByEstadoAndID(Constantes.SEMAFORO_ESTADO_ACTIVO, Constantes.SEMAFORO_ESTADO_ENVIO);
 			if (semaforoEnvio != null) {
@@ -546,7 +547,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 						for (Hacienda hacienda : listaHacienda) {
 							try {
-								log.info("Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
+								contador ++;
+								log.info("Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre()+ " cont:"+ contador);
 								haciendaBD = haciendaBo.findById(hacienda.getId());
 								openIDConnectHacienda = envioHacienda(haciendaBD, openIDConnectHacienda);
 
@@ -653,7 +655,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	@Scheduled(cron = "0 0/59 23 * * ?")
+//	@Scheduled(cron = "0 0/59 23 * * ?")
 	@Override
 	public void graficoVenta() throws Exception {
 		log.info("inicio Totales de Grafico  {}", new Date());
@@ -755,7 +757,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-	@Scheduled(fixedDelay = 5000)
+//	@Scheduled(fixedDelay = 5000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1122,7 +1124,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 //4 minutos
-	@Scheduled(fixedDelay = 240000)   
+//	@Scheduled(fixedDelay = 240000)   
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1199,7 +1201,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 	}
 
-	@Scheduled(fixedDelay = 720000)
+//	@Scheduled(fixedDelay = 720000)
 	@Override
 	public synchronized void taskEnvioCorreosNoElectronico() throws Exception {
 		try {
@@ -1498,7 +1500,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(fixedDelay = 8000)
+//	@Scheduled(fixedDelay = 8000)
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1792,7 +1794,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(fixedDelay = 360000)
+//	@Scheduled(fixedDelay = 360000)
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

@@ -101,9 +101,9 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Hacienda> findByEstado(Integer estado, Integer estadoError) {
-		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado or obj.estado = :estadoError order by obj.empresa.id");
-		query.setParameter("estado", estado);
-		query.setParameter("estadoError", estadoError);
+		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.empresa.id = 17 and obj.estado = 2 order by obj.empresa.id");
+//		query.setParameter("estado", estado);
+//		query.setParameter("estadoError", estadoError);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 
 		List<Hacienda> results = query.getResultList();

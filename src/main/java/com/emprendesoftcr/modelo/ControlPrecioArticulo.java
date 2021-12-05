@@ -15,7 +15,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
+/**
+ * Controla los precios que se cambian en el sistema, Se pueden reversar o cambiar
+ * @author jose
+ *
+ */
 @Entity
 @Table(name = "control_precio_art")
 public class ControlPrecioArticulo implements Serializable {
@@ -44,17 +48,25 @@ public class ControlPrecioArticulo implements Serializable {
 
 	@Column(name = "estado")
 	private Integer						estado;																		// 1 = Pendiente de aceptar 2 = Aceptado 3 Rechazado
-	@Column(name = "precio_actual", precision = 18, scale = 5)
-	private Double						precioPublicoActual;
-
-	@Column(name = "precio_nuevo", precision = 18, scale = 5)
+	@Column(name = "precio_nuev", precision = 18, scale = 5)
 	private Double						precioPublicoNuevo;
 
-	@Column(name = "costo", precision = 18, scale = 5)
-	private Double						costo;
+	@Column(name = "precio_ant", precision = 18, scale = 5)
+	private Double						precioPublicoAnterior;
 
-	@Column(name = "ganancia", precision = 18, scale = 5)
-	private Double						ganancia;
+	@Column(name = "costo_ant", precision = 18, scale = 5)
+	private Double						costoAnterior;
+	
+	@Column(name = "costo_nuevo", precision = 18, scale = 5)
+	private Double						costoNuevo;
+
+	@Column(name = "gana_ant", precision = 18, scale = 5)
+	private Double						gananciaAnterior;
+	
+	@Column(name = "gana_nuev", precision = 18, scale = 5)
+	private Double						gananciaNueva;
+	
+	
 	@Column(name = "consecutivo")
 	private String						consecutivo;
 	@Column(name = "ruta_archivo")
@@ -113,13 +125,6 @@ public class ControlPrecioArticulo implements Serializable {
 		this.estado = estado;
 	}
 
-	public Double getPrecioPublicoActual() {
-		return precioPublicoActual;
-	}
-
-	public void setPrecioPublicoActual(Double precioPublicoActual) {
-		this.precioPublicoActual = precioPublicoActual;
-	}
 
 	public Double getPrecioPublicoNuevo() {
 		return precioPublicoNuevo;
@@ -129,21 +134,7 @@ public class ControlPrecioArticulo implements Serializable {
 		this.precioPublicoNuevo = precioPublicoNuevo;
 	}
 
-	public Double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(Double costo) {
-		this.costo = costo;
-	}
-
-	public Double getGanancia() {
-		return ganancia;
-	}
-
-	public void setGanancia(Double ganancia) {
-		this.ganancia = ganancia;
-	}
+	
 
 	public String getConsecutivo() {
 		return consecutivo;
@@ -181,6 +172,56 @@ public class ControlPrecioArticulo implements Serializable {
 	
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
+	}
+
+	
+	public Double getPrecioPublicoAnterior() {
+		return precioPublicoAnterior;
+	}
+
+	
+	public void setPrecioPublicoAnterior(Double precioPublicoAnterior) {
+		this.precioPublicoAnterior = precioPublicoAnterior;
+	}
+
+	
+	public Double getCostoAnterior() {
+		return costoAnterior;
+	}
+
+	
+	public void setCostoAnterior(Double costoAnterior) {
+		this.costoAnterior = costoAnterior;
+	}
+
+	
+	public Double getCostoNuevo() {
+		return costoNuevo;
+	}
+
+	
+	public void setCostoNuevo(Double costoNuevo) {
+		this.costoNuevo = costoNuevo;
+	}
+
+	
+	public Double getGananciaAnterior() {
+		return gananciaAnterior;
+	}
+
+	
+	public void setGananciaAnterior(Double gananciaAnterior) {
+		this.gananciaAnterior = gananciaAnterior;
+	}
+
+	
+	public Double getGananciaNueva() {
+		return gananciaNueva;
+	}
+
+	
+	public void setGananciaNueva(Double gananciaNueva) {
+		this.gananciaNueva = gananciaNueva;
 	}
 
 }

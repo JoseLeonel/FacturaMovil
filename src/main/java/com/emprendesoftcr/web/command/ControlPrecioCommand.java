@@ -20,13 +20,17 @@ public class ControlPrecioCommand {
 
 	private Integer		estado;									// 1 = Pendiente de aceptar 2 = Aceptado 3 Rechazado
 
-	private Double		precioPublicoActual;
-
 	private Double		precioPublicoNuevo;
 
-	private Double		costo;
+	private Double		precioPublicoAnterior;
 
-	private Double		ganancia;
+	private Double		costoAnterior;
+
+	private Double		costoNuevo;
+
+	private Double		gananciaAnterior;
+
+	private Double		gananciaNueva;
 
 	private String		consecutivo;
 
@@ -48,14 +52,13 @@ public class ControlPrecioCommand {
 
 		this.estado = controlPrecioArticulo.getEstado(); // 1 = Pendiente de aceptar 2 = Aceptado 3 Rechazado
 
-		this.precioPublicoActual = controlPrecioArticulo.getPrecioPublicoActual();
-
 		this.precioPublicoNuevo = controlPrecioArticulo.getPrecioPublicoNuevo();
 
-		this.costo = controlPrecioArticulo.getCosto();
-
-		this.ganancia = controlPrecioArticulo.getGanancia();
-
+		this.precioPublicoAnterior = controlPrecioArticulo.getPrecioPublicoAnterior();
+		this.costoNuevo = controlPrecioArticulo.getCostoNuevo();
+		this.costoAnterior = controlPrecioArticulo.getCostoAnterior();
+    this.gananciaAnterior = controlPrecioArticulo.getGananciaAnterior();
+    this.gananciaNueva = controlPrecioArticulo.getGananciaNueva();
 		this.consecutivo = controlPrecioArticulo.getConsecutivo();
 
 		this.rutaArchivoCompra = controlPrecioArticulo.getRutaArchivoCompra();
@@ -110,36 +113,12 @@ public class ControlPrecioCommand {
 		this.estado = estado;
 	}
 
-	public Double getPrecioPublicoActual() {
-		return precioPublicoActual;
-	}
-
-	public void setPrecioPublicoActual(Double precioPublicoActual) {
-		this.precioPublicoActual = precioPublicoActual;
-	}
-
 	public Double getPrecioPublicoNuevo() {
 		return precioPublicoNuevo;
 	}
 
 	public void setPrecioPublicoNuevo(Double precioPublicoNuevo) {
 		this.precioPublicoNuevo = precioPublicoNuevo;
-	}
-
-	public Double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(Double costo) {
-		this.costo = costo;
-	}
-
-	public Double getGanancia() {
-		return ganancia;
-	}
-
-	public void setGanancia(Double ganancia) {
-		this.ganancia = ganancia;
 	}
 
 	public String getConsecutivo() {
@@ -187,6 +166,46 @@ public class ControlPrecioCommand {
 
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
+	}
+
+	public Double getPrecioPublicoAnterior() {
+		return precioPublicoAnterior;
+	}
+
+	public void setPrecioPublicoAnterior(Double precioPublicoAnterior) {
+		this.precioPublicoAnterior = precioPublicoAnterior;
+	}
+
+	public Double getCostoAnterior() {
+		return costoAnterior;
+	}
+
+	public void setCostoAnterior(Double costoAnterior) {
+		this.costoAnterior = costoAnterior;
+	}
+
+	public Double getCostoNuevo() {
+		return costoNuevo;
+	}
+
+	public void setCostoNuevo(Double costoNuevo) {
+		this.costoNuevo = costoNuevo;
+	}
+
+	public Double getGananciaAnterior() {
+		return gananciaAnterior;
+	}
+
+	public void setGananciaAnterior(Double gananciaAnterior) {
+		this.gananciaAnterior = gananciaAnterior;
+	}
+
+	public Double getGananciaNueva() {
+		return gananciaNueva;
+	}
+
+	public void setGananciaNueva(Double gananciaNueva) {
+		this.gananciaNueva = gananciaNueva;
 	}
 
 }

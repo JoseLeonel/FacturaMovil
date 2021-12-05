@@ -17,6 +17,7 @@ import com.emprendesoftcr.modelo.ControlPrecioObse;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 
+
 @EnableTransactionManagement
 @Service("controlPrecioBo")
 public class ControlPrecioBoImpl implements ControlPrecioBo {
@@ -70,14 +71,14 @@ public class ControlPrecioBoImpl implements ControlPrecioBo {
 		if (articuloCambio.getPrecioPublico() != articuloActual.getPrecioPublico() ) {
 
 			controlPrecioArticulo.setArticulo(articuloActual);
-			controlPrecioArticulo.setCosto(articuloActual.getCosto());
-			controlPrecioArticulo.setPrecioPublicoActual(articuloActual.getPrecioPublico());
+			controlPrecioArticulo.setCostoNuevo(articuloActual.getCosto());
 			controlPrecioArticulo.setPrecioPublicoNuevo(articuloCambio.getPrecioPublico());
+			
 			controlPrecioArticulo.setResponsableCambioPrecio(usuarioResponsable);
 			controlPrecioArticulo.setResponbleAceptarPrecio(usuarioResponsable);
 			controlPrecioArticulo.setCreated_at(new Date());
 			controlPrecioArticulo.setUpdated_at(new Date());
-			controlPrecioArticulo.setGanancia(articuloCambio.getGananciaPrecioPublico());
+			controlPrecioArticulo.setGananciaNueva(articuloCambio.getGananciaPrecioPublico());
 			controlPrecioArticulo.setRutaArchivoCompra(rutaArchivoCompra);
 			controlPrecioArticulo.setConsecutivo(consecutivoCompra);
 			agregar(controlPrecioArticulo);

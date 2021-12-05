@@ -10,76 +10,104 @@
 
     <div class="box" >
 	      <div class = "box-body">
-           <div class="container-tabla" style="overflow: scroll;height: 500px;">
+           <div class="container-tabla" >
                 <span id="tituloCompra">Productos con cambio de precio</span>
+                <div class= "elemento-parametro" >
+                   <div>
+                        <span>Digite el codigo</span>
+                        <input type="text" class="form-control" id="codigoBuscar" name="codigoBuscar"  autocomplete="off" autofocus="autofocus">
+                   </div>
+                   <div>
+                        <span>estado</span>
+                         <select  class="form-control selectEstado" id="selectEstado" name="selectEstado"  >
+                            <option value="0"  >Pendiente</option>
+                            <option value="1"  >Aceptados</option>
+                            <option value="2"  >Rechazados</option>
+				        </select>
+                   </div>
+                    <div>
+                         <button   onclick={__IngresarAlInventario} class="botonConsultar">Consultar</button>
+                   </div>
+                </div>
+                <div class= "elemento-titulo" >
+                    <span class="caption">Precios de los Articulos Afectados</span>
+                </div>
+
+                
                 <div class= "elemento-tabla" >
+                    
 				<table class="table table-striped" style="width:100%">
                         <thead>
                         <tr>
-                            <th style="width:70%;"><div class="tituloFormat">Fecha ingreso </div></th>
-                            <th style="width:6%;"><div class="tituloFormat">Responsable </div></th>
-							<th style="width:3%;"><div class="tituloFormat">Codigo </div></th>
-                            <th style="width:22%;"><div class="tituloFormat">Descripcion </div></th>
-                            <th style="width:6%;"><div class="tituloFormat">Costo </div></th>
-                             <th style="width:6%;"><div class="tituloFormat">Ganancia </div></th>
-                            <th style="width:7%;"><div class="tituloFormat">Precio Anterior</div></th>
-                            <th style="width:7%;"><div class="tituloFormat">Precio Nuevo</div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Observa</div></th>
-                            <th style="width:10%;"><div class="tituloFormat">Cons.Compra </div></th>
-                            <th style="width:10%;"><div class="tituloFormat"> </div></th>
+                            <th ><span class="tituloFormat">Fecha ingreso </span></th>
+                            <th ><span class="tituloFormat">Creado por </span></th>
+                            <th ><span class="tituloFormat">Actualizado por </span></th>
+							<th ><span class="tituloFormat">Codigo </span></th>
+                            <th ><span class="tituloFormat">Descripcion </span></th>
+                            <th ><span class="tituloFormat">Costo Anterior</span></th>
+                            <th ><span class="tituloFormat">Costo nuevo</span></th>
+                            <th ><span class="tituloFormat">Precio Anterior</span></th>
+                            <th ><span class="tituloFormat">Precio Nuevo</span></th>
                             
-						  <th style="width:10%;"><div class="tituloFormat">  </div></th>
+                            <th ><span class="tituloFormat">Cons.Compra </span></th>
                            
-                             <th style="width:10%;"><div class="tituloFormat">  </div></th>
+                            <th ><span class="tituloFormat">Observaciones</span></th>
+						  <th ><span class="tituloFormat">Acciones  </span></th>
+                           
+                             
                         </tr>
                         </thead>
                         <tbody>
                         <tr each={detail}>
-                            <td  style="width:70%;">
+                            <td  >
                                 <span>{created_atSTR}</span>
 
                                 
                             </td>
 
-                            <td  style="width:6%;">
+                            <td  >
                                 <span>{responsableCambioPrecio.nombreUsuario}</span>
                             </td>
-                            <td  style="width:6%;">
+                            <td  >
+                                <span>{responsableCambioPrecio.nombreUsuario}</span>
+                            </td>
+                            <td  >
                                 <span>{articulo.codigo}</span>
                             </td>
-                            <td style="width:30%;">
+                            <td >
                                 <span>{descripcion}</span>
                             </td>
-                            <td style="width:6%;">
-                                <input  onkeyup={__actualizarCostoInventario}  class="campodetalle" type="number" step="any"  value = "{precioPublicoActual}" min="0" pattern="^[0-9]+"/>
+                              <td  >
+                                <span>{costoAnterior}</span>
                             </td>
-                             <td  style="width:7%;">
-                                
-                                <input   onkeyup={__actualizarGananciaKeyPress}  class="campodetalle" type="number" step="any"  value = "{ganancia}" min="0" pattern="^[0-9]+"/>
+                            <td  >
+                                 <span>{costoNuevo}</span>
                             </td>
-                            <td  style="width:7%;">
-                                <span>{precioPublicoActual}</span>
+                           
+                            <td  >
+                                <span>{precioPublicoAnterior}</span>
                             </td>
-                            <td  style="width:7%;">
-                                
-                                <input  onkeyup={__actualizarPrecioKeyPress}  class="campodetalle" type="number" step="any"  value = "{precioPublicoActual}" min="0" pattern="^[0-9]+"/>
+                            <td  >
+                                 <span>{precioPublicoAnterior}</span>
                             </td>
-                            <td  style="width:10%;">
-                                <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonObservaciones">?</button>
-                            </td>
-                            <td  style="width:10%;">
+                           
+                            <td  >
                                 <span>{consecutivo}</span>
                             </td>
-                            <td  style="width:10%;">
-                                <span>{consecutivo}</span>
-                            </td>
+                            <td  >
+                                
+                                <div>
+                                   <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonObservaciones">?</button>
+                                <div>
+
+                            </td> 
                             <td>
-                                <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonAplicarInventario">Aceptar</button>
+                                <div>
+                                    <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonAplicarInventario">Aplicar</button>
+                                
+                                </div>
                             <td>
-                            <td>
-                                <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="btn-rechazo">Reversar</button>
-                            <td>
-                    
+                          
                             
                         </tr>
                         </tbody>
@@ -91,6 +119,101 @@
 	</div>
 
 <style type="text/css"  >
+tr:hover {background-color: #e8d2c1!important;}
+tbody > tr > td > div{
+    display: flex;
+    justify-content: center!important;
+}
+tbody > tr > td > span {
+    margin-left:6px!important;
+}
+
+tbody > tr > td  {
+    text-align: center!important;
+}
+
+.elemento-titulo{
+   justify-content: center;
+   display: flex;
+}
+.caption {
+	
+	color: #4e4848;
+	font-size: x-large;
+	font-weight: bold;
+	letter-spacing: .3em;
+}
+.table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 1px!important;
+    line-height: 1.42857143!important;
+    /* vertical-align: top; */
+    /* border-top: 1px solid #ddd; */
+}
+table > thead > tr > th {
+    border-bottom: 0.5px solid #bcb2b2!important;
+}
+table {
+   margin: auto !important;
+	width: 100% !important;
+	border-collapse: collapse !important;
+	border: 1px solid #fff !important; /*for older IE*/
+	border-style: hidden !important;
+}
+
+thead, tbody, tr, td, th { display: block; }
+
+tr:after {
+    content: ' ' !important;
+    display: block !important;
+    visibility: hidden !important;
+    clear: both !important;
+}
+
+thead th {
+    height: 25px !important;
+
+    /*text-align: left;*/
+}
+
+tbody {
+    height: 55vh!important;
+    overflow-y: auto !important;
+}
+
+thead {
+    /* fallback */
+}
+
+
+tbody td, thead th {
+    width: 8.2% !important;
+    float: left !important;
+}
+
+
+
+ .botonConsultar {
+     margin-top: 20px;
+    background-color: #6dca42 !important;
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 14px !important;
+    border-right-color: white;
+    border-color: #c2c5c5;
+    border-right-color: #c2c5c5;
+    display: block;
+    padding: 4px;
+    margin-left: 7px;
+    overflow: hidden;
+    border-width: 0px;
+    transition: auto;
+}
+.elemento-parametro{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+}
 tr > span{
     font-size: .875rem!important;
 }
@@ -139,7 +262,7 @@ input, select {
     border: 1px solid var(--lightGrey3) !important;
     color: var(--Darkgrey) !important;
     font-weight: 400 !important;
-    height: 31px;
+    height: 24px;
     font-size: 28px;
     line-height: 38px !important;
     -webkit-box-sizing: border-box !important;
@@ -183,8 +306,10 @@ input, select {
     border-radius: 14px !important;
 }
  .tituloFormat{
-     text-align: center;
-     font-weight: 600;
+     position: relative;
+    top: 1px;
+    text-align: center;
+    
  }
  .campodetalle{
     font-size: 14px;
@@ -469,6 +594,25 @@ function listadoControlPrecios() {
         self.controlPrecios.aaData = res
         $.each(self.controlPrecios.aaData , function( index, modeloTabla ) {
             self.detail.push(modeloTabla);
+             self.detail.push(modeloTabla);
+              self.detail.push(modeloTabla);
+               self.detail.push(modeloTabla);
+                self.detail.push(modeloTabla);
+                 self.detail.push(modeloTabla);
+                  self.detail.push(modeloTabla);
+                   self.detail.push(modeloTabla);
+                    self.detail.push(modeloTabla);
+                     self.detail.push(modeloTabla);
+                      self.detail.push(modeloTabla);
+                       self.detail.push(modeloTabla);
+                        self.detail.push(modeloTabla);
+                         self.detail.push(modeloTabla);
+                          self.detail.push(modeloTabla);
+                           self.detail.push(modeloTabla);
+                            self.detail.push(modeloTabla);
+                             self.detail.push(modeloTabla);
+                              self.detail.push(modeloTabla);
+                               self.detail.push(modeloTabla);
             self.mostrarDetalles = true;
         })
         
