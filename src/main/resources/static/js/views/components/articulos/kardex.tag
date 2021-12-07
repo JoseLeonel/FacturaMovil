@@ -233,7 +233,7 @@
         _informacionData_Kardex()
         __InicializarTabla('.tableListar')
         agregarInputsCombos()
-        __limpiarFiltros()
+        limpiarFiltros()
          
 
         window.addEventListener( "keydown", function(evento){

@@ -1,5 +1,3 @@
-
-
 package com.emprendesoftcr;
 
 import java.util.List;

@@ -1,654 +1,538 @@
 <control-precio>
 
 			
-
+<!-- Titulos -->
+    <div  class="row "  >
+        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <h1><i class="fa fa-calculator"></i>Productos con cambio de precio</h1>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"> </div>
+    </div>
+  
 				
-
-
-
-
-
-    <div class="box" >
-	      <div class = "box-body">
-           <div class="container-tabla" >
-                <span id="tituloCompra">Productos con cambio de precio</span>
-                <div class= "elemento-parametro" >
-                   <div>
-                        <span>Digite el codigo</span>
-                        <input type="text" class="form-control" id="codigoBuscar" name="codigoBuscar"  autocomplete="off" autofocus="autofocus">
-                   </div>
-                   <div>
-                        <span>estado</span>
-                         <select  class="form-control selectEstado" id="selectEstado" name="selectEstado"  >
-                            <option value="0"  >Pendiente</option>
-                            <option value="1"  >Aceptados</option>
-                            <option value="2"  >Rechazados</option>
-				        </select>
-                   </div>
-                    <div>
-                         <button   onclick={__IngresarAlInventario} class="botonConsultar">Consultar</button>
-                   </div>
+ <!-- Inicio Filtros-->
+    <div>
+        <div class="row" show={mostrarListado}>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                </div>  
+                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly >
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("articulo.articulo")} </label>  
+                                    <input onclick = {__ListaDecodigos}  id="codigoArticulo" name="codigoArticulo" class="form-control" type="text" value="{articulo.descripcion}" placeholder="XXXXXXXXXXX" readonly/>
+                                    <input  type="hidden"   class="form-control" id="idArticulo" name="idArticulo" value="{articulo.id}"/>
+                                </div>  
+                            </div>                      
+                        </div>
+                    </form>  
                 </div>
-                <div class= "elemento-titulo" >
-                    <span class="caption">Precios de los Articulos Afectados</span>
-                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+            	<button onclick ={__limpiar} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            </div>
+        </div>
+    </div>    
+<!-- Fin Filtros-->
 
-                
-                <div class= "elemento-tabla" >
-                    
-				<table class="table table-striped" style="width:100%">
-                        <thead>
-                        <tr>
-                            <th ><span class="tituloFormat">Fecha ingreso </span></th>
-                            <th ><span class="tituloFormat">Creado por </span></th>
-                            <th ><span class="tituloFormat">Actualizado por </span></th>
-							<th ><span class="tituloFormat">Codigo </span></th>
-                            <th ><span class="tituloFormat">Descripcion </span></th>
-                            <th ><span class="tituloFormat">Costo Anterior</span></th>
-                            <th ><span class="tituloFormat">Costo nuevo</span></th>
-                            <th ><span class="tituloFormat">Precio Anterior</span></th>
-                            <th ><span class="tituloFormat">Precio Nuevo</span></th>
-                            
-                            <th ><span class="tituloFormat">Cons.Compra </span></th>
-                           
-                            <th ><span class="tituloFormat">Observaciones</span></th>
-						  <th ><span class="tituloFormat">Acciones  </span></th>
-                           
-                             
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr each={detail}>
-                            <td  >
-                                <span>{created_atSTR}</span>
-
-                                
-                            </td>
-
-                            <td  >
-                                <span>{responsableCambioPrecio.nombreUsuario}</span>
-                            </td>
-                            <td  >
-                                <span>{responsableCambioPrecio.nombreUsuario}</span>
-                            </td>
-                            <td  >
-                                <span>{articulo.codigo}</span>
-                            </td>
-                            <td >
-                                <span>{descripcion}</span>
-                            </td>
-                              <td  >
-                                <span>{costoAnterior}</span>
-                            </td>
-                            <td  >
-                                 <span>{costoNuevo}</span>
-                            </td>
-                           
-                            <td  >
-                                <span>{precioPublicoAnterior}</span>
-                            </td>
-                            <td  >
-                                 <span>{precioPublicoAnterior}</span>
-                            </td>
-                           
-                            <td  >
-                                <span>{consecutivo}</span>
-                            </td>
-                            <td  >
-                                
-                                <div>
-                                   <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonObservaciones">?</button>
-                                <div>
-
-                            </td> 
-                            <td>
-                                <div>
-                                    <button id="{id}" name="{id}"  onclick={__IngresarAlInventario} class="botonAplicarInventario">Aplicar</button>
-                                
-                                </div>
-                            <td>
-                          
-                            
-                        </tr>
-                        </tbody>
-                    </table>
-                    
-		  </div>
-          </div>
-          </div>
-	</div>
-
-<style type="text/css"  >
-tr:hover {background-color: #e8d2c1!important;}
-tbody > tr > td > div{
-    display: flex;
-    justify-content: center!important;
-}
-tbody > tr > td > span {
-    margin-left:6px!important;
-}
-
-tbody > tr > td  {
-    text-align: center!important;
-}
-
-.elemento-titulo{
-   justify-content: center;
-   display: flex;
-}
-.caption {
-	
-	color: #4e4848;
-	font-size: x-large;
-	font-weight: bold;
-	letter-spacing: .3em;
-}
-.table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    padding: 1px!important;
-    line-height: 1.42857143!important;
-    /* vertical-align: top; */
-    /* border-top: 1px solid #ddd; */
-}
-table > thead > tr > th {
-    border-bottom: 0.5px solid #bcb2b2!important;
-}
-table {
-   margin: auto !important;
-	width: 100% !important;
-	border-collapse: collapse !important;
-	border: 1px solid #fff !important; /*for older IE*/
-	border-style: hidden !important;
-}
-
-thead, tbody, tr, td, th { display: block; }
-
-tr:after {
-    content: ' ' !important;
-    display: block !important;
-    visibility: hidden !important;
-    clear: both !important;
-}
-
-thead th {
-    height: 25px !important;
-
-    /*text-align: left;*/
-}
-
-tbody {
-    height: 55vh!important;
-    overflow-y: auto !important;
-}
-
-thead {
-    /* fallback */
-}
-
-
-tbody td, thead th {
-    width: 8.2% !important;
-    float: left !important;
-}
-
-
-
- .botonConsultar {
-     margin-top: 20px;
-    background-color: #6dca42 !important;
-    color: white !important;
-    font-size: 18px !important;
-    font-weight: 600 !important;
-    border-radius: 14px !important;
-    border-right-color: white;
-    border-color: #c2c5c5;
-    border-right-color: #c2c5c5;
-    display: block;
-    padding: 4px;
-    margin-left: 7px;
-    overflow: hidden;
-    border-width: 0px;
-    transition: auto;
-}
-.elemento-parametro{
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: start;
-}
-tr > span{
-    font-size: .875rem!important;
-}
- .botonAplicarInventario {
-    background-color: #6dca42 !important;
-    color: white !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    border-radius: 14px !important;
-    display: block;
-    border-right-color: white;
-    border-color: white;
-    border-right-color: white;
-    box-shadow: none!important;
-    border: 1px solid transparent !important;
-}
-.btn-rechazo {
-    background-color: #dd4b39;
-    border-color: #d73925;
-    border-radius: 14px;
-    font-size: 12px;
-    font-weight: 600;
-    color:white;
-     box-shadow: none!important;
-    border: 1px solid transparent !important;
-}
-.botonObservaciones {
-    box-shadow: none!important;
-    border: 1px solid transparent !important;
-
-
-   background-color: #338edd !important;
-    color: white !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    border-radius: 10px !important;
-    display: block;
-   
-    border-right-color: white;
-    border-color: white;
-    border-right-color: white;
-}
-
-input, select {
-    border-radius: 8px !important;
-    border: 1px solid var(--lightGrey3) !important;
-    color: var(--Darkgrey) !important;
-    font-weight: 400 !important;
-    height: 24px;
-    font-size: 28px;
-    line-height: 38px !important;
-    -webkit-box-sizing: border-box !important;
-    box-sizing: border-box !important;
-    padding: 0 0 0 20px !important;
-    border-radius: 3px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-.botoneras{
-    display:flex;
-
-}
-.container-tabla{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-}
-.elemen-tabla{
-    display: flex;
-}
-.botonCompra{
-        cursor: pointer;
-    background-color: #3c8dbc!important;
-    color: white !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    border-radius: 14px !important;
-    flex: 1;
-    padding-top: 5px;
-    margin-right: 5px;
-    height: 32px;
-    text-align: center;
-        margin-top: 5px;
-}
-.botonAplicarInventario{
-    background-color: #6dca42 !important;
-    color: white !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    border-radius: 14px !important;
-}
- .tituloFormat{
-     position: relative;
-    top: 1px;
-    text-align: center;
     
- }
- .campodetalle{
-    font-size: 14px;
-    width: 125px!important;
- }
- .box{
-    color: #000000 !important;
-    background: #c2c5c5 !important;
- }
- .table-header {
-     background: #c2c5c5 !important;
-     color: #000000!important;
- }
- .dataTables_wrapper .dataTables_filter input {
-    margin-left: 1.5em !important;
-    height: 30px !important;
-    border-radius: 10px !important;
-    font-size: 16px !important;
-}
-#tituloCompra{
-	font-size: 18px;
-    font-weight: 600;
+    <br>
+  <!-- Listado  -->
+    <div classs="contenedor-listar "  show={mostrarListado} >
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 ">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="planel-body" >
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.fecha.creacion")}  </th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.responsable.creacion")}    </th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.descripcion")}    </th>
+                                                <th class="table-header">{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.precio.nuevo")}</th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.compra")}</th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.diferencia")}</th>
+                                                <th class="table-header">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th >{$.i18n.prop("controlPrecio.fecha.creacion")}  </th>
+                                                <th >{$.i18n.prop("controlPrecio.responsable.creacion")}    </th>
+                                                <th >{$.i18n.prop("controlPrecio.descripcion")}    </th>
+                                                <th >{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
+                                                <th >{$.i18n.prop("cotrolPrecio.precio.nuevo")}</th>
+                                                <th >{$.i18n.prop("controlPrecio.compra")}</th>
+                                                <th >{$.i18n.prop("controlPrecio.diferencia")}</th>
+                                                <th >Acciones</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>   
+                            </div>   
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 col-lg-1 "> </div>
+        </div>
+    </div>
+    <!-- Fin del Listado -->
 
-}
-</style>
-	<script>
-		var self = this;
-	 	self.empresaActividadComercial= {}
-		self.compras = {aaData:[]}
-        self.detail = []
-        self.articulos = {data:[]}
-        self.detalleCompra  = null
-        self.consecutivo = null
-        self.tituloCompra = "Factura Electronica"
-        self.item = null;
-        self.articulo = null;
-        self.mostrarDetalles = false;
+<!--Modal mostrar Articulos de la empresa -->
+<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border encabezado-pantalla " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
+            </div>
+            <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>                   
+                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                    <thead>
+                        <th class="table-header">Fecha ingreso </th>
+                        <th class="table-header">Creado por   </th>
+                        <th class="table-header">Actualizado por    </th>
+                        <th class="table-header">Descripcion </th>
+                        <th class="table-header">Costo anterior </th>
+                        <th class="table-header">Costo nuevo </th>
+                        <th class="table-header">Precio Anterior </th>
+                        <th class="table-header">Precio nuevo</th>
+                        <th class="table-header">Estado</th>
+                        <th class="table-header">Acciones</th>
 
-		//Se cargan al montar el tag
-		self.on('mount',function(){
-			listadoControlPrecios();
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th >fecha ingreso         </th>
+                            <th >Creado por   </th>
+                            <th >Actualizado por    </th>
+                            <th >Descripcion </th>
+                            <th >Costo anterior  </th>
+                            <th >Costo nuevo  </th>
+                            <th >Precio anterior  </th>
+                            <th >Precio nuevo  </th>
+                            <th >Estado  </th>
+                            <th >  </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin del modal-->
+<style type ="text/css">
+        .fondoEncabezado {
+            background: #00539B;
+            color: #f9fafc;
+        }
+        .requeridoDato {
+                color: red;
+                text-align: left;
+                font-weight: 500;
+                font-size: 13px;
+        }
+        .fondoFacturacion {
+            background: rgb(247, 244, 244);
+            color: #f9fafc;
+            border-style: solid;
+            border-width: 5px;cliente
+        }
+        .wrap{
+            max-width:1100px;
+            width:100%;
+        }
+        body {
            
+            background:white;
+            font-size: 12px !important;
+        }
+        .contenedor-listar{
+            width:100%;
+        }
+        .input-table-search{
+            margin-left: 15px;
+            margin-right: 15px;
+            width:100%;
+        }
+        .botonConsulta{
+            margin-top:28px;
+        }
+        
+        table td{ 
+            text-align: center;
+            font-size: 12px;
+            
+                }
+        table th {
+                text-align: center;
+                font-size: 12px;
+        }
+        th, td {
+            white-space: nowrap;
+        }
+
+</style>
+
+<script>
+    var self = this
+    self.idiomaDataTable      = []         // idioma de la datatable nuevo
+    self.formato_tabla        = []         // Formato del Listado de la Tabla 
+    self.kardex               = {data:[]}
+    self.articulos            = {data:[]}
+    self.articulo = {
+        id:0,
+        descripcion:""
+    }
+    self.mostrarListado       = true
+    
+    self.on('mount',function(){
+        $("#filtros").validate(reglasDeValidacionParametros());
+        _informacionData_Kardex()
+        __InicializarTabla('.tableListar')
+        agregarInputsCombos()
+        limpiarFiltros()
          
 
-		});
-var itemDetalle = null;
-__IngresarAlInventario(e){
-    self.detalleCompra = e.item;
-    self.update()
-     swal({
-           title: '',
-           text: "Desea ingresarlo al inventario?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
-                if(validar()){
+        window.addEventListener( "keydown", function(evento){
+                $(".errorServerSideJgrid").remove();
+            }, false );
+    })
 
-                   actualizarDetalleAlInventario()
-                }
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos(){
+     // Agregar los input de busqueda 
+    $('.tableListar tfoot th').each( function (e) {
+        var title = $('.tableListar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+     	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionParametros = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicio : {
+				required : true,
+			},
+			fechaFinal : {
+				required : true,
+			},
+            articulo : {
+				required : true,
             }
-        })    
+           
+            
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+/*
+ * Muestra los filtros avanzados
+ */
+ __mostrarFiltros(){
+    if(self.mostrarFiltros){
+        self.mostrarFiltros = false;
+        self.valorMarginBottom  = '10px'
+    }else{
+        self.mostrarFiltros = true;
+        self.valorMarginBottom  = '0px'
+    }
+    self.update();
 }
 
-function validar(){
-    if(self.detalleCompra.cod_invet == null ){
-        mensajeAlertErrorOConfirmacion('error',"Error: Ingresar el codigo del articulo. 輸入商品編號")
-        return false
-    }
-    if(self.detalleCompra.cod_invet.length == 0 ){
-        mensajeAlertErrorOConfirmacion('error',"Error: Ingresar el codigo del articulo 輸入商品編號")
-        
-        return false
-    }
-    return true
+/**
+* limpiar los filtros
+**/
+__limpiar(){
+    limpiarFiltros()
+}
+
+function limpiarFiltros(){
+    $('.fechaInicio').val(null)
+    $('.fechaFinal').val(null)
+    $('.datepickerFechaFinal').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+    );
+    $('.datepickerFechaInicial').datepicker(
+        {
+           format: 'yyyy-mm-dd',
+           todayHighlight:true,
+        }
+    );
+    $('.articulo').val(null)
+    self.articulo = {}
+    self.update()
+
 }
 /**
- @param idCompra
- * @param idDetalleCompra
- * @param codigoInventario
- * @param gananciaPrecioPublico
- * @param precioPublico
- * @param codigoProveedor
+*  Busqueda de la informacion por rango de fechas
 **/
-function actualizarDetalleAlInventario(){
-   var parametros = {
-        idCompra:self.detalleCompra.idCompra,
-        idDetalleCompra:self.detalleCompra.id,
-        codigoInventario:self.detalleCompra.cod_invet,
-        gananciaPrecioPublico: self.detalleCompra.ganancia,
-        precioPublico:self.detalleCompra.precioPublicoNuevo,
-        costo:self.detalleCompra.costo,
-      
-        codigoProveedor:self.detalleCompra.cod_proveedor,
-   }
-    $.ajax({
-        url: 'actualizarDetalleCompraPorAutomatica.do',
-        datatype: "json",
-        method:"GET",
-        data :parametros,
-        success: function (result) {
-            if (result.status != 200) {
-                if (result.message != null && result.message.length > 0) {
-                     mensajeAlertErrorOConfirmacion('error',result.message)
-                }
-            } else {
-                __DeleteArticuloIngresadoInventario()
+__Busqueda(){
+     $("#filtros").validate(reglasDeValidacionParametros());
+     if ($("#filtros").valid()) {
+        var formulario = $("#filtros").serialize();
+        $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar')  
+        $.ajax({
+            url: "ListarKardexAjax.do",
+            datatype: "json",
+            data:formulario ,
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    _informacionData_Kardex();
+                    loadListar(".tableListar",idioma_espanol,self.informacion_tabla_kardex,result.aaData)
+                    agregarInputsCombos_Kardex();
+                    ActivarEventoFiltro(".tableListar")
+                }else{
+                    _informacionData_Kardex();
+                     agregarInputsCombos_Kardex();
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
             }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-
-}
-
-_AnularAlInventario(e){
-    self.detalleCompra = e.item;
-    self.update()
-     swal({
-           title: '',
-           text: "Desea Anular el ingresarlo al inventario?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
-
-                   anularDetalle(function(resultado){
-                       console.log(resultado)
-                       
-                   })
-            }
-        })    
-}
-
-
-function anularDetalle(callback){
-    
-   var parametros = {
-        idDetalleCompra:self.detalleCompra.id,
-        idCompra:self.detalleCompra.idCompra,
-   }
-    $.ajax({
-        url: 'anularDetalleCompra.do',
-        datatype: "json",
-        method:"GET",
-        data :parametros,
-        success: function (result) {
-            if (result.status != 200) {
-                if (result.message != null && result.message.length > 0) {
-                     mensajeAlertErrorOConfirmacion('error',result.message)
-                }
-            } else {
-                __DeleteArticuloIngresadoInventario()
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-   callback("Resultado exitoso")
-
-}
-
-function __DeleteArticuloIngresadoInventario(){
-     var index = self.controlPrecios.aaData .indexOf(self.detalleCompra);
-     self.controlPrecios.aaData .splice(index,1);
-     self.detail.splice(index,1);
-     self.update()
-     if(self.detail.length == 0){
-         self.update()
-         listadoDetallesCompras(self.detalleCompra.idCompra,function(resultado){
-             
-             console.log(resultado)
-         })
-         
+        });
      }
 }
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Kardex(){
+     // Agregar los input de busqueda 
+    $('.tableListar tfoot th').each( function (e) {
+        var title = $('.tableListar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+    })
+} 
 
 
 /**
-*   Actualizar el costo del codigo y recalcular la compra
+* Definicion de la tabla articulos 
 **/
-__actualizarGananciaKeyPress(e){
-    if (e.keyCode == 8 || e.keyCode == 46){
+function _informacionData_Kardex(){
+   self.informacion_tabla_kardex = [	{'data' : 'usuario.nombreUsuario'               ,"name":"usuario.nombreUsuario"                   ,"title" : 'Responsable'  ,"autoWidth":false},
+                                        {'data' : 'created_at'         ,"name":"created_at"         ,"title" : $.i18n.prop("kardez.listado.fecha")       ,"autoWidth":false,
+                                            "render":function(created_at,type, row){
+									            return created_at !=null?formatoFechaHora(created_at):null;
+	 							            }
+                                        },
+                                        {'data' : 'tipo'               ,"name":"tipo"                   ,"title" : $.i18n.prop("kardez.listado.tipo")  ,"autoWidth":false},
+                                        {'data' : 'cantidadSolicitada' ,"name":"cantidadSolicitada"     ,"title" : $.i18n.prop("kardez.listado.cantidad.solicitada")   ,"autoWidth":false},
+                                        {'data' : 'cantidadActualSTR'  ,"name":"cantidadActualSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.actual")   ,"autoWidth":false},
+                                        {'data' : 'costoActualSTR'     ,"name":"costoActualSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.actual"),"autoWidth":false
+                                        },
+                                        {'data' : 'totalCostoActualSTR' ,"name":"totalCostoActualSTR"   ,"title" : $.i18n.prop("kardez.listado.totalCosto.actual"),"autoWidth":false},
+                                        {'data' : 'cantidadNuevaSTR'    ,"name":"cantidadNuevaSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.nueva")   ,"autoWidth":false},
+                                        {'data' : 'costoNuevoSTR'       ,"name":"costoNuevoSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.nuevo"),"autoWidth":false
+                                        },
+                                        {'data' : 'totalCostoNuevoSTR' ,"name":"totalCostoNuevoSTR"     ,"title" : $.i18n.prop("kardez.listado.totalCosto.nuevo"),"autoWidth":false
+                                        }
+                                        
+                                    ];
+    
+ self.update()        
+}
+
+
+
+
+
+/**
+ * Listar codigos  llamado del modal para presentar los articulos
+ **/   
+ __ListaDecodigos(){
+    $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    $('#modalInventario').modal('show')    
+    
+ }
+
+ /**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}   
+
+/**
+* mostrar la lista de articulos de la empresa
+**/
+function __ListaDeArticulosPorDescripcion(){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
         return
     }
-    aplicarGananciaCompra(e)
-}
-
-__actualizarCostoInventario(e){
-    if (e.keyCode == 8 || e.keyCode == 46){
-        return
-    }
-    var costo = __valorNumerico(e.currentTarget.value);
-    self.item = e.item; 
-    var index = self.controlPrecios.aaData .indexOf(self.item);
-    var impuesto  =  __valorNumerico(self.item.articulo.impuesto)
-    var precioPublico    =  __valorNumerico(self.item.precioPublicoNuevo)
-    self.item.costo = costo
-    self.item.ganancia = __CalcularGanancia(impuesto,costo,precioPublico);
-    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.articulo.ganancia,aplicarRedondeo()))
-    if(self.item.precioPublico == 0){
-        self.item.precioPublicoNuevo =_ObtenerPrecio(self.item.articulo.costo,self.item.articulo.impuesto * 100,0,self.item.ganancia)
-        self.item.precioPublicoNuevo =  __valorNumerico(redondeoDecimales(self.item.precioPublicoNuevo,aplicarRedondeo()))
-    }
-    
-    self.detail[index] = self.item
-    self.update()
-}
-
-
-
-function aplicarGananciaCompra(e){
-    var ganancia = e.currentTarget.value;
-    self.item = e.item; 
-    var index = self.controlPrecios.aaData .indexOf(self.item);
-    var impuesto  =  __valorNumerico(self.item.imp_art)
-    var costo     =  __valorNumerico(self.item.articulo.costo)
-    var precioPublico    =  __valorNumerico(self.item.precioPublicoNuevo)
-    self.item.costo = costo
-    self.item.ganancia = __valorNumerico(ganancia);
-    self.item.precioPublicoNuevo =_ObtenerPrecio(self.item.costo,self.item.imp_art ,0,self.item.ganancia)
-    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
-    self.item.precioPublicoNuevo =  __valorNumerico(redondeoDecimales(self.item.precioPublicoNuevo,aplicarRedondeo()))
-    self.detail[index] = self.item
-    self.update()
-
-}
-/**
-*   Actualizar el costo del codigo y recalcular la compra
-**/
-__actualizarPrecioKeyPress(e){
-    
-    __ActualizarPrecioDetalle(e)
-}
-
-
-
-function __ActualizarPrecioDetalle(e){
-    var precio = e.currentTarget.value;
-    self.item = e.item; 
-    var index = self.detail.indexOf(self.item);
-    var impuesto = __valorNumerico(self.item.impuesto)
-    var costo = __valorNumerico(self.item.costo)
-    var precioPublico =  __valorNumerico(precio)
-    self.item.ganancia = __CalcularGanancia(impuesto,costo,precioPublico);
-    self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
-    self.item.precioPublicoNuevo = precio
-    self.detail[index] = self.item;
-    self.update()
-}
-
-
-
- 
-/**
-Listado de recepcion de compras
-**/		
-function listadoControlPrecios() {
-    self.controlPrecios = {aaData:[]}
-    self.detail = []
-    self.update()
-	obtenerControlPrecio()
-    .then(res => {
-        self.controlPrecios.aaData = res
-        $.each(self.controlPrecios.aaData , function( index, modeloTabla ) {
-            self.detail.push(modeloTabla);
-             self.detail.push(modeloTabla);
-              self.detail.push(modeloTabla);
-               self.detail.push(modeloTabla);
-                self.detail.push(modeloTabla);
-                 self.detail.push(modeloTabla);
-                  self.detail.push(modeloTabla);
-                   self.detail.push(modeloTabla);
-                    self.detail.push(modeloTabla);
-                     self.detail.push(modeloTabla);
-                      self.detail.push(modeloTabla);
-                       self.detail.push(modeloTabla);
-                        self.detail.push(modeloTabla);
-                         self.detail.push(modeloTabla);
-                          self.detail.push(modeloTabla);
-                           self.detail.push(modeloTabla);
-                            self.detail.push(modeloTabla);
-                             self.detail.push(modeloTabla);
-                              self.detail.push(modeloTabla);
-                               self.detail.push(modeloTabla);
-            self.mostrarDetalles = true;
-        })
-        
-        self.update()
-
-        unBlockUIStop();
-      
-     })
-     .catch(err=>{
-         unBlockUIStop();
-         console.error(err)
-     })
-	
-
-
-
-    
-}
-
-
-
-
-
-
-   
-
-
-__MostrarPDF(e) {
-     var data = e.item;
-      	var parametros = {
-            direccion: "bajarArchivo.do?filename=" + data.factura_pdf,
-            stylemodal: "modal-xl"
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
+    $.ajax({
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
+        datatype: "json",
+        method:"GET",
+        data :formulario,
+        success: function (result) {
+            if(result.aaData.length > 0){
+                _informacionData_Articulo()
+                self.articulos.data           = result.aaData
+                self.update()
+                loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
+                agregarInputsCombos_Articulo()
+                __agregarArticulos()
+                ActivarEventoFiltro(".tableListarArticulos")
+             
+                
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
         }
-        riot.mount('view-pdf', { datos: parametros });
+    });
+}
+
+/**
+* Definicion de la tabla articulos 
+**/
+function _informacionData_Articulo(){
+   self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
+                                        {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
+                                        {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
+                                        {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
+                                          "render":function(precioPublico,type, row){
+                                              var resultado = formatoDecimales(__valorNumerico(precioPublico))
+                                               return  resultado;
+                                            }
+                                        },
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+                                            "render":function(id,type, row){
+                                                    return __OpcionesArticulos(id,type,row);
+                                                }	 
+                                        },
+                              ];
+    
+ self.update()        
 }
 
 
+/**
+* Opciones del modal de articulos
+*/
+function __OpcionesArticulos(){
+  var agregar  = '<a href="#"   class="btn btnAgregar btn-success form-control" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+
+/**
+* Agregar codigos a la compra desde modal de articulos
+**/
+function __agregarArticulos() {
+     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarArticulos').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        self.articulo = data;
+        
+        self.update();  
+	    
+    });
+}
+
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Articulo(){
+     // Agregar los input de busqueda 
+    $('.tableListarArticulos tfoot th').each( function (e) {
+        var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 4    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
 </script>
 </control-precio>
