@@ -82,8 +82,9 @@
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.descripcion")}    </th>
                                                 <th class="table-header">{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.precio.nuevo")}</th>
-                                                <th class="table-header">{$.i18n.prop("controlPrecio.compra")}</th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.diferencia")}</th>
+                                                <th class="table-header">{$.i18n.prop("controlPrecio.compra")}</th>
+                                                
                                                 <th class="table-header">Acciones</th>
                                             </tr>
                                         </thead>
@@ -93,9 +94,10 @@
                                                 <th >{$.i18n.prop("controlPrecio.responsable.creacion")}    </th>
                                                 <th >{$.i18n.prop("controlPrecio.descripcion")}    </th>
                                                 <th >{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
-                                                <th >{$.i18n.prop("cotrolPrecio.precio.nuevo")}</th>
-                                                <th >{$.i18n.prop("controlPrecio.compra")}</th>
+                                                <th >{$.i18n.prop("controlPrecio.precio.nuevo")}</th>
                                                 <th >{$.i18n.prop("controlPrecio.diferencia")}</th>
+                                                <th >{$.i18n.prop("controlPrecio.compra")}</th>
+                                               
                                                 <th >Acciones</th>
                                             </tr>
                                         </tfoot>
@@ -236,8 +238,10 @@
     
     self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacionParametros());
-        _informacionData_Kardex()
+       
         __InicializarTabla('.tableListar')
+        
+        
         agregarInputsCombos()
         limpiarFiltros()
          
@@ -246,6 +250,65 @@
                 $(".errorServerSideJgrid").remove();
             }, false );
     })
+__Busqueda(){
+     $("#filtros").validate(reglasDeValidacionParametros());
+     if ($("#filtros").valid()) {
+        var formulario = $("#filtros").serialize();
+        $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar')  
+        listadoControlPrecios();
+     }
+}
+function listadoControlPrecios() {
+    self.controlPrecios = {aaData:[]}
+    self.detail = []
+    self.update()
+	obtenerControlPrecio(null,null,null,null)
+    .then(res => {
+        self.controlPrecios.aaData = res
+        $.each(self.controlPrecios.aaData , function( index, modeloTabla ) {
+            self.detail.push(modeloTabla);
+             self.detail.push(modeloTabla);
+              self.detail.push(modeloTabla);
+               self.detail.push(modeloTabla);
+                self.detail.push(modeloTabla);
+                 self.detail.push(modeloTabla);
+                  self.detail.push(modeloTabla);
+                   self.detail.push(modeloTabla);
+                    self.detail.push(modeloTabla);
+                     self.detail.push(modeloTabla);
+                      self.detail.push(modeloTabla);
+                       self.detail.push(modeloTabla);
+                        self.detail.push(modeloTabla);
+                         self.detail.push(modeloTabla);
+                          self.detail.push(modeloTabla);
+                           self.detail.push(modeloTabla);
+                            self.detail.push(modeloTabla);
+                             self.detail.push(modeloTabla);
+                              self.detail.push(modeloTabla);
+                               self.detail.push(modeloTabla);
+            self.mostrarDetalles = true;
+        })
+        
+        self.update()
+
+        unBlockUIStop();
+        var informacion = _informacionData()
+        loadListar(".tableListar",idioma_espanol,informacion,self.detail)
+        agregarInputsCombos_Kardex();
+        ActivarEventoFiltro(".tableListar")
+      
+     })
+     .catch(err=>{
+         unBlockUIStop();
+         console.error(err)
+     })
+	
+
+
+
+    
+}
 
 
 /**
@@ -328,35 +391,7 @@ function limpiarFiltros(){
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
-__Busqueda(){
-     $("#filtros").validate(reglasDeValidacionParametros());
-     if ($("#filtros").valid()) {
-        var formulario = $("#filtros").serialize();
-        $("#tableListar").dataTable().fnClearTable(); 
-        __InicializarTabla('.tableListar')  
-        $.ajax({
-            url: "ListarKardexAjax.do",
-            datatype: "json",
-            data:formulario ,
-            method:"GET",
-            success: function (result) {
-                if(result.aaData.length > 0){
-                    _informacionData_Kardex();
-                    loadListar(".tableListar",idioma_espanol,self.informacion_tabla_kardex,result.aaData)
-                    agregarInputsCombos_Kardex();
-                    ActivarEventoFiltro(".tableListar")
-                }else{
-                    _informacionData_Kardex();
-                     agregarInputsCombos_Kardex();
-                }           
-            },
-            error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
-                console.log(xhr);
-            }
-        });
-     }
-}
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -369,35 +404,44 @@ function agregarInputsCombos_Kardex(){
     })
 } 
 
-
+ 
 /**
 * Definicion de la tabla articulos 
 **/
-function _informacionData_Kardex(){
-   self.informacion_tabla_kardex = [	{'data' : 'usuario.nombreUsuario'               ,"name":"usuario.nombreUsuario"                   ,"title" : 'Responsable'  ,"autoWidth":false},
-                                        {'data' : 'created_at'         ,"name":"created_at"         ,"title" : $.i18n.prop("kardez.listado.fecha")       ,"autoWidth":false,
-                                            "render":function(created_at,type, row){
-									            return created_at !=null?formatoFechaHora(created_at):null;
-	 							            }
-                                        },
-                                        {'data' : 'tipo'               ,"name":"tipo"                   ,"title" : $.i18n.prop("kardez.listado.tipo")  ,"autoWidth":false},
-                                        {'data' : 'cantidadSolicitada' ,"name":"cantidadSolicitada"     ,"title" : $.i18n.prop("kardez.listado.cantidad.solicitada")   ,"autoWidth":false},
-                                        {'data' : 'cantidadActualSTR'  ,"name":"cantidadActualSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.actual")   ,"autoWidth":false},
-                                        {'data' : 'costoActualSTR'     ,"name":"costoActualSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.actual"),"autoWidth":false
-                                        },
-                                        {'data' : 'totalCostoActualSTR' ,"name":"totalCostoActualSTR"   ,"title" : $.i18n.prop("kardez.listado.totalCosto.actual"),"autoWidth":false},
-                                        {'data' : 'cantidadNuevaSTR'    ,"name":"cantidadNuevaSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.nueva")   ,"autoWidth":false},
-                                        {'data' : 'costoNuevoSTR'       ,"name":"costoNuevoSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.nuevo"),"autoWidth":false
-                                        },
-                                        {'data' : 'totalCostoNuevoSTR' ,"name":"totalCostoNuevoSTR"     ,"title" : $.i18n.prop("kardez.listado.totalCosto.nuevo"),"autoWidth":false
-                                        }
-                                        
-                                    ];
+function _informacionData(){
+ var resltado =  [	
+     {'data' : 'created_atSTR'         ,"name":"created_at" ,"title" : $.i18n.prop("controlPrecio.responsable.creacion") ,"autoWidth":false},
+     {'data' : 'responbleAceptarPrecio.nombreUsuario' ,"name":"responbleAceptarPrecio.nombreUsuario"  ,"title" : $.i18n.prop("controlPrecio.fecha.creacion")  ,"autoWidth":false},
+     {'data' : 'descripcion',"name":"descripcion","title" : $.i18n.prop("controlPrecio.descripcion")  ,"autoWidth":false},
+     {'data' : 'precioPublicoAnterior' ,"name":"precioPublicoAnterior","title" : $.i18n.prop("cotrolPrecio.precio.anterior")  ,"autoWidth":false},
+     {'data' : 'precioPublicoNuevo'  ,"name":"precioPublicoNuevo","title" : $.i18n.prop("controlPrecio.precio.nuevo")   ,"autoWidth":false},
+     {'data' : 'consecutivo' ,"name":"consecutivo"   ,"title" : $.i18n.prop("controlPrecio.diferencia"),"autoWidth":false},
+     {'data' : 'consecutivo',"name":"consecutivo" ,"title" : $.i18n.prop("controlPrecio.compra"),"autoWidth":false},
     
- self.update()        
+        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+                                            "render":function(id,type, row){
+                                                    return __Opciones(id,type,row);
+                                                }	 
+                                        },                                
+                                    ];
+    return resltado;
+    
 }
 
-
+/**
+ * Opciones listado de los clientes
+ */
+function __Opciones(id, type, row) {
+    let menu = '<div class="dropdown">'
+    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
+    menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+    menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
+    menu += '<li><a href="#"  title="Cambia al precio anterior" class="  btnReversar" >Reversar Precio</a></li>'
+  
+    menu += "</ul></div>"
+    return menu;
+}
 
 
 

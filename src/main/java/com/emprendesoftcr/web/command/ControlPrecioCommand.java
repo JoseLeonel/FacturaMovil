@@ -140,6 +140,10 @@ public class ControlPrecioCommand {
 	public Date getCreated_at() {
 		return created_at;
 	}
+	
+	public String getCreated_atSTR() {
+		return Utils.getFechaGeneraReporte(this.created_at());
+	}
 
 	public String getCreated_atSTR() {
 		if (this.created_at != null) {

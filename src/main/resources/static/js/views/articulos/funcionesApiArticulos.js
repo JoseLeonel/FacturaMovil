@@ -2,7 +2,7 @@
     /***
      * consulta un producto
      */
-const obtenerControlPrecio = async() => {
+const obtenerControlPrecio = async(fechaInicial,fechaFinal,idUsuario,idArticulo) => {
         try {
         
             const rawResponse = await fetch('/api/articulo/listaControlPrecioPendienteAceptar' );
