@@ -6,21 +6,7 @@ $(document).ready(function() {
 }); /*fin document*/
 
 var _Init = function() {
-    __Inicializar_Table('.tableListar');
-    $('.totalExonerado').val(0);
-    $('.totalCosto').val(0);
-    $('.totalDescuento').val(0);
-    $('.totalIVA').val(0);
-    $('.totalVenta').val(0);
-    agregarInputsCombos();
-    $('.datepickerFechaFinal').datepicker({
-        format: 'yyyy-mm-dd',
-        todayHighlight: true,
-    });
-    $('.datepickerFechaInicial').datepicker({
-        format: 'yyyy-mm-dd',
-        todayHighlight: true,
-    });
+	Limpiar();
     ListarCategoriasActivos()
     $('#panelFiltros').click(function() {
         var advanced_search_section = $('#filtrosAvanzados');
@@ -33,9 +19,21 @@ var _Init = function() {
         }
     });
     $('.btnLimpiarFiltros').click(function() {
-        $("#fechaInicial").val(null);
-        $("#fechaFinal").val(null);
+    	Limpiar();
     });
+    $('.enviarCorreo').click(function() {
+        if ($("#filtros").valid()) {
+        	__correoAlternativo();
+        }
+    });
+    
+    $('.enviarListarCorreo').click(function() {
+        if ($("#filtros").valid()) {
+        	__Enviar();
+        }
+    });
+    
+    
     $('.descargarExcel').click(function() {
         if ($("#filtros").valid()) {
             descargarExcel()
@@ -43,10 +41,36 @@ var _Init = function() {
     });
     $('.descargarExcel').hide();
     $("#filtros").validate(reglasDeValidacion());
+    $("#formularioListarEnviarCorreo").validate(reglasDeValidacionCorreo());	
     var advanced_search_section = $('#filtrosAvanzados');
     advanced_search_section.slideToggle(750);
 }
 
+
+function Limpiar(){
+	 $("#fechaInicial").val(null);
+     $("#fechaFinal").val(null);
+     __Inicializar_Table('.tableListar');
+     $('.totalExonerado').val(0);
+     $('.totalCosto').val(0);
+     $('.totalDescuento').val(0);
+     $('.totalIVA').val(0);
+     $('.totalVenta').val(0);
+     agregarInputsCombos();
+     $('.datepickerFechaFinal').datepicker({
+         format: 'yyyy-mm-dd',
+         todayHighlight: true,
+     });
+     $('.datepickerFechaInicial').datepicker({
+         format: 'yyyy-mm-dd',
+         todayHighlight: true,
+     });
+     var table = $('.tableListar').DataTable();
+     table
+         .clear()
+         .draw();
+     facturas = { data: [] }
+}
 
 /**
  * Reglas aplicadas
@@ -95,6 +119,84 @@ function descargarExcel() {
     location.href = "DescargarVentasByArticulos.do?fechaInicioParam=" + fechaInicio + "&fechaFinParam=" + fechaFin + "&codigoArticulo=" + codigoArticulo + "&estado=" + estado;
 }
 
+
+/**
+* Enviar el correo alternativo
+**/
+function __correoAlternativo(){
+    $('.correoAlternativoFactura').val(null)
+    $('#ModalCorreoAlternativoFactura').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    $('#ModalCorreoAlternativoFactura').modal('show')      
+}
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionCorreo = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			correoAlternativoFactura : {
+				required : true,
+                email:true,
+                maxlength:240,
+                minlength:1,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+/**
+* Enviar el correo
+**/
+function __Enviar(){
+     if ($("#formularioListarEnviarCorreo").valid()) {
+    	 __EnviarPorCorreo()
+     }
+}
+
+
+/**
+*  Busqueda de la informacion y la envia por correo
+**/
+function __EnviarPorCorreo(){
+	  var fechaInicio = $('.fechaInicial').val();
+	    var fechaFin = $('.fechaFinal').val();
+    if ($("#filtros").valid()) {
+     
+        var parametros = {
+                fechaInicioParam: fechaInicio,
+                correoAlternativo:$('#correoAlternativo').val(),	
+                fechaFinParam: fechaFin,
+                codigoArticulo: $('.codigoArticulo').val(),
+                estado: $('.estado').val(),
+            }
+        $.ajax({
+            url: "EnvioCorreoVentaArticuloResumenAjax.do",
+            datatype: "json",
+            data:parametros ,
+            method:"GET",
+            success: function (data) {
+				 if (data.status != 200) {
+        			if (data.message != null && data.message.length > 0) {
+            			sweetAlert("", data.message, "error");
+        			}
+    			}else{
+        			sweetAlert("", data.message, "info");
+    			}
+			    self.update();
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+        });
+ 	}		
+}
 /**
  *  Obtiene la lista de los clientes activos
  **/
@@ -254,7 +356,6 @@ var informacion_tabla = [
     { 'data': 'descripcion', "name": "descripcion", "title": "Descripcion", "autoWidth": true },
     { 'data': 'cantidadSTR', "name": "cantidad", "title": "Cantidad", "autoWidth": true },
     { 'data': 'descuentoSTR', "name": "descuento", "title": "Descuento", "autoWidth": true },
-    { 'data': 'totalExoneracionesSTR', "name": "totalExoneraciones", "title": "Exoneraciones", "autoWidth": true },
     { 'data': 'totalImpuestoSTR', "name": "totalImpuesto", "title": "Total Impuesto", "autoWidth": true },
     { 'data': 'totalVentasSTR', "name": "totalVentas", "title": "Total Venta", "autoWidth": true },
    

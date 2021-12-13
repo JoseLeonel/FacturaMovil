@@ -327,7 +327,52 @@ public class DetalleController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/EnvioCorreoVentaArticuloResumenAjax.do", method = RequestMethod.GET)
+	public RespuestaServiceValidator envioCorreoVentaArticuloAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Detalle detalle,BindingResult result,@RequestParam String correoAlternativo , @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo,  @RequestParam(value = "estado", required = false) Integer estado) throws IOException, Exception {
+
+		RespuestaServiceValidator<?> respuestaServiceValidator = new RespuestaServiceValidator<Object>();
+		try {
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+//			Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+			Date fechaFinalP = Utils.parseDate(fechaFinParam);
+			if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+				if (fechaFinalP != null) {
+					fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+				}
+			}
+			ByteArrayOutputStream baos = Utils.convertirOutStream(detalleBo.ventasbyArticuloExcel(fechaInicioParam, fechaFinParam,  codigoArticulo, usuarioSesion.getEmpresa().getId(),estado));
+			// Se prepara el excell
+		
+			Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+			// Se prepara el correo
+			String from = "factura@facturaemprendesoftcr.com";
+			String nombre = usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? usuarioSesion.getEmpresa().getNombre() : usuarioSesion.getEmpresa().getNombreComercial();
+			nombre = nombre.length() > 50 ?nombre.substring(0,50):nombre;
+			String subject = nombre+ " Ventas por articulo rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+			ArrayList<String> listaCorreos = new ArrayList<>();
+			listaCorreos.add(correoAlternativo);
+			Map<String, Object> modelEmail = new HashMap<>();
+			modelEmail.put("fechaInicial", fechaInicioParam);
+			modelEmail.put("fechaFinal", fechaFinParam);
+			modelEmail.put("impuesto", 0);
+			modelEmail.put("total", 0);
+			modelEmail.put("descuento", 0);
+			
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_ARTICULOS, modelEmail);
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+		} catch (Exception e) {
+			log.error("** Error  Enviado correo: " + " fecha " + new Date() + "" + e.getMessage());
+			System.out.println("No enviado correctamente el correo");
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.envio.correo.reintente", result.getAllErrors());
+
+		}
+
+		return respuestaServiceValidator;
+
+	}
 	
 
 	@RequestMapping(value = "/DescargarVentasByCategoria.do", method = RequestMethod.GET)

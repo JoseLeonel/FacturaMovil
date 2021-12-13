@@ -98,6 +98,9 @@ public class Constantes {
 	public static final String ARTICULO_MAXIMO = "2";
 	public static final String PLANTILLA_CORREO_CUENTAS_POR_COBRAR = "email/cuentasxcobrar.vm";
 	public static final String PLANTILLA_CORREO_VENTA_POR_CODIGO = "email/ventasXCodigo.vm";
+	
+	public static final String PLANTILLA_CORREO_VENTA_POR_ARTICULOS = "email/emailResumenVentasProductos.vm";
+	
 	public static final String PLANTILLA_CORREO_COMPRAS_ACEPTADAS = "email/emailResumenCompras.vm";
 	public static final String PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA = "email/emailResumenFactura.vm";
 	public static final String PLANTILLA_CORREO_CIERRE_CAJA = "email/emailCaja.vm";

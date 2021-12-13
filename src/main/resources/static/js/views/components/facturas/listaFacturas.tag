@@ -214,6 +214,17 @@
      </div>
 </div>
 <style type="text/css">
+
+.modal-dialog {
+    width: 600px!important;
+    margin: 30px auto;
+}
+
+h1 {
+    color: #222D32;
+    font-size: 20px!important;
+    font-weight: bold;
+}
 .clickable {
         cursor: pointer;
     }

@@ -1048,6 +1048,7 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
+		
 			// aplica decremento de los articulos cuando se trata de paquetes o six pack
 			if (articulo != null) {
 				if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {

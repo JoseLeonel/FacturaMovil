@@ -718,13 +718,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 					// Guanacaste
-					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+					// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
 					//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
-					// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				} else {
 					recepcion.setCallbackUrl(Constantes.EMPTY);
@@ -755,7 +755,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 500000)
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1498,7 +1498,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(fixedDelay = 8000)
+	@Scheduled(fixedDelay = 25000)
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
