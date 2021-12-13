@@ -403,7 +403,12 @@ function _informacionData_Kardex(){
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    $('#modalInventario').modal('show')    
+    
+    $('#modalInventario').on('shown.bs.modal', function () {
+        $('#codigoArt').select()
+        $('#codigoArt').focus()
+
+    })
     
  }
 
@@ -510,6 +515,7 @@ function __agregarArticulos() {
         self.articulo = data;
         
         self.update();  
+        $('#modalInventario').modal('hide')
 	    
     });
 }

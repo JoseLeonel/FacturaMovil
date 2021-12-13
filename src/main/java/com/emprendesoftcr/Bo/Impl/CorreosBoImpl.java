@@ -47,26 +47,32 @@ public class CorreosBoImpl implements CorreosBo {
 
 					public void prepare(MimeMessage mimeMessage) throws MessagingException {
 						Integer cantidadDocumentos = 1;
-						MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-						for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
-							String correo = (String) iterator.next();
-							if (Utils.validarCorreo(correo)) {
-								message.addTo(new InternetAddress(correo));
-							}
-						}
-						if (attachments != null) {
-							cantidadDocumentos = 1;
-							for (Attachment attachment : attachments) {
-								if (cantidadDocumentos <= 3) {
-									message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+						try {
+							MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+							for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
+								String correo = (String) iterator.next();
+								if (Utils.validarCorreo(correo)) {
+									message.addTo(new InternetAddress(correo));
 								}
-								cantidadDocumentos++;
 							}
+							if (attachments != null) {
+								cantidadDocumentos = 1;
+								for (Attachment attachment : attachments) {
+									if (cantidadDocumentos <= 3) {
+										message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+									}
+									cantidadDocumentos++;
+								}
+							}
+							message.setSubject(subjet);
+							message.setFrom(from);
+							String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
+							message.setText(text, true);
+							
+						} catch (Exception e) {
+							log.error("Error al enviar el mail: ", e.getMessage());
+							throw e;
 						}
-						message.setSubject(subjet);
-						message.setFrom(from);
-						String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
-						message.setText(text, true);
 					}
 				});
 				 

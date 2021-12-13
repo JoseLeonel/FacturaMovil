@@ -24,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan(basePackageClasses = { FacturaElectronicaApplication.class })
 public class FacturaElectronicaApplication extends SpringBootServletInitializer implements WebMvcConfigurer {
 	@PostConstruct
+	
 	public void init() { 
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Costa_Rica"));
 	}	 

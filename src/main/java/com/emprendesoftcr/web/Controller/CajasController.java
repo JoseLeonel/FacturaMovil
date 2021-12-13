@@ -144,8 +144,6 @@ public class CajasController {
 		return listarEntradasOrSalidasT(request, response, idTipoEntrada, idEntradaSalida);
 	}
 
-
-
 	private RespuestaServiceDataTable<?> listarEntradasOrSalidasT(HttpServletRequest request, HttpServletResponse response, Integer idTipoEntrada, Long idEntradaSalida) {
 		DataTableDelimitador delimitadores = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -178,23 +176,26 @@ public class CajasController {
 		return listarCajasActivasAjaxT(request, response);
 	}
 
-	
 	public RespuestaServiceDataTable<?> listarCajasActivasAjaxT(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
+		JqGridFilter dataTableFilter = null;
 		delimitadores = new DataTableDelimitador(request, "Caja");
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (usuarioBo.isUsuario_Condominio(usuario) && usuarioBo.isAdministrador_sistema(usuario) && usuarioBo.isAdministrador_empresa(usuario) && usuarioBo.isAdministrador_restaurante(usuario)) {
-			String nombreUsuario = request.getUserPrincipal().getName();
-			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
-			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
+		if (usuario != null) {
+			dataTableFilter = usuarioBo.filtroPorEmpresa(usuario.getNombreUsuario());
+		}
+
+		delimitadores.addFiltro(dataTableFilter);
+		if (!usuarioBo.isUsuario_Condominio(usuario) && !usuarioBo.isAdministrador_sistema(usuario) && !usuarioBo.isAdministrador_empresa(usuario) && !usuarioBo.isAdministrador_restaurante(usuario)&& !usuarioBo.isAdministrador_cajero(usuario)) {
+
+		
 
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
-
+		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 

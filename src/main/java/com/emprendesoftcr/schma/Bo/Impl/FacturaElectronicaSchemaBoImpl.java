@@ -86,8 +86,9 @@ public class FacturaElectronicaSchemaBoImpl implements FacturaElectronicaSchemaB
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFactura.setEmpresa(empresa);
-			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			recepcionFactura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			
+			recepcionFactura.setEstadoFirma(empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)?Constantes.FACTURA_ESTADO_FIRMA_COMPLETO:Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+			recepcionFactura.setEstado(empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)?Constantes.FACTURA_ESTADO_ACEPTADA:Constantes.FACTURA_ESTADO_FACTURADO);
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			if (recepcionFactura.getFacturaConsecutivo() != null && !recepcionFactura.getFacturaConsecutivo().equals(Constantes.EMPTY)) {
 				recepcionFactura.setTipoDocEmisor(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
