@@ -72,5 +72,5 @@ public interface ArticuloBo {
 				Articulo articulo, HttpServletResponse response, String codigoArticulo,
 				BindingResult result);
 		
-		RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario);
+		RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario,String fechaInicioParam, String fechaFinParam,  String codigoArticulo) ;
 }

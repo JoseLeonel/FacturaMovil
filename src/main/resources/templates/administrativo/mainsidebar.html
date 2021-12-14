@@ -111,6 +111,13 @@
 						<li><a th:href="@{/ListarMotivoEntradas}"
 							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')"><i
 								class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
+						<li class="treeview"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
+							<a th:href="@{/ListarControlPrecio}"> <i
+								class="fa fa-pencil-square"></i> <span>Bitacora
+									Precios</span>
+						</a>
+						</li>
 
 					</ul>
 				</li>
@@ -131,12 +138,7 @@
 				<span>Cambio Precio</span>
 		</a>
 		</li>
-		<li class="treeview"
-			sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
-			<a th:href="@{/ListarControlPrecio}"> <i class="fa fa-pencil-square"></i>
-				<span>Verificacion Precios</span>
-		</a>
-		</li>
+
 
 		<li class="treeview"
 			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante')">

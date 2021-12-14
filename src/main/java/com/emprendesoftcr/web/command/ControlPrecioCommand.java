@@ -39,6 +39,11 @@ public class ControlPrecioCommand {
 	private Date			created_at;
 
 	private Date			updated_at;
+	private Double diferencia;
+	
+	private String codigo;
+	private String codigoNuevo;
+
 
 	public ControlPrecioCommand(ControlPrecioArticulo controlPrecioArticulo) {
 		super();
@@ -67,6 +72,11 @@ public class ControlPrecioCommand {
 
 		this.updated_at = controlPrecioArticulo.getUpdated_at();
 
+		Double precioAnterior = controlPrecioArticulo.getPrecioPublicoAnterior() != null?controlPrecioArticulo.getPrecioPublicoAnterior() :Constantes.ZEROS_DOUBLE;
+		Double precioNuevo = controlPrecioArticulo.getPrecioPublicoNuevo() != null? controlPrecioArticulo.getPrecioPublicoNuevo():Constantes.ZEROS_DOUBLE;
+		this.diferencia = precioNuevo - precioAnterior   ;
+		this.codigo = controlPrecioArticulo.getCodigo();
+		this.codigoNuevo = controlPrecioArticulo.getCodigoNuevo();
 	}
 
 	public Long getId() {
@@ -141,9 +151,7 @@ public class ControlPrecioCommand {
 		return created_at;
 	}
 	
-	public String getCreated_atSTR() {
-		return Utils.getFechaGeneraReporte(this.created_at());
-	}
+
 
 	public String getCreated_atSTR() {
 		if (this.created_at != null) {
@@ -212,4 +220,28 @@ public class ControlPrecioCommand {
 		this.gananciaNueva = gananciaNueva;
 	}
 
+	
+	public Double getDiferencia() {
+		return diferencia;
+	}
+
+	
+	public void setDiferencia(Double diferencia) {
+		this.diferencia = diferencia;
+	}
+	public String getDiferenciaSTR() {
+		return Utils.formateadorMiles(this.diferencia);
+	}
+
+	
+	public String getCodigo() {
+		return codigo;
+	}
+
+	
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+	
+	
 }

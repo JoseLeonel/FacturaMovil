@@ -757,11 +757,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
 	
-<<<<<<< HEAD
-//	@Scheduled(fixedDelay = 5000)
-=======
+
 	@Scheduled(fixedDelay = 500000)
->>>>>>> master
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -1504,11 +1501,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-<<<<<<< HEAD
-//	@Scheduled(fixedDelay = 8000)
-=======
+
 	@Scheduled(fixedDelay = 25000)
->>>>>>> master
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

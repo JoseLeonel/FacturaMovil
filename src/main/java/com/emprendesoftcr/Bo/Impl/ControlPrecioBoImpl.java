@@ -59,26 +59,30 @@ public class ControlPrecioBoImpl implements ControlPrecioBo {
 	}
 
 	@Override
-	public void agregarControlPrecio(Articulo articuloCambio, Articulo articuloActual, String nota, String rutaArchivoCompra, String consecutivoCompra, Usuario usuarioResponsable) {
+	public void agregarControlPrecio(Articulo articuloCambio, Articulo articuloActual, String nota, String rutaArchivoCompra, String consecutivoCompra, String clave,Usuario usuarioResponsable) {
 		ControlPrecioArticulo controlPrecioArticulo = new ControlPrecioArticulo();
-		if (usuarioBo.isAdministrador_cajero(usuarioResponsable) || usuarioBo.isAdministrador_empresa(usuarioResponsable) || usuarioBo.isAdministrador_restaurante(usuarioResponsable)) {
+	//	if (usuarioBo.isAdministrador_cajero(usuarioResponsable) || usuarioBo.isAdministrador_empresa(usuarioResponsable) || usuarioBo.isAdministrador_restaurante(usuarioResponsable)) {
 			controlPrecioArticulo.setEstado(Constantes.ESTADO_ACEPTADO_ADMINISTRADOR_CAMBIO_PRECIO);
-		} else {
-			controlPrecioArticulo.setEstado(Constantes.ESTADO_PENDIENTE_ADMINISTRADOR_CAMBIO_PRECIO);
+	//	} else {
+	//		controlPrecioArticulo.setEstado(Constantes.ESTADO_PENDIENTE_ADMINISTRADOR_CAMBIO_PRECIO);
 
-		}
+	//	}
 
 		if (articuloCambio.getPrecioPublico() != articuloActual.getPrecioPublico() ) {
-
-			controlPrecioArticulo.setArticulo(articuloActual);
-			controlPrecioArticulo.setCostoNuevo(articuloActual.getCosto());
+			controlPrecioArticulo.setClave(clave);
+			controlPrecioArticulo.setCodigo(articuloActual.getId() != null? articuloActual.getCodigo():articuloCambio.getCodigo());
+			controlPrecioArticulo.setCodigoNuevo(articuloCambio.getCodigo());
+			controlPrecioArticulo.setArticulo(articuloCambio);
+			controlPrecioArticulo.setCostoNuevo(articuloCambio.getCosto());
+			controlPrecioArticulo.setCostoAnterior(articuloActual.getCosto());
 			controlPrecioArticulo.setPrecioPublicoNuevo(articuloCambio.getPrecioPublico());
-			
+			controlPrecioArticulo.setPrecioPublicoAnterior(articuloActual.getPrecioPublico());
 			controlPrecioArticulo.setResponsableCambioPrecio(usuarioResponsable);
 			controlPrecioArticulo.setResponbleAceptarPrecio(usuarioResponsable);
 			controlPrecioArticulo.setCreated_at(new Date());
 			controlPrecioArticulo.setUpdated_at(new Date());
 			controlPrecioArticulo.setGananciaNueva(articuloCambio.getGananciaPrecioPublico());
+			controlPrecioArticulo.setGananciaAnterior(articuloActual.getGananciaPrecioPublico());
 			controlPrecioArticulo.setRutaArchivoCompra(rutaArchivoCompra);
 			controlPrecioArticulo.setConsecutivo(consecutivoCompra);
 			agregar(controlPrecioArticulo);

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CabysBo;
@@ -292,15 +295,40 @@ public class ArticuloBoImpl implements ArticuloBo {
 	
 	
 	@SuppressWarnings("unchecked")
-	public RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario) {
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "ControlPrecioArticulo");
-		
-		
+	public RespuestaServiceDataTable<?> listarByControlPrecioPendiente(HttpServletRequest request, HttpServletResponse response,  Usuario usuario,String fechaInicioParam, String fechaFinParam,  String codigoArticulo) {
+
+		Date fechaInicio = new Date();
+		Date fechaFinal = new Date();
+		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "ControlPrecioArticulo");
 		JqGridFilter categoriaFilter = null;
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			fechaInicio = Utils.parseDate(fechaInicioParam);
+			fechaFinal = Utils.parseDate(fechaFinParam);
+			if (fechaFinal == null) {
+				fechaFinal = new Date(System.currentTimeMillis());
+			}
+			if (fechaFinal != null && fechaFinal != null) {
+				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+			}
+		}
+			if (codigoArticulo != null) {
+				if (!codigoArticulo.equals(Constantes.EMPTY)) {
+					delimitadores.addFiltro(new JqGridFilter("codigo", "'" + codigoArticulo.toString() + "'", "="));
+				}
+
+			}
 		
-		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_PENDIENTE_ADMINISTRADOR_CAMBIO_PRECIO + "'", "=");
-		delimitadores.addFiltro(categoriaFilter);
+
+		
+			DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+			String inicio1 = dateFormat1.format(fechaInicio);
+			String fin1 = dateFormat1.format(fechaFinal);
+			
+			delimitadores.addFiltro(new JqGridFilter("created_at", inicio1, "date>="));
+			delimitadores.addFiltro(new JqGridFilter("created_at", fin1, "dateFinal<="));
+		
+			categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACEPTADO_ADMINISTRADOR_CAMBIO_PRECIO + "'", "=");
+			delimitadores.addFiltro(categoriaFilter);
 		
 		categoriaFilter = new JqGridFilter("articulo.empresa.id", "'" + usuario.getEmpresa().getId() + "'", "=");
 				delimitadores.addFiltro(categoriaFilter);
@@ -467,7 +495,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			//Revisar si cambio de precio.
-			controlPrecioBo.agregarControlPrecio(articulo, articuloBd, "Actualizacion del articulo sin compra asociada", null,null, usuarioSesion);
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBd, "Actualizacion del articulo sin compra asociada", null,null,null, usuarioSesion);
 		
 			Gson gson = new Gson();
 			if (articulo.getDatosCabys() != null && !articulo.getDatosCabys().equals(Constantes.EMPTY)) {
@@ -816,7 +844,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifaMag(Constantes.EMPTY);
 			}
-			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null, usuario);
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null,null, usuario);
 			articuloBD.setUpdated_at(new Date());
 			articuloBD.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
 			articuloBD.setMarca(articulo.getMarca());
@@ -876,7 +904,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			}
 			Articulo articulo = new Articulo();
 			articulo.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
-			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null, usuario);
+			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null,null, usuario);
 		
 			String descripcion = cambiarPrecioArticuloCommand.getDescripcion() == null ? Constantes.EMPTY
 					: cambiarPrecioArticuloCommand.getDescripcion();

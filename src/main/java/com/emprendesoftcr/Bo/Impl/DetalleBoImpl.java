@@ -604,11 +604,9 @@ public class DetalleBoImpl implements DetalleBo {
 		} else {
 			sql = sql.replaceAll("and d.codigo = :codigoArticulo ", " ");
 		}
-		if (estado != null && estado > Constantes.ZEROS) {
-			parameters.addValue("Pestado", estado);
-		} else {
+	
 			sql = sql.replaceAll(" f.estado = :Pestado", " f.estado in (2,6,7) ");
-		}
+		
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		List<Map<String, Object>> listaObjetos = namedParameterJdbcTemplate.queryForList(sql, parameters);
 

@@ -206,7 +206,7 @@ public class CompraBoImpl implements CompraBo {
 
 						}
 
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -257,7 +257,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @param detalleCompra
 	 * @param articulo
 	 */
-	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor, Articulo articulo) {
+	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor, String codigoProveedor, Articulo articulo,Double  precioPublicoAnterior,Double  gananciaPrecioPublicoAnterior,Double costoNuevoAnterior) {
 		try {
 			Double cantidad = detalleCompra.getCantidad() != null && detalleCompra.getCantidad() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double costo = detalleCompra.getCosto() != null && detalleCompra.getCosto() > Constantes.ZEROS_DOUBLE ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
@@ -308,8 +308,12 @@ public class CompraBoImpl implements CompraBo {
 
 				proveedorArticuloDao.agregar(proveedorArticuloNuevo);
 			}
-			Articulo articuloTemp = new Articulo();
-			controlPrecioBo.agregarControlPrecio(articuloTemp, articulo, "cambio de precio por recepcion de compra al inventario", null,detalleCompra.getCompra().getConsecutivo(), detalleCompra.getUsuarioActualizacion());
+			Articulo articuloAnterior = new Articulo();
+	//		articuloAnterior = articulo;
+			articuloAnterior.setCosto(costoNuevoAnterior);
+			articuloAnterior.setGananciaPrecioPublico(gananciaPrecioPublicoAnterior);
+			articuloAnterior.setPrecioPublico(precioPublicoAnterior);
+			controlPrecioBo.agregarControlPrecio(articulo,articuloAnterior,  "cambio de precio por recepcion de compra al inventario", null,detalleCompra.getCompra().getConsecutivo(),detalleCompra.getCompra().getClave(), detalleCompra.getUsuarioActualizacion());
 
 		} catch (Exception e) {
 			log.info("** Error  actualizarProveedor: " + e.getMessage() + " fecha " + new Date());
@@ -768,7 +772,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setUsuarioCreacion(usuario);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
 					}
 					
 				}
@@ -848,12 +852,18 @@ public class CompraBoImpl implements CompraBo {
 	public Integer actualizarCompraAutomaticaPorDetallle(Long idCompra, Long idDetalleCompra, Double precioPublico, Double ganancia, String codigo, Empresa empresa, String codigoProveedor, Double costo_inv, Double cant_inv, Usuario usuarioIngresoInventario) throws Exception {
 		Integer resultado = 0;
 		try {
+			Double costoAnterior = Constantes.ZEROS_DOUBLE;
+			Double gananciaAnterior = Constantes.ZEROS_DOUBLE;
+			Double precioAnterior = Constantes.ZEROS_DOUBLE;
 			// 1. Obtener el detalle de la compra
 			Compra compraBD = compraDao.findById(idCompra);
 			DetalleCompra detalleCompra = detalleCompraDao.findById(idDetalleCompra);
 			// 2. Actualizar el inventario
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(codigo, empresa);
 			if (articulo != null) {
+				costoAnterior = articulo.getCosto();
+				gananciaAnterior = articulo.getGananciaPrecioPublico();
+				precioAnterior = articulo.getPrecioPublico();
 				detalleCompra.setArticulo(articulo);
 				// detalleCompra.setCosto(costo_inv);
 				detalleCompra.setCostoIventario(costo_inv);
@@ -899,7 +909,7 @@ public class CompraBoImpl implements CompraBo {
 				articulo.setGananciaPrecioPublico(ganancia);
 				articuloDao.modificar(articulo);
 
-				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor, articulo);
+				actualizarProveedor(detalleCompra, compraBD.getProveedor(), codigoProveedor, articulo, precioAnterior,  gananciaAnterior,costoAnterior);
 			}
 			Integer contador = detalleCompraDao.ContarDetalleCompraSinIngresar(compraBD.getId());
 			if (contador != null && contador.equals(Constantes.ZEROS)) {

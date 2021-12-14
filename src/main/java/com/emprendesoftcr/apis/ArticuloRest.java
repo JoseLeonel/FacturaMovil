@@ -202,12 +202,12 @@ public class ArticuloRest {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/listaControlPrecioPendienteAceptar")
-	public RespuestaServiceDataTable listaControlPrecioPendienteAceptar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPrecioArticulo controlPrecioArticulo, HttpServletResponse response, BindingResult result, SessionStatus status) {
+	public RespuestaServiceDataTable listaControlPrecioPendienteAceptar(HttpServletRequest request, ModelMap model, @ModelAttribute ControlPrecioArticulo controlPrecioArticulo, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam(value = "codigoArticulo", required = false) String codigoArticulo, HttpServletResponse response, BindingResult result, SessionStatus status) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		@SuppressWarnings("unused")
 		DataTableDelimitador delimitadores = null;
 		
-		return articuloBo.listarByControlPrecioPendiente(request, response,  usuario);
+		return articuloBo.listarByControlPrecioPendiente(request, response,  usuario, fechaInicioParam, fechaFinParam,codigoArticulo);
 	}
 	@SuppressWarnings("all")
 	@PostMapping("/ListarArticuloAjax.do")

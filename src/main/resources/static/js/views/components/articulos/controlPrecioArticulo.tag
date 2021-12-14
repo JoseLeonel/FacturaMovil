@@ -48,7 +48,7 @@
                                 <div class="form-group">
                                     <label>{$.i18n.prop("articulo.articulo")} </label>  
                                     <input onclick = {__ListaDecodigos}  id="codigoArticulo" name="codigoArticulo" class="form-control" type="text" value="{articulo.descripcion}" placeholder="XXXXXXXXXXX" readonly/>
-                                    <input  type="hidden"   class="form-control" id="idArticulo" name="idArticulo" value="{articulo.id}"/>
+                                    <input  type="hidden"   class="form-control idArticulo" id="idArticulo" name="idArticulo" value="{articulo.codigo}"/>
                                 </div>  
                             </div>                      
                         </div>
@@ -79,26 +79,28 @@
                                             <tr>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.fecha.creacion")}  </th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.responsable.creacion")}    </th>
+                                                <th class="table-header">Codigo    </th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.descripcion")}    </th>
                                                 <th class="table-header">{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.precio.nuevo")}</th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.diferencia")}</th>
                                                 <th class="table-header">{$.i18n.prop("controlPrecio.compra")}</th>
                                                 
-                                                <th class="table-header">Acciones</th>
+                                               
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
                                                 <th >{$.i18n.prop("controlPrecio.fecha.creacion")}  </th>
                                                 <th >{$.i18n.prop("controlPrecio.responsable.creacion")}    </th>
+                                                <th >Codigo </th>
                                                 <th >{$.i18n.prop("controlPrecio.descripcion")}    </th>
                                                 <th >{$.i18n.prop("cotrolPrecio.precio.anterior")} </th>
                                                 <th >{$.i18n.prop("controlPrecio.precio.nuevo")}</th>
                                                 <th >{$.i18n.prop("controlPrecio.diferencia")}</th>
                                                 <th >{$.i18n.prop("controlPrecio.compra")}</th>
                                                
-                                                <th >Acciones</th>
+                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -136,30 +138,20 @@
                 <br>                   
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
-                        <th class="table-header">Fecha ingreso </th>
-                        <th class="table-header">Creado por   </th>
-                        <th class="table-header">Actualizado por    </th>
-                        <th class="table-header">Descripcion </th>
-                        <th class="table-header">Costo anterior </th>
-                        <th class="table-header">Costo nuevo </th>
-                        <th class="table-header">Precio Anterior </th>
-                        <th class="table-header">Precio nuevo</th>
-                        <th class="table-header">Estado</th>
-                        <th class="table-header">Acciones</th>
+                         <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
+                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
+                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
+                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
 
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
-                            <th >fecha ingreso         </th>
-                            <th >Creado por   </th>
-                            <th >Actualizado por    </th>
-                            <th >Descripcion </th>
-                            <th >Costo anterior  </th>
-                            <th >Costo nuevo  </th>
-                            <th >Precio anterior  </th>
-                            <th >Precio nuevo  </th>
-                            <th >Estado  </th>
-                            <th >  </th>
+                            <th >{$.i18n.prop("articulo.codigo")}         </th>
+                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
+                            <th >                                        </th>
                         </tr>
                     </tfoot>
                 </table>
@@ -231,7 +223,7 @@
     self.kardex               = {data:[]}
     self.articulos            = {data:[]}
     self.articulo = {
-        id:0,
+        id:null,
         descripcion:""
     }
     self.mostrarListado       = true
@@ -250,6 +242,8 @@
                 $(".errorServerSideJgrid").remove();
             }, false );
     })
+
+
 __Busqueda(){
      $("#filtros").validate(reglasDeValidacionParametros());
      if ($("#filtros").valid()) {
@@ -263,40 +257,31 @@ function listadoControlPrecios() {
     self.controlPrecios = {aaData:[]}
     self.detail = []
     self.update()
-	obtenerControlPrecio(null,null,null,null)
+    var fechaFinal =  $('.fechaFinal').val()
+   
+    var fechaInicial = $('.fechaInicio').val()
+
+    var idArticulo = $('.idArticulo').val()
+	obtenerControlPrecio(fechaInicial,fechaFinal,idArticulo)
     .then(res => {
         self.controlPrecios.aaData = res
         $.each(self.controlPrecios.aaData , function( index, modeloTabla ) {
             self.detail.push(modeloTabla);
-             self.detail.push(modeloTabla);
-              self.detail.push(modeloTabla);
-               self.detail.push(modeloTabla);
-                self.detail.push(modeloTabla);
-                 self.detail.push(modeloTabla);
-                  self.detail.push(modeloTabla);
-                   self.detail.push(modeloTabla);
-                    self.detail.push(modeloTabla);
-                     self.detail.push(modeloTabla);
-                      self.detail.push(modeloTabla);
-                       self.detail.push(modeloTabla);
-                        self.detail.push(modeloTabla);
-                         self.detail.push(modeloTabla);
-                          self.detail.push(modeloTabla);
-                           self.detail.push(modeloTabla);
-                            self.detail.push(modeloTabla);
-                             self.detail.push(modeloTabla);
-                              self.detail.push(modeloTabla);
-                               self.detail.push(modeloTabla);
+             
+          
             self.mostrarDetalles = true;
         })
         
         self.update()
 
         unBlockUIStop();
-        var informacion = _informacionData()
-        loadListar(".tableListar",idioma_espanol,informacion,self.detail)
-        agregarInputsCombos_Kardex();
-        ActivarEventoFiltro(".tableListar")
+        if(typeof self.detail !== "undefined" && self.detail.length > 0 ){
+          var informacion = _informacionData()
+            loadListar(".tableListar",idioma_espanol,informacion,self.detail)
+            agregarInputsCombos_Kardex();
+            ActivarEventoFiltro(".tableListar")
+   
+        }
       
      })
      .catch(err=>{
@@ -334,11 +319,7 @@ var reglasDeValidacionParametros = function() {
 			},
 			fechaFinal : {
 				required : true,
-			},
-            articulo : {
-				required : true,
-            }
-           
+			}
             
                         
 		},
@@ -384,6 +365,7 @@ function limpiarFiltros(){
         }
     );
     $('.articulo').val(null)
+    $('.idArticulo').val(null)
     self.articulo = {}
     self.update()
 
@@ -410,19 +392,17 @@ function agregarInputsCombos_Kardex(){
 **/
 function _informacionData(){
  var resltado =  [	
-     {'data' : 'created_atSTR'         ,"name":"created_at" ,"title" : $.i18n.prop("controlPrecio.responsable.creacion") ,"autoWidth":false},
+     {'data' : 'created_atSTR'         ,"name":"created_atSTR" ,"title" : $.i18n.prop("controlPrecio.responsable.creacion") ,"autoWidth":false},
      {'data' : 'responbleAceptarPrecio.nombreUsuario' ,"name":"responbleAceptarPrecio.nombreUsuario"  ,"title" : $.i18n.prop("controlPrecio.fecha.creacion")  ,"autoWidth":false},
+     
+     {'data' : 'codigo',"name":"codigo","title" : 'Codigo'  ,"autoWidth":false},
      {'data' : 'descripcion',"name":"descripcion","title" : $.i18n.prop("controlPrecio.descripcion")  ,"autoWidth":false},
      {'data' : 'precioPublicoAnterior' ,"name":"precioPublicoAnterior","title" : $.i18n.prop("cotrolPrecio.precio.anterior")  ,"autoWidth":false},
      {'data' : 'precioPublicoNuevo'  ,"name":"precioPublicoNuevo","title" : $.i18n.prop("controlPrecio.precio.nuevo")   ,"autoWidth":false},
-     {'data' : 'consecutivo' ,"name":"consecutivo"   ,"title" : $.i18n.prop("controlPrecio.diferencia"),"autoWidth":false},
+     {'data' : 'diferenciaSTR' ,"name":"diferenciaSTR"   ,"title" : $.i18n.prop("controlPrecio.diferencia"),"autoWidth":false},
      {'data' : 'consecutivo',"name":"consecutivo" ,"title" : $.i18n.prop("controlPrecio.compra"),"autoWidth":false},
     
-        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-                                            "render":function(id,type, row){
-                                                    return __Opciones(id,type,row);
-                                                }	 
-                                        },                                
+                                
                                     ];
     return resltado;
     
@@ -432,15 +412,15 @@ function _informacionData(){
  * Opciones listado de los clientes
  */
 function __Opciones(id, type, row) {
-    let menu = '<div class="dropdown">'
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
-    menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Cambia al precio anterior" class="  btnReversar" >Reversar Precio</a></li>'
+  //  let menu = '<div class="dropdown">'
+  //  menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+  //  menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>'
+  //  menu += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+  //  menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
+  //  menu += '<li><a href="#"  title="Cambia al precio anterior" class="  btnReversar" >Reversar Precio</a></li>'
   
-    menu += "</ul></div>"
-    return menu;
+  //  menu += "</ul></div>"
+    return "";
 }
 
 
@@ -560,7 +540,7 @@ function __agregarArticulos() {
         self.articulo = data;
         
         self.update();  
-	    
+	       $('#modalInventario').modal('hide')
     });
 }
 

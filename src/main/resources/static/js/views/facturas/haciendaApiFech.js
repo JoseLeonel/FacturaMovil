@@ -1,4 +1,4 @@
-const getListaEnviosHacienda = async(fechaInicio, fechaFin, cedulaReceptor, tipoDocumento) => {
+const getListaEnviosHacienda = async (fechaInicio, fechaFin, cedulaReceptor, tipoDocumento) => {
     try {
     	
         const rawResponse = await fetch('/api/hacienda/ListarHaciendasAjax.do?fechaInicio=' + fechaInicio + '&&fechaFin=' + fechaFin + '&&cedulaReceptor=' + cedulaReceptor + '&&tipoDocumento=' + tipoDocumento);

@@ -35,7 +35,10 @@ public class ControlPrecioArticulo implements Serializable {
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
 
-	
+	@Column(name = "codigo")
+	private String						codigo;		
+	@Column(name = "codigo_nuevo")
+	private String						codigoNuevo;		
 	
 
 	@ManyToOne
@@ -81,7 +84,8 @@ public class ControlPrecioArticulo implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-
+	@Column(name = "clave", precision = 18, scale = 5)
+	private String						clave;
 	public Long getId() {
 		return id;
 	}
@@ -222,6 +226,36 @@ public class ControlPrecioArticulo implements Serializable {
 	
 	public void setGananciaNueva(Double gananciaNueva) {
 		this.gananciaNueva = gananciaNueva;
+	}
+
+	
+	public String getCodigo() {
+		return codigo;
+	}
+
+	
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	
+	public String getClave() {
+		return clave;
+	}
+
+	
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+	
+	public String getCodigoNuevo() {
+		return codigoNuevo;
+	}
+
+	
+	public void setCodigoNuevo(String codigoNuevo) {
+		this.codigoNuevo = codigoNuevo;
 	}
 
 }

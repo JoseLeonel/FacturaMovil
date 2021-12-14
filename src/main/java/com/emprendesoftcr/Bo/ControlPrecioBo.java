@@ -12,6 +12,6 @@ public interface  ControlPrecioBo {
 	void eliminar(ControlPrecioArticulo controlPrecioArticulo);
 
 	ControlPrecioArticulo buscar(Long id);
-	void agregarControlPrecio(Articulo articuloCambio, Articulo articuloActual, String nota,  String rutaArchivoCompra, String consecutivoCompra, Usuario usuarioResponsable);
+	void agregarControlPrecio(Articulo articuloCambio, Articulo articuloActual, String nota,  String rutaArchivoCompra, String consecutivoCompra,String clave, Usuario usuarioResponsable);
 
 }
