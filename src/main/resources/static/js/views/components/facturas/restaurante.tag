@@ -2624,7 +2624,7 @@ function ListadoFacturasDelDia(){
         __InformacionDataTableDia();
         if(respuestaFacturasDia !=null && respuestaFacturasDia.length > 0){
             __InformacionDataTableDia();
-            loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
+            loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,respuestaFacturasDia)
             agregarInputsCombos_Facturas_Dias();
             ActivarEventoFiltro(".tableListarFacturasDia")
             $('#modalFacturasDia').modal('show')    
