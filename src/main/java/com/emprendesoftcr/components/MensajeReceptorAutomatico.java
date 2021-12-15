@@ -444,7 +444,7 @@ public class MensajeReceptorAutomatico {
 		}
 	}
 
-//	@Scheduled(fixedDelay = 180000)
+	@Scheduled(fixedDelay = 180000)
 	public void downloadEmailAttachments() throws Exception {
 		String correoProblemas = Constantes.EMPTY;
 		Properties properties = new Properties();

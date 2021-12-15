@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.web.command.ListCabysHacienda;
 
 public interface CabysBo {
 
