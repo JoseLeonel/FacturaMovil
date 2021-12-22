@@ -308,15 +308,23 @@ public class CompraBoImpl implements CompraBo {
 
 				proveedorArticuloDao.agregar(proveedorArticuloNuevo);
 			}
-			Articulo articuloAnterior = new Articulo();
-	//		articuloAnterior = articulo;
-			articuloAnterior.setCosto(costoNuevoAnterior);
-			articuloAnterior.setGananciaPrecioPublico(gananciaPrecioPublicoAnterior);
-			articuloAnterior.setPrecioPublico(precioPublicoAnterior);
-			controlPrecioBo.agregarControlPrecio(articulo,articuloAnterior,  "cambio de precio por recepcion de compra al inventario", null,detalleCompra.getCompra().getConsecutivo(),detalleCompra.getCompra().getClave(), detalleCompra.getUsuarioActualizacion());
+			
+			
+			if(detalleCompra.getEstado().equals(Constantes.DETALLE_APLICADO_SI)) {
+				Articulo articuloAnterior = new Articulo();
+				//		articuloAnterior = articulo;
+						articuloAnterior.setId(articulo.getId());
+						articuloAnterior.setCosto(costoNuevoAnterior);
+						articuloAnterior.setCodigo(articulo.getCodigo());
+						articuloAnterior.setGananciaPrecioPublico(gananciaPrecioPublicoAnterior);
+						articuloAnterior.setPrecioPublico(precioPublicoAnterior);
+						controlPrecioBo.agregarControlPrecio(articulo,articuloAnterior,  "cambio de precio por recepcion de compra al inventario", null,detalleCompra.getCompra().getConsecutivo(),detalleCompra.getCompra().getClave(), detalleCompra.getUsuarioActualizacion());
 
+			}
+	
 		} catch (Exception e) {
 			log.info("** Error  actualizarProveedor: " + e.getMessage() + " fecha " + new Date());
+			e.getStackTrace();
 			throw e;
 		}
 	}
@@ -358,6 +366,7 @@ public class CompraBoImpl implements CompraBo {
 			articuloDao.modificar(articulo);
 
 		} catch (Exception e) {
+			e.getStackTrace();
 			log.info("** Error  aplicarInventario: " + e.getMessage() + " fecha " + new Date() + " Codigo " + articulo.getCodigo());
 			throw e;
 

@@ -52,7 +52,7 @@
 
 
 <div id='modalCerrarCaja' class="modal fade tamanoModal " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog ">
+    <div class="modal-dialog " style="width: 70%;">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> {usuarioCaja.id != null ?"Cierre de Caja de las ventas": "Apertura de la Caja"} </h1>

@@ -399,7 +399,13 @@ function _informacionData(){
      {'data' : 'descripcion',"name":"descripcion","title" : $.i18n.prop("controlPrecio.descripcion")  ,"autoWidth":false},
      {'data' : 'precioPublicoAnterior' ,"name":"precioPublicoAnterior","title" : $.i18n.prop("cotrolPrecio.precio.anterior")  ,"autoWidth":false},
      {'data' : 'precioPublicoNuevo'  ,"name":"precioPublicoNuevo","title" : $.i18n.prop("controlPrecio.precio.nuevo")   ,"autoWidth":false},
-     {'data' : 'diferenciaSTR' ,"name":"diferenciaSTR"   ,"title" : $.i18n.prop("controlPrecio.diferencia"),"autoWidth":false},
+     {'data' : 'diferenciaSTR' ,"name":"diferenciaSTR"   ,"title" : $.i18n.prop("controlPrecio.diferencia"),"autoWidth":false,
+                                          "render":function(diferenciaSTR,type, row){
+                                              
+                                               return  verprecioColor(row.diferencia,diferenciaSTR);
+                                            }
+                                        },
+     
      {'data' : 'consecutivo',"name":"consecutivo" ,"title" : $.i18n.prop("controlPrecio.compra"),"autoWidth":false},
     
                                 
@@ -407,7 +413,12 @@ function _informacionData(){
     return resltado;
     
 }
+function verprecioColor(precio,diferenciaSTR){
+var resultado = precio > 0 ? true:false;
+                                                        
+return   resultado == true ? "<span class= 'colorPositivoControlPrecio'>"+ diferenciaSTR+"</span>":"<span class= 'colorNegaticoControlPrecio'>"+ diferenciaSTR+"</span>"
 
+}
 /**
  * Opciones listado de los clientes
  */

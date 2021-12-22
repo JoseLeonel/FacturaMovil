@@ -84,7 +84,7 @@ public class ControlPrecioArticulo implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-	@Column(name = "clave", precision = 18, scale = 5)
+	@Column(name = "clave")
 	private String						clave;
 	public Long getId() {
 		return id;

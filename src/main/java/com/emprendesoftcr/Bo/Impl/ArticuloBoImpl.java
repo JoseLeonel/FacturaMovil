@@ -306,7 +306,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 			fechaFinal = Utils.parseDate(fechaFinParam);
 			if (fechaFinal == null) {
 				fechaFinal = new Date(System.currentTimeMillis());
-			}
+			} 
 			if (fechaFinal != null && fechaFinal != null) {
 				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 			}
@@ -495,6 +495,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			//Revisar si cambio de precio.
+			articulo.setId(articuloBd.getId());
 			controlPrecioBo.agregarControlPrecio(articulo, articuloBd, "Actualizacion del articulo sin compra asociada", null,null,null, usuarioSesion);
 		
 			Gson gson = new Gson();
@@ -844,6 +845,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 				articulo.setImpuestoMag(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifaMag(Constantes.EMPTY);
 			}
+			articulo.setId(articuloBD.getId());
 			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null,null, usuario);
 			articuloBD.setUpdated_at(new Date());
 			articuloBD.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
@@ -903,6 +905,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 						result.getAllErrors());
 			}
 			Articulo articulo = new Articulo();
+			articulo.setId(articuloBD.getId());
 			articulo.setPrecioPublico(cambiarPrecioArticuloCommand.getPrecioPublico());
 			controlPrecioBo.agregarControlPrecio(articulo, articuloBD, "Cambio de precio del articulo sin compra asociada", null,null,null, usuario);
 		

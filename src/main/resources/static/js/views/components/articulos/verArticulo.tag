@@ -1,7 +1,7 @@
 <ver-articulo>
   
 <div id='modalConfiguracion' class="modal fade  " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" width=100%;>
-    <div class="modal-dialog">
+    <div class="modal-dialog" style ="width: 80%;">
         <div class="modal-content">
             <div class="modal-header with-border encabezado-pantalla " >
                 <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Ver articulo/

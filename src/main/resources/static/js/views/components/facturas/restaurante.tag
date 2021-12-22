@@ -2735,7 +2735,12 @@ function __reimprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        consultaParaReimprimir(data,1)
+         var parametros = {
+                          factura:data,
+                          facturaDia:1
+                      }
+                       riot.mount('ptv-imprimir',{parametros:parametros});
+    
 	});
 }
 /**

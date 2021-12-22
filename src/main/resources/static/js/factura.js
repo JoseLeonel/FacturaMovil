@@ -2640,7 +2640,7 @@ const getFacturaByIdFactura = async(idFactura) => {
 
 const getFacturaByConsecutivo = async(consecutivo) => {
     try {
-        const rawResponse = await fetch('/api/factura/getFacturaByConsecutivo=' + consecutivo);
+        const rawResponse = await fetch('/api/factura/getFacturaByConsecutivo?consecutivo=' + consecutivo);
         const data = await rawResponse.json();
         blockUILoad();
         console.log(data.aaData);
