@@ -1,4 +1,3 @@
-
 //Se configura el properties
 $.i18n.properties({
     name: 'factura',

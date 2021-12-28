@@ -98,7 +98,7 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	private ConsultasNativeBo			consultasNativeBo;
 	@Autowired
-	private UsuarioBo usuarioBo;
+	private UsuarioBo							usuarioBo;
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -275,7 +275,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getId() == null) {
 				factura.setUsuarioCreacion(usuario);
 			}
-      factura.setDescuentoGlobal(facturaCommand.getDescuentoGlobal());
+			factura.setDescuentoGlobal(facturaCommand.getDescuentoGlobal());
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());
@@ -406,7 +406,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaTipoDoc(facturaCommand.getReferenciaTipoDoc());
 				factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
-				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
+				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon() != null && !facturaCommand.getReferenciaRazon().equals(Constantes.EMPTY) ? facturaCommand.getReferenciaRazon() : "Se anula por mal facturacion");
 				if (facturaCommand.getReferenciaFechaEmision() != null) {
 					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 				}
@@ -1048,7 +1048,7 @@ public class FacturaBoImpl implements FacturaBo {
 	@Transactional
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
-		
+
 			// aplica decremento de los articulos cuando se trata de paquetes o six pack
 			if (articulo != null) {
 				if (articulo.getCantidadPaquete() != null && articulo.getCantidadPaquete().equals(Constantes.ARTICULO_PAQUETE_TIPO_ACTIVO)) {

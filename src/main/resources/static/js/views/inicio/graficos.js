@@ -1,12 +1,12 @@
 $(document).ready(function() {
-	_Init();
-	
-} );/*fin document*/
+    _Init();
 
-var _Init = function () {
-	getTipoCambioDolar();
-	cargaMantenimientoMarcas()
-	
+}); /*fin document*/
+
+var _Init = function() {
+    getTipoCambioDolar();
+    cargaMantenimientoMarcas()
+
 }
 
 
@@ -16,6 +16,6 @@ var _Init = function () {
  */
 function cargaMantenimientoMarcas() {
 
-	
-	riot.mount('grafico-inicio');
+
+    riot.mount('grafico-inicio');
 }

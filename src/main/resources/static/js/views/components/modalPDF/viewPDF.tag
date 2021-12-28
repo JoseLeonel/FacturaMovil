@@ -1,6 +1,6 @@
 <view-pdf>
     <div class="modal fade" id="mostrarPDFVIEW" tabindex="-1" role="dialog" aria-labelledby="mostraPDFModalLabel" aria-hidden="true">
-        <div class="modal-dialog {stylemodal}">
+        <div class="modal-dialog " style ="width:160vh;">
             <div class="modal-content ">
                 <div class="modal-header">
                     <div id = "titulo-viewPDF"> 
@@ -9,7 +9,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>    
                 <div class="modal-body">
-                    <iframe  style="top:0;left:0;width: 100%; height: 500px" id="loadPdf" src="">
+                    <iframe  style="top:0;left:0;width: 100%; height: 60vh;" id="loadPdf" src="#view=FitH">
                      <p style="font-size: 110%;"><em><strong>ERROR: </strong>  
                             An &#105;frame should be displayed here but your browser version does not support &#105;frames. </em>Please update your browser to its most recent version and try again.</p>
                     </iframe>
@@ -75,7 +75,7 @@ function mostarModal(){
     selfView.stylemodal = 	selfView.datos.stylemodal
     selfView.update()	
    
-	$('#loadPdf').attr("src", href );	
+	$('#loadPdf').attr("src", href +"#zoom=110");	
 
     $("#mostrarPDFVIEW").modal("show");
     //document.getElementById('loadPdf').contentWindow.print();

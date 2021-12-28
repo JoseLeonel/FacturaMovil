@@ -84,19 +84,19 @@
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i> Marcas </a></li>
 				<li class="treeview"
-					sec:authorize="hasAnyAuthority('Administrador_Condominios','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
+					sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
 					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Articulos</span>
 						<i class="fa fa-angle-left pull-right"></i>
 				</a>
 					<ul class="treeview-menu">
 						<li><a th:href="@{/nuevoArticulo.do}"
-							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Nuevo Articulo</a></li>
 						<li><a th:href="@{/ListarArticulos}"
-							sec:authorize="hasAnyAuthority('Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Usuario_SuperDario','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Listar Articulos</a></li>
 						<li><a th:href="@{/paqueteArticulos}"
-							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 								class="fa fa-circle-o"></i>Cajas/Paquetes Art</a></li>
 
 						<li><a th:href="@{/ListarArticulosMinimos}"

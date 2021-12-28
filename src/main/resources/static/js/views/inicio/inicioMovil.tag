@@ -1,4 +1,4 @@
-<grafico-inicio>
+<grafico-inicioMovil>
   
 	<div class="row" show="{mostrarVentasXMes == true}">
 			<div class="col-md-9 col-sx-12 col-sm-9 col-lg-9">
@@ -580,9 +580,8 @@ function __cargaMeses(){
 					self.meses.push(vectorMes(modeloTabla.mes))
 					self.colores.push(vectorColores(modeloTabla.mes))
 					self.datos.push(modeloTabla.total) 
-					 self.mostrarVentasXMes = true;
 				 })
-				
+				 self.mostrarVentasXMes = true;
 				 self.update()
 				 graficoVentas()
             }            
@@ -707,4 +706,4 @@ function vectorColores(mes){
 }
 
 </script>
-</grafico-inicio>
+</grafico-inicioMovil>

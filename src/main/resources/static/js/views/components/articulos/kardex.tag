@@ -1,4 +1,52 @@
 <mostrar-kardex>
+
+<!--Modal mostrar Articulos de la empresa -->
+<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border encabezado-pantalla " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
+            </div>
+            <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>                   
+                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                    <thead>
+                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
+                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
+                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
+                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th >{$.i18n.prop("articulo.codigo")}         </th>
+                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
+                            <th >                                        </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin del modal-->
  <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -116,53 +164,7 @@
     </div>
     <!-- Fin del Listado -->
 
-<!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border encabezado-pantalla " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioParametros" name ="formularioParametros" >
-                    <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
-                        </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
-                        </div>
-                    </div> 
-                </form>    
-                <br>                   
-                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
-                    <thead>
-                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
-                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
-                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
-                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th >{$.i18n.prop("articulo.codigo")}         </th>
-                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
-                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
-                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
-                            <th >                                        </th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
+
 <style type ="text/css">
         .fondoEncabezado {
             background: #00539B;
@@ -399,18 +401,23 @@ function _informacionData_Kardex(){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-    $('.descArticulo').val(null)
-    $('.codigoArt').val(null)
+   
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    
+    $('#modalInventario').modal({backdrop: 'static', keyboard: true}) 
     $('#modalInventario').on('shown.bs.modal', function () {
         $('#codigoArt').select()
         $('#codigoArt').focus()
+         $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
 
     })
     
  }
+
+
+
+/**
 
  /**
 * consultando por descripcion
