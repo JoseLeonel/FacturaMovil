@@ -405,6 +405,7 @@ function _informacionData_Kardex(){
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
     $('#modalInventario').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalInventario').modal('show')
     $('#modalInventario').on('shown.bs.modal', function () {
         $('#codigoArt').select()
         $('#codigoArt').focus()
