@@ -2610,6 +2610,11 @@ function inicializarCombos(){
 		}
 	})();
 	
+	function __displayDate_detail(fecha) {
+	    var dateTime = new Date(fecha);
+	    return moment(dateTime).format('YYYY-MM-DD ');
+	}
+	
 	var blockUILoad = function(){
 	    $.blockUI({message: "<div style='padding: 5px; z-index: 99999;'Factura<div class='spinner'><div class='rect1'></div><div class='rect2'></div><div class='rect3'></div><div class='rect4'></div><div class='rect5'></div></div><span style='font-size: 5vh;'>Por favor espere un momento..... </span></div>",
 	        css: {backgroundColor: '#00539B', color: '#FFD204', borderRadius: '10px', borderColor: '#FFD204'},

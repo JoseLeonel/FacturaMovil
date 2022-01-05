@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.emprendesftcr.correos.PlantillaCorreo;
 import com.emprendesoftcr.Bo.MailBo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.utils.Utils;

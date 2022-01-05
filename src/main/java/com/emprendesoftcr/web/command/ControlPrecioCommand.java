@@ -242,6 +242,16 @@ public class ControlPrecioCommand {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+
+	
+	public String getCodigoNuevo() {
+		return codigoNuevo;
+	}
+
+	
+	public void setCodigoNuevo(String codigoNuevo) {
+		this.codigoNuevo = codigoNuevo;
+	}
 	
 	
 }

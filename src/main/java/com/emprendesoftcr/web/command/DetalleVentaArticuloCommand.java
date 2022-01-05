@@ -2,8 +2,6 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.emprendesoftcr.utils.Utils;
 
 public class DetalleVentaArticuloCommand {

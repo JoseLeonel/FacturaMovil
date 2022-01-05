@@ -186,7 +186,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCodigoComercial3(detalleCompraCommand.getCodigoComercial3() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercial3());
 
 					detalleCompra.setCodigoCabys(detalleCompraCommand.getCodigoCabys() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoCabys());
-
+         // detalleCompra.setEstado(Constantes.DETALLE_APLICADO_SI);
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
@@ -206,7 +206,7 @@ public class CompraBoImpl implements CompraBo {
 
 						}
 
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, articulo,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -310,7 +310,7 @@ public class CompraBoImpl implements CompraBo {
 			}
 			
 			
-			if(detalleCompra.getEstado().equals(Constantes.DETALLE_APLICADO_SI)) {
+			if(detalleCompra.getEstado() != null && detalleCompra.getEstado().equals(Constantes.DETALLE_APLICADO_SI)) {
 				Articulo articuloAnterior = new Articulo();
 				//		articuloAnterior = articulo;
 						articuloAnterior.setId(articulo.getId());
@@ -781,7 +781,7 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setUsuarioCreacion(usuario);
 					detalleCompraDao.agregar(detalleCompra);
 					if (proveedor != null && detalleCompra.getArticulo() != null) {
-						actualizarProveedor(detalleCompra, compra.getProveedor(), null, null,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
+						actualizarProveedor(detalleCompra, compra.getProveedor(), null, articulo,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE,Constantes.ZEROS_DOUBLE);
 					}
 					
 				}

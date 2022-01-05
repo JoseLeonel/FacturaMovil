@@ -718,4 +718,14 @@ public class FacturaEsperaCommand {
 	}
 
 	
+	public Double getDescuentoGlobal() {
+		return descuentoGlobal;
+	}
+
+	
+	public void setDescuentoGlobal(Double descuentoGlobal) {
+		this.descuentoGlobal = descuentoGlobal;
+	}
+
+	
 }

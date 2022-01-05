@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +29,6 @@ import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
-import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -94,8 +92,7 @@ public class UsuarioCajasController {
 
 	@Autowired
 	private StringPropertyEditor															stringPropertyEditor;
-	@Autowired
-	private ValidateTokenBo																		validateTokenBo;
+	
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

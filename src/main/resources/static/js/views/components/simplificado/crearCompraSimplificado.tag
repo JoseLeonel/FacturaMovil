@@ -309,11 +309,11 @@
                        
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control tamanonumeros" id="codigoArt" name="codigoArt"  onkeyup = {__CalculaMontoLinea} >
+                            <input type="text" class="form-control tamanonumeros codigoArt" id="codigoArt" name="codigoArt"  onkeyup = {__CalculaMontoLinea} >
                         </div>
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control tamanonumeros"   id="descArticulo" name="descArticulo" onkeyup = {__CalculaMontoLinea}>
+                            <input type="text" class="form-control tamanonumeros descArticulo"   id="descArticulo" name="descArticulo" onkeyup = {__CalculaMontoLinea}>
                         </div>
                          <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >Cabys</label>
@@ -375,7 +375,7 @@
 <div id='modalHaciendaCabys' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg" >
         <div class="modal-content" style="width:100%;">
-            <div class="modal-header with-border table-header" >
+            <div class="modal-header with-border encabezado-pantalla " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Lista de Cabys desde Hacienda y el Banco Central de Costa Rica(cabys@hacienda.go.cr) </h4>
             </div>
             <div class="modal-body aplicarScroll">
@@ -383,16 +383,16 @@
                         <form id="formularioParametros" name ="formularioParametros" >
                             <div class="row">
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                    <label  >Digite la descripcion</label>
-                                    <input type="text" class="form-control descCabys "   id="descCabys" name="descCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                    <label  >Digite la descripcion del producto a buscar</label>
+                                    <input type="text" class="form-control descCabys"   id="descCabys" name="descCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                     <label  >Digite el codigo 碼</label>
-                                    <input type="text" class="form-control codigoCabysParam"   id="codigoCabysParam" name="codigoCabysParam" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
+                                    <input type="text" class="form-control codigoCabys  codigoCabysMod"   id="codigoCabys" name="codigoCabys" onkeypress={__ConsultaCodigoCabysEnter} autofocus="autofocus" autocomplete="off">
                                 </div>
                                 <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                     <label>cantidad</label>
-                                    <select  class="form-control" id="cantidadCabys" name="cantidadCabys" >
+                                    <select  class="form-control cantidadCabys" id="cantidadCabys" name="cantidadCabys" >
                                         <option  each={cantidades}  value="{codigo}" selected="{cabys.estado ==codigo?true:false}" >{descripcion}</option>
                                     </select>
                                 </div>
@@ -433,6 +433,7 @@
         </div>
     </div>
 </div>
+
 
 <style type="text/css">
 @media (min-width: 992px){
@@ -1147,6 +1148,7 @@ self.listaCabys  = {aaData:[]}
     self.on('mount',function(){
         $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
            __informacionData()
+           __ComboCantidades()
         __InicializarTabla('.tableListaProveedor')
         __ListaActividadesComercales()
         agregarInputsCombos_Articulo()
@@ -1173,6 +1175,31 @@ self.listaCabys  = {aaData:[]}
     __calculate()
     //__Init()
 })
+/**
+*  Crear el combo de estados
+**/
+function __ComboCantidades(){
+    self.cantidades =[]
+    self.update()
+    self.cantidades.push({
+        codigo: null,
+        descripcion: "Todos"
+     });
+    self.cantidades.push({
+        codigo: 5,
+        descripcion: 5
+     });
+    self.cantidades.push({
+        codigo: 10,
+        descripcion: 10
+     });
+    self.cantidades.push({
+        codigo: 20,
+        descripcion: 20
+     });
+     self.update();
+}
+
 function __ListaActividadesComercales(){
     $.ajax({
         url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
@@ -1285,69 +1312,59 @@ function ListarCodigosCabysModal(){
 
 
 function __ListaDeHaciendaCabys(){
-   // if( $('#descArticulo').val() =='' && $('.codigoCabysMod').val() =='' ){
-   //     return
-   // }
-   self.listaCabys  = {aaData:[]}
-
-    self.origen = ""
-    self.cabys = {
-        id:null,
-        descripcion:"",
-        estado:"",
-        codigo:""
-    }
-
-    cabysHacienda = {
-        codigo:"",
-        descripcion:"",
-        categorias:[],
-        impuesto:0,
-        uri:"",
-    }  
-    self.update()
-    var cantidadTemp = $('#cantidadCabys').val() == 'Todos'?0:$('#cantidadCabys').val()
+  
+    try {
     var  encontro = false
     $(".tableListarHaciendaCabys").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-    var parametros = {
-        descArticulo :$('#descCabys').val(),
-        cantidad: cantidadTemp,
-        codigo: $('.codigoCabysParam').val()
-    };
-  if ($("#formularioParametros").valid()) {
-    $.ajax({
-        url: 'ListarCabysDeHaciendaAjax.do',
-        datatype: "json",
-        method:"GET",
-        data :parametros,
-        success: function (result) {
-            if(result.aaData.length > 0){
-                __InformacionDataTable_cabys()
-                $.each(result.aaData, function( index, modeloTabla ) {
-                   if(modeloTabla.cabys.length){
-                      self.listaCabys.aaData =modeloTabla.cabys    
-                      encontro = true 
-                   } 
-                   
-                })
-                self.update()
-                if(encontro == true){
-                   __cargarTablaCabys()
-                }
-                
+   if ($("#formularioParametros").valid()) {
 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
+       var descripcion  = $('#descCabys').val()
+       var  codigo = $('.codigoCabysMod').val() 
+       var cantidadTemp = $('.cantidadCabys').val() == 'Todos'?999:$('.cantidadCabys').val()
+       if(descripcion != null && descripcion.length > 0){
+            getCabysByDescripcion(descripcion,__valorNumerico(cantidadTemp))
+            .then(res => {
+                unBlockUIStop();
+                 __InformacionDataTable_cabys()
+                console.log("cabys");
+                  __cargarTablaCompras(res)
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+       }else{
+            getCabysByCodigo(codigo,__valorNumerico(cantidadTemp))
+            .then(res => {
+                unBlockUIStop();
+                   __InformacionDataTable_cabys()
+                console.log("cabys");
+                  __cargarTablaCompras(res)
+            })
+            .catch(err=>{
+                unBlockUIStop();
+                console.log(err)
+            })
+           
+       }
+ 
   }
+  } catch (error) {
+        console.log(error);
+    }
 }
 
-function __cargarTablaCabys() {
+
+
+function __cargarTablaCompras(data) {
+   if(data != null && data.cabys.length == 0){
+       mensajeAlertErrorOConfirmacion("error","No hay informacion con esos datos.")
+       return
+    } 
+     self.listaCabys.aaData =data.cabys    
+    self.update()
+                   
     __InicializarTabla('.tableListarHaciendaCabys')  
     $("#tableListarHaciendaCabys").dataTable().fnClearTable();
     __InformacionDataTable_cabys();
@@ -1385,6 +1402,7 @@ function agregarInputsCombosCabys(){
     })
 }
 
+
 /**
 *Formato del listado de los cambios
 **/
@@ -1410,7 +1428,6 @@ function __InformacionDataTable_cabys(){
                                       return __CategoriasCabys(categorias,type,row);
                                  }},
 */
-   
 }
 function __CategoriasCabys(categorias,type,row){
     var categoriasString =  ""
@@ -1467,12 +1484,40 @@ function moverDatos(data,callback){
     self.cabys.origenSTR = categoriasString
     
     self.cabys.estado = data.estado
+    
     $('#codigoCabys').val(self.cabys.codigo)
     self.update()
     
+    
+    
     callback("Datos movidos")
 }
-
+function actualizarComboTarifaConCabys(valor,callback){
+     $('.selectTipoImpuesto').val("01")
+     self.articulo.tipoImpuesto = "01"
+	if(valor == 0){
+        self.articulo.codigoTarifa = "01"
+		$('.selectCodigoTarifa1').val("01")
+	}else if(valor == 1){
+        self.articulo.codigoTarifa = "02"
+		$('.selectCodigoTarifa1').val("02");
+	}else if(valor == 2){
+        self.articulo.codigoTarifa = "03"
+		$('.selectCodigoTarifa1').val("03");
+	}else if(valor == 4){
+        self.articulo.codigoTarifa = "04"
+		$('.selectCodigoTarifa1').val("04")
+	}else if(valor == 8){
+        self.articulo.codigoTarifa = "07"
+		$('.selectCodigoTarifa1').val("07")
+	}else if(valor == 13){
+        self.articulo.codigoTarifa = "08"
+		$('.selectCodigoTarifa1').val("08")
+	}
+    self.articulo.impuesto = valor
+    self.update()
+      callback("Datos movidos")
+}
 
 /**
 *   Calculo del cambio entregar en el evento onblur

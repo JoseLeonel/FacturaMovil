@@ -263,8 +263,6 @@ public class Factura implements Serializable {
 
 	@Column(name = "desc_general")
 	private Double						descuentoGlobal;
-	
-	
 
 	public Factura() {
 		super();
@@ -482,7 +480,15 @@ public class Factura implements Serializable {
 	}
 
 	public String getTipoDocSTR() {
-		return MapEnums.ENUM_TIPO_DOC.get(this.tipoDoc);
+		boolean conectadoHacienda = true;
+		if (this.getEmpresa().getNoFacturaElectronica() != null && this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+			if (this.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA_REINTEGRO_GASTOS) || this.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+				conectadoHacienda = false;
+			}
+
+		}
+
+		return conectadoHacienda == true ? MapEnums.ENUM_TIPO_DOC.get(this.tipoDoc) : "Régimen Simplificado";
 	}
 
 	public void setTipoDoc(String tipoDoc) {

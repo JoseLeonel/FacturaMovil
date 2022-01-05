@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.SalidaEntradaDineroBo;
-import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.utils.RespuestaServiceValidator;
 import com.emprendesoftcr.web.command.SalidaEntradaDineroCommand;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -24,8 +23,7 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 @Controller
 public class SalidaEntradaDineroController {
 
-	@Autowired
-	private ValidateTokenBo validateTokenBo;
+	
 	@Autowired
 	private StringPropertyEditor	stringPropertyEditor;
 	@Autowired

@@ -717,7 +717,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 					// Jaco
-					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+//					 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 					// San Ana
 //					 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -726,7 +726,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 					// JacoDos
-	//				 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+					 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 					// Inventario
 //		recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
@@ -1261,24 +1261,33 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
 			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
+			
 			Map<String, Object> modelEmail = new HashMap<>();
-			modelEmail.put("consecutivo", clave);
+			modelEmail.put("fechaEmision", factura.getFechaEmisionSTR());
+			modelEmail.put("cedulaEmisor", factura.getEmpresa().getCedula());
+			modelEmail.put("clave",  factura.getClave());
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
+			modelEmail.put("nombreCliente", factura.getCliente().getNombreCompleto());
+			modelEmail.put("cedulaCliente", factura.getCliente().getCedula());
+			modelEmail.put("consecutivo", factura.getNumeroConsecutivo());
+			modelEmail.put("tipoDocumento", factura.getTipoDocSTR());
+			modelEmail.put("montoIVA", factura.getTotalImpuestoSTR());
+			modelEmail.put("nota", factura.getNota());
+			modelEmail.put("totalComprobante", factura.getTotalComprobanteSTR());
 			String from = "factura@facturaemprendesoftcr.com";
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
-			String plantillaEmail = "email/emaiNoElectronico.vm";
+			String plantillaEmail = "mailTemplate";
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				subject = "Documento Nota Credito Electrónico N°: " + factura.getNumeroConsecutivo() + " del Emisor: " + nombre;
+				subject = "Documento Nota Credito Electrónico N°: " + clave + " del Emisor: " + nombre;
 				modelEmail.put("facturaReferencia", factura.getReferenciaNumero());
 				modelEmail.put("tituloDocumento", "Nota de credito Electronico:");
-				plantillaEmail = "email/emailHaciendaNotaCredito.vm";
+			//	plantillaEmail = "email/emailHaciendaNotaCredito.vm";
 			}
 			log.info("Documento enviado al correo: " + factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
-
+			mailService.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
 			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + factura.getEmpresa().getNombre() + " Consecutivo" + factura.getNumeroConsecutivo());
 			throw e;

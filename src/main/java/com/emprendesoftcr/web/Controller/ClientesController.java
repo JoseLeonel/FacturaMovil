@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -79,9 +78,6 @@ public class ClientesController {
 	@Autowired
 	private StringPropertyEditor													stringPropertyEditor;
 
-	@Autowired
-	private ValidateTokenBo																validateTokenBo;
-
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
@@ -118,7 +114,6 @@ public class ClientesController {
 		return listarClientesByEmpresa(request);
 	}
 
-	
 	@SuppressWarnings("rawtypes")
 	private RespuestaServiceDataTable listarClientesByEmpresa(HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -150,8 +145,6 @@ public class ClientesController {
 		return listarActivosAjax(request);
 
 	}
-
-	
 
 	@SuppressWarnings("rawtypes")
 	private RespuestaServiceDataTable listarActivosAjax(HttpServletRequest request) {
@@ -217,8 +210,6 @@ public class ClientesController {
 		}
 	}
 
-	
-
 	/**
 	 * Modificar una sucursal de una empresa
 	 * @param request
@@ -244,18 +235,14 @@ public class ClientesController {
 		}
 	}
 
-	
-
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/clienteHacienda.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request,  ModelMap model, @ModelAttribute Cliente cliente ,HttpServletResponse response, @RequestParam String cedula,BindingResult result, SessionStatus status) throws IOException, ServletException {
-		
-		
+	public RespuestaServiceValidator mostrarCliente(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, HttpServletResponse response, @RequestParam String cedula, BindingResult result, SessionStatus status) throws IOException, ServletException {
+
 		return clienteBo.clienteHaciendaByCedula(cedula);
 
 	}
-
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/tipoCambioBancoCentral.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -281,7 +268,6 @@ public class ClientesController {
 		}
 	}
 
-	
 	/**
 	 * Buscar por id el cliente para mostrar
 	 * @param request
@@ -304,7 +290,6 @@ public class ClientesController {
 		}
 	}
 
-	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

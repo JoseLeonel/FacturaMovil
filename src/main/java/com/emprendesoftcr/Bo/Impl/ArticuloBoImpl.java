@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CabysBo;

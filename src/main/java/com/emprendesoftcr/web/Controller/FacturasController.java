@@ -51,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -64,7 +63,6 @@ import com.emprendesoftcr.Bo.MesaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
-import com.emprendesoftcr.Bo.ValidateTokenBo;
 import com.emprendesoftcr.Bo.VendedorBo;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
@@ -372,9 +370,7 @@ public class FacturasController {
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
 
-	@Autowired
-	private ValidateTokenBo																						validateTokenBo;
-
+	
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired

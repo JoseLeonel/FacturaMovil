@@ -133,7 +133,7 @@ public static final int HTTP_OK = 0;
 	public static final String NOTA_CREDITO_ELECTRONICO_VERSION_4_2 = "Nota Credito Electrónica ver 4.2";
 	public static final String NOTA_DEBITO_ELECTRONICO_VERSION_4_2 = "Nota Debito Electrónica ver 4.2";
 	public static final String REGIMEN_SIMPLIFICADO = "Régimen Simplificado";
-	public static final String RECIBO_POR_REINTEGRO_GASTOS = "Recibo por reintegro de Gastos";
+	public static final String RECIBO_POR_REINTEGRO_GASTOS = "Régimen Simplificado";
 
 	public static final String TIQUETE_ELECTRONICO_VERSION_4_3 = "Tiquete Electrónico ver 4.3";
 	public static final String FACTURA_ELECTRONICO_VERSION_4_3 = "Factura Electrónica ver 4.3";
