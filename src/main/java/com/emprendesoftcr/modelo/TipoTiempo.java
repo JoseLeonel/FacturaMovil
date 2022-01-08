@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,9 +28,11 @@ public class TipoTiempo implements Serializable {
 	@Column(name = "id")
 	private Long							id;
 
+	@NotEmpty
 	@Column(name = "descripcion")
 	private String						descripcion;
 
+	
 	@Column(name = "cant_veces")
 	private Integer						cantidaVeces;
 

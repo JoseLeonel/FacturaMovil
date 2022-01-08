@@ -418,6 +418,8 @@ public static final int HTTP_OK = 0;
 	// Notificacion
 	public static final Integer NOTIFICACION_CUENTA_CREDITO_SIN_ENVIAR = 1;
 	public static final Integer NOTIFICACION_CUENTA_CREDITO_ENVIADO = 2;
+	public static final Integer ESTADO_ACTIVO_NUMERIC = 1;
+	public static final Integer ESTADO_INACTIVO_NUMERIC = 2;
 
 //Estados
 	public static final Integer ESTADO_ACTIVO_PROVEEDOR_SIMPLIFICADO = 1;
