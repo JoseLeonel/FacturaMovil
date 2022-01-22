@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-
-
+<link rel="stylesheet" type="text/css" th:href="@{/css/compras/crearcomprasMovil.css?v=1}"/>
+</head>
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
 	    <header class="main-header">
@@ -18,18 +18,17 @@
 	        <section class="content-header" th:fragment="header"></section>
 	        <!-- Main content -->
 	        <section class="content">
-	        	 <tipo-tiempo></tipo-tiempo>
+	        	<compra-movil></compra-movil>
             </section>    
  		</div>
          <!-- /.content-wrapper -->
 	    <footer class="main-footer" th:replace="layout/layout :: footer"></footer>
     </div>
-	  
- 
 <div th:replace="layout/layout :: scripts"></div>
-	<!-- MANTENIMIENTO DE TIPO DE CAMBIOS -->
-	<script type="text/javascript" th:src="@{/js/views/tipoTiempo/tipoTiempo.js?v=9}"></script>
-	<script type = "riot/tag"  th:src="@{/js/views/components/tipoTiempo/tipoTiempo.tag?v=9}" ></script>
+	<script type="text/javascript"
+		th:src="@{/js/views/compras/apiCompraRest.js?v=56}"></script>
+	<script type="text/javascript" th:src="@{/js/views/compras/crearComprasMovil.js?v=50}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/compras/crearCompraMovil.tag?v=50}" ></script>
 
 
 </body>

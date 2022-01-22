@@ -2495,6 +2495,29 @@ function inicializarCombos(){
 
 
 }
+	function _evento_refrescar_proveedores(data){
+		//Destruye el sysSelect de distritos
+		$('#proveedor').empty()
+		$('#proveedor-input').val('')
+	 	$("#proveedor-sysSelect").remove()
+		//Reconstruye el sysSelect de distritos
+		$("#proveedor").sysSelect(data, "id", "nombreCompleto", true);
+	}
+	function comboCargaProveedores(data,parametro){
+		 var proveedor = null;
+         if(data != undefined && data != null && data.lenght != 0 ){
+        	 if(parametro ==undefined ||  parametro == null  ){
+        		 proveedor =data.find(proveedor => proveedor.nombreCompleto == 'Generica');
+             }else{
+            	 proveedor =  data.find(proveedor => proveedor.id == parametro);
+             }	 
+         }
+        $("#proveedor").empty();
+        if(proveedor != undefined && proveedor != null){
+        	$("#proveedor").html("<option value='"+proveedor.id+"' selected hidden>"+proveedor.nombreCompleto+"</option>");
+        	$("#proveedor-input").val(proveedor.nombreCompleto)
+        }
+	}
 /**
  * closures  DetalleFactura
  */

@@ -6,27 +6,7 @@
 				class="fa fa-dashboard"></i> <span>Inicio</span>
 		</a></li>
 
-		<li class="treeview"
-			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Usuario_Cajero','administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Usuario_Mesero')">
-			<a th:href="@{#}"> <i class="fa fa-edit"></i> <span>Loteria</span>
-				<i class="fa fa-angle-left pull-right"></i>
-		</a>
-			<ul class="treeview-menu">
-
-				<li><a th:href="@{/ListarTarifas}"><i
-						class="fa fa-circle-o"></i> configuracion </a></li>
-				<li><a th:href="@{/listarTipoTiempo}"><i
-						class="fa fa-circle-o"></i> Tipo Tiempo </a></li>
-				<li><a th:href="@{//view/tipoTiempo}">
-						<i class="fa fa-circle-o"></i> Horario
-				</a></li>
-				<li><a th:href="@{/ListarActividadComercialPorEmpresa}">
-						<i class="fa fa-circle-o"></i> Cierre lista
-				</a></li>
-
-
-			</ul>
-		</li>
+		
 		<li class="treeview"
 			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Usuario_Cajero','administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Usuario_Mesero')">
 			<a th:href="@{#}"> <i class="fa fa-edit"></i> <span>Administrativo</span>

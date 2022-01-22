@@ -429,17 +429,17 @@ public class ProveedorArticuloController {
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
 			Proveedor proveedor = proveedorBo.buscar(idProveedor);
 			ProveedorArticulo proveedorArticuloBD = null;
-			if (proveedor != null && articuloBD != null) {
+			if (proveedor != null && articuloBD != null) {   
 				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD.getCodigo(), proveedor);
 			}
 			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
-			if (articuloCommand == null) {
+			if (articuloCommand == null) {    
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
 			if (proveedorArticuloBD != null) {
 				articuloCommand.setCosto(proveedorArticuloBD.getCosto() != null ? proveedorArticuloBD.getCosto() : articuloBD.getCosto());
 			}
-
+     
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

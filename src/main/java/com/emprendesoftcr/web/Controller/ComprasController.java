@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -184,8 +185,38 @@ public class ComprasController {
 
 	@RequestMapping(value = "/ListaCompras", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
-		return "views/compras/ListarCompras";
+		String viewName = "views/compras/ListarCompras";
+		
+
+		return viewName;
 	}
+	
+	@RequestMapping(value = "/compras", method = RequestMethod.GET)
+	public String crearCompras(Device device ) {
+		
+		String viewName = "views/compras/crearCompra";
+		String deviceType = "browser";
+		String platform = "browser";
+		if (device.isNormal()) {
+			deviceType = "browser";
+		} else if (device.isMobile()) {
+			deviceType = "mobile";
+			viewName = "views/compras/crearCompraMovil.html";
+		} else if (device.isTablet()) {
+			deviceType = "tablet";
+			viewName = "views/compras/crearCompraMovil.html";
+		}
+		viewName = "views/compras/crearCompraMovil.html";
+		platform = device.getDevicePlatform().name();
+
+		if (platform.equalsIgnoreCase("UNKNOWN")) {
+			platform = "browser";
+		}
+
+		return viewName;
+		
+	}
+
 
 	@RequestMapping(value = "/ListaComprasAnular", method = RequestMethod.GET)
 	public String listarComprasAnular(ModelMap model) {
@@ -250,7 +281,6 @@ public class ComprasController {
 		return respuestaService;
 	}
 
-	
 	@RequestMapping(value = "/listarRecepcionComprasAceptadas.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable<?> listarRecepcionComprasAceptaas(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "fechaInicioParam", required = false) String fechaInicioParam, @RequestParam(value = "fechaFinParam", required = false) String fechaFinParam, @RequestParam(value = "cedulaProveedor", required = false) String cedulaProveedor) {
@@ -1141,10 +1171,6 @@ public class ComprasController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/compras", method = RequestMethod.GET)
-	public String crearCompras(ModelMap model) {
-		return "views/compras/crearCompra";
-	}
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")

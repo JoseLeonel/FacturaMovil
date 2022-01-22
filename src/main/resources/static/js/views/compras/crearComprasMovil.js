@@ -14,7 +14,8 @@ var _Init = function () {
  */
 function cargaMantenimiento() {
 
-	riot.mount('tipo-tiempo');
 	
+	riot.mount('compra-movil');
 }
+
 
