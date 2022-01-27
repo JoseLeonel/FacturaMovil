@@ -53,7 +53,7 @@
         </div>
     
         <div class="boton-1">  
-                <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">Crear Compra</span></a>
+                <a class="pull-left" href="#"   onclick = {__AplicarYCrearCompra}       title="Aplicar la compra"> <span class="label label-limpiar">Crear Compra</span></a>
         </div>
     
     </div>  
@@ -253,7 +253,7 @@ __SiguienteRegistroProveedor(){
 **/
 __AplicarYCrearCompra(){
    
-    if ($("#formularioCompra").valid()) {
+   
         swal({
            title: '',
            text: $.i18n.prop("compra.alert.crear"),
@@ -272,7 +272,7 @@ __AplicarYCrearCompra(){
               
             }
         });
-    }
+    
 }
 /**
 * Limpiar Pantalla
@@ -292,7 +292,7 @@ function __Init(){
   
     self.mostrarCapturaProveedor = true
     $('.fechaCompra').val(null);
-    $('.fechaCredito').val(null)
+  
      $('.datepickerFechaCompra').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -307,7 +307,7 @@ function __Init(){
               todayHighlight:true,
             }
          );
-    $('.nota').val(null)
+   
     $('.consecutivo').val(null)
     self.numeroLinea =0
     
@@ -358,12 +358,7 @@ function crearCompra(estadoCompra){
         mensajeError($.i18n.prop("compra.alert.sin.detalles"))
         return
     }
-    if(formaPago.value == 2  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
-           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
-            return
-        }
-    }
+   
     self.detalleCompra.data =self.detail
     self.update()
       var JSONDetalles = JSON.stringify( self.detalleCompra );
@@ -375,11 +370,10 @@ function crearCompra(estadoCompra){
         totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
         totalCompra:__valorNumerico(self.compra.totalCompra),
         formaPago:$('.formaPago').val(),
-        tipoDocumento:$('.tipoDocumento').val(),
+        
         proveedor:$('.proveedor').val(),
         consecutivo:$('.consecutivo').val(),
         estado:estadoCompra,
-        fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
         fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
         detalleCompra :JSONDetalles
      }
@@ -387,7 +381,7 @@ function crearCompra(estadoCompra){
         type : "POST",
         dataType : "json",
         data : informacion,
-        url : "CrearCompraAjax.do",
+        url : "CrearRecibirCompraAjax.do",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);

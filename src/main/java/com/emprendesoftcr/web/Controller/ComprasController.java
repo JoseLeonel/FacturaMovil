@@ -1165,6 +1165,43 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CrearRecibirCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator agregarRecibirCompra(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
+
+		@SuppressWarnings("unused")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			compraCommand.setFormaPago(Constantes.COMPRA_FORMA_PAGO_CONTADO);
+			compraCommand.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE);
+			compraCommand.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA);
+			compraCommand.setFechaCredito(null);
+			compraCommand.setNota("Compra por recibidor");
+			
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if (!compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+				Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
+				if (compraBD != null) {
+					if (!compraBD.getId().equals(compraCommand.getId())) {
+						result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+					}
+				}
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+//			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
+//			compraCommand.setUsuarioCreacion(usuarioSesion);
+//			compraBo.crearCompra(compraCommand, usuarioSesion);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", compraCommand);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
 	/**
 	 * Modulo de compras
