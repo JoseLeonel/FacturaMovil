@@ -6,7 +6,7 @@
 				class="fa fa-dashboard"></i> <span>Inicio</span>
 		</a></li>
 
-		
+
 		<li class="treeview"
 			sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','Usuario_Cajero','administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Usuario_Mesero')">
 			<a th:href="@{#}"> <i class="fa fa-edit"></i> <span>Administrativo</span>
@@ -147,13 +147,28 @@
 					Inventario</span> <i class="fa fa-angle-left pull-right"></i>
 		</a>
 			<ul class="treeview-menu">
-				<li><a th:href="@{/compras}"><i class="fa fa-circle-o"></i>
-						Nueva</a></li>
+				<li class="treeview"
+					sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
+					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Recepccion del
+							Proveedor</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="treeview-menu">
+						<li><a th:href="@{/ListarProveedores}"><i
+						class="fa fa-circle-o"></i>crear Proveedor</a></li>
+						<li><a th:href="@{/recibirPedido}"
+							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i
+								class="fa fa-circle-o"></i> Recepcion del Proveedor</a></li>
+						<li><a th:href="@{/compras}"
+							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i
+								class="fa fa-circle-o"></i>Ingresar el pedido</a></li>
+					</ul>
+				</li>
 
-				<li><a th:href="@{/ListarProveedores}"><i
-						class="fa fa-circle-o"></i> Proveedores</a></li>
+			
+
+				
 				<li><a th:href="@{/ComprasSinAceptarInventario}"><i
-						class="fa fa-circle-o"></i> Compras sin ingresar</a></li>
+						class="fa fa-circle-o"></i> Compras sin ingresar(correo)</a></li>
 				<li><a th:href="@{/ListaComprasAnular}"><i
 						class="fa fa-circle-o"></i> Anular Compra</a></li>
 				<li><a th:href="@{/ListarProveedorArticulo.do}"

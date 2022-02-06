@@ -1,8 +1,39 @@
 <compra-movil>
+
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border encabezado-pantalla" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Cambiar Cantidad</h1>
+            </div>
+            <div class="modal-body">
+               
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Cantidad </label>
+                            <input type="text" class="form-control cambiarCantidadArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarCantidadArticulo" name="cambiarCantidadArticulo"    min="0" autocomplete="off">
+                        </div>
+                    </div>
+ 
+                   
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalcularCantidad}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-calculator"></i>&nbsp Ingreso de Compra  </h1>
+            <h1 style="font-size:24px;" ><i class="fa fa-calculator" ></i>&nbsp Recepcion del Proveedor  </h1>
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
@@ -40,8 +71,13 @@
             </form>
         </div>
         <div class="modal-footer">
-            <div  >
-                <button  onclick={__SiguienteRegistroProveedor}   class=" btn-green modalCambioPrecioBotones" > Siguiente</button>
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                <button onclick={__RegresarProductos}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    {$.i18n.prop("btn.volver")}
+                </button>
+            </div>
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                   <button  onclick={__SiguienteRegistroProveedor}   class=" btn-green modalCambioPrecioBotones" > Siguiente</button>                </div>
             </div>
         </div>
         
@@ -53,7 +89,8 @@
         </div>
     
         <div class="boton-1">  
-                <a class="pull-left" href="#"   onclick = {__AplicarYCrearCompra}       title="Aplicar la compra"> <span class="label label-limpiar">Crear Compra</span></a>
+      
+                <a class="pull-left " href="#"   onclick = {__AplicarYCrearCompra}       title="Siguiente"><span class="label label-limpiar ">Crear Boleta</span></a>
         </div>
     
     </div>  
@@ -73,9 +110,31 @@
                 </div>
                 <div>   
                  
-                    <input autocomplete="off" class="campo codigo" onkeypress={__addProductToDetail}  id="codigo"  type="text" placeholder="XXXXXXXXXXX" >  </input>
+                    <input autocomplete="off" class="campo codigo"   id="codigo"  type="text" placeholder="XXXXXXXXXXX" >  </input>
                 </div>   
-                <div><span class="titulo-resumen">Cant:{totalCantidadSTR}</span></div> 
+                <div class="containerBotonesSumarRestarContar">
+                           <div class="BotonesSumarRestar">
+                               <span onclick = {__SumarConMouse} title="Sumar +" class="fontSumarRestar input-group-addon btnsumarrestar" id="botonSumar"> 
+                                   <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                   <span class="fa fa-plus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                      Sumar
+                                </span> 
+                            </div>                     
+                            <div class="BotonesSumarRestar">
+                                <span title="Cantidad" class="fontSumarRestar input-group-addon btnsumarrestar" > 
+                                    <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                    <span class="fa " aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                     Cant:{totalCantidadSTR}
+                                </span> 
+                            </div>
+                            <div class="BotonesSumarRestar">
+                                <span onclick = {__RestarConMouse} title="Restar -" class="fontSumarRestar input-group-addon btnsumarrestar" id="botonRestar"> 
+                                    <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                    <span class="fa fa-minus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                                     Restar
+                                </span> 
+                            </div>       
+                </div> 
            </div>  
         </div>
        <div class= "containerDetalle">
@@ -115,7 +174,13 @@
        <div class="containerDetalleResumenCantidades">
             
             <div><span class="titulo-resumen">Total:{totalCostoSTR}</span></div>
-            
+            <div class="BotonesSumarRestar">
+                <span onclick={__CambiarCantidad}  title="Ingresar Cantidad " class="fontSumarRestar input-group-addon btnsumarrestar" > 
+                <small class="fa " style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                <span class="fa fa-plus" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"/>
+                    Mas cantidad
+                </span> 
+            </div>       
        </div>
       
 </div>
@@ -127,14 +192,13 @@
 
 
 
-
 <script>
     var self = this;
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.mostrarCapturaProveedor = true
+    self.mostrarCapturaProveedor = false
     self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
@@ -175,7 +239,7 @@
 
         $("#formularioEncabezadoFactura").validate(reglasDeValidacionCompra());
 
-        __Teclas()
+    
      
         $('.datepickerFechaCompra').datepicker(
         {
@@ -198,10 +262,165 @@
     }
     self.update()
     __calculate()
+    var xTriggered = 0;
+        $( "#codigo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+                lecturaCodigo($('.codigo').val())
+           }
+           if(event.which == 107){
+            __SumarConTecla(event)
+            }
+             if(event.which == 109){
+            __RestarConTecla(event)
+            }
+            if(event.which == 111){
+                if(!$('#modalCambiarCantidad').is(':visible')){
+                    
+                    $(".codigo").val("")
+                    return
+                }
+            }
+        });
+
+        $.fn.delayPasteKeyUp = function(fn, ms)
+        {
+            var timer = 0;
+            $(this).on("propertychange input", function()
+            {
+                clearTimeout(timer);
+                timer = setTimeout(fn, ms);
+            });
+        };
+      
+        
+       
+         window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+            
+             __Teclas(evento.keyCode,evento)
+           
+        }, false );
+        $( "#cambiarCantidadArticulo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+               cambiarCantidadModal()
+           }
+        });
+
+
+
+
     })
 
+__RegresarProductos(){
+   self.mostrarCapturaProveedor = false
+   self.update() 
+}    
+__CambiarCantidad(e){
+   var cantidad = e.currentTarget.value;
+   self.item = e.item;
+   self.update()
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})
+        $('#modalCambiarCantidad').on('shown.bs.modal', function () {
+            $( "#cambiarCantidadArticulo" ).val(cantidad)
+            $( "#cambiarCantidadArticulo" ).focus()
+            $( "#cambiarCantidadArticulo" ).select()
+        })
+   
+ }
 
 
+this.__recalcularCantidad = function(e){
+    cambiarCantidadModal()
+  }.bind(this)
+
+ function cambiarCantidadModal(){
+      var cantidad = $(".cambiarCantidadArticulo").val();
+
+    cantidad =__valorNumerico(cantidad);
+    if(cantidad == 0){
+       cantidad = 1;
+    }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
+    self.item = __getUltimoItemIngresado()
+    self.mostrarCapturaProveedor = false
+    self.update()
+    __buscarcodigo(self.item.codigo,cantidad)
+
+    //aplicarCambioLineaDetalle()
+    $('#modalCambiarCantidad').modal('hide')
+   // getPosicionInputCodigo()
+
+ }
+
+
+
+
+function lecturaCodigo(valor){
+    if (valor == "" || valor.length == 0){
+        if(self.cantidadEnterFacturar >= 1){
+            self.cantidadEnterFacturar = 0
+            self.update()
+             __EnviarFacturar()
+             return
+        }else{
+            self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
+            self.update()
+        }
+    }
+    var objetos = getCantidadAdnCodigo_PV();
+    var codigoActual = objetos.codigo
+    var cantidadAct =objetos.cantidad
+
+    if(valor.indexOf("+") != -1){
+
+       __sumarMasArticulo(objetos.codigo,0,cantidadAct)
+       getPosicionInputCodigo()
+       return
+    }
+    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
+}
+
+
+function __Teclas(tecla,event){
+    if (tecla === undefined) {
+        return 
+    }
+    if (event === undefined) {
+        return 
+    }
+
+    if(event.id == 'nota' || event.id == 'correoAlternativo' || event.id == 'nombreFactura' ||
+       event.target.id == 'nota' ||  event.target.id == 'correoAlternativo' || event.target.id == 'nombreFactura'){
+        return
+    }
+  
+    
+    if(tecla ==111){
+       
+        return
+    }
+
+  
+
+    if(tecla ==113){
+      
+      getPosicionInputCodigo()
+      return
+    }
+
+  
+   if(tecla ==27){
+      getPosicionInputCodigo()
+      return
+    }
+
+}
 /**
 * Camps requeridos
 **/
@@ -226,6 +445,125 @@ var reglasDeValidacionCompra = function() {
 	return validationOptions;
 };
 
+
+  
+  
+
+__SumarConMouse(){
+    aplicarSumaAlCodigo(0,1,true)
+ 
+
+}
+__RestarConMouse(){
+    aplicarSumaAlCodigo(0,1,false)
+   // getPosicionInputCodigo()
+}
+
+function __SumarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,true)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return
+    }
+
+}
+
+function __RestarConTecla(e){
+    if(verificaSiSuma()){
+        aplicarSumaAlCodigo(0,1,false)
+        getPosicionInputCodigo()
+        e.preventDefault()
+         return
+    }
+
+}
+
+function verificaSiSuma(){
+   var objetos =  getCantidadAdnCodigo_PV();
+    for(i=0; i<objetos.codigo.length; i++){
+        if(isNumber(objetos.codigo)){
+          return false        }
+    }
+    return true
+}
+function aplicarSumaAlCodigo(valorPrecio,cantidadAct,siSuma){
+    var temItem = __getUltimoItemIngresado()
+    if(temItem == null){
+        getPosicionInputCodigo()
+        return
+    }
+   for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == temItem.codigo  && temItem.numeroLinea == self.detail[count].numeroLinea){
+            self.item          = self.detail[count];
+            var restarValores = self.item.cantidad - __valorNumerico(cantidadAct)
+            self.item.cantidad = siSuma  == true?self.item.cantidad + __valorNumerico(cantidadAct):restarValores <= 0 ? 1 : self.item.cantidad - __valorNumerico(cantidadAct)
+            self.update();
+            __actualizarItemArray()  
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+    __calculate();
+    
+}
+function getCantidadAdnCodigo_PV(){
+    var objeto ={
+        codigo:'',
+        cantidad:0
+    }
+
+    var valor = $('.codigo').val()
+    if(valor == "" | valor.length == 0){
+        return objeto
+    }
+    var existe = false
+    var existeMas = false
+    for(i=0; i<valor.length; i++){
+        existeMas = valor.indexOf("+") !=-1?true : false
+       if(existe == false && existeMas  == false ){
+          existe = valor.charAt(i) == "*"?true : false
+         if(valor.charAt(i) !="*" && valor.charAt(i) != "+"){
+              objeto.codigo = objeto.codigo + valor.charAt(i)
+          }
+       }else{
+           if(valor.charAt(i) != "+" && valor.charAt(i) != "*"){
+              objeto.cantidad = objeto.cantidad + valor.charAt(i)
+           }
+
+       }
+    }
+    return objeto;
+
+}
+function getPosicionInputCodigo(){
+    $('.precioPublico').val(null)
+    $('.codigo').val(null)
+    $('.codigo').focus()
+}
+function __SetUltimoArticuloIngresado(){
+   localStorage.setItem('ultimoArticulo', JSON.stringify(self.articulo));
+}
+
+function __getUltimoArticuloIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoArticulo'));
+}
+
+function __DeleteUltimoArticuloIngresado(){
+    localStorage.removeItem('ultimoArticulo');
+}
+
+function __SetUltimoItemIngresado(item){
+   localStorage.setItem('ultimoItem', JSON.stringify(item));
+}
+
+function __getUltimoItemIngresado(){
+    return JSON.parse(localStorage.getItem('ultimoItem'));
+}
+
+function __DeleteUltimoItemIngresado(){
+    localStorage.removeItem('ultimoItem');
+}
 __SiguienteRegistroProveedor(){
       if ($("#formularioEncabezadoFactura").valid()) {
             var idProveedor = $('.selecProveedor').val()
@@ -241,6 +579,7 @@ __SiguienteRegistroProveedor(){
                 }
             });
             self.mostrarCapturaProveedor = false
+            self.update()
 
       }
 }
@@ -411,18 +750,6 @@ function crearCompra(estadoCompra){
 
 
 
-/** 
-*
-*Agregar codigos al detalle de la Compra
-*
-*/
-__addProductToDetail(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    __buscarcodigo(e.currentTarget.value,1);
-}
- 
 
 
 
@@ -463,9 +790,7 @@ obtenerArticulo(idArticulo,self.proveedor.id).then(r =>{
         }
 
         if(self.articulo !=null){
-           
             self.descripcionArticulo = self.articulo.descripcion
-            
             self.update()
             __agregarArticulo(cantidad)
         }
@@ -491,7 +816,6 @@ function getPosicionInputCodigo(){
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
 function __agregarArticulo(cantidad){
-  
     if(self.articulo == null){
         return;
     }
@@ -526,8 +850,6 @@ function __agregarArticulo(cantidad){
     __calculate(); 
     self.articulo = null;
     self.update()
-
-    
 }
 
 /**
@@ -548,7 +870,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad =  self.pesoPrioridad + 1
     self.numeroLinea = self.numeroLinea + 1
 
-    self.detail.push({
+   var item ={
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
        articulo_id     : self.articulo.id,
@@ -563,7 +885,8 @@ function __nuevoArticuloAlDetalle(cantidad){
        impuesto        : __valorNumerico(iva),
        descuento       : 0,
        montoTotalLinea : __valorNumerico(montoTotalLinea)
-    }); 
+    } 
+    self.detail.push(item); 
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -572,6 +895,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     return 0;
     } );
     self.update()
+     __SetUltimoItemIngresado(item);
 }
 
 /**
@@ -582,6 +906,7 @@ function __actualizarItemArray(){
     self.item.montoTotalLinea = __valorNumerico(self.item.costo * self.item.cantidad);
     self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea-self.item.totalDescuento)
     self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea + self.item.totalImpuesto);
+    self.item.costoTotal = __valorNumerico(self.item.costoTotal) * self.item.cantidad
     self.update()
 }
 /**
@@ -615,12 +940,10 @@ __removeProductFromDetail(e) {
  * Se aplica una recalculacion de todo el detalle y Compra
  **/ 
  __recalculacionDelDetalle(e){
-   // if (e.keyCode != 13) {
-   //     return;
-   // } 
     var cantidad = e.currentTarget.value;
     self.item = e.item; 
     self.update()
+    
      __ActualizaCantidad(cantidad)
  }
 
@@ -641,9 +964,6 @@ __removeProductFromDetail(e) {
     
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
-   // if(cantidad == 0){
-   //    cantidad = 1;
-   // }
     self.item.cantidad = parseFloat(cantidad);  
     _cambiaImpuesto()
     __actualizarItemArray();
@@ -673,7 +993,8 @@ function __calculate() {
         totalDescuento   += e.totalDescuento >0?e.totalDescuento:0
         totalImpuesto    += e.totalImpuesto >0?e.totalImpuesto:0
         self.totalCantidad = self.totalCantidad + e.cantidad
-        self.totalCosto = self.totalCosto + e.costo    
+        self.totalCosto = self.totalCosto + e.costo 
+
     });
     self.compra.totalCompra    = totalCompra
     self.compra.totalDescuento = totalDescuento
@@ -697,32 +1018,6 @@ function __calculate() {
 
 }
 
-
-/**
-*  teclas de la pantalla
-**/      
-function __Teclas(){
-    window.addEventListener( "keydown", function(evento){
-    var tecla = evento.keyCode; 
-    if(tecla ==119){
-        self.mostrarFormularioPago = true
-        mostrarFormaPago()     
-    }   
-    //Compra en espera
-    if(tecla ==120){
-      crearCompra(1)   
-    }
-    
-    //Limpiar f2
-    if(tecla ==113){
-      __Init()
-    }
-
-  if(tecla ==27){
-      $('.codigo').select()
-      $('.codigo').focus()
-    }
-    }, false );
-}                         
+                  
 </script>
 </compra-movil>

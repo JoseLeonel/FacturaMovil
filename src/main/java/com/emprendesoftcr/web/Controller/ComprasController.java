@@ -197,6 +197,17 @@ public class ComprasController {
 		String viewName = "views/compras/crearCompra";
 		String deviceType = "browser";
 		String platform = "browser";
+		
+
+		return viewName;
+		
+	}
+	@RequestMapping(value = "/recibirPedido", method = RequestMethod.GET)
+	public String recibirPedido(Device device ) {
+		
+		String viewName = "views/compras/crearCompraMovil.html";
+		String deviceType = "browser";
+		String platform = "browser";
 		if (device.isNormal()) {
 			deviceType = "browser";
 		} else if (device.isMobile()) {
@@ -216,7 +227,6 @@ public class ComprasController {
 		return viewName;
 		
 	}
-
 
 	@RequestMapping(value = "/ListaComprasAnular", method = RequestMethod.GET)
 	public String listarComprasAnular(ModelMap model) {
@@ -1176,9 +1186,9 @@ public class ComprasController {
 		try {
 			compraCommand.setFormaPago(Constantes.COMPRA_FORMA_PAGO_CONTADO);
 			compraCommand.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE);
-			compraCommand.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA);
+			compraCommand.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA);
 			compraCommand.setFechaCredito(null);
-			compraCommand.setNota("Compra por recibidor");
+			compraCommand.setNota("Boleta por recibidor");
 			
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (!compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
@@ -1192,9 +1202,9 @@ public class ComprasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-//			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
-//			compraCommand.setUsuarioCreacion(usuarioSesion);
-//			compraBo.crearCompra(compraCommand, usuarioSesion);
+			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
+			compraCommand.setUsuarioCreacion(usuarioSesion);
+			compraBo.crearCompra(compraCommand, usuarioSesion);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", compraCommand);
 
