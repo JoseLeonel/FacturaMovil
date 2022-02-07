@@ -2729,7 +2729,8 @@ function crearFactura(estado){
       if (self.transaccion == true ){
         return false
     }
-    if(self.factura.totalComprobante >= 20000000 && self.empresa.cedula != '109350164'){
+    if(self.factura.totalComprobante >= 20000000 && self.empresa.cedula != '109350164'
+        && self.empresa.cedula != '112930015' && self.empresa.cedula != '3102833549' ){
       mensajeEstatico("Error el monto mayor a 20000000, corregir  ")
       return
 

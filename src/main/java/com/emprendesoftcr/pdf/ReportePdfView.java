@@ -261,7 +261,7 @@ public class ReportePdfView {
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
 		String text = Constantes.EMPTY;
-		if(fac_electro.getAplicaFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+		if(fac_electro.getAplicaFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 			text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-033-2019 del 20-06-2019 , a las " + fac_electro.getFechaEmision();
 		}else {
 			text = "Autorizada mediante resolucion No.1197 del 12 de agosto de 1997 de la Direccion General de Tributación de San Jose ";	
