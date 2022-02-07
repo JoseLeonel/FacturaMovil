@@ -121,13 +121,13 @@ public class EmpresaBoImpl implements EmpresaBo {
 		
 		return empresaDao.generarConsecutivoCompraSimplificada(empresa, usuario);
 	}
-
+	@Transactional
 	@Override
 	public String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception {
 		
 		return empresaDao.generarConsecutivoNotaCreditoInterno(empresa, usuario);
 	}
-
+	@Transactional
 	@Override
 	public String generarConsecutivoNotaDebitoInterno(Empresa empresa, Usuario usuario) throws Exception {
 		
@@ -141,5 +141,11 @@ public class EmpresaBoImpl implements EmpresaBo {
 	public String spGenerarConsecutivoFactura(Empresa empresa, Usuario usuario, String tipoDoc) throws Exception {
 		
 		return empresaDao.spGenerarConsecutivoFactura(empresa, usuario, tipoDoc);
+	}
+	@Transactional
+	@Override
+	public String generarConsecutivoAjusteInventario(Empresa empresa, Usuario usuario) throws Exception {
+	
+		return empresaDao.generarConsecutivoAjusteInventario(empresa, usuario);
 	}
 }

@@ -1,4 +1,4 @@
-<compra-movil>
+<ajuste-Inventario>
 
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -28,63 +28,39 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 style="font-size:24px;" ><i class="fa fa-calculator" ></i>&nbsp Recepcion del Proveedor  </h1>
+            <h1 style="font-size:24px;" ><i class="fa fa-calculator" ></i>&nbsp Ajuste Fisico del Inventario  </h1>
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
 
-    <div  class="box " show="{mostrarCapturaProveedor == true}" >
+ <div  class="box " show="{mostrarCapturaProveedor == true}" >
         <div class="box-body">
             <form id="formularioEncabezadoFactura" name="formularioEncabezadoFactura">
             <div class="row">
                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                     <div class="form-group ">
-                        <label>Digite proveedor</label> 
-                        <select  class=" selecProveedor has-success" name="proveedor" id="proveedor" ></select>
+                        <label>Seleccione </label> 
+                        <select  class=" selecProveedor has-success" name="ubicacion" id="ubicacion" ></select>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                    <div class="form-group ">
-                        <label>{$.i18n.prop("compra.consecutivo")}</label> 
-                        <input type="text" class="form-control consecutivo campo" id="consecutivo" name="consecutivo"  autocomplete="off">
-                    </div>
-                </div>
-                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                    <div  class="form-group">
-                        <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                        <div  class="form-group input-group date datepickerFechaCompra " data-provide="datepickerFechaCompra"   data-date-format="yyyy-mm-dd">
-                            <input type="text" class="form-control fechaCompra campo" id="fechaCompra" name = "fechaCompra"   autocomplete="off">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            </div>   
+           
             </form>
         </div>
         <div class="modal-footer">
-            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                <button onclick={__RegresarProductos}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                    {$.i18n.prop("btn.volver")}
-                </button>
-            </div>
+            
             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                    <button  onclick={__SiguienteRegistroProveedor}   class=" btn-green modalCambioPrecioBotones" > Siguiente</button>                </div>
             </div>
         </div>
         
-    </div>                  
+    </div>         
+
+
+            
 
     <div class="containerBotones" show="{mostrarCapturaProveedor == false}">
         <div class="boton-1">  
@@ -93,7 +69,7 @@
     
         <div class="boton-1">  
       
-                <a class="pull-left " href="#"   onclick = {__AplicarYCrearCompra}       title="Siguiente"><span class="label label-limpiar ">Crear Boleta</span></a>
+                <a class="pull-left " href="#"   onclick = {__AplicarYCrearCompra}       title="Siguiente"><span class="label label-limpiar ">Aplicar</span></a>
         </div>
     
     </div>  
@@ -103,10 +79,7 @@
 <div class="containerPrincipal" show="{mostrarCapturaProveedor == false}">
 
        <div class= "containerHeader">
-            <div class="containerHeaderInfo">
-                <div> <span>{proveedor.nombreCompleto}</div> 
-                <div><span class="titulo-1">{compra.consecutivo}</span><span >{compra.fechaCompra}</span></div>
-            </div>    
+           
             <div class="containerDigiteCodigo">
                 <div>
                     <span>Digite el codigo</span>
@@ -152,6 +125,7 @@
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
                             <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">cant.inv   </div></th>
                             
                    
                         </tr>
@@ -164,6 +138,7 @@
                             <td style="width:8%;"><span class="tabla-codigo">{codigo}</span></td>
                             <td style="width:16%;"><span class="tabla-descripcion">{descripcion}</span></td>
                             <td style="width:16%;" ><span class="tabla-cantidad">{cantidad}</span></td>
+                            <td style="width:16%;" ><span class="tabla-cantidad">{cantidadInventario}</span></td>
                            
                         </tr>
                     </tbody>
@@ -202,29 +177,15 @@
     self.mensajesBackEnd       = []
     self.error                 = false
     self.mostrarCapturaProveedor = false
-    self.compra                = {
-        consecutivo:"",
-        fechaCredito    : null,
-        fechaCompra     : null,
-        id : null,
-        totalImpuesto: 0,
-        totalCompra:0,
-        estado:0,
-        tipoDocumento:0,
-        formaPago:0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        nota:""
-    }       
-    self.proveedor = {
+    
+    self.ubicacion = {
         id:null,
         nombreCompleto:'',
     }                     
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.proveedores           = {data:[]}
+    self.ubicaciones           = {data:[]}
     
     self.detalleCompra         ={data:[]}
    
@@ -252,14 +213,14 @@
         
     );
    
-    var retrievedObject = JSON.parse(localStorage.getItem('detallesRecibirNueva'));
+    var retrievedObject = JSON.parse(localStorage.getItem('detallesAjustesInventario'));
     if (retrievedObject != 'undefined') {
        self.detail = retrievedObject == null? self.detail = []:retrievedObject  
     }
     if (compraObject != 'undefined') {
-       var compraObject = JSON.parse(localStorage.getItem('reciboNueva'));
+       var compraObject = JSON.parse(localStorage.getItem('ajusteNueva'));
     }
-    var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
+    var proveedorObject = JSON.parse(localStorage.getItem('ubicacion'));
     if (compraObject != 'undefined') {
        self.proveedor = proveedorObject == null? self.proveedor:proveedorObject  
     }
@@ -280,7 +241,7 @@
             __RestarConTecla(event)
             }
             if(event.which == 111){
-                if(!$('#modalCambiarCantidad').is(':visible') && !$('#modalCambiarCantidad').is(':visible') ){
+                if(!$('#modalCambiarCantidad').is(':visible')){
                     
                     $(".codigo").val("")
                     return
@@ -336,7 +297,8 @@ __CambiarCantidad(e){
         })
    
  }
- 
+
+
 this.__recalcularCantidad = function(e){
     cambiarCantidadModal()
   }.bind(this)
@@ -356,7 +318,7 @@ this.__recalcularCantidad = function(e){
 
     //aplicarCambioLineaDetalle()
     $('#modalCambiarCantidad').modal('hide')
-    getPosicionInputCodigo()
+   // getPosicionInputCodigo()
 
  }
 
@@ -425,17 +387,10 @@ function __Teclas(tecla,event){
 var reglasDeValidacionCompra = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			consecutivo : {
+			ubicacion : {
 				required : true,
                 maxlength:20,
-         	},                                   
-			fechaCompra : {
-				required : true,
-             },
-             proveedor:{
-                 required:true,
-                 maxlength:250,
-             }         
+         	}   
 		},
 		ignore : []
 
@@ -564,13 +519,21 @@ function __DeleteUltimoItemIngresado(){
 }
 __SiguienteRegistroProveedor(){
       if ($("#formularioEncabezadoFactura").valid()) {
-            var idProveedor = $('.selecProveedor').val()
-            self.proveedor =null
+            var idUbicaion = $('.selecProveedor').val()
+            self.ubicacion =null
             self.compra.fechaCompra = $(".fechaCompra").val()
             self.compra.consecutivo = $(".consecutivo").val()
-          
-            self.update()
-            validarConsecutivo(idProveedor)
+           $.each(self.ubicaciones , function( index, modeloTabla ) {
+                        if(modeloTabla.id == idUbicaion){
+                            self.ubicacion = modeloTabla
+                            self.update()
+
+                        }
+                    });
+                    self.mostrarCapturaProveedor = false
+                    self.update()
+           
+        
                 
 
         
@@ -589,7 +552,7 @@ __AplicarYCrearCompra(){
    
         swal({
            title: '',
-           text: '¿Estás seguro que deseas crear la boleta?',
+           text: $.i18n.prop("compra.alert.crear"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -664,13 +627,13 @@ function __Init(){
     self.articulo              = null;
  
     
-      __ListaDeProveedores()
+      __ListaDeUbicaciones()
 
     self.update();
     
-    localStorage.setItem('detallesRecibirNueva', JSON.stringify(self.detail));
-    localStorage.setItem('reciboNueva', JSON.stringify(self.compra));
-    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
+    localStorage.setItem('detallesAjustesInventario', JSON.stringify(self.detail));
+    localStorage.setItem('ajusteNueva', JSON.stringify(self.compra));
+    localStorage.setItem('ubicacion', JSON.stringify(self.ubicacion));
      
 }
 
@@ -704,7 +667,7 @@ function crearCompra(estadoCompra){
         totalCompra:__valorNumerico(self.compra.totalCompra),
         formaPago:$('.formaPago').val(),
         
-        proveedor:$('.selecProveedor').val(),
+        proveedor:$('.ubicacion').val(),
         consecutivo:$('.consecutivo').val(),
         estado:estadoCompra,
         fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
@@ -714,7 +677,7 @@ function crearCompra(estadoCompra){
         type : "POST",
         dataType : "json",
         data : informacion,
-        url : "CrearRecibirCompraAjax.do",
+        url : "CrearRecibirCompraAjusteInventarioAjax.do",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);
@@ -744,59 +707,7 @@ function crearCompra(estadoCompra){
 
 
 
-function validarConsecutivo(idProveedor){
-   
-    self.detalleCompra.data =self.detail
-    self.update()
-      var JSONDetalles = JSON.stringify( self.detalleCompra );
-    var informacion = {
-        id:self.compra.id,
-        nota:$('.nota').val(),
-        subTotal:__valorNumerico(self.compra.subTotal),
-        totalDescuento:__valorNumerico(self.compra.totalDescuento),
-        totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
-        totalCompra:__valorNumerico(self.compra.totalCompra),
-        formaPago:$('.formaPago').val(),
-        
-        proveedor:$('.selecProveedor').val(),
-        consecutivo:$('.consecutivo').val(),
-        fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
-        detalleCompra :JSONDetalles
-     }
-    $.ajax({
-        type : "POST",
-        dataType : "json",
-        data : informacion,
-        url : "findConsecutivoCompra.do",
-        success : function(data) {
-            if (data.status != 200) {
-               	serverMessageJsonClase(data);
-                if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
-                     resultado = true
-                }else{
-                   
-                    $.each(self.proveedores , function( index, modeloTabla ) {
-                        if(modeloTabla.id == idProveedor){
-                            self.proveedor = modeloTabla
-                            self.update()
 
-                        }
-                    });
-                    self.mostrarCapturaProveedor = false
-                    self.update()
-
-                
-                }
-            } 
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-    
-}
 
 
 
@@ -805,16 +716,16 @@ function validarConsecutivo(idProveedor){
 /**
 *  Lista de los Proveedores
 **/
-function __ListaDeProveedores(){
+function __ListaDeUbicaciones(){
     $.ajax({
-        url: 'ListarProveedoresAjax.do',
+        url: 'ListarUbicacionActivasAjax.do',
         datatype: "json",
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-                self.proveedores                = result.aaData
-                comboCargaProveedores(self.proveedores,null)
-                _evento_refrescar_proveedores(self.proveedores)
+                self.ubicaciones                = result.aaData
+                comboCargaUbicacion(self.ubicaciones,null)
+                _evento_refrescar_ubicaciones(self.ubicaciones)
             }
         },
         error: function (xhr, status) {
@@ -828,7 +739,7 @@ function __ListaDeProveedores(){
 **/
 function __buscarcodigo(idArticulo,cantidad){
 
-obtenerArticulo(idArticulo,self.proveedor.id).then(r =>{
+obtenerArticuloInventario(idArticulo).then(r =>{
        unBlockUIStop();
      self.articulo =  r;
      self.update()
@@ -921,6 +832,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 
    var item ={
        numeroLinea     : self.numeroLinea,
+       cantidadInventario:self.articulo.cantidad,
        pesoPrioridad   :self.pesoPrioridad,  
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
@@ -933,7 +845,8 @@ function __nuevoArticuloAlDetalle(cantidad){
        totalDescuento  :0,
        impuesto        : __valorNumerico(iva),
        descuento       : 0,
-       montoTotalLinea : __valorNumerico(montoTotalLinea)
+       montoTotalLinea : __valorNumerico(montoTotalLinea),
+       ubicacion:self.ubicacion.id
     } 
     self.detail.push(item); 
     self.detail.sort(function(a,b) {
@@ -1062,12 +975,12 @@ function __calculate() {
     $( "#codigo" ).val(null);
     $('.codigo').select()
     $('.codigo').focus()
-    localStorage.setItem('detallesRecibirNueva', JSON.stringify(self.detail));
-    localStorage.setItem('reciboNueva', JSON.stringify(self.compra));
-    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
+    localStorage.setItem('detallesAjustesInventario', JSON.stringify(self.detail));
+    localStorage.setItem('ajusteNueva', JSON.stringify(self.compra));
+    localStorage.setItem('ubicacion', JSON.stringify(self.proveedor));
 
 }
 
                   
 </script>
-</compra-movil>
+</ajuste-Inventario>

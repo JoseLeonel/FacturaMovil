@@ -215,6 +215,10 @@ public class Empresa implements Serializable {
 
 	@Column(name = "nota_debe_intern", columnDefinition = "INT default '1'")
 	private Integer						notaDebitoConsecutivo;
+	
+	@Column(name = "cons_ajuste_inv", columnDefinition = "INT default '0'")
+	private Integer						consecutivoAjusteInventario;
+
 
 	@Column(name = "correo_pdf")
 	private String						correoPDF;
@@ -960,6 +964,16 @@ public class Empresa implements Serializable {
 	
 	public void setAplicaVentaEspera(Integer aplicaVentaEspera) {
 		this.aplicaVentaEspera = aplicaVentaEspera;
+	}
+
+	
+	public Integer getConsecutivoAjusteInventario() {
+		return consecutivoAjusteInventario;
+	}
+
+	
+	public void setConsecutivoAjusteInventario(Integer consecutivoAjusteInventario) {
+		this.consecutivoAjusteInventario = consecutivoAjusteInventario;
 	}
 	
 	

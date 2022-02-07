@@ -3,6 +3,7 @@ package com.emprendesoftcr.web.Controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
 import com.emprendesoftcr.utils.DataTableDelimitador;
@@ -457,7 +459,9 @@ public class ProveedorArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
+	
+	
+	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

@@ -180,6 +180,46 @@ public class KardexDaoImpl implements KardexDao {
 		
 	}
 
+
+
+	@Override
+	public void ajusteFisicoInventario(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
+		try {
+			cantidadActual = cantidadActual != null && cantidadActual > Constantes.ZEROS_DOUBLE ? cantidadActual :Constantes.ZEROS_DOUBLE;
+			cantidadNueva = cantidadNueva != null && cantidadNueva > Constantes.ZEROS_DOUBLE ? cantidadNueva :Constantes.ZEROS_DOUBLE;
+			Double resultadoCantidad = Utils.roundFactura(cantidadNueva,3);
+			resultadoCantidad = resultadoCantidad < Constantes.ZEROS_DOUBLE?Constantes.ZEROS_DOUBLE:resultadoCantidad;
+			Double costoNuevo = articuloDao.getTotalCosto(articulo, resultadoCantidad);
+			Kardex kardex = new Kardex();
+			kardex.setCantidadSolicitada(cantidadNueva);
+			kardex.setCantidadActual(cantidadActual);
+			kardex.setCostoActual(articulo.getCosto());
+			kardex.setTotalCostoActual(articuloDao.getTotalCosto(articulo, cantidadActual));
+			kardex.setCodigo(articulo.getCodigo());
+			kardex.setObservacion(observacion);
+			kardex.setCantidadNueva(resultadoCantidad);
+			kardex.setCostoNuevo(articulo.getCosto());
+			kardex.setTotalCostoNuevo(costoNuevo);
+			kardex.setConsecutivo(consecutivo);
+			kardex.setTipo(tipo);
+			kardex.setMotivo(motivo);
+			kardex.setCreated_at(new Date());
+			kardex.setUpdated_at(new Date());
+			kardex.setUsuario(usuarioSesion);
+			kardex.setArticulo(articulo);
+		
+			articulo.setCantidad(resultadoCantidad);
+			articuloDao.modificar(articulo);
+			agregar(kardex);
+			
+
+		} catch (Exception e) {
+			log.info("** Error  salida kardex: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		
+	}
+
 	
 	
 	

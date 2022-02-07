@@ -191,6 +191,18 @@ public class ComprasController {
 		return viewName;
 	}
 	
+	@RequestMapping(value = "/crearBoletas.do", method = RequestMethod.GET)
+	public String crearBoletas(Device device ) {
+		
+		String viewName = "views/compras/crearBoleta.html";
+		String deviceType = "browser";
+		String platform = "browser";
+		
+
+		return viewName;
+		
+	}
+	
 	@RequestMapping(value = "/compras", method = RequestMethod.GET)
 	public String crearCompras(Device device ) {
 		
@@ -1185,7 +1197,7 @@ public class ComprasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			compraCommand.setFormaPago(Constantes.COMPRA_FORMA_PAGO_CONTADO);
-			compraCommand.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE);
+			compraCommand.setEstado(Constantes.COMPRA_ESTADO_PENDIENTE_BOLETA);
 			compraCommand.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA);
 			compraCommand.setFechaCredito(null);
 			compraCommand.setNota("Boleta por recibidor");
@@ -1206,7 +1218,80 @@ public class ComprasController {
 			compraCommand.setUsuarioCreacion(usuarioSesion);
 			compraBo.crearCompra(compraCommand, usuarioSesion);
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", compraCommand);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("boleta.agregar.correctamente", compraCommand);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CrearRecibirCompraAjusteInventarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator crearRecibirCompraAjusteInventarioAjax(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
+
+		@SuppressWarnings("unused")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Proveedor proveedor = proveedorBo.buscarPorCedulaYEmpresa(usuarioSesion.getEmpresa().getCedula(), usuarioSesion.getEmpresa());
+			if(proveedor == null) {
+				proveedor = new Proveedor();
+				proveedor.setCedula(usuarioSesion.getEmpresa().getCedula());
+				proveedor.setNombreCompleto(usuarioSesion.getEmpresa().getNombreComercial() == null && !usuarioSesion.getEmpresa().getNombreComercial().equals(Constantes.EMPTY)?usuarioSesion.getEmpresa().getNombreComercial():usuarioSesion.getEmpresa().getNombre());
+				proveedor.setCreated_at(new Date());
+				proveedor.setUpdated_at(new Date());
+				proveedor.setEmail(usuarioSesion.getEmpresa().getCorreoElectronico());
+				proveedor.setDireccion(usuarioSesion.getEmpresa().getOtraSenas());
+				proveedor.setEstado(Constantes.ESTADO_ACTIVO);
+				proveedorBo.agregar(proveedor);
+			}
+			compraCommand.setProveedor(proveedor);
+			compraCommand.setFormaPago(Constantes.COMPRA_FORMA_PAGO_CONTADO);
+			compraCommand.setEstado(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO);
+			compraCommand.setTipoDocumento(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO);
+			compraCommand.setFechaCredito(null);
+			compraCommand.setNota("Boleta por ajuste al inventario");
+			
+			
+		
+			compraCommand.setConsecutivo(empresaBo.generarConsecutivoAjusteInventario(usuarioSesion.getEmpresa(), usuarioSesion));
+			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
+			compraCommand.setUsuarioCreacion(usuarioSesion);
+			compraBo.crearCompra(compraCommand, usuarioSesion);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("boleta.agregar.correctamente", compraCommand);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/findConsecutivoCompra.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator findConsecutivoCompra(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
+
+		@SuppressWarnings("unused")
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if (!compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+				Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
+				if (compraBD != null) {
+					if (!compraBD.getId().equals(compraCommand.getId())) {
+						result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+					}
+				}
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", null);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -1440,9 +1525,26 @@ public class ComprasController {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/ListarComprasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/ListarBoletaEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Compra");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE_BOLETA.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDocumento", "'" + Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA.toString() + "'", "=");
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/ListarComprasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarActivasBoletaAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
@@ -1454,7 +1556,6 @@ public class ComprasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-
 	/**
 	 * Lista las compras ingresadas al inventario y que no estan pendiente
 	 * @param request
@@ -1545,6 +1646,9 @@ public class ComprasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
+	
+	
+	
 
 	private static class DelimitadorBuilder {
 

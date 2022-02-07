@@ -94,6 +94,9 @@ public class Articulo implements Serializable {
 
 	@Column(name = "maximo")
 	private Double						maximo;
+	
+	@Column(name = "ubicacion")
+	private Long						ubicacion;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -597,5 +600,17 @@ public class Articulo implements Serializable {
 	public void setPrecioSugerido(Double precioSugerido) {
 		this.precioSugerido = precioSugerido;
 	}
+
+	
+	public Long getUbicacion() {
+		return ubicacion;
+	}
+
+	
+	public void setUbicacion(Long ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+	
+	
 
 }

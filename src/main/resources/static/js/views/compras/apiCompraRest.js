@@ -23,3 +23,26 @@ const obtenerArticulo = async(idArticulo,idProveedor) => {
         }
 
     }
+
+const obtenerConsecutivoCompra = async(consecutivo) => {
+    try {
+    
+        const rawResponse = await fetch('findConsecutivoCompra.do?consecutivo=' + consecutivo);
+        const data = await rawResponse.json();
+        var articuloTem = null
+        $.each(data.listaObjetos, function(index, modeloTabla) {
+
+            articuloTem = modeloTabla;
+        });
+   	    blockUILoad();
+        console.log(articuloTem);
+        return articuloTem;
+    } catch (error) {
+    	unBlockUIStop();
+        console.log(error);
+
+
+
+    }
+
+}

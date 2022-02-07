@@ -171,6 +171,8 @@ public class CompraBoImpl implements CompraBo {
 
 					DetalleCompra detalleCompra = new DetalleCompra(detalleCompraCommand);
 					detalleCompra.setArticulo(articulo);
+					detalleCompra.setUbicacion(detalleCompraCommand.getUbicacion());
+					detalleCompra.setGanancia(detalleCompraCommand.getGanancia());
 					detalleCompra.setCompra(compra);
 					detalleCompra.setCreated_at(new Date());
 					detalleCompra.setUpdated_at(new Date());
@@ -187,16 +189,16 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCodigoComercial3(detalleCompraCommand.getCodigoComercial3() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoComercial3());
 
 					detalleCompra.setCodigoCabys(detalleCompraCommand.getCodigoCabys() == null ? Constantes.EMPTY : detalleCompraCommand.getCodigoCabys());
-					
+
 					detalleCompra.setCompra(compra);
 
-					if(articulo != null) {
+					if (articulo == null) {
 						articulo = crearArticuloNuevoSinIngresar(detalleCompra);
 						detalleCompra.setArticulo(articulo);
-						
-					} 
+
+					}
 					detalleCompraDao.agregar(detalleCompra);
-					
+
 					articulo.setConsecutivoCompra(compra.getConsecutivo());
 					articulo.setFechaUltimaCompra(compra.getFechaCompra());
 					articulo.setGananciaPrecioPublico(detalleCompra.getGanancia());
@@ -205,14 +207,24 @@ public class CompraBoImpl implements CompraBo {
 					articuloDao.modificar(articulo);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+				//		if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+						articulo.setContable(Constantes.CONTABLE_SI);
 							aplicarInventario(compra, detalleCompra, articulo);
-						} else {
+						//} else {
+							if(compra.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
+								articulo.setDescripcion(detalleCompra.getDescripcion());	
+								
+							}
+							if(compra.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO)) {
+								articulo.setUbicacion(detalleCompra.getUbicacion());	
+								
+							}
+							
 							articulo.setCosto(detalleCompra.getCosto());
 							articulo.setPrecioPublico(detalleCompra.getPrecio());
 							articuloDao.modificar(articulo);
 
-						}
+				//		}
 
 						actualizarProveedor(detalleCompra, compra.getProveedor(), null, articulo, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE);
 					}
@@ -264,7 +276,8 @@ public class CompraBoImpl implements CompraBo {
 	private Articulo crearArticuloNuevoSinIngresar(DetalleCompra detalleCompra) {
 		Articulo articuloNuevo = new Articulo();
 		try {
-
+			articuloNuevo.setCodigo(detalleCompra.getCodigo());
+			articuloNuevo.setEmpresa(detalleCompra.getCompra().getEmpresa());
 			articuloNuevo.setDescripcion(detalleCompra.getDescripcion());
 			articuloNuevo.setCantidad(Constantes.ZEROS_DOUBLE);
 			articuloNuevo.setTipoCodigo(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR);
@@ -272,6 +285,7 @@ public class CompraBoImpl implements CompraBo {
 			articuloNuevo.setCantidadPaquete(Constantes.ZEROS);
 			articuloNuevo.setCategoria(null);
 			articuloNuevo.setMarca(null);
+			articuloNuevo.setUnidadMedida(Constantes.UNIDAD_MEDIDA);
 			articuloNuevo.setCodigoCabys(detalleCompra.getCodigoCabys());
 			articuloNuevo.setCodigoSecundario(Constantes.EMPTY);
 			articuloNuevo.setImpuesto(detalleCompra.getImpuesto());
@@ -394,8 +408,15 @@ public class CompraBoImpl implements CompraBo {
 
 			}
 
-			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
-			kardexDao.entradaCosto(articulo, costo, cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			String leyenda = compra.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO) ? "Ajuste Fisico:" + compra.getConsecutivo() : Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getConsecutivo();
+			if (compra.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO)) {
+				
+				kardexDao.ajusteFisicoInventario(articulo, articulo.getCantidad(), cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO__AJUSTE_INVENTARIO, leyenda, compra.getUsuarioCreacion());
+			} else {
+				
+				kardexDao.entradaCosto(articulo, costo, cantidad, compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			}
+
 			Double porcentajeGanancia = articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());

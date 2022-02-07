@@ -36,6 +36,7 @@ public class DetalleCompraCommand {
 	private String						codigoTipoImpuesto;
 	
 	private String						tarifaImpuesto;
+	private Long  ubicacion;
 
 	public DetalleCompraCommand() {
 		super();
@@ -235,6 +236,16 @@ public class DetalleCompraCommand {
 	
 	public void setTarifaImpuesto(String tarifaImpuesto) {
 		this.tarifaImpuesto = tarifaImpuesto;
+	}
+
+	
+	public Long getUbicacion() {
+		return ubicacion;
+	}
+
+	
+	public void setUbicacion(Long ubicacion) {
+		this.ubicacion = ubicacion;
 	}
 
 }

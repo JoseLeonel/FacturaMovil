@@ -12,5 +12,5 @@ public interface KardexDao {
 
 	void entradaCosto(Articulo articulo,Double costoNuevo, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception;
 	void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception;
-
+	void ajusteFisicoInventario(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception;
 }

@@ -1,12 +1,42 @@
-<compra-proveedores>
+<boleta-proveedores>
 <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-calculator"></i>&nbsp Compras  </h1>
+            <h1 ><i class="fa fa-calculator"></i>&nbsp Aplicar / Crear Boletas  </h1>
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
     <br>
+
+    <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border encabezado-pantalla" >
+                <h1 class="modal-title modalTitleCambioPrecio" id="title-add-note"> <i class='fa fa-cal '></i> Digite nueva Descripcion</h1>
+            </div>
+            <div class="modal-body">
+               
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >Descripcion </label>
+                            <input type="text" class="form-control cambiarDescripcionArticulo tamanoClienteNuevo modalInputCambioPrecio"  id="cambiarDescripcionArticulo" name="cambiarDescripcionArticulo"     autocomplete="off">
+                        </div>
+                    </div>
+ 
+                   
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" >
+                    <button  onclick={__recalcularDescripcion}   class=" btn-green pull-right modalCambioPrecioBotones" > Aplicar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Modal mostrar Proveedores de una sucursal -->
 <div id="modalProveedores" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -153,8 +183,8 @@
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                     <div class="box-tools ">
                             <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">{$.i18n.prop("comprar.f8")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__crearCompraEnEspera}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
+                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">F8= Aplicar Boleta</span></a>
+                            <a class="pull-left" href="#"   onclick = {__crearCompraEnEspera}  title="Compra en espera"> <span class="label label-limpiar">F9=Boleta espera</span></a>
                             
                             <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                         </div>
@@ -246,7 +276,7 @@
                             </td>
                             <td style="width:2%;"><h2>{numeroLinea}</h2></td>
                             <td style="width:8%;"><h2>{codigo}</h2></td>
-                            <td style="width:16%;"><h2>{descripcion}</h2></td>
+                            <td style="width:16%;" onclick ={__CambiarDescripcion}><h2>{descripcion}</h2></td>
                             <td class="text-right" style="width:17%;">
                                 <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
@@ -402,12 +432,12 @@
             todayHighlight:true,
         }
     );
-    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasNueva'));
+    var retrievedObject = JSON.parse(localStorage.getItem('detallesBoletaNueva'));
     if (retrievedObject != 'undefined') {
        self.detail = retrievedObject == null? self.detail = []:retrievedObject  
     }
     if (compraObject != 'undefined') {
-       var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
+       var compraObject = JSON.parse(localStorage.getItem('boletaNueva'));
     }
     var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
     if (compraObject != 'undefined') {
@@ -455,6 +485,50 @@ function __ComboTipoGasto(){
      });
      self.update();
 }
+__CambiarDescripcion(e){
+  
+   self.item = e.item;
+   self.update()
+        $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: false})
+        $('#modalCambiarDescripcion').on('shown.bs.modal', function () {
+            $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
+            $( "#cambiarDescripcionArticulo" ).focus()
+            $( "#cambiarDescripcionArticulo" ).select()
+        })
+   
+ }
+
+
+
+__recalcularDescripcion(){
+    var descricion = $(".cambiarDescripcionArticulo").val();
+     
+   
+    
+    
+    for (var count = 0; count < self.detail.length; count++) {
+            if (self.detail[count].codigo == self.item.codigo ){
+               self.item  = self.detail[count];
+               self.item.descripcion = descricion
+               self.detail[count] = self.item;
+               self.update();
+            
+            
+            }
+        }
+
+    //aplicarCambioLineaDetalle()
+    $('#modalCambiarDescripcion').modal('hide')
+     getPosicionInputCodigo()
+     $(".cambiarDescripcionArticulo").val(null);
+    $('#modalCambiarDescripcion').modal('hide') 
+
+}
+function getPosicionInputCodigo(){
+ 
+    $('.codigo').val(null)
+    $('.codigo').focus()
+}
 
  /**
  * Listar codigos  llamado del modal para presentar los articulos
@@ -473,7 +547,7 @@ __CargarCompraEspera(e){
 * Crear Compra en espera
 **/
 __crearCompraEnEspera(){
- crearCompra(1)  
+ crearCompra(7)  
 }
 /**
 ** Se aplica o se crea una compra cargada en la pantalla
@@ -566,8 +640,8 @@ function __Init(){
      __comboFormaPagos()
      //Tipos de Documentos
       __ComboTipoDocumentos()
-    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
-    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('detallesBoletaNueva', JSON.stringify(self.detail));
+    localStorage.setItem('boletaNueva', JSON.stringify(self.compra));
     localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
      
 }
@@ -626,11 +700,11 @@ function cargarDetallesCompraEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             articulo_id     : modeloTabla.articulo.id,
             codigo          : modeloTabla.articulo.codigo,
-            descripcion     : modeloTabla.articulo.descripcion,
+            descripcion     : modeloTabla.descripcion,
             cantidad        : parseFloat(modeloTabla.cantidad),
             costo           : parseFloat(modeloTabla.costo),
             precio          : parseFloat(modeloTabla.precio),
-            impuesto        : modeloTabla.impuesto,
+            impuesto        : modeloTabla.articulo.impuesto,
             ganancia        : modeloTabla.ganancia,
             descuento       : modeloTabla.descuento,
             totalDescuento  : modeloTabla.totalDescuento,
@@ -724,7 +798,7 @@ function __ListaComprasEnEspera(){
     self.compras_espera         = {data:[]}  
     self.update()
     $.ajax({
-        url: 'ListarComprasEsperaActivasAjax',
+        url: 'ListarBoletaEsperaActivasAjax',
         datatype: "json",
         method:"GET",
         success: function (result) {
@@ -1284,8 +1358,8 @@ function __calculate() {
     $( "#codigo" ).val(null);
     $('.codigo').select()
     $('.codigo').focus()
-    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
-    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('detallesBoletaNueva', JSON.stringify(self.detail));
+    localStorage.setItem('boletaNueva', JSON.stringify(self.compra));
     localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
 
 }
@@ -1397,19 +1471,12 @@ function __comboFormaPagos(){
 **/
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
-    self.comboTipoDocumentos.push({
-        estado:1,
-        descripcion:$.i18n.prop("combos.tipoDocumento.factura")
-    })
+   
     self.comboTipoDocumentos.push({
         estado:2,
         descripcion:$.i18n.prop("combos.tipoDocumento.boleta")
     })
-     self.comboTipoDocumentos.push({
-        estado:5,
-        descripcion:'Boleta Ajuste Inventario'
-    })
-   
+     
 
 
     self.update()
@@ -1475,4 +1542,4 @@ function __Teclas(){
     }, false );
 }                         
 </script>
-</compra-proveedores>
+</boleta-proveedores>

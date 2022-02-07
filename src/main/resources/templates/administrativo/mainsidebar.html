@@ -85,6 +85,9 @@
 				<li><a th:href="@{/ListarMarcas}"
 					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
 						class="fa fa-circle-o"></i> Marcas </a></li>
+				<li><a th:href="@{/ListarUbicaciones}"
+					sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i
+						class="fa fa-circle-o"></i> Ubicaciones articulo </a></li>
 				<li class="treeview"
 					sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
 					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Articulos</span>
@@ -120,6 +123,7 @@
 						</a>
 						</li>
 
+
 					</ul>
 				</li>
 
@@ -149,24 +153,34 @@
 			<ul class="treeview-menu">
 				<li class="treeview"
 					sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')">
-					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Recepccion del
-							Proveedor</span> <i class="fa fa-angle-left pull-right"></i>
+					<a href="#"> <i class="fa  fa-circle-o"></i> <span>Recepccion
+							del Proveedor</span> <i class="fa fa-angle-left pull-right"></i>
 				</a>
 					<ul class="treeview-menu">
 						<li><a th:href="@{/ListarProveedores}"><i
-						class="fa fa-circle-o"></i>crear Proveedor</a></li>
+								class="fa fa-circle-o"></i>crear Proveedor</a></li>
 						<li><a th:href="@{/recibirPedido}"
 							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i
 								class="fa fa-circle-o"></i> Recepcion del Proveedor</a></li>
-						<li><a th:href="@{/compras}"
+						<li><a th:href="@{/crearBoletas.do}"
 							sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i
-								class="fa fa-circle-o"></i>Ingresar el pedido</a></li>
+								class="fa fa-circle-o"></i>Ingresar boleta</a></li>
+						<li class="treeview"
+							sec:authorize="hasAnyAuthority('Administrador_Condominios','Administrador_Cajero','administrador_Cocodrillos','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
+							<a th:href="@{/ajusteAlInventario.do}"> <i
+								class="fa fa-pencil-square"></i> <span>Ajuste al
+									inventario</span>
+						</a>
+						</li>
 					</ul>
 				</li>
 
-			
 
-				
+				<li><a th:href="@{/compras}"
+					sec:authorize="hasAnyAuthority('Usuario_SuperDario','Administrador_Condominios','administrador_Cocodrillos','Usuario_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><i
+						class="fa fa-circle-o"></i>Nueva compra</a></li>
+
+
 				<li><a th:href="@{/ComprasSinAceptarInventario}"><i
 						class="fa fa-circle-o"></i> Compras sin ingresar(correo)</a></li>
 				<li><a th:href="@{/ListaComprasAnular}"><i

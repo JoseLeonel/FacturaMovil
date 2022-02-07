@@ -2503,6 +2503,30 @@ function inicializarCombos(){
 		//Reconstruye el sysSelect de distritos
 		$("#proveedor").sysSelect(data, "id", "nombreCompleto", true);
 	}
+	function comboCargaUbicacion(data,parametro){
+		 var ubicacion = null;
+         if(data != undefined && data != null && data.lenght != 0 ){
+        	 if(parametro ==undefined ||  parametro == null  ){
+        		 ubicacion =data.find(ubicacion => ubicacion.descripcion == 'Generica');
+             }else{
+            	 ubicacion =  data.find(ubicacion => ubicacion.id == parametro);
+             }	 
+         }
+        $("#ubicacion").empty();
+        if(ubicacion != undefined && ubicacion != null){
+        	$("#ubicacion").html("<option value='"+ubicacion.id+"' selected hidden>"+ubicacion.descripcion+"</option>");
+        	$("#ubicacion-input").val(ubicacion.descripcion)
+        }
+	}
+	
+	function _evento_refrescar_ubicaciones(data){
+		//Destruye el sysSelect de distritos
+		$('#ubicacion').empty()
+		$('#ubicacion-input').val('')
+	 	$("#ubicacion-sysSelect").remove()
+		//Reconstruye el sysSelect de distritos
+		$("#ubicacion").sysSelect(data, "id", "descripcion", true);
+	}
 	function comboCargaProveedores(data,parametro){
 		 var proveedor = null;
          if(data != undefined && data != null && data.lenght != 0 ){

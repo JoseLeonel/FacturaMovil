@@ -95,6 +95,9 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "codigo_cabys")
 	private String						codigoCabys;
 
+	@Column(name = "ubicacion")
+	private Long						ubicacion;
+
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -497,6 +500,16 @@ public class DetalleCompra implements Serializable {
 	
 	public void setUsuarioCreacion(Usuario usuarioCreacion) {
 		this.usuarioCreacion = usuarioCreacion;
+	}
+
+	
+	public Long getUbicacion() {
+		return ubicacion;
+	}
+
+	
+	public void setUbicacion(Long ubicacion) {
+		this.ubicacion = ubicacion;
 	}
 	
 	

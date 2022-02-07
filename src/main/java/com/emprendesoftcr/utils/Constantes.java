@@ -346,6 +346,7 @@ public class Constantes {
 	public static final String					OBSERVACION_INICIAL_INVENTARIO_NUEVO													= "Ingreso inicial al inventario";
 	public static final String					CONSECUTIVO_INICIAL_INVENTARIO_NUEVO													= "99999";
 	public static final String					KARDEX_TIPO_ENTRADA																						= "Entrada";
+	public static final String					KARDEX_TIPO__AJUSTE_INVENTARIO																					= "Ajuste Fisico";
 	public static final String					KARDEX_TIPO_SALIDA																						= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO																= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA															= "Ingreso :";
@@ -531,6 +532,8 @@ public class Constantes {
 	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA															= 3;
 	public static final Integer					COMPRA_ESTADO_ANULADA																					= 4;
 	public static final Integer					COMPRA_ESTADO_PENDIENTE_RECEPCION_AUTOMATICA									= 6;
+	public static final Integer					COMPRA_ESTADO_PENDIENTE_BOLETA																				= 7;
+	public static final Integer					COMPRA_ESTADO_PENDIENTE_BOLETA_AJUSTE_INVENTARIO																				= 8;
 
 	public static final String					COMPRA_ESTADO_PENDIENTE_STR																		= "Pendiente";
 	public static final String					COMPRA_ESTADO_INGRESADA_INVENTARIO_STR												= "Ingresada";
@@ -539,6 +542,7 @@ public class Constantes {
 
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_FACTURA																	= 1;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA																	= 2;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO								= 5;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_CREDITO														= 3;
 	public static final Integer					COMPRA_TIPO_DOCUMENTO_NOTA_DEBITO															= 4;
 

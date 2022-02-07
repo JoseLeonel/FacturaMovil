@@ -48,6 +48,7 @@ private Usuario usuarioActualizacion;
 		super();
 		this.id = detalleCompra.getId();
 		this.numeroLinea = detalleCompra.getNumeroLinea();
+		this.descripcion = detalleCompra.getDescripcion();
 		this.costo = detalleCompra.getCosto();
 		this.precio = detalleCompra.getPrecio();
 		this.cantidad = detalleCompra.getCantidad();

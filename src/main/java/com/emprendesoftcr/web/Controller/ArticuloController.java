@@ -28,6 +28,7 @@ import org.json.simple.parser.JSONParser;
 import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -153,6 +154,32 @@ public class ArticuloController {
 		return "views/articulos/TotalesArticulos";
 	}
 
+	@RequestMapping(value = "/ajusteAlInventario.do", method = RequestMethod.GET)
+	public String recibirPedido(Device device ) {
+		
+		String viewName = "/views/articulos/inventarioAjuste.html";
+		String deviceType = "browser";
+		String platform = "browser";
+		if (device.isNormal()) {
+			deviceType = "browser";
+		} else if (device.isMobile()) {
+			deviceType = "mobile";
+			viewName = "/views/articulos/inventarioAjuste.html";
+		} else if (device.isTablet()) {
+			deviceType = "tablet";
+			viewName = "/views/articulos/inventarioAjuste.html";
+		}
+		viewName = "/views/articulos/inventarioAjuste.html";
+		platform = device.getDevicePlatform().name();
+
+		if (platform.equalsIgnoreCase("UNKNOWN")) {
+			platform = "browser";
+		}
+
+		return viewName;
+		
+	}
+	
 	/**
 	 * Listar JSP de los articulos
 	 * @param model
