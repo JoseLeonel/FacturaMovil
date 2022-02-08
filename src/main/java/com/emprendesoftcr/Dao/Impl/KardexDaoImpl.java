@@ -50,7 +50,8 @@ public class KardexDaoImpl implements KardexDao {
 			cantidadActual = cantidadActual != null && cantidadActual > Constantes.ZEROS_DOUBLE ? cantidadActual :Constantes.ZEROS_DOUBLE;
 			cantidadNueva = cantidadNueva != null && cantidadNueva > Constantes.ZEROS_DOUBLE ? cantidadNueva :Constantes.ZEROS_DOUBLE;
 			Double resultadoCantidad = Utils.roundFactura(cantidadActual,3) - Utils.roundFactura(cantidadNueva,3);
-			resultadoCantidad = resultadoCantidad < Constantes.ZEROS_DOUBLE?Constantes.ZEROS_DOUBLE:resultadoCantidad;
+      // ahora se contabiliza en negativo 	
+			//		resultadoCantidad = resultadoCantidad < Constantes.ZEROS_DOUBLE?Constantes.ZEROS_DOUBLE:resultadoCantidad;
 			Double costoNuevo = articuloDao.getTotalCosto(articulo, resultadoCantidad);
 			Kardex kardex = new Kardex();
 			kardex.setCantidadSolicitada(cantidadNueva);
@@ -90,7 +91,7 @@ public class KardexDaoImpl implements KardexDao {
 	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		Kardex kardex = new Kardex();
 		try {
-			cantidadActual = cantidadActual != null && cantidadActual > Constantes.ZEROS_DOUBLE ? cantidadActual :Constantes.ZEROS_DOUBLE;
+			cantidadActual = cantidadActual != null  ? cantidadActual :Constantes.ZEROS_DOUBLE;
 			cantidadNueva = cantidadNueva != null && cantidadNueva > Constantes.ZEROS_DOUBLE ? cantidadNueva :Constantes.ZEROS_DOUBLE;
 			Double sumaCantidades = cantidadNueva + cantidadActual;
 			Double resultado = sumaCantidades > Constantes.ZEROS_DOUBLE ?Utils.roundFactura(sumaCantidades,3):Constantes.ZEROS_DOUBLE;
@@ -185,7 +186,7 @@ public class KardexDaoImpl implements KardexDao {
 	@Override
 	public void ajusteFisicoInventario(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		try {
-			cantidadActual = cantidadActual != null && cantidadActual > Constantes.ZEROS_DOUBLE ? cantidadActual :Constantes.ZEROS_DOUBLE;
+			cantidadActual = cantidadActual != null  ? cantidadActual :Constantes.ZEROS_DOUBLE;
 			cantidadNueva = cantidadNueva != null && cantidadNueva > Constantes.ZEROS_DOUBLE ? cantidadNueva :Constantes.ZEROS_DOUBLE;
 			Double resultadoCantidad = Utils.roundFactura(cantidadNueva,3);
 			resultadoCantidad = resultadoCantidad < Constantes.ZEROS_DOUBLE?Constantes.ZEROS_DOUBLE:resultadoCantidad;

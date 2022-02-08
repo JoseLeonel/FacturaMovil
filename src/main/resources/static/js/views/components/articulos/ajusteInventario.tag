@@ -263,7 +263,7 @@
          $(".codigo").delayPasteKeyUp(function(){
             
 	        
-            getPosicionInputCodigo()
+           // getPosicionInputCodigo()
          }, 200);
        
          window.addEventListener( "keydown", function(evento){
