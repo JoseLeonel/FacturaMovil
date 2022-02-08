@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/layout :: head"></head>
-<link rel="stylesheet" type="text/css" th:href="@{/css/compras/crearcomprasMovil.css?v=2}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/compras/crearcomprasComputer.css?v=2}"/>
 </head>
 <body class="hold-transition skin-blue  sidebar-mini">
 	<div class="containerMenu">
@@ -18,7 +18,7 @@
 	        <section class="content-header" th:fragment="header"></section>
 	        <!-- Main content -->
 	        <section class="content">
-	        	<ajuste-Inventario></ajuste-Inventario>
+	        	<compra-movil></compra-movil>
             </section>    
  		</div>
          <!-- /.content-wrapper -->
@@ -26,9 +26,9 @@
     </div>
 <div th:replace="layout/layout :: scripts"></div>
 	<script type="text/javascript"
-		th:src="@{/js/views/compras/apiCompraRest.js?v=56}"></script>
-	<script type="text/javascript" th:src="@{/js/views/articulos/ajusteInventario.js?v=51}"></script>
-<script type = "riot/tag"  th:src="@{/js/views/components/articulos/ajusteInventario.tag?v=51}" ></script>
+		th:src="@{/js/views/compras/apiCompraRest.js?v=65}"></script>
+	<script type="text/javascript" th:src="@{/js/views/compras/crearComprasMovil.js?v=66}"></script>
+<script type = "riot/tag"  th:src="@{/js/views/components/compras/crearCompraMovil.tag?v=66}" ></script>
 
 
 </body>

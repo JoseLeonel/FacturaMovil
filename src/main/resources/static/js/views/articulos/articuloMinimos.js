@@ -59,8 +59,12 @@ var ListarArticulos = function(codigo){
  __modificarRegistro_Listar();
  __agregarEntradaAlInventario();
  __agregarSalidaAlInventario();
- __Imprimir_Articulo()
+ __Imprimir_Articulo();
+
+
 }  
+
+
 /**
  * Eventos del filtro
  */

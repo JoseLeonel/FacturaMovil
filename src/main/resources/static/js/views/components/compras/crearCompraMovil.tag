@@ -36,7 +36,7 @@
 <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <h1 style="font-size:24px;" ><i class="fa fa-calculator" ></i>&nbsp Recepcion del Proveedor  </h1>
+            <h1 class="titulo-principal" ><i class="fa fa-calculator" ></i>&nbsp Recepcion del Proveedor  </h1>
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
@@ -74,11 +74,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                <button onclick={__RegresarProductos}   type="button" class="btn-dark-gray btn-back  pull-left modalCambioPrecioBotones"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                    {$.i18n.prop("btn.volver")}
-                </button>
-            </div>
+            
             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                    <button  onclick={__SiguienteRegistroProveedor}   class=" btn-green modalCambioPrecioBotones" > Siguiente</button>                </div>
             </div>
@@ -104,10 +100,11 @@
 
        <div class= "containerHeader">
             <div class="containerHeaderInfo">
-                <div> <span>{proveedor.nombreCompleto}</div> 
-                <div><span class="titulo-1">{compra.consecutivo}</span><span >{compra.fechaCompra}</span></div>
+                <div> <span class="titulo-general">{proveedor.nombreCompleto.length>25?proveedor.nombreCompleto.substring(0, 25)+ '...':proveedor.nombreCompleto}</div> 
+                <div><span class="titulo-general titulo-1">{compra.consecutivo}</span><span  class="titulo-general">{compra.fechaCompra}</span></div>
             </div>    
             <div class="containerDigiteCodigo">
+               <div id="respuesta"></div>
                 <div>
                     <span>Digite el codigo</span>
                 </div>
@@ -265,6 +262,9 @@
     }
     self.update()
     __calculate()
+getPosicionInputCodigo()
+   
+
     var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -282,11 +282,11 @@
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible') && !$('#modalCambiarCantidad').is(':visible') ){
                     
-                    $(".codigo").val("")
+                    getPosicionInputCodigo()
                     return
                 }
             }
-        });
+        })
 
         $.fn.delayPasteKeyUp = function(fn, ms)
         {
@@ -297,8 +297,10 @@
                 timer = setTimeout(fn, ms);
             });
         };
-      
-        
+        //$(".codigo").delayPasteKeyUp(function(){
+	      //  getPosicionInputCodigo()
+        // }, 200);
+       
        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -535,7 +537,7 @@ function getCantidadAdnCodigo_PV(){
 
 }
 function getPosicionInputCodigo(){
-    $('.precioPublico').val(null)
+    
     $('.codigo').val(null)
     $('.codigo').focus()
 }

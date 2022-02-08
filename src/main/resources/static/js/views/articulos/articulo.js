@@ -1,5 +1,22 @@
 $(document).ready(function() {
 	ListarArticulos(" ");
+	  
+	$( "#ubicacion-sysSelect .options span" ).change(function() {
+ 	   alert( "Handler for .change() called." );
+ 	 });
+    $("#ubicacion-sysSelect .options span").click (function() {
+ 		   var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
+	         var ubicacion = $('#ubicacion').val()
+	         alert( "Handler 2." );
+          ListarArticulos(valor,ubicacion)
+ 	      
+
+    });
+ 	 
+ 	   $("#ubicacion-sysSelect .options span").keyup(function() {
+ 		   alert( "Handler 3" );
+ 	   });
+    
 	_Init();
 } );/*fin document*/
 
@@ -16,17 +33,23 @@ var _Init = function () {
     $('#codigoArt').keypress(function (e) {
       if (e.keyCode == 13) {
          var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
-            ListarArticulos(valor)
+         var ubicacion = $('#ubicacion').val()
+            ListarArticulos(valor,ubicacion)
       }
 
     });
-    
+       
 
 }
 
 
 
-var ListarArticulos = function(codigo){
+var ListarArticulos = function(codigo,ubicacion){
+	
+	var url = "ListarArticuloAjax.do?codigoArt="+codigo;
+	if(ubicacion !=undefined && ubicacion !=null){
+		url = "ListarArticuloAjax.do?codigoArt="+codigo+ubicacion !=undefined && ubicacion !=null?"&ubicacion="+ubicacion:"";
+	}
      var table  =  $('#tableListar').DataTable( {
      "responsive": true,
       "bAutoWidth" : true,
@@ -43,7 +66,7 @@ var ListarArticulos = function(codigo){
      "sort" : "position",
      "lengthChange": true,
      "ajax" : {
-             "url":"ListarArticuloAjax.do?codigoArt="+codigo,
+             "url":url,
              "deferRender": true,
              "type":"POST",
                      "dataType": 'json',
@@ -74,6 +97,7 @@ var ListarArticulos = function(codigo){
 	    tipoUnidades  = data;
 	      
 	});
+	
 }  
 
 var tipoUnidades = null;

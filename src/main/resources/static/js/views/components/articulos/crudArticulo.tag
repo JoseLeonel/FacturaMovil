@@ -326,7 +326,7 @@
                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-                     <button show ={mostrarBotonAgregarEntrada} onclick={__agregarEntradaInventario}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                     <button show ={mostrarBotonAgregarEntrada} onclick={__agregarEntradaInventario}   class="add-new btn-agregar pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                 </div>
             </div>   
         </div>

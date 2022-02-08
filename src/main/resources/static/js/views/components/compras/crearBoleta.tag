@@ -297,7 +297,7 @@
                                 <span class="totalLabel">{totalDescuento.toFixed(2)} </span>
                             </td>
                             <td class="text-right" style="width:8%;">
-                                <span class="totalLabelImpuesto">{impuesto*100} </span>
+                                <span class="totalLabelImpuesto">{impuesto} </span>
                             </td>
                             <td class="text-right" style="width:14%;">
                                 <span class="totalLabel">{totalImpuesto.toFixed(2)} </span>
@@ -1079,7 +1079,7 @@ __actualizarCostoKeyPress(e){
     var costo = e.currentTarget.value;
     self.item = e.item; 
     var impuesto  =  __valorNumerico(self.item.impuesto)
-    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,self.item.precio);
+    self.item.ganancia    = __CalcularGanancia(impuesto,costo,self.item.precio);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.update()
 
@@ -1090,7 +1090,7 @@ __actualizarCostoBlur(e){
     var costo = e.currentTarget.value;
     self.item = e.item; 
     var impuesto  =  __valorNumerico(self.item.impuesto)
-    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,self.item.precio);
+    self.item.ganancia    = __CalcularGanancia(impuesto ,costo,self.item.precio);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.update()
 
@@ -1254,7 +1254,7 @@ __actualizarPrecioKeyPress(e){
     var impuesto  =  __valorNumerico(self.item.impuesto)
     var costo     =  __valorNumerico(self.item.costo)
     var precioPublico    =  __valorNumerico(precio)
-    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    self.item.ganancia    = __CalcularGanancia(impuesto,costo,precioPublico);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.item.precio = precio
     self.update()
@@ -1267,7 +1267,7 @@ __actualizarPrecioBlur(e){
     var impuesto  =  __valorNumerico(self.item.impuesto)
     var costo     =  __valorNumerico(self.item.costo)
     var precioPublico    =  __valorNumerico(precio)
-    self.item.ganancia    = __CalcularGanancia(impuesto * 100,costo,precioPublico);
+    self.item.ganancia    = __CalcularGanancia(impuesto,costo,precioPublico);
     self.item.ganancia = __valorNumerico(redondeoDecimales(self.item.ganancia,aplicarRedondeo()))
     self.item.precio = precio
     self.update()

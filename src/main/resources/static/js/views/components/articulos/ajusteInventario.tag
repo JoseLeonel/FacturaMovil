@@ -185,7 +185,7 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.ubicaciones           = {data:[]}
+   
     
     self.detalleCompra         ={data:[]}
    
@@ -226,6 +226,7 @@
     }
     self.update()
     __calculate()
+    getPosicionInputCodigo()
     var xTriggered = 0;
         $( "#codigo" ).keyup(function( event ) {
             xTriggered++;
@@ -243,7 +244,7 @@
             if(event.which == 111){
                 if(!$('#modalCambiarCantidad').is(':visible')){
                     
-                    $(".codigo").val("")
+                    getPosicionInputCodigo()
                     return
                 }
             }
@@ -259,7 +260,11 @@
             });
         };
       
-        
+         $(".codigo").delayPasteKeyUp(function(){
+            
+	        
+            getPosicionInputCodigo()
+         }, 200);
        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -490,7 +495,7 @@ function getCantidadAdnCodigo_PV(){
 
 }
 function getPosicionInputCodigo(){
-    $('.precioPublico').val(null)
+   
     $('.codigo').val(null)
     $('.codigo').focus()
 }
@@ -523,7 +528,7 @@ __SiguienteRegistroProveedor(){
             self.ubicacion =null
             self.compra.fechaCompra = $(".fechaCompra").val()
             self.compra.consecutivo = $(".consecutivo").val()
-           $.each(self.ubicaciones , function( index, modeloTabla ) {
+           $.each(ubicaciones , function( index, modeloTabla ) {
                         if(modeloTabla.id == idUbicaion){
                             self.ubicacion = modeloTabla
                             self.update()
@@ -713,27 +718,7 @@ function crearCompra(estadoCompra){
 
 
 
-/**
-*  Lista de los Proveedores
-**/
-function __ListaDeUbicaciones(){
-    $.ajax({
-        url: 'ListarUbicacionActivasAjax.do',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.ubicaciones                = result.aaData
-                comboCargaUbicacion(self.ubicaciones,null)
-                _evento_refrescar_ubicaciones(self.ubicaciones)
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
+
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/

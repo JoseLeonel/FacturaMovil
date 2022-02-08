@@ -157,19 +157,19 @@ public class ArticuloController {
 	@RequestMapping(value = "/ajusteAlInventario.do", method = RequestMethod.GET)
 	public String recibirPedido(Device device ) {
 		
-		String viewName = "/views/articulos/inventarioAjuste.html";
+		String viewName = "views/articulos/inventarioAjuste.html";
 		String deviceType = "browser";
 		String platform = "browser";
 		if (device.isNormal()) {
 			deviceType = "browser";
 		} else if (device.isMobile()) {
 			deviceType = "mobile";
-			viewName = "/views/articulos/inventarioAjuste.html";
+			viewName = "views/articulos/inventarioAjuste.html";
 		} else if (device.isTablet()) {
 			deviceType = "tablet";
-			viewName = "/views/articulos/inventarioAjuste.html";
+			viewName = "views/articulos/inventarioAjuste.html";
 		}
-		viewName = "/views/articulos/inventarioAjuste.html";
+		viewName = "views/articulos/inventarioAjuste.html";
 		platform = device.getDevicePlatform().name();
 
 		if (platform.equalsIgnoreCase("UNKNOWN")) {
@@ -626,7 +626,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt,@RequestParam(value = "ubicacion", required = false) Long ubicacion) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -641,6 +641,11 @@ public class ArticuloController {
 				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
 				delimitadores.addFiltro(categoriaFilter);
 			}
+		}
+		if(ubicacion !=null) {
+			categoriaFilter = new JqGridFilter("ubicacion", "'" + ubicacion + "'", "=");
+			delimitadores.addFiltro(categoriaFilter);
+			
 		}
 		categoriaFilter = new JqGridFilter("cantidadPaquete", "'" + Constantes.ARTICULO_PAQUETE_TIPO_INACTIVO + "'", "=");
 		delimitadores.addFiltro(categoriaFilter);

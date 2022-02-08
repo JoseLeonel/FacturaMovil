@@ -2503,6 +2503,29 @@ function inicializarCombos(){
 		//Reconstruye el sysSelect de distritos
 		$("#proveedor").sysSelect(data, "id", "nombreCompleto", true);
 	}
+	
+	var ubicaciones = {data:[]};
+	/**
+	*  Lista de los Proveedores
+	**/
+	function __ListaDeUbicaciones(){
+	    $.ajax({
+	        url: 'ListarUbicacionActivasAjax.do',
+	        datatype: "json",
+	        method:"GET",
+	        success: function (result) {
+	            if(result.aaData.length > 0){
+	            	ubicaciones                = result.aaData
+	                comboCargaUbicacion(self.ubicaciones,null)
+	                _evento_refrescar_ubicaciones(self.ubicaciones)
+	            }
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });
+	}
 	function comboCargaUbicacion(data,parametro){
 		 var ubicacion = null;
          if(data != undefined && data != null && data.lenght != 0 ){

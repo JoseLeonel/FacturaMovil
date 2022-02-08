@@ -195,8 +195,7 @@ public class ComprasController {
 	public String crearBoletas(Device device ) {
 		
 		String viewName = "views/compras/crearBoleta.html";
-		String deviceType = "browser";
-		String platform = "browser";
+	
 		
 
 		return viewName;
@@ -207,9 +206,7 @@ public class ComprasController {
 	public String crearCompras(Device device ) {
 		
 		String viewName = "views/compras/crearCompra";
-		String deviceType = "browser";
-		String platform = "browser";
-		
+	
 
 		return viewName;
 		
@@ -217,19 +214,20 @@ public class ComprasController {
 	@RequestMapping(value = "/recibirPedido", method = RequestMethod.GET)
 	public String recibirPedido(Device device ) {
 		
-		String viewName = "views/compras/crearCompraMovil.html";
-		String deviceType = "browser";
+		String viewName = "views/compras/crearCompraComputer.html";
+	
 		String platform = "browser";
 		if (device.isNormal()) {
-			deviceType = "browser";
+			
+			viewName = "views/compras/crearCompraComputer.html";
 		} else if (device.isMobile()) {
-			deviceType = "mobile";
+			
 			viewName = "views/compras/crearCompraMovil.html";
 		} else if (device.isTablet()) {
-			deviceType = "tablet";
-			viewName = "views/compras/crearCompraMovil.html";
+		
+			viewName = "views/compras/crearCompraComputer.html";
 		}
-		viewName = "views/compras/crearCompraMovil.html";
+		
 		platform = device.getDevicePlatform().name();
 
 		if (platform.equalsIgnoreCase("UNKNOWN")) {
@@ -1315,6 +1313,7 @@ public class ComprasController {
 			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
 			}
+			
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (!compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
 				Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
@@ -1324,12 +1323,20 @@ public class ComprasController {
 					}
 				}
 			}
+			String mensaje = "compra.error.ya.se.encuentra.ingresada";
 			if (compraCommand.getId() != null) {
 				if (compraCommand.getId() > 0) {
 					Compra combraVerificar = compraBo.findById(compraCommand.getId());
 					if (combraVerificar != null) {
 						if (combraVerificar.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compra.error.ya.se.encuentra.ingresada", result.getAllErrors());
+							if(combraVerificar.getTipoDocumento() != null && combraVerificar.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
+								mensaje = "compra.boleta.error.ya.se.encuentra.ingresada";
+							}
+							if(combraVerificar.getTipoDocumento() != null && combraVerificar.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO)) {
+								mensaje = "compra.boleta.error.ya.se.encuentra.ingresada";
+							}
+							
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR(mensaje, result.getAllErrors());
 						}
 					}
 				}
@@ -1340,8 +1347,14 @@ public class ComprasController {
 			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
 			compraCommand.setUsuarioCreacion(usuarioSesion);
 			compraBo.crearCompra(compraCommand, usuarioSesion);
-
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", compraCommand);
+			mensaje = "compra.agregar.correctamente=";
+			if(compraCommand.getTipoDocumento() != null && compraCommand.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
+				mensaje = "boleta.agregar.correctamente";
+			}
+			if(compraCommand.getTipoDocumento() != null && compraCommand.getTipoDocumento().equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA_AJUSTE_INVENTARIO)) {
+				mensaje = "boleta.agregar.correctamente";
+			}
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK(mensaje, compraCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
