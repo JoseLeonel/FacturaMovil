@@ -32,6 +32,7 @@ import com.emprendesoftcr.Bo.CabysBo;
 import com.emprendesoftcr.Bo.ControlPrecioBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.KardexBo;
+import com.emprendesoftcr.Bo.RomanaBalanzaBo;
 import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
@@ -41,6 +42,7 @@ import com.emprendesoftcr.modelo.Cabys;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.ControlPrecioArticulo;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.RomadaBalanza;
 import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.Constantes;
@@ -77,7 +79,8 @@ public class ArticuloBoImpl implements ArticuloBo {
 	private DataTableBo		dataTableBo;
 	@Autowired
 	private UsuarioBo			usuarioBo;
-	
+	@Autowired
+	private RomanaBalanzaBo			romadaBalanzaBo;
 	@Autowired
 	private TarifaIVAIBo	tarifaIVAIBo;
 	@Autowired
@@ -946,6 +949,20 @@ public class ArticuloBoImpl implements ArticuloBo {
 						result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@Override
+	public RespuestaServiceValidator<?> findBalanzaByEmpresajax(HttpServletRequest request, RomadaBalanza romadaBalanza, HttpServletResponse response, BindingResult result) {
+		try {
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			RomadaBalanza romadaBalanzaBD = romadaBalanzaBo.buscarPorEmpresa(usuarioSesion.getEmpresa());
+			
+
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", romadaBalanzaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}

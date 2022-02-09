@@ -30,6 +30,7 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.ControlPrecioArticulo;
 import com.emprendesoftcr.modelo.Marca;
+import com.emprendesoftcr.modelo.RomadaBalanza;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.utils.DataTableDelimitador;
 import com.emprendesoftcr.utils.RespuestaServiceDataTable;
@@ -174,6 +175,17 @@ public class ArticuloRest {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("autenticacion.invalidad", result.getAllErrors());
 			}
 			return articuloBo.findArticuloByCodigojax(request, articulo, response, codigoArticulo, result);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/findRomanaBalanzaByEmpresajax")
+	public RespuestaServiceValidator findRomanaBalanzaByEmpresajax(HttpServletRequest request, ModelMap model, @ModelAttribute RomadaBalanza romadaBalanza, HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
+		try {
+		
+			return articuloBo.findBalanzaByEmpresajax(request, romadaBalanza, response, result);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}

@@ -174,6 +174,9 @@ public class Articulo implements Serializable {
 	@Column(name = "precio_sugerido", columnDefinition = "INT default '0'")
 	private Double						precioSugerido;
 
+	@Column(name = "romana", columnDefinition = "INT default '0'")
+	private Integer						siTieneRomana; // 1= 
+	
 	public Articulo() {
 		super();
 		this.costo = Constantes.ZEROS_DOUBLE;

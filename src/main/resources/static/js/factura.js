@@ -2680,6 +2680,53 @@ function inicializarCombos(){
 		}
 	})();
 	
+	const getBalanzaRomada = async() => {
+	    try {
+	        const rawResponse = await fetch('/api/articulo/findRomanaBalanzaByEmpresajax');
+	        const data = await rawResponse.json();
+	        blockUILoad();
+	        console.log(data.aaData);
+	        return data.aaData;
+	    } catch (error) {
+	        console.log(error);
+	    }
+	}
+	
+	/**
+	 * closure  para codigos de balanza
+	 */
+	const balanzaClosures = (function(){
+		return {
+			// Precio de barra posee 13
+			 getPrecio:function (codigo,inicio,final){
+		          
+				 return __valorNumerico(codigo.substring(inicio,final));
+			 
+			 },// Codigo de barra posee 13
+			 getCodigo:function (codigo,inicio,final){
+		          	 
+				 return codigo.substring(inicio,final);
+
+			 
+			 },
+			 // Peso de barra posee 13
+			 getPeso:function (codigo,inicio,final){
+		       return codigo.substring(inicio,final);
+			 
+			 },
+			 // Es de balanza
+			 getPeso:function (codigo,inicioKilo,finalKilo,inicioGramos,finalGramos){
+		       var kilos = codigo.substring(inicioKilo,finalKilo);
+		       var gramos = codigo.substring(inicioGramos,finalGramos);
+		       gramos = __valorNumerico(gramos)
+		       gramos = gramos > 0 ?gramos /1000:0;
+		       kilos = __valorNumerico(kilos);
+		       return kilos + gramos;
+			 }
+	  }
+		
+	})();
+	
 	function __displayDate_detail(fecha) {
 	    var dateTime = new Date(fecha);
 	    return moment(dateTime).format('YYYY-MM-DD ');

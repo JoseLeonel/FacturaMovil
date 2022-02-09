@@ -1,0 +1,17 @@
+package com.emprendesoftcr.Bo;
+
+import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.RomadaBalanza;
+
+public interface RomanaBalanzaBo {
+	void agregar(RomadaBalanza romadaBalanza);
+
+	void modificar(RomadaBalanza romadaBalanza);
+
+	void eliminar(RomadaBalanza romadaBalanza);
+
+	RomadaBalanza buscar(Long id);
+
+	RomadaBalanza buscarPorEmpresa( Empresa empresa);
+	
+}
