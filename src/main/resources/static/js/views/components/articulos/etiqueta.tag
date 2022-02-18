@@ -21,7 +21,7 @@
         </div>
         <div id="botones">
             <div>
-                <button type="button" class="btn-boton-agregar"  onkeypress={__addDetail} >Agregar</button>
+                <button type="button" class="btn-boton-agregar"  onclick={__addDetailButton} >Agregar</button>
             </div>
             <div>
                 <button type="button" class="btn-boton-generar"  onclick={__generarPDF}>Generar Etiquetas</button>
@@ -84,11 +84,18 @@
     })
 
 __addDetail(e){
-    if (e.keyCode != 13) {
+if (e.keyCode != 13) {
         return;
     }
+    __addDetailAgregar(e)
+}
+__addDetailButton(){
+  __addDetailAgregar(null)
+}
+function __addDetailAgregar(e){
+    
     var codigo = $('#codigo').val()
-    var cantidad = e.currentTarget.value
+    var cantidad = $('.cantidadEtiquetas').val()
     if(cantidad == null || cantidad == 0 ){
         return
     }
